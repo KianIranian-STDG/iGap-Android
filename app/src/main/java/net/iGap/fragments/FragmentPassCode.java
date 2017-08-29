@@ -1,7 +1,5 @@
 package net.iGap.fragments;
 
-
-
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -23,6 +21,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,6 +37,7 @@ import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.helper.HelperLog;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmUserInfo;
@@ -313,8 +313,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             }
         });
 
-
-        final boolean screenShot = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, false);
+        final boolean screenShot = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
 
 
         if (screenShot) {
@@ -327,21 +326,33 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                // set password;
-
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
 
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         if (screenShot) {
                             editor.putBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, false);
+
+                            try {
+                                if (G.currentActivity != null) {
+                                    G.currentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+                                }
+                            } catch (Exception e) {
+                                HelperLog.setErrorLog(e.toString());
+                            }
+
+
                         } else {
                             editor.putBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
+
+                            try {
+                                if (G.currentActivity != null) {
+                                    G.currentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+                                }
+                            } catch (Exception e) {
+                                HelperLog.setErrorLog(e.toString());
+                            }
+
                         }
                         editor.apply();
-                    }
-                });
             }
         });
 

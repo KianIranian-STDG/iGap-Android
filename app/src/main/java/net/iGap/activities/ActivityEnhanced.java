@@ -22,12 +22,14 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.view.WindowManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermision;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AttachFile;
@@ -57,6 +59,28 @@ public class ActivityEnhanced extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         checkLanguage(this);
         checkFont();
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+        boolean allwScrren = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
+
+        if (G.isPassCode && !allwScrren) {
+
+            try {
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+            } catch (Exception e) {
+                HelperLog.setErrorLog(e.toString());
+            }
+        } else {
+            try {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+            } catch (Exception e) {
+                HelperLog.setErrorLog(e.toString());
+            }
+        }
+
+
+
         super.onCreate(savedInstanceState);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -66,7 +90,7 @@ public class ActivityEnhanced extends AppCompatActivity {
         makeDirectoriesIfNotExist();
 
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
         boolean checkedEnableDataShams = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
         if (!checkedEnableDataShams) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);

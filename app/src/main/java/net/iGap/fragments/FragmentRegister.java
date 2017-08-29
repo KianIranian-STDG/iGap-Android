@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -694,6 +695,32 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         });
         // enable scroll text view
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        boolean beforeState = G.isLandscape;
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            G.isLandscape = true;
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            G.isLandscape = false;
+        }
+
+        if (beforeState != G.isLandscape) {
+            Bundle bundle = getArguments();
+
+            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentRegister.this).commit();
+
+            FragmentRegister fragment = new FragmentRegister();
+            fragment.setArguments(bundle);
+
+            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
+                setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+        }
+
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override

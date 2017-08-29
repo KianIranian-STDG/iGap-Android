@@ -88,17 +88,7 @@ public class FragmentIntroduce extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        if (G.twoPaneMode) {
-            return inflater.inflate(R.layout.activity_introduce, container, false);
-        } else {
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                G.isLandscape = true;
-                return inflater.inflate(R.layout.activity_introduce_land, container, false);
-            } else {
-                G.isLandscape = false;
-                return inflater.inflate(R.layout.activity_introduce, container, false);
-            }
-        }
+        return inflater.inflate(R.layout.activity_introduce, container, false);
 
     }
 
@@ -111,9 +101,8 @@ public class FragmentIntroduce extends BaseFragment {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        if (!G.twoPaneMode) {
 
-            boolean beforeState = G.isLandscape;
+        boolean beforeState = G.isLandscape;
 
             if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 G.isLandscape = true;
@@ -129,7 +118,6 @@ public class FragmentIntroduce extends BaseFragment {
                 getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
                     setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
             }
-        }
 
         super.onConfigurationChanged(newConfig);
     }

@@ -1,5 +1,6 @@
 package net.iGap.activities;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
@@ -28,11 +29,18 @@ public class ActivityRegisteration extends ActivityEnhanced {
 
         }
 
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            G.isLandscape = true;
+        } else {
+            G.isLandscape = false;
+
+        }
+
         layoutRoot = (FrameLayout) findViewById(R.id.ar_layout_root);
 
-        if (G.twoPaneMode) {
-            setFraymeSize();
-        }
+        //if (G.twoPaneMode) {
+        //    setFraymeSize();
+        //}
 
         if (showPro) {
             loadFragmentProfile();
@@ -61,7 +69,7 @@ public class ActivityRegisteration extends ActivityEnhanced {
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
 
-        int size = Math.min(width, height) - 10;
+        int size = Math.min(width, height) - 50;
 
         ViewGroup.LayoutParams lp = layoutRoot.getLayoutParams();
         lp.width = size;

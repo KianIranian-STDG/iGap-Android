@@ -37,14 +37,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -292,10 +290,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        SharedPreferences preferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (G.isPassCode && !preferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, false)) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-        }
         super.onCreate(savedInstanceState);
 
         G.fragmentManager = getSupportFragmentManager();
@@ -333,7 +327,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return;
         }
 
-        G.isPassCode = userInfo.isPassCode();
+
 
         if (G.firstTimeEnterToApp) {
             /**
@@ -379,6 +373,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             frameFragmentBack = (FrameLayout) findViewById(R.id.am_frame_fragment_back);
             frameFragmentContainer = (FrameLayout) findViewById(R.id.am_frame_fragment_container);
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int height = displayMetrics.heightPixels;
+            int width = displayMetrics.widthPixels;
+
+            int size = Math.min(width, height) - 50;
+
+            ViewGroup.LayoutParams lp = frameFragmentContainer.getLayoutParams();
+            lp.width = size;
+            lp.height = size;
+
+
 
             desighnLayout(chatLayoutMode.none);
 
@@ -1637,11 +1644,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
 
-        iconLocation = (TextView) findViewById(R.id.am_btn_location);
-
-
         contentLoading = (ProgressBar) findViewById(R.id.loadingContent);
         iconLocation = (TextView) findViewById(R.id.am_btn_location);
+
         SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -1705,7 +1710,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public static void stopAnimationLocation() {
         if (iconLocation != null) {
-            iconLocation.clearAnimation();
+            // iconLocation.clearAnimation();
             iconLocation.setVisibility(View.GONE);
         }
     }
@@ -1713,12 +1718,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static void startAnimationLocation() {
         if (iconLocation != null) {
             iconLocation.setVisibility(View.VISIBLE);
-            Animation anim = new AlphaAnimation(0.0f, 1.0f);
-            anim.setDuration(1000); //You can manage the time
-            anim.setStartOffset(20);
-            anim.setRepeatMode(Animation.REVERSE);
-            anim.setRepeatCount(Animation.INFINITE);
-            iconLocation.startAnimation(anim);
+            //Animation anim = new AlphaAnimation(0.0f, 1.0f);
+            //anim.setDuration(1000); //You can manage the time
+            //anim.setStartOffset(20);
+            //anim.setRepeatMode(Animation.REVERSE);
+            //anim.setRepeatCount(Animation.INFINITE);
+            //iconLocation.startAnimation(anim);
         }
     }
 
@@ -2382,7 +2387,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
 
                     if (G.isLandscape) {
-                        setWeight(frameChatContainer, 1);
+                        setWeight(frameChatContainer, 2);
                         setWeight(frameMainContainer, 1);
                         openNavigation();
                     } else {
