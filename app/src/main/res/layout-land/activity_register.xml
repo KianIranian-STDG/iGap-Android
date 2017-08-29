@@ -97,7 +97,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         >
 
       <LinearLayout
@@ -468,13 +468,14 @@
         </LinearLayout>
       </LinearLayout>
     </ScrollView>
+
     <!--CheckPassword-->
     <LinearLayout
         android:id="@+id/rg_rootCheckPassword"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         >
       <TextView
           android:layout_width="match_parent"
@@ -487,7 +488,7 @@
           />
 
 
-      <EditText
+      <MEditText
           android:id="@+id/rg_edtCheckPassword"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -506,7 +507,7 @@
           android:layout_marginLeft="@dimen/dp32"
           android:layout_marginRight="@dimen/dp32"
           android:layout_marginStart="@dimen/dp32"
-          android:layout_marginTop="@dimen/dp60"
+          android:layout_marginTop="@dimen/dp4"
           android:gravity="left|start"
           android:text="@string/forgot_password"
           android:textColor="@color/green"
