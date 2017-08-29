@@ -25,6 +25,7 @@ import java.util.Locale;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
+import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermision;
 import net.iGap.interfaces.OnGetPermission;
@@ -201,6 +202,7 @@ public class BaseFragment extends Fragment {
 
     public void popBackStackFragment() {
         fragmentActivity.getSupportFragmentManager().popBackStack();
+        ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.none);
     }
 
     public void removeFromBaseFragment() {

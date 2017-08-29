@@ -647,6 +647,14 @@ public class FragmentChat extends BaseFragment
                 ActivityMain.setMediaLayout();
                 ActivityMain.setStripLayoutCall();
 
+                if (!G.twoPaneMode) {
+                    try {
+                        ActivityMain.lockNavigation();
+                    } catch (Exception e) {
+                        HelperLog.setErrorLog("fragment chat ondestroy   " + e.toString());
+                    }
+                }
+
             }
         }, Config.LOW_START_PAGE_TIME);
 
@@ -800,6 +808,15 @@ public class FragmentChat extends BaseFragment
 
         ActivityMain.setMediaLayout();
         ActivityMain.setStripLayoutCall();
+
+        if (!G.twoPaneMode) {
+            try {
+                ActivityMain.openNavigation();
+            } catch (Exception e) {
+                HelperLog.setErrorLog("fragment chat ondestroy   " + e.toString());
+            }
+        }
+
     }
 
     @Override
