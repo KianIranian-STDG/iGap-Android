@@ -45,7 +45,6 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -372,15 +371,10 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             }
         };
 
-
         view.findViewById(R.id.ar_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
+        txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
 
-        int portrait = getResources().getConfiguration().orientation;
-        if (portrait == 1) {
-
-            txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
-        }
         if (savedInstanceState != null) {
             // Restore value of members from saved state
             edtCodeNumber.setText(savedInstanceState.getString(KEY_SAVE_CODENUMBER));
@@ -652,53 +646,31 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            int portaret_landscope = getResources().getConfiguration().orientation;
+                            txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
 
-                            if (portaret_landscope == 1) {//portrait
-                                //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                                txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
+                            txtAgreement_register.setVisibility(View.GONE);
+                            txtAgreement_register.startAnimation(trans_x_out);
+                            G.handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
 
-                                txtAgreement_register.setVisibility(View.GONE);
-                                txtAgreement_register.startAnimation(trans_x_out);
-                                G.handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
+                                    btnStart.setBackgroundColor(getResources().getColor(R.color.rg_background_verify));
+                                    btnStart.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                    btnChoseCountry.setEnabled(false);
+                                    btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                    edtPhoneNumber.setEnabled(false);
+                                    edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
 
-                                        btnStart.setBackgroundColor(getResources().getColor(R.color.rg_background_verify));
-                                        btnStart.setTextColor(getResources().getColor(R.color.rg_border_editText));
-                                        btnChoseCountry.setEnabled(false);
-                                        btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
-                                        edtPhoneNumber.setEnabled(false);
-                                        edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                    edtCodeNumber.setEnabled(false);
+                                    edtCodeNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
 
-                                        edtCodeNumber.setEnabled(false);
-                                        edtCodeNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                    layout_verify.setVisibility(View.VISIBLE);
+                                    layout_verify.startAnimation(trans_x_in);
 
-                                        layout_verify.setVisibility(View.VISIBLE);
-                                        layout_verify.startAnimation(trans_x_in);
+                                    checkVerify();
+                                }
+                            }, 600);
 
-                                        checkVerify();
-                                    }
-                                }, 600);
-                            } else {
-
-                                //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
-                                dialogVerifyLandScape = new Dialog(G.fragmentActivity);
-
-                                btnStart.setBackgroundColor(getResources().getColor(R.color.rg_border_editText));
-                                btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
-                                btnChoseCountry.setEnabled(false);
-                                edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
-                                edtPhoneNumber.setEnabled(false);
-
-                                dialogVerifyLandScape.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                dialogVerifyLandScape.setContentView(R.layout.rg_dialog_verify_land);
-                                dialogVerifyLandScape.setCanceledOnTouchOutside(false);
-                                dialogVerifyLandScape.show();
-
-                                checkVerify();
-                            }
                         }
                     }).build();
 
@@ -722,26 +694,6 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         });
         // enable scroll text view
 
-        int portrait_landscape = getResources().getConfiguration().orientation;
-        if (portrait_landscape == 1) {//portrait
-
-            if (getHeight > 480) {
-
-                int marginLeft = (int) getResources().getDimension(R.dimen.dp32);
-                int marginRight = (int) getResources().getDimension(R.dimen.dp32);
-                int marginTopStart = (int) getResources().getDimension(R.dimen.dp20);
-                int marginTopChooseCountry = 0;
-                int marginBottomChooseCountry = (int) getResources().getDimension(R.dimen.dp8);
-                int marginBottomStart = 0;
-
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) btnChoseCountry.getLayoutParams();
-                params.setMargins(marginLeft, marginTopChooseCountry, marginRight, marginBottomChooseCountry); //left, top, right, bottom
-                btnChoseCountry.setLayoutParams(params);
-                LinearLayout.LayoutParams params2 = (LinearLayout.LayoutParams) btnStart.getLayoutParams();
-                params2.setMargins(marginLeft, marginTopStart, marginRight, marginBottomStart); //left, top, right, bottom
-                btnStart.setLayoutParams(params2);
-            }
-        }
     }
 
     @Override
@@ -811,12 +763,10 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                                 time = 5 * DateUtils.SECOND_IN_MILLIS;
                             }
 
-                            int portrait_landscape = getResources().getConfiguration().orientation;
-                            if (portrait_landscape == 1) {//portrait
-                                txtTimer = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_timer);
-                            } else {
-                                txtTimerLand = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_timer_DialogLand);
-                            }
+
+
+                            txtTimer = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_timer);
+
 
                             countDownTimer = new CountDownTimer(time, Config.COUNTER_TIMER_DELAY) { // wait for verify sms
                                 public void onTick(long millisUntilFinished) {
@@ -824,31 +774,19 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                                     int seconds = (int) ((millisUntilFinished) / 1000);
                                     int minutes = seconds / 60;
                                     seconds = seconds % 60;
-                                    int portrait_landscape = getResources().getConfiguration().orientation;
-                                    if (portrait_landscape == 1) {//portrait
-                                        if (txtTimer != null) {
-                                            txtTimer.setVisibility(View.VISIBLE);
-                                            txtTimer.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-                                        }
-                                    } else {
-                                        if (txtTimerLand != null) {
-                                            txtTimerLand.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-                                        }
+
+                                    if (txtTimer != null) {
+                                        txtTimer.setVisibility(View.VISIBLE);
+                                        txtTimer.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+
                                     }
                                 }
 
                                 public void onFinish() {
-                                    int portrait_landscape = getResources().getConfiguration().orientation;
-                                    if (portrait_landscape == 1) {//portrait
-                                        if (txtTimer != null) {
-                                            txtTimer.setText("00:00");
-                                            txtTimer.setVisibility(View.INVISIBLE);
-                                        }
-                                    } else {
-                                        if (txtTimerLand != null) {
-                                            txtTimerLand.setText("00:00");
-                                            txtTimerLand.setVisibility(View.INVISIBLE);
-                                        }
+
+                                    if (txtTimer != null) {
+                                        txtTimer.setText("00:00");
+                                        txtTimer.setVisibility(View.INVISIBLE);
                                     }
                                     errorVerifySms(FragmentRegister.Reason.TIME_OUT); // open rg_dialog for enter sms code
                                 }
@@ -879,53 +817,29 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
     private void setItem() { //invoke object
 
-        int portrait_landscape = getResources().getConfiguration().orientation; //check for portrait & landScape
-        if (portrait_landscape == 1) {//portrait
-            rg_prg_verify_connect = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_connect);
-            AppUtils.setProgresColler(rg_prg_verify_connect);
+        rg_prg_verify_connect = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_connect);
+        AppUtils.setProgresColler(rg_prg_verify_connect);
 
-            rg_txt_verify_connect = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_connect);
-            rg_img_verify_connect = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_connect);
+        rg_txt_verify_connect = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_connect);
+        rg_img_verify_connect = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_connect);
 
-            rg_prg_verify_sms = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_sms);
-            AppUtils.setProgresColler(rg_prg_verify_sms);
+        rg_prg_verify_sms = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_sms);
+        AppUtils.setProgresColler(rg_prg_verify_sms);
 
-            rg_txt_verify_sms = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_sms);
-            rg_img_verify_sms = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_sms);
+        rg_txt_verify_sms = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_sms);
+        rg_img_verify_sms = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_sms);
 
-            rg_prg_verify_generate = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_key);
-            AppUtils.setProgresColler(rg_prg_verify_generate);
+        rg_prg_verify_generate = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_key);
+        AppUtils.setProgresColler(rg_prg_verify_generate);
 
-            rg_txt_verify_generate = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_key);
-            rg_img_verify_generate = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_key);
+        rg_txt_verify_generate = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_key);
+        rg_img_verify_generate = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_key);
 
-            rg_prg_verify_register = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_server);
-            AppUtils.setProgresColler(rg_prg_verify_register);
-            rg_txt_verify_register = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_server);
-            rg_img_verify_register = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_server);
-        } else {
-            rg_prg_verify_connect = (ProgressBar) dialogVerifyLandScape.findViewById(R.id.rg_prg_verify_connect_DialogLand);
-            AppUtils.setProgresColler(rg_prg_verify_connect);
-            rg_txt_verify_connect = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_connect_DialogLand);
-            rg_img_verify_connect = (ImageView) dialogVerifyLandScape.findViewById(R.id.rg_img_verify_connect_DialogLand);
+        rg_prg_verify_register = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_server);
+        AppUtils.setProgresColler(rg_prg_verify_register);
+        rg_txt_verify_register = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_server);
+        rg_img_verify_register = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_server);
 
-            rg_prg_verify_sms = (ProgressBar) dialogVerifyLandScape.findViewById(R.id.rg_prg_verify_sms_DialogLand);
-            AppUtils.setProgresColler(rg_prg_verify_sms);
-
-            rg_txt_verify_sms = (TextView) dialogVerifyLandScape.findViewById(R.id.rg_txt_verify_sms_DialogLand);
-            rg_img_verify_sms = (ImageView) dialogVerifyLandScape.findViewById(R.id.rg_img_verify_sms_DialogLand);
-
-            rg_prg_verify_generate = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_key_DialogLand);
-            AppUtils.setProgresColler(rg_prg_verify_generate);
-
-            rg_txt_verify_generate = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_key_DialogLand);
-            rg_img_verify_generate = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_key_DialogLand);
-
-            rg_prg_verify_register = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_server_DialogLand);
-            AppUtils.setProgresColler(rg_prg_verify_register);
-            rg_txt_verify_register = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_server_DialogLand);
-            rg_img_verify_register = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_server_DialogLand);
-        }
     }
 
     // error verify sms and open rg_dialog for enter sms code
@@ -963,12 +877,8 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             @Override
             public void onClick(View v) {
 
-                int portrait_landscape = getResources().getConfiguration().orientation;
-                if (portrait_landscape == 1) {//portrait
-                    txtTimer.setVisibility(View.INVISIBLE);
-                } else {
-                    txtTimerLand.setVisibility(View.INVISIBLE);
-                }
+                txtTimer.setVisibility(View.INVISIBLE);
+
                 if (!edtEnterCodeVerify.getText().toString().equals("")) {
                     verifyCode = edtEnterCodeVerify.getText().toString();
                     userVerify(userName, verifyCode);
@@ -1013,12 +923,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        int portrait_landscape = getResources().getConfiguration().orientation;
-                        if (portrait_landscape == 1) {//portrait
-                            txtTimer.setVisibility(View.VISIBLE);
-                        } else {
-                            txtTimerLand.setVisibility(View.VISIBLE);
-                        }
+
+                        txtTimer.setVisibility(View.VISIBLE);
+
                         userName = userNameR;
                         userId = userIdR;
                         authorHash = authorHashR;
@@ -1184,19 +1091,13 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
      */
     private void userVerify(final String userName, final String verificationCode) {
         if (G.socketConnection) {
-            int portrait_landscape = getResources().getConfiguration().orientation;
-            if (portrait_landscape == 1) {//portrait
-                rg_prg_verify_generate = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_key);
-                AppUtils.setProgresColler(rg_prg_verify_generate);
 
-                rg_txt_verify_generate = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_key);
-                rg_img_verify_generate = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_key);
-            } else {
-                rg_prg_verify_generate = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_key_DialogLand);
-                AppUtils.setProgresColler(rg_prg_verify_generate);
-                rg_txt_verify_generate = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_key_DialogLand);
-                rg_img_verify_generate = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_key_DialogLand);
-            }
+            rg_prg_verify_generate = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_key);
+            AppUtils.setProgresColler(rg_prg_verify_generate);
+
+            rg_txt_verify_generate = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_key);
+            rg_img_verify_generate = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_key);
+
 
             if (rg_prg_verify_generate != null) rg_prg_verify_generate.setVisibility(View.VISIBLE);
             if (rg_txt_verify_generate != null) {

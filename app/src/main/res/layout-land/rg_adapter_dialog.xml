@@ -14,7 +14,7 @@
         android:checked="false"
         android:paddingLeft="@dimen/dp20"
         android:text="New RadioButton"
-        android:textSize="@dimen/dp4"
+        android:textSize="@dimen/dp14"
 
         />
 </LinearLayout>
