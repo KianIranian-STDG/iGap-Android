@@ -95,17 +95,14 @@
           android:visibility="gone"
           />
 
-      <View
-          android:layout_width="wrap_content"
-          android:layout_height="0dp"
-          android:layout_weight="1"
-          />
+
 
 
       <LinearLayout
           android:id="@+id/fcr_layout_caller"
           android:layout_width="match_parent"
-          android:layout_height="@dimen/dp200"
+          android:layout_height="0dp"
+          android:layout_weight="1"
           android:layout_marginBottom="@dimen/dp20"
           android:gravity="center|bottom"
           android:orientation="horizontal"

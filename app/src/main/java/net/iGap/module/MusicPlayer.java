@@ -701,34 +701,34 @@ public class MusicPlayer extends Service {
 
     private static void OnCompleteMusic() {
         try {
-
-            if (playNextMusic) {
-
-                fillMediaList(true);
-
-                nextMusic();
-                if (FragmentChat.onMusicListener != null) {
-                    FragmentChat.onMusicListener.complete(false, MusicPlayer.messageId, "");
-                } else {
-                    downloadNextMusic(MusicPlayer.messageId);
-                }
-            } else {
-
                 if (repeatMode.equals(RepeatMode.noRepeat.toString())) {
                     stopSound();
                 } else if (repeatMode.equals(RepeatMode.repeatAll.toString())) {
 
-                    if (isShuffelOn) {
-                        nextRandomMusic();
-                    } else {
+                    if (playNextMusic) {
+
+                        fillMediaList(true);
 
                         nextMusic();
+                        if (FragmentChat.onMusicListener != null) {
+                            FragmentChat.onMusicListener.complete(false, MusicPlayer.messageId, "");
+                        } else {
+                            downloadNextMusic(MusicPlayer.messageId);
+                        }
+                    } else {
+
+                        if (isShuffelOn) {
+                            nextRandomMusic();
+                        } else {
+
+                            nextMusic();
+                        }
+
                     }
                 } else if (repeatMode.equals(RepeatMode.oneRpeat.toString())) {
                     stopSound();
                     playAndPause();
                 }
-            }
         } catch (Exception e) {
 
         }

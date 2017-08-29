@@ -89,7 +89,6 @@ import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.interfaces.ICallFinish;
-import net.iGap.interfaces.IMainFinish;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatClearMessageResponse;
@@ -160,7 +159,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     static FrameLayout frameFragmentContainer;
 
     FragmentCall fragmentCall;
-    public boolean fromCall = false;
+
     private NavigationTabStrip navigationTabStrip;
 
     public static MyAppBarLayout appBarLayout;
@@ -246,6 +245,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.fragmentManager = null;
 
         MusicPlayer.mainLayout = null;
+        ActivityCall.stripLayoutMain = null;
 
     }
 
@@ -268,12 +268,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            fromCall = extras.getBoolean("FROM_CALL");
 
             long _roomid = extras.getLong(ActivityMain.openChat);
-
             if (_roomid > 0) {
-                new GoToChatActivity(_roomid).startActivity();
+                GoToChatActivity goToChatActivity = new GoToChatActivity(_roomid);
+                long _peerID = extras.getLong("PeerID");
+                if (_peerID > 0) {
+                    goToChatActivity.setPeerID(_peerID);
+                }
+                goToChatActivity.startActivity();
             }
 
             boolean openMediaPlyer = extras.getBoolean(ActivityMain.openMediaPlyer);
@@ -416,6 +419,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         MusicPlayer.setMusicPlayer(mediaLayout);
         MusicPlayer.mainLayout = mediaLayout;
+
+        ActivityCall.stripLayoutMain = findViewById(R.id.am_ll_strip_call);
 
 
         appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
@@ -1937,11 +1942,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             AppUtils.setProgresColler(contentLoading);
         }
 
-
-
-        if (ActivityCall.isConnected || fromCall) {
-
-            findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
+        if (ActivityCall.isConnected) {
+            findViewById(R.id.am_ll_strip_call).setVisibility(View.VISIBLE);
 
             ActivityCall.txtTimerMain = (TextView) findViewById(R.id.cslcs_txt_timer);
 
@@ -1949,7 +1951,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    finish();
+                    startActivity(new Intent(ActivityMain.this, ActivityCall.class));
                 }
             });
 
@@ -1958,23 +1960,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 public void onFinish() {
                     try {
 
-                        finish();
-                        //findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
-                        //fromCall=false;
+                        findViewById(R.id.am_ll_strip_call).setVisibility(View.GONE);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             };
-
-            G.iMainFinish = new IMainFinish() {
-                @Override
-                public void onFinish() {
-                    finish();
-                }
-            };
         } else {
-            findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
+            findViewById(R.id.am_ll_strip_call).setVisibility(View.GONE);
         }
 
         if (drawer != null) {
@@ -2467,6 +2461,41 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
         });
+    }
+
+    public static void setStripLayoutCall() {
+
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                if (ActivityCall.isConnected) {
+
+                    if (ActivityCall.stripLayoutChat != null) {
+                        ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
+
+                        if (ActivityCall.stripLayoutMain != null) {
+                            ActivityCall.stripLayoutMain.setVisibility(View.GONE);
+                        }
+                    } else {
+                        if (ActivityCall.stripLayoutMain != null) {
+                            ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
+                        }
+                    }
+                } else {
+
+                    if (ActivityCall.stripLayoutMain != null) {
+                        ActivityCall.stripLayoutMain.setVisibility(View.GONE);
+                    }
+
+                    if (ActivityCall.stripLayoutChat != null) {
+                        ActivityCall.stripLayoutChat.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+
     }
 
     @Override

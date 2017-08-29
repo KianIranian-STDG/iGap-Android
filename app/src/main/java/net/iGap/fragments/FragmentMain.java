@@ -917,7 +917,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                                     }
                                 }
 
-                                new GoToChatActivity(mInfo.getId()).setFromCall(((ActivityMain) getActivity()).fromCall).startActivity();
+                                new GoToChatActivity(mInfo.getId()).startActivity();
 
                                 if (((ActivityMain) mActivity).arcMenu != null && ((ActivityMain) mActivity).arcMenu.isMenuOpened()) {
                                     ((ActivityMain) mActivity).arcMenu.toggleMenu();

@@ -10,10 +10,12 @@
 
 package net.iGap.helper;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import io.realm.Realm;
 import net.iGap.G;
+import net.iGap.activities.ActivityMain;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.proto.ProtoGlobal;
@@ -38,7 +40,7 @@ public class HelperPublicMethod {
 
     //**************************************************************************************************************************************
 
-    public static void goToChatRoom(final boolean fromCall, final long peerId, final OnComplete onComplete, final OnError onError) {
+    public static void goToChatRoom(final long peerId, final OnComplete onComplete, final OnError onError) {
 
         final Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
@@ -49,7 +51,7 @@ public class HelperPublicMethod {
                 onComplete.complete();
             }
 
-            goToRoom(fromCall, realmRoom.getId(), -1);
+            goToRoom(realmRoom.getId(), -1);
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override public void onChatGetRoom(final long roomId) {
@@ -58,7 +60,7 @@ public class HelperPublicMethod {
                         onError.error();
                     }
 
-                    getUserInfo(fromCall, peerId, roomId, onComplete, onError);
+                    getUserInfo(peerId, roomId, onComplete, onError);
 
                     G.onChatGetRoom = null;
                 }
@@ -87,7 +89,7 @@ public class HelperPublicMethod {
         realm.close();
     }
 
-    private static void getUserInfo(final boolean fromCall, final long peerId, final long roomId, final OnComplete onComplete, final OnError onError) {
+    private static void getUserInfo(final long peerId, final long roomId, final OnComplete onComplete, final OnError onError) {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
@@ -127,7 +129,7 @@ public class HelperPublicMethod {
                                             onComplete.complete();
                                         }
 
-                                        goToRoom(fromCall, roomId, peerId);
+                                        goToRoom(roomId, peerId);
 
                                         G.onUserInfoResponse = null;
 
@@ -161,13 +163,16 @@ public class HelperPublicMethod {
         new RequestUserInfo().userInfo(peerId);
     }
 
-    private static void goToRoom(boolean fromcall, long roomid, long peerId) {
+    private static void goToRoom(long roomid, long peerId) {
 
-        GoToChatActivity go = new GoToChatActivity(roomid).setFromCall(fromcall);
+        Intent intent = new Intent(G.context, ActivityMain.class);
+        intent.putExtra(ActivityMain.openChat, roomid);
         if (peerId >= 0) {
-            go.setPeerID(peerId);
+            intent.putExtra("PeerID", peerId);
         }
-        go.startActivity();
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        G.context.startActivity(intent);
     }
 
     //**************************************************************************************************************************************

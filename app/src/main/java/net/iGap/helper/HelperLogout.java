@@ -37,6 +37,9 @@ public final class HelperLogout {
                 if (G.currentActivity != null) {
                     G.currentActivity.finish();
                 }
+
+                G.firstTimeEnterToApp = true;
+
                 try {
                     NotificationManager nMgr = (NotificationManager) G.context.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
                     nMgr.cancelAll();

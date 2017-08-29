@@ -10,9 +10,9 @@
 
 package net.iGap.response;
 
+import android.content.Intent;
 import net.iGap.G;
-import net.iGap.fragments.FragmentRatingBar;
-import net.iGap.helper.HelperFragment;
+import net.iGap.activities.ActivityRatingBar;
 import net.iGap.proto.ProtoPushRateSignaling;
 
 public class PushRateSignalingResponse extends MessageHandler {
@@ -45,7 +45,15 @@ public class PushRateSignalingResponse extends MessageHandler {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    new HelperFragment(FragmentRatingBar.newInstance(id)).load();
+                    //  new HelperFragment(FragmentRatingBar.newInstance(id)).load();
+
+                    Intent intent = new Intent(G.context, ActivityRatingBar.class);
+                    intent.putExtra(ActivityRatingBar.ID_EXTRA, id);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    G.context.startActivity(intent);
+
+
+
                 }
             }, 1000);
         }

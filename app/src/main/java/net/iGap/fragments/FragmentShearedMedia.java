@@ -168,7 +168,7 @@ public class FragmentShearedMedia extends BaseFragment {
         realmShearedMedia = Realm.getDefaultInstance();
         mediaLayout = (LinearLayout) view.findViewById(R.id.asm_ll_music_layout);
         MusicPlayer.setMusicPlayer(mediaLayout);
-        MusicPlayer.shearedMediaLayout = mediaLayout;
+
         roomId = getArguments().getLong(ROOM_ID);
         initComponent(view);
     }
@@ -181,6 +181,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
         setListener();
 
+        MusicPlayer.shearedMediaLayout = mediaLayout;
         ActivityMain.setMediaLayout();
     }
 

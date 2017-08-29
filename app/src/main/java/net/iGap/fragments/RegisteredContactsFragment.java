@@ -413,7 +413,7 @@ public class RegisteredContactsFragment extends BaseFragment {
                         } else {
                             showProgress();
 
-                            HelperPublicMethod.goToChatRoom(false, realmContacts.getId(), new HelperPublicMethod.OnComplete() {
+                            HelperPublicMethod.goToChatRoom(realmContacts.getId(), new HelperPublicMethod.OnComplete() {
                                 @Override
                                 public void complete() {
                                     hideProgress();

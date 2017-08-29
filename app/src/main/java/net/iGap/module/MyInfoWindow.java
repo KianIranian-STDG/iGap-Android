@@ -139,7 +139,7 @@ public class MyInfoWindow extends InfoWindow {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                HelperPublicMethod.goToChatRoom(false, userId, new HelperPublicMethod.OnComplete() {
+                HelperPublicMethod.goToChatRoom(userId, new HelperPublicMethod.OnComplete() {
                     @Override
                     public void complete() {
                         new HelperFragment(fragmentiGapMap).remove();

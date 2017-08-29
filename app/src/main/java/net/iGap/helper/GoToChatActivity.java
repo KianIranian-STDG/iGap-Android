@@ -13,7 +13,6 @@ public class GoToChatActivity {
 
     private long roomid = 0;
     private long peerID = 0;
-    private boolean fromCall = false;
 
     private boolean fromUserLink = false;
     private boolean isNotJoin = false;
@@ -31,10 +30,6 @@ public class GoToChatActivity {
     }
 
 
-    public GoToChatActivity setFromCall(boolean fromCall) {
-        this.fromCall = fromCall;
-        return this;
-    }
 
     public GoToChatActivity setfromUserLink(boolean fromUserLink) {
         this.fromUserLink = fromUserLink;
@@ -79,7 +74,7 @@ public class GoToChatActivity {
 
         FragmentChat fragmentChat = new FragmentChat();
         fragmentChat.setArguments(getBundle());
-        new HelperFragment(fragmentChat).setReplace(false).load();
+        new HelperFragment(fragmentChat).setReplace(true).load();
     }
 
     public Bundle getBundle() {
@@ -94,10 +89,6 @@ public class GoToChatActivity {
 
         if (peerID > 0) {
             bundle.putLong("peerId", peerID);
-        }
-
-        if (fromCall) {
-            bundle.putBoolean("FROM_CALL_Main", true);
         }
 
         if (fromUserLink) {

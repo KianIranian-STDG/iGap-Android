@@ -83,7 +83,8 @@
         android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
     <activity
         android:name=".activities.ActivityCall"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale">
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
+        android:launchMode="singleInstance">
 
       <!--
       <intent-filter>

@@ -428,8 +428,7 @@ public class FragmentChat extends BaseFragment
     private boolean isChatReadOnly = false;
     private boolean isMuteNotification;
     private boolean sendByEnter = false;
-    private boolean fromCall = false;
-    private boolean fromCallMain = false;
+
     private boolean isCloudRoom;
     private boolean needUpdateView = false;
 
@@ -644,7 +643,11 @@ public class FragmentChat extends BaseFragment
                     }
                 });
 
+                MusicPlayer.chatLayout = mediaLayout;
+                ActivityCall.stripLayoutChat = rootView.findViewById(R.id.ac_ll_strip_call);
+
                 ActivityMain.setMediaLayout();
+                ActivityMain.setStripLayoutCall();
 
             }
         }, Config.LOW_START_PAGE_TIME);
@@ -707,8 +710,7 @@ public class FragmentChat extends BaseFragment
             backGroundSeenList.clear();
         }
 
-        if (ActivityCall.isConnected || fromCall || fromCallMain) {
-
+        if (ActivityCall.isConnected) {
             rootView.findViewById(R.id.ac_ll_strip_call).setVisibility(View.VISIBLE);
 
             ActivityCall.txtTimeChat = (TextView) rootView.findViewById(R.id.cslcs_txt_timer);
@@ -718,15 +720,8 @@ public class FragmentChat extends BaseFragment
                 @Override
                 public void onClick(View v) {
 
-                    //  finish();
-                    finishChat();
+                    startActivity(new Intent(mActivity, ActivityCall.class));
 
-                    if (!fromCall) {
-
-                        if (G.iMainFinish != null) {
-                            G.iMainFinish.onFinish();
-                        }
-                    }
                 }
             });
 
@@ -735,7 +730,6 @@ public class FragmentChat extends BaseFragment
                 public void onFinish() {
                     try {
                         rootView.findViewById(R.id.ac_ll_strip_call).setVisibility(View.GONE);
-                        fromCall = false;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -804,8 +798,10 @@ public class FragmentChat extends BaseFragment
         }
 
         MusicPlayer.chatLayout = null;
+        ActivityCall.stripLayoutChat = null;
 
         ActivityMain.setMediaLayout();
+        ActivityMain.setStripLayoutCall();
     }
 
     private void registerListener() {
@@ -854,13 +850,6 @@ public class FragmentChat extends BaseFragment
         } else if (emojiPopup != null && emojiPopup.isShowing()) {
             emojiPopup.dismiss();
         } else {
-
-            if ((fromCall || ActivityCall.isConnected) && !fromCallMain) {
-
-                Intent intent = new Intent(mActivity, ActivityMain.class);
-                intent.putExtra("FROM_CALL", true);
-                startActivity(intent);
-            }
 
             return false;
         }
@@ -1212,8 +1201,7 @@ public class FragmentChat extends BaseFragment
         if (extras != null) {
             mRoomId = extras.getLong("RoomId");
             chatPeerId = extras.getLong("peerId");
-            fromCall = extras.getBoolean("FROM_CALL");
-            fromCallMain = extras.getBoolean("FROM_CALL_Main");
+
             RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
             pageSettings();
 
@@ -1312,8 +1300,6 @@ public class FragmentChat extends BaseFragment
          */
         mediaLayout = (LinearLayout) rootView.findViewById(R.id.ac_ll_music_layout);
         MusicPlayer.setMusicPlayer(mediaLayout);
-        MusicPlayer.chatLayout = mediaLayout;
-
 
         lyt_user = (LinearLayout) rootView.findViewById(R.id.lyt_user);
         viewAttachFile = rootView.findViewById(R.id.layout_attach_file);

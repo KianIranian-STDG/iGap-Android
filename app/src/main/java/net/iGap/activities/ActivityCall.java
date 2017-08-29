@@ -116,6 +116,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     HeadsetPluginReciver headsetPluginReciver;
 
+    public static View stripLayoutChat;
+    public static View stripLayoutMain;
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -129,6 +132,10 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         unMuteMusic();
 
         new RequestSignalingGetLog().signalingGetLog(0, 1);
+
+        if (!isSendLeave) {
+            new WebRTC().leaveCall();
+        }
     }
 
     @Override
@@ -508,13 +515,13 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             @Override
             public void onClick(View v) {
 
-                boolean _fromCall = true;
+
                 if (!isConnected && isIncomingCall) {
                     endCall();
-                    _fromCall = false;
+
                 }
 
-                HelperPublicMethod.goToChatRoom(_fromCall, userId, null, null);
+                HelperPublicMethod.goToChatRoom(userId, null, null);
 
             }
         });
@@ -590,6 +597,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         new WebRTC().leaveCall();
         isSendLeave = true;
+
+        G.isInCall = false;
 
         isConnected = false;
 
