@@ -331,7 +331,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     @Override
     public void onDetach() {
         super.onDetach();
-        FragmentChat fragment = (FragmentChat) getFragmentManager().findFragmentByTag(FragmentChat.class.getSimpleName());
+        FragmentChat fragment = (FragmentChat) getFragmentManager().findFragmentByTag(FragmentChat.class.getName());
         if (fragment != null && fragment.isVisible()) {
             fragment.onResume();
         }
@@ -808,7 +808,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.group);
                     fragment.appBarLayout = fab;
-                    new HelperFragment(fragment).setReplace(false).load();
+                    new HelperFragment(fragment).setResourceContainer(R.id.fragmentContainer_group_profile).load();
                 }
             }
         });

@@ -113,6 +113,10 @@ public class BaseFragment extends Fragment {
         super.onStop();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
 
     /**
      * check the selected language user and set the language if change it

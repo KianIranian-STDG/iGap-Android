@@ -365,8 +365,6 @@ public class FragmentMediaPlayer extends BaseFragment {
     }
 
     private void finish() {
-
-        closeFragment();
-
+        popBackStackFragment();
     }
 }

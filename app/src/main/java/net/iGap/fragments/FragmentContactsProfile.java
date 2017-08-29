@@ -261,7 +261,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     }
 
                     fragment.appBarLayout = fab;
-                    new HelperFragment(fragment).setReplace(false).load();
+                    new HelperFragment(fragment).setResourceContainer(R.id.fragmentContainer_contact_profile).load();
                 }
                 realm.close();
             }
@@ -780,7 +780,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
     @Override
     public void onDetach() {
         super.onDetach();
-        FragmentChat fragment = (FragmentChat) getFragmentManager().findFragmentByTag(FragmentChat.class.getSimpleName());
+        FragmentChat fragment = (FragmentChat) getFragmentManager().findFragmentByTag(FragmentChat.class.getName());
         if (fragment != null && fragment.isVisible()) {
             fragment.onResume();
         }
