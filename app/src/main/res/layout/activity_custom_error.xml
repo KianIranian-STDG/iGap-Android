@@ -5,16 +5,11 @@
     android:background="@color/gray_3c"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/dp10"
-    android:paddingLeft="@dimen/dp20"
-    android:paddingRight="@dimen/dp20"
-    android:paddingTop="@dimen/dp10"
     >
 
   <ScrollView
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_weight="1"
+      android:layout_height="wrap_content"
       >
 
     <LinearLayout
@@ -23,6 +18,7 @@
         android:gravity="center"
         android:layout_gravity="center"
         android:orientation="vertical"
+        android:layout_margin="@dimen/dp20"
         >
 
       <android.support.v7.widget.AppCompatImageView
@@ -30,6 +26,7 @@
           android:layout_height="@dimen/dp140"
           android:contentDescription="@null"
           app:srcCompat="@drawable/ic_crash"
+          android:paddingTop="@dimen/dp15"
           />
 
       <TextView
