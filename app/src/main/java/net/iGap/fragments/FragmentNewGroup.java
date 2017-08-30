@@ -91,7 +91,7 @@ import static net.iGap.module.AttachFile.request_code_TAKE_PICTURE;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 import static net.iGap.module.MusicPlayer.roomId;
 
-public class FragmentNewGroup extends Fragment implements OnGroupAvatarResponse, OnChannelAvatarAdd {
+public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarResponse, OnChannelAvatarAdd {
 
     private MaterialDesignTextView txtBack;
     private CircleImageView imgCircleImageView;

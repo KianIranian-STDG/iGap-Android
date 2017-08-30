@@ -30,7 +30,7 @@ import net.iGap.request.RequestUserTwoStepVerificationRequestRecoveryToken;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSecurityRecovery extends Fragment {
+public class FragmentSecurityRecovery extends BaseFragment {
 
     private Security page;
     //private String page;

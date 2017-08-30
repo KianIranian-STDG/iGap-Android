@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,7 +40,7 @@ import static net.iGap.fragments.FragmentiGapMap.btnBack;
 import static net.iGap.fragments.FragmentiGapMap.isBackPress;
 import static net.iGap.fragments.FragmentiGapMap.pageUserList;
 
-public class FragmentMapUsers extends Fragment implements ActivityMain.OnBackPressedListener {
+public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBackPressedListener {
 
     private FragmentActivity mActivity;
     private RecyclerView mRecyclerView;

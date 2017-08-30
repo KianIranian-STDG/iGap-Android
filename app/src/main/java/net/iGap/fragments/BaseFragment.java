@@ -19,6 +19,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
@@ -50,6 +52,7 @@ public class BaseFragment extends Fragment {
         super.onAttach(CalligraphyContextWrapper.wrap(context));
         G.fragmentActivity = (FragmentActivity) context;
         currentFragment = this;
+        hideKeyboard();
     }
 
     @Override
@@ -197,6 +200,14 @@ public class BaseFragment extends Fragment {
             return;
         } else {
             StartupActions.makeFolder();
+        }
+    }
+
+    private void hideKeyboard() {
+        View view = G.fragmentActivity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 

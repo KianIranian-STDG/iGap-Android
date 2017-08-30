@@ -57,7 +57,7 @@ import net.iGap.request.RequestSignalingClearLog;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestSignalingGetLog;
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN) public class FragmentCall extends Fragment {
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN) public class FragmentCall extends BaseFragment {
 
     public static final String strGonTitle = "strGonTitle";
     boolean goneTitle = false;

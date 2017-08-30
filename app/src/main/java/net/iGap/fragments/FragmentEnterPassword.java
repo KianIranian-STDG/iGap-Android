@@ -12,7 +12,7 @@ import net.iGap.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentEnterPassword extends Fragment {
+public class FragmentEnterPassword extends BaseFragment {
 
 
     public FragmentEnterPassword() {
