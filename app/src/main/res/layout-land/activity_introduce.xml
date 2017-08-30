@@ -483,23 +483,22 @@
 
   <RelativeLayout
       android:id="@+id/int_layoutParentCircleImage"
-      android:layout_width="500dp"
+      android:layout_width="match_parent"
       android:layout_height="0dp"
       android:layout_below="@+id/int_layout_1"
-      android:layout_marginRight="@dimen/dp32"
+      android:layout_marginRight="@dimen/dp10"
+      android:layout_marginLeft="@dimen/dp120"
       android:duration="0"
       android:fillAfter="true"
       android:fromDegrees="0"
       android:layoutDirection="ltr"
       app:layout_heightPercent="8%"
-
       >
 
     <net.iGap.module.CustomCircleImage
         android:id="@+id/int_circleButton_introduce"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
 
         />
   </RelativeLayout>
