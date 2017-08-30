@@ -13,7 +13,6 @@ package net.iGap.activities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -25,7 +24,6 @@ import android.support.v7.app.AppCompatDelegate;
 import android.view.WindowManager;
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
@@ -57,7 +55,7 @@ public class ActivityEnhanced extends AppCompatActivity {
     }
 
     public void onCreate(Bundle savedInstanceState) {
-        checkLanguage(this);
+        G.checkLanguage();
         checkFont();
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -99,14 +97,6 @@ public class ActivityEnhanced extends AppCompatActivity {
         }
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-
-        checkLanguage(this);
-
-        super.onConfigurationChanged(newConfig);
     }
 
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -182,26 +172,6 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         if (G.typeface_neuropolitical == null) {
             G.typeface_neuropolitical = Typeface.createFromAsset(getAssets(), "fonts/neuropolitical.ttf");
-        }
-    }
-
-
-    public static void checkLanguage(Context context) {
-
-        try {
-            String selectedLanguage = G.selectedLanguage;
-            if (selectedLanguage == null) return;
-
-            String currentLanguage = Locale.getDefault().getLanguage();
-            if (!selectedLanguage.equals(currentLanguage)) {
-                Locale locale = new Locale(selectedLanguage);
-                Locale.setDefault(locale);
-                Configuration config = new Configuration();
-                config.locale = locale;
-                context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

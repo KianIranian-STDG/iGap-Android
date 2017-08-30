@@ -11,7 +11,6 @@
 package net.iGap.fragments;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,7 +22,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
@@ -37,7 +35,6 @@ import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.request.RequestUserUpdateStatus;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static net.iGap.G.context;
 import static net.iGap.G.fragmentActivity;
 
 public class BaseFragment extends Fragment {
@@ -57,7 +54,7 @@ public class BaseFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        checkLanguage();
+        G.checkLanguage();
         checkFont();
         super.onCreate(savedInstanceState);
         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -144,24 +141,6 @@ public class BaseFragment extends Fragment {
         }
     }
 
-    public void checkLanguage() {
-
-        try {
-            String selectedLanguage = G.selectedLanguage;
-            if (selectedLanguage == null) return;
-
-            String currentLanguage = Locale.getDefault().getLanguage();
-            if (!selectedLanguage.equals(currentLanguage)) {
-                Locale locale = new Locale(selectedLanguage);
-                Locale.setDefault(locale);
-                Configuration config = new Configuration();
-                config.locale = locale;
-                context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     private void makeDirectoriesIfNotExist() {
 

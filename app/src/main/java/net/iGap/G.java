@@ -12,12 +12,14 @@ package net.iGap;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import com.crashlytics.android.Crashlytics;
@@ -32,6 +34,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.crypto.spec.SecretKeySpec;
@@ -493,4 +496,33 @@ public class G extends MultiDexApplication {
         }
         return mTracker;
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        super.onConfigurationChanged(newConfig);
+
+        checkLanguage();
+    }
+
+    public static void checkLanguage() {
+
+        try {
+            String selectedLanguage = G.selectedLanguage;
+            if (selectedLanguage == null) return;
+
+            //String currentLanguage = Locale.getDefault().getLanguage();
+            //if (!selectedLanguage.equals(currentLanguage)) {
+            Locale locale = new Locale(selectedLanguage);
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+            // }
+        } catch (Exception e) {
+            Log.e("ddddd", "G   checkLanguage " + e.toString());
+        }
+    }
+
+
 }
