@@ -1042,10 +1042,20 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
         if (isBlockUser) {
 
-            new RequestUserContactsUnblock().userContactsUnblock(userId);
-        } else {
+            new MaterialDialog.Builder(mActivity).title(R.string.unblock_the_user).content(R.string.unblock_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    new RequestUserContactsUnblock().userContactsUnblock(userId);
+                }
+            }).negativeText(R.string.cancel).show();
 
-            new RequestUserContactsBlock().userContactsBlock(userId);
+        } else {
+            new MaterialDialog.Builder(mActivity).title(R.string.block_the_user).content(R.string.block_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    new RequestUserContactsBlock().userContactsBlock(userId);
+                }
+            }).negativeText(R.string.cancel).show();
         }
     }
 

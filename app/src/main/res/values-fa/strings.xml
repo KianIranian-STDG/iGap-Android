@@ -1079,5 +1079,11 @@
   <string name="in_5_hours">5 ساعت</string>
   <string name="Unlock_with_your_passcode">کد قفل گشا را وارد کنید</string>
   <string name="forgot_Unlock_with_your_passcode">رمز ورود را فراموش کرده اید؟</string>
-  کد قفل گشا باید متشکل از حداقل ۴ حرف و یا عدد باشد.
+
+  <string name="limit_passcode"> کد قفل گشا باید متشکل از حداقل ۴ حرف و یا عدد باشد</string>
+  <string name="block_the_user">مسدودی کردن مخاطب</string>
+  <string name="block_the_user_text">آیا از مسدودی کردن ارتباط این مخاطب اطمینان دارید؟</string>
+  <string name="unblock_the_user">رفع مسدودیت مخاطب</string>
+  <string name="unblock_the_user_text">آیا از رفع مسدودیت ارتباط این مخاطب اطمینان دارید؟</string>
+
 </resources>

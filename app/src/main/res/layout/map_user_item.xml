@@ -45,8 +45,7 @@
 
           <net.iGap.module.CustomTextViewMedium
               android:id="@+id/txt_user_name_map"
-              android:layout_width="0dp"
-              android:layout_weight="1"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:gravity="left"
               android:singleLine="true"
@@ -59,9 +58,10 @@
 
           <net.iGap.module.CustomTextViewMedium
               android:id="@+id/txt_user_distance_map"
-              android:layout_width="wrap_content"
+              android:layout_width="0dp"
+              android:layout_weight="1"
               android:layout_height="match_parent"
-              android:gravity="center"
+              android:gravity="end"
               android:text="distance"
               android:textColor="@color/gray_5c"
               android:textSize="@dimen/dp14"

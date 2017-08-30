@@ -303,15 +303,15 @@ public class FragmentNotificationAndSound extends BaseFragment {
         ltPopupNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+                int po = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
+                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(getResources().getString(R.string.B_cancel)).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(po, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
+                    public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                         txtPopupNotification.setText(text.toString());
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, which);
                         editor.apply();
+                        return false;
                     }
                 }).show();
             }
@@ -589,15 +589,15 @@ public class FragmentNotificationAndSound extends BaseFragment {
         ltPopupNotificationGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+                int po = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
+                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(getResources().getString(R.string.B_cancel)).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(po, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
+                    public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         txtPopupNotificationGroup.setText(text.toString());
                         editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, which);
                         editor.apply();
+                        return false;
                     }
                 }).show();
             }

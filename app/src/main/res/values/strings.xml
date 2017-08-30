@@ -1074,5 +1074,9 @@
   <string name="Unlock_with_your_passcode">Unlock with your passcode</string>
   <string name="forgot_Unlock_with_your_passcode">Forgot Passcode?</string>
   <string name="limit_passcode">The passcode must contain at least 4 numbers and/or letters.</string>
+  <string name="block_the_user">Block the User</string>
+  <string name="block_the_user_text">Are you sure to block this User?</string>
+  <string name="unblock_the_user">Unblock the User</string>
+  <string name="unblock_the_user_text">Are you sure to unblock this User?</string>
 
 </resources>
