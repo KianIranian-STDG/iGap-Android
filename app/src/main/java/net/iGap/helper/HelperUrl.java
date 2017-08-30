@@ -171,6 +171,7 @@ public class HelperUrl {
                     }
 
                     String url = strBuilder.toString().substring(start, end).trim();
+                    url = url.replaceAll("[^\\x00-\\x7F]", "");
 
                     if (!url.startsWith("https://") && !url.startsWith("http://")) {
                         url = "http://" + url;

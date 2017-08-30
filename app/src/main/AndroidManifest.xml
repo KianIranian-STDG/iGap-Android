@@ -103,6 +103,7 @@
         android:name=".activities.ActivityMain"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
         android:launchMode="singleTask"
+        android:maxRecents="1"
         android:theme="@style/AppThemeTranslucent">
 
 
