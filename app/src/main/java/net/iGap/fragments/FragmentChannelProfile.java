@@ -1387,7 +1387,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             @Override
             public void run() {
                 hideProgressBar();
-                mActivity.finish();
+                //mActivity.finish();
                 if (FragmentChat.finishActivity != null) {
                     FragmentChat.finishActivity.finishActivity();
                 }

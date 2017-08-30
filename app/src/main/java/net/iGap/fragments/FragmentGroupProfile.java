@@ -1640,13 +1640,12 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                mActivity.finish();
+                                //mActivity.finish();
+                                mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                prgWait.setVisibility(View.GONE);
                                 if (FragmentChat.finishActivity != null) {
                                     FragmentChat.finishActivity.finishActivity();
                                 }
-
-                                mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                prgWait.setVisibility(View.GONE);
                             }
                         });
                     }
