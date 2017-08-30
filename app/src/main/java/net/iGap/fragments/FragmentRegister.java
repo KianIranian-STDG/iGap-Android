@@ -649,7 +649,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
                             txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
 
-                            txtAgreement_register.setVisibility(View.GONE);
+
                             txtAgreement_register.startAnimation(trans_x_out);
                             G.handler.postDelayed(new Runnable() {
                                 @Override
@@ -664,7 +664,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
                                     edtCodeNumber.setEnabled(false);
                                     edtCodeNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
-
+                                    txtAgreement_register.setVisibility(View.GONE);
                                     layout_verify.setVisibility(View.VISIBLE);
                                     layout_verify.startAnimation(trans_x_in);
 
