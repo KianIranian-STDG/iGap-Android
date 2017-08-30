@@ -196,6 +196,7 @@
       android:id="@+id/scrollView"
       android:background="@color/background_check_gps"
       android:visibility="gone"
+      android:layout_below="@+id/backgroundToolbarMap"
       >
 
     <LinearLayout
