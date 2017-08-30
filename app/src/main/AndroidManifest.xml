@@ -84,7 +84,8 @@
     <activity
         android:name=".activities.ActivityCall"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
-        android:launchMode="singleInstance">
+        android:launchMode="singleInstance"
+        android:maxRecents="1">
 
       <!--
       <intent-filter>

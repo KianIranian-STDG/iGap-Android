@@ -558,6 +558,7 @@
             android:layout_height="@dimen/dp44"
             android:layout_marginTop="@dimen/dp12"
             android:background="@drawable/circle_mic"
+            android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:text="@string/md_downwards_arrow"
             android:textAppearance="@style/TextIconAppearance_toolbar"

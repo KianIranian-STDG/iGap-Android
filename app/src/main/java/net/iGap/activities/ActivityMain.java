@@ -264,6 +264,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void chechIntent(Intent intent) {
 
+        new HelperGetDataFromOtherApp(intent);
+
         Bundle extras = intent.getExtras();
         if (extras != null) {
 
@@ -417,10 +419,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Tracker mTracker = application.getDefaultTracker();
         mTracker.setScreenName("RoomList");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-
-
-
-        new HelperGetDataFromOtherApp(getIntent());
 
         mediaLayout = (LinearLayout) findViewById(R.id.amr_ll_music_layout);
 
