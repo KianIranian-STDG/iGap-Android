@@ -387,6 +387,8 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
     public void setMessage(String message) {
 
+        message = message.replaceAll("[^\\x00-\\x7F]", "");
+
         try {
             this.message = message;
         } catch (Exception e) {

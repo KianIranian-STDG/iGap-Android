@@ -122,12 +122,6 @@ public class BaseFragment extends Fragment {
         super.onDetach();
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        checkLanguage();
-    }
-
     /**
      * check the selected language user and set the language if change it
      */

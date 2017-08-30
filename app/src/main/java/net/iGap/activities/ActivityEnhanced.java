@@ -101,6 +101,14 @@ public class ActivityEnhanced extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        checkLanguage(this);
+
+        super.onConfigurationChanged(newConfig);
+    }
+
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         try {
