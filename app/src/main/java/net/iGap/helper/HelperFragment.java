@@ -196,7 +196,7 @@ public class HelperFragment {
                 }
             }
         } else {
-            resId = R.id.am_frame_main_container;
+            resId = R.id.frame_main;
         }
 
         return resId;
