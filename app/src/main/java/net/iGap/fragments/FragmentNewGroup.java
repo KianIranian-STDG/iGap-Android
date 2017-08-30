@@ -476,8 +476,8 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                             bundle.putString("TOKEN", token);
                             fragmentCreateChannel.setArguments(bundle);
 
-                            mActivity.onBackPressed();
-                            new HelperFragment(fragmentCreateChannel).setStateLoss(true).load();
+                            popBackStackFragment();
+                            new HelperFragment(fragmentCreateChannel).load();
                         }
                     }
                 });
@@ -784,8 +784,8 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         bundle.putString("TOKEN", token);
         fragmentCreateChannel.setArguments(bundle);
 
-        mActivity.onBackPressed();
-        new HelperFragment(fragmentCreateChannel).setStateLoss(true).load();
+        popBackStackFragment();
+        new HelperFragment(fragmentCreateChannel).load();
     }
 
     //=======================result for picture

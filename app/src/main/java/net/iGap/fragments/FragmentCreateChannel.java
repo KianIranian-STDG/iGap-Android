@@ -308,8 +308,8 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                                 bundle.putBoolean("NewRoom", true);
                                 fragment.setArguments(bundle);
 
-                                new HelperFragment(fragment).setStateLoss(true).load();
-                                removeFromBaseFragment(FragmentCreateChannel.this);
+                                popBackStackFragment();
+                                new HelperFragment(fragment).load();
                             }
                         });
                     }
