@@ -664,7 +664,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         llSharedMedia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new HelperFragment(FragmentShearedMedia.newInstance(roomId)).load();
+                new HelperFragment(FragmentShearedMedia.newInstance(roomId)).setReplace(false).load();
             }
         });
 

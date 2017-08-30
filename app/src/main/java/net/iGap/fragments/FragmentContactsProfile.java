@@ -674,7 +674,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         vgSharedMedia.setOnClickListener(new View.OnClickListener() {// go to the ActivityMediaChanel
             @Override
             public void onClick(View view) {
-                new HelperFragment(FragmentShearedMedia.newInstance(shearedId)).load();
+                new HelperFragment(FragmentShearedMedia.newInstance(shearedId)).setReplace(false).load();
             }
         });
 

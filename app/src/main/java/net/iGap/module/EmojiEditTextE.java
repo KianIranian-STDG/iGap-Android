@@ -2,6 +2,8 @@ package net.iGap.module;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 import com.vanniktech.emoji.EmojiEditText;
 
 
@@ -14,10 +16,10 @@ public class EmojiEditTextE extends EmojiEditText {
         super(context, attrs);
     }
 
-    //@Override
-    //public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-    //    InputConnection conn = super.onCreateInputConnection(outAttrs);
-    //    outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_FULLSCREEN;
-    //    return conn;
-    //}
+    @Override
+    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+        InputConnection conn = super.onCreateInputConnection(outAttrs);
+        outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_FULLSCREEN;
+        return conn;
+    }
 }

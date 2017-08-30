@@ -1185,6 +1185,17 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         FragmentiGapMap.page = FragmentiGapMap.pageiGapMap;
     }
 
+    @Override
+    public void onConfigurationChanged(android.content.res.Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                map.getController().animateTo(new GeoPoint(lastLatitude, lastLongitude));
+            }
+        }, 1000);
+    }
+
     private void closeKeyboard(View v) {
         if (isAdded()) {
             try {

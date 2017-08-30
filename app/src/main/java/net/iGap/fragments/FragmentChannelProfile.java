@@ -407,7 +407,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         lytSharedMedia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HelperFragment(FragmentShearedMedia.newInstance(roomId)).load();
+                new HelperFragment(FragmentShearedMedia.newInstance(roomId)).setReplace(false).load();
             }
         });
 
