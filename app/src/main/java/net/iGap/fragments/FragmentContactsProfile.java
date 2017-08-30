@@ -287,7 +287,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
 
                     if (realmRoom != null) {
-                        popBackStackFragment();
+                        new HelperFragment().removeAll(true);
                         new GoToChatActivity(realmRoom.getId()).startActivity();
                     } else {
                         G.onChatGetRoom = new OnChatGetRoom() {

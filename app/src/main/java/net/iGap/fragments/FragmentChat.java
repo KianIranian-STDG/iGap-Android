@@ -868,13 +868,11 @@ public class FragmentChat extends BaseFragment
         FragmentShowImage fragment = (FragmentShowImage) mActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
         if (fragment != null) {
             removeFromBaseFragment(fragment);
-            updateShowItemInScreen();
         } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
             mAdapter.deselect();
         } else if (emojiPopup != null && emojiPopup.isShowing()) {
             emojiPopup.dismiss();
         } else {
-
             return false;
         }
 
@@ -3912,14 +3910,14 @@ public class FragmentChat extends BaseFragment
     }
 
     private void updateShowItemInScreen() {
-
-        // after comback from other activity or background  the veiw should update
-
+        /**
+         * after comeback from other activity or background  the view should update
+         */
         try {
             // this only notify item that show on the screen and no more
             recyclerView.getAdapter().notifyDataSetChanged();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -4208,12 +4206,7 @@ public class FragmentChat extends BaseFragment
     private void showErrorDialog(final int time) {
 
         boolean wrapInScrollView = true;
-        final MaterialDialog dialogWait = new MaterialDialog.Builder(G.currentActivity).title(G.context.getResources().getString(R.string.title_limit_chat_to_unknown_contact))
-            .customView(R.layout.dialog_remind_time, wrapInScrollView)
-            .positiveText(R.string.B_ok)
-            .autoDismiss(false)
-            .canceledOnTouchOutside(true)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
+        final MaterialDialog dialogWait = new MaterialDialog.Builder(G.currentActivity).title(G.context.getResources().getString(R.string.title_limit_chat_to_unknown_contact)).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 dialog.dismiss();
@@ -4450,7 +4443,6 @@ public class FragmentChat extends BaseFragment
      */
     private void showImage(final StructMessageInfo messageInfo, View view) {
         // for gone app bar
-
         InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
@@ -4461,10 +4453,8 @@ public class FragmentChat extends BaseFragment
         bundle.putLong("RoomId", mRoomId);
         bundle.putLong("SelectedImage", selectedFileToken);
         fragment.setArguments(bundle);
-
         fragment.appBarLayout = appBarLayout;
-
-        new HelperFragment(fragment).load();
+        new HelperFragment(fragment).setReplace(false).load();
     }
 
     /**

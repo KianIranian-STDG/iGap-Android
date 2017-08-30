@@ -1933,7 +1933,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 G.isUpdateNotificaionColorChat = false;
                 G.isUpdateNotificaionCall = false;
 
-                new HelperFragment().removeAll();
+                new HelperFragment().removeAll(false);
 
                 ActivityMain.this.recreate();
 

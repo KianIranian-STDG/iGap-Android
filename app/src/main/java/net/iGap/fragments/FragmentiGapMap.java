@@ -65,6 +65,7 @@ import java.util.Random;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnGeoCommentResponse;
 import net.iGap.interfaces.OnGeoGetComment;
@@ -543,7 +544,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 txtItem3.setText(G.context.getResources().getString(R.string.map_registration));
                 icon3.setText(G.context.getResources().getString(R.string.md_igap_map_marker_off));
 
-
                 root1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -551,17 +551,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         fabGps.setVisibility(View.GONE);
                         rippleMoreMap.setVisibility(View.GONE);
                         page = pageUserList;
-                        FragmentMapUsers fragmentMapUsers = FragmentMapUsers.newInstance();
                         try {
-                            mActivity.getSupportFragmentManager()
-                                .beginTransaction()
-                                .addToBackStack(FragmentMapUsers.class.getName())
-                                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                                .replace(R.id.replace, fragmentMapUsers, FragmentMapUsers.class.getName())
-                                .commitAllowingStateLoss();
-
-                            //   HelperFragment.loadFragment(fragmentMapUsers, true);
-
+                            new HelperFragment(FragmentMapUsers.newInstance()).setResourceContainer(R.id.replace).setReplace(false).load();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }

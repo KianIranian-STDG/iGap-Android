@@ -9,12 +9,14 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentMain;
 
 public class HelperFragment {
 
     private Fragment fragment;
     private boolean addToBackStack = true;
     private boolean animated = true;
+    private boolean twoPaneModeAnimated = false;
     private boolean replace = true;
     private boolean stateLoss;
     private boolean hasCustomAnimation;
@@ -46,6 +48,11 @@ public class HelperFragment {
 
     public HelperFragment setAnimated(boolean animated) {
         this.animated = animated;
+        return this;
+    }
+
+    public HelperFragment setTwoPaneModeAnimated(boolean twoPaneModeAnimated) {
+        this.twoPaneModeAnimated = twoPaneModeAnimated;
         return this;
     }
 
@@ -101,7 +108,7 @@ public class HelperFragment {
             fragmentTransaction.addToBackStack(tag);
         }
 
-        if (animated) {
+        if ((!G.twoPaneMode && animated) || (G.twoPaneMode && twoPaneModeAnimated)) {
             if (hasCustomAnimation) {
                 fragmentTransaction.setCustomAnimations(enter, exit, popEnter, popExit);
             } else {
@@ -131,10 +138,12 @@ public class HelperFragment {
         ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.none);
     }
 
-    public void removeAll() {
-        for (Fragment f : G.fragmentActivity.getSupportFragmentManager().getFragments()) {
-            if (f != null) {
-                G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(f).commit();
+    public void removeAll(boolean keepMain) {
+        for (Fragment fragment : G.fragmentActivity.getSupportFragmentManager().getFragments()) {
+            if (fragment != null) {
+                if ((!keepMain) || (!fragment.getClass().getName().equals(FragmentMain.class.getName()))) {
+                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+                }
             }
         }
         G.fragmentActivity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
