@@ -830,7 +830,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
     private void showListForCustomRole(String SelectedRole) {
         FragmentShowMember fragment = FragmentShowMember.newInstance1(this.fragment, roomId, role.toString(), G.userId, SelectedRole, isNeedGetMemberList);
-        new HelperFragment(fragment).load();
+        new HelperFragment(fragment).setReplace(false).load();
         isNeedGetMemberList = false;
     }
 
@@ -877,7 +877,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         bundle.putLong("COUNT_MESSAGE", noLastMessage);
         fragment.setArguments(bundle);
 
-        new HelperFragment(fragment).load();
+        new HelperFragment(fragment).setReplace(false).load();
     }
 
     //****** create popup
@@ -1835,7 +1835,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         bundle.putLong("ID", roomId);
         fragmentNotification.setArguments(bundle);
 
-        new HelperFragment(fragmentNotification).load();
+        new HelperFragment(fragmentNotification).setReplace(false).load();
     }
 
     //*** onActivityResult

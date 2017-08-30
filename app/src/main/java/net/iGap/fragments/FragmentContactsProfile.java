@@ -693,7 +693,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                 bundle.putString("PAGE", "CONTACT");
                 bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
-                new HelperFragment(fragmentNotification).load();
+                new HelperFragment(fragmentNotification).setReplace(false).load();
             }
         });
 

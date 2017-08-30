@@ -784,7 +784,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 bundle.putString("PAGE", "GROUP");
                 bundle.putLong("ID", roomId);
                 fragmentNotification.setArguments(bundle);
-                new HelperFragment(fragmentNotification).load();
+                new HelperFragment(fragmentNotification).setReplace(false).load();
             }
         });
 
@@ -1375,7 +1375,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         bundle.putBoolean("DIALOG_SHOWING", true);
         bundle.putLong("COUNT_MESSAGE", noLastMessage);
         fragment.setArguments(bundle);
-        new HelperFragment(fragment).load();
+        new HelperFragment(fragment).setReplace(false).load();
     }
 
     private Long getMessageId(String type, int count) {
@@ -1789,7 +1789,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
     private void showListForCustomRole(String SelectedRole) {
         FragmentShowMember fragment = FragmentShowMember.newInstance1(this.fragment, roomId, role.toString(), G.userId, SelectedRole, isNeedgetContactlist);
-        new HelperFragment(fragment).load();
+        new HelperFragment(fragment).setReplace(false).load();
         isNeedgetContactlist = false;
     }
 

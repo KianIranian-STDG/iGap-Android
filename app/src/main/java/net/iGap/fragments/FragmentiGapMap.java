@@ -1086,6 +1086,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         this.location = location;
 
         if (firstEnter) {
+            lastLatitude = location.getLatitude();
+            lastLongitude = location.getLongitude();
             firstEnter = false;
             currentLocation(location, true);
             getCoordinateLoop(0, false);
