@@ -502,7 +502,12 @@ public class G extends MultiDexApplication {
 
         super.onConfigurationChanged(newConfig);
 
-        checkLanguage();
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkLanguage();
+            }
+        }, 200);
     }
 
     public static void checkLanguage() {
