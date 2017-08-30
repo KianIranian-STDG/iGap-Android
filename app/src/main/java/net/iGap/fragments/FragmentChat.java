@@ -5183,7 +5183,13 @@ public class FragmentChat extends BaseFragment
                             });
                         }
                     };
-                    new RequestUserContactsUnblock().userContactsUnblock(chatPeerId);
+
+                    new MaterialDialog.Builder(mActivity).title(R.string.unblock_the_user).content(R.string.unblock_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            new RequestUserContactsUnblock().userContactsUnblock(chatPeerId);
+                        }
+                    }).negativeText(R.string.cancel).show();
                 } else {
 
                     G.onUserContactsBlock = new OnUserContactsBlock() {
@@ -5200,7 +5206,14 @@ public class FragmentChat extends BaseFragment
                             });
                         }
                     };
-                    new RequestUserContactsBlock().userContactsBlock(chatPeerId);
+
+                    new MaterialDialog.Builder(mActivity).title(R.string.block_the_user).content(R.string.block_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            new RequestUserContactsBlock().userContactsBlock(chatPeerId);
+                        }
+                    }).negativeText(R.string.cancel).show();
+
                 }
             }
         });

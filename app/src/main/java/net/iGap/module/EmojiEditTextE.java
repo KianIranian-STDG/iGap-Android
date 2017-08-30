@@ -19,7 +19,7 @@ public class EmojiEditTextE extends EmojiEditText {
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
         InputConnection conn = super.onCreateInputConnection(outAttrs);
-        outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_FULLSCREEN;
+        outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_ENTER_ACTION;
         return conn;
     }
 }
