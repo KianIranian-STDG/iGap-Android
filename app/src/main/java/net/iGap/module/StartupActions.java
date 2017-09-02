@@ -114,7 +114,7 @@ public final class StartupActions {
         if (diagonalInches >= 6.5) {
             G.twoPaneMode = true;
         } else {
-            G.twoPaneMode = true;//false
+            G.twoPaneMode = false;
         }
     }
 
