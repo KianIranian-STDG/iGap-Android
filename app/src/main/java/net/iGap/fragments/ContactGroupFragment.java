@@ -80,6 +80,7 @@ public class ContactGroupFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        isNeedResume = true;
         return inflater.inflate(R.layout.fragment_contact_group, container, false);
     }
 
