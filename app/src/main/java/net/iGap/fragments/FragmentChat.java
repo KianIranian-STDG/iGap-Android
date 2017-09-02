@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -45,12 +46,14 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -4529,6 +4532,31 @@ public class FragmentChat extends BaseFragment
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        int height = metrics.heightPixels;
+        int width = metrics.widthPixels;
+
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT || G.twoPaneMode) {
+            G.maxChatBox = Math.min(width, height) - ViewMaker.i_Dp(R.dimen.dp80);
+        } else {
+            G.maxChatBox = Math.max(width, height) - ViewMaker.i_Dp(R.dimen.dp80);
+        }
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                updateShowItemInScreen();
+            }
+        }, 300);
+
+        super.onConfigurationChanged(newConfig);
     }
 
     /**

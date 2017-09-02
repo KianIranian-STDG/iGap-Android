@@ -186,7 +186,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             int maxsize = 0;
 
             if ((type == ProtoGlobal.Room.Type.CHANNEL) || (type == ProtoGlobal.Room.Type.CHAT) && mMessage.forwardedFrom != null) {
-                maxsize = (int) G.context.getResources().getDimension(R.dimen.dp220);
+                maxsize = G.maxChatBox;
             }
 
             messageView = ViewMaker.makeTextViewMessage(maxsize, mMessage.hasEmojiInText);

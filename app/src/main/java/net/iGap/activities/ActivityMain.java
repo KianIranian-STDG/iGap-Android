@@ -586,7 +586,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
 
-
         if (G.twoPaneMode) {
 
             boolean beforeState = G.isLandscape;
@@ -2368,6 +2367,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
         params.weight = value;
         view.setLayoutParams(params);
+
+        if (value > 0) {
+            view.setVisibility(View.VISIBLE);
+        } else {
+            view.setVisibility(View.GONE);
+        }
     }
 
     public enum chatLayoutMode {

@@ -195,6 +195,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
                 @Override
                 public void deny() {
+                    G.isInCall = false;
                     finish();
                     new WebRTC().leaveCall();
                 }
