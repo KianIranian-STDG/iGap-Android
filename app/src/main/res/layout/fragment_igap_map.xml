@@ -194,7 +194,7 @@
       android:layout_height="match_parent"
       android:id="@+id/scrollView"
       android:background="@color/background_check_gps"
-      android:visibility="gone"
+      android:visibility="visible"
       android:layout_below="@+id/backgroundToolbarMap"
       >
 
@@ -203,7 +203,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_gravity="center"
         android:orientation="vertical"
 
         >
