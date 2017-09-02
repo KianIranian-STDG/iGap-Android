@@ -86,7 +86,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         mRecyclerView.setAdapter(mAdapter);
         realm.close();
         ((ActivityMain) mActivity).setOnBackPressedListener(FragmentMapUsers.this, false);
-        ViewGroup mapContainer = (ViewGroup) view.findViewById(R.id.rooFragmentUserMap);
+        ViewGroup mapContainer = (ViewGroup) view.findViewById(R.id.rootFragmentUserMap);
         mapContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,7 +153,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                     //if (btnBack != null){
                     //    btnBack.performClick();
                     //}
-                    new HelperFragment(FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
+                    new HelperFragment(FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setResourceContainer(R.id.mapContainer).setReplace(false).load();
                     //for close FragmentiGapMap
                     //if (G.onMapClose != null) {
                     //    G.onMapClose.onClose();
