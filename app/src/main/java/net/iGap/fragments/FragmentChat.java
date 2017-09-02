@@ -467,6 +467,7 @@ public class FragmentChat extends BaseFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        isNeedResume = true;
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
 
         return rootView;
@@ -824,14 +825,6 @@ public class FragmentChat extends BaseFragment
 
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Fragment fragment = HelperFragment.isFragmentVisible(FragmentChat.class.getName());
-        if (fragment != null) {
-            fragment.onResume();
-        }
-    }
 
     private void registerListener() {
 

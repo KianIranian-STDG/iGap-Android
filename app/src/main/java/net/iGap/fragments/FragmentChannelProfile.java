@@ -189,6 +189,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        isNeedResume = true;
         return inflater.inflate(R.layout.activity_profile_channel, container, false);
     }
 
@@ -638,15 +639,6 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         super.onDestroy();
         if (realmChannelProfile != null && !realmChannelProfile.isClosed()) {
             realmChannelProfile.close();
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        FragmentChat fragment = (FragmentChat) getFragmentManager().findFragmentByTag(FragmentChat.class.getName());
-        if (fragment != null && fragment.isVisible()) {
-            fragment.onResume();
         }
     }
 

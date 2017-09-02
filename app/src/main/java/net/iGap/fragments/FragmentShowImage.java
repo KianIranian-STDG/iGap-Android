@@ -120,6 +120,7 @@ public class FragmentShowImage extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        isNeedResume = true;
         realmShowImage = Realm.getDefaultInstance();
         return inflater.inflate(R.layout.activity_show_image, container, false);
     }
