@@ -433,13 +433,13 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
                         String fullName = "";
                         if (edtFirstName.length() == 0) {
-                            fullName = " " + " " + edtLastName.getText().toString();
+                            fullName = " " + " " + edtLastName.getText().toString().trim();
                         }
                         if (edtLastName.length() == 0) {
-                            fullName = edtFirstName.getText().toString() + " " + " ";
+                            fullName = edtFirstName.getText().toString().trim() + " " + " ";
                         }
                         if (edtLastName.length() > 0 && edtFirstName.length() > 0) {
-                            fullName = edtFirstName.getText().toString() + " " + edtLastName.getText().toString();
+                            fullName = edtFirstName.getText().toString().trim() + " " + edtLastName.getText().toString().trim();
                         }
 
                         new RequestUserProfileSetNickname().userProfileNickName(fullName);

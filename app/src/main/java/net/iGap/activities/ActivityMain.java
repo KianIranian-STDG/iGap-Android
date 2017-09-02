@@ -976,6 +976,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onStart() {
         super.onStart();
 
+        openActivityPassCode();
+
+        //RealmRoomMessage.fetchNotDeliveredMessages(new OnActivityMainStart() {
+        //    @Override
+        //    public void sendDeliveredStatus(RealmRoom room, RealmRoomMessage message) {
+        //        G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), message.getRoomId(), message.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+        //    }
+        //});
+    }
+
+    private void openActivityPassCode() {
         if (!isActivityEnterPassCode && G.isPassCode && isLock) {
             enterPassword();
         } else if (!isActivityEnterPassCode) {
@@ -989,12 +1000,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 enterPassword();
             }
         }
-        //RealmRoomMessage.fetchNotDeliveredMessages(new OnActivityMainStart() {
-        //    @Override
-        //    public void sendDeliveredStatus(RealmRoom room, RealmRoomMessage message) {
-        //        G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), message.getRoomId(), message.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-        //    }
-        //});
     }
 
     /**

@@ -398,7 +398,13 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        System.exit(0);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            finishAffinity();
+        } else {
+            finish();
+        }
+
     }
 
     private void maxLengthEditText(int numberOfLenth) {
