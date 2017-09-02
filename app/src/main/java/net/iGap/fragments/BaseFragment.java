@@ -28,6 +28,7 @@ import static net.iGap.G.fragmentActivity;
 public class BaseFragment extends Fragment {
 
     protected Fragment currentFragment;
+    public boolean isNeedResume = false;
 
     @Override
     public void onAttach(Context context) {
@@ -49,6 +50,25 @@ public class BaseFragment extends Fragment {
 
     @Override
     public void onDetach() {
+
+        for (int i = G.fragmentManager.getFragments().size() - 2; i >= 0; i--) {
+
+            Fragment f = G.fragmentManager.getFragments().get(i);
+
+            if (f == null) {
+                continue;
+            }
+
+            BaseFragment bf = (BaseFragment) f;
+
+            if (bf.isNeedResume) {
+                bf.onResume();
+            }
+
+            break;
+        }
+
+
         super.onDetach();
     }
 

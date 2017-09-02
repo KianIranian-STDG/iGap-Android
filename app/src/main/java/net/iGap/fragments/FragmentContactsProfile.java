@@ -151,6 +151,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        isNeedResume = true;
         return inflater.inflate(R.layout.activity_contacts_profile, container, false);
     }
 
@@ -770,14 +771,6 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         super.onDestroy();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        FragmentChat fragment = (FragmentChat) getFragmentManager().findFragmentByTag(FragmentChat.class.getName());
-        if (fragment != null && fragment.isVisible()) {
-            fragment.onResume();
-        }
-    }
 
     /**
      * ************************************ methods ************************************

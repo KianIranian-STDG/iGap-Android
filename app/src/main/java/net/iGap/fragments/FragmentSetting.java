@@ -186,6 +186,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        isNeedResume = true;
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_setting, container, false);
     }

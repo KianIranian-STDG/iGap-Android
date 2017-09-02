@@ -186,6 +186,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        isNeedResume = true;
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
         return inflater.inflate(R.layout.fragment_igap_map, container, false);
     }

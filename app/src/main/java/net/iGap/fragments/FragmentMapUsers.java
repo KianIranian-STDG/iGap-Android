@@ -55,6 +55,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        isNeedResume = true;
         return inflater.inflate(R.layout.fragment_map_users, container, false);
     }
 
