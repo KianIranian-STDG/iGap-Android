@@ -26,6 +26,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
+import net.iGap.fragments.FragmentQrCodeNewDevice;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperCalander;
@@ -402,6 +403,7 @@ public final class StartupActions {
     private void fillImmovableClasses() {
         generalImmovableClasses.add(FragmentShowAvatars.class.getName());
         generalImmovableClasses.add(FragmentShowImage.class.getName());
+        generalImmovableClasses.add(FragmentQrCodeNewDevice.class.getName());
     }
 
     /**

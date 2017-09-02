@@ -627,38 +627,36 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                 if (!identity.equals(RequestClientGetRoom.CreateRoomMode.requestFromOwner.toString())) return;
 
                 try {
-                    if (mActivity != null) {
-                        mActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
 
-                                if (existAvatar) {
-                                    showProgressBar();
-                                    if (room.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                        new RequestGroupAvatarAdd().groupAvatarAdd(roomId, token);
-                                    } else {
-                                        new RequestChannelAvatarAdd().channelAvatarAdd(roomId, token);
-                                    }
+                            if (existAvatar) {
+                                showProgressBar();
+                                if (room.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                    new RequestGroupAvatarAdd().groupAvatarAdd(roomId, token);
                                 } else {
-                                    Fragment fragment = ContactGroupFragment.newInstance();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putLong("RoomId", roomId);
-
-                                    if (room.getType() == ProtoGlobal.Room.Type.GROUP) {
-                                        bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
-                                    } else {
-                                        bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
-                                    }
-                                    bundle.putString("TYPE", typeCreate.toString());
-                                    bundle.putBoolean("NewRoom", true);
-                                    fragment.setArguments(bundle);
-
-                                    mActivity.onBackPressed();
-                                    new HelperFragment(fragment).setStateLoss(true).load();
+                                    new RequestChannelAvatarAdd().channelAvatarAdd(roomId, token);
                                 }
+                            } else {
+                                Fragment fragment = ContactGroupFragment.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putLong("RoomId", roomId);
+
+                                if (room.getType() == ProtoGlobal.Room.Type.GROUP) {
+                                    bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
+                                } else {
+                                    bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
+                                }
+                                bundle.putString("TYPE", typeCreate.toString());
+                                bundle.putBoolean("NewRoom", true);
+                                fragment.setArguments(bundle);
+
+                                popBackStackFragment();
+                                new HelperFragment(fragment).load();
                             }
-                        });
-                    }
+                        }
+                    });
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
@@ -770,8 +768,8 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         bundle.putBoolean("NewRoom", true);
         fragment.setArguments(bundle);
 
-        mActivity.onBackPressed();
-        new HelperFragment(fragment).setStateLoss(true).load();
+        popBackStackFragment();
+        new HelperFragment(fragment).load();
     }
 
     private void startChannelRoom(long roomId) {

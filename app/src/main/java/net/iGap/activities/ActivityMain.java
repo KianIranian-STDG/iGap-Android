@@ -1276,7 +1276,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     HelperPermision.getCameraPermission(ActivityMain.this, new OnGetPermission() {
                         @Override
                         public void Allow() throws IOException {
-                            new HelperFragment(FragmentQrCodeNewDevice.newInstance()).setAnimated(false).load();
+                            new HelperFragment(FragmentQrCodeNewDevice.newInstance()).load();
                         }
 
                         @Override
