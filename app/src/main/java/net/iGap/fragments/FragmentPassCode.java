@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -67,7 +68,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
     private boolean deviceHasFingerPrint;
     private ViewGroup vgFingerPrint;
     private Spinner staticSpinner;
-    private static final String[] paths = {"PIN", "Password"};
+    private String[] paths = {"PIN", "Password"};
     private final int PIN = 0;
     private final int PASSWORD = 1;
     private int kindPassword = 0;
@@ -96,6 +97,8 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        paths = getResources().getStringArray(R.array.array_passCode);
 
         view.findViewById(R.id.asn_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
@@ -178,6 +181,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         staticSpinner.setAdapter(adapter);
         staticSpinner.setOnItemSelectedListener(this);
         staticSpinner.setSelection(0);
+        staticSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         if (isPassCode) {
 
             page = 3;

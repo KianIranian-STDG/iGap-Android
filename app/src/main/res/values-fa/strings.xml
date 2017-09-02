@@ -1085,5 +1085,6 @@
   <string name="block_the_user_text">آیا از مسدودی کردن ارتباط این مخاطب اطمینان دارید؟</string>
   <string name="unblock_the_user">رفع مسدودیت مخاطب</string>
   <string name="unblock_the_user_text">آیا از رفع مسدودیت ارتباط این مخاطب اطمینان دارید؟</string>
-
+  <string name="PIN">پین</string>
+  <string name="password">رمز</string>
 </resources>

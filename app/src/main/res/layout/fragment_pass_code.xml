@@ -65,7 +65,8 @@
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/stns_ripple_back"
             android:layout_toRightOf="@+id/stns_ripple_back"
-            android:visibility="gone"
+            android:visibility="visible"
+            android:layoutDirection="rtl"
             />
 
         <TextView
