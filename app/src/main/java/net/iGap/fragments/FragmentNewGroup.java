@@ -14,7 +14,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -854,10 +853,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
     private String pathSaveImage;
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
 
     //***Show And Hide ProgressBar
     private void showProgressBar() {

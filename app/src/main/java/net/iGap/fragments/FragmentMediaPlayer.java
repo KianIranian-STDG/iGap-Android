@@ -12,6 +12,7 @@ package net.iGap.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -152,6 +153,14 @@ public class FragmentMediaPlayer extends BaseFragment {
         MusicPlayer.isShowMediaPlayer = true;
         MusicPlayer.onComplete = onComplete;
         updateUi();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        G.fragmentManager.beginTransaction().detach(this).attach(this).commit();
+
+        super.onConfigurationChanged(newConfig);
     }
 
     //*****************************************************************************************
@@ -319,6 +328,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         txt_MusicTime.setText(MusicPlayer.musicTime);
         txt_MusicPlace.setText(MusicPlayer.musicInfoTitle);
         txt_MusicName.setText(MusicPlayer.musicName);
+        txt_Timer.setText(MusicPlayer.strTimer);
 
         if (MusicPlayer.mp != null) {
             if (MusicPlayer.mp.isPlaying()) {
