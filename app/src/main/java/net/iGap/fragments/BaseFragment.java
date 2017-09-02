@@ -13,34 +13,20 @@ package net.iGap.fragments;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import java.io.File;
-import java.io.IOException;
-import net.iGap.Config;
 import net.iGap.G;
-import net.iGap.WebSocketClient;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperPermision;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.module.AttachFile;
-import net.iGap.module.StartupActions;
-import net.iGap.proto.ProtoUserUpdateStatus;
-import net.iGap.request.RequestUserUpdateStatus;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static net.iGap.G.fragmentActivity;
 
 public class BaseFragment extends Fragment {
 
-    private boolean isOnGetPermission = false;
-    //private FragmentActivity fragmentActivity;
     protected Fragment currentFragment;
 
     @Override
@@ -57,62 +43,9 @@ public class BaseFragment extends Fragment {
         G.checkLanguage();
         checkFont();
         super.onCreate(savedInstanceState);
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        //    StatusBarUtil.setColor(this, Color.parseColor(G.appBarColor), 50);
-        //}
-        makeDirectoriesIfNotExist();
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
     }
 
-    @Override
-    public void onStart() {
-        if (!G.isAppInFg) {
-            G.isAppInFg = true;
-            G.isChangeScrFg = false;
-
-            /**
-             * if user isn't login and page come in foreground try for reconnect
-             */
-            if (!G.userLogin) {
-                WebSocketClient.reconnect(true);
-            }
-        } else {
-            G.isChangeScrFg = true;
-        }
-        G.isScrInFg = true;
-
-        AttachFile.isInAttach = false;
-
-        if (!G.isUserStatusOnline && G.userLogin) {
-            new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE);
-        }
-
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        makeDirectoriesIfNotExist();
-    }
-
-    @Override
-    public void onStop() {
-        if (!G.isScrInFg || !G.isChangeScrFg) {
-            G.isAppInFg = false;
-        }
-        G.isScrInFg = false;
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (!G.isAppInFg && !AttachFile.isInAttach && G.userLogin) {
-                    new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE);
-                }
-            }
-        }, Config.UPDATE_STATUS_TIME);
-        super.onStop();
-    }
 
     @Override
     public void onDetach() {
@@ -142,45 +75,6 @@ public class BaseFragment extends Fragment {
     }
 
 
-    private void makeDirectoriesIfNotExist() {
-
-        if (isOnGetPermission) {
-            return;
-        }
-
-        //if (this instanceof ActivityIntroduce) {
-        //    return;
-        //}
-
-        isOnGetPermission = true;
-
-        try {
-            HelperPermision.getStoragePermision(fragmentActivity, new OnGetPermission() {
-                @Override
-                public void Allow() throws IOException {
-                    checkIsDirectoryExist();
-                }
-
-                @Override
-                public void deny() {
-                    removeFromBaseFragment();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void checkIsDirectoryExist() {
-
-        isOnGetPermission = false;
-
-        if (new File(G.DIR_APP).exists() && new File(G.DIR_IMAGES).exists() && new File(G.DIR_VIDEOS).exists() && new File(G.DIR_AUDIOS).exists() && new File(G.DIR_DOCUMENT).exists() && new File(G.DIR_CHAT_BACKGROUND).exists() && new File(G.DIR_IMAGE_USER).exists() && new File(G.DIR_TEMP).exists()) {
-            return;
-        } else {
-            StartupActions.makeFolder();
-        }
-    }
 
     private void hideKeyboard() {
         View view = G.fragmentActivity.getCurrentFocus();
