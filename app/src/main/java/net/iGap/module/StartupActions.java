@@ -26,6 +26,8 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
+import net.iGap.fragments.FragmentShowAvatars;
+import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFillLookUpClass;
@@ -55,6 +57,7 @@ import static net.iGap.G.context;
 import static net.iGap.G.displayName;
 import static net.iGap.G.emojiProvider;
 import static net.iGap.G.emojiTree;
+import static net.iGap.G.generalImmovableClasses;
 import static net.iGap.G.headerTextColor;
 import static net.iGap.G.helperNotificationAndBadge;
 import static net.iGap.G.imageFile;
@@ -110,7 +113,7 @@ public final class StartupActions {
         if (diagonalInches >= 6.5) {
             G.twoPaneMode = true;
         } else {
-            G.twoPaneMode = false;
+            G.twoPaneMode = true;//false
         }
     }
 
@@ -321,6 +324,7 @@ public final class StartupActions {
                 fillUnSecureList();
                 fillUnSecureServerActionId();
                 fillUnLoginList();
+                fillImmovableClasses();
                 fillWaitingRequestActionIdAllowed();
             }
         }).start();
@@ -390,6 +394,14 @@ public final class StartupActions {
         unLogin.add("139");
         unLogin.add("140");
         unLogin.add("802");
+    }
+
+    /**
+     * list off classes(fragments) that don't have any animations for open and close state
+     */
+    private void fillImmovableClasses() {
+        generalImmovableClasses.add(FragmentShowAvatars.class.getName());
+        generalImmovableClasses.add(FragmentShowImage.class.getName());
     }
 
     /**

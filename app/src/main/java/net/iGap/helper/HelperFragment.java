@@ -1,5 +1,6 @@
 package net.iGap.helper;
 
+import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,7 +17,6 @@ public class HelperFragment {
     private Fragment fragment;
     private boolean addToBackStack = true;
     private boolean animated = true;
-    private boolean twoPaneModeAnimated = false;
     private boolean replace = true;
     private boolean stateLoss;
     private boolean hasCustomAnimation;
@@ -48,11 +48,6 @@ public class HelperFragment {
 
     public HelperFragment setAnimated(boolean animated) {
         this.animated = animated;
-        return this;
-    }
-
-    public HelperFragment setTwoPaneModeAnimated(boolean twoPaneModeAnimated) {
-        this.twoPaneModeAnimated = twoPaneModeAnimated;
         return this;
     }
 
@@ -94,26 +89,26 @@ public class HelperFragment {
             return;
         }
 
+        FragmentTransaction fragmentTransaction = G.fragmentManager.beginTransaction();
+
         if (tag == null) {
             tag = fragment.getClass().getName();
+        }
+
+        if (getAnimation(tag)) {
+            if (hasCustomAnimation) {
+                fragmentTransaction.setCustomAnimations(enter, exit, popEnter, popExit);
+            } else {
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
+            }
         }
 
         if (resourceContainer == 0) {
             resourceContainer = getResContainer(tag);
         }
 
-        FragmentTransaction fragmentTransaction = G.fragmentManager.beginTransaction();
-
         if (addToBackStack) {
             fragmentTransaction.addToBackStack(tag);
-        }
-
-        if ((!G.twoPaneMode && animated) || (G.twoPaneMode && twoPaneModeAnimated)) {
-            if (hasCustomAnimation) {
-                fragmentTransaction.setCustomAnimations(enter, exit, popEnter, popExit);
-            } else {
-                fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
-            }
         }
 
         if (replace) {
@@ -152,6 +147,29 @@ public class HelperFragment {
 
     public void popBackStack() {
         G.fragmentActivity.getSupportFragmentManager().popBackStack();
+    }
+
+    private boolean getAnimation(String tag) {
+
+        for (String immovableClass : G.generalImmovableClasses) {
+            if (tag.equals(immovableClass)) {
+                return false;
+            }
+        }
+
+        if (G.twoPaneMode) {
+            if ((G.context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) && (tag.equals(FragmentChat.class.getName()))) {
+                return true;
+            }
+
+            if ((ActivityMain.frameFragmentBack != null && ActivityMain.frameFragmentBack.getVisibility() == View.VISIBLE)) {
+                return true;
+            }
+            return false;
+        } else {
+            return true;
+        }
+
     }
 
     public static Fragment isFragmentVisible(String fragmentTag) {
