@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -19,7 +18,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -109,7 +107,6 @@ public class FragmentShowMember extends BaseFragment {
     private boolean isFirstFill = true;
     private int offset = 0;
     private int limit = 30;
-    private FragmentActivity mActivity;
     public static OnComplete infoUpdateListenerCount;
     private EndlessRecyclerViewScrollListener scrollListener;
     private boolean isDeleteMemberList = true;
@@ -354,7 +351,7 @@ public class FragmentShowMember extends BaseFragment {
                 });
             }
         };
-        mActivity.runOnUiThread(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
                 mCurrentUpdateCount = 0;
@@ -446,7 +443,7 @@ public class FragmentShowMember extends BaseFragment {
                     edtSearch.setVisibility(View.GONE);
                     menu_txt_titleToolbar.setVisibility(View.VISIBLE);
                     txtSearch.setVisibility(View.VISIBLE);
-                    InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
             }
@@ -495,9 +492,9 @@ public class FragmentShowMember extends BaseFragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fcm_recycler_view_show_member);
         mRecyclerView.setItemViewCacheSize(100);
         mRecyclerView.setItemAnimator(null);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
 
-        final PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(mActivity, DeviceUtils.getScreenHeight(mActivity));
+        final PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(G.fragmentActivity, DeviceUtils.getScreenHeight(G.fragmentActivity));
         mRecyclerView.setLayoutManager(preCachingLayoutManager);
 
         progressBar = (ProgressBar) view.findViewById(R.id.fcg_prgWaiting);
@@ -509,7 +506,7 @@ public class FragmentShowMember extends BaseFragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                // mActivity.getSupportFragmentManager().popBackStack();
+                // G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
                 popBackStackFragment();
 
@@ -591,7 +588,7 @@ public class FragmentShowMember extends BaseFragment {
                     mList = memberList.where().equalTo(RealmMemberFields.ROLE, selectedRole).findAll();
                 }
 
-                if (mList.size() > 0 && mActivity != null) {
+                if (mList.size() > 0 && G.fragmentActivity != null) {
                     mAdapter = new MemberAdapter(mList, realmRoom.getType(), mMainRole, userID);
                     mRecyclerView.setAdapter(mAdapter);
                 }
@@ -657,7 +654,7 @@ public class FragmentShowMember extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     try {
-                        HelperPermision.getStoragePermision(mActivity, new OnGetPermission() {
+                        HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                             @Override
                             public void Allow() {
                                 if (mContact.peerId == userID) {
@@ -865,13 +862,5 @@ public class FragmentShowMember extends BaseFragment {
             realm.close();
             return null;
         }
-    }
-
-
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 }

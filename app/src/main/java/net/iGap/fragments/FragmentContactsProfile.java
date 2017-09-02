@@ -13,7 +13,6 @@ package net.iGap.fragments;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -27,7 +26,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -134,7 +132,6 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
     private RealmList<RealmAvatar> avatarList;
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
-    private FragmentActivity mActivity;
 
     private static final String ROOM_ID = "RoomId";
     private static final String PEER_ID = "peerId";
@@ -356,7 +353,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                 @Override
                 public void onClick(View view) {
 
-                    final LinearLayout layoutNickname = new LinearLayout(mActivity);
+                    final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
                     layoutNickname.setOrientation(LinearLayout.VERTICAL);
 
                     String splitNickname[] = txtNickname.getText().toString().split(" ");
@@ -375,13 +372,13 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     } else {
                         firsName = splitNickname[0];
                     }
-                    final View viewFirstName = new View(mActivity);
+                    final View viewFirstName = new View(G.fragmentActivity);
                     viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
 
                     LinearLayout.LayoutParams viewParams = new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
 
-                    TextInputLayout inputFirstName = new TextInputLayout(mActivity);
-                    final EmojiEditTextE edtFirstName = new EmojiEditTextE(mActivity);
+                    TextInputLayout inputFirstName = new TextInputLayout(G.fragmentActivity);
+                    final EmojiEditTextE edtFirstName = new EmojiEditTextE(G.fragmentActivity);
                     edtFirstName.setHint(R.string.first_name);
                     edtFirstName.setTypeface(G.typeface_IRANSansMobile);
                     edtFirstName.setText(firsName);
@@ -396,11 +393,11 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                         edtFirstName.setBackground(getResources().getDrawable(android.R.color.transparent));
                     }
 
-                    final View viewLastName = new View(mActivity);
+                    final View viewLastName = new View(G.fragmentActivity);
                     viewLastName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
 
-                    TextInputLayout inputLastName = new TextInputLayout(mActivity);
-                    final MEditText edtLastName = new MEditText(mActivity);
+                    TextInputLayout inputLastName = new TextInputLayout(G.fragmentActivity);
+                    final MEditText edtLastName = new MEditText(G.fragmentActivity);
                     edtLastName.setHint(R.string.last_name);
                     edtLastName.setTypeface(G.typeface_IRANSansMobile);
                     edtLastName.setText(lastName);
@@ -423,7 +420,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     layoutNickname.addView(inputFirstName, layoutParams);
                     layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
-                    final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.pu_nikname_profileUser)).positiveText(getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
+                    final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.pu_nikname_profileUser)).positiveText(getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
                     final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                     positive.setEnabled(false);
@@ -652,7 +649,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
             @Override
             public void onClick(View v) {
                 try {
-                    HelperPermision.getContactPermision(mActivity, new OnGetPermission() {
+                    HelperPermision.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                         @Override
                         public void Allow() throws IOException {
                             showPopupPhoneNumber(vgPhoneNumber, mPhone);
@@ -782,12 +779,6 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mActivity = (FragmentActivity) context;
-    }
-
     /**
      * ************************************ methods ************************************
      */
@@ -853,7 +844,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         }
 
         if (isExist) {
-            new MaterialDialog.Builder(mActivity).title(R.string.phone_number).items(R.array.phone_number2).itemsCallback(new MaterialDialog.ListCallback() {
+            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).items(R.array.phone_number2).itemsCallback(new MaterialDialog.ListCallback() {
                 @Override
                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                     switch (which) {
@@ -871,7 +862,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                         case 1:
                             String copy;
                             copy = mPhone;
-                            ClipboardManager clipboard = (ClipboardManager) mActivity.getSystemService(CLIPBOARD_SERVICE);
+                            ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
                             ClipData clip = ClipData.newPlainText("PHONE_NUMBER", copy);
                             clipboard.setPrimaryClip(clip);
                             break;
@@ -879,7 +870,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                 }
             }).show();
         } else {
-            new MaterialDialog.Builder(mActivity).title(R.string.phone_number).items(R.array.phone_number).itemsCallback(new MaterialDialog.ListCallback() {
+            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).items(R.array.phone_number).itemsCallback(new MaterialDialog.ListCallback() {
                 @Override
                 public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                     switch (which) {
@@ -931,7 +922,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                             break;
                         case 2:
 
-                            ClipboardManager clipboard = (ClipboardManager) mActivity.getSystemService(CLIPBOARD_SERVICE);
+                            ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
                             ClipData clip = ClipData.newPlainText("PHONE_NUMBER", mPhone);
                             clipboard.setPrimaryClip(clip);
 
@@ -959,7 +950,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
     private void showPopUp() {
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
         View v = dialog.getCustomView();
 
         DialogAnimation.animationUp(dialog);
@@ -1010,7 +1001,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                new MaterialDialog.Builder(mActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -1026,7 +1017,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                new MaterialDialog.Builder(mActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -1042,7 +1033,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
         if (isBlockUser) {
 
-            new MaterialDialog.Builder(mActivity).title(R.string.unblock_the_user).content(R.string.unblock_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.unblock_the_user).content(R.string.unblock_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     new RequestUserContactsUnblock().userContactsUnblock(userId);
@@ -1050,7 +1041,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
             }).negativeText(R.string.cancel).show();
 
         } else {
-            new MaterialDialog.Builder(mActivity).title(R.string.block_the_user).content(R.string.block_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.block_the_user).content(R.string.block_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     new RequestUserContactsBlock().userContactsBlock(userId);
@@ -1061,7 +1052,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
     private void showAlertDialog(String message, String positive, String negitive) { // alert dialog for block or clear user
 
-        new MaterialDialog.Builder(mActivity).title(R.string.clear_history).content(message).positiveText(positive).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(message).positiveText(positive).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 dialog.dismiss();

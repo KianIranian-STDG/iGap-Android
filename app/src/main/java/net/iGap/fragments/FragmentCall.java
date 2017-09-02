@@ -1,7 +1,6 @@
 package net.iGap.fragments;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -12,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -68,7 +66,6 @@ import net.iGap.request.RequestSignalingGetLog;
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = true;
     private AppCompatImageView imgCallEmpty;
-    private FragmentActivity mActivity;
     private TextView empty_call;
     ProgressBar progressBar;
     private int attampOnError = 0;
@@ -114,7 +111,7 @@ import net.iGap.request.RequestSignalingGetLog;
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                mActivity.onBackPressed();
+                G.fragmentActivity.onBackPressed();
             }
         });
 
@@ -133,7 +130,7 @@ import net.iGap.request.RequestSignalingGetLog;
         mRecyclerView.setItemViewCacheSize(1000);
         mRecyclerView.setItemAnimator(null);
 
-        PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(mActivity, 6000);
+        PreCachingLayoutManager layoutManager = new PreCachingLayoutManager(G.fragmentActivity, 6000);
 
         mRecyclerView.setLayoutManager(layoutManager);
 
@@ -230,19 +227,19 @@ import net.iGap.request.RequestSignalingGetLog;
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
 
-                    if (((ActivityMain) mActivity).arcMenu.isMenuOpened()) {
-                        ((ActivityMain) mActivity).arcMenu.toggleMenu();
+                    if (((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
+                        ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
                     }
 
                     if (dy > 0) {
                         // Scroll Down
-                        if (((ActivityMain) mActivity).arcMenu.fabMenu.isShown()) {
-                            ((ActivityMain) mActivity).arcMenu.fabMenu.hide();
+                        if (((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
+                            ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.hide();
                         }
                     } else if (dy < 0) {
                         // Scroll Up
-                        if (!((ActivityMain) mActivity).arcMenu.fabMenu.isShown()) {
-                            ((ActivityMain) mActivity).arcMenu.fabMenu.show();
+                        if (!((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
+                            ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.show();
                         }
                     }
                 }
@@ -259,7 +256,7 @@ import net.iGap.request.RequestSignalingGetLog;
         fragment.setArguments(bundle);
 
         try {
-            mActivity.getSupportFragmentManager()
+            G.fragmentActivity.getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
                 .addToBackStack(null)
@@ -289,7 +286,7 @@ import net.iGap.request.RequestSignalingGetLog;
 
 
     public void openDialogMenu() {
-        final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
         View view = dialog.getCustomView();
 
         DialogAnimation.animationUp(dialog);
@@ -310,7 +307,7 @@ import net.iGap.request.RequestSignalingGetLog;
                 dialog.dismiss();
 
                 if (G.userLogin) {
-                    new MaterialDialog.Builder(mActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
                             positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -537,12 +534,6 @@ import net.iGap.request.RequestSignalingGetLog;
                 }
             });
         }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 
     @Override

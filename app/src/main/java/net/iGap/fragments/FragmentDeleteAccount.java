@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -20,7 +19,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,24 +60,26 @@ public class FragmentDeleteAccount extends BaseFragment {
     private String phone;
     private ViewGroup ltTime;
     private ProgressBar prgWaiting;
-    private FragmentActivity mActivity;
     private boolean isFirstClick = true;
 
     public FragmentDeleteAccount() {
         // Required empty public constructor
     }
 
-    @Override public void onResume() {
+    @Override
+    public void onResume() {
 
         final IntentFilter filter = new IntentFilter();
         filter.addAction("android.provider.Telephony.SMS_RECEIVED");
         smsReceiver = new IncomingSms(new OnSmsReceive() {
 
-            @Override public void onSmsReceive(final String phoneNumber, final String message) {
+            @Override
+            public void onSmsReceive(final String phoneNumber, final String message) {
                 try {
                     if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
                         G.handler.postDelayed(new Runnable() {
-                            @Override public void run() {
+                            @Override
+                            public void run() {
                                 smsMessage = message;
                                 setCode();
                             }
@@ -100,12 +100,14 @@ public class FragmentDeleteAccount extends BaseFragment {
         });
 
         try {
-            HelperPermision.getSmsPermision(mActivity, new OnGetPermission() {
-                @Override public void Allow() {
-                    mActivity.registerReceiver(smsReceiver, filter);
+            HelperPermision.getSmsPermision(G.fragmentActivity, new OnGetPermission() {
+                @Override
+                public void Allow() {
+                    G.fragmentActivity.registerReceiver(smsReceiver, filter);
                 }
 
-                @Override public void deny() {
+                @Override
+                public void deny() {
 
                 }
             });
@@ -115,12 +117,14 @@ public class FragmentDeleteAccount extends BaseFragment {
         super.onResume();
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_delete_account, container, false);
     }
 
-    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if (getArguments().getString("PHONE") != null) {
@@ -129,21 +133,25 @@ public class FragmentDeleteAccount extends BaseFragment {
         }
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.fda_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         G.onUserGetDeleteToken = new OnUserGetDeleteToken() {
-            @Override public void onUserGetDeleteToken(int resendDelay, String tokenRegex, String tokenLength) {
+            @Override
+            public void onUserGetDeleteToken(int resendDelay, String tokenRegex, String tokenLength) {
                 regex = tokenRegex;
                 setCode();
             }
 
-            @Override public void onUserGetDeleteError(final int majorCode, int minorCode, final int time) {
+            @Override
+            public void onUserGetDeleteError(final int majorCode, int minorCode, final int time) {
 
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         switch (majorCode) {
                             case 152:
                                 dialogWaitTime(R.string.USER_GET_DELETE_TOKEN_MAX_TRY_LOCK, time, majorCode);
@@ -161,14 +169,16 @@ public class FragmentDeleteAccount extends BaseFragment {
 
         ViewGroup rootDeleteAccount = (ViewGroup) view.findViewById(R.id.rootDeleteAccount);
         rootDeleteAccount.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
             }
         });
 
         RippleView txtBack = (RippleView) view.findViewById(R.id.stda_ripple_back);
         txtBack.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 removeFromBaseFragment(FragmentDeleteAccount.this);
@@ -186,78 +196,77 @@ public class FragmentDeleteAccount extends BaseFragment {
         txtSet = (RippleView) view.findViewById(R.id.stda_ripple_set);
         txtSet.setEnabled(false);
         txtSet.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 if (edtDeleteAccount.getText().length() > 0) {
 
-                    new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.delete_account))
-                        .titleColor(getResources().getColor(android.R.color.black))
-                        .content(R.string.sure_delete_account)
-                        .positiveText(getResources().getString(R.string.B_ok))
-                        .negativeText(getResources().getString(R.string.B_cancel))
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.delete_account)).titleColor(getResources().getColor(android.R.color.black)).content(R.string.sure_delete_account).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                //                                    String verificationCode = HelperString.regexExtractValue(smsMessage, regex);
-                                String verificationCode = edtDeleteAccount.getText().toString();
-                                if (verificationCode != null && !verificationCode.isEmpty() && isFirstClick) {
+                            //                                    String verificationCode = HelperString.regexExtractValue(smsMessage, regex);
+                            String verificationCode = edtDeleteAccount.getText().toString();
+                            if (verificationCode != null && !verificationCode.isEmpty() && isFirstClick) {
 
-                                    isFirstClick = false;
-                                    G.onUserDelete = new OnUserDelete() {
-                                        @Override public void onUserDeleteResponse() {
-                                            hideProgressBar();
+                                isFirstClick = false;
+                                G.onUserDelete = new OnUserDelete() {
+                                    @Override
+                                    public void onUserDeleteResponse() {
+                                        hideProgressBar();
 
-                                        }
+                                    }
 
-                                        @Override public void Error(final int majorCode, final int minorCode, final int time) {
+                                    @Override
+                                    public void Error(final int majorCode, final int minorCode, final int time) {
 
-                                            hideProgressBar();
-                                            isFirstClick = true;
-                                            mActivity.runOnUiThread(new Runnable() {
-                                                @Override public void run() {
-                                                    if (dialog.isShowing()) dialog.dismiss();
-                                                    switch (majorCode) {
-                                                        case 158:
-                                                            dialogWaitTime(R.string.USER_DELETE_MAX_TRY_LOCK, time, majorCode);
-                                                            break;
-                                                    }
+                                        hideProgressBar();
+                                        isFirstClick = true;
+                                        G.handler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (dialog.isShowing()) dialog.dismiss();
+                                                switch (majorCode) {
+                                                    case 158:
+                                                        dialogWaitTime(R.string.USER_DELETE_MAX_TRY_LOCK, time, majorCode);
+                                                        break;
                                                 }
-                                            });
-                                        }
+                                            }
+                                        });
+                                    }
 
-                                        @Override public void TimeOut() {
-                                            hideProgressBar();
-                                            isFirstClick = true;
-                                            if (mActivity != null) {
-                                                mActivity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void TimeOut() {
+                                        hideProgressBar();
+                                        isFirstClick = true;
+                                        G.handler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                     @Override
-                                                    public void run() {
-                                                        final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
-                                                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-                                                                snack.dismiss();
-                                                            }
-                                                        });
-                                                        snack.show();
+                                                    public void onClick(View view) {
+                                                        snack.dismiss();
                                                     }
                                                 });
+                                                snack.show();
                                             }
-                                        }
-                                    };
+                                        });
+                                    }
+                                };
 
-                                    showProgressBar();
-                                    new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
-                                }
+                                showProgressBar();
+                                new RequestUserDelete().userDelete(verificationCode, ProtoUserDelete.UserDelete.Reason.OTHER);
                             }
-                        })
-                        .show();
+                        }
+                    }).show();
                 } else {
 
-                    final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.please_enter_code_for_verify, Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), R.string.please_enter_code_for_verify, Snackbar.LENGTH_LONG);
 
                     snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -271,7 +280,8 @@ public class FragmentDeleteAccount extends BaseFragment {
 
         final View viewLineBottom = view.findViewById(R.id.stda_line_below_editText);
         txtSet.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override public void onFocusChange(View view, boolean b) {
+            @Override
+            public void onFocusChange(View view, boolean b) {
                 if (b) {
                     viewLineBottom.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
                 } else {
@@ -283,7 +293,8 @@ public class FragmentDeleteAccount extends BaseFragment {
         final TextView txtTimerLand = (TextView) view.findViewById(R.id.stda_txt_time);
 
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
 
                 long time;
                 if (BuildConfig.DEBUG) {
@@ -293,14 +304,16 @@ public class FragmentDeleteAccount extends BaseFragment {
                 }
 
                 countDownTimer = new CountDownTimer(time, 1000) {
-                    @Override public void onTick(long millisUntilFinished) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
                         int seconds = (int) ((millisUntilFinished) / 1000);
                         int minutes = seconds / 60;
                         seconds = seconds % 60;
                         txtTimerLand.setText("" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
                     }
 
-                    @Override public void onFinish() {
+                    @Override
+                    public void onFinish() {
                         edtDeleteAccount.setEnabled(true);
                         txtSet.setEnabled(true);
                         ltTime.setVisibility(View.GONE);
@@ -323,9 +336,10 @@ public class FragmentDeleteAccount extends BaseFragment {
         }
     }
 
-    @Override public void onPause() {
+    @Override
+    public void onPause() {
         try {
-            mActivity.unregisterReceiver(smsReceiver);
+            G.fragmentActivity.unregisterReceiver(smsReceiver);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -335,10 +349,11 @@ public class FragmentDeleteAccount extends BaseFragment {
     private void showProgressBar() {
 
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 prgWaiting.setVisibility(View.VISIBLE);
-                if (mActivity != null) {
-                    mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (G.fragmentActivity != null) {
+                    G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
@@ -346,10 +361,11 @@ public class FragmentDeleteAccount extends BaseFragment {
 
     private void hideProgressBar() {
         G.handler.post(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 prgWaiting.setVisibility(View.GONE);
-                if (mActivity != null) {
-                    mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (G.fragmentActivity != null) {
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
@@ -357,32 +373,27 @@ public class FragmentDeleteAccount extends BaseFragment {
 
     private void dialogWaitTime(int title, long time, int majorCode) {
         boolean wrapInScrollView = true;
-        final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).title(title)
-            .customView(R.layout.dialog_remind_time, wrapInScrollView)
-            .positiveText(R.string.B_ok)
-            .autoDismiss(false)
-            .negativeText(R.string.B_cancel)
-            .onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    dialog.dismiss();
-                    removeFromBaseFragment(FragmentDeleteAccount.this);
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).negativeText(R.string.B_cancel).onNegative(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.dismiss();
+                removeFromBaseFragment(FragmentDeleteAccount.this);
 
-                }
-            })
-            .canceledOnTouchOutside(false)
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    dialog.dismiss();
-                    new RequestUserGetDeleteToken().userGetDeleteToken();
-                }
-            })
-            .show();
+            }
+        }).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                dialog.dismiss();
+                new RequestUserGetDeleteToken().userGetDeleteToken();
+            }
+        }).show();
 
         View v = dialog.getCustomView();
 
         final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
-            @Override public void onTick(long millisUntilFinished) {
+            @Override
+            public void onTick(long millisUntilFinished) {
                 int seconds = (int) ((millisUntilFinished) / 1000);
                 int minutes = seconds / 60;
                 seconds = seconds % 60;
@@ -390,17 +401,12 @@ public class FragmentDeleteAccount extends BaseFragment {
                 dialog.getActionButton(DialogAction.POSITIVE).setEnabled(false);
             }
 
-            @Override public void onFinish() {
+            @Override
+            public void onFinish() {
                 dialog.getActionButton(DialogAction.POSITIVE).setEnabled(true);
                 remindTime.setText("00:00");
             }
         };
         countWaitTimer.start();
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 }

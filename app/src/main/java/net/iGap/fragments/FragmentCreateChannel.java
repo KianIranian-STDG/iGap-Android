@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.graphics.Color;
@@ -19,7 +18,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.Selection;
@@ -69,18 +67,19 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
     private boolean existAvatar;
     private ProgressBar prgWaiting;
     private String pathSaveImage;
-    private FragmentActivity mActivity;
 
     public FragmentCreateChannel() {
         // Required empty public constructor
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_channel, container, false);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         G.onChannelCheckUsername = this;
@@ -100,22 +99,25 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
 
         ViewGroup vgRoot = (ViewGroup) view.findViewById(R.id.fch_root);
         vgRoot.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
             }
         });
 
         TextView txtBack = (TextView) view.findViewById(R.id.fch_txt_back);
         txtBack.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 removeFromBaseFragment(FragmentCreateChannel.this);
             }
         });
 
         TextView txtCancel = (TextView) view.findViewById(R.id.fch_txt_cancel);
         txtCancel.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
+            @Override
+            public void onClick(View view) {
+                //  G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentCreateChannel.this).commit();
 
                 removeFromBaseFragment(FragmentCreateChannel.this);
             }
@@ -123,37 +125,42 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
 
         txtFinish = (TextView) view.findViewById(R.id.fch_txt_finish);
         txtFinish.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 G.onChannelUpdateUsername = new OnChannelUpdateUsername() {
-                    @Override public void onChannelUpdateUsername(final long roomId, final String username) {
+                    @Override
+                    public void onChannelUpdateUsername(final long roomId, final String username) {
 
-                        if (mActivity != null) {
-                            mActivity.runOnUiThread(new Runnable() {
-                                @Override public void run() {
-                                    Realm realm = Realm.getDefaultInstance();
-                                    realm.executeTransaction(new Realm.Transaction() {
-                                        @Override public void execute(Realm realm) {
-                                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                            realmRoom.getChannelRoom().setUsername(username);
-                                            realmRoom.getChannelRoom().setPrivate(false);
-                                        }
-                                    });
-                                    realm.close();
-                                    getRoom(roomId, ProtoGlobal.Room.Type.CHANNEL);
-                                }
-                            });
-                        }
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Realm realm = Realm.getDefaultInstance();
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                        realmRoom.getChannelRoom().setUsername(username);
+                                        realmRoom.getChannelRoom().setPrivate(false);
+                                    }
+                                });
+                                realm.close();
+                                getRoom(roomId, ProtoGlobal.Room.Type.CHANNEL);
+                            }
+                        });
                     }
 
-                    @Override public void onError(int majorCode, int minorCode, int time) {
+                    @Override
+                    public void onError(int majorCode, int minorCode, int time) {
                         hideProgressBar();
-                        mActivity.runOnUiThread(new Runnable() {
-                            @Override public void run() {
-                                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
                                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                    @Override public void onClick(View view) {
+                                    @Override
+                                    public void onClick(View view) {
                                         snack.dismiss();
                                     }
                                 });
@@ -162,14 +169,17 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                         });
                     }
 
-                    @Override public void onTimeOut() {
+                    @Override
+                    public void onTimeOut() {
                         hideProgressBar();
-                        mActivity.runOnUiThread(new Runnable() {
-                            @Override public void run() {
-                                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                    @Override public void onClick(View view) {
+                                    @Override
+                                    public void onClick(View view) {
                                         snack.dismiss();
                                     }
                                 });
@@ -186,7 +196,8 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                     if (raPrivate.isChecked()) {
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                                 realmRoom.getChannelRoom().setPrivate(true);
                             }
@@ -204,9 +215,10 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
 
         txtInputLayout = (TextInputLayout) view.findViewById(R.id.fch_txtInput_nikeName);
         txtInputLayout.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 if (raPrivate.isChecked()) {
-                    final PopupMenu popup = new PopupMenu(mActivity, view);
+                    final PopupMenu popup = new PopupMenu(G.fragmentActivity, view);
                     //Inflating the Popup using xml file
                     popup.getMenuInflater().inflate(R.menu.menu_item_copy, popup.getMenu());
 
@@ -235,15 +247,18 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
         edtLink.setText("iGap.net/");
         Selection.setSelection(edtLink.getText(), edtLink.getText().length());
         edtLink.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
 
                 if (!raPrivate.isChecked()) {
 
@@ -266,14 +281,16 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
 
         RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.fch_radioGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(RadioGroup group, int checkedId) {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
                 setInviteLink();
             }
         });
 
         raPublic = (RadioButton) view.findViewById(R.id.fch_radioButton_Public);
         raPublic.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
             }
         });
@@ -281,7 +298,8 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
         raPrivate = (RadioButton) view.findViewById(R.id.fch_radioButton_private);
         raPrivate.setChecked(true);
         raPrivate.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
             }
         });
@@ -290,14 +308,16 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
 
     private void getRoom(final Long roomId, final ProtoGlobal.Room.Type type) {
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
-            @Override public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, String identity) {
+            @Override
+            public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, String identity) {
 
                 if (!identity.equals(RequestClientGetRoom.CreateRoomMode.requestFromOwner.toString())) return;
 
                 try {
-                    if (mActivity != null) {
-                        mActivity.runOnUiThread(new Runnable() {
-                            @Override public void run() {
+                    if (G.fragmentActivity != null) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
 
                                 hideProgressBar();
                                 Fragment fragment = ContactGroupFragment.newInstance();
@@ -318,14 +338,17 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                 }
             }
 
-            @Override public void onError(int majorCode, int minorCode) {
+            @Override
+            public void onError(int majorCode, int minorCode) {
                 hideProgressBar();
             }
 
-            @Override public void onTimeOut() {
+            @Override
+            public void onTimeOut() {
 
-                mActivity.runOnUiThread(new Runnable() {
-                    @Override public void run() {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
                         hideProgressBar();
                     }
                 });
@@ -350,11 +373,13 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
         }
     }
 
-    @Override public void onChannelCheckUsername(final ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status status) {
+    @Override
+    public void onChannelCheckUsername(final ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status status) {
 
-        if (mActivity != null) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override public void run() {
+        if (G.fragmentActivity != null) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
                     if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.AVAILABLE) {
 
                         txtFinish.setEnabled(true);
@@ -382,14 +407,17 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
         }
     }
 
-    @Override public void onError(int majorCode, int minorCode) {
+    @Override
+    public void onError(int majorCode, int minorCode) {
 
-        if (mActivity != null) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override public void run() {
-                    final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+        if (G.fragmentActivity != null) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -399,15 +427,18 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
         }
     }
 
-    @Override public void onTimeOut() {
+    @Override
+    public void onTimeOut() {
 
-        if (mActivity != null) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override public void run() {
-                    final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+        if (G.fragmentActivity != null) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override public void onClick(View view) {
+                        @Override
+                        public void onClick(View view) {
                             snack.dismiss();
                         }
                     });
@@ -419,12 +450,13 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
 
     private void showProgressBar() {
 
-        if (mActivity != null) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override public void run() {
+        if (G.fragmentActivity != null) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
 
                     prgWaiting.setVisibility(View.VISIBLE);
-                    mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             });
         }
@@ -432,23 +464,20 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
 
     private void hideProgressBar() {
 
-        if (mActivity != null) {
-            mActivity.runOnUiThread(new Runnable() {
-                @Override public void run() {
+        if (G.fragmentActivity != null) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
 
                     prgWaiting.setVisibility(View.GONE);
-                    mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             });
         }
     }
 
-    @Override public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
-    }
-
-    @Override public void onDetach() {
+    @Override
+    public void onDetach() {
 
         if (prgWaiting.getVisibility() == View.VISIBLE) {
             hideProgressBar();

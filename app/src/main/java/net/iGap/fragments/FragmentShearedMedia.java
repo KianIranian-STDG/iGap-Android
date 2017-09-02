@@ -25,7 +25,6 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.GridLayoutManager;
@@ -110,7 +109,6 @@ public class FragmentShearedMedia extends BaseFragment {
     private OnComplete complete;
     private ProgressBar progressBar;
     private Realm realmShearedMedia;
-    private FragmentActivity mActivity;
     private LinearLayout ll_AppBarSelected;
     private LinearLayout mediaLayout;
     private TextView txtSharedMedia;
@@ -207,13 +205,6 @@ public class FragmentShearedMedia extends BaseFragment {
 
         ActivityMain.setMediaLayout();
     }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mActivity = (FragmentActivity) context;
-    }
-
 
     private Realm getRealm() {
         if (realmShearedMedia == null || realmShearedMedia.isClosed()) {

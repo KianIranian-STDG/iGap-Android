@@ -14,7 +14,6 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -25,7 +24,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -81,8 +79,6 @@ public class FragmentIntroduce extends BaseFragment {
     private ViewGroup layout_iGap;
     private String isoCode = "", countryName = "", pattern = "", regex = "", body = null;
     private int callingCode;
-
-    private FragmentActivity mActivity;
 
     @Nullable
     @Override
@@ -428,10 +424,10 @@ public class FragmentIntroduce extends BaseFragment {
 
                         fragment.setArguments(bundle);
 
-                        mActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
+                        G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
                             setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
 
-                        mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commit();
+                        G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commit();
 
 
 
@@ -1041,12 +1037,5 @@ public class FragmentIntroduce extends BaseFragment {
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        mActivity = (FragmentActivity) context;
     }
 }

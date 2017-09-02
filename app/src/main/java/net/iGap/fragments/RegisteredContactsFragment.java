@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -89,7 +87,6 @@ public class RegisteredContactsFragment extends BaseFragment {
     StickyRecyclerHeadersDecoration decoration;
     private ProgressBar prgWaiting;
     RealmResults<RealmContacts> results;
-    private FragmentActivity mActivity;
     private EditText edtSearch;
     private boolean isCallAction = false;
     private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
@@ -123,7 +120,7 @@ public class RegisteredContactsFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         /**
          * not import contact in every enter to this page
@@ -132,7 +129,7 @@ public class RegisteredContactsFragment extends BaseFragment {
         //isImportContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT_IN_FRAGMENT, false);
         //if (!isImportContactList) {
         //    try {
-        //        HelperPermision.getContactPermision(mActivity, new OnGetPermission() {
+        //        HelperPermision.getContactPermision(G.fragmentActivity, new OnGetPermission() {
         //            @Override
         //            public void Allow() throws IOException {
         //                importContactList();
@@ -211,7 +208,7 @@ public class RegisteredContactsFragment extends BaseFragment {
                     edtSearch.setVisibility(View.GONE);
                     menu_txt_titleToolbar.setVisibility(View.VISIBLE);
                     txtSearch.setVisibility(View.VISIBLE);
-                    InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
             }
@@ -262,8 +259,8 @@ public class RegisteredContactsFragment extends BaseFragment {
         rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                mActivity.onBackPressed();
-                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                G.fragmentActivity.onBackPressed();
+                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleView.getWindowToken(), 0);
             }
         });
@@ -271,7 +268,7 @@ public class RegisteredContactsFragment extends BaseFragment {
         realmRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         realmRecyclerView.setItemViewCacheSize(1000);
         realmRecyclerView.setItemAnimator(null);
-        realmRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        realmRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
         realmRecyclerView.setNestedScrollingEnabled(false);
 
         results = getRealm().where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
@@ -286,7 +283,7 @@ public class RegisteredContactsFragment extends BaseFragment {
         fastItemAdapter = new FastItemAdapter();
 
         try {
-            HelperPermision.getContactPermision(mActivity, new OnGetPermission() {
+            HelperPermision.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
                     new LongOperation().execute();
@@ -324,7 +321,7 @@ public class RegisteredContactsFragment extends BaseFragment {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 prgWaiting.setVisibility(View.GONE);
             }
         });
@@ -334,16 +331,10 @@ public class RegisteredContactsFragment extends BaseFragment {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 prgWaiting.setVisibility(View.VISIBLE);
             }
         });
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 
     @Override
@@ -400,7 +391,7 @@ public class RegisteredContactsFragment extends BaseFragment {
                     public void onClick(View v) {
 
                         if (isCallAction) {
-                            //  mActivity.getSupportFragmentManager().popBackStack();
+                            //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
                             popBackStackFragment();
 
@@ -417,7 +408,7 @@ public class RegisteredContactsFragment extends BaseFragment {
                                 @Override
                                 public void complete() {
                                     hideProgress();
-                                    //  mActivity.getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
+                                    //  G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
 
                                     popBackStackFragment();
 
@@ -596,7 +587,7 @@ public class RegisteredContactsFragment extends BaseFragment {
             holder.txtName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.igap))
+                    new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.igap))
 
                             .content(getResources().getString(R.string.invite_friend)).positiveText(getResources().getString(R.string.ok)).negativeText(getResources().getString(R.string.cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override

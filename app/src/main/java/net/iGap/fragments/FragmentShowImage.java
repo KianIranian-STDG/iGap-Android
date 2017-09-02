@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,7 +18,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ContentLoadingProgressBar;
@@ -94,7 +92,6 @@ public class FragmentShowImage extends BaseFragment {
     private String path;
     private String type = null;
     private boolean isLockScreen = false;
-    private FragmentActivity mActivity;
     private Realm realmShowImage;
     public final String ROOM_ID = "roomId";
     public final String SELECTED_IMAGE = "selectedImage";
@@ -156,8 +153,8 @@ public class FragmentShowImage extends BaseFragment {
     }
 
     private boolean getIntentData(Bundle bundle) {
-        if (mActivity != null) {
-            mActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        if (G.fragmentActivity != null) {
+            G.fragmentActivity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
         if (bundle != null) { // get a list of image
@@ -165,7 +162,7 @@ public class FragmentShowImage extends BaseFragment {
             selectedFileToken = bundle.getLong("SelectedImage");
             if (bundle.getString("TYPE") != null) type = bundle.getString("TYPE");
             if (mRoomId == null) {
-                // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+                // G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
 
                 popBackStackFragment();
 
@@ -175,7 +172,7 @@ public class FragmentShowImage extends BaseFragment {
             mRealmList = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
 
             if (mRealmList.size() < 1) {
-                // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+                // G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
 
                 popBackStackFragment();
 
@@ -218,8 +215,8 @@ public class FragmentShowImage extends BaseFragment {
 
             return true;
         } else {
-            if (mActivity != null) {
-                // mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
+            if (G.fragmentActivity != null) {
+                // G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
 
                 popBackStackFragment();
             }
@@ -237,7 +234,7 @@ public class FragmentShowImage extends BaseFragment {
 
             @Override
             public void onComplete(RippleView rippleView) {
-                mActivity.onBackPressed();
+                G.fragmentActivity.onBackPressed();
             }
         });
 
@@ -352,7 +349,7 @@ public class FragmentShowImage extends BaseFragment {
 
     public void popUpMenuShowImage() {
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
         View v = dialog.getCustomView();
 
         DialogAnimation.animationUp(dialog);
@@ -463,7 +460,7 @@ public class FragmentShowImage extends BaseFragment {
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
 
-            LayoutInflater inflater = LayoutInflater.from(mActivity);
+            LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
             final TextureView mTextureView = (TextureView) layout.findViewById(R.id.textureView);
             final ImageView imgPlay = (ImageView) layout.findViewById(R.id.imgPlay);
@@ -749,7 +746,7 @@ public class FragmentShowImage extends BaseFragment {
         private void playVideo(final int position, final TextureView mTextureView, final ImageView imgPlay, final TouchImageView touchImageView) {
 
             if (mMediaPlayer == null) mMediaPlayer = new MediaPlayer();
-            if (videoController == null) videoController = new MediaController(mActivity);
+            if (videoController == null) videoController = new MediaController(G.fragmentActivity);
             mTextureView.setVisibility(View.VISIBLE);
             videoPath = getFilePath(position);
             videoController.setAnchorView(touchImageView);
@@ -757,7 +754,7 @@ public class FragmentShowImage extends BaseFragment {
             imgPlay.setVisibility(View.GONE);
             mMediaPlayer.reset();
             try {
-                mMediaPlayer.setDataSource(mActivity, Uri.parse(videoPath));
+                mMediaPlayer.setDataSource(G.fragmentActivity, Uri.parse(videoPath));
                 mTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
                     @Override
                     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
@@ -853,7 +850,7 @@ public class FragmentShowImage extends BaseFragment {
             int videoHeight = mp.getVideoHeight();
 
             //Get the width of the screen
-            int screenWidth = mActivity.getWindowManager().getDefaultDisplay().getWidth();
+            int screenWidth = G.fragmentActivity.getWindowManager().getDefaultDisplay().getWidth();
 
             //Get the SurfaceView layout parameters
             ViewGroup.LayoutParams lp = mTextureView.getLayoutParams();
@@ -1022,12 +1019,5 @@ public class FragmentShowImage extends BaseFragment {
                 videoController.show();
             }
         }
-
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 }

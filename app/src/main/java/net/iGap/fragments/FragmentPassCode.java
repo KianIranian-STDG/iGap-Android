@@ -14,7 +14,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -52,7 +51,6 @@ import static net.iGap.R.id.numberPicker;
  * A simple {@link Fragment} subclass.
  */
 public class FragmentPassCode extends BaseFragment implements AdapterView.OnItemSelectedListener {
-    private FragmentActivity mActivity;
     private Realm realm;
     private boolean isPassCode;
     private boolean isFingerPrintCode;
@@ -103,7 +101,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
 
         checkFingerPrint();
 
-        sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         final ViewGroup rootSettingPassword = (ViewGroup) view.findViewById(R.id.rootSettingPassword);
         final ViewGroup rootEnterPassword = (ViewGroup) view.findViewById(R.id.rootEnterPassword);
@@ -132,7 +130,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             @Override
             public void onClick(View v) {
 
-                //mActivity.getSupportFragmentManager().popBackStack();
+                //G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
                 popBackStackFragment();
 
@@ -174,7 +172,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         staticSpinner = (Spinner) view.findViewById(R.id.static_spinner);
 
         // Create an ArrayAdapter using the string array and a default spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity, R.layout.spinner_password, paths);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(G.fragmentActivity, R.layout.spinner_password, paths);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         staticSpinner.setAdapter(adapter);
@@ -495,7 +493,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             public void onClick(View view) {
 
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).title(getString(R.string.auto_lock)).customView(R.layout.dialog_auto_lock, wrapInScrollView).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.auto_lock)).customView(R.layout.dialog_auto_lock, wrapInScrollView).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).build();
 
                 View view1 = dialog.getCustomView();
 
@@ -580,7 +578,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //Fingerprint API only available on from Android 6.0 (M)
             FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
-            if (ActivityCompat.checkSelfPermission(mActivity, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -603,13 +601,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         }
     }
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mActivity = (FragmentActivity) context;
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -619,7 +610,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
     private void closeKeyboard(View v) {
         if (isAdded()) {
             try {
-                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             } catch (IllegalStateException e) {
                 e.getStackTrace();
@@ -632,7 +623,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             try {
                 Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                 vShort.vibrate(200);
-                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

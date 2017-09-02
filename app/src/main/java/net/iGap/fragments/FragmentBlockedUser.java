@@ -10,13 +10,11 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -50,8 +48,6 @@ import net.iGap.request.RequestUserContactsUnblock;
 import static net.iGap.G.inflater;
 
 public class FragmentBlockedUser extends BaseFragment {
-    private FragmentActivity mActivity;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -102,7 +98,7 @@ public class FragmentBlockedUser extends BaseFragment {
         RecyclerView realmRecyclerView = (RecyclerView) view.findViewById(R.id.fbu_realm_recycler_view);
         realmRecyclerView.setItemViewCacheSize(100);
         realmRecyclerView.setItemAnimator(null);
-        realmRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        realmRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -200,11 +196,5 @@ public class FragmentBlockedUser extends BaseFragment {
                 }
             });
         }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 }

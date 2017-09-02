@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -24,7 +23,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -125,7 +123,6 @@ import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_
  */
 public class FragmentSetting extends BaseFragment implements OnUserAvatarResponse {
 
-    private FragmentActivity mActivity;
     public static String pathSaveImage;
     public static int KEY_AD_DATA_PHOTO = -1;
     public static int KEY_AD_DATA_VOICE_MESSAGE = -1;
@@ -205,7 +202,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         }
 
         fragment = this;
-        sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         txtNickNameTitle = (EmojiTextViewE) view.findViewById(R.id.ac_txt_nickname_title);
         txtNickName = (EmojiTextViewE) view.findViewById(R.id.st_txt_nikName);
@@ -224,7 +221,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         if (realmUserInfo == null) {
             //finish();
 
-            mActivity.onBackPressed();
+            G.fragmentActivity.onBackPressed();
 
             return;
         }
@@ -238,7 +235,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onClick(View view) {
 
-                final LinearLayout layoutNickname = new LinearLayout(mActivity);
+                final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
                 layoutNickname.setOrientation(LinearLayout.VERTICAL);
 
                 String splitNickname[] = txtNickName.getText().toString().split(" ");
@@ -257,12 +254,12 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 } else {
                     firsName = splitNickname[0];
                 }
-                final View viewFirstName = new View(mActivity);
+                final View viewFirstName = new View(G.fragmentActivity);
                 viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                 LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
-                TextInputLayout inputFirstName = new TextInputLayout(mActivity);
-                final EmojiEditTextE edtFirstName = new EmojiEditTextE(mActivity);
+                TextInputLayout inputFirstName = new TextInputLayout(G.fragmentActivity);
+                final EmojiEditTextE edtFirstName = new EmojiEditTextE(G.fragmentActivity);
                 edtFirstName.setHint(getResources().getString(R.string.fac_First_Name));
                 edtFirstName.setText(firsName);
                 edtFirstName.setTypeface(G.typeface_IRANSansMobile);
@@ -273,14 +270,14 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 edtFirstName.setSingleLine(true);
                 inputFirstName.addView(edtFirstName);
                 inputFirstName.addView(viewFirstName, viewParams);
-                final View viewLastName = new View(mActivity);
+                final View viewLastName = new View(G.fragmentActivity);
                 viewLastName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     edtFirstName.setBackground(getResources().getDrawable(android.R.color.transparent));
                 }
 
-                TextInputLayout inputLastName = new TextInputLayout(mActivity);
-                final EmojiEditTextE edtLastName = new EmojiEditTextE(mActivity);
+                TextInputLayout inputLastName = new TextInputLayout(G.fragmentActivity);
+                final EmojiEditTextE edtLastName = new EmojiEditTextE(G.fragmentActivity);
                 edtLastName.setHint(getResources().getString(R.string.fac_Last_Name));
                 edtLastName.setText(lastName);
                 edtLastName.setTypeface(G.typeface_IRANSansMobile);
@@ -303,7 +300,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 layoutNickname.addView(inputFirstName, layoutParams);
                 layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_nickname)).positiveText(getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_nickname)).positiveText(getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
@@ -490,7 +487,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     }
                 };
 
-                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_Gander)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.array_gander).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_Gander)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.array_gander).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -522,14 +519,14 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         ltEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final LinearLayout layoutEmail = new LinearLayout(mActivity);
+                final LinearLayout layoutEmail = new LinearLayout(G.fragmentActivity);
                 layoutEmail.setOrientation(LinearLayout.VERTICAL);
 
-                final View viewEmail = new View(mActivity);
+                final View viewEmail = new View(G.fragmentActivity);
                 LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
-                final TextInputLayout inputEmail = new TextInputLayout(mActivity);
-                final MEditText edtEmail = new MEditText(mActivity);
+                final TextInputLayout inputEmail = new TextInputLayout(G.fragmentActivity);
+                final MEditText edtEmail = new MEditText(G.fragmentActivity);
                 edtEmail.setHint(getResources().getString(R.string.set_email));
                 edtEmail.setTypeface(G.typeface_IRANSansMobile);
                 edtEmail.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
@@ -555,7 +552,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
                 layoutEmail.addView(inputEmail, layoutParams);
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_email)).positiveText(getResources().getString(R.string.save)).customView(layoutEmail, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_email)).positiveText(getResources().getString(R.string.save)).customView(layoutEmail, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
@@ -652,14 +649,14 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onClick(View view) {
 
-                final LinearLayout layoutUserName = new LinearLayout(mActivity);
+                final LinearLayout layoutUserName = new LinearLayout(G.fragmentActivity);
                 layoutUserName.setOrientation(LinearLayout.VERTICAL);
 
-                final View viewUserName = new View(mActivity);
+                final View viewUserName = new View(G.fragmentActivity);
                 LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
-                final TextInputLayout inputUserName = new TextInputLayout(mActivity);
-                final MEditText edtUserName = new MEditText(mActivity);
+                final TextInputLayout inputUserName = new TextInputLayout(G.fragmentActivity);
+                final MEditText edtUserName = new MEditText(G.fragmentActivity);
                 edtUserName.setHint(getResources().getString(R.string.st_username));
                 edtUserName.setText(txtUserName.getText().toString());
                 edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
@@ -679,7 +676,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
                 layoutUserName.addView(inputUserName, layoutParams);
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
@@ -855,7 +852,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onComplete(RippleView rippleView) {
                 //finish();
-                mActivity.onBackPressed();
+                G.fragmentActivity.onBackPressed();
             }
         });
 
@@ -868,7 +865,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onComplete(RippleView rippleView) {
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
                 View v = dialog.getCustomView();
 
                 DialogAnimation.animationUp(dialog);
@@ -898,7 +895,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     public void onClick(final View view) {
                         dialog.dismiss();
 
-                        final MaterialDialog inDialog = new MaterialDialog.Builder(mActivity).customView(R.layout.dialog_content_custom, true).build();
+                        final MaterialDialog inDialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.dialog_content_custom, true).build();
                         View v = inDialog.getCustomView();
 
                         inDialog.show();
@@ -993,7 +990,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
                         dialog.dismiss();
 
-                        final MaterialDialog inDialog = new MaterialDialog.Builder(mActivity).customView(R.layout.dialog_content_custom, true).build();
+                        final MaterialDialog inDialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.dialog_content_custom, true).build();
                         View v = inDialog.getCustomView();
 
                         inDialog.show();
@@ -1125,7 +1122,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         ltDataStorage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(mActivity, ActivityManageSpace.class));
+                startActivity(new Intent(G.fragmentActivity, ActivityManageSpace.class));
 
 
             }
@@ -1434,7 +1431,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         ltMessageTextSize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_title_message_textSize))
+                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_title_message_textSize))
                         .titleGravity(GravityEnum.START)
                         .titleColor(getResources().getColor(android.R.color.black))
                         .items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
@@ -1696,7 +1693,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 KEY_AD_DATA_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_MUSIC, -1);
                 KEY_AD_DATA_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, 5);
 
-                new MaterialDialog.Builder(mActivity).title(R.string.title_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.title_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
                         KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
@@ -1747,7 +1744,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 KEY_AD_WIFI_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_MUSIC, -1);
                 KEY_AD_WIFI_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, 5);
 
-                new MaterialDialog.Builder(mActivity).title(R.string.title_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.title_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
                         KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
@@ -1801,7 +1798,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 KEY_AD_ROAMING_MUSIC = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_MUSIC, -1);
                 KEY_AD_ROAMINGN_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
 
-                new MaterialDialog.Builder(mActivity).title(R.string.title_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.title_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
                         KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
@@ -1998,7 +1995,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             public void run() {
                 if (prgWait != null) {
                     prgWait.setVisibility(View.GONE);
-                    mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
@@ -2007,7 +2004,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     private void dialogWaitTime(int title, long time, int majorCode) {
         if (isActiveRun) {
             boolean wrapInScrollView = true;
-            final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+            final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     dialog.dismiss();
@@ -2139,7 +2136,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
         String titleMessage = getResources().getString(title);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(getResources().getString(R.string.set)).negativeText(getResources().getString(R.string.DISCARD)).title(titleMessage).onNegative(new MaterialDialog.SingleButtonCallback() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(getResources().getString(R.string.set)).negativeText(getResources().getString(R.string.DISCARD)).title(titleMessage).onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -2194,7 +2191,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     }
                 } catch (IllegalArgumentException e) {
 
-                    new MaterialDialog.Builder(mActivity).title(R.string.selected_color_can_not_set_on_yout_device).cancelable(true).show();
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.selected_color_can_not_set_on_yout_device).cancelable(true).show();
                 }
             }
         });
@@ -2204,7 +2201,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
     private void showSetDefaultColorDialog() {
 
-        new MaterialDialog.Builder(mActivity).title(R.string.set_color_to_default).content(R.string.color_default).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.set_color_to_default).content(R.string.color_default).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
@@ -2232,7 +2229,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
         editor.apply();
 
-        mActivity.recreate();
+        G.fragmentActivity.recreate();
         if (G.onRefreshActivity != null) {
             G.onRefreshActivity.refresh("");
         }
@@ -2287,7 +2284,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
         editor.apply();
 
-        if (updateUi) mActivity.recreate();
+        if (updateUi) G.fragmentActivity.recreate();
     }
 
     private void sendAndAttachColorClick(int color) {
@@ -2327,16 +2324,16 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     //dialog for choose pic from gallery or camera
     private void startDialog(int r) {
 
-        new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.choose_picture)).negativeText(getResources().getString(R.string.B_cancel)).items(r).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.choose_picture)).negativeText(getResources().getString(R.string.B_cancel)).items(r).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals(getResources().getString(R.string.array_From_Camera))) { // camera
 
                     try {
-                        HelperPermision.getStoragePermision(mActivity, new OnGetPermission() {
+                        HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                             @Override
                             public void Allow() throws IOException {
-                                HelperPermision.getCameraPermission(mActivity, new OnGetPermission() {
+                                HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                                     @Override
                                     public void Allow() {
                                         dialog.dismiss();
@@ -2360,7 +2357,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     }
                 } else {
                     try {
-                        //new AttachFile(mActivity).requestOpenGalleryForImageSingleSelect();
+                        //new AttachFile(G.fragmentActivity).requestOpenGalleryForImageSingleSelect();
 
                         // this part should transform to attach file
 
@@ -2389,13 +2386,13 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     private void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
-                new AttachFile(mActivity).dispatchTakePictureIntent(FragmentSetting.this);
+                new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(FragmentSetting.this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
 
-            if (mActivity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+            if (G.fragmentActivity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                 idAvatar = SUID.id().get();
                 pathSaveImage = G.imageFile.toString() + "_" + System.currentTimeMillis() + "_" + idAvatar + ".jpg";
                 File nameImageFile = new File(pathSaveImage);
@@ -2405,7 +2402,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
 
             } else {
-                Toast.makeText(mActivity, getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
+                Toast.makeText(G.fragmentActivity, getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -2441,7 +2438,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
         if (realmUserInfo == null) {
             //finish();
-            mActivity.onBackPressed();
+            G.fragmentActivity.onBackPressed();
             return;
         }
 
@@ -2485,7 +2482,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == RESULT_OK) {// result for camera
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Intent intent = new Intent(mActivity, ActivityCrop.class);
+                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
                 ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
                 intent.putExtra("IMAGE_CAMERA", AttachFile.mCurrentPhotoPath);
                 intent.putExtra("TYPE", "camera");
@@ -2493,7 +2490,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 intent.putExtra("ID", (int) (idAvatar + 1L));
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
             } else {
-                Intent intent = new Intent(mActivity, ActivityCrop.class);
+                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
                 if (uriIntent != null) {
                     ImageHelper.correctRotateImage(pathSaveImage, true);
                     intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
@@ -2508,7 +2505,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 if (data.getData() == null) {
                     return;
                 }
-                Intent intent = new Intent(mActivity, ActivityCrop.class);
+                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
                 intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "setting");
@@ -2571,21 +2568,13 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         return mRealm;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        mActivity = (FragmentActivity) context;
-
-    }
-
     private void showProgressBar() {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
                 if (prgWait != null) {
                     prgWait.setVisibility(View.VISIBLE);
-                    mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });

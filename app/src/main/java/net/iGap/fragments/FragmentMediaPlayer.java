@@ -10,14 +10,12 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -53,8 +51,6 @@ public class FragmentMediaPlayer extends BaseFragment {
     private ImageView img_RepeatOne;
     private ImageView img_MusicImage_default_icon;
     private TextView btnPlay;
-
-    private FragmentActivity mActivity;
 
     @Nullable
     @Override
@@ -267,7 +263,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     private void popUpMusicMenu() {
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
         View v = dialog.getCustomView();
 
         DialogAnimation.animationUp(dialog);
@@ -366,12 +362,6 @@ public class FragmentMediaPlayer extends BaseFragment {
         } else {
             txt_musicInfo.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 
     private void finish() {

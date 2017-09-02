@@ -461,7 +461,6 @@ public class FragmentChat extends BaseFragment
     private boolean isCameraAttached = false;
     private boolean isPermissionCamera = false;
 
-    private FragmentActivity mActivity;
     private View rootView;
 
     @Nullable
@@ -602,7 +601,7 @@ public class FragmentChat extends BaseFragment
 
                                 final String finalMembers = members;
                                 if (finalMembers != null) {
-                                    mActivity.runOnUiThread(new Runnable() {
+                                    G.handler.post(new Runnable() {
                                         @Override
                                         public void run() {
                                             if (finalMembers != null && HelperString.isNumeric(finalMembers) && Integer.parseInt(finalMembers) == 1) {
@@ -692,7 +691,7 @@ public class FragmentChat extends BaseFragment
             public void onUpdateUserOrRoomInfo(final String messageId) {
 
                 if (messageId != null && messageId.length() > 0) {
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             int start = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
@@ -731,7 +730,7 @@ public class FragmentChat extends BaseFragment
                 @Override
                 public void onClick(View v) {
 
-                    startActivity(new Intent(mActivity, ActivityCall.class));
+                    startActivity(new Intent(G.fragmentActivity, ActivityCall.class));
 
                 }
             });
@@ -870,7 +869,7 @@ public class FragmentChat extends BaseFragment
 
         boolean stopSuperPress = true;
 
-        FragmentShowImage fragment = (FragmentShowImage) mActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
+        FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
         if (fragment != null) {
             removeFromBaseFragment(fragment);
         } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
@@ -963,7 +962,7 @@ public class FragmentChat extends BaseFragment
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 if (requestCode == request_code_VIDEO_CAPTURED) {
                     if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
-                        Intent intent = new Intent(mActivity, ActivityTrimVideo.class);
+                        Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
                         intent.putExtra("PATH", listPathString.get(0));
                         startActivityForResult(intent, AttachFile.request_code_trim_video);
                         return;
@@ -974,7 +973,7 @@ public class FragmentChat extends BaseFragment
                         listPathString = new ArrayList<>();
 
                         Uri uri = data.getData();
-                        File tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile(HelperString.getRandomFileName(5), mActivity, uri);
+                        File tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile(HelperString.getRandomFileName(5), G.fragmentActivity, uri);
                         mainVideoPath = tempFile.getPath();
                         String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
 
@@ -1017,7 +1016,7 @@ public class FragmentChat extends BaseFragment
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     if (requestCode == AttachFile.requestOpenGalleryForVideoMultipleSelect) {
                         if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
-                            Intent intent = new Intent(mActivity, ActivityTrimVideo.class);
+                            Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
                             intent.putExtra("PATH", listPathString.get(0));
                             startActivityForResult(intent, AttachFile.request_code_trim_video);
                             return;
@@ -1087,13 +1086,13 @@ public class FragmentChat extends BaseFragment
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
 
                                 Uri uri = Uri.parse(listPathString.get(0));
-                                Intent intent = new Intent(mActivity, ActivityCrop.class);
+                                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
                                 intent.putExtra("IMAGE_CAMERA", getFilePathFromUri(uri));
                                 intent.putExtra("TYPE", "gallery");
                                 intent.putExtra("PAGE", "chat");
                                 startActivityForResult(intent, IntentRequests.REQ_CROP);
 
-                                mActivity.runOnUiThread(new Runnable() {
+                                G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         if (prgWaiting != null) {
@@ -1103,7 +1102,7 @@ public class FragmentChat extends BaseFragment
                                 });
                             } else {
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
-                                Intent intent = new Intent(mActivity, ActivityCrop.class);
+                                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
                                 Uri uri = Uri.parse(listPathString.get(0));
                                 uri = Uri.parse("file://" + getFilePathFromUri(uri));
                                 intent.putExtra("IMAGE_CAMERA", uri.toString());
@@ -1111,7 +1110,7 @@ public class FragmentChat extends BaseFragment
                                 intent.putExtra("PAGE", "chat");
                                 startActivityForResult(intent, IntentRequests.REQ_CROP);
 
-                                mActivity.runOnUiThread(new Runnable() {
+                                G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         if (prgWaiting != null) {
@@ -1121,7 +1120,7 @@ public class FragmentChat extends BaseFragment
                                 });
                             }
                         } else {
-                            mActivity.runOnUiThread(new Runnable() {
+                            G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (prgWaiting != null) {
@@ -1135,14 +1134,14 @@ public class FragmentChat extends BaseFragment
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
                             ImageHelper.correctRotateImage(listPathString.get(0), true);
-                            Intent intent = new Intent(mActivity, ActivityCrop.class);
+                            Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
 
                             intent.putExtra("IMAGE_CAMERA", listPathString.get(0));
                             intent.putExtra("TYPE", "camera");
                             intent.putExtra("PAGE", "chat");
                             startActivityForResult(intent, IntentRequests.REQ_CROP);
 
-                            mActivity.runOnUiThread(new Runnable() {
+                            G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (prgWaiting != null) {
@@ -1153,14 +1152,14 @@ public class FragmentChat extends BaseFragment
                         } else {
                             ImageHelper.correctRotateImage(listPathString.get(0), true);
 
-                            Intent intent = new Intent(mActivity, ActivityCrop.class);
+                            Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
 
                             intent.putExtra("IMAGE_CAMERA", "file://" + listPathString.get(0));
                             intent.putExtra("TYPE", "camera");
                             intent.putExtra("PAGE", "chat");
                             startActivityForResult(intent, IntentRequests.REQ_CROP);
 
-                            mActivity.runOnUiThread(new Runnable() {
+                            G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (prgWaiting != null) {
@@ -1201,7 +1200,7 @@ public class FragmentChat extends BaseFragment
      */
     private void startPageFastInitialize() {
 
-        attachFile = new AttachFile(mActivity);
+        attachFile = new AttachFile(G.fragmentActivity);
         backGroundSeenList.clear();
 
         //+Realm realm = Realm.getDefaultInstance();
@@ -1315,7 +1314,7 @@ public class FragmentChat extends BaseFragment
         viewMicRecorder = rootView.findViewById(R.id.layout_mic_recorde);
         prgWaiting = (ProgressBar) rootView.findViewById(R.id.chl_prgWaiting);
         AppUtils.setProgresColler(prgWaiting);
-        voiceRecord = new VoiceRecord(mActivity, viewMicRecorder, viewAttachFile, this);
+        voiceRecord = new VoiceRecord(G.fragmentActivity, viewMicRecorder, viewAttachFile, this);
 
         prgWaiting.setVisibility(View.VISIBLE);
 
@@ -1323,7 +1322,7 @@ public class FragmentChat extends BaseFragment
 
         lastDateCalendar.clear();
 
-        locationManager = (LocationManager) mActivity.getSystemService(LOCATION_SERVICE);
+        locationManager = (LocationManager) G.fragmentActivity.getSystemService(LOCATION_SERVICE);
 
         Bundle extras = getArguments();
         if (extras != null) {
@@ -1347,7 +1346,7 @@ public class FragmentChat extends BaseFragment
                                 isNotJoin = false;
                                 HelperUrl.closeDialogWaiting();
 
-                                mActivity.runOnUiThread(new Runnable() {
+                                G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         layoutJoin.setVisibility(View.GONE);
@@ -1490,7 +1489,7 @@ public class FragmentChat extends BaseFragment
         /**
          * get sendByEnter action from setting value
          */
-        sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         sendByEnter = sharedPreferences.getInt(SHP_SETTING.KEY_SEND_BT_ENTER, 0) == 1;
 
         /**
@@ -1527,7 +1526,7 @@ public class FragmentChat extends BaseFragment
         G.onChatSendMessage = new OnChatSendMessage() {
             @Override
             public void Error(int majorCode, int minorCode, final int waitTime) {
-                mActivity.runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
                         showErrorDialog(waitTime);
@@ -1541,7 +1540,7 @@ public class FragmentChat extends BaseFragment
             public void onChatEditMessage(long roomId, final long messageId, long messageVersion, final String message, ProtoResponse.Response response) {
                 if (mRoomId == roomId && mAdapter != null) {
                     // I'm in the room
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             // update message text in adapter
@@ -1571,7 +1570,7 @@ public class FragmentChat extends BaseFragment
 
                     // if deleted message is for current room clear from adapter
                     if (roomId == mRoomId) {
-                        mActivity.runOnUiThread(new Runnable() {
+                        G.handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 // remove deleted message from adapter
@@ -1681,7 +1680,7 @@ public class FragmentChat extends BaseFragment
         G.onClearChatHistory = new OnClearChatHistory() {
             @Override
             public void onClearChatHistory() {
-                mActivity.runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
                         mAdapter.clear();
@@ -1706,7 +1705,7 @@ public class FragmentChat extends BaseFragment
         G.onDeleteChatFinishActivity = new OnDeleteChatFinishActivity() {
             @Override
             public void onFinish() {
-                mActivity.runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
                         //finish();
@@ -1793,7 +1792,7 @@ public class FragmentChat extends BaseFragment
                         @Override
                         public void onAnimationEnd(Animator animation) {
                             super.onAnimationEnd(animation);
-                            mActivity.runOnUiThread(new Runnable() {
+                            G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     imvSendButton.clearAnimation();
@@ -1813,7 +1812,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View rippleView) {
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
                 View v = dialog.getCustomView();
 
                 DialogAnimation.animationUp(dialog);
@@ -1924,7 +1923,7 @@ public class FragmentChat extends BaseFragment
                     public void onClick(View view) {
                         dialog.dismiss();
 
-                        new MaterialDialog.Builder(mActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 onSelectRoomMenu("txtClearHistory", (int) mRoomId);
@@ -1936,7 +1935,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-                        new MaterialDialog.Builder(mActivity).title(R.string.delete_chat).content(R.string.delete_chat_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.delete_chat).content(R.string.delete_chat_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
@@ -1955,7 +1954,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-                        new MaterialDialog.Builder(mActivity).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.convert_chat_to_group_title).content(R.string.convert_chat_to_group_content).positiveText(R.string.yes).negativeText(R.string.no).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 //finish();
@@ -2024,7 +2023,7 @@ public class FragmentChat extends BaseFragment
         });
 
         //FragmentMain.PreCachingLayoutManager layoutManager = new FragmentMain.PreCachingLayoutManager(ActivityChat.this, 7500);
-        MyLinearLayoutManager layoutManager = new MyLinearLayoutManager(mActivity);
+        MyLinearLayoutManager layoutManager = new MyLinearLayoutManager(G.fragmentActivity);
         layoutManager.setStackFromEnd(true);
 
         if (recyclerView == null) {
@@ -2071,7 +2070,7 @@ public class FragmentChat extends BaseFragment
         llScrollNavigate = (FrameLayout) rootView.findViewById(R.id.ac_ll_scrool_navigate);
         txtNewUnreadMessage = (TextView) rootView.findViewById(R.id.cs_txt_unread_message);
 
-        mActivity.runOnUiThread(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
                 getMessages();
@@ -2328,7 +2327,7 @@ public class FragmentChat extends BaseFragment
                         //End
 
                         // I'm in the room
-                        mActivity.runOnUiThread(new Runnable() {
+                        G.handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 // update message text in adapter
@@ -2477,7 +2476,7 @@ public class FragmentChat extends BaseFragment
                     initAttach();
                 }
 
-                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 itemAdapterBottomSheet();
             }
@@ -2487,16 +2486,16 @@ public class FragmentChat extends BaseFragment
             @Override
             public boolean onLongClick(View view) {
 
-                if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     try {
-                        HelperPermision.getMicroPhonePermission(mActivity, null);
+                        HelperPermision.getMicroPhonePermission(G.fragmentActivity, null);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         try {
-                            HelperPermision.getStoragePermision(mActivity, null);
+                            HelperPermision.getStoragePermision(G.fragmentActivity, null);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -2562,7 +2561,7 @@ public class FragmentChat extends BaseFragment
                             @Override
                             public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
-                                mActivity.runOnUiThread(new Runnable() {
+                                G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         imvSendButton.clearAnimation();
@@ -2584,7 +2583,7 @@ public class FragmentChat extends BaseFragment
                             @Override
                             public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
-                                mActivity.runOnUiThread(new Runnable() {
+                                G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         imvSendButton.clearAnimation();
@@ -2652,7 +2651,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onChatClearMessage(final long roomId, final long clearId, ProtoResponse.Response response) {
-        mActivity.runOnUiThread(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
                 mAdapter.clear();
@@ -2673,7 +2672,7 @@ public class FragmentChat extends BaseFragment
 
         // I'm in the room
         if (mRoomId == roomId) {
-            mActivity.runOnUiThread(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     if (mAdapter != null) {
@@ -2830,7 +2829,7 @@ public class FragmentChat extends BaseFragment
     public void onMessageUpdate(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoGlobal.RoomMessage roomMessage) {
         // I'm in the room
         if (roomId == mRoomId && mAdapter != null) {
-            mActivity.runOnUiThread(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     mAdapter.updateMessageIdAndStatus(messageId, identity, status);
@@ -2999,7 +2998,7 @@ public class FragmentChat extends BaseFragment
         final long messageId = SUID.id().get();
         final long updateTime = TimeUtils.currentLocalTime();
         final long senderID = G.userId;
-        final long duration = AndroidUtils.getAudioDuration(mActivity, savedPath) / 1000;
+        final long duration = AndroidUtils.getAudioDuration(G.fragmentActivity, savedPath) / 1000;
 
         getRealmChat().executeTransaction(new Realm.Transaction() {
             @Override
@@ -3244,7 +3243,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onContainerClick(View view, final StructMessageInfo message, int pos) {
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
 
         View v = dialog.getCustomView();
         if (v == null) {
@@ -3483,7 +3482,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                ClipboardManager clipboard = (ClipboardManager) mActivity.getSystemService(CLIPBOARD_SERVICE);
+                ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
                 String _text = message.forwardedFrom != null ? message.forwardedFrom.getMessage() : message.messageText;
                 if (_text != null && _text.length() > 0) {
                     ClipData clip = ClipData.newPlainText("Copied Text", _text);
@@ -3516,7 +3515,7 @@ public class FragmentChat extends BaseFragment
         rootDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mActivity.runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
                         dialog.dismiss();
@@ -3625,7 +3624,7 @@ public class FragmentChat extends BaseFragment
                                 if (progress == 100) {
 
                                     if (canUpdateAfterDownload) {
-                                        mActivity.runOnUiThread(new Runnable() {
+                                        G.handler.post(new Runnable() {
                                             @Override
                                             public void run() {
                                                 if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
@@ -3665,7 +3664,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onFailedMessageClick(View view, final StructMessageInfo message, final int pos) {
         final List<StructMessageInfo> failedMessages = mAdapter.getFailedMessages();
-        new ResendMessage(mActivity, new IResendMessage() {
+        new ResendMessage(G.fragmentActivity, new IResendMessage() {
             @Override
             public void deleteMessage() {
                 if (mAdapter.getAdapterItemCount() > pos) {
@@ -3724,7 +3723,7 @@ public class FragmentChat extends BaseFragment
                         realmRoom.setActionState(action, userId);
                     }
 
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             if (action != null) {
@@ -3789,7 +3788,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onLastSeenUpdate(final long userIdR, final String showLastSeen) {
-        mActivity.runOnUiThread(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
                 if (chatType == CHAT && userIdR == chatPeerId && userId != userIdR) { // userId != userIdR means that , this isn't update status for own user
@@ -3816,7 +3815,7 @@ public class FragmentChat extends BaseFragment
         HelperAvatar.getAvatar(roomId, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
-                mActivity.runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
 
@@ -3829,7 +3828,7 @@ public class FragmentChat extends BaseFragment
 
             @Override
             public void onShowInitials(final String initials, final String color) {
-                mActivity.runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
                         if (!isCloudRoom) {
@@ -3852,7 +3851,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onChannelAddMessageReaction(final long roomId, final long messageId, final String reactionCounterLabel, final ProtoGlobal.RoomMessageReaction reaction, final long forwardedMessageId) {
-        mActivity.runOnUiThread(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
                 mAdapter.updateVote(roomId, messageId, reactionCounterLabel, reaction, forwardedMessageId);
@@ -3870,7 +3869,7 @@ public class FragmentChat extends BaseFragment
 
         if (mAdapter != null) {
             for (final ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : statsList) {
-                mActivity.runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
                         mAdapter.updateMessageState(stats.getMessageId(), stats.getThumbsUpLabel(), stats.getThumbsDownLabel(), stats.getViewsLabel());
@@ -3981,7 +3980,7 @@ public class FragmentChat extends BaseFragment
     private void clearReplyView() {
         if (mReplayLayout != null) {
             mReplayLayout.setTag(null);
-            mActivity.runOnUiThread(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     mReplayLayout.setVisibility(View.GONE);
@@ -3991,7 +3990,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void hideProgress() {
-        mActivity.runOnUiThread(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
                 if (prgWaiting != null) {
@@ -4036,7 +4035,7 @@ public class FragmentChat extends BaseFragment
         HelperAvatar.getAvatar(idForGetAvatar, type, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
-                mActivity.runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
 
@@ -4047,7 +4046,7 @@ public class FragmentChat extends BaseFragment
 
             @Override
             public void onShowInitials(final String initials, final String color) {
-                mActivity.runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
 
@@ -4083,7 +4082,7 @@ public class FragmentChat extends BaseFragment
      * @param time if state is not online set latest online time
      */
     private void setUserStatus(final String status, final long time) {
-        mActivity.runOnUiThread(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
                 userStatus = status;
@@ -4137,7 +4136,7 @@ public class FragmentChat extends BaseFragment
         //+Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null && realmRoom.getActionState() != null) {
-            mActivity.runOnUiThread(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     if (realmRoom.getActionState() != null && (chatType == GROUP || chatType == CHANNEL) || ((isCloudRoom || (!isCloudRoom && realmRoom.getActionStateUserId() != userId)))) {
@@ -4260,7 +4259,7 @@ public class FragmentChat extends BaseFragment
      */
     private void insertItemAndUpdateAfterStartUpload(int progress, final FileUploadStructure struct) {
         if (progress == 0) {
-            mActivity.runOnUiThread(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     addItemAfterStartUpload(struct);
@@ -4459,7 +4458,7 @@ public class FragmentChat extends BaseFragment
      */
     private void showImage(final StructMessageInfo messageInfo, View view) {
         // for gone app bar
-        InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
         long selectedFileToken = parseLong(messageInfo.messageID);
@@ -4767,7 +4766,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        mActivity.runOnUiThread(new Runnable() {
+                        G.handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 imvSendButton.clearAnimation();
@@ -5019,7 +5018,7 @@ public class FragmentChat extends BaseFragment
                     String mfilepath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
                     if (mfilepath != null) {
                         Uri uri = Uri.fromFile(new File(mfilepath));
-                        String mimeType = FileUtils.getMimeType(mActivity, uri);
+                        String mimeType = FileUtils.getMimeType(G.fragmentActivity, uri);
 
                         if (mimeType == null || mimeType.length() < 1) {
                             mimeType = "*/*";
@@ -5029,7 +5028,7 @@ public class FragmentChat extends BaseFragment
                         intent.putExtra(Intent.EXTRA_STREAM, uri);
                         chooserDialogText = getString(R.string.share_file);
                     } else {
-                        mActivity.runOnUiThread(new Runnable() {
+                        G.handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 Toast.makeText(context, R.string.file_not_download_yet, Toast.LENGTH_SHORT).show();
@@ -5213,7 +5212,7 @@ public class FragmentChat extends BaseFragment
                     G.onUserContactsUnBlock = new OnUserContactsUnBlock() {
                         @Override
                         public void onUserContactsUnBlock(final long userId) {
-                            mActivity.runOnUiThread(new Runnable() {
+                            G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     blockUser = false;
@@ -5225,7 +5224,7 @@ public class FragmentChat extends BaseFragment
                         }
                     };
 
-                    new MaterialDialog.Builder(mActivity).title(R.string.unblock_the_user).content(R.string.unblock_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.unblock_the_user).content(R.string.unblock_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             new RequestUserContactsUnblock().userContactsUnblock(chatPeerId);
@@ -5236,7 +5235,7 @@ public class FragmentChat extends BaseFragment
                     G.onUserContactsBlock = new OnUserContactsBlock() {
                         @Override
                         public void onUserContactsBlock(final long userId) {
-                            mActivity.runOnUiThread(new Runnable() {
+                            G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     blockUser = true;
@@ -5248,7 +5247,7 @@ public class FragmentChat extends BaseFragment
                         }
                     };
 
-                    new MaterialDialog.Builder(mActivity).title(R.string.block_the_user).content(R.string.block_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.block_the_user).content(R.string.block_the_user_text).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             new RequestUserContactsBlock().userContactsBlock(chatPeerId);
@@ -5267,7 +5266,7 @@ public class FragmentChat extends BaseFragment
 
         fastItemAdapter = new FastItemAdapter();
 
-        viewBottomSheet = mActivity.getLayoutInflater().inflate(R.layout.bottom_sheet, null);
+        viewBottomSheet = G.fragmentActivity.getLayoutInflater().inflate(R.layout.bottom_sheet, null);
 
         TextView txtCamera = (TextView) viewBottomSheet.findViewById(R.id.txtCamera);
         TextView textPicture = (TextView) viewBottomSheet.findViewById(R.id.textPicture);
@@ -5329,10 +5328,10 @@ public class FragmentChat extends BaseFragment
         };
 
         rcvBottomSheet = (RecyclerView) viewBottomSheet.findViewById(R.id.rcvContent);
-        rcvBottomSheet.setLayoutManager(new GridLayoutManager(mActivity, 1, GridLayoutManager.HORIZONTAL, false));
+        rcvBottomSheet.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 1, GridLayoutManager.HORIZONTAL, false));
         rcvBottomSheet.setItemViewCacheSize(100);
         rcvBottomSheet.setAdapter(fastItemAdapter);
-        bottomSheetDialog = new BottomSheetDialog(mActivity);
+        bottomSheetDialog = new BottomSheetDialog(G.fragmentActivity);
         bottomSheetDialog.setContentView(viewBottomSheet);
         final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheet.getParent());
 
@@ -5353,7 +5352,7 @@ public class FragmentChat extends BaseFragment
             public void onclickCamera() {
                 try {
                     bottomSheetDialog.dismiss();
-                    new AttachFile(mActivity).requestTakePicture(FragmentChat.this);
+                    new AttachFile(G.fragmentActivity).requestTakePicture(FragmentChat.this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -5400,7 +5399,7 @@ public class FragmentChat extends BaseFragment
                                         @Override
                                         public void run() {
 
-                                            fotoapparatSwitcher = Fotoapparat.with(mActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                            fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
                                                     .photoSize(biggestSize())   // we want to have the biggest photo possible
                                                     .lensPosition(back())       // we want back camera
                                                     .build();
@@ -5443,7 +5442,7 @@ public class FragmentChat extends BaseFragment
                                     G.handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            fotoapparatSwitcher = Fotoapparat.with(mActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                            fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
                                                     .photoSize(biggestSize())   // we want to have the biggest photo possible
                                                     .lensPosition(back())       // we want back camera
                                                     .build();
@@ -5588,7 +5587,7 @@ public class FragmentChat extends BaseFragment
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            mActivity.runOnUiThread(new Runnable() {
+                            G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     ArrayList<String> pathStrings = listPathString;
@@ -5815,7 +5814,7 @@ public class FragmentChat extends BaseFragment
 
                 final ArrayList<Long> list = new ArrayList<Long>();
 
-                mActivity.runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
 
@@ -5837,7 +5836,7 @@ public class FragmentChat extends BaseFragment
                 });
             }
         });
-        txtNumberOfSelected = (TextView) mActivity.findViewById(R.id.chl_txt_number_of_selected);
+        txtNumberOfSelected = (TextView) G.fragmentActivity.findViewById(R.id.chl_txt_number_of_selected);
 
         if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
             initLayoutChannelFooter();
@@ -5935,7 +5934,7 @@ public class FragmentChat extends BaseFragment
 
                 btnHashLayoutClose.performClick();
 
-                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
@@ -6002,9 +6001,9 @@ public class FragmentChat extends BaseFragment
     public void itemAdapterBottomSheet() {
         listPathString.clear();
         fastItemAdapter.clear();
-        itemGalleryList = getAllShownImagesPath(mActivity);
+        itemGalleryList = getAllShownImagesPath(G.fragmentActivity);
         try {
-            HelperPermision.getCameraPermission(mActivity, new OnGetPermission() {
+            HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
 
@@ -6196,7 +6195,7 @@ public class FragmentChat extends BaseFragment
                          */
 
                         long fileSize = new File(structUploadVideo.filePath).length();
-                        long duration = AndroidUtils.getAudioDuration(mActivity, structUploadVideo.filePath) / 1000;
+                        long duration = AndroidUtils.getAudioDuration(G.fragmentActivity, structUploadVideo.filePath) / 1000;
 
                         if (fileSize >= structCompress.originalSize) {
                             structUploadVideo.filePath = structCompress.originalPath;
@@ -6286,7 +6285,7 @@ public class FragmentChat extends BaseFragment
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
                 if (AndroidUtils.getImageDimens(filePath)[0] == 0 && AndroidUtils.getImageDimens(filePath)[1] == 0) {
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             Toast.makeText(context, "Picture Not Loaded", Toast.LENGTH_SHORT).show();
@@ -6346,10 +6345,10 @@ public class FragmentChat extends BaseFragment
                 }
                 if (compress) {
                     fileSize = new File(filePath).length();
-                    duration = AndroidUtils.getAudioDuration(mActivity, filePath) / 1000;
+                    duration = AndroidUtils.getAudioDuration(G.fragmentActivity, filePath) / 1000;
                 } else {
                     fileSize = new File(mainVideoPath).length();
-                    duration = AndroidUtils.getAudioDuration(mActivity, mainVideoPath) / 1000;
+                    duration = AndroidUtils.getAudioDuration(G.fragmentActivity, mainVideoPath) / 1000;
                 }
 
                 if (isMessageWrote()) {
@@ -6368,14 +6367,14 @@ public class FragmentChat extends BaseFragment
             case AttachFile.request_code_pic_audi:
                 fileName = new File(filePath).getName();
                 fileSize = new File(filePath).length();
-                duration = AndroidUtils.getAudioDuration(mActivity, filePath) / 1000;
+                duration = AndroidUtils.getAudioDuration(G.fragmentActivity, filePath) / 1000;
                 if (isMessageWrote()) {
                     messageType = ProtoGlobal.RoomMessageType.AUDIO_TEXT;
                 } else {
                     messageType = ProtoGlobal.RoomMessageType.AUDIO;
                 }
                 String songArtist = AndroidUtils.getAudioArtistName(filePath);
-                long songDuration = AndroidUtils.getAudioDuration(mActivity, filePath);
+                long songDuration = AndroidUtils.getAudioDuration(G.fragmentActivity, filePath);
 
                 messageInfo = StructMessageInfo.buildForAudio(getRealmChat(), mRoomId, messageId, senderID, ProtoGlobal.RoomMessageStatus.SENDING, messageType, MyType.SendType.send, updateTime, getWrittenMessage(), null, filePath, songArtist, songDuration, userTriesReplay() ? parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID) : -1);
                 break;
@@ -6401,7 +6400,7 @@ public class FragmentChat extends BaseFragment
                 if (latestUri == null) {
                     break;
                 }
-                ContactUtils contactUtils = new ContactUtils(mActivity, latestUri);
+                ContactUtils contactUtils = new ContactUtils(G.fragmentActivity, latestUri);
                 String name = contactUtils.retrieveName();
                 String number = contactUtils.retrieveNumber();
                 messageType = CONTACT;
@@ -6542,7 +6541,7 @@ public class FragmentChat extends BaseFragment
                         structUploadVideos.add(uploadVideo);
 
                         finalMessageInfo.attachment.compressing = G.context.getResources().getString(R.string.compressing);
-                        mActivity.runOnUiThread(new Runnable() {
+                        G.handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 switchAddItem(new ArrayList<>(Collections.singletonList(finalMessageInfo)), false);
@@ -6592,7 +6591,7 @@ public class FragmentChat extends BaseFragment
 
         if (userTriesReplay()) {
             mReplayLayout.setTag(null);
-            mActivity.runOnUiThread(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     mReplayLayout.setVisibility(View.GONE);
@@ -6712,7 +6711,7 @@ public class FragmentChat extends BaseFragment
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
                                     super.onAnimationEnd(animation);
-                                    mActivity.runOnUiThread(new Runnable() {
+                                    G.handler.post(new Runnable() {
                                         @Override
                                         public void run() {
                                             imvSendButton.clearAnimation();
@@ -6737,7 +6736,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        mActivity.runOnUiThread(new Runnable() {
+                        G.handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 imvSendButton.clearAnimation();
@@ -6834,7 +6833,7 @@ public class FragmentChat extends BaseFragment
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
 
-        String timeString = TimeUtils.getChatSettingsTimeAgo(mActivity, calendar.getTime());
+        String timeString = TimeUtils.getChatSettingsTimeAgo(G.fragmentActivity, calendar.getTime());
 
         RealmRoomMessage timeMessage = new RealmRoomMessage();
         timeMessage.setMessageId(SUID.id().get());
@@ -7376,7 +7375,7 @@ public class FragmentChat extends BaseFragment
                     MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN, getRealmChat());
 
                     if (realmRoomMessages.size() > 0) {
-                        mActivity.runOnUiThread(new Runnable() {
+                        G.handler.post(new Runnable() {
                             @Override
                             public void run() {
                             }
@@ -7439,7 +7438,7 @@ public class FragmentChat extends BaseFragment
                     if (majorCode == 617) {
 
                         if (!isWaitingForHistoryUp && !isWaitingForHistoryDown && mAdapter.getItemCount() == 0) {
-                            mActivity.runOnUiThread(new Runnable() {
+                            G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                 }
@@ -7450,7 +7449,7 @@ public class FragmentChat extends BaseFragment
                             isWaitingForHistoryUp = false;
                             isWaitingForHistoryUp = false;
                             allowGetHistoryUp = false;
-                            mActivity.runOnUiThread(new Runnable() {
+                            G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     //TODO [Saeed Mozaffari] [2017-03-06 9:50 AM] - for avoid from 'Inconsistency detected. Invalid item position' error i set notifyDataSetChanged. Find Solution And Clear it!!!
@@ -7571,7 +7570,7 @@ public class FragmentChat extends BaseFragment
      * @param direction define direction for show progress in UP or DOWN
      */
     private void progressItem(final ProgressState progressState, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-        mActivity.runOnUiThread(new Runnable() {
+        G.handler.post(new Runnable() {
             @Override
             public void run() {
                 int progressIndex = 0;
@@ -7746,7 +7745,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
+        G.fragmentActivity = (FragmentActivity) activity;
     }
 
     public void finishChat() {

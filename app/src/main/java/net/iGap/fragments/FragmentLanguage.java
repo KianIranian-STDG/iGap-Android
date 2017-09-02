@@ -1,13 +1,11 @@
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +25,6 @@ import static net.iGap.G.onRefreshActivity;
  */
 public class FragmentLanguage extends BaseFragment {
 
-    private FragmentActivity mActivity;
     private SharedPreferences sharedPreferences;
 
     public FragmentLanguage() {
@@ -55,7 +52,7 @@ public class FragmentLanguage extends BaseFragment {
             }
         });
 
-        sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.stns_ripple_back);
         rippleBack.setOnClickListener(new View.OnClickListener() {
@@ -140,12 +137,6 @@ public class FragmentLanguage extends BaseFragment {
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
-        mActivity.getBaseContext().getResources().updateConfiguration(config, mActivity.getBaseContext().getResources().getDisplayMetrics());
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
+        G.fragmentActivity.getBaseContext().getResources().updateConfiguration(config, G.fragmentActivity.getBaseContext().getResources().getDisplayMetrics());
     }
 }

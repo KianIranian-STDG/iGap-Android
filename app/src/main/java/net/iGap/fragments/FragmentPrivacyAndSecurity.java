@@ -10,13 +10,11 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +72,6 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
     private RealmPrivacy realmPrivacy;
     private RealmChangeListener<RealmModel> privacyListener;
     private int poWhoCan;
-    private FragmentActivity mActivity;
 
     public FragmentPrivacyAndSecurity() {
     }
@@ -265,7 +262,7 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
 
         txtDestruction = (TextView) view.findViewById(R.id.stps_txt_Self_destruction);
 
-        sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         poSelfRemove = sharedPreferences.getInt(SHP_SETTING.KEY_POSITION_SELF_REMOVE, 2);
         ViewGroup ltSelfDestruction = (ViewGroup) view.findViewById(R.id.stps_layout_Self_destruction);
         ltSelfDestruction.setOnClickListener(new View.OnClickListener() {
@@ -282,7 +279,7 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
 
     private void selfDestructs() {
 
-        new MaterialDialog.Builder(mActivity).title(G.context.getResources().getString(R.string.self_destructs)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.self_destructs)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.account_self_destruct).itemsCallbackSingleChoice(poSelfRemove, new MaterialDialog.ListCallbackSingleChoice() {
             @Override
             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -342,7 +339,7 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
 
     private void openDialogWhoCan(final ProtoGlobal.PrivacyType privacyType, int position, int title) {
 
-        new MaterialDialog.Builder(mActivity).title(G.context.getResources().getString(title)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.privacy_setting_array).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(title)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.privacy_setting_array).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
             @Override
             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -397,11 +394,5 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
         }
 
         return resString;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 }

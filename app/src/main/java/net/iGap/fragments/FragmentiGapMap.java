@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -37,7 +36,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
@@ -139,7 +137,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     private EditText edtMessageGps;
     public static FloatingActionButton fabGps;
     private ProgressBar prgWaitingSendMessage;
-    private FragmentActivity mActivity;
     private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = null;
     private GestureDetector mGestureDetector;
     public static Location mineStaticLocation;
@@ -308,7 +305,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         e.printStackTrace();
                     }
                 } else {
-                    new MaterialDialog.Builder(mActivity).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Visible_Status_title_dialog).content(R.string.Visible_Status_text_dialog).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             if (G.userLogin) {
@@ -394,7 +391,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
 
                 if (txtSendMessageGps.getText().toString().contains(G.context.getResources().getString(R.string.md_close_button))) {
-                    new MaterialDialog.Builder(mActivity).title(R.string.Clear_Status).content(R.string.Clear_Status_desc).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Clear_Status).content(R.string.Clear_Status_desc).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -500,7 +497,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 }
                 if (!isBackPress) {
                     //getActivity().getSupportFragmentManager().popBackStack();
-                    mActivity.onBackPressed();
+                    G.fragmentActivity.onBackPressed();
                 }
                 closeKeyboard(v);
                 isBackPress = false;
@@ -514,7 +511,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             @Override
             public void onClick(View view) {
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
                 View v = dialog.getCustomView();
                 DialogAnimation.animationUp(dialog);
                 dialog.show();
@@ -577,7 +574,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         dialog.dismiss();
 
 
-                        new MaterialDialog.Builder(mActivity).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -592,7 +589,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         }).show();
 
 
-                        //final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.dialog_map_registration, true).build();
+                        //final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.dialog_map_registration, true).build();
                         //View v = dialog.getCustomView();
                         //if (v == null) {
                         //    return;
@@ -639,7 +636,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         G.currentActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
+                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
 
                 snack.setAction(R.string.cancel, new View.OnClickListener() {
                     @Override
@@ -754,7 +751,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 marker.setPosition(new GeoPoint(mapItem.getPoint().getLatitude(), mapItem.getPoint().getLongitude()));
                 InfoWindow infoWindow;
                 marker.setIcon(avatarMark(userIdR, MarkerColor.GRAY));
-                infoWindow = new MyInfoWindow(map, marker, userIdR, hasComment, FragmentiGapMap.this, mActivity);
+                infoWindow = new MyInfoWindow(map, marker, userIdR, hasComment, FragmentiGapMap.this, G.fragmentActivity);
                 marker.setInfoWindow(infoWindow);
 
                 markers.add(marker);
@@ -1136,14 +1133,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
-    }
-
     public void statusCheck() {
-        final LocationManager manager = (LocationManager) mActivity.getSystemService(Context.LOCATION_SERVICE);
+        final LocationManager manager = (LocationManager) G.fragmentActivity.getSystemService(Context.LOCATION_SERVICE);
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//GPS is off
 
@@ -1201,7 +1192,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     private void closeKeyboard(View v) {
         if (isAdded()) {
             try {
-                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             } catch (IllegalStateException e) {
                 e.getStackTrace();
@@ -1215,7 +1206,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             @Override
             public void run() {
 
-                SharedPreferences sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (state) {
@@ -1238,7 +1229,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
     @Override
     public void onClose() {
-        if (mActivity != null) {
+        if (G.fragmentActivity != null) {
             removeFromBaseFragment(this);
         }
     }

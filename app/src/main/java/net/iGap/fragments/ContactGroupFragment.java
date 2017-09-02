@@ -10,11 +10,9 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -71,7 +69,6 @@ public class ContactGroupFragment extends BaseFragment {
     private int countAddMemberRequest = 0;
     private static ProtoGlobal.Room.Type type;
     private String typeCreate;
-    private FragmentActivity mActivity;
 
     private int sizeTextEditText = 0;
     private List<StructContactInfo> contacts;
@@ -115,7 +112,7 @@ public class ContactGroupFragment extends BaseFragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                mActivity.onBackPressed();
+                G.fragmentActivity.onBackPressed();
             }
         });
 
@@ -193,8 +190,6 @@ public class ContactGroupFragment extends BaseFragment {
                         if (isAdded()) {
                             removeFromBaseFragment(ContactGroupFragment.this);
                             new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
-
-                            // mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
                         }
 
                     }
@@ -324,7 +319,6 @@ public class ContactGroupFragment extends BaseFragment {
         if (isAdded()) {
             removeFromBaseFragment(ContactGroupFragment.this);
             new GoToChatActivity(roomId).startActivity();
-            // mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
         }
 
     }
@@ -346,7 +340,6 @@ public class ContactGroupFragment extends BaseFragment {
         if (isAdded()) {
             removeFromBaseFragment(ContactGroupFragment.this);
             new GoToChatActivity(roomId).startActivity();
-            // mActivity.getSupportFragmentManager().beginTransaction().remove(ContactGroupFragment.this).commit();
         }
 
     }
@@ -444,9 +437,8 @@ public class ContactGroupFragment extends BaseFragment {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                //                prgWaiting.setVisibility(View.VISIBLE);
-                if (mActivity != null) {
-                    mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (G.fragmentActivity != null) {
+                    G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
@@ -456,18 +448,11 @@ public class ContactGroupFragment extends BaseFragment {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-
-                //                prgWaiting.setVisibility(View.GONE);
-                if (mActivity != null) {
-                    mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (G.fragmentActivity != null) {
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
-    }
 }

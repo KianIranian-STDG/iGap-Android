@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +66,6 @@ public class FragmentSecurity extends BaseFragment {
     private static final int CHANGE_EMAIL = 2;
     private static final int CONFIRM_EMAIL = 3;
     private static final int CHANGE_QUESTION = 4;
-    private FragmentActivity mActivity;
     public boolean isFirstArrive = true;
     public static boolean isFirstSetPassword = true;
     private TextView txtSetConfirmedEmail;
@@ -169,7 +166,7 @@ public class FragmentSecurity extends BaseFragment {
                         break;
                     default:
                         isFirstArrive = true;
-                        //mActivity.getSupportFragmentManager().popBackStack();
+                        //G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
                         popBackStackFragment();
 
@@ -207,7 +204,7 @@ public class FragmentSecurity extends BaseFragment {
                     item = R.array.securityRecoveryPasswordWithoutEmail;
                 }
 
-                new MaterialDialog.Builder(mActivity).title(R.string.set_recovery_dialog_title).items(item).itemsCallback(new MaterialDialog.ListCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.set_recovery_dialog_title).items(item).itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -242,7 +239,7 @@ public class FragmentSecurity extends BaseFragment {
                 rootSetPassword.setVisibility(View.GONE);
                 rootSetAdditionPassword.setVisibility(View.GONE);
                 rootChangeHint.setVisibility(View.VISIBLE);
-                txtTitleToolbar.setText(mActivity.getString(R.string.password_hint));
+                txtTitleToolbar.setText(G.fragmentActivity.getString(R.string.password_hint));
                 rippleOk.setVisibility(View.VISIBLE);
 
             }
@@ -257,7 +254,7 @@ public class FragmentSecurity extends BaseFragment {
                 rootSetPassword.setVisibility(View.GONE);
                 rootSetAdditionPassword.setVisibility(View.GONE);
                 rootConfirmedEmail.setVisibility(View.VISIBLE);
-                txtTitleToolbar.setText(mActivity.getString(R.string.confirm_email_title));
+                txtTitleToolbar.setText(G.fragmentActivity.getString(R.string.confirm_email_title));
                 rippleOk.setVisibility(View.VISIBLE);
             }
         });
@@ -283,7 +280,7 @@ public class FragmentSecurity extends BaseFragment {
                 rootSetPassword.setVisibility(View.GONE);
                 rootSetAdditionPassword.setVisibility(View.GONE);
                 rootChangeEmail.setVisibility(View.VISIBLE);
-                txtTitleToolbar.setText(mActivity.getString(R.string.change_email_recovery));
+                txtTitleToolbar.setText(G.fragmentActivity.getString(R.string.change_email_recovery));
                 //rootConfirmedEmail.setVisibility(View.VISIBLE);
                 rippleOk.setVisibility(View.VISIBLE);
 
@@ -293,7 +290,7 @@ public class FragmentSecurity extends BaseFragment {
         txtTurnPasswordOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MaterialDialog.Builder(mActivity).title(R.string.turn_Password_off).content(R.string.turn_Password_off_desc).positiveText(getResources().getString(R.string.yes)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.turn_Password_off).content(R.string.turn_Password_off_desc).positiveText(getResources().getString(R.string.yes)).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -316,7 +313,7 @@ public class FragmentSecurity extends BaseFragment {
                 rootSetPassword.setVisibility(View.GONE);
                 rootSetAdditionPassword.setVisibility(View.GONE);
                 rootQuestionPassword.setVisibility(View.VISIBLE);
-                txtTitleToolbar.setText(mActivity.getString(R.string.title_toolbar_password_Question));
+                txtTitleToolbar.setText(G.fragmentActivity.getString(R.string.title_toolbar_password_Question));
                 rippleOk.setVisibility(View.VISIBLE);
             }
         });
@@ -331,7 +328,7 @@ public class FragmentSecurity extends BaseFragment {
                 isConfirmedRecoveryEmail = hasConfirmedRecoveryEmail;
                 mUnconfirmedEmailPattern = unconfirmedEmailPattern;
 
-                mActivity.runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
 
@@ -379,14 +376,14 @@ public class FragmentSecurity extends BaseFragment {
 
                 if (isAdded()) {
 
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
 
                             if (majorCode == 188 && minorCode == 1) {  //USER DON'T SET A PASSWORD
                                 setFirstView();
                             } else { // CAN'T CONNECT TO SERVER
-                                //  mActivity.getSupportFragmentManager().popBackStack();
+                                //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
                                 popBackStackFragment();
                             }
@@ -398,10 +395,10 @@ public class FragmentSecurity extends BaseFragment {
             @Override
             public void timeOutGetPasswordDetail() {
                 if (isAdded()) {
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            // mActivity.getSupportFragmentManager().popBackStack();
+                            // G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
                             popBackStackFragment();
                         }
@@ -412,7 +409,7 @@ public class FragmentSecurity extends BaseFragment {
             @Override
             public void checkPassword() {
                 if (isAdded()) {
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             rootSetPassword.setVisibility(View.VISIBLE);
@@ -427,7 +424,7 @@ public class FragmentSecurity extends BaseFragment {
             @Override
             public void errorCheckPassword(final int getWait) {
                 if (isAdded()) {
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             dialogWaitTime(getWait);
@@ -439,7 +436,7 @@ public class FragmentSecurity extends BaseFragment {
             @Override
             public void unSetPassword() {
                 if (isAdded()) {
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
 
@@ -456,7 +453,7 @@ public class FragmentSecurity extends BaseFragment {
             @Override
             public void changeRecoveryQuestion() {
                 if (isAdded()) {
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             viewChangeRecoveryQuestion();
@@ -469,7 +466,7 @@ public class FragmentSecurity extends BaseFragment {
             public void changeHint() {
                 if (isAdded()) {
 
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             viewChangeHint();
@@ -482,7 +479,7 @@ public class FragmentSecurity extends BaseFragment {
             public void changeEmail(final String unConfirmEmailPatern) {
                 if (isAdded()) {
 
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             mUnconfirmedEmailPattern = unConfirmEmailPatern;
@@ -497,7 +494,7 @@ public class FragmentSecurity extends BaseFragment {
             @Override
             public void confirmEmail() {
                 if (isAdded()) {
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             viewConfirmEmail();
@@ -510,7 +507,7 @@ public class FragmentSecurity extends BaseFragment {
             @Override
             public void errorConfirmEmail() {
                 if (isAdded()) {
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             error(getString(R.string.invalid_verify_email_code));
@@ -522,7 +519,7 @@ public class FragmentSecurity extends BaseFragment {
             @Override
             public void errorInvalidPassword() {
                 if (isAdded()) {
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             error(getString(R.string.invalid_password));
@@ -629,7 +626,7 @@ public class FragmentSecurity extends BaseFragment {
 
     private void setFirstView() {
         if (isAdded()) {
-            mActivity.runOnUiThread(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
 
@@ -646,7 +643,7 @@ public class FragmentSecurity extends BaseFragment {
 
     private void setSecondView() {
         if (isAdded()) {
-            mActivity.runOnUiThread(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     rootSetPassword.setVisibility(View.VISIBLE);
@@ -670,13 +667,13 @@ public class FragmentSecurity extends BaseFragment {
 
     private void viewConfirmEmail() {
         if (isAdded()) {
-            mActivity.runOnUiThread(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     page = 0;
                     rootSetPassword.setVisibility(View.VISIBLE);
                     rootConfirmedEmail.setVisibility(View.GONE);
-                    txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
+                    txtTitleToolbar.setText(G.fragmentActivity.getString(R.string.two_step_verification_title));
                     rippleOk.setVisibility(View.GONE);
                 }
             });
@@ -685,14 +682,14 @@ public class FragmentSecurity extends BaseFragment {
 
     private void viewChangeEmail() {
         if (isAdded()) {
-            mActivity.runOnUiThread(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     page = 0;
                     rootSetPassword.setVisibility(View.VISIBLE);
                     rootConfirmedEmail.setVisibility(View.GONE);
                     rootChangeEmail.setVisibility(View.GONE);
-                    txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
+                    txtTitleToolbar.setText(G.fragmentActivity.getString(R.string.two_step_verification_title));
                     rippleOk.setVisibility(View.GONE);
                     if (mUnconfirmedEmailPattern.length() > 0) {
                         txtSetConfirmedEmail.setVisibility(View.VISIBLE);
@@ -708,13 +705,13 @@ public class FragmentSecurity extends BaseFragment {
 
     private void viewChangeHint() {
         if (isAdded()) {
-            mActivity.runOnUiThread(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     page = 0;
                     rootSetPassword.setVisibility(View.VISIBLE);
                     rootChangeHint.setVisibility(View.GONE);
-                    txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
+                    txtTitleToolbar.setText(G.fragmentActivity.getString(R.string.two_step_verification_title));
                     rippleOk.setVisibility(View.GONE);
                 }
             });
@@ -723,13 +720,13 @@ public class FragmentSecurity extends BaseFragment {
 
     private void viewChangeRecoveryQuestion() {
         if (isAdded()) {
-            mActivity.runOnUiThread(new Runnable() {
+            G.handler.post(new Runnable() {
                 @Override
                 public void run() {
                     page = 0;
                     rootSetPassword.setVisibility(View.VISIBLE);
                     rootQuestionPassword.setVisibility(View.GONE);
-                    txtTitleToolbar.setText(mActivity.getString(R.string.two_step_verification_title));
+                    txtTitleToolbar.setText(G.fragmentActivity.getString(R.string.two_step_verification_title));
                     rippleOk.setVisibility(View.GONE);
                 }
             });
@@ -739,7 +736,7 @@ public class FragmentSecurity extends BaseFragment {
     private void closeKeyboard(View v) {
         if (isAdded()) {
             try {
-                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             } catch (IllegalStateException e) {
                 e.getStackTrace();
@@ -752,7 +749,7 @@ public class FragmentSecurity extends BaseFragment {
             try {
                 Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                 vShort.vibrate(200);
-                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -770,7 +767,7 @@ public class FragmentSecurity extends BaseFragment {
         boolean wrapInScrollView = true;
         if (isAdded()) {
 
-            final MaterialDialog dialogWait = new MaterialDialog.Builder(mActivity).title(R.string.error_check_password).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(true).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
+            final MaterialDialog dialogWait = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.error_check_password).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(true).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -798,13 +795,6 @@ public class FragmentSecurity extends BaseFragment {
             countWaitTimer.start();
         }
     }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
-    }
-
 
     private Pattern patternEmail() {
         return Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{2,256}" + "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,64}" + "(" + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,25}" + ")+");

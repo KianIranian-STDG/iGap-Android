@@ -10,12 +10,10 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -53,7 +51,6 @@ public class FragmentExplorer extends BaseFragment {
     String mode = "normal";
     boolean first = true;
 
-    private FragmentActivity mActivity;
     private IPickFile pickFile = null;
 
     @Nullable
@@ -78,7 +75,7 @@ public class FragmentExplorer extends BaseFragment {
         txtCurentPath = (TextView) view.findViewById(R.id.ae_txt_file_path);
         recyclerView = (RecyclerView) view.findViewById(R.id.ae_recycler_view_explorer);
         recyclerView.setItemViewCacheSize(100);
-        mLayoutManager = new LinearLayoutManager(mActivity);
+        mLayoutManager = new LinearLayoutManager(G.fragmentActivity);
         recyclerView.setLayoutManager(mLayoutManager);
 
         view.findViewById(R.id.ae_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
@@ -92,7 +89,7 @@ public class FragmentExplorer extends BaseFragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                mActivity.onBackPressed();
+                G.fragmentActivity.onBackPressed();
             }
         });
 
@@ -299,7 +296,7 @@ public class FragmentExplorer extends BaseFragment {
                 //Intent data = new Intent();
                 //data.setData(Uri.parse(fileDir.getAbsolutePath()));
 
-                // mActivity.setResult(Activity.RESULT_OK, data);
+                // G.fragmentActivity.setResult(Activity.RESULT_OK, data);
 
                 if (pickFile != null) {
 
@@ -311,7 +308,7 @@ public class FragmentExplorer extends BaseFragment {
                 finish();
             }
         } catch (Exception e) {
-            Toast.makeText(mActivity, e.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(G.fragmentActivity, e.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -345,60 +342,8 @@ public class FragmentExplorer extends BaseFragment {
         return result;
     }
 
-    //    Integer setPicture(File f) {
-    //
-    //        Integer x = null;
-    //        String extention;
-    //
-    //        if (f.getName().indexOf(".") == -1) {
-    //            extention = "";
-    //        }
-    //        else {
-    //            extention = f.getName().toLowerCase();//.substring(f.getName().length() - 3, f.getName().length());
-    //        }
-    //
-    //        if (extention.endsWith("jpg") || extention.endsWith("jpeg") || extention.endsWith("png") || extention.endsWith("bmp"))
-    //            x = R.mipmap.j_pic;
-    //        else if (extention.endsWith("apk"))
-    //            x = R.mipmap.j_apk;
-    //        else if (extention.endsWith("mp3") || extention.endsWith("ogg") || extention.endsWith("wma"))
-    //            x = R.mipmap.j_mp3;
-    //        else if (extention.endsWith("mp4") || extention.endsWith("3gp") || extention.endsWith("avi") || extention.endsWith("mpg") || extention.endsWith("flv") || extention.endsWith("wmv") || extention.endsWith("m4v"))
-    //            x = R.mipmap.j_video;
-    //        else if (extention.endsWith("m4a") || extention.endsWith("amr") || extention.endsWith("wav"))
-    //            x = R.mipmap.j_audio;
-    //        else if (extention.endsWith("html") || extention.endsWith("htm"))
-    //            x = R.mipmap.j_html;
-    //        else if (extention.endsWith("pdf"))
-    //            x = R.mipmap.j_pdf;
-    //        else if (extention.endsWith("ppt"))
-    //            x = R.mipmap.j_ppt;
-    //        else if (extention.endsWith("snb"))
-    //            x = R.mipmap.j_snb;
-    //        else if (extention.endsWith("txt"))
-    //            x = R.mipmap.j_txt;
-    //        else if (extention.endsWith("doc"))
-    //            x = R.mipmap.j_word;
-    //        else if (extention.endsWith("xls"))
-    //            x = R.mipmap.j_xls;
-    //        else if (f.isFile())
-    //            x = R.mipmap.j_ect;
-    //        else if (f.isDirectory())
-    //            x = R.mipmap.actionbar_icon_myfiles;
-    //        else
-    //            x = R.mipmap.j_ect;
-    //
-    //        return x;
-    //    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
-    }
-
     private void finish() {
         finish = true;
-        mActivity.onBackPressed();
+        G.fragmentActivity.onBackPressed();
     }
 }

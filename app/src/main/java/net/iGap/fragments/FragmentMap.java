@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,7 +21,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -63,7 +61,6 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback {
     private Double longitude;
     private Mode mode;
     Marker marker;
-    private FragmentActivity mActivity;
 
     public enum Mode {
         sendPosition, seePosition;
@@ -127,7 +124,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback {
 
         SupportMapFragment mapFragment = new SupportMapFragment();
 
-        mActivity.getSupportFragmentManager()
+        G.fragmentActivity.getSupportFragmentManager()
             .beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
             .replace(mf_fragment_map_view, mapFragment, null)
@@ -215,7 +212,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback {
         final boolean[] updatePosition = {true};
 
         //if device has not gps permision in androi 6+ return form map
-        if (ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(G.fragmentActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(G.fragmentActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
         }
@@ -378,11 +375,5 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback {
                 listener.getBitmap(result);
             }
         }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 }

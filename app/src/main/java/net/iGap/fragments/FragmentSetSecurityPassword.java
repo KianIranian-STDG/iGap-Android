@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +41,6 @@ public class FragmentSetSecurityPassword extends BaseFragment {
     private EditText edtSetConfirmEmail;
     private static String txtPassword;
     private static String oldPassword = "";
-    private FragmentActivity mActivity;
 
     public FragmentSetSecurityPassword() {
         // Required empty public constructor
@@ -264,7 +261,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
             @Override
             public void confirmEmail() {
 
-                mActivity.runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
 
@@ -286,7 +283,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
             @Override
             public void errorInvalidConfirmCode() {
 
-                mActivity.runOnUiThread(new Runnable() {
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
                         if (isAdded()) error(getString(R.string.invalid_verify_email_code));
@@ -317,7 +314,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
 
         if (isAdded()) {
             try {
-                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             } catch (IllegalStateException e) {
                 e.getStackTrace();
@@ -331,7 +328,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
             try {
                 Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                 vShort.vibrate(200);
-                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -343,11 +340,5 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                 e.getStackTrace();
             }
         }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 }

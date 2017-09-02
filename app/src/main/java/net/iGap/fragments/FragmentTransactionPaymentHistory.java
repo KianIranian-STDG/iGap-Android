@@ -10,10 +10,8 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +36,6 @@ public class FragmentTransactionPaymentHistory extends BaseFragment {
     private ItemAdapter itemAdapter;
     private ArrayList<StructHistoryPayment> list = new ArrayList<>();
     private RecyclerView recyclerView;
-    private FragmentActivity mActivity;
     private PaymentTaype paymentTaype = PaymentTaype.weekly;
 
     public enum PaymentTaype {
@@ -161,11 +158,5 @@ public class FragmentTransactionPaymentHistory extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(itemAdapter.wrap(fastAdapter));
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 }

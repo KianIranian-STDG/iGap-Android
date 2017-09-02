@@ -10,12 +10,10 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ContentLoadingProgressBar;
@@ -104,7 +102,6 @@ public class FragmentShowAvatars extends BaseFragment {
     private GroupChatRole roleGroup;
     private ChannelChatRole roleChannel;
     private int avatarListSize = 0;
-    private FragmentActivity mActivity;
     private FragmentShowAvatars.AdapterViewPager mAdapter;
     private RealmResults<RealmAvatar> avatarList;
     public static OnComplete onComplete;
@@ -195,7 +192,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
             @Override
             public void onComplete(RippleView rippleView) {
-                mActivity.onBackPressed();
+                G.fragmentActivity.onBackPressed();
             }
         });
 
@@ -207,7 +204,7 @@ public class FragmentShowAvatars extends BaseFragment {
             public void onComplete(RippleView rippleView) {
 
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
                 View v = dialog.getCustomView();
 
                 DialogAnimation.animationUp(dialog);
@@ -351,7 +348,7 @@ public class FragmentShowAvatars extends BaseFragment {
                                 txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
                             }
                         } else {
-                            //  mActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
+                            //  G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowAvatars.this).commit();
 
                             popBackStackFragment();
                         }
@@ -422,7 +419,7 @@ public class FragmentShowAvatars extends BaseFragment {
     }
 
     private void showPopupMenu(int r) {
-        MaterialDialog dialog = new MaterialDialog.Builder(mActivity).items(r).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
+        MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).items(r).contentColor(Color.BLACK).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -510,7 +507,7 @@ public class FragmentShowAvatars extends BaseFragment {
         @Override
         public Object instantiateItem(View container, final int position) {
 
-            LayoutInflater inflater = LayoutInflater.from(mActivity);
+            LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
             final ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.show_image_sub_layout, (ViewGroup) container, false);
 
             final TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
@@ -763,11 +760,5 @@ public class FragmentShowAvatars extends BaseFragment {
 
     private void deletePhotoChat() {
 
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 }

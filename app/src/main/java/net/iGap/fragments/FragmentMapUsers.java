@@ -1,10 +1,8 @@
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -42,7 +40,6 @@ import static net.iGap.fragments.FragmentiGapMap.pageUserList;
 
 public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBackPressedListener {
 
-    private FragmentActivity mActivity;
     private RecyclerView mRecyclerView;
     private MapUserAdapter mAdapter;
     private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
@@ -74,7 +71,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     private void initComponent(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rcy_map_user);
         mRecyclerView.setItemAnimator(null);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -85,7 +82,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         mAdapter = new MapUserAdapter(realm.where(RealmGeoNearbyDistance.class).findAll(), true);
         mRecyclerView.setAdapter(mAdapter);
         realm.close();
-        ((ActivityMain) mActivity).setOnBackPressedListener(FragmentMapUsers.this, false);
+        ((ActivityMain) G.fragmentActivity).setOnBackPressedListener(FragmentMapUsers.this, false);
         ViewGroup mapContainer = (ViewGroup) view.findViewById(R.id.rootFragmentUserMap);
         mapContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,15 +225,9 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
-        ((ActivityMain) mActivity).setOnBackPressedListener(FragmentMapUsers.this, true);
+        ((ActivityMain) G.fragmentActivity).setOnBackPressedListener(FragmentMapUsers.this, true);
     }
 
     @Override

@@ -10,12 +10,10 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -68,7 +66,6 @@ public class SearchFragment extends BaseFragment {
     private ItemAdapter itemAdapter;
     private ImageView imvNothingFound;
     private TextView txtEmptyListComment;
-    private FragmentActivity mActivity;
     public static HashMap<Long, CircleImageView> hashMapAvatarSearchFragment = new HashMap<>();
 
     public static SearchFragment newInstance() {
@@ -146,9 +143,9 @@ public class SearchFragment extends BaseFragment {
             @Override
             public void onComplete(RippleView rippleView) {
 
-                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleBack.getWindowToken(), 0);
-                mActivity.onBackPressed();
+                G.fragmentActivity.onBackPressed();
             }
         });
 
@@ -379,7 +376,7 @@ public class SearchFragment extends BaseFragment {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (mActivity != null) {
+                            if (G.fragmentActivity != null) {
                                 removeFromBaseFragment(SearchFragment.this);
                             }
                             new GoToChatActivity(roomId).setPeerID(id).startActivity();
@@ -427,11 +424,5 @@ public class SearchFragment extends BaseFragment {
         public RealmAvatar avatar;
         public ProtoGlobal.Room.Type roomType;
         public SearchType type = SearchType.header;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 }

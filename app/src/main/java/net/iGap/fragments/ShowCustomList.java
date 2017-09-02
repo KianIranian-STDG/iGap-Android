@@ -10,12 +10,10 @@
 
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,7 +44,6 @@ import net.iGap.adapter.StickyHeaderAdapter;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.interfaces.OnSelectedList;
 import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.structs.StructContactInfo;
 
 public class ShowCustomList extends BaseFragment {
@@ -63,7 +60,6 @@ public class ShowCustomList extends BaseFragment {
     private int count = 0;
     private boolean singleSelect = false;
     private RippleView rippleDown;
-    private FragmentActivity mActivity;
     public static ShowCustomList newInstance(List<StructContactInfo> list, OnSelectedList onSelectedListResult) {
         onSelectedList = onSelectedListResult;
         contacts = list;
@@ -98,13 +94,9 @@ public class ShowCustomList extends BaseFragment {
         txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
         edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
 
-        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.fcg_btn_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override public void onComplete(RippleView rippleView) {
-
-                // mActivity.getSupportFragmentManager().popBackStack();
-
                 popBackStackFragment();
             }
         });
@@ -119,8 +111,6 @@ public class ShowCustomList extends BaseFragment {
                     if (onSelectedList != null) {
                         onSelectedList.getSelectedList(true, "", 0, getSelectedList());
                     }
-                    //  mActivity.getSupportFragmentManager().popBackStack();
-
                     popBackStackFragment();
                 }
             }
@@ -150,7 +140,7 @@ public class ShowCustomList extends BaseFragment {
                     if (onSelectedList != null) {
                         onSelectedList.getSelectedList(true, "", 0, getSelectedList());
                     }
-                    // mActivity.getSupportFragmentManager().popBackStack();
+                    // G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
                     popBackStackFragment();
                 }
@@ -237,7 +227,7 @@ public class ShowCustomList extends BaseFragment {
 
     private void showDialog() {
 
-        new MaterialDialog.Builder(mActivity).title(R.string.show_message_count).items(R.array.numberCountGroup).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.show_message_count).items(R.array.numberCountGroup).itemsCallback(new MaterialDialog.ListCallback() {
             @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
                 switch (which) {
@@ -246,7 +236,7 @@ public class ShowCustomList extends BaseFragment {
                         if (onSelectedList != null) {
                             onSelectedList.getSelectedList(true, "fromBegin", count, getSelectedList());
                         }
-                        // mActivity.getSupportFragmentManager().popBackStack();
+                        // G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
                         popBackStackFragment();
                         break;
@@ -256,7 +246,7 @@ public class ShowCustomList extends BaseFragment {
 
                             onSelectedList.getSelectedList(true, "fromNow", count, getSelectedList());
                         }
-                        //  mActivity.getSupportFragmentManager().popBackStack();
+                        //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
                         popBackStackFragment();
 
@@ -266,14 +256,14 @@ public class ShowCustomList extends BaseFragment {
                         if (onSelectedList != null) {
                             onSelectedList.getSelectedList(true, "", count, getSelectedList());
                         }
-                        // mActivity.getSupportFragmentManager().popBackStack();
+                        // G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
                         popBackStackFragment();
 
                         break;
                     case 3:
                         dialog.dismiss();
-                        new MaterialDialog.Builder(mActivity).title(R.string.customs)
+                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.customs)
                             .positiveText(getString(R.string.B_ok))
                             .alwaysCallInputCallback()
                             .widgetColor(getResources().getColor(R.color.toolbar_background))
@@ -282,7 +272,7 @@ public class ShowCustomList extends BaseFragment {
                                     if (onSelectedList != null) {
                                         onSelectedList.getSelectedList(true, "", count, getSelectedList());
                                     }
-                                    //  mActivity.getSupportFragmentManager().popBackStack();
+                                    //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
                                     popBackStackFragment();
 
@@ -345,11 +335,5 @@ public class ShowCustomList extends BaseFragment {
         //add the values which need to be saved from the adapter to the bundle
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 }

@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -23,7 +22,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -85,8 +83,6 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
     private ProgressBar prgWait;
     private boolean existAvatar = false;
     private Typeface titleTypeface;
-
-    FragmentActivity mActivity;
 
     @Nullable
     @Override
@@ -170,7 +166,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                 if (!nickName.equals("")) {
 
                     showProgressBar();
-                    mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -211,7 +207,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-                Intent intent = new Intent(mActivity, ActivityCrop.class);
+                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
                 ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
                 intent.putExtra("IMAGE_CAMERA", AttachFile.mCurrentPhotoPath);
                 intent.putExtra("TYPE", "camera");
@@ -219,7 +215,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                 intent.putExtra("ID", (int) getArguments().getLong(ARG_USER_ID, -1));
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
             } else {
-                Intent intent = new Intent(mActivity, ActivityCrop.class);
+                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
                 ImageHelper.correctRotateImage(AttachFile.imagePath, true);
                 intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
                 intent.putExtra("TYPE", "camera");
@@ -229,7 +225,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
             }
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
             if (data != null) {
-                Intent intent = new Intent(mActivity, ActivityCrop.class);
+                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
                 if (data.getData() == null) {
                     return;
                 }
@@ -305,7 +301,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
@@ -328,7 +324,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                                         Intent intent = new Intent(context, ActivityMain.class);
                                         intent.putExtra(ARG_USER_ID, userId);
                                         startActivity(intent);
-                                        mActivity.finish();
+                                        G.fragmentActivity.finish();
                                     }
                                 });
                             }
@@ -366,13 +362,13 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
     public void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
-                new AttachFile(mActivity).dispatchTakePictureIntent(FragmentRegistrationNickname.this);
+                new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(FragmentRegistrationNickname.this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                new AttachFile(mActivity).requestTakePicture(FragmentRegistrationNickname.this);
+                new AttachFile(G.fragmentActivity).requestTakePicture(FragmentRegistrationNickname.this);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -388,7 +384,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                 @Override
                 public void Allow() {
                     try {
-                        new AttachFile(mActivity).requestOpenGalleryForImageSingleSelect(FragmentRegistrationNickname.this);
+                        new AttachFile(G.fragmentActivity).requestOpenGalleryForImageSingleSelect(FragmentRegistrationNickname.this);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -406,7 +402,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
 
     private void startDialog() {
 
-        new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.choose_picture))
+        new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.choose_picture))
             .negativeText(getResources().getString(R.string.B_cancel))
             .items(R.array.profile)
             .itemsCallback(new MaterialDialog.ListCallback() {
@@ -423,10 +419,10 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                                            if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                                                try {
 
-                                                   HelperPermision.getStoragePermision(mActivity, new OnGetPermission() {
+                                                   HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                                                        @Override
                                                        public void Allow() throws IOException {
-                                                           HelperPermision.getCameraPermission(mActivity, new OnGetPermission() {
+                                                           HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                                                                @Override
                                                                public void Allow() {
                                                                    // this dialog show 2 way for choose image : gallery and camera
@@ -450,7 +446,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                                                    e.printStackTrace();
                                                }
                                            } else {
-                                               final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), getResources().getString(R.string.please_check_your_camera), Snackbar.LENGTH_LONG);
+                                               final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), getResources().getString(R.string.please_check_your_camera), Snackbar.LENGTH_LONG);
 
                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                    @Override
@@ -506,7 +502,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
             public void run() {
                 if (prgWait != null) {
                     prgWait.setVisibility(View.VISIBLE);
-                    mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
@@ -518,7 +514,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
             public void run() {
                 if (prgWait != null) {
                     prgWait.setVisibility(View.GONE);
-                    mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             }
         });
@@ -555,12 +551,5 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
     @Override
     public void onAvatarError() {
         hideProgressBar();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        mActivity = (FragmentActivity) context;
     }
 }

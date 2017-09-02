@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -9,7 +8,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -95,7 +93,6 @@ public class FragmentMain extends BaseFragment implements OnComplete {
 
     private RecyclerView mRecyclerView;
     public MainType mainType;
-    private Activity mActivity;
     private long tagId;
     private Realm realmFragmentMain;
 
@@ -156,7 +153,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
         // mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setItemViewCacheSize(1000);
-        mRecyclerView.setLayoutManager(new PreCachingLayoutManager(mActivity, 3000));
+        mRecyclerView.setLayoutManager(new PreCachingLayoutManager(G.fragmentActivity, 3000));
 
 
         RealmResults<RealmRoom> results = null;
@@ -286,19 +283,19 @@ public class FragmentMain extends BaseFragment implements OnComplete {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (((ActivityMain) mActivity).arcMenu.isMenuOpened()) {
-                    ((ActivityMain) mActivity).arcMenu.toggleMenu();
+                if (((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
+                    ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
                 }
 
                 if (dy > 0) {
                     // Scroll Down
-                    if (((ActivityMain) mActivity).arcMenu.fabMenu.isShown()) {
-                        ((ActivityMain) mActivity).arcMenu.fabMenu.hide();
+                    if (((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
+                        ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.hide();
                     }
                 } else if (dy < 0) {
                     // Scroll Up
-                    if (!((ActivityMain) mActivity).arcMenu.fabMenu.isShown()) {
-                        ((ActivityMain) mActivity).arcMenu.fabMenu.show();
+                    if (!((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
+                        ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.show();
                     }
                 }
             }
@@ -317,14 +314,14 @@ public class FragmentMain extends BaseFragment implements OnComplete {
 
             case all:
 
-                ((ActivityMain) mActivity).mainActionApp = new ActivityMain.MainInterface() {
+                ((ActivityMain) G.fragmentActivity).mainActionApp = new ActivityMain.MainInterface() {
                     @Override
                     public void onAction(ActivityMain.MainAction action) {
                         doAction(action);
                     }
                 };
 
-                ((ActivityMain) mActivity).mainInterfaceGetRoomList = new ActivityMain.MainInterfaceGetRoomList() {
+                ((ActivityMain) G.fragmentActivity).mainInterfaceGetRoomList = new ActivityMain.MainInterfaceGetRoomList() {
                     @Override
                     public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
 
@@ -369,7 +366,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
 
                 break;
             case chat:
-                ((ActivityMain) mActivity).mainActionChat = new ActivityMain.MainInterface() {
+                ((ActivityMain) G.fragmentActivity).mainActionChat = new ActivityMain.MainInterface() {
                     @Override
                     public void onAction(ActivityMain.MainAction action) {
                         doAction(action);
@@ -377,7 +374,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                 };
                 break;
             case group:
-                ((ActivityMain) mActivity).mainActionGroup = new ActivityMain.MainInterface() {
+                ((ActivityMain) G.fragmentActivity).mainActionGroup = new ActivityMain.MainInterface() {
                     @Override
                     public void onAction(ActivityMain.MainAction action) {
                         doAction(action);
@@ -385,7 +382,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                 };
                 break;
             case channel:
-                ((ActivityMain) mActivity).mainActionChannel = new ActivityMain.MainInterface() {
+                ((ActivityMain) G.fragmentActivity).mainActionChannel = new ActivityMain.MainInterface() {
                     @Override
                     public void onAction(ActivityMain.MainAction action) {
                         doAction(action);
@@ -694,7 +691,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
     @Override
     public void complete(boolean result, String messageOne, String MessageTow) {
         if (messageOne.equals("closeMenuButton")) {
-            ((ActivityMain) mActivity).arcMenu.toggleMenu();
+            ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
         }
     }
     //**************************************************************************************************************************************
@@ -908,7 +905,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                         if (ActivityMain.isMenuButtonAddShown) {
                             mComplete.complete(true, "closeMenuButton", "");
                         } else {
-                            if (mInfo.isValid() && mActivity != null) {
+                            if (mInfo.isValid() && G.fragmentActivity != null) {
 
                                 if (G.twoPaneMode) {
                                     Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
@@ -919,8 +916,8 @@ public class FragmentMain extends BaseFragment implements OnComplete {
 
                                 new GoToChatActivity(mInfo.getId()).startActivity();
 
-                                if (((ActivityMain) mActivity).arcMenu != null && ((ActivityMain) mActivity).arcMenu.isMenuOpened()) {
-                                    ((ActivityMain) mActivity).arcMenu.toggleMenu();
+                                if (((ActivityMain) G.fragmentActivity).arcMenu != null && ((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
+                                    ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
                                 }
                             }
                         }
@@ -938,7 +935,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                             }
 
                         } else {
-                            if (mInfo.isValid() && mActivity != null) {
+                            if (mInfo.isValid() && G.fragmentActivity != null) {
                                 String role = null;
                                 if (mInfo.getType() == GROUP) {
                                     role = mInfo.getGroupRoom().getRole().toString();
@@ -946,7 +943,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                                     role = mInfo.getChannelRoom().getRole().toString();
                                 }
 
-                                MyDialog.showDialogMenuItemRooms(mActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, new OnComplete() {
+                                MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, new OnComplete() {
                                     @Override
                                     public void complete(boolean result, String messageOne, String MessageTow) {
                                         onSelectRoomMenu(messageOne, mInfo);
@@ -1207,12 +1204,6 @@ public class FragmentMain extends BaseFragment implements OnComplete {
             realmFragmentMain = Realm.getDefaultInstance();
         }
         return realmFragmentMain;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
     }
 
     @Override

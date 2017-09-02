@@ -11,14 +11,12 @@
 package net.iGap.fragments;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -55,7 +53,6 @@ public class FragmentAddContact extends BaseFragment {
     private ViewGroup parent;
     private RippleView rippleSet;
     private MaterialDesignTextView txtSet;
-    private FragmentActivity mActivity;
     private TextView txtChooseCountry;
     public static OnCountryCallBack onCountryCallBack;
     private TextView txtCodeCountry;
@@ -204,28 +201,21 @@ public class FragmentAddContact extends BaseFragment {
             }
         });
 
-        //G.onContactImport = new OnUserContactImport() {
-        //    @Override
-        //    public void onContactImport() {
-        //
-        //    }
-        //};
-
-        mActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        G.fragmentActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         rippleSet = (RippleView) view.findViewById(R.id.ac_ripple_set);
         rippleSet.setEnabled(false);
         rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(final RippleView rippleView) {
 
-                new MaterialDialog.Builder(mActivity).title(R.string.add_to_list_contact).content(R.string.text_add_to_list_contact).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.add_to_list_contact).content(R.string.text_add_to_list_contact).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         addContactToServer();
                         final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
                         if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
                             try {
-                                HelperPermision.getContactPermision(mActivity, null);
+                                HelperPermision.getContactPermision(G.fragmentActivity, null);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -323,16 +313,10 @@ public class FragmentAddContact extends BaseFragment {
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
-    }
-
     private void closeKeyboard(View v) {
         if (isAdded()) {
             try {
-                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             } catch (IllegalStateException e) {
                 e.getStackTrace();

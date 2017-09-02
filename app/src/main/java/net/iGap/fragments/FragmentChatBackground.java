@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -18,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -59,7 +57,6 @@ public class FragmentChatBackground extends BaseFragment {
     private AdapterChatBackground adapterChatBackgroundSetting;
     private ArrayList<StructWallpaper> wList;
     private Realm realmChatBackground;
-    private FragmentActivity mActivity;
     private Fragment fragment;
 
     public static FragmentChatBackground newInstance() {
@@ -153,12 +150,6 @@ public class FragmentChatBackground extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mActivity = (FragmentActivity) context;
     }
 
     @Override

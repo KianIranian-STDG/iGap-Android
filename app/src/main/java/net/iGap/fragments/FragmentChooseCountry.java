@@ -1,12 +1,10 @@
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -39,7 +37,6 @@ import static net.iGap.fragments.FragmentAddContact.onCountryCallBack;
  * A simple {@link Fragment} subclass.
  */
 public class FragmentChooseCountry extends BaseFragment {
-    private FragmentActivity mActivity;
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList();
     private ArrayList<StructCountry> items = new ArrayList<>();
 
@@ -90,7 +87,7 @@ public class FragmentChooseCountry extends BaseFragment {
         rcvChooseCountry = (RecyclerView) view.findViewById(R.id.rcvChooseCountry);
         rcvChooseCountry.setItemViewCacheSize(1000);
         rcvChooseCountry.setItemAnimator(null);
-        rcvChooseCountry.setLayoutManager(new LinearLayoutManager(mActivity));
+        rcvChooseCountry.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
         rcvChooseCountry.setNestedScrollingEnabled(false);
 
         rcvChooseCountry.setAdapter(fastItemAdapter);
@@ -147,7 +144,7 @@ public class FragmentChooseCountry extends BaseFragment {
          */
 
         CountryReader countryReade = new CountryReader();
-        StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", mActivity);
+        StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", G.fragmentActivity);
 
         String list = fileListBuilder.toString();
         // Split line by line Into array
@@ -279,16 +276,10 @@ public class FragmentChooseCountry extends BaseFragment {
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
-    }
-
     private void closeKeyboard(View v) {
         if (isAdded()) {
             try {
-                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             } catch (IllegalStateException e) {
                 e.getStackTrace();

@@ -14,7 +14,6 @@ import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +54,6 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
     private int poRbDialogSoundGroup = -1;
     private int poRbDialogSoundMessage = -1;
-    private FragmentActivity mActivity;
     private ToggleButton tgAlert, tgMessagePreview, tgAlert_group, tgMessagePreview_group, tgApp_sound, tgApp_Vibrate, tgApp_preview, tgChat_sound, tgContact_joined, tgPinned_message, tgKeep_alive_service, tgBackground_connection, tgBadge_content;
 
     private SharedPreferences sharedPreferences;
@@ -75,7 +73,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         TextView txtBack = (TextView) view.findViewById(R.id.stns_txt_back);
 
@@ -87,7 +85,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onComplete(RippleView rippleView) {
                 //finish();
-                // mActivity.getSupportFragmentManager().popBackStack();
+                // G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
                 popBackStackFragment();
             }
@@ -171,7 +169,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(getResources().getString(R.string.set)).negativeText(getResources().getString(R.string.DISCARD)).title(getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(getResources().getString(R.string.set)).negativeText(getResources().getString(R.string.DISCARD)).title(getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -232,11 +230,11 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                        sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, which);
                         editor.apply();
@@ -259,7 +257,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                                 break;
                             case 3:
                                 txtVibrateMessage.setText(getResources().getString(R.string.array_Only_if_silent));
-                                AudioManager am2 = (AudioManager) mActivity.getSystemService(Context.AUDIO_SERVICE);
+                                AudioManager am2 = (AudioManager) G.fragmentActivity.getSystemService(Context.AUDIO_SERVICE);
 
                                 switch (am2.getRingerMode()) {
                                     case AudioManager.RINGER_MODE_SILENT:
@@ -304,7 +302,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
                 int po = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
-                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(getResources().getString(R.string.B_cancel)).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(po, new MaterialDialog.ListCallbackSingleChoice() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(getResources().getString(R.string.B_cancel)).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(po, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                         txtPopupNotification.setText(text.toString());
@@ -331,53 +329,53 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(poRbDialogSoundMessage, new MaterialDialog.ListCallbackSingleChoice() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(poRbDialogSoundMessage, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
                         switch (which) {
                             case 0:
-                                MediaPlayer.create(mActivity, R.raw.igap).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.igap).start();
                                 break;
                             case 1:
-                                MediaPlayer.create(mActivity, R.raw.aooow).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.aooow).start();
                                 break;
                             case 2:
-                                MediaPlayer.create(mActivity, R.raw.bbalert).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.bbalert).start();
                                 break;
                             case 3:
-                                MediaPlayer.create(mActivity, R.raw.boom).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.boom).start();
                                 break;
                             case 4:
-                                MediaPlayer.create(mActivity, R.raw.bounce).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.bounce).start();
                                 break;
                             case 5:
-                                MediaPlayer.create(mActivity, R.raw.doodoo).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.doodoo).start();
                                 break;
 
                             case 6:
-                                MediaPlayer.create(mActivity, R.raw.jing).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.jing).start();
                                 break;
                             case 7:
-                                MediaPlayer.create(mActivity, R.raw.lili).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.lili).start();
                                 break;
                             case 8:
-                                MediaPlayer.create(mActivity, R.raw.msg).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.msg).start();
                                 break;
                             case 9:
-                                MediaPlayer.create(mActivity, R.raw.newa).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.newa).start();
                                 break;
                             case 10:
-                                MediaPlayer.create(mActivity, R.raw.none).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.none).start();
                                 break;
                             case 11:
-                                MediaPlayer.create(mActivity, R.raw.onelime).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.onelime).start();
                                 break;
                             case 12:
-                                MediaPlayer.create(mActivity, R.raw.tone).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.tone).start();
                                 break;
                             case 13:
-                                MediaPlayer.create(mActivity, R.raw.woow).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.woow).start();
                                 break;
                         }
 
@@ -463,7 +461,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(getResources().getString(R.string.set)).negativeText(getResources().getString(R.string.DISCARD)).title(getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(getResources().getString(R.string.set)).negativeText(getResources().getString(R.string.DISCARD)).title(getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -523,10 +521,10 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, which);
                         editor.apply();
@@ -549,7 +547,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                                 break;
                             case 3:
                                 txtVibrateGroup.setText(getResources().getString(R.string.array_Only_if_silent));
-                                AudioManager am2 = (AudioManager) mActivity.getSystemService(Context.AUDIO_SERVICE);
+                                AudioManager am2 = (AudioManager) G.fragmentActivity.getSystemService(Context.AUDIO_SERVICE);
 
                                 switch (am2.getRingerMode()) {
                                     case AudioManager.RINGER_MODE_SILENT:
@@ -590,7 +588,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
                 int po = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
-                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(getResources().getString(R.string.B_cancel)).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(po, new MaterialDialog.ListCallbackSingleChoice() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(getResources().getString(R.string.B_cancel)).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(po, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -617,52 +615,52 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(poRbDialogSoundGroup, new MaterialDialog.ListCallbackSingleChoice() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(poRbDialogSoundGroup, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
                             case 0:
-                                MediaPlayer.create(mActivity, R.raw.igap).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.igap).start();
                                 break;
                             case 1:
-                                MediaPlayer.create(mActivity, R.raw.aooow).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.aooow).start();
                                 break;
                             case 2:
-                                MediaPlayer.create(mActivity, R.raw.bbalert).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.bbalert).start();
                                 break;
                             case 3:
-                                MediaPlayer.create(mActivity, R.raw.boom).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.boom).start();
                                 break;
                             case 4:
-                                MediaPlayer.create(mActivity, R.raw.bounce).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.bounce).start();
                                 break;
                             case 5:
-                                MediaPlayer.create(mActivity, R.raw.doodoo).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.doodoo).start();
                                 break;
 
                             case 6:
-                                MediaPlayer.create(mActivity, R.raw.jing).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.jing).start();
                                 break;
                             case 7:
-                                MediaPlayer.create(mActivity, R.raw.lili).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.lili).start();
                                 break;
                             case 8:
-                                MediaPlayer.create(mActivity, R.raw.msg).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.msg).start();
                                 break;
                             case 9:
-                                MediaPlayer.create(mActivity, R.raw.newa).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.newa).start();
                                 break;
                             case 10:
-                                MediaPlayer.create(mActivity, R.raw.none).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.none).start();
                                 break;
                             case 11:
-                                MediaPlayer.create(mActivity, R.raw.onelime).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.onelime).start();
                                 break;
                             case 12:
-                                MediaPlayer.create(mActivity, R.raw.tone).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.tone).start();
                                 break;
                             case 13:
-                                MediaPlayer.create(mActivity, R.raw.woow).start();
+                                MediaPlayer.create(G.fragmentActivity, R.raw.woow).start();
                                 break;
                         }
 
@@ -885,7 +883,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                     editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
                     editor.apply();
 
-                    mActivity.startService(new Intent(mActivity, MyServiceTemporat.class));
+                    G.fragmentActivity.startService(new Intent(G.fragmentActivity, MyServiceTemporat.class));
 
                 } else {
                     editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 0);
@@ -893,7 +891,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
                     Intent intentService = new Intent(G.context, MyService.class);
                     intentService.putExtra("ACTION", MyService.STOPFOREGROUND_ACTION);
-                    mActivity.startService(intentService);
+                    G.fragmentActivity.startService(intentService);
 
                 }
             }
@@ -970,11 +968,11 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(mActivity).title(getResources().getString(R.string.st_Repeat_Notifications)).items(R.array.repeat_notification).negativeText(getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_Repeat_Notifications)).items(R.array.repeat_notification).negativeText(getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                        sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         switch (which) {
                             case 0:
@@ -1025,10 +1023,10 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(mActivity).title(R.string.st_title_reset).content(R.string.st_dialog_reset_all_notification).positiveText(R.string.st_dialog_reset_all_notification_yes).negativeText(R.string.st_dialog_reset_all_notification_no).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.st_title_reset).content(R.string.st_dialog_reset_all_notification).positiveText(R.string.st_dialog_reset_all_notification_yes).negativeText(R.string.st_dialog_reset_all_notification_no).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        sharedPreferences = mActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                        sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
@@ -1052,7 +1050,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
                         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
                         editor.apply();
-                        Toast.makeText(mActivity, getResources().getString(R.string.st_reset_all_notification), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(G.fragmentActivity, getResources().getString(R.string.st_reset_all_notification), Toast.LENGTH_SHORT).show();
 
                         removeFromBaseFragment(FragmentNotificationAndSound.this);
                         new HelperFragment(new FragmentNotificationAndSound()).load();
@@ -1061,14 +1059,5 @@ public class FragmentNotificationAndSound extends BaseFragment {
                 }).show();
             }
         });
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        mActivity = (FragmentActivity) context;
-
     }
 }

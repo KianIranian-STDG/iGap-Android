@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +45,6 @@ public class FragmentSecurityRecovery extends BaseFragment {
     private TextView txtSetRecoveryByEmail;
     private TextView txtSetRecoveryQuestionPassOne;
     private TextView txtSetRecoveryQuestionPassTwo;
-    private FragmentActivity mActivity;
     private boolean isConfirmedRecoveryEmail;
 
     public FragmentSecurityRecovery() {
@@ -127,7 +124,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
             public void onClick(View v) {
                 new RequestUserTwoStepVerificationRequestRecoveryToken().requestRecovertyToken();
                 closeKeyboard(v);
-                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), R.string.resend_verify_email_code, Snackbar.LENGTH_LONG);
+                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), R.string.resend_verify_email_code, Snackbar.LENGTH_LONG);
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -148,7 +145,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
                 @Override
                 public void getEmailPatern(final String patern) {
 
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             edtSetRecoveryEmail.setHint(patern);
@@ -198,7 +195,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
 
                 @Override
                 public void getEmailPatern(final String patern) {
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             edtSetRecoveryEmail.setHint(patern);
@@ -208,7 +205,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
 
                 @Override
                 public void errorRecoveryByEmail() {
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             closeKeyboard(view);
@@ -228,7 +225,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
 
                 @Override
                 public void errorRecoveryByQuestion() {
-                    mActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             closeKeyboard(view);
@@ -271,14 +268,14 @@ public class FragmentSecurityRecovery extends BaseFragment {
 
     private void pageRegister() {
 
-        mActivity.getSupportFragmentManager().popBackStack();
+        G.fragmentActivity.getSupportFragmentManager().popBackStack();
     }
 
     private void pageSetting() {
 
-        mActivity.getSupportFragmentManager().popBackStack();
+        G.fragmentActivity.getSupportFragmentManager().popBackStack();
         //FragmentSecurity fragmentSecurity = new FragmentSecurity();
-        //mActivity
+        //G.fragmentActivity
         //    .getSupportFragmentManager()
         //    .beginTransaction()
         //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
@@ -288,9 +285,9 @@ public class FragmentSecurityRecovery extends BaseFragment {
     }
 
     private void closeKeyboard(View v) {
-        if (mActivity != null) {
+        if (G.fragmentActivity != null) {
             try {
-                InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             } catch (IllegalStateException e) {
                 e.getStackTrace();
@@ -299,11 +296,11 @@ public class FragmentSecurityRecovery extends BaseFragment {
     }
 
     private void error(String error) {
-        if (mActivity != null) {
+        if (G.fragmentActivity != null) {
             try {
                 Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                 vShort.vibrate(200);
-                final Snackbar snack = Snackbar.make(mActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -316,11 +313,4 @@ public class FragmentSecurityRecovery extends BaseFragment {
             }
         }
     }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (FragmentActivity) activity;
-    }
-
 }
