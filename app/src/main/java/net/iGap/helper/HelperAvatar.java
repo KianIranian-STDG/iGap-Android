@@ -46,6 +46,7 @@ import net.iGap.request.RequestFileDownload;
 public class HelperAvatar {
 
     private static HashMap<Long, ArrayList<OnAvatarGet>> onAvatarGetHashMap = new HashMap<>();
+    private static HashMap<Long, ArrayList<OnAvatarGet>> onAvatarSync = new HashMap<>();
     private static HashMap<Long, Boolean> mRepeatList = new HashMap<>();
     private static ArrayList<String> reDownloadFiles = new ArrayList<>();
 
@@ -82,6 +83,8 @@ public class HelperAvatar {
                 if (onAvatarAdd != null && avatarPath != null) {
                     onAvatarAdd.onAvatarAdd(avatarPath);
                 }
+
+                syncAvatarAdd(ownerId, avatarPath);
             }
         });
         realm.close();
@@ -190,6 +193,8 @@ public class HelperAvatar {
             insertRegisteredInfoToDB(registeredUser, _realm);
             realmAvatar = getLastAvatar(ownerId, _realm);
         }
+
+        fillAvatarSyncList(ownerId, onAvatarGet);
 
         if (realmAvatar != null) {
 
@@ -456,6 +461,27 @@ public class HelperAvatar {
         }
         realm.close();
         return ownerId;
+    }
+
+    private static void fillAvatarSyncList(long ownerId, OnAvatarGet onAvatarGet) {
+        if (G.twoPaneMode) {
+            if (onAvatarSync.containsKey(ownerId)) {
+                ArrayList<OnAvatarGet> listeners = onAvatarSync.get(ownerId);
+                listeners.add(onAvatarGet);
+            } else {
+                ArrayList<OnAvatarGet> listeners = new ArrayList<>();
+                listeners.add(onAvatarGet);
+                onAvatarSync.put(ownerId, listeners);
+            }
+        }
+    }
+
+    private static void syncAvatarAdd(long ownerId, String avatarPath) {
+        if (G.twoPaneMode) {
+            for (OnAvatarGet listener : onAvatarSync.get(ownerId)) {
+                listener.onAvatarGet(avatarPath, ownerId);
+            }
+        }
     }
 
     private static class AvatarDownload implements OnFileDownloaded {
