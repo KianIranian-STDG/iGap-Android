@@ -60,6 +60,7 @@ import net.iGap.interfaces.ISignalingLeave;
 import net.iGap.interfaces.ISignalingOffer;
 import net.iGap.interfaces.ISignalingRinging;
 import net.iGap.interfaces.ISignalingSessionHold;
+import net.iGap.interfaces.OnBackgroundChanged;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChannelAddAdmin;
@@ -416,6 +417,7 @@ public class G extends MultiDexApplication {
     public static OnVerifyNewDevice onVerifyNewDevice;
     public static OnPushLoginToken onPushLoginToken;
     public static OnPushTwoStepVerification onPushTwoStepVerification;
+    public static OnBackgroundChanged onBackgroundChanged;
     public static IClientSearchUserName onClientSearchUserName;
     public static OnCallLeaveView onCallLeaveView;
     public static ICallFinish iCallFinishChat;

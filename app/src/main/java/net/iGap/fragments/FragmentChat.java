@@ -151,6 +151,7 @@ import net.iGap.interfaces.ISendPosition;
 import net.iGap.interfaces.IUpdateLogItem;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.interfaces.OnBackgroundChanged;
 import net.iGap.interfaces.OnChannelAddMessageReaction;
 import net.iGap.interfaces.OnChannelGetMessagesStats;
 import net.iGap.interfaces.OnChatClearMessageResponse;
@@ -299,7 +300,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 
 public class FragmentChat extends BaseFragment
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete {
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
 
     public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
@@ -317,6 +318,7 @@ public class FragmentChat extends BaseFragment
     private MaterialDesignTextView btnCancelSendingFile;
     private ViewGroup viewGroupLastSeen;
     private CircleImageView imvUserPicture;
+    private ImageView imgBackGround;
     private RecyclerView recyclerView;
     private MaterialDesignTextView imvSmileButton;
     private LocationManager locationManager;
@@ -668,6 +670,7 @@ public class FragmentChat extends BaseFragment
         G.onUserUpdateStatus = this;
         G.onLastSeenUpdateTiming = this;
         G.onChatDelete = this;
+        G.onBackgroundChanged = this;
         G.helperNotificationAndBadge.cancelNotification();
 
         finishActivity = new FinishActivity() {
@@ -1495,9 +1498,7 @@ public class FragmentChat extends BaseFragment
 
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
         if (backGroundPath.length() > 0) {
-
-            ImageView imgBackGround = (ImageView) rootView.findViewById(R.id.chl_img_view_chat);
-
+            imgBackGround = (ImageView) rootView.findViewById(R.id.chl_img_view_chat);
 
             File f = new File(backGroundPath);
             if (f.exists()) {
@@ -3886,6 +3887,23 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onChatDeleteError(int majorCode, int minorCode) {
 
+    }
+
+
+    @Override
+    public void onBackgroundChanged(final String backgroundPath) {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (imgBackGround != null) {
+                    File f = new File(backgroundPath);
+                    if (f.exists()) {
+                        Drawable d = Drawable.createFromPath(f.getAbsolutePath());
+                        imgBackGround.setImageDrawable(d);
+                    }
+                }
+            }
+        });
     }
 
     /**
