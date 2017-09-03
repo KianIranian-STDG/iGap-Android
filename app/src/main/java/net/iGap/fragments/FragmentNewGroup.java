@@ -288,9 +288,9 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         txtTitleToolbar = (TextView) view.findViewById(R.id.ng_txt_titleToolbar);
         if (prefix.equals("NewChanel")) {
-            txtTitleToolbar.setText(getResources().getString(R.string.New_Chanel));
+            txtTitleToolbar.setText(G.context.getResources().getString(R.string.New_Chanel));
         } else if (prefix.equals("ConvertToGroup")) {
-            txtTitleToolbar.setText(getResources().getString(R.string.chat_to_group));
+            txtTitleToolbar.setText(G.context.getResources().getString(R.string.chat_to_group));
         }
 
         parent = (RelativeLayout) view.findViewById(R.id.ng_fragmentContainer);
@@ -341,22 +341,22 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             public void onFocusChange(View view, boolean b) {
 
                 if (b) {
-                    ViewGroupName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                    ViewGroupName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
                 } else {
-                    ViewGroupName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                    ViewGroupName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
             }
         });
 
         switch (prefix) {
             case "NewChanel":
-                txtInputNewGroup.setHint(getResources().getString(R.string.channel_name) + " " + getResources().getString(R.string.mandatory));
+                txtInputNewGroup.setHint(G.context.getResources().getString(R.string.channel_name) + " " + G.context.getResources().getString(R.string.mandatory));
                 break;
             case "ConvertToGroup":
-                txtInputNewGroup.setHint(getResources().getString(R.string.group_name) + " " + getResources().getString(R.string.mandatory));
+                txtInputNewGroup.setHint(G.context.getResources().getString(R.string.group_name) + " " + G.context.getResources().getString(R.string.mandatory));
                 break;
             default:
-                txtInputNewGroup.setHint(getResources().getString(R.string.group_name) + " " + getResources().getString(R.string.mandatory));
+                txtInputNewGroup.setHint(G.context.getResources().getString(R.string.group_name) + " " + G.context.getResources().getString(R.string.mandatory));
                 break;
         }
 

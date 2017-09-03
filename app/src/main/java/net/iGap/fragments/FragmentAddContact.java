@@ -93,7 +93,7 @@ public class FragmentAddContact extends BaseFragment {
 
 
         txtSet = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_set);
-        txtSet.setTextColor(getResources().getColor(R.color.line_edit_text));
+        txtSet.setTextColor(G.context.getResources().getColor(R.color.line_edit_text));
 
         parent = (ViewGroup) view.findViewById(R.id.ac_layoutParent);
         parent.setOnClickListener(new View.OnClickListener() {
@@ -124,9 +124,9 @@ public class FragmentAddContact extends BaseFragment {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewFirstName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
                 } else {
-                    viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
             }
         });
@@ -134,9 +134,9 @@ public class FragmentAddContact extends BaseFragment {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewLastName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                    viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
                 } else {
-                    viewLastName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                    viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
             }
         });
@@ -144,9 +144,9 @@ public class FragmentAddContact extends BaseFragment {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewPhoneNumber.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                    viewPhoneNumber.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
                 } else {
-                    viewPhoneNumber.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                    viewPhoneNumber.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
             }
         });
@@ -252,10 +252,10 @@ public class FragmentAddContact extends BaseFragment {
 
         if ((edtFirstName.getText().toString().length() > 0 || edtLastName.getText().toString().length() > 0) && edtPhoneNumber.getText().toString().length() > 0) {
 
-            txtSet.setTextColor(getResources().getColor(R.color.white));
+            txtSet.setTextColor(G.context.getResources().getColor(R.color.white));
             rippleSet.setEnabled(true);
         } else {
-            txtSet.setTextColor(getResources().getColor(R.color.line_edit_text));
+            txtSet.setTextColor(G.context.getResources().getColor(R.color.line_edit_text));
             rippleSet.setEnabled(false);
         }
     }

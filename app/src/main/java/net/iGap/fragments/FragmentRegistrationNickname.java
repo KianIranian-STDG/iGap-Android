@@ -147,8 +147,8 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                 txtInputNickName.setErrorEnabled(true);
                 txtInputNickName.setError("");
                 txtInputNickName.setHintTextAppearance(R.style.remove_error_appearance);
-                edtNikName.setTextColor(getResources().getColor(R.color.border_editText));
-                lineEditText.setBackgroundColor(getResources().getColor(android.R.color.black));
+                edtNikName.setTextColor(G.context.getResources().getColor(R.color.border_editText));
+                lineEditText.setBackgroundColor(G.context.getResources().getColor(android.R.color.black));
             }
 
             @Override
@@ -180,10 +180,10 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                         public void run() {
 
                             txtInputNickName.setErrorEnabled(true);
-                            txtInputNickName.setError(getResources().getString(R.string.Toast_Write_NickName));
+                            txtInputNickName.setError(G.context.getResources().getString(R.string.Toast_Write_NickName));
                             txtInputNickName.setHintTextAppearance(R.style.error_appearance);
-                            edtNikName.setTextColor(getResources().getColor(R.color.red));
-                            lineEditText.setBackgroundColor(getResources().getColor(R.color.red));
+                            edtNikName.setTextColor(G.context.getResources().getColor(R.color.red));
+                            lineEditText.setBackgroundColor(G.context.getResources().getColor(R.color.red));
                         }
                     });
                 }
@@ -402,8 +402,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
 
     private void startDialog() {
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.choose_picture))
-            .negativeText(getResources().getString(R.string.B_cancel))
+        new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.choose_picture)).negativeText(G.context.getResources().getString(R.string.B_cancel))
             .items(R.array.profile)
             .itemsCallback(new MaterialDialog.ListCallback() {
                                @Override
@@ -446,7 +445,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                                                    e.printStackTrace();
                                                }
                                            } else {
-                                               final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), getResources().getString(R.string.please_check_your_camera), Snackbar.LENGTH_LONG);
+                                               final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.please_check_your_camera), Snackbar.LENGTH_LONG);
 
                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                    @Override

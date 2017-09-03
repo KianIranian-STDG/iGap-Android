@@ -98,7 +98,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        paths = getResources().getStringArray(R.array.array_passCode);
+        paths = G.context.getResources().getStringArray(R.array.array_passCode);
 
         view.findViewById(R.id.asn_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
@@ -181,7 +181,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         staticSpinner.setOnItemSelectedListener(this);
         staticSpinner.setSelection(0);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        staticSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        staticSpinner.getBackground().setColorFilter(G.context.getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         if (isPassCode) {
 
             page = 3;
@@ -189,16 +189,16 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             rootEnterPassword.setVisibility(View.VISIBLE);
             rootSettingPassword.setVisibility(View.GONE);
             rippleOk.setVisibility(View.VISIBLE);
-            txtSetPassword.setText(getResources().getString(R.string.enter_pass_code));
+            txtSetPassword.setText(G.context.getResources().getString(R.string.enter_pass_code));
             txtChangePassCode.setEnabled(true);
-            txtChangePassCode.setTextColor(getResources().getColor(R.color.black_register));
+            txtChangePassCode.setTextColor(G.context.getResources().getColor(R.color.black_register));
             togglePassCode.setChecked(true);
 
         } else {
             rootSettingPassword.setVisibility(View.GONE);
             togglePassCode.setChecked(false);
             txtChangePassCode.setEnabled(false);
-            txtChangePassCode.setTextColor(getResources().getColor(R.color.gray_5c));
+            txtChangePassCode.setTextColor(G.context.getResources().getColor(R.color.gray_5c));
         }
 
         togglePassCode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -214,7 +214,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                     rootEnterPassword.setVisibility(View.VISIBLE);
                     rootSettingPassword.setVisibility(View.GONE);
                     rippleOk.setVisibility(View.VISIBLE);
-                    //txtSetPassword.setText(getResources().getString(R.string.enter_a_password));
+                    //txtSetPassword.setText(G.context.getResources().getString(R.string.enter_a_password));
                     //titlePassCode.setText("PIN");
                     titlePassCode.setVisibility(View.GONE);
                     staticSpinner.setVisibility(View.VISIBLE);
@@ -231,7 +231,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                     rippleOk.setVisibility(View.GONE);
                     staticSpinner.setVisibility(View.GONE);
                     txtChangePassCode.setEnabled(false);
-                    txtChangePassCode.setTextColor(getResources().getColor(R.color.gray_5c));
+                    txtChangePassCode.setTextColor(G.context.getResources().getColor(R.color.gray_5c));
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, false);
                     editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 0);
@@ -274,7 +274,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                 //titlePassCode.setText("PIN");
                 titlePassCode.setVisibility(View.GONE);
                 staticSpinner.setVisibility(View.VISIBLE);
-                txtSetPassword.setText(getResources().getString(R.string.enter_change_pass_code));
+                txtSetPassword.setText(G.context.getResources().getString(R.string.enter_change_pass_code));
                 if (kindPassword == PIN) {
                     edtSetPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
                 } else {
@@ -414,14 +414,14 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                         rootEnterPassword.setVisibility(View.GONE);
                         rootSettingPassword.setVisibility(View.VISIBLE);
                         txtChangePassCode.setEnabled(true);
-                        txtChangePassCode.setTextColor(getResources().getColor(R.color.black_register));
+                        txtChangePassCode.setTextColor(G.context.getResources().getColor(R.color.black_register));
                         if (deviceHasFingerPrint) {
                             vgFingerPrint.setVisibility(View.VISIBLE);
                         } else {
                             vgFingerPrint.setVisibility(View.GONE);
                         }
                         rippleOk.setVisibility(View.GONE);
-                        titlePassCode.setText(getResources().getString(R.string.two_step_pass_code));
+                        titlePassCode.setText(G.context.getResources().getString(R.string.two_step_pass_code));
                         titlePassCode.setVisibility(View.VISIBLE);
                         staticSpinner.setVisibility(View.GONE);
                         if (ActivityMain.iconLock != null) {
@@ -460,11 +460,11 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                             vgFingerPrint.setVisibility(View.GONE);
                         }
                         rippleOk.setVisibility(View.GONE);
-                        titlePassCode.setText(getResources().getString(R.string.two_step_pass_code));
+                        titlePassCode.setText(G.context.getResources().getString(R.string.two_step_pass_code));
                         titlePassCode.setVisibility(View.VISIBLE);
                         staticSpinner.setVisibility(View.GONE);
                         txtChangePassCode.setEnabled(true);
-                        txtChangePassCode.setTextColor(getResources().getColor(R.color.black_register));
+                        txtChangePassCode.setTextColor(G.context.getResources().getColor(R.color.black_register));
                         closeKeyboard(v);
                     } else {
                         closeKeyboard(v);

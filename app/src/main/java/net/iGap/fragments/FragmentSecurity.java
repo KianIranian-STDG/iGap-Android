@@ -291,14 +291,14 @@ public class FragmentSecurity extends BaseFragment {
         txtTurnPasswordOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.turn_Password_off).content(R.string.turn_Password_off_desc).positiveText(getResources().getString(R.string.yes)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.turn_Password_off).content(R.string.turn_Password_off_desc).positiveText(G.context.getResources().getString(R.string.yes)).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                         isFirstSetPassword = true;
                         new RequestUserTwoStepVerificationUnsetPassword().unsetPassword(password);
                     }
-                }).negativeText(getResources().getString(R.string.no)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                }).negativeText(G.context.getResources().getString(R.string.no)).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         dialog.dismiss();

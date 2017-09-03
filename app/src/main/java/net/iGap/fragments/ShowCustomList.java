@@ -265,8 +265,7 @@ public class ShowCustomList extends BaseFragment {
                         dialog.dismiss();
                         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.customs)
                             .positiveText(getString(R.string.B_ok))
-                            .alwaysCallInputCallback()
-                            .widgetColor(getResources().getColor(R.color.toolbar_background))
+                            .alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     if (onSelectedList != null) {

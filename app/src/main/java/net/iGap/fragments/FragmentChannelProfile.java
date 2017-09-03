@@ -542,7 +542,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                     @Override
                     public void run() {
 
-                        final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+                        final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
                         snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -658,10 +658,10 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
         if (isPrivate) {
             txtChannelLink.setText(inviteLink);
-            txtLinkTitle.setText(getResources().getString(R.string.channel_link));
+            txtLinkTitle.setText(G.context.getResources().getString(R.string.channel_link));
         } else {
             txtChannelLink.setText("" + linkUsername);
-            txtLinkTitle.setText(getResources().getString(R.string.st_username));
+            txtLinkTitle.setText(G.context.getResources().getString(R.string.st_username));
         }
     }
 
@@ -677,31 +677,28 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
         final TextInputLayout inputRevoke = new TextInputLayout(G.fragmentActivity);
         edtRevoke = new MEditText(G.fragmentActivity);
-        edtRevoke.setHint(getResources().getString(R.string.channel_link_hint_revoke));
+        edtRevoke.setHint(G.context.getResources().getString(R.string.channel_link_hint_revoke));
         edtRevoke.setTypeface(G.typeface_IRANSansMobile);
         edtRevoke.setText(link);
-        edtRevoke.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
-        edtRevoke.setTextColor(getResources().getColor(R.color.text_edit_text));
-        edtRevoke.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtRevoke.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
+        edtRevoke.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
+        edtRevoke.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
         edtRevoke.setPadding(0, 8, 0, 8);
         edtRevoke.setEnabled(false);
         edtRevoke.setSingleLine(true);
         inputRevoke.addView(edtRevoke);
         inputRevoke.addView(viewRevoke, viewParams);
 
-        viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        viewRevoke.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtRevoke.setBackground(getResources().getDrawable(android.R.color.transparent));
+            edtRevoke.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
         }
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         layoutRevoke.addView(inputRevoke, layoutParams);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.channel_link_title_revoke))
-                .positiveText(getResources().getString(R.string.revoke))
-                .customView(layoutRevoke, true)
-                .widgetColor(getResources().getColor(R.color.toolbar_background))
-                .negativeText(getResources().getString(R.string.B_cancel))
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.channel_link_title_revoke)).positiveText(G.context.getResources().getString(R.string.revoke))
+                .customView(layoutRevoke, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.context.getResources().getString(R.string.B_cancel))
                 .neutralText(R.string.array_Copy)
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -737,12 +734,12 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
         final TextInputLayout inputChannelLink = new TextInputLayout(G.fragmentActivity);
         MEditText edtLink = new MEditText(G.fragmentActivity);
-        edtLink.setHint(getResources().getString(R.string.channel_public_hint_revoke));
+        edtLink.setHint(G.context.getResources().getString(R.string.channel_public_hint_revoke));
         edtLink.setTypeface(G.typeface_IRANSansMobile);
         edtLink.setText(link);
-        edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
-        edtLink.setTextColor(getResources().getColor(R.color.text_edit_text));
-        edtLink.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtLink.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
+        edtLink.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
+        edtLink.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
         edtLink.setPadding(0, 8, 0, 8);
         edtLink.setEnabled(false);
         edtLink.setSingleLine(true);
@@ -751,19 +748,23 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
         TextView txtLink = new TextView(G.fragmentActivity);
         txtLink.setText("iGap.net/" + link);
-        txtLink.setTextColor(getResources().getColor(R.color.gray_6c));
+        txtLink.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
 
-        viewRevoke.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        viewRevoke.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtLink.setBackground(getResources().getDrawable(android.R.color.transparent));
+            edtLink.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
         }
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         layoutChannelLink.addView(inputChannelLink, layoutParams);
         layoutChannelLink.addView(txtLink, layoutParams);
 
-        final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.channel_link)).positiveText(getResources().getString(R.string.array_Copy)).customView(layoutChannelLink, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.channel_link))
+            .positiveText(G.context.getResources().getString(R.string.array_Copy))
+            .customView(layoutChannelLink, true)
+            .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+            .negativeText(G.context.getResources().getString(R.string.B_cancel))
+            .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String copy;
@@ -1079,7 +1080,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
     private String dialogName;
 
     private void ChangeGroupDescription() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.channel_description).positiveText(getString(R.string.save)).alwaysCallInputCallback().widgetColor(getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.channel_description).positiveText(getString(R.string.save)).alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 editChannelRequest(txtChannelNameInfo.getText().toString(), dialogDesc);
@@ -1112,26 +1113,26 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
         final TextInputLayout inputUserName = new TextInputLayout(G.fragmentActivity);
         final EmojiEditTextE edtNameChannel = new EmojiEditTextE(G.fragmentActivity);
-        edtNameChannel.setHint(getResources().getString(R.string.st_username));
+        edtNameChannel.setHint(G.context.getResources().getString(R.string.st_username));
         edtNameChannel.setTypeface(G.typeface_IRANSansMobile);
-        edtNameChannel.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
+        edtNameChannel.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
         edtNameChannel.setText(txtChannelNameInfo.getText().toString());
-        edtNameChannel.setTextColor(getResources().getColor(R.color.text_edit_text));
-        edtNameChannel.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtNameChannel.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
+        edtNameChannel.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
         edtNameChannel.setPadding(0, 8, 0, 8);
         edtNameChannel.setSingleLine(true);
         inputUserName.addView(edtNameChannel);
         inputUserName.addView(viewUserName, viewParams);
 
-        viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtNameChannel.setBackground(getResources().getDrawable(android.R.color.transparent));
+            edtNameChannel.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
         }
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         layoutUserName.addView(inputUserName, layoutParams);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.channel_name)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.channel_name)).positiveText(G.context.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.context.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
 
@@ -1206,9 +1207,9 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                    viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
                 } else {
-                    viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                    viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
             }
         });
@@ -1465,7 +1466,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
@@ -1484,7 +1485,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                     @Override
@@ -1512,11 +1513,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         TextView iconItem1 = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
 
         if (isPrivate) {
-            txtItem1.setText(getResources().getString(R.string.channel_title_convert_to_public));
-            iconItem1.setText(getResources().getString(R.string.md_convert_to_public));
+            txtItem1.setText(G.context.getResources().getString(R.string.channel_title_convert_to_public));
+            iconItem1.setText(G.context.getResources().getString(R.string.md_convert_to_public));
         } else {
-            txtItem1.setText(getResources().getString(R.string.channel_title_convert_to_private));
-            iconItem1.setText(getResources().getString(R.string.md_convert_to_private));
+            txtItem1.setText(G.context.getResources().getString(R.string.channel_title_convert_to_private));
+            iconItem1.setText(G.context.getResources().getString(R.string.md_convert_to_private));
 
         }
 
@@ -1595,12 +1596,12 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
         final TextInputLayout inputUserName = new TextInputLayout(G.fragmentActivity);
         final MEditText edtUserName = new MEditText(G.fragmentActivity);
-        edtUserName.setHint(getResources().getString(R.string.channel_title_channel_set_username));
+        edtUserName.setHint(G.context.getResources().getString(R.string.channel_title_channel_set_username));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             edtUserName.setTextDirection(View.TEXT_DIRECTION_LTR);
         }
         edtUserName.setTypeface(G.typeface_IRANSansMobile);
-        edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
+        edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
 
         if (isPopup) {
             edtUserName.setText("iGap.net/");
@@ -1608,22 +1609,22 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             edtUserName.setText("" + linkUsername);
         }
 
-        edtUserName.setTextColor(getResources().getColor(R.color.text_edit_text));
-        edtUserName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+        edtUserName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
+        edtUserName.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
         edtUserName.setPadding(0, 8, 0, 8);
         edtUserName.setSingleLine(true);
         inputUserName.addView(edtUserName);
         inputUserName.addView(viewUserName, viewParams);
 
-        viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+        viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            edtUserName.setBackground(getResources().getDrawable(android.R.color.transparent));
+            edtUserName.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
         }
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         layoutUserName.addView(inputUserName, layoutParams);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_username)).positiveText(getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.st_username)).positiveText(G.context.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.context.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -1643,15 +1644,15 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                         } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.INVALID) {
                             positive.setEnabled(false);
                             inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("" + getResources().getString(R.string.INVALID));
+                            inputUserName.setError("" + G.context.getResources().getString(R.string.INVALID));
                         } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.TAKEN) {
                             positive.setEnabled(false);
                             inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("" + getResources().getString(R.string.TAKEN));
+                            inputUserName.setError("" + G.context.getResources().getString(R.string.TAKEN));
                         } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.OCCUPYING_LIMIT_EXCEEDED) {
                             positive.setEnabled(false);
                             inputUserName.setErrorEnabled(true);
-                            inputUserName.setError("" + getResources().getString(R.string.OCCUPYING_LIMIT_EXCEEDED));
+                            inputUserName.setError("" + G.context.getResources().getString(R.string.OCCUPYING_LIMIT_EXCEEDED));
                         }
                     }
                 });
@@ -1692,7 +1693,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                 } else {
                     positive.setEnabled(false);
                     inputUserName.setErrorEnabled(true);
-                    inputUserName.setError("" + getResources().getString(R.string.INVALID));
+                    inputUserName.setError("" + G.context.getResources().getString(R.string.INVALID));
                 }
             }
         });
@@ -1761,9 +1762,9 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewUserName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                    viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
                 } else {
-                    viewUserName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                    viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
             }
         });

@@ -134,7 +134,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                     if (edtSetPassword.length() >= 2) {
 
                         page = 2;
-                        txtToolbar.setText(getResources().getString(R.string.your_password));
+                        txtToolbar.setText(G.context.getResources().getString(R.string.your_password));
                         txtPassword = edtSetPassword.getText().toString();
                         rootEnterPassword.setVisibility(View.GONE);
                         rootReEnterPassword.setVisibility(View.VISIBLE);
@@ -150,7 +150,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                         if (txtPassword.equals(edtSetRePassword.getText().toString())) {
 
                             page = 3;
-                            txtToolbar.setText(getResources().getString(R.string.password_hint));
+                            txtToolbar.setText(G.context.getResources().getString(R.string.password_hint));
                             rootReEnterPassword.setVisibility(View.GONE);
                             rootHintPassword.setVisibility(View.VISIBLE);
                         } else {
@@ -170,7 +170,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                         if (!txtPassword.equals(edtSetHintPassword.getText().toString())) {
 
                             page = 4;
-                            txtToolbar.setText(getResources().getString(R.string.recovery_question));
+                            txtToolbar.setText(G.context.getResources().getString(R.string.recovery_question));
                             rootHintPassword.setVisibility(View.GONE);
                             rootQuestionPassword.setVisibility(View.VISIBLE);
 
@@ -186,7 +186,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                 } else if (page == 4) {
                     if (edtSetQuestionPassOne.length() > 0 && edtSetQuestionPassTwo.length() > 0 && edtSetAnswerPassOne.length() > 0 && edtSetAnswerPassTwo.length() > 0) {
                         page = 5;
-                        txtToolbar.setText(getResources().getString(R.string.recovery_email));
+                        txtToolbar.setText(G.context.getResources().getString(R.string.recovery_email));
                         rootQuestionPassword.setVisibility(View.GONE);
                         rootEmail.setVisibility(View.VISIBLE);
 
@@ -204,7 +204,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                             page = 6;
                             new RequestUserTwoStepVerificationSetPassword().setPassword(oldPassword, txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
 
-                            txtToolbar.setText(getResources().getString(R.string.recovery_email));
+                            txtToolbar.setText(G.context.getResources().getString(R.string.recovery_email));
                             rootEmail.setVisibility(View.GONE);
                             rootConfirmEmail.setVisibility(View.VISIBLE);
                         } else {

@@ -374,7 +374,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                         firsName = splitNickname[0];
                     }
                     final View viewFirstName = new View(G.fragmentActivity);
-                    viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
 
                     LinearLayout.LayoutParams viewParams = new AppBarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2);
 
@@ -383,32 +383,32 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     edtFirstName.setHint(R.string.first_name);
                     edtFirstName.setTypeface(G.typeface_IRANSansMobile);
                     edtFirstName.setText(firsName);
-                    edtFirstName.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
-                    edtFirstName.setTextColor(getResources().getColor(R.color.text_edit_text));
-                    edtFirstName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+                    edtFirstName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
+                    edtFirstName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
+                    edtFirstName.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
                     edtFirstName.setPadding(0, 8, 0, 8);
                     edtFirstName.setSingleLine(true);
                     inputFirstName.addView(edtFirstName);
                     inputFirstName.addView(viewFirstName, viewParams);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        edtFirstName.setBackground(getResources().getDrawable(android.R.color.transparent));
+                        edtFirstName.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
                     }
 
                     final View viewLastName = new View(G.fragmentActivity);
-                    viewLastName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                    viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
 
                     TextInputLayout inputLastName = new TextInputLayout(G.fragmentActivity);
                     final MEditText edtLastName = new MEditText(G.fragmentActivity);
                     edtLastName.setHint(R.string.last_name);
                     edtLastName.setTypeface(G.typeface_IRANSansMobile);
                     edtLastName.setText(lastName);
-                    edtLastName.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.dp14));
-                    edtLastName.setTextColor(getResources().getColor(R.color.text_edit_text));
-                    edtLastName.setHintTextColor(getResources().getColor(R.color.hint_edit_text));
+                    edtLastName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
+                    edtLastName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
+                    edtLastName.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
                     edtLastName.setPadding(0, 8, 0, 8);
                     edtLastName.setSingleLine(true);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        edtLastName.setBackground(getResources().getDrawable(android.R.color.transparent));
+                        edtLastName.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
                     }
                     inputLastName.addView(edtLastName);
                     inputLastName.addView(viewLastName, viewParams);
@@ -421,7 +421,8 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     layoutNickname.addView(inputFirstName, layoutParams);
                     layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
-                    final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.pu_nikname_profileUser)).positiveText(getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(getResources().getColor(R.color.toolbar_background)).negativeText(getResources().getString(R.string.B_cancel)).build();
+                    final MaterialDialog dialog =
+                        new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.pu_nikname_profileUser)).positiveText(G.context.getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.context.getResources().getString(R.string.B_cancel)).build();
 
                     final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                     positive.setEnabled(false);
@@ -430,9 +431,9 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                         @Override
                         public void onFocusChange(View view, boolean b) {
                             if (b) {
-                                viewFirstName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                                viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
                             } else {
-                                viewFirstName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                                viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                             }
                         }
                     });
@@ -441,9 +442,9 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                         @Override
                         public void onFocusChange(View view, boolean b) {
                             if (b) {
-                                viewLastName.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                                viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
                             } else {
-                                viewLastName.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                                viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                             }
                         }
                     });
@@ -610,7 +611,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
             }
         });
 
-        screenWidth = (int) (getResources().getDisplayMetrics().widthPixels / 1.7);
+        screenWidth = (int) (G.context.getResources().getDisplayMetrics().widthPixels / 1.7);
         imgMenu = (MaterialDesignTextView) view.findViewById(R.id.chi_img_menuPopup);
 
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.chi_ripple_menuPopup);
@@ -960,10 +961,10 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         TextView iconBlockUser = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
 
         TextView iconClearHistory = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-        iconClearHistory.setText(getResources().getString(R.string.md_clearHistory));
+        iconClearHistory.setText(G.context.getResources().getString(R.string.md_clearHistory));
 
         TextView iconDeleteContact = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
-        iconDeleteContact.setText(getResources().getString(R.string.md_rubbish_delete_file));
+        iconDeleteContact.setText(G.context.getResources().getString(R.string.md_rubbish_delete_file));
 
         root1.setVisibility(View.VISIBLE);
         root2.setVisibility(View.VISIBLE);
@@ -975,13 +976,13 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
         if (isBlockUser) {
             txtBlockUser.setText(getString(R.string.un_block_user));
-            iconBlockUser.setText(getResources().getString(R.string.md_unblock));
+            iconBlockUser.setText(G.context.getResources().getString(R.string.md_unblock));
         } else {
             txtBlockUser.setText(getString(R.string.block_user));
-            iconBlockUser.setText(getResources().getString(R.string.md_block));
+            iconBlockUser.setText(G.context.getResources().getString(R.string.md_block));
         }
-        txtClearHistory.setText(getResources().getString(R.string.clear_history));
-        txtDeleteContact.setText(getResources().getString(R.string.delete_contact));
+        txtClearHistory.setText(G.context.getResources().getString(R.string.clear_history));
+        txtDeleteContact.setText(G.context.getResources().getString(R.string.delete_contact));
 
         root1.setOnClickListener(new View.OnClickListener() {
             @Override

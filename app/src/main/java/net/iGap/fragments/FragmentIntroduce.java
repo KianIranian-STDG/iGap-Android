@@ -167,7 +167,7 @@ public class FragmentIntroduce extends BaseFragment {
 
         txt_p1_l2 = (TextView) view.findViewById(R.id.int_txt_p1_l2);
         txt_p1_l3 = (TextView) view.findViewById(R.id.int_txt_p1_l3);
-        txt_p1_l3.setText(getResources().getString(R.string.text_line_3_introduce_page1) + "\n" + getResources().getString(R.string.text_line_4_introduce_page1));
+        txt_p1_l3.setText(G.context.getResources().getString(R.string.text_line_3_introduce_page1) + "\n" + G.context.getResources().getString(R.string.text_line_4_introduce_page1));
 
         txt_p1_l2.setText(R.string.text_line_2_introduce_page1);
 
@@ -435,7 +435,7 @@ public class FragmentIntroduce extends BaseFragment {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), getResources().getString(R.string.Toast_waiting_fot_get_info), Snackbar.LENGTH_LONG);
+                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.Toast_waiting_fot_get_info), Snackbar.LENGTH_LONG);
                                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -452,7 +452,7 @@ public class FragmentIntroduce extends BaseFragment {
                         @Override
                         public void run() {
 
-                            final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), getResources().getString(R.string.waiting_for_connection), Snackbar.LENGTH_LONG);
+                            final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.waiting_for_connection), Snackbar.LENGTH_LONG);
 
                             snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                 @Override

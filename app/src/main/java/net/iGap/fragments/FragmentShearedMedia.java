@@ -444,25 +444,25 @@ public class FragmentShearedMedia extends BaseFragment {
         TextView txtLink = (TextView) v.findViewById(R.id.dialog_text_item7_notification);
 
         TextView iconImage = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-        iconImage.setText(getResources().getString(R.string.md_photo));
+        iconImage.setText(G.context.getResources().getString(R.string.md_photo));
 
         TextView iconVideo = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-        iconVideo.setText(getResources().getString(R.string.md_videocam));
+        iconVideo.setText(G.context.getResources().getString(R.string.md_videocam));
 
         TextView iconAudio = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
-        iconAudio.setText(getResources().getString(R.string.icon_music));
+        iconAudio.setText(G.context.getResources().getString(R.string.icon_music));
 
         TextView iconVoice = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
-        iconVoice.setText(getResources().getString(R.string.md_surround_sound));
+        iconVoice.setText(G.context.getResources().getString(R.string.md_surround_sound));
 
         TextView iconGif = (TextView) v.findViewById(R.id.dialog_icon_item5_notification);
-        iconGif.setText(getResources().getString(R.string.md_emby));
+        iconGif.setText(G.context.getResources().getString(R.string.md_emby));
 
         TextView iconFile = (TextView) v.findViewById(R.id.dialog_icon_item6_notification);
-        iconFile.setText(getResources().getString(R.string.icon_file));
+        iconFile.setText(G.context.getResources().getString(R.string.icon_file));
 
         TextView iconLink = (TextView) v.findViewById(R.id.dialog_icon_item7_notification);
-        iconLink.setText(getResources().getString(R.string.md_link));
+        iconLink.setText(G.context.getResources().getString(R.string.md_link));
 
         root1.setVisibility(View.VISIBLE);
         root2.setVisibility(View.VISIBLE);
@@ -472,13 +472,13 @@ public class FragmentShearedMedia extends BaseFragment {
         root6.setVisibility(View.VISIBLE);
         root7.setVisibility(View.VISIBLE);
 
-        txtImage.setText(getResources().getString(R.string.shared_image));
-        txtVideo.setText(getResources().getString(R.string.shared_video));
-        txtAudio.setText(getResources().getString(R.string.shared_audio));
-        txtVoice.setText(getResources().getString(R.string.shared_voice));
-        txtGif.setText(getResources().getString(R.string.shared_gif));
-        txtFile.setText(getResources().getString(R.string.shared_file));
-        txtLink.setText(getResources().getString(R.string.shared_links));
+        txtImage.setText(G.context.getResources().getString(R.string.shared_image));
+        txtVideo.setText(G.context.getResources().getString(R.string.shared_video));
+        txtAudio.setText(G.context.getResources().getString(R.string.shared_audio));
+        txtVoice.setText(G.context.getResources().getString(R.string.shared_voice));
+        txtGif.setText(G.context.getResources().getString(R.string.shared_gif));
+        txtFile.setText(G.context.getResources().getString(R.string.shared_file));
+        txtLink.setText(G.context.getResources().getString(R.string.shared_links));
 
         root1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -532,7 +532,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
         //WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         //layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        //layoutParams.width = (int) getResources().getDimension(R.dimen.dp260);
+        //layoutParams.width = (int) G.context.getResources().getDimension(R.dimen.dp260);
         //layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
 
         //dialog.getWindow().setAttributes(layoutParams);
@@ -581,7 +581,7 @@ public class FragmentShearedMedia extends BaseFragment {
             public void onGlobalLayout() {
                 recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 int viewWidth = recyclerView.getMeasuredWidth();
-                float cardViewWidth = getResources().getDimension(R.dimen.dp120);
+                float cardViewWidth = G.context.getResources().getDimension(R.dimen.dp120);
                 int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
 
                 if (newSpanCount < 3) {

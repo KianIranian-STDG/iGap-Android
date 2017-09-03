@@ -202,7 +202,12 @@ public class FragmentDeleteAccount extends BaseFragment {
 
                 if (edtDeleteAccount.getText().length() > 0) {
 
-                    new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.delete_account)).titleColor(getResources().getColor(android.R.color.black)).content(R.string.sure_delete_account).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.delete_account))
+                        .titleColor(G.context.getResources().getColor(android.R.color.black))
+                        .content(R.string.sure_delete_account)
+                        .positiveText(G.context.getResources().getString(R.string.B_ok))
+                        .negativeText(G.context.getResources().getString(R.string.B_cancel))
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull final MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -243,7 +248,7 @@ public class FragmentDeleteAccount extends BaseFragment {
                                         G.handler.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+                                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
                                                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
@@ -284,9 +289,9 @@ public class FragmentDeleteAccount extends BaseFragment {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewLineBottom.setBackgroundColor(getResources().getColor(R.color.toolbar_background));
+                    viewLineBottom.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
                 } else {
-                    viewLineBottom.setBackgroundColor(getResources().getColor(R.color.line_edit_text));
+                    viewLineBottom.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
             }
         });

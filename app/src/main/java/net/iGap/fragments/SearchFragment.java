@@ -122,7 +122,7 @@ public class SearchFragment extends BaseFragment {
                     ((View) rippleDown).setEnabled(true);
 
                 } else {
-                    btnClose.setTextColor(getResources().getColor(R.color.colorChatMessageSelectableItemBg));
+                    btnClose.setTextColor(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg));
                     ((View) rippleDown).setEnabled(false);
 
                 }

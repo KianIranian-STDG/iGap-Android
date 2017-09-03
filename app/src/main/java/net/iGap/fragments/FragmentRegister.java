@@ -499,8 +499,8 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialogChooseCountry.setContentView(R.layout.rg_dialog);
 
-                int setWidth = (int) (getResources().getDisplayMetrics().widthPixels * 0.9);
-                int setHeight = (int) (getResources().getDisplayMetrics().heightPixels * 0.9);
+                int setWidth = (int) (G.context.getResources().getDisplayMetrics().widthPixels * 0.9);
+                int setHeight = (int) (G.context.getResources().getDisplayMetrics().heightPixels * 0.9);
                 dialogChooseCountry.getWindow().setLayout(setWidth, setHeight);
                 //
                 final TextView txtTitle = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
@@ -654,7 +654,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
                     phoneNumber = edtPhoneNumber.getText().toString();
 
-                    MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.rg_mdialog_text, true).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_edit)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.rg_mdialog_text, true).positiveText(G.context.getResources().getString(R.string.B_ok)).negativeText(G.context.getResources().getString(R.string.B_edit)).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -666,15 +666,15 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                                 @Override
                                 public void run() {
 
-                                    btnStart.setBackgroundColor(getResources().getColor(R.color.rg_background_verify));
-                                    btnStart.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                    btnStart.setBackgroundColor(G.context.getResources().getColor(R.color.rg_background_verify));
+                                    btnStart.setTextColor(G.context.getResources().getColor(R.color.rg_border_editText));
                                     btnChoseCountry.setEnabled(false);
-                                    btnChoseCountry.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                    btnChoseCountry.setTextColor(G.context.getResources().getColor(R.color.rg_border_editText));
                                     edtPhoneNumber.setEnabled(false);
-                                    edtPhoneNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                    edtPhoneNumber.setTextColor(G.context.getResources().getColor(R.color.rg_border_editText));
 
                                     edtCodeNumber.setEnabled(false);
-                                    edtCodeNumber.setTextColor(getResources().getColor(R.color.rg_border_editText));
+                                    edtCodeNumber.setTextColor(G.context.getResources().getColor(R.color.rg_border_editText));
                                     txtAgreement_register.setVisibility(View.GONE);
                                     layout_verify.setVisibility(View.VISIBLE);
                                     layout_verify.startAnimation(trans_x_in);
@@ -842,9 +842,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                             edtPhoneNumber.setEnabled(true);
                             rg_prg_verify_connect.setVisibility(View.GONE);
                             rg_img_verify_connect.setImageResource(R.mipmap.alert);
-                            rg_img_verify_connect.setColorFilter(getResources().getColor(R.color.rg_error_red), PorterDuff.Mode.SRC_ATOP);
+                            rg_img_verify_connect.setColorFilter(G.context.getResources().getColor(R.color.rg_error_red), PorterDuff.Mode.SRC_ATOP);
                             rg_img_verify_connect.setVisibility(View.VISIBLE);
-                            rg_txt_verify_connect.setTextColor(getResources().getColor(R.color.rg_error_red));
+                            rg_txt_verify_connect.setTextColor(G.context.getResources().getColor(R.color.rg_error_red));
                             rg_txt_verify_connect.setText(R.string.please_check_your_connenction);
                             if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
                                 rg_txt_verify_connect.setTypeface(titleTypeface);
@@ -890,9 +890,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         rg_prg_verify_sms.setVisibility(View.GONE);
         rg_img_verify_sms.setImageResource(R.mipmap.alert);
         rg_img_verify_sms.setVisibility(View.VISIBLE);
-        rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_error_red), PorterDuff.Mode.SRC_ATOP);
+        rg_img_verify_sms.setColorFilter(G.context.getResources().getColor(R.color.rg_error_red), PorterDuff.Mode.SRC_ATOP);
         rg_txt_verify_sms.setText(R.string.errore_verification_sms);
-        rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_error_red));
+        rg_txt_verify_sms.setTextColor(G.context.getResources().getColor(R.color.rg_error_red));
         if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
             rg_txt_verify_sms.setTypeface(titleTypeface);
         }
@@ -907,11 +907,11 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         TextView txtShowReason = (TextView) dialog.findViewById(R.id.txt_show_reason);
 
         if (reason == FragmentRegister.Reason.SOCKET) {
-            txtShowReason.setText(getResources().getString(R.string.verify_socket_message));
+            txtShowReason.setText(G.context.getResources().getString(R.string.verify_socket_message));
         } else if (reason == FragmentRegister.Reason.TIME_OUT) {
-            txtShowReason.setText(getResources().getString(R.string.verify_time_out_message));
+            txtShowReason.setText(G.context.getResources().getString(R.string.verify_time_out_message));
         } else if (reason == FragmentRegister.Reason.INVALID_CODE) {
-            txtShowReason.setText(getResources().getString(R.string.verify_invalid_code_message));
+            txtShowReason.setText(G.context.getResources().getString(R.string.verify_invalid_code_message));
         }
 
         TextView btnCancel = (TextView) dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
@@ -982,7 +982,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         rg_img_verify_connect.setVisibility(View.VISIBLE);
                         if (rg_img_verify_sms != null) rg_img_verify_sms.setVisibility(View.GONE);
                         rg_txt_verify_connect.setTextAppearance(G.context, R.style.RedHUGEText);
-                        rg_txt_verify_connect.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                        rg_txt_verify_connect.setTextColor(G.context.getResources().getColor(R.color.rg_text_verify));
                         if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
                             rg_txt_verify_connect.setTypeface(titleTypeface);
                         }
@@ -1068,13 +1068,13 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 btnStart.setBackgroundColor(Color.parseColor(G.appBarColor));
-                btnStart.setTextColor(getResources().getColor(R.color.white));
+                btnStart.setTextColor(G.context.getResources().getColor(R.color.white));
                 btnStart.setEnabled(true);
                 btnChoseCountry.setEnabled(true);
-                btnChoseCountry.setTextColor(getResources().getColor(black_register));
+                btnChoseCountry.setTextColor(G.context.getResources().getColor(black_register));
                 edtPhoneNumber.setEnabled(true);
-                edtPhoneNumber.setTextColor(getResources().getColor(black_register));
-                edtCodeNumber.setTextColor(getResources().getColor(black_register));
+                edtPhoneNumber.setTextColor(G.context.getResources().getColor(black_register));
+                edtCodeNumber.setTextColor(G.context.getResources().getColor(black_register));
                 txtAgreement_register.setVisibility(View.VISIBLE);
                 layout_verify.setVisibility(View.GONE);
                 dialog.dismiss();
@@ -1172,7 +1172,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             // clear step two
             rg_prg_verify_sms.setVisibility(View.GONE);
             rg_img_verify_sms.setVisibility(View.INVISIBLE);
-            rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
+            rg_txt_verify_sms.setTextColor(G.context.getResources().getColor(R.color.rg_text_verify));
             if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
                 rg_txt_verify_sms.setTypeface(titleTypeface);
             }
@@ -1193,8 +1193,8 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         rg_prg_verify_sms.setVisibility(View.GONE);
                         rg_img_verify_sms.setVisibility(View.VISIBLE);
                         rg_img_verify_sms.setImageResource(R.mipmap.check);
-                        rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_text_verify), PorterDuff.Mode.SRC_ATOP);
-                        rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                        rg_img_verify_sms.setColorFilter(G.context.getResources().getColor(R.color.rg_text_verify), PorterDuff.Mode.SRC_ATOP);
+                        rg_txt_verify_sms.setTextColor(G.context.getResources().getColor(R.color.rg_text_verify));
                         if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
                             rg_txt_verify_sms.setTypeface(titleTypeface);
                         }
@@ -1205,7 +1205,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         if (rg_prg_verify_generate != null) {
                             rg_prg_verify_generate.setVisibility(View.GONE);
                             rg_img_verify_generate.setVisibility(View.VISIBLE);
-                            rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                            rg_txt_verify_generate.setTextColor(G.context.getResources().getColor(R.color.rg_text_verify));
                             if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
                                 rg_txt_verify_generate.setTypeface(titleTypeface);
                             }
@@ -1295,12 +1295,12 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
                 if (!isQrCode) {
 
-                    rg_txt_verify_sms.setText((getResources().getString(R.string.rg_verify_register2)));
+                    rg_txt_verify_sms.setText((G.context.getResources().getString(R.string.rg_verify_register2)));
                     rg_prg_verify_sms.setVisibility(View.GONE);
                     rg_img_verify_sms.setVisibility(View.VISIBLE);
                     rg_img_verify_sms.setImageResource(R.mipmap.check);
-                    rg_img_verify_sms.setColorFilter(getResources().getColor(R.color.rg_text_verify), PorterDuff.Mode.SRC_ATOP);
-                    rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                    rg_img_verify_sms.setColorFilter(G.context.getResources().getColor(R.color.rg_text_verify), PorterDuff.Mode.SRC_ATOP);
+                    rg_txt_verify_sms.setTextColor(G.context.getResources().getColor(R.color.rg_text_verify));
                     if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
                         rg_txt_verify_sms.setTypeface(titleTypeface);
                     }
@@ -1310,7 +1310,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                     if (rg_prg_verify_generate != null) {
                         rg_prg_verify_generate.setVisibility(View.GONE);
                         rg_img_verify_generate.setVisibility(View.VISIBLE);
-                        rg_txt_verify_generate.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                        rg_txt_verify_generate.setTextColor(G.context.getResources().getColor(R.color.rg_text_verify));
                         if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
                             rg_txt_verify_generate.setTypeface(titleTypeface);
                         }
@@ -1426,7 +1426,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         if (rg_prg_verify_register != null) rg_prg_verify_register.setVisibility(View.GONE);
                         if (rg_img_verify_register != null) rg_img_verify_register.setVisibility(View.VISIBLE);
                         if (rg_txt_verify_register != null) {
-                            rg_txt_verify_register.setTextColor(getResources().getColor(R.color.rg_text_verify));
+                            rg_txt_verify_register.setTextColor(G.context.getResources().getColor(R.color.rg_text_verify));
                             if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
                                 rg_txt_verify_register.setTypeface(titleTypeface);
                             }
@@ -1585,7 +1585,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
         rg_prg_verify_sms.setVisibility(View.GONE);
         rg_img_verify_sms.setVisibility(View.VISIBLE);
-        rg_txt_verify_sms.setTextColor(getResources().getColor(R.color.rg_text_verify));
+        rg_txt_verify_sms.setTextColor(G.context.getResources().getColor(R.color.rg_text_verify));
         if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
             rg_txt_verify_sms.setTypeface(titleTypeface);
         }
@@ -1717,7 +1717,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 closeKeyboard(txtOk);
                 prgWaiting.setVisibility(View.GONE);
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                error(getResources().getString(R.string.invalid_password));
+                error(G.context.getResources().getString(R.string.invalid_password));
             }
         });
     }

@@ -277,16 +277,16 @@ public class FragmentMediaPlayer extends BaseFragment {
         TextView txtSaveToGallery = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
 
         TextView iconSaveToGallery = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-        iconSaveToGallery.setText(getResources().getString(R.string.md_save));
+        iconSaveToGallery.setText(G.context.getResources().getString(R.string.md_save));
 
-        txtShare.setText(getResources().getString(R.string.save_to_Music));
-        txtSaveToGallery.setText(getResources().getString(R.string.share_item_dialog));
+        txtShare.setText(G.context.getResources().getString(R.string.save_to_Music));
+        txtSaveToGallery.setText(G.context.getResources().getString(R.string.share_item_dialog));
 
         root1.setVisibility(View.VISIBLE);
         root2.setVisibility(View.VISIBLE);
 
         TextView iconShare = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-        iconShare.setText(getResources().getString(R.string.md_share_button));
+        iconShare.setText(G.context.getResources().getString(R.string.md_share_button));
 
         root1.setOnClickListener(new View.OnClickListener() {
             @Override

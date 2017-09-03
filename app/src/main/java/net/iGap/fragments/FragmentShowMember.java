@@ -516,11 +516,11 @@ public class FragmentShowMember extends BaseFragment {
         //TextView txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_member);
 
         //if (selectedRole.toString().equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())) {
-        //    txtNumberOfMember.setText(getResources().getString(R.string.list_modereator));
+        //    txtNumberOfMember.setText(G.context.getResources().getString(R.string.list_modereator));
         //} else if (selectedRole.toString().equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
-        //    txtNumberOfMember.setText(getResources().getString(R.string.list_admin));
+        //    txtNumberOfMember.setText(G.context.getResources().getString(R.string.list_admin));
         //} else {
-        //    txtNumberOfMember.setText(getResources().getString(member));
+        //    txtNumberOfMember.setText(G.context.getResources().getString(member));
         //}
 
         scrollListener = new EndlessRecyclerViewScrollListener(preCachingLayoutManager) {

@@ -221,7 +221,7 @@ public class FragmentChatBackground extends BaseFragment {
         };
 
         ProtoInfoWallpaper.InfoWallpaper.Fit fit = ProtoInfoWallpaper.InfoWallpaper.Fit.PHONE;
-        if (getResources().getBoolean(R.bool.isTablet)) {
+        if (G.context.getResources().getBoolean(R.bool.isTablet)) {
             fit = ProtoInfoWallpaper.InfoWallpaper.Fit.TABLET;
         }
 

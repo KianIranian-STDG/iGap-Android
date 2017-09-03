@@ -587,9 +587,9 @@ public class RegisteredContactsFragment extends BaseFragment {
             holder.txtName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.igap))
+                    new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.igap))
 
-                            .content(getResources().getString(R.string.invite_friend)).positiveText(getResources().getString(R.string.ok)).negativeText(getResources().getString(R.string.cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        .content(G.context.getResources().getString(R.string.invite_friend)).positiveText(G.context.getResources().getString(R.string.ok)).negativeText(G.context.getResources().getString(R.string.cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 

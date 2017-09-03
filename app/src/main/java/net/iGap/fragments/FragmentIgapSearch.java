@@ -101,7 +101,7 @@ public class FragmentIgapSearch extends BaseFragment {
         }, 150);
 
         loadingProgressBar = (ContentLoadingProgressBar) view.findViewById(R.id.sfl_progress_loading);
-        loadingProgressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
+        loadingProgressBar.getIndeterminateDrawable().setColorFilter(G.context.getResources().getColor(R.color.toolbar_background), android.graphics.PorterDuff.Mode.MULTIPLY);
 
         edtSearch = (EditText) view.findViewById(R.id.sfl_edt_search);
 
