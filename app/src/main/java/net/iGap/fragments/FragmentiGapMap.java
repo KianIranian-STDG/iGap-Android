@@ -979,16 +979,18 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
      * hint : call this method after fill location
      */
     private void getCoordinateLoop(final int delay, boolean loop) {
-        if (loop && page == pageiGapMap) {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
-                    getCoordinateLoop(DEFAULT_LOOP_TIME, true);
-                }
-            }, delay);
-        } else {
-            new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+        if (location != null) {
+            if (loop && page == pageiGapMap) {
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                        getCoordinateLoop(DEFAULT_LOOP_TIME, true);
+                    }
+                }, delay);
+            } else {
+                new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+            }
         }
     }
 
@@ -1210,11 +1212,11 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-
                 SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (state) {
+                    getCoordinateLoop(0, false);
                     ActivityMain.startAnimationLocation();
                     editor.putBoolean(SHP_SETTING.REGISTER_STATUS, true);
                     editor.apply();

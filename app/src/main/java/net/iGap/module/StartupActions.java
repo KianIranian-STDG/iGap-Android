@@ -123,11 +123,6 @@ public final class StartupActions {
         } else {
             G.maxChatBox = Math.max(metrics.widthPixels, metrics.heightPixels) - ViewMaker.i_Dp(R.dimen.dp80);
         }
-
-
-
-
-
     }
 
     private void initEmoji() {
