@@ -1087,4 +1087,7 @@
   <string name="unblock_the_user_text">آیا از رفع مسدودیت ارتباط این مخاطب اطمینان دارید؟</string>
   <string name="PIN">پین</string>
   <string name="password">رمز</string>
+  <string name="text_empty_user_map">متأسفانه هیچ کاربری اطراف شما نفشه خود را فعال نکرده است</string>
+
+
 </resources>

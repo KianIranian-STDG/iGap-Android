@@ -5151,6 +5151,10 @@ public class FragmentChat extends BaseFragment
                                 blockUser = true;
                                 txtSpamUser.setText(G.context.getResources().getString(R.string.un_block_user));
                                 vgSpamUser.setVisibility(View.VISIBLE);
+                            } else {
+                                if (vgSpamUser != null) {
+                                    vgSpamUser.setVisibility(View.GONE);
+                                }
                             }
                         }
                     }
@@ -5167,6 +5171,10 @@ public class FragmentChat extends BaseFragment
                                 blockUser = true;
                                 txtSpamUser.setText(G.context.getResources().getString(R.string.un_block_user));
                                 vgSpamUser.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            if (vgSpamUser != null) {
+                                vgSpamUser.setVisibility(View.GONE);
                             }
                         }
                     }
