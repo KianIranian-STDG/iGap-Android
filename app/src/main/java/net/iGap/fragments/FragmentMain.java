@@ -228,56 +228,8 @@ public class FragmentMain extends BaseFragment implements OnComplete {
         });
 
         if (mainType == MainType.all) {
-
             getChatsList();
-
-        /*    RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-
-                @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-
-                    if (isThereAnyMoreItemToLoad) {
-                        if (!isSendRequestForLoading) {
-
-                            //int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                            //
-                            //if (lastVisiblePosition + 10 >= mOffset) {
-                            isSendRequestForLoading = true;
-
-                            //  mOffset = mRecyclerView.getRecycleView().getAdapter().getItemCount();
-                            new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
-                            progressBar.setVisibility(View.VISIBLE);
-                            // }
-                        }
-                    }
-                }
-            };
-
-            mRecyclerView.getRecycleView().addOnScrollListener(onScrollListener);*/
         }
-
-
-
-      /*  swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override public void onRefresh() {
-                if (heartBeatTimeOut()) {
-                    WebSocketClient.checkConnection();
-                }
-                if (isSendRequestForLoading == false) {
-
-                    mOffset = 0;
-                    isThereAnyMoreItemToLoad = true;
-                    new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit);
-                    isSendRequestForLoading = true;
-                } else {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        });
-
-        //   swipeRefreshLayout.setColorSchemeResources(R.color.green, R.color.room_message_blue, R.color.accent);
-
-        swipeRefreshLayout.setColorSchemeColors(Color.parseColor(G.progressColor));*/
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -301,13 +253,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                 }
             }
         });
-
-
-
-
     }
-
-
 
     private void initListener() {
 
@@ -326,7 +272,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                     @Override
                     public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
 
-                        onclientGetRoomList(roomList, response, identity);
+                        FragmentMain.this.onClientGetRoomList(roomList, response, identity);
                     }
 
                     @Override
@@ -422,7 +368,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
         }
     }
 
-    private void onclientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
+    private void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
 
         boolean fromLogin = false;
         // requst from login
@@ -735,15 +681,13 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                 isMyCloud = false;
             }
 
-
-
             if (mInfo.isValid()) {
 
                 setLastMessage(mInfo, holder, isMyCloud);
 
                 if (isMyCloud) {
 
-                    if (holder.txtClude == null) {
+                    if (holder.txtCloud == null) {
 
                         MaterialDesignTextView cs_txt_contact_initials = new MaterialDesignTextView(G.context);
                         cs_txt_contact_initials.setId(R.id.cs_txt_contact_initials);
@@ -757,17 +701,17 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                         cs_txt_contact_initials.setVisibility(View.GONE);
                         cs_txt_contact_initials.setLayoutParams(layout_936);
 
-                        holder.txtClude = cs_txt_contact_initials;
+                        holder.txtCloud = cs_txt_contact_initials;
 
                         holder.rootChat.addView(cs_txt_contact_initials, 0);
                     }
 
-                    holder.txtClude.setVisibility(View.VISIBLE);
+                    holder.txtCloud.setVisibility(View.VISIBLE);
                     holder.image.setVisibility(View.GONE);
                 } else {
 
-                    if (holder.txtClude != null) {
-                        holder.txtClude.setVisibility(View.GONE);
+                    if (holder.txtCloud != null) {
+                        holder.txtCloud.setVisibility(View.GONE);
                     }
 
                     if (holder.image.getVisibility() == View.GONE) {
@@ -813,14 +757,12 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                         holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red_left);
                     }
 
-
                     if (mInfo.getMute()) {
                         AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor("#c6c1c1"));
                     } else {
                         AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(G.notificationColor));
                     }
                 }
-
 
                 if (mInfo.getMute()) {
                     holder.mute.setVisibility(View.VISIBLE);
@@ -833,19 +775,10 @@ public class FragmentMain extends BaseFragment implements OnComplete {
              * for change english number to persian number
              */
             if (HelperCalander.isLanguagePersian) {
-
                 holder.txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtLastMessage.getText().toString()));
-
                 holder.txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getText().toString()));
-
-                //holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
             }
-
-
         }
-
-
-
 
         public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -853,17 +786,17 @@ public class FragmentMain extends BaseFragment implements OnComplete {
 
             protected CircleImageView image;
             protected EmojiTextViewE name;
-            protected ViewGroup rootChat;
-            protected EmojiTextViewE txtLastMessage;
-            protected EmojiTextViewE txtLastMessageFileText;
-            protected MaterialDesignTextView txtChatIcon;
-            protected TextView txtTime;
-            protected MaterialDesignTextView txtPinIcon;
-            protected TextView txtUnread;
+            private ViewGroup rootChat;
+            private EmojiTextViewE txtLastMessage;
+            private EmojiTextViewE txtLastMessageFileText;
+            private MaterialDesignTextView txtChatIcon;
+            private TextView txtTime;
+            private MaterialDesignTextView txtPinIcon;
+            private TextView txtUnread;
             protected MaterialDesignTextView mute;
-            protected EmojiTextViewE lastMessageSender;
-            protected ImageView txtTic;
-            protected MaterialDesignTextView txtClude;
+            private EmojiTextViewE lastMessageSender;
+            private ImageView txtTic;
+            private MaterialDesignTextView txtCloud;
 
 
             public ViewHolder(View view) {
@@ -894,10 +827,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
 
                 txtTic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
 
-                txtClude = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_contact_initials);
-
-
-                //AndroidUtils.setBackgroundShapeColor(unreadMessage, Color.parseColor(G.notificationColor));
+                txtCloud = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_contact_initials);
 
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
