@@ -5,10 +5,14 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import java.io.IOException;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentIntroduce;
 import net.iGap.fragments.FragmentRegistrationNickname;
+import net.iGap.helper.HelperPermision;
+import net.iGap.interfaces.OnGetPermission;
+import net.iGap.module.StartupActions;
 
 public class ActivityRegisteration extends ActivityEnhanced {
 
@@ -18,35 +22,58 @@ public class ActivityRegisteration extends ActivityEnhanced {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        isOnGetPermistion = true;
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_registeration);
 
-        boolean showPro = false;
+
         try {
-            showPro = getIntent().getExtras().getBoolean(showProfile);
-        } catch (Exception e) {
+            HelperPermision.getStoragePermision(this, new OnGetPermission() {
+                @Override
+                public void Allow() throws IOException {
 
+                    StartupActions.makeFolder();
+
+                    boolean showPro = false;
+                    try {
+                        showPro = getIntent().getExtras().getBoolean(showProfile);
+                    } catch (Exception e) {
+
+                    }
+
+                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        G.isLandscape = true;
+                    } else {
+                        G.isLandscape = false;
+                    }
+
+                    layoutRoot = (FrameLayout) findViewById(R.id.ar_layout_root);
+
+                    //if (G.twoPaneMode) {
+                    //    setFraymeSize();
+                    //}
+
+                    if (showPro) {
+                        loadFragmentProfile();
+                    } else {
+                        loadFragmentIntrodius();
+                    }
+                }
+
+                @Override
+                public void deny() {
+                    finish();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            G.isLandscape = true;
-        } else {
-            G.isLandscape = false;
 
-        }
 
-        layoutRoot = (FrameLayout) findViewById(R.id.ar_layout_root);
-
-        //if (G.twoPaneMode) {
-        //    setFraymeSize();
-        //}
-
-        if (showPro) {
-            loadFragmentProfile();
-        } else {
-            loadFragmentIntrodius();
-        }
     }
 
     private void loadFragmentProfile() {

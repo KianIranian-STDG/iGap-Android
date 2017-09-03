@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:layoutDirection="ltr"
+    android:clickable="true"
     android:orientation="horizontal"
     >
 
@@ -61,7 +62,7 @@
   <LinearLayout
       android:layout_width="0dp"
       android:layout_weight="4"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:orientation="vertical"
       >
 
@@ -159,12 +160,13 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <View
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/gray_f2"
+        android:background="@color/black"
         android:layout_weight="1"
-        />
+        ></LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -216,14 +218,14 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/ml_btn_shuffel_music"
-            android:layout_width="@dimen/dp40"
+            android:layout_width="@dimen/dp36"
             android:layout_height="match_parent"
             android:background="@null"
             android:gravity="center"
             android:text="@string/md_shuffle_mode"
             android:textAppearance="@style/TextIconAppearance.all"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/dp20"
+            android:textSize="@dimen/dp18"
             />
 
 
@@ -232,22 +234,22 @@
 
       <net.iGap.module.MaterialDesignTextView
           android:id="@+id/ml_btn_Previous_music"
-          android:layout_width="@dimen/dp40"
+          android:layout_width="@dimen/dp36"
           android:layout_height="match_parent"
           android:background="@null"
           android:gravity="center"
           android:text="@string/md_previous_track"
           android:textAppearance="@style/TextIconAppearance.all"
           android:textColor="#444"
-          android:textSize="@dimen/dp22"
+          android:textSize="@dimen/dp20"
           />
 
       <net.iGap.module.MaterialDesignTextView
           android:id="@+id/ml_btn_play_music"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
-          android:layout_marginLeft="@dimen/dp24"
-          android:layout_marginRight="@dimen/dp24"
+          android:layout_marginLeft="@dimen/dp12"
+          android:layout_marginRight="@dimen/dp12"
           android:background="@null"
           android:gravity="center"
           android:text="@string/md_play_rounded_button"
@@ -258,14 +260,14 @@
 
       <net.iGap.module.MaterialDesignTextView
           android:id="@+id/ml_btn_forward_music"
-          android:layout_width="@dimen/dp40"
+          android:layout_width="@dimen/dp36"
           android:layout_height="match_parent"
           android:background="@null"
           android:gravity="center"
           android:text="@string/md_play_next_button"
           android:textAppearance="@style/TextIconAppearance.all"
           android:textColor="#444"
-          android:textSize="@dimen/dp22"
+          android:textSize="@dimen/dp20"
           />
 
 
@@ -277,7 +279,7 @@
 
         <net.iGap.module.MaterialDesignTextView
             android:id="@+id/ml_btn_replay_music"
-            android:layout_width="@dimen/dp40"
+            android:layout_width="@dimen/dp36"
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:background="@null"
@@ -285,7 +287,7 @@
             android:text="@string/md_synchronization_arrows"
             android:textAppearance="@style/TextIconAppearance.all"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/dp28"
+            android:textSize="@dimen/dp26"
             />
 
         <ImageView

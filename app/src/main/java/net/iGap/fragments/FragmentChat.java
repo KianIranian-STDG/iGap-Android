@@ -822,6 +822,11 @@ public class FragmentChat extends BaseFragment
             }
         }
 
+        if (getActivity() != null) {
+            ((ActivityMain) getActivity()).resume();
+        }
+
+
     }
 
 

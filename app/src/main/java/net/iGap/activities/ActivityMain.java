@@ -283,7 +283,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (openMediaPlyer) {
                 if (G.fragmentManager.findFragmentByTag(FragmentMediaPlayer.class.getName()) == null) {
                     FragmentMediaPlayer fragmant = new FragmentMediaPlayer();
-                    new HelperFragment(fragmant).load();
+                    new HelperFragment(fragmant).setReplace(false).load();
                 }
             }
         }
@@ -296,20 +296,29 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             openActivityPassCode();
         }
 
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            isNeedToRegister = true;
+            isOnGetPermistion = true;
+        }
+
+
         super.onCreate(savedInstanceState);
 
-        G.fragmentManager = getSupportFragmentManager();
+        if (isNeedToRegister) {
 
-        //checkAppAccount();
-
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            isNeedToRegister = true;
             Intent intent = new Intent(this, ActivityRegisteration.class);
             startActivity(intent);
 
             finish();
             return;
         }
+
+
+
+
+        G.fragmentManager = getSupportFragmentManager();
+
+        //checkAppAccount();
 
         try {
             HelperPermision.getPhonePermision(this, null);
@@ -1935,6 +1944,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onResume() {
         super.onResume();
 
+        resume();
+    }
+
+    public void resume() {
         /**
          * after change language in ActivitySetting this part refresh Activity main
          */
