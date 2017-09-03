@@ -60,6 +60,7 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperString;
@@ -2230,7 +2231,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
         editor.apply();
 
-        G.fragmentActivity.recreate();
+        // G.fragmentActivity.recreate();
         if (G.onRefreshActivity != null) {
             G.onRefreshActivity.refresh("");
         }
@@ -2285,7 +2286,9 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
         editor.apply();
 
-        if (updateUi) G.fragmentActivity.recreate();
+        if (updateUi) {
+            G.fragmentActivity.recreate();
+        }
     }
 
     private void sendAndAttachColorClick(int color) {
@@ -2547,7 +2550,30 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         if (mRealm != null && !mRealm.isClosed()) {
             mRealm.close();
         }
+
+        updateRoomListIfNeeded();
+
     }
+
+    private void updateRoomListIfNeeded() {
+
+        try {
+
+            for (Fragment f : G.fragmentManager.getFragments()) {
+
+                if (f == null) {
+                    continue;
+                }
+
+                if (f instanceof FragmentMain || f instanceof FragmentCall) {
+                    f.onResume();
+                }
+            }
+        } catch (Exception e) {
+            HelperLog.setErrorLog("fragment setting   updateRoomListIfNeeded    " + e.toString());
+        }
+    }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

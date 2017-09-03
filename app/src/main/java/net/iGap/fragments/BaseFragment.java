@@ -51,21 +51,27 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDetach() {
 
-        for (int i = G.fragmentManager.getFragments().size() - 2; i >= 0; i--) {
+        try {
 
-            Fragment f = G.fragmentManager.getFragments().get(i);
+            for (int i = G.fragmentManager.getFragments().size() - 2; i >= 0; i--) {
 
-            if (f == null) {
-                continue;
+                Fragment f = G.fragmentManager.getFragments().get(i);
+
+                if (f == null) {
+                    continue;
+                }
+
+                BaseFragment bf = (BaseFragment) f;
+
+                if (bf.isNeedResume) {
+                    bf.onResume();
+                }
+
+                break;
             }
+        } catch (Exception e) {
 
-            BaseFragment bf = (BaseFragment) f;
-
-            if (bf.isNeedResume) {
-                bf.onResume();
-            }
-
-            break;
+            // try need for activity register
         }
 
 
