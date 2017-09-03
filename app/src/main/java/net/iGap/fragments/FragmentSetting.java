@@ -2234,6 +2234,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         // G.fragmentActivity.recreate();
         if (G.onRefreshActivity != null) {
             G.onRefreshActivity.refresh("");
+            G.isRestartActivity = true;
         }
     }
 
@@ -2287,6 +2288,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         editor.apply();
 
         if (updateUi) {
+            G.isRestartActivity = true;
             G.fragmentActivity.recreate();
         }
     }

@@ -177,10 +177,10 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         // Create an ArrayAdapter using the string array and a default spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(G.fragmentActivity, R.layout.spinner_password, paths);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         staticSpinner.setAdapter(adapter);
         staticSpinner.setOnItemSelectedListener(this);
         staticSpinner.setSelection(0);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         staticSpinner.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         if (isPassCode) {
 

@@ -461,6 +461,8 @@ public class G extends MultiDexApplication {
     public static EmojiProvider emojiProvider;
     public static EmojiTree emojiTree = new EmojiTree();
     public static boolean isFragmentMapActive = false; // for check network
+    public static boolean isRestartActivity = false; // for check passCode
+    public static boolean isFirstPassCode = true; // for check passCode
 
     public static FragmentManager fragmentManager;
 

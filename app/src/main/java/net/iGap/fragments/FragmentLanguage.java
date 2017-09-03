@@ -98,6 +98,7 @@ public class FragmentLanguage extends BaseFragment {
                     G.isAppRtl = false;
 
                     if (onRefreshActivity != null) {
+                        G.isRestartActivity = true;
                         onRefreshActivity.refresh("en");
                     }
 
@@ -124,6 +125,7 @@ public class FragmentLanguage extends BaseFragment {
                     G.isAppRtl = true;
 
                     if (onRefreshActivity != null) {
+                        G.isRestartActivity = true;
                         onRefreshActivity.refresh("fa");
                     }
                 }
