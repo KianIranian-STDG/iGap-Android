@@ -173,7 +173,7 @@ public class HelperFragment {
     }
 
     public static Fragment isFragmentVisible(String fragmentTag) {
-        FragmentChat fragment = (FragmentChat) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(fragmentTag);
+        Fragment fragment = G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(fragmentTag);
         if (fragment != null && fragment.isVisible()) {
             return fragment;
         }

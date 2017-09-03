@@ -87,7 +87,6 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        isNeedResume = true;
         return inflater.inflate(R.layout.fragment_registration_nickname, container, false);
     }
 

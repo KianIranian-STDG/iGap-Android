@@ -101,23 +101,9 @@ public class FragmentShowImage extends BaseFragment {
         return new FragmentShowImage();
     }
 
-    //public static FragmentShowImage newInstance(long roomId, long selectedFileToken, @Nullable ProtoGlobal.RoomMessageType roomMessageType, View appBarLayout) {
-    //    FragmentShowImage fragment = new FragmentShowImage();
-    //    Bundle bundle = new Bundle();
-    //    bundle.putLong(ROOM_ID, roomId);
-    //    bundle.putLong(SELECTED_IMAGE, selectedFileToken);
-    //    if (roomMessageType != null) {
-    //        bundle.putString(TYPE, roomMessageType.toString());
-    //    }
-    //    fragment.setArguments(bundle);
-    //    fragment.appBarLayout = appBarLayout;
-    //    return fragment;
-    //}
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        isNeedResume = true;
         realmShowImage = Realm.getDefaultInstance();
         return inflater.inflate(R.layout.activity_show_image, container, false);
     }

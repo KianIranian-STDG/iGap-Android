@@ -186,7 +186,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        isNeedResume = true;
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
         return inflater.inflate(R.layout.fragment_igap_map, container, false);
     }
@@ -492,6 +491,11 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // after return to FragmentMapUsers from FragmentContactsProfile don't execute this block
+                if (G.fragmentManager.getFragments().get(G.fragmentManager.getFragments().size() - 1) != null && G.fragmentManager.getFragments().get(G.fragmentManager.getFragments().size() - 1).getClass().getName().equals(FragmentContactsProfile.class.getName())) {
+                    return;
+                }
+
                 if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
                     rippleMoreMap.setVisibility(View.VISIBLE);
                     fabGps.setVisibility(View.VISIBLE);
