@@ -150,7 +150,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                     //if (btnBack != null){
                     //    btnBack.performClick();
                     //}
-                    new HelperFragment(FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setResourceContainer(R.id.mapContainer).setReplace(false).load();
+                    new HelperFragment(FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
                     //for close FragmentiGapMap
                     //if (G.onMapClose != null) {
                     //    G.onMapClose.onClose();
