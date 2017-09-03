@@ -1585,7 +1585,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                G.fragmentActivity.finish();
+                                //   G.fragmentActivity.finish();
                                 if (FragmentChat.finishActivity != null) {
                                     FragmentChat.finishActivity.finishActivity();
                                 }

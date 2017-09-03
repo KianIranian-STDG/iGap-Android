@@ -115,7 +115,7 @@ public final class StartupActions {
         if (diagonalInches >= 6.5) {
             G.twoPaneMode = true;
         } else {
-            G.twoPaneMode = false;
+            G.twoPaneMode = true;
         }
 
         if (G.context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE || G.twoPaneMode) {
