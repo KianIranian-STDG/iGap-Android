@@ -293,7 +293,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public void onCreate(Bundle savedInstanceState) {
 
         if (G.isFirstPassCode) {
-            G.isFirstPassCode = false;
             openActivityPassCode();
         }
 
@@ -981,7 +980,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onStart() {
         super.onStart();
 
-        if (!G.isFirstPassCode) openActivityPassCode();
+        if (!G.isFirstPassCode) {
+            openActivityPassCode();
+        }
+        G.isFirstPassCode = false;
 
         //RealmRoomMessage.fetchNotDeliveredMessages(new OnActivityMainStart() {
         //    @Override

@@ -37,6 +37,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -46,8 +47,10 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
@@ -179,6 +182,10 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
     private MaterialDialog dialogQrCode;
     private boolean smsPermission = true;
     private FragmentActivity mActivity;
+    private boolean isVerify = false;
+    private ScrollView scrollView;
+    private int headerLayoutHeight;
+    private LinearLayout headerLayout;
 
     public enum Reason {
         SOCKET, TIME_OUT, INVALID_CODE
@@ -197,6 +204,10 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
         final IntentFilter filter = new IntentFilter();
         filter.addAction("android.provider.Telephony.SMS_RECEIVED");
+
+
+        scrollView = (ScrollView) view.findViewById(R.id.scrollView);
+        headerLayout = (LinearLayout) view.findViewById(R.id.headerLayout);
 
         smsReceiver = new IncomingSms(new OnSmsReceive() {
 
@@ -668,6 +679,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                                     layout_verify.setVisibility(View.VISIBLE);
                                     layout_verify.startAnimation(trans_x_in);
 
+                                    isVerify = true;
                                     checkVerify();
                                 }
                             }, 600);
@@ -708,16 +720,19 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             G.isLandscape = false;
         }
 
-        if (beforeState != G.isLandscape) {
-            Bundle bundle = getArguments();
+        if (G.isLandscape && isVerify) {
 
-            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentRegister.this).commit();
+            ViewTreeObserver observer = headerLayout.getViewTreeObserver();
+            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
-            FragmentRegister fragment = new FragmentRegister();
-            fragment.setArguments(bundle);
-
-            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
-                setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+                @Override
+                public void onGlobalLayout() {
+                    // TODO Auto-generated method stub
+                    headerLayoutHeight = headerLayout.getHeight();
+                    scrollView.scrollTo(0, headerLayoutHeight);
+                    headerLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+            });
         }
 
         super.onConfigurationChanged(newConfig);
