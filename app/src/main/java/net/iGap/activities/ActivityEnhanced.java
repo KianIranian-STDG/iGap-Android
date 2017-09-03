@@ -40,7 +40,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityEnhanced extends AppCompatActivity {
 
-    private boolean isOnGetPermistion = false;
+    public boolean isOnGetPermistion = false;
 
     @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));

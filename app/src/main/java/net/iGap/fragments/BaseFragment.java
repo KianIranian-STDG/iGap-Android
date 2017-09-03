@@ -51,13 +51,15 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDetach() {
 
+        super.onDetach();
+
         try {
 
-            for (int i = G.fragmentManager.getFragments().size() - 2; i >= 0; i--) {
+            for (int i = G.fragmentManager.getFragments().size() - 1; i >= 0; i--) {
 
                 Fragment f = G.fragmentManager.getFragments().get(i);
 
-                if (f == null) {
+                if (f == null || f == currentFragment) {
                     continue;
                 }
 
@@ -73,9 +75,6 @@ public class BaseFragment extends Fragment {
 
             // try need for activity register
         }
-
-
-        super.onDetach();
     }
 
     /**
