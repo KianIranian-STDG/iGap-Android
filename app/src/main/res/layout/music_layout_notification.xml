@@ -31,7 +31,7 @@
             android:singleLine="true"
             android:text="@string/music_name"
             android:textColor="@color/notification_music_background"
-            android:textSize="@dimen/dp16"
+            android:textSize="16dp"
             />
 
 
@@ -44,7 +44,7 @@
             android:singleLine="true"
             android:text="hamid asgari"
             android:textColor="@color/notification_music_background"
-            android:textSize="@dimen/dp12"
+            android:textSize="12dp"
             />
 
 
@@ -55,30 +55,30 @@
 
             <ImageView
                 android:id="@+id/mln_btn_Previous_music"
-                android:layout_width="@dimen/dp32"
+                android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="6dp"
+                android:padding="4dp"
                 android:tint="@color/notification_music_background"
                 android:src="@mipmap/previous_track" />
 
             <ImageView
                 android:id="@+id/mln_btn_play_music"
-                android:layout_width="@dimen/dp32"
+                android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp"
                 android:gravity="center"
-                android:padding="6dp"
+                android:padding="4dp"
                 android:tint="@color/notification_music_background"
                 android:src="@mipmap/play_button" />
 
             <ImageView
                 android:id="@+id/mln_btn_forward_music"
-                android:layout_width="@dimen/dp32"
+                android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="6dp"
+                android:padding="4dp"
                 android:src="@mipmap/play_next_button"
                 android:tint="@color/notification_music_background"
                 />
