@@ -445,7 +445,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="@dimen/dp16"
-            android:imeOptions="flagNoExtractUi"
             android:hint="@string/search"
             android:padding="@dimen/dp8"
             android:textColor="@color/white"

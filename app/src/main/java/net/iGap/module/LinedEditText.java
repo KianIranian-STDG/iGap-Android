@@ -107,8 +107,7 @@ public class LinedEditText extends android.support.v7.widget.AppCompatEditText {
 
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-        InputConnection conn = super.onCreateInputConnection(outAttrs);
-        outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_FULLSCREEN;
-        return conn;
+        outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI;
+        return super.onCreateInputConnection(outAttrs);
     }
 }
