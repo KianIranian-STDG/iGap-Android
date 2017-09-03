@@ -554,7 +554,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         rippleMoreMap.setVisibility(View.GONE);
                         page = pageUserList;
                         try {
-                            new HelperFragment(FragmentMapUsers.newInstance()).setResourceContainer(R.id.replace).setReplace(false).load();
+                            new HelperFragment(FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer).setReplace(false).load();
                         } catch (Exception e) {
                             e.getStackTrace();
                         }
