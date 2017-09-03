@@ -132,7 +132,6 @@ public class MusicPlayer extends Service {
     public static LinearLayout chatLayout;
     public static LinearLayout shearedMediaLayout;
 
-
     private static Realm mRealm;
 
     private static Realm getmRealm() {
@@ -170,9 +169,11 @@ public class MusicPlayer extends Service {
 
                 if (action.equals(STARTFOREGROUND_ACTION)) {
 
-                    startForeground(notificationId, notification);
+                    if (notification != null) {
+                        startForeground(notificationId, notification);
+                        registerMediaBottom();
+                    }
 
-                    registerMediaBottom();
                 } else if (action.equals(STOPFOREGROUND_ACTION)) {
                     stopForeground(true);
                     stopSelf();
@@ -545,9 +546,6 @@ public class MusicPlayer extends Service {
         }
 
         try {
-            Intent intent = new Intent(G.context, MusicPlayer.class);
-            intent.putExtra("ACTION", STOPFOREGROUND_ACTION);
-            G.context.startService(intent);
 
             if (isRegisterReciver) {
                 G.context.unregisterReceiver(headsetPluginReciver);
@@ -556,6 +554,11 @@ public class MusicPlayer extends Service {
 
                 isRegisterReciver = false;
             }
+
+            Intent intent = new Intent(G.context, MusicPlayer.class);
+            intent.putExtra("ACTION", STOPFOREGROUND_ACTION);
+            G.context.startService(intent);
+
         } catch (RuntimeException e) {
         }
 
@@ -569,7 +572,6 @@ public class MusicPlayer extends Service {
     }
 
     public static void startPlayer(String name, String musicPath, String roomName, long roomId, final boolean updateList, String messageID) {
-
 
         isVoice = false;
         isPause = false;
@@ -590,7 +592,6 @@ public class MusicPlayer extends Service {
             } catch (Exception e) {
                 HelperLog.setErrorLog(" music plyer   startPlayer   setISVoice    " + messageID + "    " + e.toString());
             }
-
         }
 
         MusicPlayer.messageId = messageID;
@@ -701,34 +702,33 @@ public class MusicPlayer extends Service {
 
     private static void OnCompleteMusic() {
         try {
-                if (repeatMode.equals(RepeatMode.noRepeat.toString())) {
-                    stopSound();
-                } else if (repeatMode.equals(RepeatMode.repeatAll.toString())) {
+            if (repeatMode.equals(RepeatMode.noRepeat.toString())) {
+                stopSound();
+            } else if (repeatMode.equals(RepeatMode.repeatAll.toString())) {
 
-                    if (playNextMusic) {
+                if (playNextMusic) {
 
-                        fillMediaList(true);
+                    fillMediaList(true);
 
-                        nextMusic();
-                        if (FragmentChat.onMusicListener != null) {
-                            FragmentChat.onMusicListener.complete(false, MusicPlayer.messageId, "");
-                        } else {
-                            downloadNextMusic(MusicPlayer.messageId);
-                        }
+                    nextMusic();
+                    if (FragmentChat.onMusicListener != null) {
+                        FragmentChat.onMusicListener.complete(false, MusicPlayer.messageId, "");
+                    } else {
+                        downloadNextMusic(MusicPlayer.messageId);
+                    }
+                } else {
+
+                    if (isShuffelOn) {
+                        nextRandomMusic();
                     } else {
 
-                        if (isShuffelOn) {
-                            nextRandomMusic();
-                        } else {
-
-                            nextMusic();
-                        }
-
+                        nextMusic();
                     }
-                } else if (repeatMode.equals(RepeatMode.oneRpeat.toString())) {
-                    stopSound();
-                    playAndPause();
                 }
+            } else if (repeatMode.equals(RepeatMode.oneRpeat.toString())) {
+                stopSound();
+                playAndPause();
+            }
         } catch (Exception e) {
 
         }
@@ -1095,11 +1095,9 @@ public class MusicPlayer extends Service {
                                     MusicPlayer.playNextMusic = false;
                                 }
                             }
-
                         }
 
                         break;
-
                     } catch (Exception e) {
                         Log.e("dddd", "music player   fillMediaList " + e.toString());
                     }
@@ -1128,14 +1126,12 @@ public class MusicPlayer extends Service {
                         if (isVoice) {
                             setSpeaker();
                         }
-
                     } else {
                         //far
                         isNearDistance = false;
                         if (isVoice) {
                             setSpeaker();
                         }
-
                     }
                 }
             }
@@ -1165,7 +1161,6 @@ public class MusicPlayer extends Service {
             Log.e("dddd", "music player unRegisterDistanceSensore   " + e.toString());
         }
     }
-
 
     //*************************************************************************************** getPhoneState
 
@@ -1241,8 +1236,6 @@ public class MusicPlayer extends Service {
                     HelperLog.setErrorLog(" music plyer   registerMediaBottom    " + e.toString());
                 }
             }
-
-
         }
     }
 
@@ -1250,7 +1243,7 @@ public class MusicPlayer extends Service {
 
         if (remoteComponentName != null) {
             remoteComponentName = new ComponentName(G.context, MediaBottomReciver.class.getName());
-            }
+        }
 
         try {
 
@@ -1261,7 +1254,7 @@ public class MusicPlayer extends Service {
                 PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(G.context, 55, mediaButtonIntent, 0);
                 remoteControlClient = new RemoteControlClient(mediaPendingIntent);
                 audioManager.registerRemoteControlClient(remoteControlClient);
-                }
+            }
             remoteControlClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_PLAY
                 | RemoteControlClient.FLAG_KEY_MEDIA_PAUSE
                 | RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE
@@ -1270,8 +1263,8 @@ public class MusicPlayer extends Service {
                 | RemoteControlClient.FLAG_KEY_MEDIA_NEXT);
 
             RemoteControlClient.MetadataEditor metadataEditor = remoteControlClient.editMetadata(true);
-            metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, musicName);
-            metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, musicInfoTitle);
+            metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, musicName + "");
+            metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, musicInfoTitle + "");
 
             try {
                 metadataEditor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, mediaThumpnail);
@@ -1282,7 +1275,7 @@ public class MusicPlayer extends Service {
             metadataEditor.apply();
         } catch (Exception e) {
             HelperLog.setErrorLog(" music plyer   setMediaControl    " + e.toString());
-            }
+        }
     }
 
     private static void removeMediaControl() {
@@ -1309,7 +1302,6 @@ public class MusicPlayer extends Service {
             if (remoteComponentName != null) {
                 audioManager.unregisterMediaButtonEventReceiver(remoteComponentName);
             }
-
         } catch (Exception e) {
             Log.e("ddddd", "music plyer  onDestroy    " + e.toString());
         }
@@ -1363,7 +1355,6 @@ public class MusicPlayer extends Service {
         }
 
         isSpeakerON = am.isSpeakerphoneOn();
-
     }
 }
 

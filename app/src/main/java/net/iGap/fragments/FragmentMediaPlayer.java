@@ -66,7 +66,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         MusicPlayer.isShowMediaPlayer = true;
 
         if (MusicPlayer.mp == null) {
-            finish();
+            removeFromBaseFragment();
             return;
         }
 
@@ -100,16 +100,15 @@ public class FragmentMediaPlayer extends BaseFragment {
                 } else if (messageOne.equals("Shuffel")) {
                     setShuffleButton();
                 } else if (messageOne.equals("finish")) {
-                    finish();
+                    removeFromBaseFragment();
                 }
             }
         };
 
-        MusicPlayer.onComplete = onComplete;
-
         initComponent(view);
-
         setMusicInfo();
+
+        MusicPlayer.onComplete = onComplete;
     }
 
     private void setShuffleButton() {
@@ -148,8 +147,9 @@ public class FragmentMediaPlayer extends BaseFragment {
     public void onResume() {
         super.onResume();
         MusicPlayer.isShowMediaPlayer = true;
-        MusicPlayer.onComplete = onComplete;
         updateUi();
+        MusicPlayer.onComplete = onComplete;
+
     }
 
     @Override
@@ -200,7 +200,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                finish();
+                removeFromBaseFragment();
             }
         });
 
@@ -365,7 +365,9 @@ public class FragmentMediaPlayer extends BaseFragment {
         }
     }
 
-    private void finish() {
-        popBackStackFragment();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MusicPlayer.onComplete = null;
     }
 }

@@ -109,8 +109,8 @@ public class FragmentExplorer extends BaseFragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
 
         G.onBackPressedExplorer = null;
     }
