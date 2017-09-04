@@ -23,6 +23,7 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
@@ -47,6 +48,8 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     private final int DEFAULT_LOOP_TIME = (int) (10 * DateUtils.SECOND_IN_MILLIS);
     private ImageView imvNothingFound;
     private TextView txtEmptyListComment;
+    private RippleView rippleBack;
+
     public FragmentMapUsers() {
         // Required empty public constructor
     }
@@ -74,7 +77,8 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
 
         imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);
         txtEmptyListComment = (TextView) view.findViewById(R.id.sfl_txt_empty_list_comment);
-
+        rippleBack = (RippleView) view.findViewById(R.id.rippleBackMapUser);
+        view.findViewById(R.id.toolbarMapUsers).setBackgroundColor(Color.parseColor(G.appBarColor));
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rcy_map_user);
         mRecyclerView.setItemAnimator(null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
@@ -89,11 +93,13 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         mRecyclerView.setAdapter(mAdapter);
         realm.close();
         ((ActivityMain) G.fragmentActivity).setOnBackPressedListener(FragmentMapUsers.this, false);
-        ViewGroup mapContainer = (ViewGroup) view.findViewById(R.id.rootFragmentUserMap);
-        mapContainer.setOnClickListener(new View.OnClickListener() {
+        rippleBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (ActivityMain.onBackPressedListener != null) {
+                    ActivityMain.onBackPressedListener.doBack();
+                }
+                popBackStackFragment();
             }
         });
 

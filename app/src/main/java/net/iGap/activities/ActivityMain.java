@@ -1882,7 +1882,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    protected OnBackPressedListener onBackPressedListener;
+    public static OnBackPressedListener onBackPressedListener;
 
     public interface OnBackPressedListener {
         void doBack();
@@ -1890,9 +1890,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener, boolean isDisable) {
         if (!isDisable) {
-            this.onBackPressedListener = onBackPressedListener;
+            ActivityMain.onBackPressedListener = onBackPressedListener;
         } else {
-            this.onBackPressedListener = null;
+            ActivityMain.onBackPressedListener = null;
         }
     }
 
