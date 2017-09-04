@@ -73,7 +73,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
     private final int PASSWORD = 1;
     private int kindPassword = 0;
     SharedPreferences sharedPreferences;
-    private int kindPassCode = 0;
 
 
     public FragmentPassCode() {
@@ -437,7 +436,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                                 if (realmUserInfo != null) {
                                     realmUserInfo.setPassCode(true);
                                     realmUserInfo.setPassCode(edtSetPassword.getText().toString());
-                                    realmUserInfo.setKindPassCode(kindPassCode);
+                                    realmUserInfo.setKindPassCode(kindPassword);
                                 }
                             }
                         });
@@ -648,13 +647,13 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                 // Whatever you want to happen when the first item gets selected
                 edtSetPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
                 maxLengthEditText(4);
-                kindPassCode = PIN;
+                kindPassword = PIN;
                 break;
             case 1:
                 // Whatever you want to happen when the second item gets selected
                 edtSetPassword.setInputType(InputType.TYPE_CLASS_TEXT);
                 maxLengthEditText(20);
-                kindPassCode = PASSWORD;
+                kindPassword = PASSWORD;
                 break;
         }
     }
