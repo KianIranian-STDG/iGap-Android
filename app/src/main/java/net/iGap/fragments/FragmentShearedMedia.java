@@ -89,7 +89,6 @@ import org.parceler.Parcels;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
-import static net.iGap.G.context;
 import static net.iGap.G.fragmentActivity;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
@@ -975,38 +974,24 @@ public class FragmentShearedMedia extends BaseFragment {
             countOFGIF = proto.getGif();
             countOFFILE = proto.getFile();
             countOFLink = proto.getUrl();
+
+            final String result = countOFImage + "\n" + countOFVIDEO + "\n" + countOFAUDIO + "\n" + countOFVOICE + "\n" + countOFGIF + "\n" + countOFFILE + "\n" + countOFLink;
+
+            Realm realm = Realm.getDefaultInstance();
+
+            final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (room != null) {
+
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        room.setSharedMediaCount(result);
+                    }
+                });
+            }
+
+            realm.close();
         }
-
-        String result = "";
-
-        if (countOFImage > 0) result += "\n" + countOFImage + " " + context.getString(R.string.shared_image);
-        if (countOFVIDEO > 0) result += "\n" + countOFVIDEO + " " + context.getString(R.string.shared_video);
-        if (countOFAUDIO > 0) result += "\n" + countOFAUDIO + " " + context.getString(R.string.shared_audio);
-        if (countOFVOICE > 0) result += "\n" + countOFVOICE + " " + context.getString(R.string.shared_voice);
-        if (countOFGIF > 0) result += "\n" + countOFGIF + " " + context.getString(R.string.shared_gif);
-        if (countOFFILE > 0) result += "\n" + countOFFILE + " " + context.getString(R.string.shared_file);
-        if (countOFLink > 0) result += "\n" + countOFLink + " " + context.getString(R.string.shared_links);
-
-        result = result.trim();
-
-        if (result.length() < 1) {
-            result = context.getString(R.string.there_is_no_sheared_media);
-        }
-
-        Realm realm = Realm.getDefaultInstance();
-
-        final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (room != null) {
-            final String finalResult = result;
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    room.setSharedMediaCount(finalResult);
-                }
-            });
-        }
-
-        realm.close();
     }
 
     public static void getCountOfSharedMedia(long roomId) {

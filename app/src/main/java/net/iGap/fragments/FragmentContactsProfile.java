@@ -725,15 +725,11 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                 }
                                 String countText = ((RealmRoom) element).getSharedMediaCount();
 
-                                if (countText == null || countText.length() == 0) {
-                                    txtCountOfShearedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
-                                } else {
                                     if (HelperCalander.isLanguagePersian) {
                                         txtCountOfShearedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
                                     } else {
                                         txtCountOfShearedMedia.setText(countText);
                                     }
-                                }
                             }
                         });
                     }

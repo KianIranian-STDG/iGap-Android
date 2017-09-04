@@ -610,16 +610,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                                 public void run() {
                                     String countText = ((RealmRoom) element).getSharedMediaCount();
 
-                                    if (countText == null || countText.length() == 0) {
-                                        txtSharedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
-                                    } else {
-
                                         if (HelperCalander.isLanguagePersian) {
                                             txtSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
                                         } else {
                                             txtSharedMedia.setText(countText);
                                         }
-                                    }
                                 }
                             });
                         }

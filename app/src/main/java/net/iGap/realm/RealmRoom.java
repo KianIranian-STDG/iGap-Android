@@ -19,6 +19,7 @@ import io.realm.RealmResults;
 import io.realm.annotations.PrimaryKey;
 import java.util.List;
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.helper.HelperString;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
@@ -572,7 +573,45 @@ public class RealmRoom extends RealmObject {
     }
 
     public String getSharedMediaCount() {
-        return sharedMediaCount;
+
+        if (sharedMediaCount == null || sharedMediaCount.length() == 0) {
+            return G.context.getString(R.string.there_is_no_sheared_media);
+        }
+
+        String countList[] = sharedMediaCount.split("\n");
+        try {
+
+            int countOFImage = Integer.parseInt(countList[0]);
+            int countOFVIDEO = Integer.parseInt(countList[1]);
+            int countOFAUDIO = Integer.parseInt(countList[2]);
+            int countOFVOICE = Integer.parseInt(countList[3]);
+            int countOFGIF = Integer.parseInt(countList[4]);
+            int countOFFILE = Integer.parseInt(countList[5]);
+            int countOFLink = Integer.parseInt(countList[6]);
+
+            String result = "";
+
+            if (countOFImage > 0) result += "\n" + countOFImage + " " + G.context.getString(R.string.shared_image);
+            if (countOFVIDEO > 0) result += "\n" + countOFVIDEO + " " + G.context.getString(R.string.shared_video);
+            if (countOFAUDIO > 0) result += "\n" + countOFAUDIO + " " + G.context.getString(R.string.shared_audio);
+            if (countOFVOICE > 0) result += "\n" + countOFVOICE + " " + G.context.getString(R.string.shared_voice);
+            if (countOFGIF > 0) result += "\n" + countOFGIF + " " + G.context.getString(R.string.shared_gif);
+            if (countOFFILE > 0) result += "\n" + countOFFILE + " " + G.context.getString(R.string.shared_file);
+            if (countOFLink > 0) result += "\n" + countOFLink + " " + G.context.getString(R.string.shared_links);
+
+            result = result.trim();
+
+            if (result.length() < 1) {
+                result = G.context.getString(R.string.there_is_no_sheared_media);
+            }
+
+            return result;
+        } catch (Exception e) {
+
+            return sharedMediaCount;
+        }
+
+
     }
 
     public void setSharedMediaCount(String sharedMediaCount) {

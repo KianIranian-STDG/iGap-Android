@@ -283,15 +283,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                                 public void run() {
                                     String countText = ((RealmRoom) element).getSharedMediaCount();
 
-                                    if (countText == null || countText.length() == 0) {
-                                        txtNumberOfSharedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
-                                    } else {
                                         if (HelperCalander.isLanguagePersian) {
                                             txtNumberOfSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
                                         } else {
                                             txtNumberOfSharedMedia.setText(countText);
                                         }
-                                    }
                                 }
                             });
                         }
