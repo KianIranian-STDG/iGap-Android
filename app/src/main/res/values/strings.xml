@@ -167,7 +167,7 @@
   <string name="st_title_info">Information</string>
   <string name="st_title_notification_sounds">Notifications and Sounds</string>
   <string name="st_title_Clear_Cache">Clear Cache</string>
-  <string name="st_title_Privacy_Security">Security and Privacy</string>
+  <string name="st_title_Privacy_Security">Privacy and Security</string>
   <string name="st_title_message">Message Room</string>
   <string name="st_title_message_textSize">Text Message Size</string>
   <string name="st_stickers">Stickers and Pictures</string>
@@ -725,24 +725,22 @@
   <string name="saturday">"Saturday"</string>
 
 
-  <string name="USER_JOINED">"Joined iGap"</string>
-  <string name="USER_DELETED">"Left from iGap"</string>
+  <string name="USER_JOINED">"joined iGap"</string>
+  <string name="USER_DELETED">"left iGap"</string>
   <string name="ROOM_CREATED">"created"</string>
   <string name="MEMBER_ADDED">"added"</string>
   <string name="prefix">""</string>  <!-- have to empty -->
-  <string name="MEMBER_KICKED">"Kicked out"</string>
-  <string name="MEMBER_LEFT">"Left Page"</string>
+  <string name="MEMBER_KICKED">"kicked out"</string>
+  <string name="MEMBER_LEFT">"left Page"</string>
   <string name="ROOM_CONVERTED_TO_PUBLIC">"converted to Public"</string>
   <string name="ROOM_CONVERTED_TO_PRIVATE">"converted to Private"</string>
-  <string name="MEMBER_JOINED_BY_INVITE_LINK">"Joined by Invitation Link"</string>
-  <string name="MEMBER_JOINED_BY_INVITE_LINK_2">"اضافه شد"</string>
-  <string name="Room_Deleted">"Deleted Room"</string>
+  <string name="MEMBER_JOINED_BY_INVITE_LINK">"joined via Invite Link"</string>
   <string name="Room_Deleted_log">"deleted Room"</string>
   <string name="conversation">""</string>
 
   <string name="MISSED_SCREEN_SHARE">"Missed Screen Share"</string>
-  <string name="MISSED_VOICE_CALL">"Voice Call Missed"</string>
-  <string name="MISSED_VIDEO_CALL">"Video Call Missed"</string>
+  <string name="MISSED_VOICE_CALL">"Missed Voice Call"</string>
+  <string name="MISSED_VIDEO_CALL">"Missed Video Call"</string>
 
 
   <string name="delete_account_text1">other</string>
@@ -754,9 +752,9 @@
   <string name="channel_link_hint_revoke">Channel Invitation Link</string>
   <string name="group_link_hint_revoke">Group Invitation Link</string>
   <string name="self_destructs">Self-destruct</string>
-  <string name="channel_title_convert_to_private">Convert channel to private</string>
+  <string name="channel_title_convert_to_private">Convert to private</string>
   <string name="channel_text_convert_to_private">Do you want to convert this channel to private?</string>
-  <string name="channel_title_convert_to_public">Convert channel to public</string>
+  <string name="channel_title_convert_to_public">Convert to public</string>
   <string name="channel_text_convert_to_public">Do you want to convert this channel to public?</string>
   <string name="channel_title_channel_set_username">Set Username</string>
 
