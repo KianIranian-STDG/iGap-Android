@@ -658,9 +658,9 @@ public class FragmentShowMember extends BaseFragment {
                             @Override
                             public void Allow() {
                                 if (mContact.peerId == userID) {
-                                    new HelperFragment(new FragmentSetting()).load();
+                                    new HelperFragment(new FragmentSetting()).setReplace(false).load();
                                 } else {
-                                    new HelperFragment(FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString())).load();
+                                    new HelperFragment(FragmentContactsProfile.newInstance(mRoomID, mContact.peerId, GROUP.toString())).setReplace(false).load();
                                 }
                             }
 
