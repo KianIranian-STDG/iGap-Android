@@ -525,41 +525,45 @@ public class MusicPlayer extends Service {
 
     private static void closeLayoutMediaPlayer() {
 
-        isMusicPlyerEnable = false;
+        try {
 
-        if (layoutTripMusic != null) {
-            layoutTripMusic.setVisibility(View.GONE);
-        }
+            isMusicPlyerEnable = false;
 
-        if (onComplete != null) {
-            onComplete.complete(true, "finish", "");
-        }
+            if (layoutTripMusic != null) {
+                layoutTripMusic.setVisibility(View.GONE);
+            }
 
-        if (onCompleteChat != null) {
-            onCompleteChat.complete(true, "pause", "");
-        }
+            if (onComplete != null) {
+                onComplete.complete(true, "finish", "");
+            }
 
-        stopSound();
-        if (mp != null) {
-            mp.release();
-            mp = null;
+            if (onCompleteChat != null) {
+                onCompleteChat.complete(true, "pause", "");
+            }
+
+            stopSound();
+
+            if (mp != null) {
+                mp.release();
+                mp = null;
+            }
+        } catch (Exception E) {
+
         }
 
         try {
-
-            if (isRegisterReciver) {
-                G.context.unregisterReceiver(headsetPluginReciver);
-
-                unRegisterDistanceSensore();
-
-                isRegisterReciver = false;
-            }
 
             Intent intent = new Intent(G.context, MusicPlayer.class);
             intent.putExtra("ACTION", STOPFOREGROUND_ACTION);
             G.context.startService(intent);
 
         } catch (RuntimeException e) {
+
+            if (notificationManager != null) {
+                notificationManager.cancel(notificationId);
+            }
+
+
         }
 
         if (mRealm != null && !mRealm.isClosed()) {
@@ -567,8 +571,22 @@ public class MusicPlayer extends Service {
             mRealm = null;
         }
 
-        clearWallpaperLockScrean();
-        removeMediaControl();
+        try {
+            if (isRegisterReciver) {
+                G.context.unregisterReceiver(headsetPluginReciver);
+
+                unRegisterDistanceSensore();
+
+                isRegisterReciver = false;
+
+                clearWallpaperLockScrean();
+                removeMediaControl();
+            }
+        } catch (Exception e) {
+
+        }
+
+
     }
 
     public static void startPlayer(String name, String musicPath, String roomName, long roomId, final boolean updateList, String messageID) {

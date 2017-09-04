@@ -56,7 +56,18 @@ public class FragmentMediaPlayer extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
-        return inflater.inflate(R.layout.activity_media_player, container, false);
+
+        if (G.twoPaneMode) {
+            return inflater.inflate(R.layout.activity_media_player, container, false);
+        } else {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                return inflater.inflate(R.layout.activity_media_player_land, container, false);
+            } else {
+                return inflater.inflate(R.layout.activity_media_player, container, false);
+            }
+        }
+
+
     }
 
     @Override
@@ -69,6 +80,11 @@ public class FragmentMediaPlayer extends BaseFragment {
             removeFromBaseFragment();
             return;
         }
+
+        //GifImageView gifImageView=(GifImageView)view.findViewById(R.id.ampl_gif_plyer) ;
+        //if(gifImageView!=null){
+        //    gifImageView.st
+        //}
 
         onComplete = new OnComplete() {
             @Override
@@ -155,7 +171,10 @@ public class FragmentMediaPlayer extends BaseFragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
 
-        G.fragmentManager.beginTransaction().detach(this).attach(this).commit();
+        if (!G.twoPaneMode) {
+            G.fragmentManager.beginTransaction().detach(this).attach(this).commit();
+        }
+
 
         super.onConfigurationChanged(newConfig);
     }
