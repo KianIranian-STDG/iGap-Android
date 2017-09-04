@@ -4321,11 +4321,11 @@ public class FragmentChat extends BaseFragment
         } else if (chatType == GROUP) {
 
             if (!isChatReadOnly) {
-                new HelperFragment(FragmentGroupProfile.newInstance(mRoomId)).setReplace(false).load();
+                new HelperFragment(FragmentGroupProfile.newInstance(mRoomId, isNotJoin)).setReplace(false).load();
 
             }
         } else if (chatType == CHANNEL) {
-            new HelperFragment(FragmentChannelProfile.newInstance(mRoomId)).setReplace(false).load();
+            new HelperFragment(FragmentChannelProfile.newInstance(mRoomId, isNotJoin)).setReplace(false).load();
         }
     }
 

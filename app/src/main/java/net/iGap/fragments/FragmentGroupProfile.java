@@ -193,10 +193,13 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     private static final String ROOM_ID = "RoomId";
     private Fragment fragment;
     public static final String FRAGMENT_TAG = "FragmentGroupProfile";
+    private static final String IS_NOT_JOIN = "is_not_join";
+    private boolean isNotJoin = false;
 
-    public static FragmentGroupProfile newInstance(long roomId) {
+    public static FragmentGroupProfile newInstance(long roomId, Boolean isNotJoin) {
         Bundle args = new Bundle();
         args.putLong(ROOM_ID, roomId);
+        args.putBoolean(IS_NOT_JOIN, isNotJoin);
         FragmentGroupProfile fragment = new FragmentGroupProfile();
         fragment.setArguments(args);
         return fragment;
@@ -216,6 +219,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
         Bundle extras = getArguments();
         roomId = extras.getLong(ROOM_ID);
+        isNotJoin = extras.getBoolean(IS_NOT_JOIN);
 
         //group info
         RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -612,9 +616,14 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         LinearLayout llGroupName = (LinearLayout) view.findViewById(R.id.agp_ll_group_name);
         LinearLayout llGroupDescription = (LinearLayout) view.findViewById(R.id.agp_ll_group_description);
 
+        if (isNotJoin) {
+            layoutSetting.setVisibility(View.GONE);
+        }
+
         /**
          *  visibility layout Description
          */
+
         if (role == GroupChatRole.OWNER) {
             llGroupDescription.setVisibility(View.VISIBLE);
 

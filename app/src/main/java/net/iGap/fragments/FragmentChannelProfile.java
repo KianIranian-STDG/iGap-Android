@@ -24,6 +24,7 @@ import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -172,12 +173,15 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
     private Realm realmChannelProfile;
     private RealmChangeListener<RealmModel> changeListener;
     private RealmRoom mRoom;
+    private boolean isNotJoin = false;
     private static final String ROOM_ID = "RoomId";
+    private static final String IS_NOT_JOIN = "is_not_join";
     public static final String FRAGMENT_TAG = "FragmentChannelProfile";
 
-    public static FragmentChannelProfile newInstance(long roomId) {
+    public static FragmentChannelProfile newInstance(long roomId, Boolean isNotJoin) {
         Bundle args = new Bundle();
         args.putLong(ROOM_ID, roomId);
+        args.putBoolean(IS_NOT_JOIN, isNotJoin);
         FragmentChannelProfile fragment = new FragmentChannelProfile();
         fragment.setArguments(args);
         return fragment;
@@ -211,6 +215,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         //=========Put Extra Start
         Bundle extras = getArguments();
         roomId = extras.getLong(ROOM_ID);
+        isNotJoin = extras.getBoolean(IS_NOT_JOIN);
 
         //+Realm realm = Realm.getDefaultInstance();
 
@@ -258,11 +263,18 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         lytListModerator = (LinearLayout) view.findViewById(R.id.lyt_list_moderator);
         lytDeleteChannel = (LinearLayout) view.findViewById(R.id.lyt_delete_channel);
         lytNotification = (LinearLayout) view.findViewById(R.id.lyt_notification);
+        ViewGroup layoutSetting = (LinearLayout) view.findViewById(R.id.agp_ll_seetting);
         txtLinkTitle = (TextView) view.findViewById(R.id.txt_channel_link_title);
         ViewGroup vgRootAddMember = (ViewGroup) view.findViewById(R.id.agp_root_layout_add_member);
         ViewGroup ltLink = (ViewGroup) view.findViewById(R.id.layout_channel_link);
         imgPopupMenu = (MaterialDesignTextView) view.findViewById(R.id.pch_img_menuPopup);
         txtDescription = (EmojiTextViewE) view.findViewById(R.id.txt_description);
+
+        Log.i("FFFFFFFFF", "onViewCreated: " + isNotJoin);
+        if (isNotJoin) {
+            layoutSetting.setVisibility(View.GONE);
+        }
+
         if ((role == ChannelChatRole.MEMBER) || (role == ChannelChatRole.MODERATOR)) {
             vgRootAddMember.setVisibility(View.GONE);
         }
