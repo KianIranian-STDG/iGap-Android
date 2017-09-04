@@ -228,7 +228,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onDestroy() {
         super.onDestroy();
 
-
+        Log.i("PPPPPPPPPP", "onDestroy");
 
         if (mRealm != null && !mRealm.isClosed()) {
             mRealm.close();
@@ -291,7 +291,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
+        Log.i("PPPPPPPPPP", "onCreate");
         if (G.isFirstPassCode) {
             openActivityPassCode();
         }
@@ -989,6 +989,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onStart() {
         super.onStart();
 
+        Log.i("PPPPPPPPPP", "onStart");
         if (!G.isFirstPassCode) {
             openActivityPassCode();
         }
@@ -1002,7 +1003,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //});
     }
 
-    private void openActivityPassCode() {
+    public void openActivityPassCode() {
         if (!isActivityEnterPassCode && G.isPassCode && isLock && !G.isRestartActivity) {
             enterPassword();
         } else if (!isActivityEnterPassCode && !G.isRestartActivity) {

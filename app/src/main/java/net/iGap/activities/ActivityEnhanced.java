@@ -10,7 +10,10 @@
 
 package net.iGap.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -21,6 +24,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import android.view.WindowManager;
 import java.io.File;
 import java.io.IOException;
@@ -41,6 +45,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class ActivityEnhanced extends AppCompatActivity {
 
     public boolean isOnGetPermistion = false;
+    public boolean isScreenOn = false;
 
     @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -57,6 +62,9 @@ public class ActivityEnhanced extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         G.checkLanguage();
         checkFont();
+
+        registerReceiver(mybroadcast, new IntentFilter(Intent.ACTION_SCREEN_ON));
+        registerReceiver(mybroadcast, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
@@ -215,6 +223,26 @@ public class ActivityEnhanced extends AppCompatActivity {
         }
     }
 
+
+    BroadcastReceiver mybroadcast = new BroadcastReceiver() {
+        //When Event is published, onReceive method is called
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+            Log.i("[BroadcastReceiver]", "MyReceiver");
+
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                if (G.isPassCode && !ActivityMain.isActivityEnterPassCode) {
+                    isScreenOn = false;
+                    G.isFirstPassCode = true;
+                    Intent i = new Intent(ActivityEnhanced.this, ActivityEnterPassCode.class);
+                    startActivity(i);
+                }
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+            }
+
+        }
+    };
 
 
 }
