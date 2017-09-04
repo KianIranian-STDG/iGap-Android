@@ -8,6 +8,7 @@
     android:layoutDirection="ltr"
     tools:ignore="MissingPrefix"
     android:orientation="vertical"
+    android:clickable="true"
     android:background="@color/white"
     >
 

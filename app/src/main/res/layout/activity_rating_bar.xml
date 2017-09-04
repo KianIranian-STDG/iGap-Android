@@ -5,6 +5,7 @@
     android:layoutDirection="ltr"
     android:id="@+id/arb_layout_root"
     android:gravity="center"
+    android:clickable="true"
     android:orientation="vertical"
     >
 

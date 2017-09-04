@@ -8,6 +8,7 @@
               android:elevation="999dp"
               android:orientation="vertical"
     tools:ignore="MissingPrefix"
+    android:clickable="true"
     tools:context="net.iGap.fragments.FragmentDeleteAccount"
     >
 

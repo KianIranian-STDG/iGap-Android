@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/st_layoutParent"
     android:layout_width="match_parent"
+    android:clickable="true"
     android:layout_height="match_parent"
     tools:ignore="MissingPrefix"
     >

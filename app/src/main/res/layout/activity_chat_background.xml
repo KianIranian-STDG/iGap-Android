@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/stcb_root"
     android:layout_width="match_parent"
+    android:clickable="true"
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:ignore="MissingPrefix">

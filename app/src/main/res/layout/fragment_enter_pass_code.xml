@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/green"
     android:elevation="1999dp"
+    android:clickable="true"
     android:orientation="vertical"
     tools:ignore="MissingPrefix"
     >

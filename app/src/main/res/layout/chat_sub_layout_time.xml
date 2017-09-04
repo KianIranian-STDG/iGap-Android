@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/chatSubLayoutTime"
     android:layout_width="match_parent"
+    android:clickable="true"
     android:layout_height="wrap_content"
     >
 

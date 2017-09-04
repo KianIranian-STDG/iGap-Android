@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/gray_3c"
     android:gravity="center_horizontal"
+    android:clickable="true"
     android:orientation="vertical"
     >
 

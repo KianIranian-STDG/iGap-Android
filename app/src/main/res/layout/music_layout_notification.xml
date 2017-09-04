@@ -5,6 +5,7 @@
     android:background="@color/notification_music_icons"
     android:layoutDirection="ltr"
     android:gravity="left"
+    android:clickable="true"
     android:orientation="horizontal">
 
     <ImageView

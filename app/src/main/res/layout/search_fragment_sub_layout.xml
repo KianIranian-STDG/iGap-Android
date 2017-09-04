@@ -4,6 +4,7 @@
     android:layout_height="@dimen/dp68"
     android:orientation="horizontal"
     android:padding="@dimen/dp8"
+    android:clickable="true"
     >
 
 

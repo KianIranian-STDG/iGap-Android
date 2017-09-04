@@ -6,6 +6,7 @@
     android:gravity="bottom"
     android:layout_gravity="bottom"
     android:layoutDirection="ltr"
+    android:clickable="true"
     android:orientation="vertical"
     >
 

@@ -8,6 +8,7 @@
     android:elevation="999dp"
     android:background="@android:color/white"
     tools:ignore="MissingPrefix"
+    android:clickable="true"
     android:layoutDirection="ltr"
     >
 

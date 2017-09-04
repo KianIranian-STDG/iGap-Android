@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/black90"
+    android:clickable="true"
     >
   <TextView
       android:id="@+id/rowText"

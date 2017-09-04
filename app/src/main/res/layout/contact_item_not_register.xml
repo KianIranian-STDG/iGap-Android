@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:paddingEnd="@dimen/dp28"
     android:paddingLeft="@dimen/dp52"
+    android:clickable="true"
     android:paddingRight="@dimen/dp28"
     android:paddingStart="@dimen/dp52">
 

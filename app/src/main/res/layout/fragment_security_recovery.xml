@@ -8,6 +8,7 @@
     android:background="@color/white"
     android:id="@+id/rootRecoveryPassword"
     android:layoutDirection="ltr"
+    android:clickable="true"
     android:elevation="999dp"
     >
 

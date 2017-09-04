@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layoutDirection="ltr"
     android:paddingBottom="@dimen/dp4"
+    android:clickable="true"
     >
   <!--
   <LinearLayout

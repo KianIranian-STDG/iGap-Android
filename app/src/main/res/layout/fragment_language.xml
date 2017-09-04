@@ -7,6 +7,7 @@
     tools:ignore="MissingPrefix"
     android:orientation="vertical"
     android:background="@color/white"
+    android:clickable="true"
     android:id="@+id/rootFragmentLanguage"
     android:elevation="999dp"
     >

@@ -8,6 +8,7 @@
     android:background="@color/gray_f2"
     android:elevation="999dp"
     android:orientation="vertical"
+    android:clickable="true"
     tools:context="net.iGap.activities.ActivityManageSpace"
     tools:ignore="MissingPrefix"
     >

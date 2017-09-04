@@ -8,6 +8,7 @@
     android:background="@android:color/white"
     android:elevation="999dp"
     android:orientation="vertical"
+    android:clickable="true"
     tools:ignore="MissingPrefix"
     >
 

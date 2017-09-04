@@ -10,6 +10,7 @@
     android:orientation="vertical"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
     tools:ignore="MissingPrefix"
+    android:clickable="true"
     >
 
   <LinearLayout

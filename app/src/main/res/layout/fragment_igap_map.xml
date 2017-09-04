@@ -9,6 +9,7 @@
     android:background="#EEEEEE"
     android:fitsSystemWindows="false"
     android:orientation="vertical"
+    android:clickable="true"
     tools:ignore="MissingPrefix"
     >
 

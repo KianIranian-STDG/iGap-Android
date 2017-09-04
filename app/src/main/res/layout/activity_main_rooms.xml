@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
+    android:clickable="true"
     tools:ignore="MissingPrefix"
     >
 

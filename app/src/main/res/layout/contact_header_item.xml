@@ -5,6 +5,7 @@
     android:layout_marginLeft="@dimen/dp8"
     android:layout_marginStart="@dimen/dp8"
     android:textColor="@color/gray_4c"
+    android:clickable="true"
     android:textSize="@dimen/dp20"
     fontPath="fonts/IRANSansMobile_Bold.ttf"
     android:textDirection="ltr"

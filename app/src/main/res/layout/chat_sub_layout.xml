@@ -4,6 +4,7 @@
     android:id="@+id/root_chat_sub_layout"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp68"
+    android:clickable="true"
     >
 
 

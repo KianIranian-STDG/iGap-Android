@@ -5,6 +5,7 @@
     android:orientation="horizontal"
     android:id="@+id/rootAdapterChooseCountry"
     android:background="@color/white"
+    android:clickable="true"
     >
 
   <LinearLayout

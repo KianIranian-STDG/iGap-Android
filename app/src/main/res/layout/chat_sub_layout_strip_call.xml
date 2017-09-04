@@ -5,6 +5,7 @@
     android:background="#fec107"
     android:paddingRight="@dimen/dp4"
     android:paddingLeft="@dimen/dp4"
+    android:clickable="true"
     android:layoutDirection="locale"
     android:orientation="horizontal"
     >
