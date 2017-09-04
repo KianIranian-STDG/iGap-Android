@@ -440,7 +440,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().equals("0")) {
-                    Toast.makeText(G.fragmentActivity, getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(G.fragmentActivity, G.context.getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT).show();
                     edtPhoneNumber.setText("");
                 }
             }

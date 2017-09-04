@@ -60,7 +60,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         if (G.twoPaneMode) {
             return inflater.inflate(R.layout.activity_media_player, container, false);
         } else {
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (G.context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 return inflater.inflate(R.layout.activity_media_player_land, container, false);
             } else {
                 return inflater.inflate(R.layout.activity_media_player, container, false);

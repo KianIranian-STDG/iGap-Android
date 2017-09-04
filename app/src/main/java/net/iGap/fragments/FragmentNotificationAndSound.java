@@ -169,7 +169,8 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(getResources().getString(R.string.set)).negativeText(getResources().getString(R.string.DISCARD)).title(getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                final MaterialDialog dialog =
+                        new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.context.getResources().getString(R.string.set)).negativeText(G.context.getResources().getString(R.string.DISCARD)).title(G.context.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -209,19 +210,19 @@ public class FragmentNotificationAndSound extends BaseFragment {
         int vibrateMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 1);
         switch (vibrateMessage) {
             case 0:
-                txtVibrateMessage.setText(getResources().getString(R.string.array_Disable));
+                txtVibrateMessage.setText(G.context.getResources().getString(R.string.array_Disable));
                 break;
             case 1:
-                txtVibrateMessage.setText(getResources().getString(R.string.array_Default));
+                txtVibrateMessage.setText(G.context.getResources().getString(R.string.array_Default));
                 break;
             case 2:
-                txtVibrateMessage.setText(getResources().getString(R.string.array_Short));
+                txtVibrateMessage.setText(G.context.getResources().getString(R.string.array_Short));
                 break;
             case 3:
-                txtVibrateMessage.setText(getResources().getString(R.string.array_Long));
+                txtVibrateMessage.setText(G.context.getResources().getString(R.string.array_Long));
                 break;
             case 4:
-                txtVibrateMessage.setText(getResources().getString(R.string.array_Only_if_silent));
+                txtVibrateMessage.setText(G.context.getResources().getString(R.string.array_Only_if_silent));
                 break;
         }
 
@@ -230,7 +231,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(G.context.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -240,23 +241,23 @@ public class FragmentNotificationAndSound extends BaseFragment {
                         editor.apply();
                         switch (which) {
                             case 0:
-                                txtVibrateMessage.setText(getResources().getString(R.string.array_Default));
+                                txtVibrateMessage.setText(G.context.getResources().getString(R.string.array_Default));
                                 Vibrator vDefault = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                                 vDefault.vibrate(350);
                                 break;
                             case 1:
-                                txtVibrateMessage.setText(getResources().getString(R.string.array_Short));
+                                txtVibrateMessage.setText(G.context.getResources().getString(R.string.array_Short));
                                 Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                                 vShort.vibrate(200);
 
                                 break;
                             case 2:
-                                txtVibrateMessage.setText(getResources().getString(R.string.array_Long));
+                                txtVibrateMessage.setText(G.context.getResources().getString(R.string.array_Long));
                                 Vibrator vLong = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                                 vLong.vibrate(500);
                                 break;
                             case 3:
-                                txtVibrateMessage.setText(getResources().getString(R.string.array_Only_if_silent));
+                                txtVibrateMessage.setText(G.context.getResources().getString(R.string.array_Only_if_silent));
                                 AudioManager am2 = (AudioManager) G.fragmentActivity.getSystemService(Context.AUDIO_SERVICE);
 
                                 switch (am2.getRingerMode()) {
@@ -268,7 +269,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                                 break;
                             case 4:
 
-                                txtVibrateMessage.setText(getResources().getString(R.string.array_Disable));
+                                txtVibrateMessage.setText(G.context.getResources().getString(R.string.array_Disable));
 
                                 break;
 
@@ -284,16 +285,16 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
         switch (mode) {
             case 0:
-                txtPopupNotification.setText(getResources().getString(R.string.array_No_popup));
+                txtPopupNotification.setText(G.context.getResources().getString(R.string.array_No_popup));
                 break;
             case 1:
-                txtPopupNotification.setText(getResources().getString(R.string.array_Only_when_screen_on));
+                txtPopupNotification.setText(G.context.getResources().getString(R.string.array_Only_when_screen_on));
                 break;
             case 2:
-                txtPopupNotification.setText(getResources().getString(R.string.array_Only_when_screen_off));
+                txtPopupNotification.setText(G.context.getResources().getString(R.string.array_Only_when_screen_off));
                 break;
             case 3:
-                txtPopupNotification.setText(getResources().getString(R.string.array_Always_show_popup));
+                txtPopupNotification.setText(G.context.getResources().getString(R.string.array_Always_show_popup));
                 break;
         }
 
@@ -302,7 +303,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
                 int po = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
-                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(getResources().getString(R.string.B_cancel)).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(po, new MaterialDialog.ListCallbackSingleChoice() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(G.context.getResources().getString(R.string.B_cancel)).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(po, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                         txtPopupNotification.setText(text.toString());
@@ -317,9 +318,9 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
         poRbDialogSoundMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
         txtSoundMessage = (TextView) view.findViewById(R.id.stns_txt_sound_text);
-        String soundMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, getResources().getString(R.string.array_Default_Notification_tone));
+        String soundMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, G.context.getResources().getString(R.string.array_Default_Notification_tone));
         if (poRbDialogSoundMessage == 0) {
-            txtSoundMessage.setText(getResources().getString(R.string.array_Default_Notification_tone));
+            txtSoundMessage.setText(G.context.getResources().getString(R.string.array_Default_Notification_tone));
         } else {
             txtSoundMessage.setText(soundMessage);
         }
@@ -329,7 +330,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(poRbDialogSoundMessage, new MaterialDialog.ListCallbackSingleChoice() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(poRbDialogSoundMessage, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -389,7 +390,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
                         return true;
                     }
-                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
+                }).positiveText(G.context.getResources().getString(R.string.B_ok)).negativeText(G.context.getResources().getString(R.string.B_cancel)).show();
             }
         });
 
@@ -461,7 +462,8 @@ public class FragmentNotificationAndSound extends BaseFragment {
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(getResources().getString(R.string.set)).negativeText(getResources().getString(R.string.DISCARD)).title(getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                final MaterialDialog dialog =
+                        new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.context.getResources().getString(R.string.set)).negativeText(G.context.getResources().getString(R.string.DISCARD)).title(G.context.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -501,19 +503,19 @@ public class FragmentNotificationAndSound extends BaseFragment {
         int vibrateGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
         switch (vibrateGroup) {
             case 0:
-                txtVibrateGroup.setText(getResources().getString(R.string.array_Disable));
+                txtVibrateGroup.setText(G.context.getResources().getString(R.string.array_Disable));
                 break;
             case 1:
-                txtVibrateGroup.setText(getResources().getString(R.string.array_Default));
+                txtVibrateGroup.setText(G.context.getResources().getString(R.string.array_Default));
                 break;
             case 2:
-                txtVibrateGroup.setText(getResources().getString(R.string.array_Short));
+                txtVibrateGroup.setText(G.context.getResources().getString(R.string.array_Short));
                 break;
             case 3:
-                txtVibrateGroup.setText(getResources().getString(R.string.array_Long));
+                txtVibrateGroup.setText(G.context.getResources().getString(R.string.array_Long));
                 break;
             case 4:
-                txtVibrateGroup.setText(getResources().getString(R.string.array_Only_if_silent));
+                txtVibrateGroup.setText(G.context.getResources().getString(R.string.array_Only_if_silent));
                 break;
         }
         ViewGroup ltVibrateGroup = (ViewGroup) view.findViewById(R.id.stns_layout_vibrate_group);
@@ -521,7 +523,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(G.context.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -530,23 +532,23 @@ public class FragmentNotificationAndSound extends BaseFragment {
                         editor.apply();
                         switch (which) {
                             case 0:
-                                txtVibrateGroup.setText(getResources().getString(R.string.array_Default));
+                                txtVibrateGroup.setText(G.context.getResources().getString(R.string.array_Default));
                                 Vibrator vDefault = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                                 vDefault.vibrate(350);
                                 break;
                             case 1:
-                                txtVibrateGroup.setText(getResources().getString(R.string.array_Short));
+                                txtVibrateGroup.setText(G.context.getResources().getString(R.string.array_Short));
                                 Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                                 vShort.vibrate(200);
 
                                 break;
                             case 2:
-                                txtVibrateGroup.setText(getResources().getString(R.string.array_Long));
+                                txtVibrateGroup.setText(G.context.getResources().getString(R.string.array_Long));
                                 Vibrator vLong = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                                 vLong.vibrate(500);
                                 break;
                             case 3:
-                                txtVibrateGroup.setText(getResources().getString(R.string.array_Only_if_silent));
+                                txtVibrateGroup.setText(G.context.getResources().getString(R.string.array_Only_if_silent));
                                 AudioManager am2 = (AudioManager) G.fragmentActivity.getSystemService(Context.AUDIO_SERVICE);
 
                                 switch (am2.getRingerMode()) {
@@ -558,7 +560,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                                 break;
                             case 4:
 
-                                txtVibrateGroup.setText(getResources().getString(R.string.array_Disable));
+                                txtVibrateGroup.setText(G.context.getResources().getString(R.string.array_Disable));
 
                                 break;
                         }
@@ -570,16 +572,16 @@ public class FragmentNotificationAndSound extends BaseFragment {
         int modeGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
         switch (modeGroup) {
             case 0:
-                txtPopupNotificationGroup.setText(getResources().getString(R.string.array_No_popup));
+                txtPopupNotificationGroup.setText(G.context.getResources().getString(R.string.array_No_popup));
                 break;
             case 1:
-                txtPopupNotificationGroup.setText(getResources().getString(R.string.array_Only_when_screen_on));
+                txtPopupNotificationGroup.setText(G.context.getResources().getString(R.string.array_Only_when_screen_on));
                 break;
             case 2:
-                txtPopupNotificationGroup.setText(getResources().getString(R.string.array_Only_when_screen_off));
+                txtPopupNotificationGroup.setText(G.context.getResources().getString(R.string.array_Only_when_screen_off));
                 break;
             case 3:
-                txtPopupNotificationGroup.setText(getResources().getString(R.string.array_Always_show_popup));
+                txtPopupNotificationGroup.setText(G.context.getResources().getString(R.string.array_Always_show_popup));
                 break;
         }
 
@@ -588,7 +590,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
                 int po = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
-                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(getResources().getString(R.string.B_cancel)).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(po, new MaterialDialog.ListCallbackSingleChoice() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.st_popupNotification)).items(R.array.popup_Notification).negativeText(G.context.getResources().getString(R.string.B_cancel)).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(po, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -603,9 +605,9 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
         poRbDialogSoundGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
         txtSoundGroup = (TextView) view.findViewById(R.id.stns_txt_sound_group_text);
-        String soundGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_GROUP, getResources().getString(R.string.array_Default_Notification_tone));
+        String soundGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_GROUP, G.context.getResources().getString(R.string.array_Default_Notification_tone));
         if (poRbDialogSoundGroup == 0) {
-            txtSoundGroup.setText(getResources().getString(R.string.array_Default_Notification_tone));
+            txtSoundGroup.setText(G.context.getResources().getString(R.string.array_Default_Notification_tone));
         } else {
             txtSoundGroup.setText(soundGroup);
         }
@@ -615,7 +617,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).titleColor(getResources().getColor(android.R.color.black)).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(poRbDialogSoundGroup, new MaterialDialog.ListCallbackSingleChoice() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(poRbDialogSoundGroup, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         switch (which) {
@@ -673,7 +675,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                         editor.apply();
                         return true;
                     }
-                }).positiveText(getResources().getString(R.string.B_ok)).negativeText(getResources().getString(R.string.B_cancel)).show();
+                }).positiveText(G.context.getResources().getString(R.string.B_ok)).negativeText(G.context.getResources().getString(R.string.B_cancel)).show();
             }
         });
 
@@ -961,14 +963,14 @@ public class FragmentNotificationAndSound extends BaseFragment {
         });
 
         txtRepeat_Notifications = (TextView) view.findViewById(R.id.st_txt_Repeat_Notifications);
-        String repeat_Notifications = sharedPreferences.getString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_Off));
+        String repeat_Notifications = sharedPreferences.getString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, G.context.getResources().getString(R.string.array_Off));
         txtRepeat_Notifications.setText(repeat_Notifications);
         ViewGroup ltRepeat_Notifications = (ViewGroup) view.findViewById(R.id.st_layout_Repeat_Notifications);
         ltRepeat_Notifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                new MaterialDialog.Builder(G.fragmentActivity).title(getResources().getString(R.string.st_Repeat_Notifications)).items(R.array.repeat_notification).negativeText(getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.st_Repeat_Notifications)).items(R.array.repeat_notification).negativeText(G.context.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
                     public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -976,38 +978,38 @@ public class FragmentNotificationAndSound extends BaseFragment {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         switch (which) {
                             case 0:
-                                txtRepeat_Notifications.setText(getResources().getString(R.string.array_Off));
-                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_Off));
+                                txtRepeat_Notifications.setText(G.context.getResources().getString(R.string.array_Off));
+                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, G.context.getResources().getString(R.string.array_Off));
                                 editor.apply();
                                 break;
                             case 1:
-                                txtRepeat_Notifications.setText(getResources().getString(R.string.array_5_minutes));
-                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_5_minutes));
+                                txtRepeat_Notifications.setText(G.context.getResources().getString(R.string.array_5_minutes));
+                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, G.context.getResources().getString(R.string.array_5_minutes));
                                 editor.apply();
                                 break;
                             case 2:
-                                txtRepeat_Notifications.setText(getResources().getString(R.string.array_10_minutes));
-                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_10_minutes));
+                                txtRepeat_Notifications.setText(G.context.getResources().getString(R.string.array_10_minutes));
+                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, G.context.getResources().getString(R.string.array_10_minutes));
                                 editor.apply();
                                 break;
                             case 3:
-                                txtRepeat_Notifications.setText(getResources().getString(R.string.array_30_minutes));
-                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_30_minutes));
+                                txtRepeat_Notifications.setText(G.context.getResources().getString(R.string.array_30_minutes));
+                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, G.context.getResources().getString(R.string.array_30_minutes));
                                 editor.apply();
                                 break;
                             case 4:
-                                txtRepeat_Notifications.setText(getResources().getString(R.string.array_1_hour));
-                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_1_hour));
+                                txtRepeat_Notifications.setText(G.context.getResources().getString(R.string.array_1_hour));
+                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, G.context.getResources().getString(R.string.array_1_hour));
                                 editor.apply();
                                 break;
                             case 5:
-                                txtRepeat_Notifications.setText(getResources().getString(R.string.array_2_hour));
-                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_2_hour));
+                                txtRepeat_Notifications.setText(G.context.getResources().getString(R.string.array_2_hour));
+                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, G.context.getResources().getString(R.string.array_2_hour));
                                 editor.apply();
                                 break;
                             case 6:
-                                txtRepeat_Notifications.setText(getResources().getString(R.string.array_4_hour));
-                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_4_hour));
+                                txtRepeat_Notifications.setText(G.context.getResources().getString(R.string.array_4_hour));
+                                editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, G.context.getResources().getString(R.string.array_4_hour));
                                 editor.apply();
                                 break;
                         }
@@ -1046,11 +1048,11 @@ public class FragmentNotificationAndSound extends BaseFragment {
                         editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
                         editor.putInt(SHP_SETTING.KEY_STNS_BACKGROUND_CONNECTION, 1);
                         editor.putInt(SHP_SETTING.KEY_STNS_BADGE_CONTENT, 1);
-                        editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, getResources().getString(R.string.array_1_hour));
+                        editor.putString(SHP_SETTING.KEY_STNS_REPEAT_NOTIFICATION, G.context.getResources().getString(R.string.array_1_hour));
                         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
                         editor.putInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
                         editor.apply();
-                        Toast.makeText(G.fragmentActivity, getResources().getString(R.string.st_reset_all_notification), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(G.fragmentActivity, G.context.getResources().getString(R.string.st_reset_all_notification), Toast.LENGTH_SHORT).show();
 
                         removeFromBaseFragment(FragmentNotificationAndSound.this);
                         new HelperFragment(new FragmentNotificationAndSound()).load();
