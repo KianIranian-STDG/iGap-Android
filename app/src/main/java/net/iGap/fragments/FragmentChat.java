@@ -1661,7 +1661,7 @@ public class FragmentChat extends BaseFragment
                     Double latitude = Double.parseDouble(split[0]);
                     Double longitude = Double.parseDouble(split[1]);
                     FragmentMap fragment = FragmentMap.getInctance(latitude, longitude, FragmentMap.Mode.sendPosition);
-                    new HelperFragment(fragment).load();
+                    new HelperFragment(fragment).setReplace(false).load();
                 } catch (Exception e) {
                     HelperLog.setErrorLog("Activity Chat   complete   " + e.toString());
                 }
