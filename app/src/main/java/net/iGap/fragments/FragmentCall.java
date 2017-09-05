@@ -36,6 +36,7 @@ import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.ISignalingGetCallLog;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -255,12 +256,15 @@ import net.iGap.request.RequestSignalingGetLog;
         fragment.setArguments(bundle);
 
         try {
-            G.fragmentActivity.getSupportFragmentManager()
-                .beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-                .addToBackStack(null)
-                .replace(R.id.fragmentContainer, fragment)
-                .commit();
+            //G.fragmentActivity.getSupportFragmentManager()
+            //    .beginTransaction()
+            //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+            //    .addToBackStack(null)
+            //    .replace(R.id.fragmentContainer, fragment)
+            //    .commit();
+
+            new HelperFragment(fragment).setReplace(false).load();
+
         } catch (Exception e) {
             e.getStackTrace();
         }

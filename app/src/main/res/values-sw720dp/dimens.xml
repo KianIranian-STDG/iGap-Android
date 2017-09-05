@@ -1,6 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!-- Default screen margins, per the Android Design guidelines. -->
-
   <bool name="isTablet">true</bool>
 
 

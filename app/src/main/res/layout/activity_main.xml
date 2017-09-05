@@ -22,10 +22,10 @@
         android:orientation="horizontal"
         >
 
-
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="match_parent"
+          android:background="#99f7f7f7"
           >
 
         <FrameLayout
@@ -294,6 +294,7 @@
             android:id="@+id/am_frame_chat_container"
             android:layout_width="1px"
             android:layout_height="match_parent"
+            android:background="@drawable/back_main_room"
             android:layout_weight="1"
             >
 

@@ -42,6 +42,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
 import net.iGap.proto.ProtoGlobal;
@@ -124,11 +125,13 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback {
 
         SupportMapFragment mapFragment = new SupportMapFragment();
 
-        G.fragmentActivity.getSupportFragmentManager()
-            .beginTransaction()
-            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
-            .replace(mf_fragment_map_view, mapFragment, null)
-            .commit();
+        //G.fragmentActivity.getSupportFragmentManager()
+        //    .beginTransaction()
+        //    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left)
+        //    .replace(mf_fragment_map_view, mapFragment, null)
+        //    .commit();
+
+        new HelperFragment(mapFragment).setReplace(false).setAddToBackStack(false).setResourceContainer(mf_fragment_map_view).load();
 
         mapFragment.getMapAsync(FragmentMap.this);
 

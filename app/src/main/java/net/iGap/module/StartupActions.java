@@ -241,20 +241,24 @@ public final class StartupActions {
      */
     public static void textSizeDetection(SharedPreferences sharedPreferences) {
         userTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14);
-        int screenLayout = context.getResources().getConfiguration().screenLayout;
-        screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
 
-        switch (screenLayout) {
-            case Configuration.SCREENLAYOUT_SIZE_SMALL:
-                userTextSize = (userTextSize * 3) / 4;
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_LARGE:
-                userTextSize = (userTextSize * 3) / 2;
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_XLARGE:// or 4
-                userTextSize *= 2;
+        if (!G.context.getResources().getBoolean(R.bool.isTablet)) {
+
+            int screenLayout = context.getResources().getConfiguration().screenLayout;
+            screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
+
+            switch (screenLayout) {
+                case Configuration.SCREENLAYOUT_SIZE_SMALL:
+                    userTextSize = (userTextSize * 3) / 4;
+                    break;
+                case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                    break;
+                case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                    userTextSize = (userTextSize * 3) / 2;
+                    break;
+                case Configuration.SCREENLAYOUT_SIZE_XLARGE:// or 4
+                    userTextSize *= 2;
+            }
         }
     }
 
