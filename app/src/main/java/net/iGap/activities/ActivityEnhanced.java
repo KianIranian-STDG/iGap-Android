@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -28,6 +29,7 @@ import android.util.Log;
 import android.view.WindowManager;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
@@ -254,5 +256,26 @@ public class ActivityEnhanced extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mybroadcast);
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        checkLanguage();
+    }
+
+    public void checkLanguage() {
+        try {
+            String selectedLanguage = G.selectedLanguage;
+            if (selectedLanguage == null) return;
+            Locale locale = new Locale(selectedLanguage);
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

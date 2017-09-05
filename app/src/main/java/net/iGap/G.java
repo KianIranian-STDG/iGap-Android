@@ -19,7 +19,6 @@ import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import com.crashlytics.android.Crashlytics;
@@ -503,37 +502,17 @@ public class G extends MultiDexApplication {
         return mTracker;
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-
-        super.onConfigurationChanged(newConfig);
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkLanguage();
-            }
-        }, 200);
-    }
-
     public static void checkLanguage() {
-
         try {
             String selectedLanguage = G.selectedLanguage;
             if (selectedLanguage == null) return;
-
-            //String currentLanguage = Locale.getDefault().getLanguage();
-            //if (!selectedLanguage.equals(currentLanguage)) {
             Locale locale = new Locale(selectedLanguage);
             Locale.setDefault(locale);
             Configuration config = new Configuration();
             config.locale = locale;
             context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-            // }
         } catch (Exception e) {
-            Log.e("ddddd", "G   checkLanguage " + e.toString());
+            e.printStackTrace();
         }
     }
-
-
 }
