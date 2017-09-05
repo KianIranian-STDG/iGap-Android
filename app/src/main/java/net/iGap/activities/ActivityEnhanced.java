@@ -45,13 +45,14 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class ActivityEnhanced extends AppCompatActivity {
 
     public boolean isOnGetPermistion = false;
-    public boolean isScreenOn = false;
 
-    @Override protected void attachBaseContext(Context newBase) {
+    @Override
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
 
         makeDirectoriesIfNotExist();
@@ -63,8 +64,10 @@ public class ActivityEnhanced extends AppCompatActivity {
         G.checkLanguage();
         checkFont();
 
-        registerReceiver(mybroadcast, new IntentFilter(Intent.ACTION_SCREEN_ON));
-        registerReceiver(mybroadcast, new IntentFilter(Intent.ACTION_SCREEN_OFF));
+        IntentFilter screenStateFilter = new IntentFilter();
+        screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
+        screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(mybroadcast, screenStateFilter);
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
@@ -107,7 +110,8 @@ public class ActivityEnhanced extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         try {
             HelperPermision.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -116,7 +120,8 @@ public class ActivityEnhanced extends AppCompatActivity {
         }
     }
 
-    @Override protected void onStart() {
+    @Override
+    protected void onStart() {
 
         if (!G.isAppInFg) {
             G.isAppInFg = true;
@@ -142,7 +147,8 @@ public class ActivityEnhanced extends AppCompatActivity {
         super.onStart();
     }
 
-    @Override protected void onStop() {
+    @Override
+    protected void onStop() {
         super.onStop();
 
         if (!G.isScrInFg || !G.isChangeScrFg) {
@@ -151,7 +157,8 @@ public class ActivityEnhanced extends AppCompatActivity {
         G.isScrInFg = false;
 
         new Handler().postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (!G.isAppInFg && !AttachFile.isInAttach && G.userLogin) {
                     new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE);
                 }
@@ -233,7 +240,6 @@ public class ActivityEnhanced extends AppCompatActivity {
 
             if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 if (G.isPassCode && !ActivityMain.isActivityEnterPassCode) {
-                    isScreenOn = false;
                     G.isFirstPassCode = true;
                     Intent i = new Intent(ActivityEnhanced.this, ActivityEnterPassCode.class);
                     startActivity(i);
@@ -244,5 +250,9 @@ public class ActivityEnhanced extends AppCompatActivity {
         }
     };
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mybroadcast);
+    }
 }
