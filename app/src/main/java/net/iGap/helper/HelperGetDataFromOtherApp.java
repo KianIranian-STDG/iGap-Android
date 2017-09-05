@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 import net.iGap.G;
+import net.iGap.activities.ActivityMain;
 
 public class HelperGetDataFromOtherApp {
 
@@ -132,7 +133,7 @@ public class HelperGetDataFromOtherApp {
             }
         }
 
-        if (hasSharedData) {
+        if (hasSharedData && ActivityMain.isOpenChatBeforeSheare) {
 
             new HelperFragment().removeAll(true);
         }

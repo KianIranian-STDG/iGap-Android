@@ -155,6 +155,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static FrameLayout frameFragmentBack;
 
     static FrameLayout frameFragmentContainer;
+    public static boolean isOpenChatBeforeSheare = false;
 
     FragmentCall fragmentCall;
 
@@ -258,7 +259,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
+        isOpenChatBeforeSheare = true;
         chechIntent(intent);
     }
 
@@ -416,6 +417,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             frameChatContainer.setVisibility(View.GONE);
         }
 
+        isOpenChatBeforeSheare = false;
         chechIntent(getIntent());
 
 
