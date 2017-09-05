@@ -1331,8 +1331,10 @@ public class FragmentChat extends BaseFragment
 
             if (isNotJoin) {
                 final LinearLayout layoutJoin = (LinearLayout) rootView.findViewById(R.id.ac_ll_join);
+                final RelativeLayout layoutMute = (RelativeLayout) rootView.findViewById(R.id.chl_ll_channel_footer);
                 layoutJoin.setBackgroundColor(Color.parseColor(G.appBarColor));
                 layoutJoin.setVisibility(View.VISIBLE);
+                layoutMute.setVisibility(View.GONE);
                 layoutJoin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -1348,7 +1350,7 @@ public class FragmentChat extends BaseFragment
                                     @Override
                                     public void run() {
                                         layoutJoin.setVisibility(View.GONE);
-
+                                        layoutMute.setVisibility(View.VISIBLE);
                                         rootView.findViewById(ac_ll_parent).invalidate();
 
                                         if (chatType == GROUP) {
@@ -5844,7 +5846,7 @@ public class FragmentChat extends BaseFragment
         });
         txtNumberOfSelected = (TextView) G.fragmentActivity.findViewById(R.id.chl_txt_number_of_selected);
 
-        if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
+        if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER && !isNotJoin) {
             initLayoutChannelFooter();
         }
     }
