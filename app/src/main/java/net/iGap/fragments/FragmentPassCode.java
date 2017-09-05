@@ -28,7 +28,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -45,7 +44,7 @@ import net.iGap.realm.RealmUserInfo;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
-import static net.iGap.R.id.numberPicker;
+import static net.iGap.R.string.Disable;
 
 
 /**
@@ -64,7 +63,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
     private RippleView rippleOk;
     private String password;
     private int page = 0;
-    private NumberPicker numberPickerMinutes;
+    private net.iGap.module.NumberPicker numberPickerMinutes;
     private boolean deviceHasFingerPrint;
     private ViewGroup vgFingerPrint;
     private Spinner staticSpinner;
@@ -480,7 +479,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         });
         long valuNumberPic = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
         if (valuNumberPic == 0) {
-            txtAutoLock.setText(getString(R.string.Disable));
+            txtAutoLock.setText(getString(Disable));
         } else if (valuNumberPic == 60) {
             txtAutoLock.setText(getString(R.string.in_1_minutes));
         } else if (valuNumberPic == 60 * 5) {
@@ -488,8 +487,10 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         } else if (valuNumberPic == 60 * 60) {
             txtAutoLock.setText(getString(R.string.in_1_hours));
         } else if (valuNumberPic == 60 * 60 * 5) {
-            txtAutoLock.setText(getString(R.string.in_1_hours));
+            txtAutoLock.setText(getString(R.string.in_5_hours));
         }
+
+
 
         vgAutoLock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -501,12 +502,11 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                 View view1 = dialog.getCustomView();
 
                 assert view1 != null;
-                numberPickerMinutes = (NumberPicker) view1.findViewById(numberPicker);
+                numberPickerMinutes = (net.iGap.module.NumberPicker) view1.findViewById(R.id.numberPicker);
                 numberPickerMinutes.setMinValue(0);
                 numberPickerMinutes.setMaxValue(4);
-                numberPickerMinutes.setWrapSelectorWheel(true);
-                numberPickerMinutes.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-                //numberPickerMinutes.setDisplayedValues(new String[]{"in 1 hour", "in 5 hours", "in 1 minute", "in 5 minutes", "Disable"});
+                //numberPickerMinutes.setWrapSelectorWheel(true);
+                //numberPickerMinutes.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 
                 long valueNumberPic = sharedPreferences.getLong(SHP_SETTING.KEY_TIME_LOCK, 0);
                 if (valueNumberPic == 0) {
@@ -521,7 +521,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                     numberPickerMinutes.setValue(4);
                 }
 
-                numberPickerMinutes.setFormatter(new NumberPicker.Formatter() {
+                numberPickerMinutes.setFormatter(new net.iGap.module.NumberPicker.Formatter() {
                     @Override
                     public String format(int value) {
                         if (value == 0) {
@@ -550,7 +550,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                         int which = numberPickerMinutes.getValue();
                         if (which == 0) {
                             editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 0);
-                            txtAutoLock.setText(getString(R.string.Disable));
+                            txtAutoLock.setText(getString(Disable));
                         } else if (which == 1) {
                             editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 60);
                             txtAutoLock.setText(getString(R.string.in_1_minutes));
