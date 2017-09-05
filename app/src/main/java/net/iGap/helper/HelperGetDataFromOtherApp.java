@@ -131,6 +131,13 @@ public class HelperGetDataFromOtherApp {
                 SetOutPutMultipleFile(FileType.file);
             }
         }
+
+        if (hasSharedData) {
+
+            new HelperFragment().removeAll(true);
+        }
+
+
     }
 
     //*****************************************************************************************************

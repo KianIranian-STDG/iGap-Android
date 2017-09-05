@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMain;
+
+import static net.iGap.fragments.FragmentCall.strGonTitle;
 
 public class HelperFragment {
 
@@ -136,7 +139,19 @@ public class HelperFragment {
     public void removeAll(boolean keepMain) {
         for (Fragment fragment : G.fragmentActivity.getSupportFragmentManager().getFragments()) {
             if (fragment != null) {
-                if ((!keepMain) || (!fragment.getClass().getName().equals(FragmentMain.class.getName()))) {
+
+                if (keepMain) {
+                    if (fragment.getClass().getName().equals(FragmentMain.class.getName())) {
+                        continue;
+                    }
+                    if (fragment instanceof FragmentCall) {
+                        if (fragment.getArguments().getBoolean(strGonTitle)) {
+                            continue;
+                        }
+                    }
+
+                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+                } else {
                     G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
                 }
             }
