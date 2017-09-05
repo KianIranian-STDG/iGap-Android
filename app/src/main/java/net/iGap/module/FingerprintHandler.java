@@ -17,7 +17,6 @@ import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.CancellationSignal;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import net.iGap.G;
 
 @TargetApi(Build.VERSION_CODES.M) public class FingerprintHandler extends FingerprintManager.AuthenticationCallback {
@@ -72,9 +71,8 @@ import net.iGap.G;
             if (G.fingerPrint != null) {
                 G.fingerPrint.success();
             }
-            Log.i("IIIIIIIIIIIIIII", "update: " + "success fingerprint");
         } else {
-            if (G.fingerPrint != null) {
+            if (G.fingerPrint != null && !e.contains("Fingerprint operation canceled.")) {
                 G.fingerPrint.error();
             }
         }

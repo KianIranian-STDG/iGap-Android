@@ -12,6 +12,7 @@ package net.iGap.activities;
 import android.annotation.TargetApi;
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -78,11 +79,14 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
     private MaterialDialog dialogForgot;
     private EditText edtPassword;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_enter_pass_code);
+
+        if (getIntent().getBooleanExtra("EXIT", false)) {
+            finish();
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
@@ -155,7 +159,9 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
                         @Override
                         public void run() {
 
-                            if (dialog != null) dialog.dismiss();
+                            if (dialog != null) {
+                                dialog.dismiss();
+                            }
 
                             if (ActivityMain.iconLock != null) {
                                 ActivityMain.iconLock.setText(getResources().getString(R.string.md_igap_lock_open_outline));
@@ -399,11 +405,13 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
     public void onBackPressed() {
         super.onBackPressed();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            finishAffinity();
-        } else {
-            finish();
-        }
+        ActivityMain.isLock = true;
+        Intent intent = new Intent(getApplicationContext(), ActivityEnterPassCode.class);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("EXIT", true);
+        startActivity(intent);
 
     }
 
