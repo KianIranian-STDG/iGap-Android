@@ -67,6 +67,7 @@ public class HelperNotificationAndBadge {
     private long roomId = 0;
     private long senderId = 0;
     private ArrayList<Item> list = new ArrayList<>();
+    private boolean isEnablepopUpSettin = false;
 
     private NotificationManager notificationManager;
     private Notification notification;
@@ -401,6 +402,8 @@ public class HelperNotificationAndBadge {
         unreadMessageCount = 0;
         popUpList.clear();
 
+        isEnablepopUpSettin = checkPopUpSetting(type);
+
         RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class)
                 .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString())
                 .or()
@@ -417,9 +420,10 @@ public class HelperNotificationAndBadge {
                     unreadMessageCount++;
                     messageOne = roomMessage.getMessage();
 
-                    if (unreadMessageCount > 3) {
+                    if (unreadMessageCount > 3 && (!isEnablepopUpSettin || G.isAppInFg || AttachFile.isInAttach)) {
                         break;
                     }
+
 
                     addItemToPopUPList(roomMessage);
 
@@ -464,8 +468,7 @@ public class HelperNotificationAndBadge {
                 }
             }
 
-
-            startActivityPopUpNotification(type, popUpList);
+            startActivityPopUpNotification(popUpList);
 
             isFromOnRoom = false;
 
@@ -601,7 +604,7 @@ public class HelperNotificationAndBadge {
         return intVibrator;
     }
 
-    private void startActivityPopUpNotification(ProtoGlobal.Room.Type type, ArrayList<StructPopUp> poList) {
+    private boolean checkPopUpSetting(ProtoGlobal.Room.Type type) {
 
         SharedPreferences sharedPreferences;
         boolean popUpSetting = false;
@@ -639,9 +642,14 @@ public class HelperNotificationAndBadge {
                 break;
         }
 
+        return popUpSetting;
+    }
+
+    private void startActivityPopUpNotification(ArrayList<StructPopUp> poList) {
+
         if (!G.isAppInFg) {
             if (!AttachFile.isInAttach) {
-                if (popUpSetting) {
+                if (isEnablepopUpSettin) {
                     if (getForegroundApp() || ActivityPopUpNotification.isPopUpVisible) { //check that any other program is in background
 
                         goToPopUpActivity(poList);
