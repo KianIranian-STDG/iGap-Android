@@ -583,7 +583,7 @@ public class RegisteredContactsFragment extends BaseFragment {
         //The unique ID for this type of item
         @Override
         public int getType() {
-            return R.id.rooTest;
+            return R.id.root_List_contact;
         }
 
         //The layout to be used for this type of item
@@ -601,7 +601,7 @@ public class RegisteredContactsFragment extends BaseFragment {
             holder.txtName.setText(item);
             holder.txtPhone.setText(phone);
 
-            holder.txtName.setOnClickListener(new View.OnClickListener() {
+            holder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.igap))
@@ -631,12 +631,14 @@ public class RegisteredContactsFragment extends BaseFragment {
 
             private TextView txtName;
             private TextView txtPhone;
+            private ViewGroup root;
 
             public ViewHolder(View view) {
                 super(view);
 
                 txtName = (TextView) view.findViewById(R.id.txtName);
                 txtPhone = (TextView) view.findViewById(R.id.txtPhone);
+                root = (ViewGroup) view.findViewById(R.id.root_List_contact);
 
             }
         }
