@@ -1078,5 +1078,6 @@
   <string name="unblock_the_user_text">Are you sure to unblock this User?</string>
 
   <string name="text_empty_user_map">Oops! No user nearby has turned on her/his map yet</string>
+  <string name="send_message_to">Send Message To </string>
 
 </resources>

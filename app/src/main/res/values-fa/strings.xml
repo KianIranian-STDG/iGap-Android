@@ -1086,6 +1086,6 @@
   <string name="PIN">پین</string>
   <string name="password">رمز</string>
   <string name="text_empty_user_map">متأسفانه هیچ کاربری اطراف شما نفشه خود را فعال نکرده است</string>
-
+  <string name="send_message_to">ارسال پیام به  </string>
 
 </resources>

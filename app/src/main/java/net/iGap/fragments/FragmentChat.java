@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -55,6 +56,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -2603,7 +2605,7 @@ public class FragmentChat extends BaseFragment
             String filePath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
 
             if (filePath != null) {
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
+                intent.putExtra(Intent.EXTRA_STREAM, AppUtils.createtUri(new File(filePath)));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -5072,7 +5074,7 @@ public class FragmentChat extends BaseFragment
                     String imagePathPosition = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getLocation().getImagePath() : messageInfo.location.getImagePath();
                     intent.setType("image/*");
                     if (imagePathPosition != null) {
-                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(imagePathPosition)));
+                        intent.putExtra(Intent.EXTRA_STREAM, AppUtils.createtUri(new File(imagePathPosition)));
                     }
                     break;
                 case "VOICE":
@@ -5098,8 +5100,11 @@ public class FragmentChat extends BaseFragment
                 case "FILE_TEXT":
                     String mfilepath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
                     if (mfilepath != null) {
-                        Uri uri = Uri.fromFile(new File(mfilepath));
-                        String mimeType = FileUtils.getMimeType(G.fragmentActivity, uri);
+                        Uri uri = AppUtils.createtUri(new File(mfilepath));
+
+                        ContentResolver cR = context.getContentResolver();
+                        MimeTypeMap mime = MimeTypeMap.getSingleton();
+                        String mimeType = mime.getExtensionFromMimeType(cR.getType(uri));
 
                         if (mimeType == null || mimeType.length() < 1) {
                             mimeType = "*/*";

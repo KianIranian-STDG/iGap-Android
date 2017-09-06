@@ -610,14 +610,14 @@ public final class AppUtils {
         }
     }
 
-    public static Uri getUri(String path) {
+    public static Uri createtUri(File file) {
 
         Uri outputUri;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            outputUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", new File(path));
+            outputUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file);
         } else {
-            outputUri = Uri.fromFile(new File(path));
+            outputUri = Uri.fromFile(file);
         }
 
         return outputUri;

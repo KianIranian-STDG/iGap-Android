@@ -965,4 +965,5 @@
   <string name="comment_waiting">در حال دریافت یادداشت</string>
   <string name="comment_no">یادداشتی وجود ندارد</string>
   <string formatted="false" name="distance">حدود %d متر</string>
+  <string name="send_message_to">ارسال پیام به  </string>
 </resources>
