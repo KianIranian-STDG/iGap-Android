@@ -4906,14 +4906,19 @@ public class FragmentChat extends BaseFragment
                         }
                     } else if (messageType == HelperGetDataFromOtherApp.FileType.video) {
                         if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
-                            String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                            final String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                             mainVideoPath = getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
 
                             if (mainVideoPath == null) {
                                 return;
                             }
 
-                            new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
+                            G.handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
+                                }
+                            }, 200);
                             sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
                         } else {
                             for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
@@ -4938,10 +4943,14 @@ public class FragmentChat extends BaseFragment
                                 sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
                             } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
                                 if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
-                                    String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                                    final String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                                     mainVideoPath = getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
-
-                                    new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
+                                    G.handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
+                                        }
+                                    }, 200);
                                     sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
                                 } else {
                                     compressedPath.put(getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(i).toString())), true);
