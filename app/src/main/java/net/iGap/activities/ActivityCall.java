@@ -599,10 +599,12 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     private void endCall() {
 
+        G.isInCall = false;
+
         new WebRTC().leaveCall();
         isSendLeave = true;
 
-        G.isInCall = false;
+
 
         isConnected = false;
 
@@ -616,6 +618,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     }
 
     private void endVoiceAndFinish() {
+
+        G.isInCall = false;
+
         cancelRingtone();
 
         finish();
