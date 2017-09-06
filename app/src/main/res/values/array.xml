@@ -283,4 +283,9 @@
     <item>@string/recovery_by_question_dialog</item>
   </string-array>
 
+    <string-array name="modePassCode">
+        <item>@string/PIN</item>
+        <item>@string/password</item>
+    </string-array>
+
 </resources>

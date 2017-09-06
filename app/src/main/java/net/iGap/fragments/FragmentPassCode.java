@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,11 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
@@ -39,6 +35,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperLog;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmUserInfo;
 
@@ -50,7 +47,7 @@ import static net.iGap.R.string.Disable;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentPassCode extends BaseFragment implements AdapterView.OnItemSelectedListener {
+public class FragmentPassCode extends BaseFragment {
     private Realm realm;
     private boolean isPassCode;
     private boolean isFingerPrintCode;
@@ -66,12 +63,12 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
     private net.iGap.module.NumberPicker numberPickerMinutes;
     private boolean deviceHasFingerPrint;
     private ViewGroup vgFingerPrint;
-    private Spinner staticSpinner;
-    private String[] paths = {"PIN", "Password"};
     private final int PIN = 0;
     private final int PASSWORD = 1;
     private int kindPassword = 0;
     SharedPreferences sharedPreferences;
+    private ViewGroup layoutModePassCode;
+    private TextView txtModePassCode;
 
 
     public FragmentPassCode() {
@@ -96,14 +93,13 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        paths = G.context.getResources().getStringArray(R.array.array_passCode);
-
         view.findViewById(R.id.asn_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         checkFingerPrint();
 
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
+        layoutModePassCode = (ViewGroup) view.findViewById(R.id.layout_mode_passCode);
         final ViewGroup rootSettingPassword = (ViewGroup) view.findViewById(R.id.rootSettingPassword);
         final ViewGroup rootEnterPassword = (ViewGroup) view.findViewById(R.id.rootEnterPassword);
         final ViewGroup vgTogglePassCode = (ViewGroup) view.findViewById(R.id.vgTogglePassCode);
@@ -111,6 +107,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         final ViewGroup vgAutoLock = (ViewGroup) view.findViewById(R.id.st_layout_autoLock);
         vgFingerPrint = (ViewGroup) view.findViewById(R.id.vgToggleFingerPrint);
 
+        txtModePassCode = (TextView) view.findViewById(R.id.mode_passCode);
         txtChangePassCode = (TextView) view.findViewById(R.id.st_txt_ChangePassCode);
         edtSetPassword = (EditText) view.findViewById(R.id.setPassword_edtSetPassword);
         txtSetPassword = (TextView) view.findViewById(R.id.setPassword_txtSetPassword);
@@ -136,6 +133,40 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                 popBackStackFragment();
 
                 closeKeyboard(v);
+
+            }
+        });
+
+        layoutModePassCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).items(R.array.modePassCode).itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                        switch (which) {
+                            case 0:
+                                // Whatever you want to happen when the first item gets selected
+                                edtSetPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
+                                maxLengthEditText(4);
+                                kindPassword = PIN;
+                                txtModePassCode.setText(G.context.getString(R.string.PIN));
+                                break;
+                            case 1:
+                                // Whatever you want to happen when the second item gets selected
+                                edtSetPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                                maxLengthEditText(20);
+                                kindPassword = PASSWORD;
+                                txtModePassCode.setText(G.context.getString(R.string.password));
+                                break;
+                        }
+
+                    }
+                }).build();
+
+                DialogAnimation.animationUp(dialog);
+                dialog.show();
 
             }
         });
@@ -170,16 +201,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         }
 
 
-        staticSpinner = (Spinner) view.findViewById(R.id.static_spinner);
-
-        // Create an ArrayAdapter using the string array and a default spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(G.fragmentActivity, R.layout.spinner_password, paths);
-
-        staticSpinner.setAdapter(adapter);
-        staticSpinner.setOnItemSelectedListener(this);
-        staticSpinner.setSelection(0);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        staticSpinner.getBackground().setColorFilter(G.context.getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
         if (isPassCode) {
 
             page = 3;
@@ -215,7 +236,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                     //txtSetPassword.setText(G.context.getResources().getString(R.string.enter_a_password));
                     //titlePassCode.setText("PIN");
                     titlePassCode.setVisibility(View.GONE);
-                    staticSpinner.setVisibility(View.VISIBLE);
+                    layoutModePassCode.setVisibility(View.VISIBLE);
                     if (kindPassword == PIN) {
                         edtSetPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
                     } else {
@@ -227,7 +248,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                     rootEnterPassword.setVisibility(View.GONE);
                     rootSettingPassword.setVisibility(View.GONE);
                     rippleOk.setVisibility(View.GONE);
-                    staticSpinner.setVisibility(View.GONE);
+                    layoutModePassCode.setVisibility(View.GONE);
                     txtChangePassCode.setEnabled(false);
                     txtChangePassCode.setTextColor(G.context.getResources().getColor(R.color.gray_5c));
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -263,7 +284,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
             @Override
             public void onClick(View v) {
                 page = 0;
-                staticSpinner.setSelection(0);
                 edtSetPassword.setText("");
                 vgTogglePassCode.setVisibility(View.GONE);
                 rootEnterPassword.setVisibility(View.VISIBLE);
@@ -271,7 +291,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                 rippleOk.setVisibility(View.VISIBLE);
                 //titlePassCode.setText("PIN");
                 titlePassCode.setVisibility(View.GONE);
-                staticSpinner.setVisibility(View.VISIBLE);
+                layoutModePassCode.setVisibility(View.VISIBLE);
                 txtSetPassword.setText(G.context.getResources().getString(R.string.enter_change_pass_code));
                 if (kindPassword == PIN) {
                     edtSetPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -421,7 +441,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                         rippleOk.setVisibility(View.GONE);
                         titlePassCode.setText(G.context.getResources().getString(R.string.two_step_pass_code));
                         titlePassCode.setVisibility(View.VISIBLE);
-                        staticSpinner.setVisibility(View.GONE);
+                        layoutModePassCode.setVisibility(View.GONE);
                         if (ActivityMain.iconLock != null) {
                             ActivityMain.iconLock.setVisibility(View.VISIBLE);
                         }
@@ -440,7 +460,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                             }
                         });
                         edtSetPassword.setText("");
-                        staticSpinner.setSelection(0);
                     } else {
                         closeKeyboard(v);
                         error(getString(R.string.Password_dose_not_match));
@@ -460,7 +479,7 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
                         rippleOk.setVisibility(View.GONE);
                         titlePassCode.setText(G.context.getResources().getString(R.string.two_step_pass_code));
                         titlePassCode.setVisibility(View.VISIBLE);
-                        staticSpinner.setVisibility(View.GONE);
+                        layoutModePassCode.setVisibility(View.GONE);
                         txtChangePassCode.setEnabled(true);
                         txtChangePassCode.setTextColor(G.context.getResources().getColor(R.color.black_register));
                         closeKeyboard(v);
@@ -640,28 +659,6 @@ public class FragmentPassCode extends BaseFragment implements AdapterView.OnItem
         }
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (position) {
-            case 0:
-                // Whatever you want to happen when the first item gets selected
-                edtSetPassword.setInputType(InputType.TYPE_CLASS_NUMBER);
-                maxLengthEditText(4);
-                kindPassword = PIN;
-                break;
-            case 1:
-                // Whatever you want to happen when the second item gets selected
-                edtSetPassword.setInputType(InputType.TYPE_CLASS_TEXT);
-                maxLengthEditText(20);
-                kindPassword = PASSWORD;
-                break;
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     private void maxLengthEditText(int numberOfLenth) {
         edtSetPassword.setFilters(new InputFilter[]{new InputFilter.LengthFilter(numberOfLenth)});

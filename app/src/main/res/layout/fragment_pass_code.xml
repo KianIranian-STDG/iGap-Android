@@ -59,17 +59,50 @@
               />
         </net.iGap.libs.rippleeffect.RippleView>
 
-        <Spinner
-            android:id="@+id/static_spinner"
+        <!--<Spinner-->
+        <!--android:id="@+id/static_spinner"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_toEndOf="@+id/stns_ripple_back"-->
+        <!--android:layout_toRightOf="@+id/stns_ripple_back"-->
+        <!--android:visibility="gone"-->
+        <!--android:gravity="center"-->
+        <!--/>-->
+
+        <LinearLayout
+            android:id="@+id/layout_mode_passCode"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
+            android:orientation="horizontal"
             android:layout_toEndOf="@+id/stns_ripple_back"
             android:layout_toRightOf="@+id/stns_ripple_back"
             android:visibility="gone"
+            >
+          <TextView
+              android:id="@+id/mode_passCode"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
             android:gravity="center"
+              android:text="@string/PIN"
+              android:textColor="@color/whit_background"
+              android:textSize="@dimen/dp18"
+              android:textStyle="normal"
+              android:visibility="visible"
+              fontPath="fonts/IRANSansMobile_Bold.ttf"
             />
 
+          <net.iGap.module.MaterialDesignTextView
+              android:layout_width="@dimen/dp22"
+              android:layout_height="match_parent"
+              android:layout_alignParentTop="true"
+              android:gravity="center"
+              android:text="@string/md_downwards_arrow"
+              android:textAppearance="@style/TextIconAppearance_toolbar"
+              android:textColor="@color/whit_background"
+              />
+
+        </LinearLayout>
         <TextView
             android:id="@+id/titlePassCode"
             android:layout_width="wrap_content"
