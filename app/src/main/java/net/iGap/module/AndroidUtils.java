@@ -335,6 +335,12 @@ public final class AndroidUtils {
 
     public static void copyFile(File src, File dst) throws IOException {
         InputStream in = new FileInputStream(src);
+
+        copyFile(in, dst);
+    }
+
+    public static void copyFile(InputStream in, File dst) throws IOException {
+
         OutputStream out = new FileOutputStream(dst);
 
         // Transfer bytes from in to out

@@ -87,7 +87,9 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -433,7 +435,6 @@ public class FragmentChat extends BaseFragment
     private boolean sendByEnter = false;
 
     private boolean isCloudRoom;
-    private boolean needUpdateView = false;
 
 
     private long biggestMessageId = 0;
@@ -567,11 +568,8 @@ public class FragmentChat extends BaseFragment
                 initLayoutHashNavigationCallback();
                 showSpamBar();
 
+                updateShowItemInScreen();
 
-                if (needUpdateView) {
-                    updateShowItemInScreen();
-                    needUpdateView = false;
-                }
 
                 if (isGoingFromUserLink) {
                     new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
@@ -774,7 +772,7 @@ public class FragmentChat extends BaseFragment
         onMusicListener = null;
         iUpdateLogItem = null;
 
-        needUpdateView = true;
+
 
         unRegisterListener();
     }
@@ -4881,6 +4879,54 @@ public class FragmentChat extends BaseFragment
     /**
      * *************************** sheared data ***************************
      */
+
+    private String getPathN(Uri uri, HelperGetDataFromOtherApp.FileType fileType) {
+
+        try {
+
+            if (uri == null) {
+                return null;
+            }
+
+            String name = AttachFile.getFileName(uri.getPath());
+            if (name == null || name.length() == 0) {
+                name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            }
+
+            String destinationPath = "";
+
+            switch (fileType) {
+
+                case video:
+                    destinationPath = G.DIR_VIDEOS;
+                    break;
+                case audio:
+                    destinationPath = G.DIR_AUDIOS;
+                    break;
+                case image:
+                    destinationPath = G.DIR_IMAGES;
+                    break;
+                default:
+                    destinationPath = G.DIR_DOCUMENT;
+                    break;
+            }
+
+            destinationPath += File.separator + name;
+
+            InputStream input = getContext().getContentResolver().openInputStream(uri);
+
+            AndroidUtils.copyFile(input, new File(destinationPath));
+
+            return destinationPath;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private void insertShearedData() {
         /**
          * run this method with delay , because client get local message with delay
@@ -4892,8 +4938,33 @@ public class FragmentChat extends BaseFragment
             @Override
             public void run() {
                 if (HelperGetDataFromOtherApp.hasSharedData) {
-
                     HelperGetDataFromOtherApp.hasSharedData = false;
+
+                    ArrayList<String> pathList = new ArrayList<String>();
+
+                    if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1) {
+
+                        Uri _Uri = HelperGetDataFromOtherApp.messageFileAddress.get(0);
+                        String _path = getFilePathFromUri(Uri.parse(_Uri.toString()));
+                        if (_path == null) {
+                            _path = getPathN(_Uri, messageType);
+                        }
+                        pathList.add(_path);
+                    } else {
+
+                        for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
+
+                            Uri _Uri = HelperGetDataFromOtherApp.messageFileAddress.get(i);
+                            String _path = getFilePathFromUri(Uri.parse(_Uri.toString()));
+
+                            if (_path == null) {
+                                _path = getPathN(_Uri, HelperGetDataFromOtherApp.fileTypeArray.get(i));
+                            }
+                            pathList.add(_path);
+                        }
+                    }
+
+
                     if (messageType == HelperGetDataFromOtherApp.FileType.message) {
 
                         String message = HelperGetDataFromOtherApp.message;
@@ -4901,13 +4972,13 @@ public class FragmentChat extends BaseFragment
                         imvSendButton.performClick();
                     } else if (messageType == HelperGetDataFromOtherApp.FileType.image) {
 
-                        for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-                            sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                        for (int i = 0; i < pathList.size(); i++) {
+                            sendMessage(AttachFile.request_code_TAKE_PICTURE, pathList.get(i));
                         }
                     } else if (messageType == HelperGetDataFromOtherApp.FileType.video) {
-                        if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
+                        if (pathList.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
                             final String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                            mainVideoPath = getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
+                            mainVideoPath = pathList.get(0);
 
                             if (mainVideoPath == null) {
                                 return;
@@ -4921,30 +4992,31 @@ public class FragmentChat extends BaseFragment
                             }, 200);
                             sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
                         } else {
-                            for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-                                compressedPath.put(getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(i).toString())), true);
-                                sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                            for (int i = 0; i < pathList.size(); i++) {
+                                compressedPath.put(pathList.get(i), true);
+                                sendMessage(request_code_VIDEO_CAPTURED, pathList.get(i));
                             }
                         }
                     } else if (messageType == HelperGetDataFromOtherApp.FileType.audio) {
 
-                        for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-                            sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                        for (int i = 0; i < pathList.size(); i++) {
+                            sendMessage(AttachFile.request_code_pic_audi, pathList.get(i));
                         }
                     } else if (messageType == HelperGetDataFromOtherApp.FileType.file) {
 
-                        for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
+                        for (int i = 0; i < pathList.size(); i++) {
                             HelperGetDataFromOtherApp.FileType fileType = messageType = HelperGetDataFromOtherApp.FileType.file;
                             if (HelperGetDataFromOtherApp.fileTypeArray.size() > 0) {
                                 fileType = HelperGetDataFromOtherApp.fileTypeArray.get(i);
                             }
 
                             if (fileType == HelperGetDataFromOtherApp.FileType.image) {
-                                sendMessage(AttachFile.request_code_TAKE_PICTURE, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                                sendMessage(AttachFile.request_code_TAKE_PICTURE, pathList.get(i));
                             } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
-                                if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
+                                if (pathList.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
                                     final String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                                    mainVideoPath = getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(0).toString()));
+                                    mainVideoPath = pathList.get(0);
+
                                     G.handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
@@ -4953,13 +5025,13 @@ public class FragmentChat extends BaseFragment
                                     }, 200);
                                     sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
                                 } else {
-                                    compressedPath.put(getFilePathFromUri(Uri.parse(HelperGetDataFromOtherApp.messageFileAddress.get(i).toString())), true);
-                                    sendMessage(request_code_VIDEO_CAPTURED, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                                    compressedPath.put(pathList.get(i), true);
+                                    sendMessage(request_code_VIDEO_CAPTURED, pathList.get(i));
                                 }
                             } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
-                                sendMessage(AttachFile.request_code_pic_audi, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                                sendMessage(AttachFile.request_code_pic_audi, pathList.get(i));
                             } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
-                                sendMessage(AttachFile.request_code_open_document, HelperGetDataFromOtherApp.messageFileAddress.get(i).toString());
+                                sendMessage(AttachFile.request_code_open_document, pathList.get(i));
                             }
                         }
                     }
