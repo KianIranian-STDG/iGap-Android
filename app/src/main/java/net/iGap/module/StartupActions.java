@@ -17,10 +17,6 @@ import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Locale;
 import net.iGap.Config;
 import net.iGap.G;
@@ -195,45 +191,8 @@ public final class StartupActions {
         int checkedSaveToGallery = preferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
         isSaveToGallery = checkedSaveToGallery == 1;
 
-        /**
-         * copy country list
-         */
-        SharedPreferences sharedPreferences = context.getSharedPreferences("CopyDataBase", MODE_PRIVATE);
-        boolean isCopyFromAsset = sharedPreferences.getBoolean("isCopyRealm", true);
-        if (isCopyFromAsset) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("isCopyRealm", false);
-            editor.apply();
-            try {
-                copyCountryListFromAsset();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
         textSizeDetection(preferences);
         languageDetection(preferences);
-    }
-
-    /**
-     * copy country list from assets just once for use in registration
-     *
-     * @throws IOException
-     */
-    private void copyCountryListFromAsset() throws IOException {
-        InputStream inputStream = context.getAssets().open("CountryListA.realm");
-        Realm realm = Realm.getDefaultInstance();
-        String outFileName = realm.getPath();
-        OutputStream outputStream = new FileOutputStream(outFileName);
-        byte[] buffer = new byte[1024];
-        int len;
-        while ((len = inputStream.read(buffer)) > 0) {
-            outputStream.write(buffer, 0, len);
-        }
-        outputStream.flush();
-        outputStream.close();
-        inputStream.close();
-        realm.close();
     }
 
     /**

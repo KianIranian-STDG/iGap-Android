@@ -56,8 +56,6 @@ dependencies {
   }
   compile project(':messageprogress')
   compile project(':proto')
-
-  compile project(':audioplayerview')
   compile project(':websocket')
   compile project(':libwebrtc')
   compile('com.afollestad.material-dialogs:core:0.9.4.5') {
