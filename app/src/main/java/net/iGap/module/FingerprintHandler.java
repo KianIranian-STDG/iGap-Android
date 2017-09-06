@@ -23,7 +23,8 @@ import net.iGap.G;
 
 
     private Context context;
-
+    private CancellationSignal mCancellationSignal;
+    private boolean mSelfCancelled;
 
     // Constructor
     public FingerprintHandler(Context mContext) {
@@ -32,13 +33,21 @@ import net.iGap.G;
 
 
     public void startAuth(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject) {
-        CancellationSignal cancellationSignal = new CancellationSignal();
+        mCancellationSignal = new CancellationSignal();
+        mSelfCancelled = false;
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
+        manager.authenticate(cryptoObject, mCancellationSignal, 0, this, null);
     }
 
+    public void stopListening() {
+        if (mCancellationSignal != null) {
+            mSelfCancelled = true;
+            mCancellationSignal.cancel();
+            mCancellationSignal = null;
+        }
+    }
 
     @Override
     public void onAuthenticationError(int errMsgId, CharSequence errString) {
@@ -72,7 +81,7 @@ import net.iGap.G;
                 G.fingerPrint.success();
             }
         } else {
-            if (G.fingerPrint != null && !e.contains("Fingerprint operation canceled.")) {
+            if (G.fingerPrint != null && !e.contains("Fingerprint operation canceled.") && !mSelfCancelled) {
                 G.fingerPrint.error();
             }
         }

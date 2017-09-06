@@ -78,6 +78,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
     private RealmUserInfo realmUserInfo;
     private MaterialDialog dialogForgot;
     private EditText edtPassword;
+    private FingerprintHandler helper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -134,7 +135,12 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
 
         if (isFingerPrint) {
 
-            dialog = new MaterialDialog.Builder(this).title(getString(R.string.FingerPrint)).customView(R.layout.dialog_finger_print, true).negativeText(getResources().getString(R.string.B_cancel)).build();
+            dialog = new MaterialDialog.Builder(this).title(getString(R.string.FingerPrint)).customView(R.layout.dialog_finger_print, true).onNegative(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    helper.stopListening();
+                }
+            }).negativeText(getResources().getString(R.string.B_cancel)).build();
 
             View viewDialog = dialog.getView();
 
@@ -321,11 +327,24 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
     public void onResume() {
         super.onResume();
 
+        if (isFingerPrint) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                generateKey();
+                if (cipherInit()) {
+                    FingerprintManager.CryptoObject cryptoObject = null;
+                    cryptoObject = new FingerprintManager.CryptoObject(cipher);
+                    helper = new FingerprintHandler(this);
+                    helper.startAuth(fingerprintManager, cryptoObject);
+                }
+            }
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        helper.stopListening();
         realm.close();
         ActivityMain.isActivityEnterPassCode = false;
     }
