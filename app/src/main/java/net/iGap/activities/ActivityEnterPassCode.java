@@ -350,7 +350,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
 
         if (isFingerPrint) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                helper.stopListening();
+                if (helper != null) helper.stopListening();
             }
         }
         realm.close();
