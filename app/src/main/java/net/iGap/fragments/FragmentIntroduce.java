@@ -100,20 +100,20 @@ public class FragmentIntroduce extends BaseFragment {
 
         boolean beforeState = G.isLandscape;
 
-            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                G.isLandscape = true;
-            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                G.isLandscape = false;
-            }
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            G.isLandscape = true;
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            G.isLandscape = false;
+        }
 
-            if (beforeState != G.isLandscape) {
+        if (beforeState != G.isLandscape) {
 
-                getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commit();
 
-                FragmentIntroduce fragment = new FragmentIntroduce();
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
+            FragmentIntroduce fragment = new FragmentIntroduce();
+            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
                     setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
-            }
+        }
 
         super.onConfigurationChanged(newConfig);
     }
@@ -403,39 +403,48 @@ public class FragmentIntroduce extends BaseFragment {
     }
 
     private void startRegistration() {
+        try {
+            registrationTry = true;
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (G.socketConnection) {
+                        if (body != null & enableRegistration & (!isoCode.equals("") || !locationFound)) {
+                            enableRegistration = false;
 
-        registrationTry = true;
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (G.socketConnection) {
-                    if (body != null & enableRegistration & (!isoCode.equals("") || !locationFound)) {
-                        enableRegistration = false;
+                            FragmentRegister fragment = new FragmentRegister();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("ISO_CODE", isoCode);
+                            bundle.putInt("CALLING_CODE", callingCode);
+                            bundle.putString("COUNTRY_NAME", countryName);
+                            bundle.putString("PATTERN", pattern);
+                            bundle.putString("REGEX", regex);
+                            bundle.putString("TERMS_BODY", body);
+                            fragment.setArguments(bundle);
 
-                        FragmentRegister fragment = new FragmentRegister();
-                        Bundle bundle = new Bundle();
-
-                        bundle.putString("ISO_CODE", isoCode);
-                        bundle.putInt("CALLING_CODE", callingCode);
-                        bundle.putString("COUNTRY_NAME", countryName);
-                        bundle.putString("PATTERN", pattern);
-                        bundle.putString("REGEX", regex);
-                        bundle.putString("TERMS_BODY", body);
-
-                        fragment.setArguments(bundle);
-
-                        G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
-                            setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
-
-                        G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commit();
-
-
-
+                            G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+                            G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commit();
+                        } else {
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.Toast_waiting_fot_get_info), Snackbar.LENGTH_LONG);
+                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            snack.dismiss();
+                                        }
+                                    });
+                                    snack.show();
+                                }
+                            });
+                            getInfo();
+                        }
                     } else {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.Toast_waiting_fot_get_info), Snackbar.LENGTH_LONG);
+                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.waiting_for_connection), Snackbar.LENGTH_LONG);
                                 snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -445,28 +454,14 @@ public class FragmentIntroduce extends BaseFragment {
                                 snack.show();
                             }
                         });
-                        getInfo();
                     }
-                } else {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
 
-                            final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.waiting_for_connection), Snackbar.LENGTH_LONG);
-
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
-                        }
-                    });
                 }
-            }
-        });
-        thread.start();
+            });
+            thread.start();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getInfo() {
