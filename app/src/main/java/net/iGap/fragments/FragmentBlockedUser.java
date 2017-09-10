@@ -90,7 +90,7 @@ public class FragmentBlockedUser extends BaseFragment {
                 Bundle bundle = new Bundle();
                 // if you want to have  single select in select list
                 fragment.setArguments(bundle);
-                new HelperFragment(fragment).load();
+                new HelperFragment(fragment).setReplace(false).load();
             }
         });
 

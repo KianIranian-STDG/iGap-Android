@@ -2623,7 +2623,7 @@ public class FragmentChat extends BaseFragment
          */
         G.onClearChatHistory = null;
 
-        new HelperFragment(FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString())).load();
+        new HelperFragment(FragmentContactsProfile.newInstance(mRoomId, parseLong(messageInfo.senderID), GROUP.toString())).setReplace(false).load();
     }
 
     @Override

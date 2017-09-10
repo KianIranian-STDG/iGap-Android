@@ -493,7 +493,7 @@ public class HelperLogMessage {
             bundle.putString("enterFrom", "GROUP");
             contactsProfile.setArguments(bundle);
 
-            new HelperFragment(contactsProfile).load();
+            new HelperFragment(contactsProfile).setReplace(false).load();
 
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
@@ -508,7 +508,7 @@ public class HelperLogMessage {
                             bundle.putLong("RoomId", roomId);
                             bundle.putString("enterFrom", "GROUP");
                             contactsProfile.setArguments(bundle);
-                            new HelperFragment(contactsProfile).load();
+                            new HelperFragment(contactsProfile).setReplace(false).load();
                             G.onChatGetRoom = null;
                         }
                     });

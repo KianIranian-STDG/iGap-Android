@@ -109,7 +109,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                                     @Override
                                     public void run() {
                                         FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition);
-                                        new HelperFragment(fragment).load();
+                                        new HelperFragment(fragment).setReplace(false).load();
                                     }
                                 });
                             }

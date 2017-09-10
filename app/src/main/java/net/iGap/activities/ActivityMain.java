@@ -292,7 +292,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.i("PPPPPPPPPP", "onCreate");
         if (G.isFirstPassCode) {
             openActivityPassCode();
         }

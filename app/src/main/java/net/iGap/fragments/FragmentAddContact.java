@@ -108,7 +108,7 @@ public class FragmentAddContact extends BaseFragment {
         txtChooseCountry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HelperFragment(new FragmentChooseCountry()).load();
+                new HelperFragment(new FragmentChooseCountry()).setReplace(false).load();
                 closeKeyboard(v);
             }
         });

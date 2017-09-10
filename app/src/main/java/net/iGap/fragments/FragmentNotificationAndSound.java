@@ -1055,7 +1055,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                         Toast.makeText(G.fragmentActivity, G.context.getResources().getString(R.string.st_reset_all_notification), Toast.LENGTH_SHORT).show();
 
                         removeFromBaseFragment(FragmentNotificationAndSound.this);
-                        new HelperFragment(new FragmentNotificationAndSound()).load();
+                        new HelperFragment(new FragmentNotificationAndSound()).setReplace(false).load();
 
                     }
                 }).show();

@@ -547,6 +547,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                 @Override
                                 public void run() {
                                     txtNickname.setText(firstName + " " + lastName);
+                                    titleToolbar.setText(firstName + " " + lastName);
                                 }
                             });
                         }
@@ -1101,6 +1102,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     @Override
                     public void run() {
                         txtNickname.setText(user.getDisplayName());
+                        titleToolbar.setText(user.getDisplayName());
                     }
                 });
             }

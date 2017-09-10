@@ -168,7 +168,7 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
         txtPassCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HelperFragment(new FragmentPassCode()).load();
+                new HelperFragment(new FragmentPassCode()).setReplace(false).load();
             }
         });
 
@@ -176,7 +176,7 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
         txtSecurity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HelperFragment(new FragmentSecurity()).load();
+                new HelperFragment(new FragmentSecurity()).setReplace(false).load();
             }
         });
 
@@ -184,7 +184,7 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
         txtActiveSessions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new HelperFragment(new FragmentActiveSessions()).load();
+                new HelperFragment(new FragmentActiveSessions()).setReplace(false).load();
             }
         });
 
@@ -192,7 +192,7 @@ public class FragmentPrivacyAndSecurity extends BaseFragment {
         txtBlockedUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new HelperFragment(new FragmentBlockedUser()).load();
+                new HelperFragment(new FragmentBlockedUser()).setReplace(false).load();
             }
         });
 

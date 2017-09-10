@@ -1495,7 +1495,7 @@ public class FragmentShearedMedia extends BaseFragment {
             fragment.setArguments(bundle);
 
             fragment.appBarLayout = appBarLayout;
-            new HelperFragment(fragment).load();
+            new HelperFragment(fragment).setReplace(false).load();
         }
     }
 
@@ -1634,7 +1634,7 @@ public class FragmentShearedMedia extends BaseFragment {
             bundle.putLong("SelectedImage", selectedFileToken);
             bundle.putString("TYPE", ProtoGlobal.RoomMessageType.VIDEO.toString());
             fragment.setArguments(bundle);
-            new HelperFragment(fragment).load();
+            new HelperFragment(fragment).setReplace(false).load();
         }
     }
 

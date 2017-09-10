@@ -252,7 +252,7 @@ public class RegisteredContactsFragment extends BaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
                 fragment.setArguments(bundle);
-                new HelperFragment(fragment).load();
+                new HelperFragment(fragment).setReplace(false).load();
             }
         });
 
