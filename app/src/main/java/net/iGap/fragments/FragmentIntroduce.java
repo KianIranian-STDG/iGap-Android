@@ -106,15 +106,15 @@ public class FragmentIntroduce extends BaseFragment {
             G.isLandscape = false;
         }
 
-        if (beforeState != G.isLandscape) {
-
-            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commit();
-
-            FragmentIntroduce fragment = new FragmentIntroduce();
-            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
-                    setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+        try {
+            if (beforeState != G.isLandscape) {
+                G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commit();
+                FragmentIntroduce fragment = new FragmentIntroduce();
+                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+            }
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
         }
-
         super.onConfigurationChanged(newConfig);
     }
 
