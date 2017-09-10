@@ -811,8 +811,8 @@ public class FragmentChat extends BaseFragment
         MusicPlayer.chatLayout = null;
         ActivityCall.stripLayoutChat = null;
 
-        ActivityMain.setMediaLayout();
-        ActivityMain.setStripLayoutCall();
+        //  ActivityMain.setMediaLayout();
+        // ActivityMain.setStripLayoutCall();
 
         if (!G.twoPaneMode) {
             try {
@@ -875,7 +875,7 @@ public class FragmentChat extends BaseFragment
         } else if (emojiPopup != null && emojiPopup.isShowing()) {
             emojiPopup.dismiss();
         } else {
-            removeFromBaseFragment();
+            return false;
         }
 
         return stopSuperPress;

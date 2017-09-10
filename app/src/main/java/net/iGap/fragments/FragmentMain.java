@@ -844,7 +844,8 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                                     Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
                                     if (fragment != null) {
 
-                                        if (FragmentChat.mRoomIdStatic == mInfo.getId()) {
+                                        FragmentChat fm = (FragmentChat) fragment;
+                                        if (fm.mRoomId == mInfo.getId() && fm.mRoomId > 0) {
                                             openChat = false;
                                         } else {
                                             removeFromBaseFragment(fragment);

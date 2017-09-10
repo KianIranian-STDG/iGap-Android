@@ -839,6 +839,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     if (mViewPager.getAdapter().getCount() > 0) {
                         navigationTabStrip.setTabIndex(mViewPager.getCurrentItem());
                     }
+
+                    navigationTabStrip.setOnTabStripSelectedIndexListener(new NavigationTabStrip.OnTabStripSelectedIndexListener() {
+                        @Override
+                        public void onStartTabSelected(String title, int index) {
+
+                        }
+
+                        @Override
+                        public void onEndTabSelected(String title, int index) {
+
+                            onSelectItem(index);
+                        }
+                    });
+
+
                 } catch (Exception e) {
 
                     HelperLog.setErrorLog("Activity main     setmViewPagerSelectedItem    " + index + "     " + HelperCalander.isLanguagePersian + "    " + e.toString());
@@ -865,18 +880,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
         navigationTabStrip.setStripColor(Color.WHITE);
 
-        navigationTabStrip.setOnTabStripSelectedIndexListener(new NavigationTabStrip.OnTabStripSelectedIndexListener() {
-            @Override
-            public void onStartTabSelected(String title, int index) {
 
-            }
-
-            @Override
-            public void onEndTabSelected(String title, int index) {
-
-                onSelectItem(index);
-            }
-        });
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setOffscreenPageLimit(5);

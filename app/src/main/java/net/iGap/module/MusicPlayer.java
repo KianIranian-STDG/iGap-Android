@@ -116,6 +116,7 @@ public class MusicPlayer extends Service {
     public static boolean pauseSoundFromCall = false;
     public static boolean isMusicPlyerEnable = false;
     private static int stateHedset = -1;
+    public static boolean firstGetStateHeadSet = false;
 
     public static boolean playNextMusic = false;
 
@@ -1142,7 +1143,9 @@ public class MusicPlayer extends Service {
 
         registerMediaBottom();
 
+        firstGetStateHeadSet = false;
         headsetPluginReciver = new HeadsetPluginReciver();
+
 
         mSensorManager = (SensorManager) G.context.getSystemService(Context.SENSOR_SERVICE);
         mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
@@ -1244,7 +1247,10 @@ public class MusicPlayer extends Service {
 
                             setSpeaker();
 
-                            pauseSound();
+                            if (firstGetStateHeadSet) {
+                                pauseSound();
+                            }
+
 
                             //  Log.d("dddddd", "Headset is unplugged");
                             break;
@@ -1257,6 +1263,11 @@ public class MusicPlayer extends Service {
                         //default:
                         //    Log.d("dddddd", "I have no idea what the headset state is");
                     }
+
+                    if (!firstGetStateHeadSet) {
+                        firstGetStateHeadSet = true;
+                    }
+
                 }
             }
         }
