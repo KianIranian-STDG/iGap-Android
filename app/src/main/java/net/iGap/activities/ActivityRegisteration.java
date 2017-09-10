@@ -22,13 +22,9 @@ public class ActivityRegisteration extends ActivityEnhanced {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         isOnGetPermistion = true;
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_registeration);
-
 
         try {
             HelperPermision.getStoragePermision(this, new OnGetPermission() {
@@ -41,7 +37,7 @@ public class ActivityRegisteration extends ActivityEnhanced {
                     try {
                         showPro = getIntent().getExtras().getBoolean(showProfile);
                     } catch (Exception e) {
-
+                        e.printStackTrace();
                     }
 
                     if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -52,14 +48,10 @@ public class ActivityRegisteration extends ActivityEnhanced {
 
                     layoutRoot = (FrameLayout) findViewById(R.id.ar_layout_root);
 
-                    //if (G.twoPaneMode) {
-                    //    setFraymeSize();
-                    //}
-
                     if (showPro) {
                         loadFragmentProfile();
                     } else {
-                        loadFragmentIntrodius();
+                        loadFragmentIntroduce();
                     }
                 }
 
@@ -71,43 +63,31 @@ public class ActivityRegisteration extends ActivityEnhanced {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
     }
 
     private void loadFragmentProfile() {
-
         FragmentRegistrationNickname fragment = new FragmentRegistrationNickname();
-
-        //Bundle  bundle=new Bundle();
-        //bundle.putLong(FragmentRegistrationNickname.ARG_USER_ID, userId);
-        //
-        //fragment.setArguments(bundle);
-
-        getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
-            setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
     }
 
     private void setFraymeSize() {
-
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
         int width = displayMetrics.widthPixels;
-
         int size = Math.min(width, height) - 50;
-
         ViewGroup.LayoutParams lp = layoutRoot.getLayoutParams();
         lp.width = size;
         lp.height = size;
     }
 
-    private void loadFragmentIntrodius() {
-
-        FragmentIntroduce fragment = new FragmentIntroduce();
-
-        getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
-            setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+    private void loadFragmentIntroduce() {
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                FragmentIntroduce fragment = new FragmentIntroduce();
+                getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+            }
+        }, 1000);
     }
 }
