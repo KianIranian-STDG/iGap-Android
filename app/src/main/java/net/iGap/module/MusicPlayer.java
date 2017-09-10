@@ -340,11 +340,19 @@ public class MusicPlayer extends Service {
                 onComplete.complete(true, "play", "");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            HelperLog.setErrorLog("music player   pauseSound   aaa    " + e.toString());
         }
 
-        isPause = true;
-        mp.pause();
+        try {
+            if (mp != null && mp.isPlaying()) {
+                mp.pause();
+                isPause = true;
+            }
+        } catch (Exception e) {
+            HelperLog.setErrorLog("music player   pauseSound   bbb    " + e.toString());
+        }
+
+
     }
 
     //**************************************************************************
@@ -381,15 +389,19 @@ public class MusicPlayer extends Service {
                 onComplete.complete(true, "pause", "");
             }
         } catch (Exception e) {
+            HelperLog.setErrorLog("music player   playSound   aaa    " + e.toString());
         }
 
-        if (isPause) {
-
-            mp.start();
-            isPause = false;
-            updateProgress();
-        } else {
-            startPlayer(musicName, musicPath, roomName, roomId, false, MusicPlayer.messageId);
+        try {
+            if (mp != null && isPause) {
+                mp.start();
+                isPause = false;
+                updateProgress();
+            } else {
+                startPlayer(musicName, musicPath, roomName, roomId, false, MusicPlayer.messageId);
+            }
+        } catch (Exception e) {
+            HelperLog.setErrorLog("music player   playSound  bbb " + e.toString());
         }
     }
 
@@ -624,11 +636,20 @@ public class MusicPlayer extends Service {
             layoutTripMusic.setVisibility(View.VISIBLE);
         }
 
-        if (name == null) {
-            name = "";
-        }
+        try {
 
-        musicName = name.length() > 0 ? name : musicPath.substring(musicPath.lastIndexOf("/") + 1);
+            if (name == null) {
+                name = "";
+            }
+
+            if (name.length() > 0) {
+                musicName = name;
+            } else if (musicPath != null && musicPath.length() > 0) {
+                musicName = musicPath.substring(musicPath.lastIndexOf("/") + 1);
+            }
+        } catch (Exception e) {
+
+        }
 
         try {
 
