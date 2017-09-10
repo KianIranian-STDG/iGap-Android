@@ -222,7 +222,7 @@ public class HelperFragment {
 
         int resId = 0;
 
-        if (G.twoPaneMode) {
+        if (G.twoPaneMode && !fragmentClassName.equals("net.iGap.fragments.FragmentShowImage")) {
 
             if (isChatFragment(fragmentClassName)) {
 
