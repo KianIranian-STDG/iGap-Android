@@ -875,7 +875,7 @@ public class FragmentChat extends BaseFragment
         } else if (emojiPopup != null && emojiPopup.isShowing()) {
             emojiPopup.dismiss();
         } else {
-            return false;
+            removeFromBaseFragment();
         }
 
         return stopSuperPress;

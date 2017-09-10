@@ -838,17 +838,28 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                         } else {
                             if (mInfo.isValid() && G.fragmentActivity != null) {
 
+                                boolean openChat = true;
+
                                 if (G.twoPaneMode) {
                                     Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
                                     if (fragment != null) {
-                                        removeFromBaseFragment(fragment);
+
+                                        if (FragmentChat.mRoomIdStatic == mInfo.getId()) {
+                                            openChat = false;
+                                        } else {
+                                            removeFromBaseFragment(fragment);
+                                        }
+
+
                                     }
                                 }
 
-                                new GoToChatActivity(mInfo.getId()).startActivity();
+                                if (openChat) {
+                                    new GoToChatActivity(mInfo.getId()).startActivity();
 
-                                if (((ActivityMain) G.fragmentActivity).arcMenu != null && ((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
-                                    ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
+                                    if (((ActivityMain) G.fragmentActivity).arcMenu != null && ((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
+                                        ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
+                                    }
                                 }
                             }
                         }
