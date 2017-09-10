@@ -477,7 +477,7 @@ public class HelperAvatar {
     }
 
     private static void syncAvatarAdd(long ownerId, String avatarPath) {
-        if (G.twoPaneMode) {
+        if (G.twoPaneMode && onAvatarSync.get(ownerId) != null) {
             for (OnAvatarGet listener : onAvatarSync.get(ownerId)) {
                 listener.onAvatarGet(avatarPath, ownerId);
             }
