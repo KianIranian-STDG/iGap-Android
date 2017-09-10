@@ -72,7 +72,7 @@ public class MusicPlayer extends Service {
     private static Sensor mProximity;
     private static SensorEventListener sensorEventListener;
     private static final int SENSOR_SENSITIVITY = 4;
-    private static boolean isRegisterReciver = false;
+
 
     public static final int notificationId = 19;
     public static String repeatMode = RepeatMode.noRepeat.toString();
@@ -124,7 +124,6 @@ public class MusicPlayer extends Service {
     private static HeadsetPluginReciver headsetPluginReciver;
 
     private static RemoteControlClient remoteControlClient;
-    private static AudioManager audioManager;
     private static ComponentName remoteComponentName;
     public static boolean downloadNewItem = false;
 
@@ -153,7 +152,16 @@ public class MusicPlayer extends Service {
     public void onCreate() {
         super.onCreate();
 
-        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        initSensore();
+
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        removeSensore();
     }
 
     @Override
@@ -171,7 +179,7 @@ public class MusicPlayer extends Service {
 
                     if (notification != null) {
                         startForeground(notificationId, notification);
-                        registerMediaBottom();
+
                     }
 
                 } else if (action.equals(STOPFOREGROUND_ACTION)) {
@@ -197,9 +205,7 @@ public class MusicPlayer extends Service {
 
         getAtribuits();
 
-        initSensore();
 
-        headsetPluginReciver = new HeadsetPluginReciver();
     }
 
     public static void repeatClick() {
@@ -343,7 +349,16 @@ public class MusicPlayer extends Service {
 
     //**************************************************************************
 
-    private static void playSound() {
+    public static void playSound() {
+
+        if (mp == null) {
+            return;
+        }
+
+        if (mp.isPlaying()) {
+            return;
+        }
+
 
         try {
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
@@ -368,7 +383,7 @@ public class MusicPlayer extends Service {
         } catch (Exception e) {
         }
 
-        if (isPause && mp != null) {
+        if (isPause) {
 
             mp.start();
             isPause = false;
@@ -571,20 +586,7 @@ public class MusicPlayer extends Service {
             mRealm = null;
         }
 
-        try {
-            if (isRegisterReciver) {
-                G.context.unregisterReceiver(headsetPluginReciver);
 
-                unRegisterDistanceSensore();
-
-                isRegisterReciver = false;
-
-                clearWallpaperLockScrean();
-                removeMediaControl();
-            }
-        } catch (Exception e) {
-
-        }
 
 
     }
@@ -641,11 +643,7 @@ public class MusicPlayer extends Service {
 
             mp = new MediaPlayer();
 
-            if (!isRegisterReciver) {
-                IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-                G.context.registerReceiver(headsetPluginReciver, filter);
-                registerDistanceSensor();
-            }
+
         } catch (Exception e) {
 
         }
@@ -681,15 +679,6 @@ public class MusicPlayer extends Service {
                 onComplete.complete(true, "update", "");
             }
 
-            try {
-                if (mp.isPlaying()) {
-                    remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
-                } else {
-                    remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
-                }
-                notificationManager.notify(notificationId, notification);
-            } catch (RuntimeException e) {
-            }
         } catch (Exception e) {
         }
 
@@ -793,13 +782,13 @@ public class MusicPlayer extends Service {
         remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
         remoteViews.setTextViewText(R.id.mln_txt_music_outher, MusicPlayer.musicInfoTitle);
 
-        if (mp != null) {
-            if (mp.isPlaying()) {
+        //if (mp != null) {
+        //    if (mp.isPlaying()) {
                 remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
-            } else {
-                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
-            }
-        }
+        //    } else {
+        //        remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
+        //    }
+        //}
 
         Intent intentPrevious = new Intent(G.context, customButtonListener.class);
         intentPrevious.putExtra("mode", "previous");
@@ -1130,9 +1119,12 @@ public class MusicPlayer extends Service {
 
     private static void initSensore() {
 
+        registerMediaBottom();
+
+        headsetPluginReciver = new HeadsetPluginReciver();
+
         mSensorManager = (SensorManager) G.context.getSystemService(Context.SENSOR_SERVICE);
         mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-
         sensorEventListener = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
@@ -1159,6 +1151,37 @@ public class MusicPlayer extends Service {
 
             }
         };
+
+        IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+        G.context.registerReceiver(headsetPluginReciver, filter);
+        registerDistanceSensor();
+
+
+    }
+
+    private static void removeSensore() {
+
+        try {
+            if (remoteComponentName != null) {
+
+                AudioManager audioManager = (AudioManager) G.context.getSystemService(AUDIO_SERVICE);
+
+                audioManager.unregisterMediaButtonEventReceiver(remoteComponentName);
+            }
+        } catch (Exception e) {
+            Log.e("ddddd", "music plyer  removeSensore   audioManager   " + e.toString());
+        }
+
+        try {
+
+            G.context.unregisterReceiver(headsetPluginReciver);
+        } catch (Exception e) {
+            Log.e("ddddd", "music plyer  removeSensore    unregisterReceiver " + e.toString());
+        }
+
+        unRegisterDistanceSensore();
+        clearWallpaperLockScrean();
+        removeMediaControl();
     }
 
     private static void registerDistanceSensor() {
@@ -1249,6 +1272,7 @@ public class MusicPlayer extends Service {
 
                 try {
                     remoteComponentName = new ComponentName(G.context, MediaBottomReciver.class.getName());
+                    AudioManager audioManager = (AudioManager) G.context.getSystemService(AUDIO_SERVICE);
                     audioManager.registerMediaButtonEventReceiver(remoteComponentName);
                 } catch (Exception e) {
                     HelperLog.setErrorLog(" music plyer   registerMediaBottom    " + e.toString());
@@ -1271,6 +1295,7 @@ public class MusicPlayer extends Service {
                 mediaButtonIntent.setComponent(remoteComponentName);
                 PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(G.context, 55, mediaButtonIntent, 0);
                 remoteControlClient = new RemoteControlClient(mediaPendingIntent);
+                AudioManager audioManager = (AudioManager) G.context.getSystemService(AUDIO_SERVICE);
                 audioManager.registerRemoteControlClient(remoteControlClient);
             }
             remoteControlClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_PLAY
@@ -1303,6 +1328,7 @@ public class MusicPlayer extends Service {
                 RemoteControlClient.MetadataEditor metadataEditor = remoteControlClient.editMetadata(true);
                 metadataEditor.clear();
                 metadataEditor.apply();
+                AudioManager audioManager = (AudioManager) G.context.getSystemService(AUDIO_SERVICE);
                 audioManager.unregisterRemoteControlClient(remoteControlClient);
 
                 remoteControlClient = null;
@@ -1312,18 +1338,7 @@ public class MusicPlayer extends Service {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
 
-        try {
-            if (remoteComponentName != null) {
-                audioManager.unregisterMediaButtonEventReceiver(remoteComponentName);
-            }
-        } catch (Exception e) {
-            Log.e("ddddd", "music plyer  onDestroy    " + e.toString());
-        }
-    }
 
     private static void setWallpaperLockScreen(Bitmap bitmap) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

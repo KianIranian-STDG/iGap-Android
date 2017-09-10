@@ -162,9 +162,15 @@ public class FragmentMediaPlayer extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        MusicPlayer.isShowMediaPlayer = true;
-        updateUi();
-        MusicPlayer.onComplete = onComplete;
+
+        if (MusicPlayer.mp == null) {
+            removeFromBaseFragment();
+        } else {
+            MusicPlayer.isShowMediaPlayer = true;
+            updateUi();
+            MusicPlayer.onComplete = onComplete;
+        }
+
 
     }
 

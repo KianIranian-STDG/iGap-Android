@@ -21,31 +21,12 @@ public class MyPhoneStateListener extends PhoneStateListener {
             lastPhoneState = state;
 
             if (state == TelephonyManager.CALL_STATE_RINGING) {
-
-                if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
-
-                    MusicPlayer.pauseSound();
-                    MusicPlayer.pauseSoundFromCall = true;
-
-                    AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-
-                    if (am.isBluetoothScoOn()) {
-                        isBlutoothOn = true;
-                        am.setBluetoothScoOn(false);
-
-                        try {
-                            am.stopBluetoothSco();
-                        } catch (Exception e) {
-                            HelperLog.setErrorLog("myPhoneStateListener    " + e.toString());
-                        }
-
-                    }
-                }
+                pauseSoundIfPlay();
             } else if (state == TelephonyManager.CALL_STATE_IDLE) {
 
                 if (MusicPlayer.pauseSoundFromCall) {
                     MusicPlayer.pauseSoundFromCall = false;
-                    MusicPlayer.playAndPause();
+                    MusicPlayer.playSound();
 
                     if (isBlutoothOn) {
                         isBlutoothOn = false;
@@ -53,10 +34,31 @@ public class MyPhoneStateListener extends PhoneStateListener {
                         AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
                         am.setBluetoothScoOn(true);
                     }
-
                 }
             } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                pauseSoundIfPlay();
+            }
+        }
+    }
 
+    private void pauseSoundIfPlay() {
+
+        if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying()) {
+
+            MusicPlayer.pauseSound();
+            MusicPlayer.pauseSoundFromCall = true;
+
+            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+
+            if (am.isBluetoothScoOn()) {
+                isBlutoothOn = true;
+                am.setBluetoothScoOn(false);
+
+                try {
+                    am.stopBluetoothSco();
+                } catch (Exception e) {
+                    HelperLog.setErrorLog("myPhoneStateListener    " + e.toString());
+                }
             }
         }
     }

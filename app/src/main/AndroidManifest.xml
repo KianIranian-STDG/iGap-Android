@@ -104,6 +104,7 @@
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
         android:launchMode="singleTask"
         android:maxRecents="1"
+        android:windowSoftInputMode="stateUnchanged"
         android:theme="@style/AppThemeTranslucent">
 
 
