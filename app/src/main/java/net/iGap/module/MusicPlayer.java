@@ -810,7 +810,7 @@ public class MusicPlayer extends Service {
         PendingIntent pendingIntentClose = PendingIntent.getBroadcast(G.context, 4, intentClose, 0);
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
-        notification = new NotificationCompat.Builder(G.context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_audio).setContentTitle(musicName)
+        notification = new NotificationCompat.Builder(G.context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName)
             //  .setContentText(place)
             .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
 
