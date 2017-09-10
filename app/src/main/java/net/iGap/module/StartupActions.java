@@ -114,7 +114,7 @@ public final class StartupActions {
             G.twoPaneMode = false;
         }
 
-        if (G.context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE || G.twoPaneMode) {
+        if (G.context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || G.twoPaneMode) {
             G.maxChatBox = Math.min(metrics.widthPixels, metrics.heightPixels) - ViewMaker.i_Dp(R.dimen.dp80);
         } else {
             G.maxChatBox = Math.max(metrics.widthPixels, metrics.heightPixels) - ViewMaker.i_Dp(R.dimen.dp80);

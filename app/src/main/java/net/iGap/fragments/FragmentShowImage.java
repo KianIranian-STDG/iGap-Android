@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.view.LayoutInflater;
@@ -736,6 +737,7 @@ public class FragmentShowImage extends BaseFragment {
             if (videoController == null) videoController = new MediaController(G.fragmentActivity);
             mTextureView.setVisibility(View.VISIBLE);
             videoPath = getFilePath(position);
+            ViewCompat.setLayoutDirection(videoController, View.LAYOUT_DIRECTION_LTR);
             videoController.setAnchorView(touchImageView);
             videoController.setMediaPlayer(this);
             imgPlay.setVisibility(View.GONE);
