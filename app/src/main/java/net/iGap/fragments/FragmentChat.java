@@ -4452,7 +4452,13 @@ public class FragmentChat extends BaseFragment
      * @return true if lower than END_CHAT_LIMIT otherwise return false
      */
     private boolean isEnd() {
-        return addToView && ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition() + END_CHAT_LIMIT > recyclerView.getAdapter().getItemCount();
+        if (addToView) {
+            if (((recyclerView.getLayoutManager()) == null) || ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition() + END_CHAT_LIMIT > recyclerView.getAdapter().getItemCount()) {
+                return true;
+            }
+        }
+        return false;
+        //return addToView && ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition() + END_CHAT_LIMIT > recyclerView.getAdapter().getItemCount();
     }
 
     /**
