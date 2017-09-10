@@ -115,7 +115,9 @@ public class FragmentChatBackground extends BaseFragment {
             @Override
             public void onComplete(RippleView rippleView) {
                 if (savePath != null && savePath.length() > 0) {
-                    G.onBackgroundChanged.onBackgroundChanged(savePath);
+                    if (G.twoPaneMode && G.onBackgroundChanged != null) {
+                        G.onBackgroundChanged.onBackgroundChanged(savePath);
+                    }
                     SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, savePath);
