@@ -4321,7 +4321,12 @@ public class FragmentChat extends BaseFragment
     private void goToProfile() {
         ActivityMain.lockNavigation();
         if (chatType == CHAT) {
-            new HelperFragment(FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString())).setReplace(false).load();
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    new HelperFragment(FragmentContactsProfile.newInstance(mRoomId, chatPeerId, CHAT.toString())).setReplace(false).load();
+                }
+            });
         } else if (chatType == GROUP) {
 
             if (!isChatReadOnly) {
