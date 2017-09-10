@@ -190,12 +190,9 @@ public class HelperGetDataFromOtherApp {
 
     //*****************************************************************************************************
 
-    void handleSendText(Intent intent) {
-
+    private void handleSendText(Intent intent) {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-
         if (sharedText != null) {
-
             hasSharedData = true;
             messageType = FileType.message;
             message = sharedText;

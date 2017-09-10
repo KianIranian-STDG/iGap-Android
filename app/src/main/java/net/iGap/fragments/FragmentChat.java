@@ -4946,31 +4946,31 @@ public class FragmentChat extends BaseFragment
 
                     ArrayList<String> pathList = new ArrayList<String>();
 
-                    if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1) {
+                    if (messageType != HelperGetDataFromOtherApp.FileType.message) {
+                        if (HelperGetDataFromOtherApp.messageFileAddress.size() == 1) {
 
-                        Uri _Uri = HelperGetDataFromOtherApp.messageFileAddress.get(0);
-                        String _path = getFilePathFromUri(Uri.parse(_Uri.toString()));
-                        if (_path == null) {
-                            _path = getPathN(_Uri, messageType);
-                        }
-                        pathList.add(_path);
-                    } else {
-
-                        for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
-
-                            Uri _Uri = HelperGetDataFromOtherApp.messageFileAddress.get(i);
+                            Uri _Uri = HelperGetDataFromOtherApp.messageFileAddress.get(0);
                             String _path = getFilePathFromUri(Uri.parse(_Uri.toString()));
-
                             if (_path == null) {
-                                _path = getPathN(_Uri, HelperGetDataFromOtherApp.fileTypeArray.get(i));
+                                _path = getPathN(_Uri, messageType);
                             }
                             pathList.add(_path);
+                        } else {
+
+                            for (int i = 0; i < HelperGetDataFromOtherApp.messageFileAddress.size(); i++) {
+
+                                Uri _Uri = HelperGetDataFromOtherApp.messageFileAddress.get(i);
+                                String _path = getFilePathFromUri(Uri.parse(_Uri.toString()));
+
+                                if (_path == null) {
+                                    _path = getPathN(_Uri, HelperGetDataFromOtherApp.fileTypeArray.get(i));
+                                }
+                                pathList.add(_path);
+                            }
                         }
                     }
 
-
                     if (messageType == HelperGetDataFromOtherApp.FileType.message) {
-
                         String message = HelperGetDataFromOtherApp.message;
                         edtChat.setText(message);
                         imvSendButton.performClick();

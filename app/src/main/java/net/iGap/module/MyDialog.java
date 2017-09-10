@@ -8,7 +8,7 @@
 * All rights reserved.
 */
 
-package net.iGap.activities;
+package net.iGap.module;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -21,8 +21,6 @@ import io.realm.RealmResults;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnComplete;
-import net.iGap.module.DialogAnimation;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
