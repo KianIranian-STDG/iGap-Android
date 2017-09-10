@@ -293,7 +293,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                 G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        popBackStackFragment();
+                                        new HelperFragment().removeAll(true);
                                         new GoToChatActivity(roomId).setPeerID(userId).startActivity();
                                         G.onChatGetRoom = null;
                                     }

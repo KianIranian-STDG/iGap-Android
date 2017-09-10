@@ -622,39 +622,32 @@ public class HelperUrl {
             @Override
             public void run() {
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(finalTitle)
-                    .customView(R.layout.dialog_alert_join, true)
-                    .positiveText(R.string.join)
-                    .cancelable(true)
-                    .negativeText(android.R.string.cancel)
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).title(finalTitle).customView(R.layout.dialog_alert_join, true).positiveText(R.string.join).cancelable(true).negativeText(android.R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            joinToRoom(token, room);
+                        joinToRoom(token, room);
+                    }
+                }).onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        final Realm realm = Realm.getDefaultInstance();
+
+                        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+
+                        if (realmRoom != null) {
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    realmRoom.deleteFromRealm();
+                                }
+                            });
                         }
-                    })
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            final Realm realm = Realm.getDefaultInstance();
-
-                            final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
-
-                            if (realmRoom != null) {
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        realmRoom.deleteFromRealm();
-                                    }
-                                });
-                            }
-
-                            realm.close();
-                        }
-                    })
-                    .build();
+                        realm.close();
+                    }
+                }).build();
 
                 imageView[0] = (CircleImageView) dialog.findViewById(R.id.daj_img_room_picture);
 
@@ -772,33 +765,25 @@ public class HelperUrl {
         }
     }
 
-    private static void goToActivity(long Roomid, long peerId, ChatEntry chatEntery) {
+    private static void goToActivity(final long roomId, final long peerId, ChatEntry chatEntry) {
 
-        Intent intent;
-
-        switch (chatEntery) {
+        switch (chatEntry) {
             case chat:
-
-                new GoToChatActivity(Roomid).setPeerID(peerId).startActivity();
-
+                new GoToChatActivity(roomId).setPeerID(peerId).startActivity();
                 break;
-
             case profile:
-
-                //intent = new Intent(G.context, ActivityContactsProfile.class);
-                //intent.putExtra("peerId", peerId);
-                //intent.putExtra("RoomId", Roomid);
-                //intent.putExtra("enterFrom", GROUP.toString());
-                ////  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                //G.currentActivity.startActivity(intent);
-
-                FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
-                Bundle bundle = new Bundle();
-                bundle.putLong("peerId", peerId);
-                bundle.putLong("RoomId", Roomid);
-                bundle.putString("enterFrom", GROUP.toString());
-                contactsProfile.setArguments(bundle);
-                new HelperFragment(contactsProfile).setReplace(false).load();
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("peerId", peerId);
+                        bundle.putLong("RoomId", roomId);
+                        bundle.putString("enterFrom", GROUP.toString());
+                        contactsProfile.setArguments(bundle);
+                        new HelperFragment(contactsProfile).setReplace(false).load();
+                    }
+                });
                 break;
         }
     }
@@ -940,10 +925,7 @@ public class HelperUrl {
                     @Override
                     public void onSuccess() {
 
-                        new GoToChatActivity(room.getId()).setfromUserLink(true)
-                            .setisNotJoin(true)
-                            .setuserName(username)
-                            .startActivity();
+                        new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).startActivity();
 
                         realm.close();
                     }

@@ -499,7 +499,7 @@ public class HelperLogMessage {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final long roomId) {
-                    G.currentActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
