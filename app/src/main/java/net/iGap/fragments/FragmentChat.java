@@ -5185,12 +5185,13 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
 
                 ll_navigateHash.setVisibility(View.GONE);
-                viewAttachFile.setVisibility(View.VISIBLE);
 
                 mAdapter.toggleSelection(searchHash.lastMessageId, false, null);
 
                 if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
                     rootView.findViewById(R.id.chl_ll_channel_footer).setVisibility(View.VISIBLE);
+                } else {
+                    viewAttachFile.setVisibility(View.VISIBLE);
                 }
             }
         });
