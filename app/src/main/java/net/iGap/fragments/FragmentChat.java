@@ -1350,7 +1350,9 @@ public class FragmentChat extends BaseFragment
                                     @Override
                                     public void run() {
                                         layoutJoin.setVisibility(View.GONE);
-                                        layoutMute.setVisibility(View.VISIBLE);
+                                        if (chatType == CHANNEL) {
+                                            layoutMute.setVisibility(View.VISIBLE);
+                                        }
                                         rootView.findViewById(ac_ll_parent).invalidate();
 
                                         if (chatType == GROUP) {
