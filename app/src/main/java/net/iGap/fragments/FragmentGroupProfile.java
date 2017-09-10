@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -195,6 +196,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     public static final String FRAGMENT_TAG = "FragmentGroupProfile";
     private static final String IS_NOT_JOIN = "is_not_join";
     private boolean isNotJoin = false;
+    private View v;
 
     public static FragmentGroupProfile newInstance(long roomId, Boolean isNotJoin) {
         Bundle args = new Bundle();
@@ -216,6 +218,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         super.onViewCreated(view, savedInstanceState);
         fragment = this;
         realmGroupProfile = Realm.getDefaultInstance();
+
+        v = view;
 
         Bundle extras = getArguments();
         roomId = extras.getLong(ROOM_ID);
@@ -475,7 +479,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         }
     };
 
-    private void initComponent(View view) {
+    private void initComponent(final View view) {
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.agp_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -566,7 +570,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                         isPopup = true;
 
                         if (isPrivate) {
-                            convertToPublic();
+                            convertToPublic(view);
                         } else {
                             convertToPrivate();
                         }
@@ -1033,7 +1037,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         }
     }
 
-    private void convertToPublic() {
+    private void convertToPublic(View view) {
         new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.group_title_convert_to_public)).content(getString(R.string.group_text_convert_to_public)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -1215,6 +1219,12 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         });
 
         // check each word with server
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                AndroidUtils.closeKeyboard(v);
+            }
+        });
 
         dialog.show();
     }
@@ -1513,6 +1523,14 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 }
             }
         });
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                AndroidUtils.closeKeyboard(view);
+            }
+        });
+
         dialog.show();
     }
 
@@ -1565,6 +1583,14 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 }
             }
         }).show();
+
+        final View v = dialog.getView();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                AndroidUtils.closeKeyboard(v);
+            }
+        });
     }
 
     private void groupLeft() {

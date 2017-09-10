@@ -27,6 +27,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -566,4 +567,13 @@ public final class AndroidUtils {
     }
 
     //*****************************************************************************************************************
+
+    public static void closeKeyboard(View v) {
+        try {
+            InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        } catch (IllegalStateException e) {
+            e.getStackTrace();
+        }
+    }
 }

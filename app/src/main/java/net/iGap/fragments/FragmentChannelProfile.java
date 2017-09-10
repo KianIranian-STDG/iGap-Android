@@ -4,6 +4,7 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -177,6 +178,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
     private static final String ROOM_ID = "RoomId";
     private static final String IS_NOT_JOIN = "is_not_join";
     public static final String FRAGMENT_TAG = "FragmentChannelProfile";
+    private View v;
 
     public static FragmentChannelProfile newInstance(long roomId, Boolean isNotJoin) {
         Bundle args = new Bundle();
@@ -197,6 +199,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         fragment = this;
+
+        v = view;
 
         realmChannelProfile = Realm.getDefaultInstance();
 
@@ -1087,7 +1091,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
     private String dialogName;
 
     private void ChangeGroupDescription() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.channel_description).positiveText(getString(R.string.save)).alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
+        MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.channel_description).positiveText(getString(R.string.save)).alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 editChannelRequest(txtChannelNameInfo.getText().toString(), dialogDesc);
@@ -1108,7 +1112,16 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                     positive.setAlpha(0.5f);
                 }
             }
-        }).show();
+        }).build();
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                AndroidUtils.closeKeyboard(v);
+            }
+        });
+
+        dialog.show();
     }
 
     private void ChangeGroupName() {
@@ -1220,7 +1233,16 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                 }
             }
         });
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                AndroidUtils.closeKeyboard(v);
+            }
+        });
+
         dialog.show();
+
     }
 
     //********** channel edit name and description
@@ -1777,6 +1799,14 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         });
 
         // check each word with server
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                AndroidUtils.closeKeyboard(v);
+            }
+        });
+
 
         dialog.show();
     }

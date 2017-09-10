@@ -93,6 +93,7 @@
             android:singleLine="true"
             android:text=""
             android:textColor="@color/white"
+            android:textCursorDrawable="@drawable/white_cursor_color"
             android:textSize="@dimen/dp15"
 
             />
