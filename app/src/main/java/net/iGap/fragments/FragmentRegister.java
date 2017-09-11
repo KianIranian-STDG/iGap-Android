@@ -326,21 +326,17 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-
-                        //if (CountDownTimerQrCode !=null){
-                        //    CountDownTimerQrCode.onFinish();
-                        //}
-
                         checkExpireTime(expireTime);
                         if (prgQrCodeNewDevice != null) {
                             prgQrCodeNewDevice.setVisibility(View.GONE);
                         }
 
-                        G.imageLoader.clearMemoryCache();
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(_resultQrCode), imgQrCodeNewDevice);
+                        if (imgQrCodeNewDevice != null) {
+                            G.imageLoader.clearMemoryCache();
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(_resultQrCode), imgQrCodeNewDevice);
+                        }
                     }
                 });
-
             }
         };
 
@@ -480,15 +476,16 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         Collections.sort(structCountryArrayList, new CountryListComparator());
 
         for (int i = 0; i < structCountryArrayList.size(); i++) {
-
-            countryNameList[i] = structCountryArrayList.get(i).getName();
-            StructCountry item = new StructCountry();
-            item.setId(i);
-            item.setName(structCountryArrayList.get(i).getName());
-            item.setCountryCode(structCountryArrayList.get(i).getCountryCode());
-            item.setPhonePattern(structCountryArrayList.get(i).getPhonePattern());
-            item.setAbbreviation(structCountryArrayList.get(i).getAbbreviation());
-            items.add(item);
+            if (i < countryNameList.length) {
+                countryNameList[i] = structCountryArrayList.get(i).getName();
+                StructCountry item = new StructCountry();
+                item.setId(i);
+                item.setName(structCountryArrayList.get(i).getName());
+                item.setCountryCode(structCountryArrayList.get(i).getCountryCode());
+                item.setPhonePattern(structCountryArrayList.get(i).getPhonePattern());
+                item.setAbbreviation(structCountryArrayList.get(i).getAbbreviation());
+                items.add(item);
+            }
         }
 
         btnChoseCountry.setOnClickListener(new View.OnClickListener() {
@@ -1361,8 +1358,8 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                                 fragmentSecurityRecovery.setArguments(bundle);
 
                                 G.fragmentActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).
-                                    setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).
-                                    replace(R.id.ar_layout_root, fragmentSecurityRecovery).commit();
+                                        setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).
+                                        replace(R.id.ar_layout_root, fragmentSecurityRecovery).commit();
 
 
 
@@ -1433,19 +1430,17 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         }
 
                         if (newUser) {
-
-                            FragmentRegistrationNickname fragment = new FragmentRegistrationNickname();
-
-                            Bundle bundle = new Bundle();
-                            bundle.putLong(FragmentRegistrationNickname.ARG_USER_ID, userId);
-                            fragment.setArguments(bundle);
-
-                            getActivity().getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).
-                                setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
-
-                            getActivity().getSupportFragmentManager().beginTransaction().remove(FragmentRegister.this).commit();
-
-
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    FragmentRegistrationNickname fragment = new FragmentRegistrationNickname();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putLong(FragmentRegistrationNickname.ARG_USER_ID, userId);
+                                    fragment.setArguments(bundle);
+                                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+                                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentRegister.this).commit();
+                                }
+                            });
                         } else {
                             // get user info for set nick name and after from that go to ActivityMain
                             getUserInfo();

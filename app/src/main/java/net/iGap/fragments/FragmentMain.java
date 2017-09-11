@@ -236,20 +236,24 @@ public class FragmentMain extends BaseFragment implements OnComplete {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
-                    ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
-                }
+                try {
+                    if (((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
+                        ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
+                    }
 
-                if (dy > 0) {
-                    // Scroll Down
-                    if (((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
-                        ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.hide();
+                    if (dy > 0) {
+                        // Scroll Down
+                        if (((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
+                            ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.hide();
+                        }
+                    } else if (dy < 0) {
+                        // Scroll Up
+                        if (!((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
+                            ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.show();
+                        }
                     }
-                } else if (dy < 0) {
-                    // Scroll Up
-                    if (!((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
-                        ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.show();
-                    }
+                } catch (ClassCastException e) {
+                    e.printStackTrace();
                 }
             }
         });

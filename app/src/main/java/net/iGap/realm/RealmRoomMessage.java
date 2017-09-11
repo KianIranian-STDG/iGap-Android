@@ -928,7 +928,9 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
                     RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
                     realmOfflineDelete.setOfflineDelete(messageId);
 
-                    realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
+                    if (realmClientCondition != null) {
+                        realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
+                    }
 
                     if (chatType == GROUP) {
                         new RequestGroupDeleteMessage().groupDeleteMessage(RoomId, messageId);

@@ -286,12 +286,14 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                                 @Override
                                 public void run() {
                                     String countText = ((RealmRoom) element).getSharedMediaCount();
-
-                                        if (HelperCalander.isLanguagePersian) {
-                                            txtNumberOfSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
-                                        } else {
-                                            txtNumberOfSharedMedia.setText(countText);
-                                        }
+                                    if (txtNumberOfSharedMedia == null) {
+                                        txtNumberOfSharedMedia = (TextView) G.fragmentActivity.findViewById(R.id.agp_txt_number_of_shared_media);
+                                    }
+                                    if (HelperCalander.isLanguagePersian) {
+                                        txtNumberOfSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
+                                    } else {
+                                        txtNumberOfSharedMedia.setText(countText);
+                                    }
                                 }
                             });
                         }
@@ -302,6 +304,9 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             mRoom.addChangeListener(changeListener);
             changeListener.onChange(mRoom);
         } else {
+            if (txtNumberOfSharedMedia == null) {
+                txtNumberOfSharedMedia = (TextView) G.fragmentActivity.findViewById(R.id.agp_txt_number_of_shared_media);
+            }
             txtNumberOfSharedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
         }
 
@@ -911,20 +916,21 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         layoutGroupLink.addView(txtLink, layoutParams);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.group_link))
-            .positiveText(G.context.getResources().getString(R.string.array_Copy))
-            .customView(layoutGroupLink, true)
-            .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
-            .negativeText(G.context.getResources().getString(R.string.no))
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                String copy;
-                copy = txtGroupLink.getText().toString();
-                ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                clipboard.setPrimaryClip(clip);
-            }
-        }).build();
+                .positiveText(G.context.getResources().getString(R.string.array_Copy))
+                .customView(layoutGroupLink, true)
+                .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+                .negativeText(G.context.getResources().getString(R.string.no))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String copy;
+                        copy = txtGroupLink.getText().toString();
+                        ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                })
+                .build();
 
         dialog.show();
     }
@@ -961,8 +967,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
         layoutRevoke.addView(inputRevoke, layoutParams);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.group_link_hint_revoke)).positiveText(G.context.getResources().getString(R.string.revoke))
-                .customView(layoutRevoke, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.context.getResources().getString(R.string.B_cancel))
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.group_link_hint_revoke)).positiveText(G.context.getResources().getString(R.string.revoke)).customView(layoutRevoke, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.context.getResources().getString(R.string.B_cancel))
                 .neutralText(R.string.array_Copy)
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
