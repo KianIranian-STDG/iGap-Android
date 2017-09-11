@@ -137,6 +137,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
     private static final String PEER_ID = "peerId";
     private static final String ENTER_FROM = "enterFrom";
     public static final String FRAGMENT_TAG = "FragmentContactsProfile";
+    private boolean disableDeleteContact = false;
 
     public static FragmentContactsProfile newInstance(long roomId, long peerId, String enterFrom) {
         Bundle args = new Bundle();
@@ -239,6 +240,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
          */
         if (realmContacts == null && enterFrom.equals(ProtoGlobal.Room.Type.GROUP.toString())) {
             showNumber = false;
+            disableDeleteContact = true;
         }
 
         imgUser = (net.iGap.module.CircleImageView) view.findViewById(R.id.chi_img_circleImage);
@@ -967,6 +969,10 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         root3.setVisibility(View.VISIBLE);
         if (G.userId == userId) {
             root1.setVisibility(View.GONE);
+            root3.setVisibility(View.GONE);
+        }
+
+        if (disableDeleteContact) {
             root3.setVisibility(View.GONE);
         }
 
