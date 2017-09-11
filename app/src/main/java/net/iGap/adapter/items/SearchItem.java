@@ -26,7 +26,6 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.EmojiTextViewE;
-import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
 
 import static net.iGap.fragments.SearchFragment.SearchType.contact;
@@ -60,7 +59,8 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
         holder.name.setText(item.name);
         holder.lastSeen.setText(item.comment);
 
-        holder.txtTime.setText(TimeUtils.toLocal(item.time, G.CHAT_MESSAGE_TIME));
+        //holder.txtTime.setText(TimeUtils.toLocal(item.time, G.CHAT_MESSAGE_TIME));
+        holder.txtTime.setText(HelperCalander.getTimeForMainRoom(item.time));
 
         if (HelperCalander.isLanguagePersian) {
             //holder.name.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.name.getText().toString()));
@@ -98,14 +98,15 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
             }
         }
 
-        hashMapAvatarSearchFragment.put(item.idDetectAvatar, holder.avatar);
+        hashMapAvatarSearchFragment.put(this.getIdentifier(), holder.avatar);
+
         HelperAvatar.getAvatar(item.idDetectAvatar, avatarType, false, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long roomId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatarSearchFragment.get(item.idDetectAvatar));
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatarSearchFragment.get(SearchItem.this.getIdentifier()));
                     }
                 });
             }
@@ -115,7 +116,8 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        hashMapAvatarSearchFragment.get(item.idDetectAvatar).setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        hashMapAvatarSearchFragment.get(SearchItem.this.getIdentifier())
+                            .setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
             }

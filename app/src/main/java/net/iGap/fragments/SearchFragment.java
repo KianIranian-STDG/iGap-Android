@@ -244,7 +244,12 @@ public class SearchFragment extends BaseFragment {
 
         int size = list.size();
 
-        for (RealmRoom realmRoom : realm.where(RealmRoom.class).contains(RealmRoomFields.TITLE, text, Case.INSENSITIVE).findAll()) {
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class)
+            .equalTo(RealmRoomFields.KEEP_ROOM, false)
+            .equalTo(RealmRoomFields.IS_DELETED, false)
+            .contains(RealmRoomFields.TITLE, text, Case.INSENSITIVE)
+            .findAll()) {
+
             StructSearch item = new StructSearch();
 
             item.roomType = realmRoom.getType();
