@@ -241,11 +241,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         G.imageLoader.clearMemoryCache();
 
-        G.fragmentManager = null;
-
-        MusicPlayer.mainLayout = null;
-        ActivityCall.stripLayoutMain = null;
-
     }
 
     private void deleteContentFolderChatBackground() {
@@ -282,7 +277,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             boolean openMediaPlyer = extras.getBoolean(ActivityMain.openMediaPlyer);
             if (openMediaPlyer) {
-                if (G.fragmentManager.findFragmentByTag(FragmentMediaPlayer.class.getName()) == null) {
+                if (getSupportFragmentManager().findFragmentByTag(FragmentMediaPlayer.class.getName()) == null) {
                     FragmentMediaPlayer fragmant = new FragmentMediaPlayer();
                     new HelperFragment(fragmant).setReplace(false).load();
                 }
@@ -861,33 +856,31 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 }
 
+
                 navigationTabStrip.setViewPager(mViewPager, index);
 
                 try {
-
                     if (mViewPager.getAdapter().getCount() > 0) {
-                        navigationTabStrip.setTabIndex(mViewPager.getCurrentItem());
+                        if (navigationTabStrip.getTitles() != null && navigationTabStrip.getTitles().length == 5) {
+                            navigationTabStrip.setTabIndex(mViewPager.getCurrentItem());
+                        }
                     }
-
-                    navigationTabStrip.setOnTabStripSelectedIndexListener(new NavigationTabStrip.OnTabStripSelectedIndexListener() {
-                        @Override
-                        public void onStartTabSelected(String title, int index) {
-
-                        }
-
-                        @Override
-                        public void onEndTabSelected(String title, int index) {
-
-                            onSelectItem(index);
-                        }
-                    });
-
-
                 } catch (Exception e) {
-
                     HelperLog.setErrorLog("Activity main     setmViewPagerSelectedItem    " + index + "     " + HelperCalander.isLanguagePersian + "    " + e.toString());
                 }
 
+                navigationTabStrip.setOnTabStripSelectedIndexListener(new NavigationTabStrip.OnTabStripSelectedIndexListener() {
+                    @Override
+                    public void onStartTabSelected(String title, int index) {
+
+                    }
+
+                    @Override
+                    public void onEndTabSelected(String title, int index) {
+
+                        onSelectItem(index);
+                    }
+                });
 
 
 
@@ -930,7 +923,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
 
-                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(G.fragmentManager);
+                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
 
 
@@ -938,7 +931,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
                 }
-            }, 500);
+            }, 400);
         } else {
 
             G.handler.postDelayed(new Runnable() {
@@ -946,13 +939,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 public void run() {
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
 
-                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(G.fragmentManager);
+                    sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
 
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
 
                 }
-            }, 500);
+            }, 400);
 
             G.handler.postDelayed(new Runnable() {
                 @Override
@@ -970,7 +963,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     setmViewPagerSelectedItem();
 
                 }
-            }, 1000);
+            }, 800);
         }
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);

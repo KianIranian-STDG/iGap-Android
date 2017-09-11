@@ -1627,17 +1627,6 @@ public class FragmentChat extends BaseFragment
                 for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
 
                     try {
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                int start = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-
-                for (int i = start; i < mAdapter.getItemCount() && i < start + 15; i++) {
-                    try {
-
                         AbstractMessage item = mAdapter.getAdapterItem(i);
 
                         if (item.mMessage != null && item.mMessage.messageID.equals(messageId + "")) {
@@ -1646,7 +1635,7 @@ public class FragmentChat extends BaseFragment
                             break;
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.e("ddddd", "activity chat iUpdateLogItem    " + e.toString());
                     }
                 }
             }
