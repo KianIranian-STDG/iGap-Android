@@ -671,7 +671,7 @@
               android:background="@color/background_editText"
               />
 
-          <RelativeLayout
+          <LinearLayout
               android:id="@+id/agp_layout_signature"
               android:layout_width="match_parent"
               android:layout_height="@dimen/dp48"
@@ -685,9 +685,9 @@
 
             <TextView
                 android:id="@+id/agp_txt_signature"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:layout_centerInParent="true"
                 android:gravity="center_vertical"
                 android:paddingTop="@dimen/dp4"
                 android:text="@string/st_signature"
@@ -701,16 +701,12 @@
                 android:id="@+id/agp_toggle_signature"
                 android:layout_width="@dimen/dp44"
                 android:layout_height="@dimen/dp40"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
                 android:background="@drawable/st_switch_button"
-                android:clickable="false"
                 android:textOff=""
                 android:textOn=""
                 />
 
-          </RelativeLayout>
+          </LinearLayout>
 
         </LinearLayout>
 

@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -33,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -577,17 +577,25 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             }
         };
 
+        toggleEnableSignature.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+                    new RequestChannelUpdateSignature().channelUpdateSignature(roomId, true);
+                } else {
+                    new RequestChannelUpdateSignature().channelUpdateSignature(roomId, false);
+                }
+            }
+        });
+
+
         txtSignature.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (toggleEnableSignature.isChecked()) {
-                    toggleEnableSignature.setChecked(false);
-                    new RequestChannelUpdateSignature().channelUpdateSignature(roomId, false);
-                } else {
-                    toggleEnableSignature.setChecked(true);
-                    new RequestChannelUpdateSignature().channelUpdateSignature(roomId, true);
-                }
+                toggleEnableSignature.setChecked(!toggleEnableSignature.isChecked());
+
             }
         });
 
