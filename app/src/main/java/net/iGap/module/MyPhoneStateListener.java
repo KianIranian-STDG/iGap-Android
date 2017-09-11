@@ -1,11 +1,7 @@
 package net.iGap.module;
 
-import android.content.Context;
-import android.media.AudioManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import net.iGap.G;
-import net.iGap.helper.HelperLog;
 
 public class MyPhoneStateListener extends PhoneStateListener {
 
@@ -28,12 +24,12 @@ public class MyPhoneStateListener extends PhoneStateListener {
                     MusicPlayer.pauseSoundFromCall = false;
                     MusicPlayer.playSound();
 
-                    if (isBlutoothOn) {
-                        isBlutoothOn = false;
-
-                        AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-                        am.setBluetoothScoOn(true);
-                    }
+                    //if (isBlutoothOn) {
+                    //    isBlutoothOn = false;
+                    //
+                    //    AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+                    //    am.setBluetoothScoOn(true);
+                    //}
                 }
             } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
                 pauseSoundIfPlay();
@@ -48,18 +44,18 @@ public class MyPhoneStateListener extends PhoneStateListener {
             MusicPlayer.pauseSound();
             MusicPlayer.pauseSoundFromCall = true;
 
-            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+            //AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
 
-            if (am.isBluetoothScoOn()) {
-                isBlutoothOn = true;
-                am.setBluetoothScoOn(false);
-
-                try {
-                    am.stopBluetoothSco();
-                } catch (Exception e) {
-                    HelperLog.setErrorLog("myPhoneStateListener    " + e.toString());
-                }
-            }
+            //if (am.isBluetoothScoOn()) {
+            //    isBlutoothOn = true;
+            //    am.setBluetoothScoOn(false);
+            //
+            //    try {
+            //        am.stopBluetoothSco();
+            //    } catch (Exception e) {
+            //        HelperLog.setErrorLog("myPhoneStateListener    " + e.toString());
+            //    }
+            //}
         }
     }
 }

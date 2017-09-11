@@ -39,7 +39,10 @@ public class ServiceContact extends Service {
         return null;
     }
 
-    @Override public int onStartCommand(Intent intent, int flags, int startId) {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
         contentObserver = new MyContentObserver();
 
         Handler handler = new Handler();
@@ -49,6 +52,10 @@ public class ServiceContact extends Service {
                 getApplicationContext().getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, contentObserver);
             }
         }, 10000);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
 
         return Service.START_NOT_STICKY;
     }

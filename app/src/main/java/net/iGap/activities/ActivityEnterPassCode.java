@@ -105,7 +105,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         final RippleView txtOk = (RippleView) findViewById(R.id.enterPassword_rippleOk);
         edtPassword = (EditText) findViewById(R.id.enterPassword_edtSetPassword);
 
-        ActivityMain.lockNavigation();
+
         rootEnterPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,9 +180,6 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
                                 dialog.dismiss();
                             }
 
-                            if (ActivityMain.iconLock != null) {
-                                ActivityMain.iconLock.setText(getResources().getString(R.string.md_igap_lock_open_outline));
-                            }
                             ActivityMain.isLock = false;
                             finish();
 
@@ -262,12 +259,9 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
                 if (enterPassword.length() > 0) {
 
                     if (enterPassword.equals(password)) {
-                        finish();
-                        if (ActivityMain.iconLock != null) {
-                            ActivityMain.iconLock.setText(getResources().getString(R.string.md_igap_lock_open_outline));
-                        }
                         ActivityMain.isLock = false;
-                        ActivityMain.openNavigation();
+                        finish();
+
                         //G.isPassCode = false;
                         closeKeyboard(v);
                     } else {

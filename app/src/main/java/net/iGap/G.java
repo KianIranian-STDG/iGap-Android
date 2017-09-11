@@ -59,6 +59,7 @@ import net.iGap.interfaces.ISignalingLeave;
 import net.iGap.interfaces.ISignalingOffer;
 import net.iGap.interfaces.ISignalingRinging;
 import net.iGap.interfaces.ISignalingSessionHold;
+import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnBackgroundChanged;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
@@ -428,6 +429,7 @@ public class G extends MultiDexApplication {
     public static IDispatchTochEvent dispatchTochEventChat;
     public static IOnBackPressed onBackPressedChat;
     public static ISendPosition iSendPositionChat;
+    public static ITowPanModDesinLayout iTowPanModDesinLayout;
 
     public static IOnBackPressed onBackPressedExplorer;
 

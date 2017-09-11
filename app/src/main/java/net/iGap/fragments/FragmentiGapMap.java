@@ -1180,7 +1180,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     @Override
     public void onResume() {
         super.onResume();
-        ActivityMain.lockNavigation();
+        if (G.fragmentActivity != null) {
+            ((ActivityMain) G.fragmentActivity).lockNavigation();
+        }
         statusCheck();
         FragmentiGapMap.page = FragmentiGapMap.pageiGapMap;
     }
@@ -1217,11 +1219,17 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
                 if (state) {
                     getCoordinateLoop(0, false);
-                    ActivityMain.startAnimationLocation();
+                    if (G.fragmentActivity != null) {
+                        ((ActivityMain) G.fragmentActivity).startAnimationLocation();
+                    }
+
                     editor.putBoolean(SHP_SETTING.REGISTER_STATUS, true);
                     editor.apply();
                 } else {
-                    ActivityMain.stopAnimationLocation();
+                    if (G.fragmentActivity != null) {
+                        ((ActivityMain) G.fragmentActivity).stopAnimationLocation();
+                    }
+
                     editor.putBoolean(SHP_SETTING.REGISTER_STATUS, false);
                     editor.apply();
                 }

@@ -111,7 +111,10 @@ public class BaseFragment extends Fragment {
 
     public void popBackStackFragment() {
         fragmentActivity.getSupportFragmentManager().popBackStack();
-        ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.none);
+
+        if (G.iTowPanModDesinLayout != null) {
+            G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+        }
     }
 
     public void removeFromBaseFragment() {

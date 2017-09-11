@@ -254,9 +254,7 @@ public class FragmentPassCode extends BaseFragment {
                     editor.putBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, false);
                     editor.putLong(SHP_SETTING.KEY_TIME_LOCK, 0);
                     editor.apply();
-                    if (ActivityMain.iconLock != null) {
-                        ActivityMain.iconLock.setVisibility(View.GONE);
-                    }
+
                     G.isPassCode = false;
                     edtSetPassword.setText("");
                     realm.executeTransaction(new Realm.Transaction() {
@@ -441,9 +439,7 @@ public class FragmentPassCode extends BaseFragment {
                         titlePassCode.setText(G.context.getResources().getString(R.string.two_step_pass_code));
                         titlePassCode.setVisibility(View.VISIBLE);
                         layoutModePassCode.setVisibility(View.GONE);
-                        if (ActivityMain.iconLock != null) {
-                            ActivityMain.iconLock.setVisibility(View.VISIBLE);
-                        }
+
                         G.isPassCode = true;
                         ActivityMain.isLock = false;
                         closeKeyboard(v);

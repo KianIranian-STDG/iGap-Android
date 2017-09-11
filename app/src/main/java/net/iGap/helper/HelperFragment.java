@@ -4,7 +4,6 @@ import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
@@ -133,7 +132,10 @@ public class HelperFragment {
         }
         G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         G.fragmentActivity.getSupportFragmentManager().popBackStack();
-        ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.none);
+
+        if (G.iTowPanModDesinLayout != null) {
+            G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+        }
     }
 
     public void removeAll(boolean keepMain) {
@@ -157,7 +159,10 @@ public class HelperFragment {
             }
         }
         G.fragmentActivity.getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.none);
+
+        if (G.iTowPanModDesinLayout != null) {
+            G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+        }
     }
 
     public void popBackStack() {
@@ -177,7 +182,7 @@ public class HelperFragment {
                 return true;
             }
 
-            if ((ActivityMain.frameFragmentBack != null && ActivityMain.frameFragmentBack.getVisibility() == View.VISIBLE)) {
+            if (G.iTowPanModDesinLayout != null && G.iTowPanModDesinLayout.getBackChatVisibility()) {
                 return true;
             }
             return false;
@@ -227,14 +232,17 @@ public class HelperFragment {
             if (isChatFragment(fragmentClassName)) {
 
                 resId = R.id.am_frame_chat_container;
-                ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.show);
+
+                if (G.iTowPanModDesinLayout != null) {
+                    G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.show);
+                }
 
             } else {
 
                 resId = R.id.am_frame_fragment_container;
 
-                if (ActivityMain.frameFragmentBack != null) {
-                    ActivityMain.frameFragmentBack.setVisibility(View.VISIBLE);
+                if (G.iTowPanModDesinLayout != null) {
+                    G.iTowPanModDesinLayout.setBackChatVisibility(true);
                 }
             }
         } else {

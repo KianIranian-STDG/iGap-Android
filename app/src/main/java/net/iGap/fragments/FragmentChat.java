@@ -651,7 +651,9 @@ public class FragmentChat extends BaseFragment
 
                 if (!G.twoPaneMode) {
                     try {
-                        ActivityMain.lockNavigation();
+                        if (G.fragmentActivity != null) {
+                            ((ActivityMain) G.fragmentActivity).lockNavigation();
+                        }
                     } catch (Exception e) {
                         HelperLog.setErrorLog("fragment chat ondestroy   " + e.toString());
                     }
@@ -793,37 +795,35 @@ public class FragmentChat extends BaseFragment
         //    RealmRoom.deleteRoom(mRoomId);
         //}
 
+
+        // room id have to be set to default, otherwise I'm in the room always!
+        mRoomId = -1;
+        MusicPlayer.chatLayout = null;
+        ActivityCall.stripLayoutChat = null;
+
+        if (G.fragmentActivity != null) {
+            if (!G.twoPaneMode) {
+                try {
+                    ((ActivityMain) G.fragmentActivity).openNavigation();
+                } catch (Exception e) {
+                    HelperLog.setErrorLog("fragment chat ondestroy   " + e.toString());
+                }
+            }
+            ((ActivityMain) G.fragmentActivity).resume();
+
+        }
+
         super.onStop();
     }
 
     @Override
     public void onDestroy() {
-        // room id have to be set to default, otherwise I'm in the room always!
-        mRoomId = -1;
+
         super.onDestroy();
 
         if (realmChat != null && !realmChat.isClosed()) {
             realmChat.close();
         }
-
-        MusicPlayer.chatLayout = null;
-        ActivityCall.stripLayoutChat = null;
-
-        //  ActivityMain.setMediaLayout();
-        // ActivityMain.setStripLayoutCall();
-
-        if (!G.twoPaneMode) {
-            try {
-                ActivityMain.openNavigation();
-            } catch (Exception e) {
-                HelperLog.setErrorLog("fragment chat ondestroy   " + e.toString());
-            }
-        }
-
-        if (getActivity() != null) {
-            ((ActivityMain) getActivity()).resume();
-        }
-
 
     }
 
@@ -4317,7 +4317,10 @@ public class FragmentChat extends BaseFragment
      * open profile for this room or user profile if room is chat
      */
     private void goToProfile() {
-        ActivityMain.lockNavigation();
+        if (G.fragmentActivity != null) {
+            ((ActivityMain) G.fragmentActivity).lockNavigation();
+        }
+
         if (chatType == CHAT) {
             G.handler.post(new Runnable() {
                 @Override
@@ -7857,7 +7860,10 @@ public class FragmentChat extends BaseFragment
 
         Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
         removeFromBaseFragment(fragment);
-        ActivityMain.desighnLayout(ActivityMain.chatLayoutMode.hide);
+
+        if (G.iTowPanModDesinLayout != null) {
+            G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.hide);
+        }
     }
 
     private void closeKeyboard(View v) {

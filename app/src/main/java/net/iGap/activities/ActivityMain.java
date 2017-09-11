@@ -88,6 +88,7 @@ import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.interfaces.ICallFinish;
+import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatClearMessageResponse;
@@ -149,29 +150,27 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
 
     public static boolean isMenuButtonAddShown = false;
-    LinearLayout mediaLayout;
+    private LinearLayout mediaLayout;
 
-    public static FrameLayout frameChatContainer;
-    public static FrameLayout frameMainContainer;
-    public static FrameLayout frameFragmentBack;
+    private FrameLayout frameChatContainer;
+    private FrameLayout frameMainContainer;
+    private FrameLayout frameFragmentBack;
 
-    static FrameLayout frameFragmentContainer;
+    private FrameLayout frameFragmentContainer;
     public static boolean isOpenChatBeforeSheare = false;
 
     FragmentCall fragmentCall;
 
     private NavigationTabStrip navigationTabStrip;
 
-    public static MyAppBarLayout appBarLayout;
+    private MyAppBarLayout appBarLayout;
     private Typeface titleTypeface;
     private SharedPreferences sharedPreferences;
     private ImageView imgNavImage;
-    private static DrawerLayout drawer;
-    public static int currentMainRoomListPosition = 0;
-    private int pageDrawer = 0;
+    private DrawerLayout drawer;
     private ProgressBar contentLoading;
-    private static TextView iconLocation;
-    public static TextView iconLock;
+    private TextView iconLocation;
+    public TextView iconLock;
 
     public MainInterface mainActionApp;
     public MainInterface mainActionChat;
@@ -192,7 +191,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     SampleFragmentPagerAdapter sampleFragmentPagerAdapter;
     boolean waitingForConfiguration = false;
     private String phoneNumber;
-    private boolean isPassCode;
+
     private static long oldTime;
     private static long currentTime;
     public static boolean isLock = true;
@@ -413,6 +412,35 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     onBackPressed();
                 }
             });
+
+            G.iTowPanModDesinLayout = new ITowPanModDesinLayout() {
+                @Override
+                public void onLayout(chatLayoutMode mode) {
+                    desighnLayout(mode);
+                }
+
+                @Override
+                public boolean getBackChatVisibility() {
+
+                    if (frameFragmentBack != null && frameFragmentBack.getVisibility() == View.VISIBLE) {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                @Override
+                public void setBackChatVisibility(boolean visibility) {
+
+                    if (true) {
+                        if (frameFragmentBack != null) {
+                            frameFragmentBack.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+            };
+
+
         } else {
             frameChatContainer.setVisibility(View.GONE);
         }
@@ -1650,11 +1678,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         iconLock = (TextView) findViewById(R.id.am_btn_lock);
 
-        if (G.isPassCode) {
-            iconLock.setVisibility(View.VISIBLE);
-        } else {
-            iconLock.setVisibility(View.GONE);
-        }
         iconLock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1735,14 +1758,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    public static void stopAnimationLocation() {
+    public void stopAnimationLocation() {
         if (iconLocation != null) {
             // iconLocation.clearAnimation();
             iconLocation.setVisibility(View.GONE);
         }
     }
 
-    public static void startAnimationLocation() {
+    public void startAnimationLocation() {
         if (iconLocation != null) {
             iconLocation.setVisibility(View.VISIBLE);
             //Animation anim = new AlphaAnimation(0.0f, 1.0f);
@@ -2036,6 +2059,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         ActivityMain.setMediaLayout();
+
+        if (G.isPassCode) {
+            iconLock.setVisibility(View.VISIBLE);
+
+            if (isLock) {
+                iconLock.setText(getResources().getString(R.string.md_igap_lock));
+            } else {
+                iconLock.setText(getResources().getString(R.string.md_igap_lock_open_outline));
+            }
+        } else {
+            iconLock.setVisibility(View.GONE);
+        }
 
     }
 
@@ -2361,11 +2396,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     //*************************************************************
 
-    public static void lockNavigation() {
+    public void lockNavigation() {
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
-    public static void openNavigation() {
+    public void openNavigation() {
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
@@ -2414,7 +2449,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         none, show, hide
     }
 
-    public static void desighnLayout(final chatLayoutMode mode) {
+    public void desighnLayout(final chatLayoutMode mode) {
 
         G.handler.post(new Runnable() {
             @Override

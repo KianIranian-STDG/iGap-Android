@@ -1,7 +1,5 @@
 package net.iGap.fragments;
 
-
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -55,6 +53,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
+import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
@@ -2545,14 +2544,23 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+
+        updateRoomListIfNeeded();
+
+        if (getActivity() != null) {
+            ((ActivityMain) getActivity()).resume();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
         if (mRealm != null && !mRealm.isClosed()) {
             mRealm.close();
         }
-
-        updateRoomListIfNeeded();
 
     }
 

@@ -78,7 +78,11 @@ public class FragmentQrCodeNewDevice extends BaseFragment implements QRCodeReade
             @Override
             public void onClick(View v) {
                 popBackStackFragment();
-                ActivityMain.openNavigation();
+
+                if (G.fragmentActivity != null) {
+                    ((ActivityMain) G.fragmentActivity).openNavigation();
+                }
+
                 G.fragmentActivity.overridePendingTransition(0, 0);
             }
         });
@@ -98,6 +102,9 @@ public class FragmentQrCodeNewDevice extends BaseFragment implements QRCodeReade
         }
         pointsOverlayView.setPoints(points);
         popBackStackFragment();
-        ActivityMain.openNavigation();
+
+        if (G.fragmentActivity != null) {
+            ((ActivityMain) G.fragmentActivity).openNavigation();
+        }
     }
 }
