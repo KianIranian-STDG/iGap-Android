@@ -43,6 +43,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -300,9 +301,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             isNeedToRegister = true;
             isOnGetPermistion = true;
         }
-
-
         super.onCreate(savedInstanceState);
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         if (isNeedToRegister) {
 
