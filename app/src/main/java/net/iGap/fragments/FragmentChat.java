@@ -556,9 +556,7 @@ public class FragmentChat extends BaseFragment
         super.onResume();
 
         if (FragmentShearedMedia.list != null && FragmentShearedMedia.list.size() > 0) {
-
             deleteSelectedMessageFromAdapter(FragmentShearedMedia.list);
-
             FragmentShearedMedia.list.clear();
         }
 
@@ -5952,33 +5950,32 @@ public class FragmentChat extends BaseFragment
     }
 
     private void deleteSelectedMessageFromAdapter(ArrayList<Long> list) {
-
         for (Long mId : list) {
             try {
-
                 mAdapter.removeMessage(mId);
-
                 // remove tag from edtChat if the message has deleted
                 if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                    if (mId.equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
+                    if (mId == Long.parseLong(((StructMessageInfo) edtChat.getTag()).messageID)) {
                         edtChat.setTag(null);
                     }
                 }
             } catch (Exception e) {
-                Log.e("dddd", "activity chat    deleteSelectedMessageFromAdapter    " + e.toString());
+                e.printStackTrace();
             }
         }
 
-        int size = mAdapter.getItemCount();
-        for (int i = 0; i < size; i++) {
+        if (mAdapter != null) {
+            int size = mAdapter.getItemCount();
+            for (int i = 0; i < size; i++) {
 
-            if (mAdapter.getItem(i) instanceof TimeItem) {
-                if (i < size - 1) {
-                    if (mAdapter.getItem(i + 1) instanceof TimeItem) {
+                if (mAdapter.getItem(i) instanceof TimeItem) {
+                    if (i < size - 1) {
+                        if (mAdapter.getItem(i + 1) instanceof TimeItem) {
+                            mAdapter.remove(i);
+                        }
+                    } else {
                         mAdapter.remove(i);
                     }
-                } else {
-                    mAdapter.remove(i);
                 }
             }
         }
@@ -6855,7 +6852,7 @@ public class FragmentChat extends BaseFragment
                 }).start();
 
                 int _count = mForwardMessages.size();
-                String str = _count > 1 ? getString(R.string.messages_selected) : getString(R.string.message_selected);
+                String str = _count > 1 ? G.context.getResources().getString(R.string.messages_selected) : getString(R.string.message_selected);
 
                 EmojiTextViewE emMessage = (EmojiTextViewE) rootView.findViewById(R.id.cslhf_txt_message);
 
@@ -7631,7 +7628,7 @@ public class FragmentChat extends BaseFragment
             unreadMessage.setMessageId(TimeUtils.currentLocalTime());
             // -1 means time message
             unreadMessage.setUserId(-1);
-            unreadMessage.setMessage(unreadMessageCount + " " + getString(R.string.unread_message));
+            unreadMessage.setMessage(unreadMessageCount + " " + G.context.getResources().getString(R.string.unread_message));
             unreadMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
             mAdapter.add(0, new UnreadMessage(getRealmChat(), FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), unreadMessage)).withIdentifier(SUID.id().get()));
             //}
