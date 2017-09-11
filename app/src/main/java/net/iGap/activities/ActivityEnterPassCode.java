@@ -86,7 +86,14 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         setContentView(R.layout.fragment_enter_pass_code);
 
         if (getIntent().getBooleanExtra("EXIT", false)) {
-            finish();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                finish();
+            } else {
+                finishAffinity();
+            }
+
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -436,7 +443,6 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         Intent intent = new Intent(getApplicationContext(), ActivityEnterPassCode.class);
         //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("EXIT", true);
         startActivity(intent);
 
