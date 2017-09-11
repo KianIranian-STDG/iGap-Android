@@ -102,7 +102,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
             public void onClick(View v) {
                 new RequestUserTwoStepVerificationResendVerifyEmail().ResendVerifyEmail();
                 closeKeyboard(v);
-                error(getString(R.string.resend_verify_email_code));
+                error(G.context.getResources().getString(R.string.resend_verify_email_code));
             }
         });
 
@@ -140,7 +140,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                         rootReEnterPassword.setVisibility(View.VISIBLE);
                     } else {
                         closeKeyboard(v);
-                        error(getString(R.string.Password_has_to_mor_than_character));
+                        error(G.context.getResources().getString(R.string.Password_has_to_mor_than_character));
                     }
 
 
@@ -155,12 +155,12 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                             rootHintPassword.setVisibility(View.VISIBLE);
                         } else {
                             closeKeyboard(v);
-                            error(getString(R.string.Password_dose_not_match));
+                            error(G.context.getResources().getString(R.string.Password_dose_not_match));
                         }
 
                     } else {
                         closeKeyboard(v);
-                        error(getString(R.string.Password_has_to_mor_than_character));
+                        error(G.context.getResources().getString(R.string.Password_has_to_mor_than_character));
                     }
 
                 } else if (page == 3) {
@@ -176,11 +176,11 @@ public class FragmentSetSecurityPassword extends BaseFragment {
 
                         } else {
                             closeKeyboard(v);
-                            error(getString(R.string.Hint_cant_the_same_password));
+                            error(G.context.getResources().getString(R.string.Hint_cant_the_same_password));
                         }
                     } else {
                         closeKeyboard(v);
-                        error(getString(R.string.please_set_hint));
+                        error(G.context.getResources().getString(R.string.please_set_hint));
                     }
 
                 } else if (page == 4) {
@@ -192,7 +192,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
 
                     } else {
                         closeKeyboard(v);
-                        error(getString(R.string.please_complete_all_item));
+                        error(G.context.getResources().getString(R.string.please_complete_all_item));
                     }
                 } else if (page == 5) {
 
@@ -209,7 +209,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                             rootConfirmEmail.setVisibility(View.VISIBLE);
                         } else {
                             closeKeyboard(v);
-                            error(getString(R.string.invalid_email));
+                            error(G.context.getResources().getString(R.string.invalid_email));
                         }
                     } else {
                         page = 0;
@@ -237,7 +237,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                     if (edtSetConfirmEmail.length() > 0) {
                         new RequestUserTwoStepVerificationVerifyRecoveryEmail().recoveryEmail(edtSetConfirmEmail.getText().toString());
                     } else {
-                        error(getString(R.string.enter_verify_email_code));
+                        error(G.context.getResources().getString(R.string.enter_verify_email_code));
                     }
                     closeKeyboard(v);
                 }
@@ -286,7 +286,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (isAdded()) error(getString(R.string.invalid_verify_email_code));
+                        if (isAdded()) error(G.context.getResources().getString(R.string.invalid_verify_email_code));
                     }
                 });
             }
@@ -329,7 +329,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                 Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                 vShort.vibrate(200);
                 final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
-                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         snack.dismiss();

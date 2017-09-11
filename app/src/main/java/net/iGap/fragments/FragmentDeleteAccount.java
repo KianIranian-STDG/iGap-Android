@@ -248,7 +248,7 @@ public class FragmentDeleteAccount extends BaseFragment {
                                             @Override
                                             public void run() {
                                                 final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
-                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
                                                         snack.dismiss();
@@ -269,7 +269,7 @@ public class FragmentDeleteAccount extends BaseFragment {
 
                     final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), R.string.please_enter_code_for_verify, Snackbar.LENGTH_LONG);
 
-                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                    snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             snack.dismiss();

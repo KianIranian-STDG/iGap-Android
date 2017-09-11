@@ -257,7 +257,7 @@ public class FragmentShowImage extends BaseFragment {
 
         viewPager.setCurrentItem(selectedFile);
 
-        txtImageNumber.setText(selectedFile + 1 + " " + getString(R.string.of) + " " + mFList.size());
+        txtImageNumber.setText(selectedFile + 1 + " " + G.context.getResources().getString(R.string.of) + " " + mFList.size());
         if (HelperCalander.isLanguagePersian) {
             txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
         }
@@ -395,7 +395,7 @@ public class FragmentShowImage extends BaseFragment {
                 intent.setType("image/*");
                 //+Realm realm = Realm.getDefaultInstance();
                 putExtra(intent, StructMessageInfo.convert(getRealm(), rm));
-                startActivity(Intent.createChooser(intent, getString(R.string.share_image_from_igap)));
+                startActivity(Intent.createChooser(intent, G.context.getResources().getString(R.string.share_image_from_igap)));
             }
         }
     }
@@ -625,7 +625,7 @@ public class FragmentShowImage extends BaseFragment {
                 @Override
                 public void onPageSelected(final int position) {
 
-                    txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + mFList.size());
+                    txtImageNumber.setText(position + 1 + " " + G.context.getResources().getString(R.string.of) + " " + mFList.size());
                     if (HelperCalander.isLanguagePersian) {
                         txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
                     }

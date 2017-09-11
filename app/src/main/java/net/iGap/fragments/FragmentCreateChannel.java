@@ -158,7 +158,7 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                             public void run() {
                                 final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
-                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();
@@ -177,7 +177,7 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                             public void run() {
                                 final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
-                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();

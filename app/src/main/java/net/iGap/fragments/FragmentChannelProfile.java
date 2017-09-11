@@ -334,9 +334,9 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
         TextView txtDeletChannel = (TextView) view.findViewById(R.id.txt_delete_channel);
         if (role == ChannelChatRole.OWNER) {
-            txtDeletChannel.setText(getString(R.string.channel_delete));
+            txtDeletChannel.setText(G.context.getResources().getString(R.string.channel_delete));
         } else {
-            txtDeletChannel.setText(getString(R.string.channel_left));
+            txtDeletChannel.setText(G.context.getResources().getString(R.string.channel_left));
         }
         lytDeleteChannel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -559,7 +559,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                     public void run() {
 
                         final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
-                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                        snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 snack.dismiss();
@@ -976,7 +976,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.choose_picture).negativeText(R.string.cansel).items(r).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
-                if (text.toString().equals(getString(R.string.from_camera))) {
+                if (text.toString().equals(G.context.getResources().getString(R.string.from_camera))) {
 
                     if (G.fragmentActivity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
@@ -1091,13 +1091,13 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
     private String dialogName;
 
     private void ChangeGroupDescription() {
-        MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.channel_description).positiveText(getString(R.string.save)).alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
+        MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.channel_description).positiveText(G.context.getResources().getString(R.string.save)).alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 editChannelRequest(txtChannelNameInfo.getText().toString(), dialogDesc);
                 showProgressBar();
             }
-        }).negativeText(getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(getString(R.string.please_enter_group_description), txtDescription.getText().toString(), new MaterialDialog.InputCallback() {
+        }).negativeText(G.context.getResources().getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(G.context.getResources().getString(R.string.please_enter_group_description), txtDescription.getText().toString(), new MaterialDialog.InputCallback() {
             @Override
             public void onInput(MaterialDialog dialog, CharSequence input) {
                 // Do something
@@ -1497,7 +1497,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             public void run() {
                 final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
-                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         snack.dismiss();
@@ -1516,7 +1516,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             public void run() {
                 final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
-                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         snack.dismiss();
@@ -1595,7 +1595,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             }
         };
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.channel_title_convert_to_private)).content(getString(R.string.channel_text_convert_to_private)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.channel_title_convert_to_private)).content(G.context.getResources().getString(R.string.channel_text_convert_to_private)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -1606,7 +1606,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
     private void convertToPublic() {
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.channel_title_convert_to_public)).content(getString(R.string.channel_text_convert_to_public)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.channel_title_convert_to_public)).content(G.context.getResources().getString(R.string.channel_text_convert_to_public)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 

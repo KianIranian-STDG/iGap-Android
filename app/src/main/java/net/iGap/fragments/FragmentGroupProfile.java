@@ -781,9 +781,9 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         });
 
         if (role == GroupChatRole.OWNER) {
-            txtDeleteGroup.setText(getString(R.string.delete_group));
+            txtDeleteGroup.setText(G.context.getResources().getString(R.string.delete_group));
         } else {
-            txtDeleteGroup.setText(getString(R.string.left_group));
+            txtDeleteGroup.setText(G.context.getResources().getString(R.string.left_group));
         }
 
         txtDeleteGroup.setOnClickListener(new View.OnClickListener() {
@@ -1017,7 +1017,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             }
         };
 
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.group_title_convert_to_private)).content(getString(R.string.group_text_convert_to_private)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.group_title_convert_to_private)).content(G.context.getResources().getString(R.string.group_text_convert_to_private)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -1038,7 +1038,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     }
 
     private void convertToPublic(View view) {
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.group_title_convert_to_public)).content(getString(R.string.group_text_convert_to_public)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.group_title_convert_to_public)).content(G.context.getResources().getString(R.string.group_text_convert_to_public)).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -1492,7 +1492,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                     public void run() {
                         final Snackbar snack = Snackbar.make(view.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
-                        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                        snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 snack.dismiss();
@@ -1535,7 +1535,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     }
 
     private void ChangeGroupDescription() {
-        MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.group_description).positiveText(getString(R.string.save)).alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
+        MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.group_description).positiveText(G.context.getResources().getString(R.string.save)).alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -1566,7 +1566,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
                 new RequestGroupEdit().groupEdit(roomId, txtGroupName.getText().toString(), tmp);
             }
-        }).negativeText(getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(getString(R.string.please_enter_group_description), txtGroupDescription.getText().toString(), new MaterialDialog.InputCallback() {
+        }).negativeText(G.context.getResources().getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(G.context.getResources().getString(R.string.please_enter_group_description), txtGroupDescription.getText().toString(), new MaterialDialog.InputCallback() {
             @Override
             public void onInput(MaterialDialog dialog, CharSequence input) {
                 // Do something
@@ -1598,10 +1598,10 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         String text = "";
         int title;
         if (role == GroupChatRole.OWNER) {
-            text = getString(R.string.do_you_want_to_delete_this_group);
+            text = G.context.getResources().getString(R.string.do_you_want_to_delete_this_group);
             title = R.string.delete_group;
         } else {
-            text = getString(R.string.do_you_want_to_leave_this_group);
+            text = G.context.getResources().getString(R.string.do_you_want_to_leave_this_group);
             title = R.string.left_group;
         }
 
@@ -1920,7 +1920,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             public void run() {
                 final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
-                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         snack.dismiss();
@@ -1940,7 +1940,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             public void run() {
                 final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
-                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         snack.dismiss();

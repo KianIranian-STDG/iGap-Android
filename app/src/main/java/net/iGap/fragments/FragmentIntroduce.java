@@ -434,7 +434,7 @@ public class FragmentIntroduce extends BaseFragment {
                                 @Override
                                 public void run() {
                                     final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.Toast_waiting_fot_get_info), Snackbar.LENGTH_LONG);
-                                    snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                    snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
                                             snack.dismiss();
@@ -450,7 +450,7 @@ public class FragmentIntroduce extends BaseFragment {
                             @Override
                             public void run() {
                                 final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.waiting_for_connection), Snackbar.LENGTH_LONG);
-                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();

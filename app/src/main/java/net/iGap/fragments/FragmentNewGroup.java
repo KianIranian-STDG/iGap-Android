@@ -145,7 +145,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     }
 
     private void showDialogSelectGallery() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.choose_picture)).negativeText(getString(R.string.cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+        new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.choose_picture)).negativeText(G.context.getResources().getString(R.string.cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
 

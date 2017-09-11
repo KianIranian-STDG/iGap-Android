@@ -2109,7 +2109,7 @@ public class FragmentChat extends BaseFragment
                         unreadMessage.setMessageId(TimeUtils.currentLocalTime());
                         // -1 means time message
                         unreadMessage.setUserId(-1);
-                        unreadMessage.setMessage(countNewMessage + " " + getString(R.string.unread_message));
+                        unreadMessage.setMessage(countNewMessage + " " + G.context.getResources().getString(R.string.unread_message));
                         unreadMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
                         mAdapter.add(position, new UnreadMessage(getRealmChat(), FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), unreadMessage)).withIdentifier(SUID.id().get()));
 
@@ -3385,9 +3385,9 @@ public class FragmentChat extends BaseFragment
                     rootReplay.setVisibility(View.GONE);
                     rootDelete.setVisibility(View.GONE);
 
-                    //items.remove(getString(R.string.edit_item_dialog));
-                    //items.remove(getString(R.string.replay_item_dialog));
-                    //items.remove(getString(R.string.delete_item_dialog));
+                    //items.remove(G.context.getResources().getString(R.string.edit_item_dialog));
+                    //items.remove(G.context.getResources().getString(R.string.replay_item_dialog));
+                    //items.remove(G.context.getResources().getString(R.string.delete_item_dialog));
                 }
                 final long senderId = G.userId;
                 ChannelChatRole roleSenderMessage = null;
@@ -3401,20 +3401,20 @@ public class FragmentChat extends BaseFragment
                 if (!G.authorHash.equals(message.authorHash)) {  // if message dose'nt belong to owner
                     if (channelRole == ChannelChatRole.MEMBER) {
 
-                        //items.remove(getString(R.string.delete_item_dialog));
+                        //items.remove(G.context.getResources().getString(R.string.delete_item_dialog));
                         rootDelete.setVisibility(View.GONE);
                     } else if (channelRole == ChannelChatRole.MODERATOR) {
                         if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
-                            //items.remove(getString(R.string.delete_item_dialog));
+                            //items.remove(G.context.getResources().getString(R.string.delete_item_dialog));
                             rootDelete.setVisibility(View.GONE);
                         }
                     } else if (channelRole == ChannelChatRole.ADMIN) {
                         if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
-                            //items.remove(getString(R.string.delete_item_dialog));
+                            //items.remove(G.context.getResources().getString(R.string.delete_item_dialog));
                             rootDelete.setVisibility(View.GONE);
                         }
                     }
-                    //items.remove(getString(R.string.edit_item_dialog));
+                    //items.remove(G.context.getResources().getString(R.string.edit_item_dialog));
                     rootEdit.setVisibility(View.GONE);
                 }
             } else if (chatType == GROUP) {
@@ -3431,27 +3431,27 @@ public class FragmentChat extends BaseFragment
                 }
                 if (!G.authorHash.equals(message.authorHash)) {  // if message dose'nt belong to owner
                     if (groupRole == GroupChatRole.MEMBER) {
-                        //items.remove(getString(R.string.delete_item_dialog));
+                        //items.remove(G.context.getResources().getString(R.string.delete_item_dialog));
                         rootDelete.setVisibility(View.GONE);
                     } else if (groupRole == GroupChatRole.MODERATOR) {
                         if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
-                            //items.remove(getString(R.string.delete_item_dialog));
+                            //items.remove(G.context.getResources().getString(R.string.delete_item_dialog));
                             rootDelete.setVisibility(View.GONE);
                         }
                     } else if (groupRole == GroupChatRole.ADMIN) {
                         if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
-                            //items.remove(getString(R.string.delete_item_dialog));
+                            //items.remove(G.context.getResources().getString(R.string.delete_item_dialog));
                             rootDelete.setVisibility(View.GONE);
                         }
                     }
-                    //items.remove(getString(R.string.edit_item_dialog));
+                    //items.remove(G.context.getResources().getString(R.string.edit_item_dialog));
                     rootEdit.setVisibility(View.GONE);
                 }
             } else if (realmRoom.getReadOnly()) {
                 rootReplay.setVisibility(View.GONE);
             } else {
                 if (!message.senderID.equalsIgnoreCase(Long.toString(G.userId))) {
-                    //items.remove(getString(R.string.edit_item_dialog));
+                    //items.remove(G.context.getResources().getString(R.string.edit_item_dialog));
                     rootEdit.setVisibility(View.GONE);
                 }
             }
@@ -3462,11 +3462,11 @@ public class FragmentChat extends BaseFragment
 
         String _savedFolderName = "";
         if (message.messageType.toString().contains("IMAGE") || message.messageType.toString().contains("VIDEO") || message.messageType.toString().contains("GIF")) {
-            _savedFolderName = getString(R.string.save_to_gallery);
+            _savedFolderName = G.context.getResources().getString(R.string.save_to_gallery);
         } else if (message.messageType.toString().contains("AUDIO") || message.messageType.toString().contains("VOICE")) {
-            _savedFolderName = getString(R.string.save_to_Music);
+            _savedFolderName = G.context.getResources().getString(R.string.save_to_Music);
         } else {
-            _savedFolderName = getString(R.string.saveToDownload_item_dialog);
+            _savedFolderName = G.context.getResources().getString(R.string.saveToDownload_item_dialog);
         }
 
         txtItemSaveToDownload.setText(_savedFolderName);
@@ -3587,12 +3587,12 @@ public class FragmentChat extends BaseFragment
 
                 if (new File(_dPath).exists()) {
 
-                    if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
+                    if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(G.context.getResources().getString(R.string.saveToDownload_item_dialog))) {
 
                         HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
-                    } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_Music))) {
+                    } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(G.context.getResources().getString(R.string.save_to_Music))) {
                         HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
-                    } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_gallery))) {
+                    } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(G.context.getResources().getString(R.string.save_to_gallery))) {
 
                         if (message.messageType.toString().contains("VIDEO")) {
                             HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
@@ -3627,12 +3627,12 @@ public class FragmentChat extends BaseFragment
                                         G.handler.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.saveToDownload_item_dialog))) {
+                                                if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(G.context.getResources().getString(R.string.saveToDownload_item_dialog))) {
 
                                                     HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
-                                                } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_Music))) {
+                                                } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(G.context.getResources().getString(R.string.save_to_Music))) {
                                                     HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
-                                                } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(getString(R.string.save_to_gallery))) {
+                                                } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(G.context.getResources().getString(R.string.save_to_gallery))) {
 
                                                     if (message.messageType.toString().contains("VIDEO")) {
                                                         HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
@@ -4683,61 +4683,61 @@ public class FragmentChat extends BaseFragment
                 String filename = listPathString.get(0).substring(listPathString.get(0).lastIndexOf("/") + 1);
                 switch (requestCode) {
                     case AttachFile.request_code_TAKE_PICTURE:
-                        txtFileNameForSend.setText(getString(R.string.image_selected_for_send) + "\n" + filename);
+                        txtFileNameForSend.setText(G.context.getResources().getString(R.string.image_selected_for_send) + "\n" + filename);
                         break;
                     case AttachFile.requestOpenGalleryForImageMultipleSelect:
                         if (listPathString.size() == 1) {
                             if (!listPathString.get(0).toLowerCase().endsWith(".gif")) {
-                                txtFileNameForSend.setText(getString(R.string.image_selected_for_send) + "\n" + filename);
+                                txtFileNameForSend.setText(G.context.getResources().getString(R.string.image_selected_for_send) + "\n" + filename);
                             } else {
-                                txtFileNameForSend.setText(getString(R.string.gif_selected_for_send) + "\n" + filename);
+                                txtFileNameForSend.setText(G.context.getResources().getString(R.string.gif_selected_for_send) + "\n" + filename);
                             }
                         } else {
-                            txtFileNameForSend.setText(listPathString.size() + getString(R.string.image_selected_for_send) + "\n" + filename);
+                            txtFileNameForSend.setText(listPathString.size() + G.context.getResources().getString(R.string.image_selected_for_send) + "\n" + filename);
                         }
 
                         break;
 
                     case AttachFile.requestOpenGalleryForVideoMultipleSelect:
-                        txtFileNameForSend.setText(getString(R.string.multi_video_selected_for_send) + "\n" + filename);
+                        txtFileNameForSend.setText(G.context.getResources().getString(R.string.multi_video_selected_for_send) + "\n" + filename);
                         break;
                     case request_code_VIDEO_CAPTURED:
 
                         if (listPathString.size() == 1) {
-                            txtFileNameForSend.setText(getString(R.string.video_selected_for_send));
+                            txtFileNameForSend.setText(G.context.getResources().getString(R.string.video_selected_for_send));
                         } else {
-                            txtFileNameForSend.setText(listPathString.size() + getString(R.string.video_selected_for_send) + "\n" + filename);
+                            txtFileNameForSend.setText(listPathString.size() + G.context.getResources().getString(R.string.video_selected_for_send) + "\n" + filename);
                         }
                         break;
 
                     case AttachFile.request_code_pic_audi:
                         if (listPathString.size() == 1) {
-                            txtFileNameForSend.setText(getString(R.string.audio_selected_for_send) + "\n" + filename);
+                            txtFileNameForSend.setText(G.context.getResources().getString(R.string.audio_selected_for_send) + "\n" + filename);
                         } else {
-                            txtFileNameForSend.setText(listPathString.size() + getString(R.string.audio_selected_for_send) + "\n" + filename);
+                            txtFileNameForSend.setText(listPathString.size() + G.context.getResources().getString(R.string.audio_selected_for_send) + "\n" + filename);
                         }
                         break;
                     case AttachFile.request_code_pic_file:
-                        txtFileNameForSend.setText(getString(R.string.file_selected_for_send) + "\n" + filename);
+                        txtFileNameForSend.setText(G.context.getResources().getString(R.string.file_selected_for_send) + "\n" + filename);
                         break;
                     case AttachFile.request_code_open_document:
                         if (listPathString.size() == 1) {
-                            txtFileNameForSend.setText(getString(R.string.file_selected_for_send) + "\n" + filename);
+                            txtFileNameForSend.setText(G.context.getResources().getString(R.string.file_selected_for_send) + "\n" + filename);
                         }
                         break;
                     case AttachFile.request_code_paint:
                         if (listPathString.size() == 1) {
-                            txtFileNameForSend.setText(getString(R.string.pain_selected_for_send) + "\n" + filename);
+                            txtFileNameForSend.setText(G.context.getResources().getString(R.string.pain_selected_for_send) + "\n" + filename);
                         }
                         break;
                     case AttachFile.request_code_contact_phone:
-                        txtFileNameForSend.setText(getString(R.string.phone_selected_for_send) + "\n" + filename);
+                        txtFileNameForSend.setText(G.context.getResources().getString(R.string.phone_selected_for_send) + "\n" + filename);
                         break;
                     case IntentRequests.REQ_CROP:
                         if (!listPathString.get(0).toLowerCase().endsWith(".gif")) {
-                            txtFileNameForSend.setText(getString(R.string.crop_selected_for_send) + "\n" + filename);
+                            txtFileNameForSend.setText(G.context.getResources().getString(R.string.crop_selected_for_send) + "\n" + filename);
                         } else {
-                            txtFileNameForSend.setText(getString(R.string.gif_selected_for_send) + "\n" + filename);
+                            txtFileNameForSend.setText(G.context.getResources().getString(R.string.gif_selected_for_send) + "\n" + filename);
                         }
                         break;
                 }
@@ -5093,19 +5093,19 @@ public class FragmentChat extends BaseFragment
                 case "AUDIO_TEXT":
                     intent.setType("audio/*");
                     putExtra(intent, messageInfo);
-                    chooserDialogText = getString(R.string.share_audio_file);
+                    chooserDialogText = G.context.getResources().getString(R.string.share_audio_file);
                     break;
                 case "IMAGE":
                 case "IMAGE_TEXT":
                     intent.setType("image/*");
                     putExtra(intent, messageInfo);
-                    chooserDialogText = getString(R.string.share_image);
+                    chooserDialogText = G.context.getResources().getString(R.string.share_image);
                     break;
                 case "VIDEO":
                 case "VIDEO_TEXT":
                     intent.setType("video/*");
                     putExtra(intent, messageInfo);
-                    chooserDialogText = getString(R.string.share_video_file);
+                    chooserDialogText = G.context.getResources().getString(R.string.share_video_file);
                     break;
                 case "FILE":
                 case "FILE_TEXT":
@@ -5123,7 +5123,7 @@ public class FragmentChat extends BaseFragment
 
                         intent.setType(mimeType);
                         intent.putExtra(Intent.EXTRA_STREAM, uri);
-                        chooserDialogText = getString(R.string.share_file);
+                        chooserDialogText = G.context.getResources().getString(R.string.share_file);
                     } else {
                         G.handler.post(new Runnable() {
                             @Override
@@ -6852,7 +6852,7 @@ public class FragmentChat extends BaseFragment
                 }).start();
 
                 int _count = mForwardMessages.size();
-                String str = _count > 1 ? G.context.getResources().getString(R.string.messages_selected) : getString(R.string.message_selected);
+                String str = _count > 1 ? G.context.getResources().getString(R.string.messages_selected) : G.context.getResources().getString(R.string.message_selected);
 
                 EmojiTextViewE emMessage = (EmojiTextViewE) rootView.findViewById(R.id.cslhf_txt_message);
 

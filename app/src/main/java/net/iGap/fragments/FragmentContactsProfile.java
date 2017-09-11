@@ -680,7 +680,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         txtClearChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAlertDialog(getString(R.string.clear_this_chat), getString(R.string.clear), getString(R.string.cancel));
+                showAlertDialog(G.context.getResources().getString(R.string.clear_this_chat), G.context.getResources().getString(R.string.clear), G.context.getResources().getString(R.string.cancel));
             }
         });
         txtNotifyAndSound = (TextView) view.findViewById(R.id.chi_txtNotifyAndSound);
@@ -893,7 +893,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                 Toast.makeText(G.context, R.string.save_ok, Toast.LENGTH_SHORT).show();
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                Toast.makeText(G.context, getString(R.string.exception) + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(G.context, G.context.getResources().getString(R.string.exception) + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
 
                             break;
@@ -971,10 +971,10 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         }
 
         if (isBlockUser) {
-            txtBlockUser.setText(getString(R.string.un_block_user));
+            txtBlockUser.setText(G.context.getResources().getString(R.string.un_block_user));
             iconBlockUser.setText(G.context.getResources().getString(R.string.md_unblock));
         } else {
-            txtBlockUser.setText(getString(R.string.block_user));
+            txtBlockUser.setText(G.context.getResources().getString(R.string.block_user));
             iconBlockUser.setText(G.context.getResources().getString(R.string.md_block));
         }
         txtClearHistory.setText(G.context.getResources().getString(R.string.clear_history));

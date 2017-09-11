@@ -448,7 +448,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                             }
                         } else {
                             final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.please_check_your_camera), Snackbar.LENGTH_LONG);
-                            snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                            snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     snack.dismiss();

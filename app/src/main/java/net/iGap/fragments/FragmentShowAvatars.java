@@ -343,7 +343,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
                         if (avatarListSize > 0) {
                             viewPager.getAdapter().notifyDataSetChanged();
-                            txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + getString(R.string.of) + " " + avatarListSize);
+                            txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + G.context.getResources().getString(R.string.of) + " " + avatarListSize);
                             if (HelperCalander.isLanguagePersian) {
                                 txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
                             }
@@ -367,7 +367,7 @@ public class FragmentShowAvatars extends BaseFragment {
         mAdapter = new FragmentShowAvatars.AdapterViewPager();
         viewPager.setAdapter(mAdapter);
 
-        txtImageNumber.setText(1 + " " + getString(R.string.of) + " " + avatarList.size());
+        txtImageNumber.setText(1 + " " + G.context.getResources().getString(R.string.of) + " " + avatarList.size());
         if (HelperCalander.isLanguagePersian) {
             txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
         }
@@ -392,7 +392,7 @@ public class FragmentShowAvatars extends BaseFragment {
             @Override
             public void onPageSelected(int position) {
 
-                txtImageNumber.setText(position + 1 + " " + getString(R.string.of) + " " + avatarList.size());
+                txtImageNumber.setText(position + 1 + " " + G.context.getResources().getString(R.string.of) + " " + avatarList.size());
                 if (HelperCalander.isLanguagePersian) {
                     txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
                 }
@@ -474,7 +474,7 @@ public class FragmentShowAvatars extends BaseFragment {
     //
     //            intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
     //            intent.setType("image/*");
-    //            startActivity(Intent.createChooser(intent, getString(R.string.share_image_from_igap)));
+    //            startActivity(Intent.createChooser(intent, G.context.getResources().getString(R.string.share_image_from_igap)));
     //        }
     //    }
     //}

@@ -343,7 +343,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         Intent share = new Intent(Intent.ACTION_SEND);
         share.setType("audio/*");
         share.putExtra(Intent.EXTRA_STREAM, uri);
-        startActivity(Intent.createChooser(share, getString(R.string.shate_audio_file)));
+        startActivity(Intent.createChooser(share, G.context.getResources().getString(R.string.shate_audio_file)));
     }
 
     private void updateUi() {
@@ -354,9 +354,9 @@ public class FragmentMediaPlayer extends BaseFragment {
 
         if (MusicPlayer.mp != null) {
             if (MusicPlayer.mp.isPlaying()) {
-                btnPlay.setText(getString(R.string.md_round_pause_button));
+                btnPlay.setText(G.context.getResources().getString(R.string.md_round_pause_button));
             } else {
-                btnPlay.setText(getString(R.string.md_play_rounded_button));
+                btnPlay.setText(G.context.getResources().getString(R.string.md_play_rounded_button));
             }
 
             if (MusicPlayer.mediaThumpnail != null) {

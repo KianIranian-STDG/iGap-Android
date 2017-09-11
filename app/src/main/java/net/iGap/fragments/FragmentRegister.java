@@ -254,7 +254,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             @Override
             public void onClick(View v) {
 
-                dialogQrCode = new MaterialDialog.Builder(G.fragmentActivity).title(getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true).positiveText(R.string.share_item_dialog).onPositive(new MaterialDialog.SingleButtonCallback() {
+                dialogQrCode = new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true).positiveText(R.string.share_item_dialog).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         if (_resultQrCode == null) {
@@ -269,7 +269,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            startActivity(Intent.createChooser(intent, getString(R.string.share_image_from_igap)));
+                            startActivity(Intent.createChooser(intent, G.context.getResources().getString(R.string.share_image_from_igap)));
                         }
                     }
                 }).negativeText(R.string.save).onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -1189,7 +1189,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        rg_txt_verify_sms.setText(getString(R.string.rg_verify_register2));
+                        rg_txt_verify_sms.setText(G.context.getResources().getString(R.string.rg_verify_register2));
                         rg_prg_verify_sms.setVisibility(View.GONE);
                         rg_img_verify_sms.setVisibility(View.VISIBLE);
                         rg_img_verify_sms.setImageResource(R.mipmap.check);
@@ -1344,7 +1344,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
                             @Override
                             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                if (text.equals(getString(R.string.recovery_by_email_dialog))) {
+                                if (text.equals(G.context.getResources().getString(R.string.recovery_by_email_dialog))) {
                                     isRecoveryByEmail = true;
                                 } else {
                                     isRecoveryByEmail = false;
@@ -1378,7 +1378,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                             G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             new RequestUserTwoStepVerificationVerifyPassword().verifyPassword(editCheckPassword.getText().toString());
                         } else {
-                            error(getString(R.string.please_enter_code));
+                            error(G.context.getResources().getString(R.string.please_enter_code));
                         }
                     }
                 });
@@ -1650,7 +1650,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         Vibrator vShort = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         vShort.vibrate(200);
         final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
-        snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+        snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 snack.dismiss();
@@ -1753,7 +1753,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 prgWaiting.setVisibility(View.GONE);
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 closeKeyboard(txtOk);
-                error(getString(R.string.invalid_email_token));
+                error(G.context.getResources().getString(R.string.invalid_email_token));
             }
         });
     }
@@ -1783,7 +1783,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 prgWaiting.setVisibility(View.GONE);
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 closeKeyboard(txtOk);
-                error(getString(R.string.invalid_question_token));
+                error(G.context.getResources().getString(R.string.invalid_question_token));
             }
         });
     }

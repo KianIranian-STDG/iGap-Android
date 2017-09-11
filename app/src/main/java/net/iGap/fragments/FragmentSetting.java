@@ -943,7 +943,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                                             public void run() {
                                                 hideProgressBar();
                                                 final Snackbar snack = Snackbar.make(view.findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
                                                         snack.dismiss();
@@ -961,7 +961,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                                             public void run() {
                                                 hideProgressBar();
                                                 final Snackbar snack = Snackbar.make(view.findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
+                                                snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
                                                         snack.dismiss();
@@ -1978,7 +1978,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
         TextView txtVersionApp = (TextView) view.findViewById(R.id.st_txt_versionApp);
 
-        txtVersionApp.setText(getString(R.string.iGap_version) + " " + getAppVersion());
+        txtVersionApp.setText(G.context.getResources().getString(R.string.iGap_version) + " " + getAppVersion());
 
         if (HelperCalander.isLanguagePersian) {
             txtVersionApp.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVersionApp.getText().toString()));
@@ -2407,7 +2407,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 startActivityForResult(intent, AttachFile.request_code_TAKE_PICTURE);
 
             } else {
-                Toast.makeText(G.fragmentActivity, getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
+                Toast.makeText(G.fragmentActivity, G.context.getResources().getString(R.string.please_check_your_camera), Toast.LENGTH_SHORT).show();
             }
         }
     }
