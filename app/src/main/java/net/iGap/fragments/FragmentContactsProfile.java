@@ -846,7 +846,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
                                 callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
                                 callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(callIntent);
+                                G.context.startActivity(callIntent);
                             } catch (Exception ex) {
                                 ex.getStackTrace();
                             }
@@ -906,7 +906,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
                                 callIntent.setData(Uri.parse("tel:" + Uri.encode(call.trim())));
                                 callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(callIntent);
+                                G.context.startActivity(callIntent);
                             } catch (Exception ex) {
 
                                 ex.getStackTrace();

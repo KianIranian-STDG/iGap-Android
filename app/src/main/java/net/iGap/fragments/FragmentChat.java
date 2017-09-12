@@ -730,9 +730,7 @@ public class FragmentChat extends BaseFragment
             txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    startActivity(new Intent(G.fragmentActivity, ActivityCall.class));
-
+                    G.context.startActivity(new Intent(G.fragmentActivity, ActivityCall.class));
                 }
             });
 
@@ -3118,7 +3116,7 @@ public class FragmentChat extends BaseFragment
             if (intent != null) {
                 try {
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(intent);
+                    G.context.startActivity(intent);
                 } catch (Exception e) {
                     // to prevent from 'No Activity found to handle Intent'
                     e.printStackTrace();
@@ -5128,7 +5126,7 @@ public class FragmentChat extends BaseFragment
                     break;
             }
 
-            startActivity(Intent.createChooser(intent, chooserDialogText));
+            G.context.startActivity(Intent.createChooser(intent, chooserDialogText));
         } catch (Exception e) {
             e.printStackTrace();
         }
