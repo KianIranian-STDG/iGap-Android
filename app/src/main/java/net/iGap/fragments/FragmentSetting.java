@@ -1124,7 +1124,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         ltDataStorage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                G.context.startActivity(new Intent(G.fragmentActivity, ActivityManageSpace.class));
+                startActivity(new Intent(G.fragmentActivity, ActivityManageSpace.class));
             }
         });
 

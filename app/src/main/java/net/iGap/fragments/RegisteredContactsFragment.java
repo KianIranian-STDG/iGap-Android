@@ -614,7 +614,7 @@ public class RegisteredContactsFragment extends BaseFragment {
                             sendIntent.setAction(Intent.ACTION_SEND);
                             sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you!");
                             sendIntent.setType("text/plain");
-                            G.context.startActivity(sendIntent);
+                            startActivity(sendIntent);
                         }
                     }).show();
 

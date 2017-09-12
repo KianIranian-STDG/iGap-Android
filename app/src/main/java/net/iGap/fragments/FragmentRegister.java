@@ -269,7 +269,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            G.context.startActivity(Intent.createChooser(intent, G.context.getResources().getString(R.string.share_image_from_igap)));
+                            startActivity(Intent.createChooser(intent, G.context.getResources().getString(R.string.share_image_from_igap)));
                         }
                     }
                 }).negativeText(R.string.save).onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -1501,7 +1501,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                                 G.onUserInfoResponse = null;
                                 Intent intent = new Intent(context, ActivityMain.class);
                                 intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, userId);
-                                G.context.startActivity(intent);
+                                startActivity(intent);
                                 getActivity().finish();
                             }
                         });

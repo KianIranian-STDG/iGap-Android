@@ -730,7 +730,7 @@ public class FragmentChat extends BaseFragment
             txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    G.context.startActivity(new Intent(G.fragmentActivity, ActivityCall.class));
+                    startActivity(new Intent(G.fragmentActivity, ActivityCall.class));
                 }
             });
 
@@ -3116,7 +3116,7 @@ public class FragmentChat extends BaseFragment
             if (intent != null) {
                 try {
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    G.context.startActivity(intent);
+                    startActivity(intent);
                 } catch (Exception e) {
                     // to prevent from 'No Activity found to handle Intent'
                     e.printStackTrace();
@@ -4791,7 +4791,9 @@ public class FragmentChat extends BaseFragment
 
             if (mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE) {
                 StructMessageInfo info = ((StructMessageInfo) mReplayLayout.getTag());
-                replyToMessageId = parseLong(info.messageID);
+                if (info != null) {
+                    replyToMessageId = parseLong(info.messageID);
+                }
             } else {
                 replyToMessageId = 0;
             }
@@ -5126,7 +5128,7 @@ public class FragmentChat extends BaseFragment
                     break;
             }
 
-            G.context.startActivity(Intent.createChooser(intent, chooserDialogText));
+            startActivity(Intent.createChooser(intent, chooserDialogText));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -7844,13 +7846,17 @@ public class FragmentChat extends BaseFragment
     }
 
     public void finishChat() {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
+                removeFromBaseFragment(fragment);
 
-        Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
-        removeFromBaseFragment(fragment);
-
-        if (G.iTowPanModDesinLayout != null) {
-            G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.hide);
-        }
+                if (G.iTowPanModDesinLayout != null) {
+                    G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.hide);
+                }
+            }
+        });
     }
 
     private void closeKeyboard(View v) {

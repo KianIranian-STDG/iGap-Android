@@ -395,7 +395,7 @@ public class FragmentShowImage extends BaseFragment {
                 intent.setType("image/*");
                 //+Realm realm = Realm.getDefaultInstance();
                 putExtra(intent, StructMessageInfo.convert(getRealm(), rm));
-                G.context.startActivity(Intent.createChooser(intent, G.context.getResources().getString(R.string.share_image_from_igap)));
+                startActivity(Intent.createChooser(intent, G.context.getResources().getString(R.string.share_image_from_igap)));
             }
         }
     }

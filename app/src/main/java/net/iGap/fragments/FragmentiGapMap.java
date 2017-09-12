@@ -300,7 +300,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             public void onClick(View v) {
                 if (!isGpsOn) {
                     try {
-                        G.context.startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                     } catch (ActivityNotFoundException e) {
                         e.printStackTrace();
                     }
