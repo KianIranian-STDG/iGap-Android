@@ -59,28 +59,29 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                new WebRTC().peerConnectionInstance().setRemoteDescription(new SdpObserver() {
-                    @Override
-                    public void onCreateSuccess(SessionDescription sessionDescription) {
+                if (new WebRTC().peerConnectionInstance() != null) {
+                    new WebRTC().peerConnectionInstance().setRemoteDescription(new SdpObserver() {
+                        @Override
+                        public void onCreateSuccess(SessionDescription sessionDescription) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onSetSuccess() {
+                        @Override
+                        public void onSetSuccess() {
+                            FragmentCall.call(called_userId, true);
+                        }
 
-                        FragmentCall.call(called_userId, true);
-                    }
+                        @Override
+                        public void onCreateFailure(String s) {
+                            Log.i("WWW", "onOffer onCreateFailure : " + s);
+                        }
 
-                    @Override
-                    public void onCreateFailure(String s) {
-                        Log.i("WWW", "onOffer onCreateFailure : " + s);
-                    }
-
-                    @Override
-                    public void onSetFailure(String s) {
-                        Log.i("WWW", "onOffer onSetFailure : " + s);
-                    }
-                }, new SessionDescription(OFFER, callerSdp));
+                        @Override
+                        public void onSetFailure(String s) {
+                            Log.i("WWW", "onOffer onSetFailure : " + s);
+                        }
+                    }, new SessionDescription(OFFER, callerSdp));
+                }
             }
         });
     }

@@ -505,7 +505,7 @@ public class ViewMaker {
         ImageView cslr_txt_tic = new ImageView(context);
         cslr_txt_tic.setId(R.id.cslr_txt_tic);
         cslr_txt_tic.setColorFilter(context.getResources().getColor(R.color.colorOldBlack));
-        AppUtils.setImageDrawable(cslr_txt_tic, R.drawable.ic_double_check);
+        //AppUtils.setImageDrawable(cslr_txt_tic, R.drawable.ic_double_check);
         LinearLayout.LayoutParams layout_311 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp16), ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_311.leftMargin = i_Dp(dp4);
         layout_311.topMargin = dpToPixel(-5);

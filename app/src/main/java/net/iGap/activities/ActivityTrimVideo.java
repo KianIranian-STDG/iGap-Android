@@ -63,20 +63,23 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
     }
 
     private void durationVideo(String path) {
+        try {
+            File file = new File(path);
+            originalSize = file.length();
 
-        File file = new File(path);
-        originalSize = file.length();
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(file.toString()); // Enter Full File Path Here
+            String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+            duration = Long.parseLong(time);
+            int seconds = (int) ((duration) / 1000);
+            int minutes = seconds / 60;
+            seconds = seconds % 60;
+            txtTime.setText("," + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
 
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(file.toString()); // Enter Full File Path Here
-        String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        duration = Long.parseLong(time);
-        int seconds = (int) ((duration) / 1000);
-        int minutes = seconds / 60;
-        seconds = seconds % 60;
-        txtTime.setText("," + String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-
-        txtSize.setText("," + net.iGap.module.FileUtils.formatFileSize((long) originalSize));
+            txtSize.setText("," + net.iGap.module.FileUtils.formatFileSize((long) originalSize));
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override public void onTrimStarted() {
