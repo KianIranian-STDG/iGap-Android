@@ -109,18 +109,21 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     /////////////////////////////////////////////////////////////////////////////////////////
 
-    @Override protected void onResume() {
+    @Override
+    protected void onResume() {
         super.onResume();
         isPopUpVisible = true;
     }
 
-    @Override protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
         isPopUpVisible = false;
 
     }
 
-    @Override public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
         if (emojiPopup != null && emojiPopup.isShowing()) {
             emojiPopup.dismiss();
         } else {
@@ -128,16 +131,18 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         }
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
 
         G.checkLanguage();
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-            | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-            | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-            | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         super.onCreate(savedInstanceState);
 
+        if (getIntent() == null || getIntent().getExtras() == null) {
+            finish();
+            return;
+        }
 
         mList = (ArrayList<StructPopUp>) getIntent().getExtras().getSerializable(ARGUMENTLIST);
 
@@ -159,27 +164,33 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     private void setUpEmojiPopup() {
         emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent_notification)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
-            @Override public void onEmojiBackspaceClicked(final View v) {
+            @Override
+            public void onEmojiBackspaceClicked(final View v) {
 
             }
         }).setOnEmojiClickedListener(new OnEmojiClickedListener() {
-            @Override public void onEmojiClicked(final Emoji emoji) {
+            @Override
+            public void onEmojiClicked(final Emoji emoji) {
 
             }
         }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
-            @Override public void onEmojiPopupShown() {
+            @Override
+            public void onEmojiPopupShown() {
                 changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
             }
         }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
-            @Override public void onKeyboardOpen(final int keyBoardHeight) {
+            @Override
+            public void onKeyboardOpen(final int keyBoardHeight) {
 
             }
         }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
-            @Override public void onEmojiPopupDismiss() {
+            @Override
+            public void onEmojiPopupDismiss() {
                 changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
             }
         }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
-            @Override public void onKeyboardClose() {
+            @Override
+            public void onKeyboardClose() {
                 emojiPopup.dismiss();
             }
         }).build(edtChat);
@@ -251,8 +262,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 if (realmRegisteredInfo != null && realmRegisteredInfo.getLastAvatar() != null && realmRegisteredInfo.getLastAvatar().getFile() != null) {
                     // onRequestDownloadAvatar(realmRegisteredInfo.getLastAvatar().getFile());
                 }
-                imvUserPicture.setImageBitmap(
-                    net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
+                imvUserPicture.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imvUserPicture.getContext().getResources().getDimension(R.dimen.dp60), initialize, color));
             }
         } else {
             if (realmRegisteredInfo != null && realmRegisteredInfo.getLastAvatar() != null && realmRegisteredInfo.getLastAvatar().getFile() != null) {
@@ -262,7 +272,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         }
     }
 
-    @Override public boolean dispatchTouchEvent(MotionEvent event) {
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
 
         if (voiceRecord != null) {
             voiceRecord.dispatchTouchEvent(event);
@@ -281,7 +292,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         final String identity = Long.toString(System.currentTimeMillis());
 
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, Long.parseLong(identity));
 
                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
@@ -322,10 +334,12 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         private void initMethode() {
 
             popUpListener = new IPopUpListener() {
-                @Override public void onMessageRecive(final ArrayList<StructPopUp> list) {
+                @Override
+                public void onMessageRecive(final ArrayList<StructPopUp> list) {
 
                     viewPager.post(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
 
                             mList.clear();
                             mList = (ArrayList<StructPopUp>) list.clone();
@@ -345,7 +359,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             viewMicRecorder = findViewById(R.id.apn_layout_mic_recorde);
 
             voiceRecord = new VoiceRecord(ActivityPopUpNotification.this, viewMicRecorder, viewAttachFile, new OnVoiceRecord() {
-                @Override public void onVoiceRecordDone(String savedPath) {
+                @Override
+                public void onVoiceRecordDone(String savedPath) {
 
                     Intent uploadService = new Intent(ActivityPopUpNotification.this, UploadService.class);
                     uploadService.putExtra("Path", savedPath);
@@ -357,7 +372,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                     finish();
                 }
 
-                @Override public void onVoiceRecordCancel() {
+                @Override
+                public void onVoiceRecordCancel() {
 
                 }
             });
@@ -373,7 +389,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             RippleView rippleBackButton = (RippleView) findViewById(R.id.apn_ripple_back_Button);
 
             rippleBackButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-                @Override public void onComplete(RippleView rippleView) {
+                @Override
+                public void onComplete(RippleView rippleView) {
                     finish();
                 }
             });
@@ -382,7 +399,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
             txtName = (TextView) findViewById(R.id.apn_txt_name);
             txtName.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     goToChatActivity();
                 }
             });
@@ -391,14 +409,16 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
             imvUserPicture = (ImageView) findViewById(R.id.apn_imv_user_picture);
             imvUserPicture.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     goToChatActivity();
                 }
             });
 
             btnMessageCounter = (Button) findViewById(R.id.apn_btn_message_counter);
             btnMessageCounter.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
                 }
             });
@@ -416,17 +436,20 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             setImageAndTextAppBar(viewPager.getCurrentItem());
 
             viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
                 }
 
-                @Override public void onPageSelected(int position) {
+                @Override
+                public void onPageSelected(int position) {
                     btnMessageCounter.setText(position + 1 + "/" + listSize);
 
                     setImageAndTextAppBar(position);
                 }
 
-                @Override public void onPageScrollStateChanged(int state) {
+                @Override
+                public void onPageScrollStateChanged(int state) {
 
                 }
             });
@@ -437,7 +460,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             btnSmileButton = (MaterialDesignTextView) findViewById(R.id.apn_btn_smile_button);
             btnSmileButton.setOnClickListener(new View.OnClickListener() {
 
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     emojiPopup.toggle();
                 }
             });
@@ -445,11 +469,13 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             edtChat = (EmojiEditTextE) findViewById(R.id.apn_edt_chat);
 
             edtChat.addTextChangedListener(new TextWatcher() {
-                @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 }
 
-                @Override public void onTextChanged(CharSequence text, int i, int i1, int i2) {
+                @Override
+                public void onTextChanged(CharSequence text, int i, int i1, int i2) {
 
                     // if in the seeting page send by enter is on message send by enter key
                     if (text.toString().endsWith(System.getProperty("line.separator"))) {
@@ -457,30 +483,35 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                     }
                 }
 
-                @Override public void afterTextChanged(Editable editable) {
+                @Override
+                public void afterTextChanged(Editable editable) {
 
                     if (edtChat.getText().length() > 0) {
                         btnMic.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                            @Override public void onAnimationEnd(Animator animation) {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
                                 btnMic.setVisibility(View.GONE);
                             }
                         }).start();
                         btnSend.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                            @Override public void onAnimationEnd(Animator animation) {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
                                 btnSend.setVisibility(View.VISIBLE);
                             }
                         }).start();
                     } else {
                         btnMic.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                            @Override public void onAnimationEnd(Animator animation) {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
                                 btnMic.setVisibility(View.VISIBLE);
                             }
                         }).start();
                         btnSend.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                            @Override public void onAnimationEnd(Animator animation) {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
                                 btnSend.setVisibility(View.GONE);
                             }
@@ -498,7 +529,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
             btnMic = (MaterialDesignTextView) findViewById(R.id.apn_btn_mic);
             btnMic.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override public boolean onLongClick(View view) {
+                @Override
+                public boolean onLongClick(View view) {
 
                     voiceRecord.setItemTag("ivVoice");
                     viewAttachFile.setVisibility(View.GONE);
@@ -513,7 +545,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             btnSend.setTextColor(Color.parseColor(G.attachmentColor));
 
             btnSend.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
                     int position = viewPager.getCurrentItem();
 
@@ -529,15 +562,18 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     private class AdapterViewPagerClass extends PagerAdapter {
 
-        @Override public int getCount() {
+        @Override
+        public int getCount() {
             return mList.size();
         }
 
-        @Override public boolean isViewFromObject(View view, Object object) {
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
             return view.equals(object);
         }
 
-        @Override public Object instantiateItem(View container, final int position) {
+        @Override
+        public Object instantiateItem(View container, final int position) {
 
             LayoutInflater inflater = LayoutInflater.from(ActivityPopUpNotification.this);
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.sub_layout_activity_popup_notification, (ViewGroup) container, false);
@@ -546,7 +582,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             txtMessage.setText(mList.get(position).getMessage());
 
             layout.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
                     goToChatActivity();
                 }
             });
@@ -556,7 +593,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             return layout;
         }
 
-        @Override public void destroyItem(ViewGroup container, int position, Object object) {
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
         }
     }
