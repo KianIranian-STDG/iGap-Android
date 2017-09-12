@@ -6168,7 +6168,7 @@ public class FragmentChat extends BaseFragment
         private ArrayList<String> hashList = new ArrayList<>();
 
         void setHashString(String hashString) {
-            this.hashString = hashString;
+            this.hashString = hashString.toLowerCase();
         }
 
         public void setPosition(String messageId) {
@@ -6198,7 +6198,7 @@ public class FragmentChat extends BaseFragment
 
                     String mText = mAdapter.getItem(i).mMessage.forwardedFrom != null ? mAdapter.getItem(i).mMessage.forwardedFrom.getMessage() : mAdapter.getItem(i).mMessage.messageText;
 
-                    if (mText.contains(hashString)) {
+                    if (mText.toLowerCase().contains(hashString)) {
                         hashList.add(mAdapter.getItem(i).mMessage.messageID);
                     }
                 }

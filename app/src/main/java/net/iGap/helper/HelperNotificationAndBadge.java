@@ -409,7 +409,7 @@ public class HelperNotificationAndBadge {
                 .or()
                 .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.DELIVERED.toString())
                 .equalTo(RealmRoomMessageFields.DELETED, false)
-                .notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, authorHash)
+                .notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, authorHash).notEqualTo(RealmRoomMessageFields.USER_ID, G.userId)
                 .notEqualTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.LOG.toString())
                 .findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 

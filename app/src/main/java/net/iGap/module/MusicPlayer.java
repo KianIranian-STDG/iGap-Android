@@ -133,6 +133,7 @@ public class MusicPlayer extends Service {
     public static LinearLayout shearedMediaLayout;
 
     private static Realm mRealm;
+    private static boolean isRegisterSensore = false;
 
     private static Realm getmRealm() {
         if (mRealm == null || mRealm.isClosed()) {
@@ -149,21 +150,7 @@ public class MusicPlayer extends Service {
         return null;
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
 
-        initSensore();
-
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        removeSensore();
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -181,9 +168,14 @@ public class MusicPlayer extends Service {
                     if (notification != null) {
                         startForeground(notificationId, notification);
 
+                        initSensore();
+
                     }
 
                 } else if (action.equals(STOPFOREGROUND_ACTION)) {
+
+                    removeSensore();
+
                     stopForeground(true);
                     stopSelf();
                 }
@@ -578,6 +570,10 @@ public class MusicPlayer extends Service {
         } catch (Exception E) {
 
         }
+
+        clearWallpaperLockScrean();
+
+        removeMediaControl();
 
         try {
 
@@ -1141,71 +1137,75 @@ public class MusicPlayer extends Service {
 
     private static void initSensore() {
 
-        registerMediaBottom();
+        if (!isRegisterSensore) {
 
-        firstGetStateHeadSet = false;
-        headsetPluginReciver = new HeadsetPluginReciver();
+            registerMediaBottom();
 
+            firstGetStateHeadSet = false;
+            headsetPluginReciver = new HeadsetPluginReciver();
 
-        mSensorManager = (SensorManager) G.context.getSystemService(Context.SENSOR_SERVICE);
-        mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        sensorEventListener = new SensorEventListener() {
-            @Override
-            public void onSensorChanged(SensorEvent event) {
+            mSensorManager = (SensorManager) G.context.getSystemService(Context.SENSOR_SERVICE);
+            mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+            sensorEventListener = new SensorEventListener() {
+                @Override
+                public void onSensorChanged(SensorEvent event) {
 
-                if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
-                    if (event.values[0] >= -SENSOR_SENSITIVITY && event.values[0] <= SENSOR_SENSITIVITY) {
-                        // near
-                        isNearDistance = true;
-                        if (isVoice) {
-                            setSpeaker();
-                        }
-                    } else {
-                        //far
-                        isNearDistance = false;
-                        if (isVoice) {
-                            setSpeaker();
+                    if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+                        if (event.values[0] >= -SENSOR_SENSITIVITY && event.values[0] <= SENSOR_SENSITIVITY) {
+                            // near
+                            isNearDistance = true;
+                            if (isVoice) {
+                                setSpeaker();
+                            }
+                        } else {
+                            //far
+                            isNearDistance = false;
+                            if (isVoice) {
+                                setSpeaker();
+                            }
                         }
                     }
                 }
-            }
 
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+                @Override
+                public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
-            }
-        };
+                }
+            };
 
-        IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-        G.context.registerReceiver(headsetPluginReciver, filter);
-        registerDistanceSensor();
+            IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+            G.context.registerReceiver(headsetPluginReciver, filter);
+            registerDistanceSensor();
 
-
+            isRegisterSensore = true;
+        }
     }
 
     private static void removeSensore() {
 
-        try {
-            if (remoteComponentName != null) {
+        if (isRegisterSensore) {
+            try {
+                if (remoteComponentName != null) {
 
-                AudioManager audioManager = (AudioManager) G.context.getSystemService(AUDIO_SERVICE);
+                    AudioManager audioManager = (AudioManager) G.context.getSystemService(AUDIO_SERVICE);
 
-                audioManager.unregisterMediaButtonEventReceiver(remoteComponentName);
+                    audioManager.unregisterMediaButtonEventReceiver(remoteComponentName);
+                }
+            } catch (Exception e) {
+                Log.e("ddddd", "music plyer  removeSensore   audioManager   " + e.toString());
             }
-        } catch (Exception e) {
-            Log.e("ddddd", "music plyer  removeSensore   audioManager   " + e.toString());
+
+            try {
+
+                G.context.unregisterReceiver(headsetPluginReciver);
+            } catch (Exception e) {
+                Log.e("ddddd", "music plyer  removeSensore    unregisterReceiver " + e.toString());
+            }
+
+            unRegisterDistanceSensore();
+
+            isRegisterSensore = false;
         }
-
-        try {
-
-            G.context.unregisterReceiver(headsetPluginReciver);
-        } catch (Exception e) {
-            Log.e("ddddd", "music plyer  removeSensore    unregisterReceiver " + e.toString());
-        }
-
-        unRegisterDistanceSensore();
-        clearWallpaperLockScrean();
-        removeMediaControl();
     }
 
     private static void registerDistanceSensor() {
@@ -1248,7 +1248,10 @@ public class MusicPlayer extends Service {
                             setSpeaker();
 
                             if (firstGetStateHeadSet) {
-                                pauseSound();
+                                if (mp != null && mp.isPlaying()) {
+                                    pauseSound();
+                                }
+
                             }
 
 

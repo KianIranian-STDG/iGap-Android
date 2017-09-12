@@ -91,12 +91,15 @@ public class HelperMessageResponse {
                             HelperNotificationAndBadge.updateBadgeOnly();
                         } else {
 
-                            G.handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    G.helperNotificationAndBadge.checkAlert(true, roomType, roomId);
-                                }
-                            }, 200);
+                            if (roomType != ProtoGlobal.Room.Type.CHANNEL) {
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        G.helperNotificationAndBadge.checkAlert(true, roomType, roomId);
+                                    }
+                                }, 200);
+                            }
+
                         }
                     }
 
