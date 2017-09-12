@@ -791,8 +791,15 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inSampleSize = 2;
                     bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
-                } catch (Exception e1) {
-                    e1.printStackTrace();
+                } catch (OutOfMemoryError e1) {
+                    try {
+                        File imgFile = new File(pathName);
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inSampleSize = 4;
+                        bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
+                    } catch (OutOfMemoryError e2) {
+                        e2.printStackTrace();
+                    }
                 }
             }
 

@@ -1684,7 +1684,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                final Snackbar snack = Snackbar.make(dialog.findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
+                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
                                 snack.setAction("CANCEL", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {

@@ -111,6 +111,7 @@ import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyPassword;
 import net.iGap.request.RequestWrapper;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static net.iGap.G.context;
 import static net.iGap.R.color.black_register;
 
@@ -1501,7 +1502,8 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                                 G.onUserInfoResponse = null;
                                 Intent intent = new Intent(context, ActivityMain.class);
                                 intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, userId);
-                                startActivity(intent);
+                                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                G.context.startActivity(intent);
                                 getActivity().finish();
                             }
                         });
