@@ -87,6 +87,7 @@ import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
+import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnAvatarGet;
@@ -196,6 +197,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private static long currentTime;
     public static boolean isLock = true;
     public static boolean isActivityEnterPassCode = false;
+    public static FinishActivity finishActivity;
 
     public enum MainAction {
         downScrool, clinetCondition
@@ -298,6 +300,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onCreate(savedInstanceState);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        finishActivity = new FinishActivity() {
+            @Override
+            public void finishActivity() {
+                // ActivityChat.this.finish();
+                finish();
+            }
+        };
+
 
         if (isNeedToRegister) {
 

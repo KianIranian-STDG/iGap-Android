@@ -12,7 +12,6 @@ package net.iGap.activities;
 import android.annotation.TargetApi;
 import android.app.KeyguardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -85,16 +84,6 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_enter_pass_code);
 
-        if (getIntent().getBooleanExtra("EXIT", false)) {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-                finish();
-            } else {
-                finishAffinity();
-            }
-
-        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             fingerprintManager = (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
@@ -433,12 +422,11 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
     public void onBackPressed() {
         super.onBackPressed();
 
-        ActivityMain.isLock = true;
-        Intent intent = new Intent(getApplicationContext(), ActivityEnterPassCode.class);
-        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("EXIT", true);
-        startActivity(intent);
+        if (ActivityMain.finishActivity != null) {
+            ActivityMain.finishActivity.finishActivity();
+        }
+        finish();
+        finishAffinity();
 
     }
 
