@@ -135,9 +135,11 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
                     @Override
                     public void execute(Realm realm) {
 
-                        RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findAll();
+                        RealmResults<RealmRoomMessage> realmRoomMessages =
+                                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
                         RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
 
+                        int count = 0;
                         if (realmClientCondition != null) {
                             for (RealmRoomMessage roomMessage : realmRoomMessages) {
                                 if (roomMessage != null) {
@@ -151,6 +153,10 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
                                         realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
                                         callback.sendSeenStatus(roomMessage);
+                                        count++;
+                                        if (count >= 100) { // do this block for 100 item, (client need to send all status in one request, wait for server change...)
+                                            break;
+                                        }
                                     } else {
                                         if (G.userLogin) {
                                             if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
