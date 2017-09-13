@@ -795,21 +795,11 @@ public class FragmentChat extends BaseFragment
 
 
         // room id have to be set to default, otherwise I'm in the room always!
-        mRoomId = -1;
+
         MusicPlayer.chatLayout = null;
         ActivityCall.stripLayoutChat = null;
 
-        if (G.fragmentActivity != null) {
-            if (!G.twoPaneMode) {
-                try {
-                    ((ActivityMain) G.fragmentActivity).openNavigation();
-                } catch (Exception e) {
-                    HelperLog.setErrorLog("fragment chat ondestroy   " + e.toString());
-                }
-            }
-            ((ActivityMain) G.fragmentActivity).resume();
 
-        }
 
         super.onStop();
     }
@@ -818,6 +808,13 @@ public class FragmentChat extends BaseFragment
     public void onDestroy() {
 
         super.onDestroy();
+
+        mRoomId = -1;
+
+        if (G.fragmentActivity != null) {
+            ((ActivityMain) G.fragmentActivity).resume();
+        }
+
 
         if (realmChat != null && !realmChat.isClosed()) {
             realmChat.close();

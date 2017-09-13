@@ -53,7 +53,6 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
-import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
@@ -2546,10 +2545,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         super.onStop();
 
         updateRoomListIfNeeded();
-
-        if (getActivity() != null) {
-            ((ActivityMain) getActivity()).resume();
-        }
     }
 
     @Override

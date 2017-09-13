@@ -1968,7 +1968,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             // this call for create group   getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
+
             super.onBackPressed();
+
+            if (G.fragmentManager != null && G.fragmentManager.getBackStackEntryCount() == 0) {
+                if (!this.isFinishing()) {
+                    resume();
+                }
+            }
 
             desighnLayout(chatLayoutMode.none);
         }

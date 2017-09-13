@@ -849,7 +849,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                                     if (fragment != null) {
 
                                         FragmentChat fm = (FragmentChat) fragment;
-                                        if (fm.mRoomId == mInfo.getId() && fm.mRoomId > 0) {
+                                        if (fm.isAdded() && fm.mRoomId == mInfo.getId()) {
                                             openChat = false;
                                         } else {
                                             removeFromBaseFragment(fragment);
