@@ -72,6 +72,7 @@ public class MusicPlayer extends Service {
     private static Sensor mProximity;
     private static SensorEventListener sensorEventListener;
     private static final int SENSOR_SENSITIVITY = 4;
+    public static boolean canDoAction = true;
 
 
     public static final int notificationId = 19;
@@ -449,6 +450,11 @@ public class MusicPlayer extends Service {
 
     public static void nextMusic() {
 
+        if (!canDoAction) {
+            return;
+        }
+        canDoAction = false;
+
         try {
             String beforMessageID = MusicPlayer.messageId;
 
@@ -497,6 +503,7 @@ public class MusicPlayer extends Service {
 
     public static void previousMusic() {
 
+
         try {
             if (MusicPlayer.mp != null) {
 
@@ -508,11 +515,17 @@ public class MusicPlayer extends Service {
                     time = MusicPlayer.mp.getCurrentPosition();
                     updatePlayerTime();
 
+
                     return;
                 }
             }
         } catch (IllegalStateException e) {
         }
+
+        if (!canDoAction) {
+            return;
+        }
+        canDoAction = false;
 
         try {
             selectedMedia--;
@@ -601,6 +614,13 @@ public class MusicPlayer extends Service {
     }
 
     public static void startPlayer(String name, String musicPath, String roomName, long roomId, final boolean updateList, String messageID) {
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                canDoAction = true;
+            }
+        }, 1000);
 
         isVoice = false;
         isPause = false;
@@ -1054,10 +1074,12 @@ public class MusicPlayer extends Service {
 
             if (str.equals("previous")) {
                 previousMusic();
+                MusicPlayer.canDoAction = false;
             } else if (str.equals("play")) {
                 playAndPause();
             } else if (str.equals("forward")) {
                 nextMusic();
+                MusicPlayer.canDoAction = false;
             } else if (str.equals("close")) {
                 closeLayoutMediaPlayer();
             }

@@ -30,7 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperSaveFile;
@@ -38,7 +37,7 @@ import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.libs.ripplesoundplayer.RippleVisualizerView;
-import net.iGap.libs.ripplesoundplayer.renderer.BarRenderer;
+import net.iGap.libs.ripplesoundplayer.renderer.LineRenderer;
 import net.iGap.libs.ripplesoundplayer.util.PaintUtil;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
@@ -59,6 +58,7 @@ public class FragmentMediaPlayer extends BaseFragment {
     private ImageView img_RepeatOne;
     private ImageView img_MusicImage_default_icon;
     private TextView btnPlay;
+
 
     private RippleVisualizerView rippleVisualizerView;
 
@@ -316,6 +316,23 @@ public class FragmentMediaPlayer extends BaseFragment {
         }
     }
 
+    //private void setRenderer() {
+    //    switch (currentRenderMode) {
+    //        case LINE:
+    //            renderDemoView.setCurrentRenderer(new LineRenderer(PaintUtil.getLinePaint(Color.YELLOW)));
+    //            break;
+    //        case BAR_GRAPH:
+    //            renderDemoView.setCurrentRenderer(new BarRenderer(16, PaintUtil.getBarGraphPaint(Color.WHITE)));
+    //            break;
+    //        case COLORFUL_BAR_GRAPH:
+    //            renderDemoView.setCurrentRenderer(new ColorfulBarRenderer(8, PaintUtil.getBarGraphPaint(Color.BLUE)
+    //                , Color.parseColor("#FF0033")
+    //                , Color.parseColor("#ffebef"))
+    //            );
+    //            break;
+    //    }
+    //}
+
     private void initVisualizer(final View view) {
 
         if (G.context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -328,7 +345,8 @@ public class FragmentMediaPlayer extends BaseFragment {
 
                         if (rippleVisualizerView != null) {
 
-                            rippleVisualizerView.setCurrentRenderer(new BarRenderer(ViewMaker.i_Dp(R.dimen.dp4), PaintUtil.getBarGraphPaint(Color.parseColor("#15E4EE"))));
+                            rippleVisualizerView.setCurrentRenderer(new LineRenderer(PaintUtil.getLinePaint(Color.parseColor("#15E4EE"))));
+
 
                             if (MusicPlayer.mp.isPlaying()) {
                                 rippleVisualizerView.setEnabled(true);
