@@ -133,10 +133,14 @@ public class RealmMigration implements io.realm.RealmMigration {
             }
 
             RealmObjectSchema realmAvatar = schema.get(RealmAvatar.class.getSimpleName());
-            realmAvatar.addIndex(RealmAvatarFields.OWNER_ID);
+            if (realmAvatar != null) {
+                realmAvatar.addIndex(RealmAvatarFields.OWNER_ID);
+            }
 
             RealmObjectSchema realmRoom = schema.get(RealmRoom.class.getSimpleName());
-            realmRoom.addField(RealmRoomFields.IS_PINNED, boolean.class, FieldAttribute.REQUIRED);
+            if (realmRoom != null) {
+                realmRoom.addField(RealmRoomFields.IS_PINNED, boolean.class, FieldAttribute.REQUIRED);
+            }
 
             oldVersion++;
         }
@@ -150,7 +154,10 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
         if (oldVersion == 13) {
-            schema.get(RealmUserInfo.class.getSimpleName()).addField(RealmUserInfoFields.IS_PASS_CODE, boolean.class).addField(RealmUserInfoFields.IS_FINGER_PRINT, boolean.class).addField(RealmUserInfoFields.KIND_PASS_CODE, int.class).addField(RealmUserInfoFields.PASS_CODE, String.class);
+            RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
+            if (realmUserInfo != null) {
+                realmUserInfo.addField(RealmUserInfoFields.IS_PASS_CODE, boolean.class).addField(RealmUserInfoFields.IS_FINGER_PRINT, boolean.class).addField(RealmUserInfoFields.KIND_PASS_CODE, int.class).addField(RealmUserInfoFields.PASS_CODE, String.class);
+            }
             oldVersion++;
         }
     }
