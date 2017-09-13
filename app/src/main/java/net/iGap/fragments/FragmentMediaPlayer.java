@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,12 +27,19 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import java.io.File;
+import java.io.IOException;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.interfaces.OnComplete;
+import net.iGap.interfaces.OnGetPermission;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.libs.ripplesoundplayer.RippleVisualizerView;
+import net.iGap.libs.ripplesoundplayer.renderer.BarRenderer;
+import net.iGap.libs.ripplesoundplayer.util.PaintUtil;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
@@ -52,6 +60,8 @@ public class FragmentMediaPlayer extends BaseFragment {
     private ImageView img_MusicImage_default_icon;
     private TextView btnPlay;
 
+    private RippleVisualizerView rippleVisualizerView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,8 +76,6 @@ public class FragmentMediaPlayer extends BaseFragment {
                 return inflater.inflate(R.layout.activity_media_player, container, false);
             }
         }
-
-
     }
 
     @Override
@@ -81,19 +89,24 @@ public class FragmentMediaPlayer extends BaseFragment {
             return;
         }
 
-        //GifImageView gifImageView=(GifImageView)view.findViewById(R.id.ampl_gif_plyer) ;
-        //if(gifImageView!=null){
-        //    gifImageView.st
-        //}
-
         onComplete = new OnComplete() {
             @Override
             public void complete(boolean result, String messageOne, final String MessageTow) {
 
                 if (messageOne.equals("play")) {
                     btnPlay.setText(R.string.md_play_rounded_button);
+
+                    if (rippleVisualizerView != null) {
+                        rippleVisualizerView.setEnabled(false);
+                        rippleVisualizerView.pauseVisualizer();
+                    }
                 } else if (messageOne.equals("pause")) {
                     btnPlay.setText(R.string.md_round_pause_button);
+
+                    if (rippleVisualizerView != null) {
+                        rippleVisualizerView.setEnabled(true);
+                        rippleVisualizerView.startVisualizer();
+                    }
                 } else if (messageOne.equals("update")) {
                     G.handler.post(new Runnable() {
                         @Override
@@ -170,16 +183,30 @@ public class FragmentMediaPlayer extends BaseFragment {
             updateUi();
             MusicPlayer.onComplete = onComplete;
         }
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
 
+        if (rippleVisualizerView != null) {
+            rippleVisualizerView.pauseVisualizer();
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
 
-        if (!G.twoPaneMode) {
-            G.fragmentManager.beginTransaction().detach(this).attach(this).commit();
+        try {
+            if (!G.twoPaneMode) {
+                if (isAdded()) {
+                    G.fragmentManager.beginTransaction().detach(this).attach(this).commit();
+                }
+            }
+        } catch (Exception e) {
+            Log.e("ddddd", "FragmentMediaPlayer  onConfigurationChanged  " + e.toString());
         }
+
 
 
         super.onConfigurationChanged(newConfig);
@@ -188,6 +215,8 @@ public class FragmentMediaPlayer extends BaseFragment {
     //*****************************************************************************************
 
     private void initComponent(View view) {
+
+        initVisualizer(view);
 
         txt_MusicName = (TextView) view.findViewById(R.id.ml_txt_music_name);
         txt_MusicPlace = (TextView) view.findViewById(R.id.ml_txt_music_place);
@@ -287,6 +316,41 @@ public class FragmentMediaPlayer extends BaseFragment {
         }
     }
 
+    private void initVisualizer(final View view) {
+
+        if (G.context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            try {
+                HelperPermision.getMicroPhonePermission(G.currentActivity, new OnGetPermission() {
+                    @Override
+                    public void Allow() throws IOException {
+
+                        rippleVisualizerView = (RippleVisualizerView) view.findViewById(R.id.line_renderer_demo);
+
+                        if (rippleVisualizerView != null) {
+
+                            rippleVisualizerView.setCurrentRenderer(new BarRenderer(ViewMaker.i_Dp(R.dimen.dp4), PaintUtil.getBarGraphPaint(Color.parseColor("#15E4EE"))));
+
+                            if (MusicPlayer.mp.isPlaying()) {
+                                rippleVisualizerView.setEnabled(true);
+                            } else {
+                                rippleVisualizerView.setEnabled(false);
+                            }
+
+                            rippleVisualizerView.setAmplitudePercentage(3);
+                        }
+                    }
+
+                    @Override
+                    public void deny() {
+
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void popUpMusicMenu() {
 
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
@@ -373,6 +437,10 @@ public class FragmentMediaPlayer extends BaseFragment {
 
         if (HelperCalander.isLanguagePersian) {
             txt_MusicTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_MusicTime.getText().toString()));
+        }
+
+        if (rippleVisualizerView != null) {
+            rippleVisualizerView.setMediaPlayer(MusicPlayer.mp);
         }
     }
 

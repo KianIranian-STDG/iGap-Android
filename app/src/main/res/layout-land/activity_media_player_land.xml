@@ -160,14 +160,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/ampl_gif_plyer"
+    <net.iGap.libs.ripplesoundplayer.RippleVisualizerView
+        android:id="@+id/line_renderer_demo"
+        android:layout_margin="@dimen/dp8"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:src="@mipmap/equalizert"
-        android:scaleType="centerCrop"
-        ></pl.droidsonroids.gif.GifImageView>
+
+        />
 
 
     <LinearLayout
@@ -250,8 +250,8 @@
           android:id="@+id/ml_btn_play_music"
           android:layout_width="wrap_content"
           android:layout_height="match_parent"
-          android:layout_marginLeft="@dimen/dp12"
-          android:layout_marginRight="@dimen/dp12"
+          android:layout_marginLeft="@dimen/dp8"
+          android:layout_marginRight="@dimen/dp8"
           android:background="@null"
           android:gravity="center"
           android:text="@string/md_play_rounded_button"
