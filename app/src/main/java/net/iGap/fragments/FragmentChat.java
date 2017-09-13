@@ -3654,7 +3654,7 @@ public class FragmentChat extends BaseFragment
         new ResendMessage(G.fragmentActivity, new IResendMessage() {
             @Override
             public void deleteMessage() {
-                if (mAdapter.getAdapterItemCount() > pos) {
+                if (pos >= 0 && mAdapter.getAdapterItemCount() > pos) {
                     mAdapter.remove(pos);
                 }
             }

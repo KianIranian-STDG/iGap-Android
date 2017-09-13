@@ -195,17 +195,19 @@ public class HelperNotificationAndBadge {
                 }
             }
             if (avatarPath != null) {
+                try {
+                    BitmapFactory.Options option = new BitmapFactory.Options();
+                    option.outHeight = 64;
+                    option.outWidth = 64;
 
-                BitmapFactory.Options option = new BitmapFactory.Options();
-                option.outHeight = 64;
-                option.outWidth = 64;
-
-                Bitmap bitmap = BitmapFactory.decodeFile(avatarPath, option);
-                if (bitmap != null) {
-                    mBitmapIcon = bitmap;
+                    Bitmap bitmap = BitmapFactory.decodeFile(avatarPath, option);
+                    if (bitmap != null) {
+                        mBitmapIcon = bitmap;
+                    }
+                } catch (OutOfMemoryError e) {
+                    e.printStackTrace();
                 }
             }
-
             realm.close();
         }
     }
@@ -408,8 +410,7 @@ public class HelperNotificationAndBadge {
                 .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString())
                 .or()
                 .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.DELIVERED.toString())
-                .equalTo(RealmRoomMessageFields.DELETED, false)
-                .notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, authorHash).notEqualTo(RealmRoomMessageFields.USER_ID, G.userId)
+                .equalTo(RealmRoomMessageFields.DELETED, false).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, authorHash).notEqualTo(RealmRoomMessageFields.USER_ID, G.userId)
                 .notEqualTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.LOG.toString())
                 .findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
 

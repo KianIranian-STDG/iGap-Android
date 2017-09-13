@@ -89,7 +89,7 @@ public class ServiceContact extends Service {
                         ContentResolver cr = G.context.getContentResolver();
                         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
-                        if (cur != null) {
+                        if (cur != null && !cur.isClosed()) {
                             if (cur.getCount() > 0) {
                                 while (cur.moveToNext()) {
                                     StructListOfContact itemContact = new StructListOfContact();
