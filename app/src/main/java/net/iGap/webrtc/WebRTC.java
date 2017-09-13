@@ -17,6 +17,7 @@ import io.realm.Realm;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import net.iGap.G;
 import net.iGap.proto.ProtoSignalingGetConfiguration;
@@ -88,9 +89,9 @@ public class WebRTC {
             }
 
             PeerConnectionFactory.initializeAndroidGlobals(G.context,  // Context
-                true,  // Audio Enabled
-                false,  // Video Enabled
-                true); // Hardware Acceleration Enabled
+                    true,  // Audio Enabled
+                    false,  // Video Enabled
+                    true); // Hardware Acceleration Enabled
 
             peerConnectionFactory = new PeerConnectionFactory();
         }
@@ -258,11 +259,15 @@ public class WebRTC {
         peerConnectionInstance().close();
     }
 
-    public void dispose() {
-        peerConnectionInstance().dispose();
+    void dispose() {
+        try {
+            peerConnectionInstance().dispose();
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void clearConnection() {
+    void clearConnection() {
         peerConnection = null;
     }
 }

@@ -66,23 +66,9 @@ public class HelperGetDataFromOtherApp {
 
         if (extension.endsWith("jpg") || extension.endsWith("jpeg") || extension.endsWith("png") || extension.endsWith("bmp") || extension.endsWith(".tiff")) {
             fileType = FileType.image;
-        } else if (extension.endsWith("mp3")
-            || extension.endsWith("ogg")
-            || extension.endsWith("wma")
-            || extension.endsWith("m4a")
-            || extension.endsWith("amr")
-            || extension.endsWith("wav")
-            || extension.endsWith(".mid")
-            || extension.endsWith(".midi")) {
+        } else if (extension.endsWith("mp3") || extension.endsWith("ogg") || extension.endsWith("wma") || extension.endsWith("m4a") || extension.endsWith("amr") || extension.endsWith("wav") || extension.endsWith(".mid") || extension.endsWith(".midi")) {
             fileType = FileType.audio;
-        } else if (extension.endsWith("mp4")
-            || extension.endsWith("3gp")
-            || extension.endsWith("avi")
-            || extension.endsWith("mpg")
-            || extension.endsWith("flv")
-            || extension.endsWith("wmv")
-            || extension.endsWith("m4v")
-            || extension.endsWith(".mpeg")) {
+        } else if (extension.endsWith("mp4") || extension.endsWith("3gp") || extension.endsWith("avi") || extension.endsWith("mpg") || extension.endsWith("flv") || extension.endsWith("wmv") || extension.endsWith("m4v") || extension.endsWith(".mpeg")) {
             fileType = FileType.video;
         }
 
@@ -134,11 +120,13 @@ public class HelperGetDataFromOtherApp {
         }
 
         if (hasSharedData && ActivityMain.isOpenChatBeforeSheare) {
-
-            new HelperFragment().removeAll(true);
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    new HelperFragment().removeAll(true);
+                }
+            });
         }
-
-
     }
 
     //*****************************************************************************************************

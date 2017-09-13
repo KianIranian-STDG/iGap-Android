@@ -920,6 +920,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         canvas.drawCircle(canvas.getWidth() / 2, canvas.getWidth() / 2, canvas.getWidth() / 2 - borderWidth / 2, paint);
         if (!srcBitmap.isRecycled()) {
             srcBitmap.recycle();
+            srcBitmap = null;
         }
         return dstBitmap;
     }
@@ -935,14 +936,12 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         paint.setStrokeWidth(borderWidth);
         paint.setAntiAlias(true);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));//DST_OUT
-        //canvas.drawCircle(canvas.getWidth() / 2, canvas.getWidth() / 2, canvas.getWidth() / 2 - borderWidth / 2, paint);
 
         Paint paintSharp = new Paint();
         paintSharp.setColor(Color.WHITE);
         paintSharp.setStyle(Paint.Style.FILL);
         paintSharp.setStrokeWidth(borderWidth);
         paintSharp.setAntiAlias(true);
-        //srcBitmap.recycle();
 
         Path path1 = new Path();
         path1.moveTo(borderWidth + 3, canvas.getWidth() / 2);// first point
@@ -955,29 +954,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
         canvas.drawCircle(canvas.getWidth() / 2, canvas.getWidth() / 2, canvas.getWidth() / 2 - borderWidth / 2, paint);
 
-        //=========OK
-        //Path path1 = new Path();
-        //path1.moveTo(borderWidth + 3, canvas.getWidth() / 2 - borderWidth / 2);// first point
-        //path1.lineTo(canvas.getWidth() - borderWidth - 3, canvas.getWidth() / 2 - borderWidth / 2);
-        //path1.lineTo((canvas.getWidth() / 2), canvas.getWidth() - borderWidth / 2);
-        //path1.lineTo(borderWidth + 3, canvas.getWidth() / 2 - borderWidth / 2);// last point
-        //path1.close();
-        //paintSharp.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));//DST_OVER
-        //canvas.drawPath(path1, paintSharp);
-
-        //=========OK
-        //int sharpSize = 10;
-        //Path path1 = new Path();
-        //path1.moveTo(canvas.getWidth() / 2 - sharpSize,canvas.getWidth() / 2 - borderWidth / 2);// first point
-        //path1.lineTo(canvas.getWidth() / 2 + sharpSize, canvas.getWidth() / 2 - borderWidth / 2);
-        //path1.lineTo((canvas.getWidth() / 2), canvas.getWidth());
-        //path1.lineTo(canvas.getWidth() / 2 - sharpSize, canvas.getWidth() / 2 - borderWidth / 2);// last point
-        //path1.close();
-        //paintSharp.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
-        //canvas.drawPath(path1, paintSharp);
-
         if (!srcBitmap.isRecycled()) {
             srcBitmap.recycle();
+            srcBitmap = null;
         }
         return dstBitmap;
     }
