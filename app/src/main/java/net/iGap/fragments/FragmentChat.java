@@ -3164,7 +3164,7 @@ public class FragmentChat extends BaseFragment
             messageInfo.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
 
             //+final Realm realm = Realm.getDefaultInstance();
-            getRealmChat().executeTransactionAsync(new Realm.Transaction() {
+            getRealmChat().executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     /**
