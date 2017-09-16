@@ -44,8 +44,6 @@ import static net.iGap.R.dimen.dp4;
 import static net.iGap.R.dimen.dp52;
 import static net.iGap.R.dimen.dp8;
 import static net.iGap.R.dimen.messageContainerPadding;
-import static net.iGap.R.id.center_horizontal;
-import static net.iGap.R.id.center_vertical;
 
 public class ViewMaker {
 
@@ -863,7 +861,7 @@ public class ViewMaker {
         linearLayout_632.setLayoutParams(layout_842);
 
         LinearLayout linearLayout_916 = new LinearLayout(G.context);
-        linearLayout_916.setGravity(center_horizontal);
+        linearLayout_916.setGravity(Gravity.CENTER_HORIZONTAL);
         linearLayout_916.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_6 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         linearLayout_916.setLayoutParams(layout_6);
@@ -1098,7 +1096,7 @@ public class ViewMaker {
         m_container.setLayoutParams(layout_346);
 
         LinearLayout linearLayout_784 = new LinearLayout(G.context);
-        linearLayout_784.setGravity(center_vertical);
+        linearLayout_784.setGravity(Gravity.CENTER_VERTICAL);
         setLayoutDirection(linearLayout_784, View.LAYOUT_DIRECTION_LTR);
         linearLayout_784.setOrientation(HORIZONTAL);
         linearLayout_784.setPadding(0, 0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPadding), 0);

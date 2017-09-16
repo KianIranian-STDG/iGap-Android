@@ -188,7 +188,7 @@
 
     <activity
         android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
+        android:configChanges="keyboard|keyboardHidden|screenSize|locale"
         android:theme="@style/AppTheme22" />
 
     <receiver android:name=".module.IncomingSms" />
