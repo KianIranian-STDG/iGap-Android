@@ -2203,7 +2203,8 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View view) {
                 closeKeyboard(view);
-                finishChat();
+                popBackStackFragment();
+                //finishChat();
             }
         });
 
