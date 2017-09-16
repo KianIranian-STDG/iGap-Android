@@ -328,6 +328,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                                         hideProgressBar();
                                         Intent intent = new Intent(context, ActivityMain.class);
                                         intent.putExtra(ARG_USER_ID, userId);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         G.context.startActivity(intent);
                                         G.fragmentActivity.finish();
                                     }
