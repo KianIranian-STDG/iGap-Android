@@ -30,8 +30,6 @@ import net.iGap.module.ReserveSpaceRoundedImageView;
 import static android.R.attr.left;
 import static android.graphics.Typeface.BOLD;
 import static android.support.design.R.id.center;
-import static android.support.design.R.id.center_horizontal;
-import static android.support.design.R.id.center_vertical;
 import static android.view.Gravity.BOTTOM;
 import static android.view.Gravity.CENTER;
 import static android.view.Gravity.CENTER_HORIZONTAL;
@@ -46,6 +44,8 @@ import static net.iGap.R.dimen.dp4;
 import static net.iGap.R.dimen.dp52;
 import static net.iGap.R.dimen.dp8;
 import static net.iGap.R.dimen.messageContainerPadding;
+import static net.iGap.R.id.center_horizontal;
+import static net.iGap.R.id.center_vertical;
 
 public class ViewMaker {
 

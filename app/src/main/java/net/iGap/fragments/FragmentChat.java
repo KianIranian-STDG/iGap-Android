@@ -2638,8 +2638,12 @@ public class FragmentChat extends BaseFragment
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                mAdapter.clear();
-                recyclerView.removeAllViews();
+                if (mAdapter != null) {
+                    mAdapter.clear();
+                }
+                if (recyclerView != null) {
+                    recyclerView.removeAllViews();
+                }
 
                 /**
                  * remove tag from edtChat if the message has deleted
