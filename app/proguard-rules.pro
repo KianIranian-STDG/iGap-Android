@@ -98,6 +98,10 @@
 }
 ###
 
+###osmdroid
+-dontwarn org.osmdroid.tileprovider.modules.NetworkAvailabliltyCheck
+###
+
 ###Parceler library
 -keep interface org.parceler.Parcel
 -keep @org.parceler.Parcel class * { *; }
