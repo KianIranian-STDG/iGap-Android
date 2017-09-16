@@ -111,6 +111,11 @@ public class FragmentIntroduce extends BaseFragment {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+
+                        if (!isAdded() || G.fragmentActivity.isFinishing()) {
+                            return;
+                        }
+
                         G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commit();
                         FragmentIntroduce fragment = new FragmentIntroduce();
                         G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
@@ -408,6 +413,11 @@ public class FragmentIntroduce extends BaseFragment {
     }
 
     private void startRegistration() {
+
+        if (!isAdded() || G.fragmentActivity.isFinishing()) {
+            return;
+        }
+
         try {
             registrationTry = true;
             Thread thread = new Thread(new Runnable() {

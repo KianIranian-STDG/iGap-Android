@@ -870,15 +870,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 navigationTabStrip.setViewPager(mViewPager, index);
 
-                try {
-                    if (mViewPager.getAdapter().getCount() > 0) {
-                        if (navigationTabStrip.getTitles() != null && navigationTabStrip.getTitles().length == 5) {
-                            navigationTabStrip.setTabIndex(mViewPager.getCurrentItem());
-                        }
-                    }
-                } catch (Exception e) {
-                    HelperLog.setErrorLog("Activity main     setmViewPagerSelectedItem    " + index + "     " + HelperCalander.isLanguagePersian + "    " + e.toString());
-                }
+                //try {
+                //    if (mViewPager.getAdapter().getCount() > 0) {
+                //        if (navigationTabStrip.getTitles() != null && navigationTabStrip.getTitles().length == 5) {
+                //            navigationTabStrip.setTabIndex(mViewPager.getCurrentItem());
+                //        }
+                //    }
+                //} catch (Exception e) {
+                //    HelperLog.setErrorLog("Activity main     setmViewPagerSelectedItem    " + index + "     " + HelperCalander.isLanguagePersian + "    " + e.toString());
+                //}
 
                 navigationTabStrip.setOnTabStripSelectedIndexListener(new NavigationTabStrip.OnTabStripSelectedIndexListener() {
                     @Override

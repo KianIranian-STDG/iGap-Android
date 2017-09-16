@@ -4459,6 +4459,11 @@ public class FragmentChat extends BaseFragment
      * open fragment show image and show all image for this room
      */
     private void showImage(final StructMessageInfo messageInfo, View view) {
+
+        if (!isAdded() || G.fragmentActivity.isFinishing()) {
+            return;
+        }
+
         // for gone app bar
         InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -7850,11 +7855,14 @@ public class FragmentChat extends BaseFragment
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
-                removeFromBaseFragment(fragment);
 
-                if (G.iTowPanModDesinLayout != null) {
-                    G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.hide);
+                if (isAdded()) {
+                    Fragment fragment = G.fragmentManager.findFragmentByTag(FragmentChat.class.getName());
+                    removeFromBaseFragment(fragment);
+
+                    if (G.iTowPanModDesinLayout != null) {
+                        G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.hide);
+                    }
                 }
             }
         });

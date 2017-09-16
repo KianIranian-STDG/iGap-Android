@@ -14,7 +14,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -31,14 +30,13 @@ import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.RemoteControlClient;
-import android.media.session.MediaSession;
-import android.media.session.PlaybackState;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.View;
@@ -48,7 +46,6 @@ import android.widget.TextView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -66,6 +63,8 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 
+import static net.iGap.G.context;
+
 public class MusicPlayer extends Service {
 
     private static SensorManager mSensorManager;
@@ -73,7 +72,9 @@ public class MusicPlayer extends Service {
     private static SensorEventListener sensorEventListener;
     private static final int SENSOR_SENSITIVITY = 4;
     public static boolean canDoAction = true;
-
+    private static MediaSessionCompat mSession;
+    //    private static Bitmap orginalWallPaper = null;
+    //    private static boolean isGetOrginalWallpaper=false;
 
     public static final int notificationId = 19;
     public static String repeatMode = RepeatMode.noRepeat.toString();
@@ -116,8 +117,7 @@ public class MusicPlayer extends Service {
 
     public static boolean pauseSoundFromCall = false;
     public static boolean isMusicPlyerEnable = false;
-    private static int stateHedset = -1;
-    public static boolean firstGetStateHeadSet = false;
+    private static int stateHedset = 0;
 
     public static boolean playNextMusic = false;
 
@@ -151,8 +151,6 @@ public class MusicPlayer extends Service {
         return null;
     }
 
-
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -170,9 +168,7 @@ public class MusicPlayer extends Service {
                         startForeground(notificationId, notification);
 
                         initSensore();
-
                     }
-
                 } else if (action.equals(STOPFOREGROUND_ACTION)) {
 
                     removeSensore();
@@ -188,8 +184,8 @@ public class MusicPlayer extends Service {
 
     public static void setMusicPlayer(LinearLayout layoutTripMusic) {
 
-        remoteViews = new RemoteViews(G.context.getPackageName(), R.layout.music_layout_notification);
-        notificationManager = (NotificationManager) G.context.getSystemService(Context.NOTIFICATION_SERVICE);
+        remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
+        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (layoutTripMusic != null) {
             layoutTripMusic.setVisibility(View.GONE);
@@ -199,8 +195,39 @@ public class MusicPlayer extends Service {
 
         getAtribuits();
 
+        //  getOrginallWallpaper();
 
     }
+
+    //
+    //    private static  void getOrginallWallpaper(){
+    //
+    //        if(isGetOrginalWallpaper){
+    //            return;
+    //        }
+    //
+    //        isGetOrginalWallpaper=true;
+    //
+    //
+    //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    //
+    //            WallpaperManager myWallpaperManager = WallpaperManager.getInstance(G.context);
+    //
+    //            if (myWallpaperManager.isSetWallpaperAllowed()) {
+    //
+    //                ParcelFileDescriptor pfd = myWallpaperManager.getWallpaperFile(WallpaperManager.FLAG_LOCK);
+    //                if (pfd != null) {
+    //                    orginalWallPaper = BitmapFactory.decodeFileDescriptor(pfd.getFileDescriptor());
+    //                    try {
+    //                        pfd.close();
+    //                    } catch (IOException e) {
+    //                        e.printStackTrace();
+    //                    }
+    //                }
+    //            }
+    //
+    //        }
+    //    }
 
     public static void repeatClick() {
 
@@ -215,7 +242,7 @@ public class MusicPlayer extends Service {
 
         repeatMode = str;
 
-        SharedPreferences sharedPreferences = G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("RepeatMode", str);
         editor.apply();
@@ -228,7 +255,7 @@ public class MusicPlayer extends Service {
     public static void shuffelClick() {
 
         isShuffelOn = !isShuffelOn;
-        SharedPreferences sharedPreferences = G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("Shuffel", isShuffelOn);
         editor.apply();
@@ -244,11 +271,11 @@ public class MusicPlayer extends Service {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(G.context, ActivityMain.class);
+                Intent intent = new Intent(context, ActivityMain.class);
                 intent.putExtra(ActivityMain.openMediaPlyer, true);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                G.context.startActivity(intent);
+                context.startActivity(intent);
             }
         });
 
@@ -280,9 +307,9 @@ public class MusicPlayer extends Service {
             txt_music_time.setText(musicTime);
 
             if (MusicPlayer.mp.isPlaying()) {
-                btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
+                btnPlayMusic.setText(context.getString(R.string.md_pause_button));
             } else {
-                btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
+                btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
             }
         }
 
@@ -323,7 +350,7 @@ public class MusicPlayer extends Service {
             stopTimer();
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
+                btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
             }
 
             if (!isShowMediaPlayer) {
@@ -345,8 +372,6 @@ public class MusicPlayer extends Service {
         } catch (Exception e) {
             HelperLog.setErrorLog("music player   pauseSound   bbb    " + e.toString());
         }
-
-
     }
 
     //**************************************************************************
@@ -361,7 +386,6 @@ public class MusicPlayer extends Service {
             return;
         }
 
-
         try {
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
             notificationManager.notify(notificationId, notification);
@@ -371,7 +395,7 @@ public class MusicPlayer extends Service {
         try {
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
+                btnPlayMusic.setText(context.getString(R.string.md_pause_button));
             }
 
             if (!isShowMediaPlayer) {
@@ -420,7 +444,7 @@ public class MusicPlayer extends Service {
         try {
 
             if (btnPlayMusic != null) {
-                btnPlayMusic.setText(G.context.getString(R.string.md_play_arrow));
+                btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
             }
 
             musicProgress = 0;
@@ -503,7 +527,6 @@ public class MusicPlayer extends Service {
 
     public static void previousMusic() {
 
-
         try {
             if (MusicPlayer.mp != null) {
 
@@ -514,7 +537,6 @@ public class MusicPlayer extends Service {
                     MusicPlayer.mp.seekTo(0);
                     time = MusicPlayer.mp.getCurrentPosition();
                     updatePlayerTime();
-
 
                     return;
                 }
@@ -584,33 +606,26 @@ public class MusicPlayer extends Service {
 
         }
 
-        clearWallpaperLockScrean();
+        // clearWallpaperLockScrean();
 
-        removeMediaControl();
+        setMedaiInfoOnLockScreen(true);
 
         try {
 
-            Intent intent = new Intent(G.context, MusicPlayer.class);
+            Intent intent = new Intent(context, MusicPlayer.class);
             intent.putExtra("ACTION", STOPFOREGROUND_ACTION);
-            G.context.startService(intent);
-
+            context.startService(intent);
         } catch (RuntimeException e) {
 
             if (notificationManager != null) {
                 notificationManager.cancel(notificationId);
             }
-
-
         }
 
         if (mRealm != null && !mRealm.isClosed()) {
             mRealm.close();
             mRealm = null;
         }
-
-
-
-
     }
 
     public static void startPlayer(String name, String musicPath, String roomName, long roomId, final boolean updateList, String messageID) {
@@ -680,8 +695,6 @@ public class MusicPlayer extends Service {
             }
 
             mp = new MediaPlayer();
-
-
         } catch (Exception e) {
 
         }
@@ -701,7 +714,7 @@ public class MusicPlayer extends Service {
 
             musicTime = milliSecondsToTimer((long) mp.getDuration());
             txt_music_time.setText(musicTime);
-            btnPlayMusic.setText(G.context.getString(R.string.md_pause_button));
+            btnPlayMusic.setText(context.getString(R.string.md_pause_button));
             txt_music_name.setText(musicName);
 
             updateProgress();
@@ -716,7 +729,6 @@ public class MusicPlayer extends Service {
             if (onComplete != null) {
                 onComplete.complete(true, "update", "");
             }
-
         } catch (Exception e) {
         }
 
@@ -812,49 +824,49 @@ public class MusicPlayer extends Service {
 
         getMusicInfo();
 
-        Intent intentFragmentMusic = new Intent(G.context, ActivityMain.class);
+        Intent intentFragmentMusic = new Intent(context, ActivityMain.class);
         intentFragmentMusic.putExtra(ActivityMain.openMediaPlyer, true);
 
-        PendingIntent pi = PendingIntent.getActivity(G.context, 555, intentFragmentMusic, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = PendingIntent.getActivity(context, 555, intentFragmentMusic, PendingIntent.FLAG_UPDATE_CURRENT);
 
         remoteViews.setTextViewText(R.id.mln_txt_music_name, MusicPlayer.musicName);
         remoteViews.setTextViewText(R.id.mln_txt_music_outher, MusicPlayer.musicInfoTitle);
 
         //if (mp != null) {
         //    if (mp.isPlaying()) {
-                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
+        remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
         //    } else {
         //        remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
         //    }
         //}
 
-        Intent intentPrevious = new Intent(G.context, customButtonListener.class);
+        Intent intentPrevious = new Intent(context, customButtonListener.class);
         intentPrevious.putExtra("mode", "previous");
-        PendingIntent pendingIntentPrevious = PendingIntent.getBroadcast(G.context, 1, intentPrevious, 0);
+        PendingIntent pendingIntentPrevious = PendingIntent.getBroadcast(context, 1, intentPrevious, 0);
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_Previous_music, pendingIntentPrevious);
 
-        Intent intentPlayPause = new Intent(G.context, customButtonListener.class);
+        Intent intentPlayPause = new Intent(context, customButtonListener.class);
         intentPlayPause.putExtra("mode", "play");
-        PendingIntent pendingIntentPlayPause = PendingIntent.getBroadcast(G.context, 2, intentPlayPause, 0);
+        PendingIntent pendingIntentPlayPause = PendingIntent.getBroadcast(context, 2, intentPlayPause, 0);
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_play_music, pendingIntentPlayPause);
 
-        Intent intentforward = new Intent(G.context, customButtonListener.class);
+        Intent intentforward = new Intent(context, customButtonListener.class);
         intentforward.putExtra("mode", "forward");
-        PendingIntent pendingIntentforward = PendingIntent.getBroadcast(G.context, 3, intentforward, 0);
+        PendingIntent pendingIntentforward = PendingIntent.getBroadcast(context, 3, intentforward, 0);
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_forward_music, pendingIntentforward);
 
-        Intent intentClose = new Intent(G.context, customButtonListener.class);
+        Intent intentClose = new Intent(context, customButtonListener.class);
         intentClose.putExtra("mode", "close");
-        PendingIntent pendingIntentClose = PendingIntent.getBroadcast(G.context, 4, intentClose, 0);
+        PendingIntent pendingIntentClose = PendingIntent.getBroadcast(context, 4, intentClose, 0);
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
-        notification = new NotificationCompat.Builder(G.context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName)
+        notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName)
             //  .setContentText(place)
             .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
 
-        Intent intent = new Intent(G.context, MusicPlayer.class);
+        Intent intent = new Intent(context, MusicPlayer.class);
         intent.putExtra("ACTION", STARTFOREGROUND_ACTION);
-        G.context.startService(intent);
+        context.startService(intent);
     }
 
     public static void fillMediaList(boolean setSelectedItem) {
@@ -1000,7 +1012,7 @@ public class MusicPlayer extends Service {
     private static void getMusicInfo() {
 
         musicInfo = "";
-        musicInfoTitle = G.context.getString(R.string.unknown_artist);
+        musicInfoTitle = context.getString(R.string.unknown_artist);
 
         MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
 
@@ -1014,7 +1026,7 @@ public class MusicPlayer extends Service {
 
             try {
 
-                mediaMetadataRetriever.setDataSource(G.context, uri);
+                mediaMetadataRetriever.setDataSource(context, uri);
 
                 String title = (String) mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
 
@@ -1038,15 +1050,20 @@ public class MusicPlayer extends Service {
                 byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
                 if (data != null) {
                     mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    setWallpaperLockScreen(mediaThumpnail);
-                    setMediaControl();
+                    //  setWallpaperLockScreen(mediaThumpnail);
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            setMedaiInfoOnLockScreen(false);
+                        }
+                    }, 100);
 
-                    int size = (int) G.context.getResources().getDimension(R.dimen.dp48);
+                    int size = (int) context.getResources().getDimension(R.dimen.dp48);
                     remoteViews.setImageViewBitmap(R.id.mln_img_picture_music, Bitmap.createScaledBitmap(mediaThumpnail, size, size, false));
                 } else {
                     remoteViews.setImageViewResource(R.id.mln_img_picture_music, R.mipmap.music_icon_green);
-                    clearWallpaperLockScrean();
-                    removeMediaControl();
+                    // clearWallpaperLockScrean();
+                    setMedaiInfoOnLockScreen(true);
                 }
             } catch (Exception e) {
 
@@ -1056,7 +1073,7 @@ public class MusicPlayer extends Service {
     }
 
     private static void getAtribuits() {
-        SharedPreferences sharedPreferences = G.context.getSharedPreferences("MusicSetting", G.context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", context.MODE_PRIVATE);
         repeatMode = sharedPreferences.getString("RepeatMode", RepeatMode.noRepeat.toString());
         isShuffelOn = sharedPreferences.getBoolean("Shuffel", false);
     }
@@ -1163,10 +1180,9 @@ public class MusicPlayer extends Service {
 
             registerMediaBottom();
 
-            firstGetStateHeadSet = false;
             headsetPluginReciver = new HeadsetPluginReciver();
 
-            mSensorManager = (SensorManager) G.context.getSystemService(Context.SENSOR_SERVICE);
+            mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
             mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
             sensorEventListener = new SensorEventListener() {
                 @Override
@@ -1196,7 +1212,7 @@ public class MusicPlayer extends Service {
             };
 
             IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-            G.context.registerReceiver(headsetPluginReciver, filter);
+            context.registerReceiver(headsetPluginReciver, filter);
             registerDistanceSensor();
 
             isRegisterSensore = true;
@@ -1206,11 +1222,13 @@ public class MusicPlayer extends Service {
     private static void removeSensore() {
 
         if (isRegisterSensore) {
+
+            isRegisterSensore = false;
+
+            AudioManager audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
+
             try {
                 if (remoteComponentName != null) {
-
-                    AudioManager audioManager = (AudioManager) G.context.getSystemService(AUDIO_SERVICE);
-
                     audioManager.unregisterMediaButtonEventReceiver(remoteComponentName);
                 }
             } catch (Exception e) {
@@ -1218,15 +1236,27 @@ public class MusicPlayer extends Service {
             }
 
             try {
+                if (remoteControlClient != null) {
+                    audioManager.unregisterRemoteControlClient(remoteControlClient);
+                }
+            } catch (Exception e) {
+                Log.e("ddddd", "music plyer  removeSensore   remoteControlClient   " + e.toString());
+            }
 
-                G.context.unregisterReceiver(headsetPluginReciver);
+            try {
+
+                context.unregisterReceiver(headsetPluginReciver);
             } catch (Exception e) {
                 Log.e("ddddd", "music plyer  removeSensore    unregisterReceiver " + e.toString());
             }
 
             unRegisterDistanceSensore();
 
-            isRegisterSensore = false;
+            remoteComponentName = null;
+            remoteControlClient = null;
+
+            // clearWallpaperLockScrean();
+
         }
     }
 
@@ -1269,18 +1299,13 @@ public class MusicPlayer extends Service {
 
                             setSpeaker();
 
-                            if (firstGetStateHeadSet) {
-                                if (mp != null && mp.isPlaying()) {
-                                    pauseSound();
-                                }
-
+                            if (mp != null && mp.isPlaying()) {
+                                pauseSound();
                             }
-
 
                             //  Log.d("dddddd", "Headset is unplugged");
                             break;
                         case 1:
-
                             setSpeaker();
 
                             //  Log.d("dddddd", "Headset is plugged");
@@ -1288,11 +1313,6 @@ public class MusicPlayer extends Service {
                         //default:
                         //    Log.d("dddddd", "I have no idea what the headset state is");
                     }
-
-                    if (!firstGetStateHeadSet) {
-                        firstGetStateHeadSet = true;
-                    }
-
                 }
             }
         }
@@ -1306,13 +1326,13 @@ public class MusicPlayer extends Service {
 
                 try {
 
-                    MediaSession mSession = new MediaSession(G.context, G.context.getPackageName());
-                    Intent intent = new Intent(G.context, MediaBottomReciver.class);
-                    PendingIntent pintent = PendingIntent.getBroadcast(G.context, 50, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    mSession = new MediaSessionCompat(context, context.getPackageName());
+                    Intent intent = new Intent(context, MediaBottomReciver.class);
+                    PendingIntent pintent = PendingIntent.getBroadcast(context, 50, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     mSession.setMediaButtonReceiver(pintent);
                     mSession.setActive(true);
 
-                    PlaybackState state = new PlaybackState.Builder().setActions(PlaybackStateCompat.ACTION_STOP
+                    PlaybackStateCompat state = new PlaybackStateCompat.Builder().setActions(PlaybackStateCompat.ACTION_STOP
                         | PlaybackStateCompat.ACTION_PAUSE
                         | PlaybackStateCompat.ACTION_PLAY
                         | PlaybackStateCompat.ACTION_PLAY_PAUSE
@@ -1328,82 +1348,98 @@ public class MusicPlayer extends Service {
             } else {
 
                 try {
-                    remoteComponentName = new ComponentName(G.context, MediaBottomReciver.class.getName());
-                    AudioManager audioManager = (AudioManager) G.context.getSystemService(AUDIO_SERVICE);
+                    remoteComponentName = new ComponentName(context, MediaBottomReciver.class.getName());
+                    AudioManager audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
                     audioManager.registerMediaButtonEventReceiver(remoteComponentName);
                 } catch (Exception e) {
                     HelperLog.setErrorLog(" music plyer   registerMediaBottom    " + e.toString());
                 }
             }
-        }
-    }
 
-    private static void setMediaControl() {
-
-        if (remoteComponentName != null) {
-            remoteComponentName = new ComponentName(G.context, MediaBottomReciver.class.getName());
-        }
-
-        try {
-
-            if (remoteControlClient == null) {
-
-                Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-                mediaButtonIntent.setComponent(remoteComponentName);
-                PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(G.context, 55, mediaButtonIntent, 0);
-                remoteControlClient = new RemoteControlClient(mediaPendingIntent);
-                AudioManager audioManager = (AudioManager) G.context.getSystemService(AUDIO_SERVICE);
-                audioManager.registerRemoteControlClient(remoteControlClient);
+            if (remoteComponentName != null) {
+                remoteComponentName = new ComponentName(context, MediaBottomReciver.class.getName());
             }
-            remoteControlClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_PLAY
-                | RemoteControlClient.FLAG_KEY_MEDIA_PAUSE
-                | RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE
-                | RemoteControlClient.FLAG_KEY_MEDIA_STOP
-                | RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS
-                | RemoteControlClient.FLAG_KEY_MEDIA_NEXT);
-
-            RemoteControlClient.MetadataEditor metadataEditor = remoteControlClient.editMetadata(true);
-            metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, musicName + "");
-            metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, musicInfoTitle + "");
 
             try {
-                metadataEditor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, mediaThumpnail);
-            } catch (Throwable e) {
 
+                if (remoteControlClient == null) {
+
+                    Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+                    mediaButtonIntent.setComponent(remoteComponentName);
+                    PendingIntent mediaPendingIntent = PendingIntent.getBroadcast(context, 55, mediaButtonIntent, 0);
+                    remoteControlClient = new RemoteControlClient(mediaPendingIntent);
+                    AudioManager audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
+                    audioManager.registerRemoteControlClient(remoteControlClient);
+
+                    remoteControlClient.setTransportControlFlags(RemoteControlClient.FLAG_KEY_MEDIA_PLAY
+                        | RemoteControlClient.FLAG_KEY_MEDIA_PAUSE
+                        | RemoteControlClient.FLAG_KEY_MEDIA_PLAY_PAUSE
+                        | RemoteControlClient.FLAG_KEY_MEDIA_STOP
+                        | RemoteControlClient.FLAG_KEY_MEDIA_PREVIOUS
+                        | RemoteControlClient.FLAG_KEY_MEDIA_NEXT);
+                }
+            } catch (Exception e) {
+                HelperLog.setErrorLog(" music plyer   setMediaControl    " + e.toString());
             }
-
-            metadataEditor.apply();
-        } catch (Exception e) {
-            HelperLog.setErrorLog(" music plyer   setMediaControl    " + e.toString());
         }
     }
 
-    private static void removeMediaControl() {
+    private static void setMedaiInfoOnLockScreen(boolean clear) {
 
         try {
-            if (remoteControlClient != null) {
-                RemoteControlClient.MetadataEditor metadataEditor = remoteControlClient.editMetadata(true);
-                metadataEditor.clear();
-                metadataEditor.apply();
-                AudioManager audioManager = (AudioManager) G.context.getSystemService(AUDIO_SERVICE);
-                audioManager.unregisterRemoteControlClient(remoteControlClient);
 
-                remoteControlClient = null;
+            if (remoteControlClient != null) {
+
+                RemoteControlClient.MetadataEditor metadataEditor = remoteControlClient.editMetadata(true);
+
+                if (clear) {
+
+                    metadataEditor.clear();
+                } else {
+                    metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_ARTIST, musicName + "");
+                    metadataEditor.putString(MediaMetadataRetriever.METADATA_KEY_TITLE, musicInfoTitle + "");
+                    try {
+                        metadataEditor.putBitmap(RemoteControlClient.MetadataEditor.BITMAP_KEY_ARTWORK, mediaThumpnail);
+                        // seMediaSesionMetaData();
+
+                    } catch (Throwable e) {
+                    }
+                }
+
+                metadataEditor.apply();
             }
         } catch (Exception e) {
-
+            HelperLog.setErrorLog(" music plyer   setMedoiInfoOnLockScreen    " + e.toString());
         }
     }
 
+    //    private static void seMediaSesionMetaData() {
+    //        if (mSession != null) {
+    //
+    //            MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
+    //            builder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "aaaaaaa");
+    //            builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, "bbbbbbb");
+    //            builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, "ccccccccc");
+    //            builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, 1234);
+    //            builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, mediaThumpnail);
+    //            mSession.setMetadata(builder.build());
+    //
+    //
+    //        }
+    //    }
 
 
-    private static void setWallpaperLockScreen(Bitmap bitmap) {
+    /*private static void setWallpaperLockScreen(Bitmap bitmap) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
             WallpaperManager myWallpaperManager = WallpaperManager.getInstance(G.context);
+
             try {
 
-                myWallpaperManager.setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK);
+                if (myWallpaperManager.isSetWallpaperAllowed()) {
+                    myWallpaperManager.setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK);
+                }
+
             } catch (Exception e) {
 
             }
@@ -1413,12 +1449,23 @@ public class MusicPlayer extends Service {
     private static void clearWallpaperLockScrean() {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                WallpaperManager.getInstance(G.context).clear(WallpaperManager.FLAG_LOCK);
+
+                WallpaperManager myWallpaperManager = WallpaperManager.getInstance(G.context);
+                if (myWallpaperManager.isSetWallpaperAllowed()) {
+
+                    if (orginalWallPaper != null) {
+                        myWallpaperManager.setBitmap(orginalWallPaper, null, true, WallpaperManager.FLAG_LOCK);
+                    } else {
+                        myWallpaperManager.clear(WallpaperManager.FLAG_LOCK);
+                    }
+                }
+
+
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     private static void setSpeaker() {
 
@@ -1426,7 +1473,7 @@ public class MusicPlayer extends Service {
             return;
         }
 
-        AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
         if (isVoice) {
 

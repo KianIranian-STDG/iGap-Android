@@ -428,6 +428,10 @@ public class HelperNotificationAndBadge {
 
                     addItemToPopUPList(roomMessage);
 
+                    if (popUpList.size() > 50) {// show item in popup activity with limit count
+                        break;
+                    }
+
                     if (unreadMessageCount <= 3) {
                         Item item = new Item();
 
@@ -714,7 +718,7 @@ public class HelperNotificationAndBadge {
             Intent intent = new Intent(context, ActivityPopUpNotification.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.putExtra(ActivityPopUpNotification.ARGUMENTLIST, poList);
-            context.getApplicationContext().startActivity(intent);
+            context.startActivity(intent);
         }
     }
 

@@ -10,6 +10,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentIntroduce;
 import net.iGap.fragments.FragmentRegistrationNickname;
+import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermision;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.StartupActions;
@@ -35,7 +36,10 @@ public class ActivityRegisteration extends ActivityEnhanced {
 
                     boolean showPro = false;
                     try {
-                        showPro = getIntent().getExtras().getBoolean(showProfile);
+                        if (getParent() != null && getIntent().getExtras() != null) {
+                            showPro = getIntent().getExtras().getBoolean(showProfile);
+                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -67,7 +71,10 @@ public class ActivityRegisteration extends ActivityEnhanced {
 
     private void loadFragmentProfile() {
         FragmentRegistrationNickname fragment = new FragmentRegistrationNickname();
-        getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+        getSupportFragmentManager().beginTransaction()
+            .add(R.id.ar_layout_root, fragment)
+            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
+            .commit();
     }
 
     private void setFraymeSize() {
@@ -85,8 +92,19 @@ public class ActivityRegisteration extends ActivityEnhanced {
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                FragmentIntroduce fragment = new FragmentIntroduce();
-                getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commit();
+
+                if (!ActivityRegisteration.this.isFinishing()) {
+
+                    try {
+                        FragmentIntroduce fragment = new FragmentIntroduce();
+                        getSupportFragmentManager().beginTransaction()
+                            .add(R.id.ar_layout_root, fragment)
+                            .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
+                            .commit();
+                    } catch (Exception e) {
+                        HelperLog.setErrorLog("activity registeration     loadFragmentIntroduce   " + e.toString());
+                    }
+                }
             }
         }, 1000);
     }

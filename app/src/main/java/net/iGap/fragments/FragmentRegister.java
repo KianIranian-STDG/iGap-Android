@@ -648,6 +648,10 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             @Override
             public void onClick(View v) {
 
+                if (!isAdded() || mActivity.isFinishing()) {
+                    return;
+                }
+
                 if (edtPhoneNumber.getText().length() > 0 && !regex.equals("") && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
 
                     phoneNumber = edtPhoneNumber.getText().toString();
@@ -746,7 +750,10 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
     public void onStop() {
         super.onStop();
         try {
-            G.fragmentActivity.unregisterReceiver(smsReceiver);
+            if (smsPermission) {
+                G.fragmentActivity.unregisterReceiver(smsReceiver);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -944,9 +951,11 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         dialog.setCanceledOnTouchOutside(false);
 
         if (!mActivity.isFinishing() && !mActivity.isRestricted()) {
-            dialog.show();
-            if (dialog.isShowing()) {
-                countDownTimer.cancel();
+            if (isAdded()) {
+                dialog.show();
+                if (dialog.isShowing()) {
+                    countDownTimer.cancel();
+                }
             }
         }
     }
