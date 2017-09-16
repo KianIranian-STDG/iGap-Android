@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -1143,6 +1144,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         final TextInputLayout inputUserName = new TextInputLayout(G.fragmentActivity);
         final EmojiEditTextE edtNameChannel = new EmojiEditTextE(G.fragmentActivity);
         edtNameChannel.setHint(G.context.getResources().getString(R.string.st_username));
+        edtNameChannel.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         edtNameChannel.setTypeface(G.typeface_IRANSansMobile);
         edtNameChannel.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
         edtNameChannel.setText(txtChannelNameInfo.getText().toString());

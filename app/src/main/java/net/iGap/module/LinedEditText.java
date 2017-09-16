@@ -17,8 +17,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
 import net.iGap.G;
 import net.iGap.R;
 
@@ -105,9 +103,4 @@ public class LinedEditText extends android.support.v7.widget.AppCompatEditText {
         }
     }
 
-    @Override
-    public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
-        outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI;
-        return super.onCreateInputConnection(outAttrs);
-    }
 }

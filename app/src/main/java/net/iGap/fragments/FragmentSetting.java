@@ -29,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -262,6 +263,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 final EmojiEditTextE edtFirstName = new EmojiEditTextE(G.fragmentActivity);
                 edtFirstName.setHint(G.context.getResources().getString(R.string.fac_First_Name));
                 edtFirstName.setText(firsName);
+                edtFirstName.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
                 edtFirstName.setTypeface(G.typeface_IRANSansMobile);
                 edtFirstName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
                 edtFirstName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
@@ -280,6 +282,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 final EmojiEditTextE edtLastName = new EmojiEditTextE(G.fragmentActivity);
                 edtLastName.setHint(G.context.getResources().getString(R.string.fac_Last_Name));
                 edtLastName.setText(lastName);
+                edtLastName.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
                 edtLastName.setTypeface(G.typeface_IRANSansMobile);
                 edtLastName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
                 edtLastName.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));

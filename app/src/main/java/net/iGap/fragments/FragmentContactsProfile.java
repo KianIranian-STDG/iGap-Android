@@ -32,6 +32,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -382,6 +383,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     TextInputLayout inputFirstName = new TextInputLayout(G.fragmentActivity);
                     final EmojiEditTextE edtFirstName = new EmojiEditTextE(G.fragmentActivity);
                     edtFirstName.setHint(R.string.first_name);
+                    edtFirstName.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
                     edtFirstName.setTypeface(G.typeface_IRANSansMobile);
                     edtFirstName.setText(firsName);
                     edtFirstName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));

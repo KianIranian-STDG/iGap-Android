@@ -183,6 +183,7 @@
             android:paddingTop="@dimen/dp8"
             android:textCursorDrawable="@drawable/editext_cursor"
             android:textSize="@dimen/dp15"
+            android:imeOptions="flagNoExtractUi|actionDone"
             />
 
       </android.support.design.widget.TextInputLayout>

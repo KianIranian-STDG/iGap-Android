@@ -36,6 +36,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -1436,6 +1437,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         final EmojiEditTextE edtUserName = new EmojiEditTextE(G.fragmentActivity);
         edtUserName.setHint(G.context.getResources().getString(R.string.st_username));
         edtUserName.setTypeface(G.typeface_IRANSansMobile);
+        edtUserName.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
         edtUserName.setText(txtGroupNameTitle.getText().toString());
         edtUserName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
