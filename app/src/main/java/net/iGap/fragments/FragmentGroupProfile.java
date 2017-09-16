@@ -59,6 +59,7 @@ import net.iGap.activities.ActivityCrop;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
@@ -383,7 +384,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                         return;
                     }
                     Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
-                    intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
+                    intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image));
                     intent.putExtra("TYPE", "gallery");
                     intent.putExtra("PAGE", "setting");
                     intent.putExtra("ID", (int) (avatarId + 1L));

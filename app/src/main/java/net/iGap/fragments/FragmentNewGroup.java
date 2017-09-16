@@ -49,6 +49,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperUploadFile;
@@ -813,7 +814,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             if (data != null) {
 
                 Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
-                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
+                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image));
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", prefix);
                 startActivityForResult(intent, IntentRequests.REQ_CROP);

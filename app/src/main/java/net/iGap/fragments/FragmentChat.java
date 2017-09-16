@@ -89,9 +89,7 @@ import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -288,6 +286,7 @@ import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.R.string.item;
 import static net.iGap.helper.HelperGetDataFromOtherApp.messageType;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
+import static net.iGap.module.AttachFile.getPathN;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_open_document;
 import static net.iGap.module.AttachFile.request_code_pic_file;
@@ -1078,7 +1077,7 @@ public class FragmentChat extends BaseFragment
 
                                 Uri uri = Uri.parse(listPathString.get(0));
                                 Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
-                                intent.putExtra("IMAGE_CAMERA", getFilePathFromUri(uri));
+                                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUriAndCheckForAndroid7(uri, HelperGetDataFromOtherApp.FileType.image));
                                 intent.putExtra("TYPE", "gallery");
                                 intent.putExtra("PAGE", "chat");
                                 startActivityForResult(intent, IntentRequests.REQ_CROP);
@@ -4891,52 +4890,7 @@ public class FragmentChat extends BaseFragment
      * *************************** sheared data ***************************
      */
 
-    private String getPathN(Uri uri, HelperGetDataFromOtherApp.FileType fileType) {
 
-        try {
-
-            if (uri == null) {
-                return null;
-            }
-
-            String name = AttachFile.getFileName(uri.getPath());
-            if (name == null || name.length() == 0) {
-                name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            }
-
-            String destinationPath = "";
-
-            switch (fileType) {
-
-                case video:
-                    destinationPath = G.DIR_VIDEOS;
-                    break;
-                case audio:
-                    destinationPath = G.DIR_AUDIOS;
-                    break;
-                case image:
-                    destinationPath = G.DIR_IMAGES;
-                    break;
-                default:
-                    destinationPath = G.DIR_DOCUMENT;
-                    break;
-            }
-
-            destinationPath += File.separator + name;
-
-            InputStream input = getContext().getContentResolver().openInputStream(uri);
-
-            AndroidUtils.copyFile(input, new File(destinationPath));
-
-            return destinationPath;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
 
     private void insertShearedData() {
         /**

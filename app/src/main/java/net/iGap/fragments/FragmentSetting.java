@@ -57,6 +57,7 @@ import net.iGap.activities.ActivityManageSpace;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperLogout;
@@ -2507,7 +2508,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     return;
                 }
                 Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
-                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
+                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image));
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "setting");
                 intent.putExtra("ID", (int) (idAvatar + 1L));

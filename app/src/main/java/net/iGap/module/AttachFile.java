@@ -39,7 +39,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +53,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityPaint;
 import net.iGap.fragments.FragmentExplorer;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.ImageHelper;
@@ -666,6 +669,69 @@ public class AttachFile {
 
         return path;
     }
+
+    public static String getFilePathFromUriAndCheckForAndroid7(Uri uri, HelperGetDataFromOtherApp.FileType fileType) {
+
+        String path = getFilePathFromUri(uri);
+
+        if (path == null) {
+            path = getPathN(uri, fileType);
+        }
+
+        return path;
+    }
+
+    public static String getPathN(Uri uri, HelperGetDataFromOtherApp.FileType fileType) {
+
+        if (uri == null) {
+            return null;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+            try {
+                String name = AttachFile.getFileName(uri.getPath());
+                if (name == null || name.length() == 0) {
+                    name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                }
+
+                String destinationPath = "";
+
+                switch (fileType) {
+
+                    case video:
+                        destinationPath = G.DIR_VIDEOS;
+                        break;
+                    case audio:
+                        destinationPath = G.DIR_AUDIOS;
+                        break;
+                    case image:
+                        destinationPath = G.DIR_IMAGES;
+                        break;
+                    default:
+                        destinationPath = G.DIR_DOCUMENT;
+                        break;
+                }
+
+                destinationPath += File.separator + name;
+
+                InputStream input = G.context.getContentResolver().openInputStream(uri);
+
+                AndroidUtils.copyFile(input, new File(destinationPath));
+
+                return destinationPath;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
+
+
 
     private Uri getOutputMediaFileUri(int type, int camera) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && camera == 0) {

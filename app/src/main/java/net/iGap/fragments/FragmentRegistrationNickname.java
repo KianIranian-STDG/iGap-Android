@@ -41,6 +41,7 @@ import net.iGap.activities.ActivityCrop;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
@@ -234,7 +235,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                 if (data.getData() == null) {
                     return;
                 }
-                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUri(data.getData()));
+                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image));
                 intent.putExtra("TYPE", "gallery");
                 intent.putExtra("PAGE", "profile");
                 intent.putExtra("ID", userId);
