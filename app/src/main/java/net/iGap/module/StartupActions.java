@@ -10,8 +10,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.emoji.Emoji;
-import com.vanniktech.emoji.emoji.EmojiCategory;
 import com.vanniktech.emoji.one.EmojiOneProvider;
 import io.realm.DynamicRealm;
 import io.realm.Realm;
@@ -53,8 +51,6 @@ import static net.iGap.G.attachmentColor;
 import static net.iGap.G.authorHash;
 import static net.iGap.G.context;
 import static net.iGap.G.displayName;
-import static net.iGap.G.emojiProvider;
-import static net.iGap.G.emojiTree;
 import static net.iGap.G.generalImmovableClasses;
 import static net.iGap.G.headerTextColor;
 import static net.iGap.G.helperNotificationAndBadge;
@@ -79,7 +75,7 @@ public final class StartupActions {
     public StartupActions() {
 
         detectDeviceType();
-        initEmoji();
+        EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
         initializeGlobalVariables();
         realmConfiguration();
         mainUserInfo();
@@ -121,33 +117,7 @@ public final class StartupActions {
         }
     }
 
-    private void initEmoji() {
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                emojiProvider = new EmojiOneProvider();
-
-                EmojiCategory[] categories = emojiProvider.getCategories();
-                emojiTree.clear();
-
-                for (int i = 0; i < categories.length; i++) {
-                    try {
-                        final Emoji[] emojis = categories[i].getEmojis();
-
-                        //noinspection ForLoopReplaceableByForEach
-                        for (int j = 0; j < emojis.length; j++) {
-                            emojiTree.add(emojis[j]);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                EmojiManager.install(emojiProvider); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
-            }
-        }).start();
-    }
 
     /**
      * start connecting to the sever

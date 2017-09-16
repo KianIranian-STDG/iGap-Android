@@ -13,7 +13,7 @@ package net.iGap.realm;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.format.DateUtils;
-import com.vanniktech.emoji.emoji.Emoji;
+import com.vanniktech.emoji.EmojiUtils;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmObject;
@@ -793,19 +793,13 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
     public static void isEmojiInText(RealmRoomMessage roomMessage, String message) {
 
         try {
-            boolean hasEmoji = false;
-            int i = 0;
-            while (i < message.length()) {
-                final Emoji found = G.emojiTree.findEmoji(message.subSequence(i, message.length()));
-                if (found != null) {
-                    hasEmoji = true;
-                    break;
-                } else {
-                    i++;
-                }
+
+            if (EmojiUtils.emojisCount(message) > 0) {
+                roomMessage.setHasEmojiInText(true);
+            } else {
+                roomMessage.setHasEmojiInText(false);
             }
 
-            roomMessage.setHasEmojiInText(hasEmoji);
         } catch (Exception e) {
             roomMessage.setHasEmojiInText(true);
         }

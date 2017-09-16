@@ -14,7 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.vanniktech.emoji.emoji.Emoji;
+import com.vanniktech.emoji.EmojiUtils;
 import io.realm.Realm;
 import java.util.List;
 import net.iGap.G;
@@ -62,23 +62,9 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
             if (text.length() <= 2) {
 
-                int i = 0;
-                int count = 0;
-                while (i < text.length()) {
-                    final Emoji found = G.emojiTree.findEmoji(text.subSequence(i, text.length()));
-                    if (found != null) {
-                        i += found.getLength();
-                        count++;
-                    } else {
-                        i++;
-                    }
-                }
-
-                if (count == 1) {
+                if (EmojiUtils.emojisCount(text) == 1) {
                     textViewE.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp28));
                 }
-
-
             }
 
             setTextIfNeeded(textViewE, text);

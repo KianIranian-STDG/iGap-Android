@@ -26,8 +26,6 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.vanniktech.emoji.EmojiProvider;
-import com.vanniktech.emoji.emoji.EmojiTree;
 import io.fabric.sdk.android.Fabric;
 import java.io.File;
 import java.util.ArrayList;
@@ -459,8 +457,6 @@ public class G extends MultiDexApplication {
     public static boolean isPassCode;
     public static FingerPrint fingerPrint;
 
-    public static EmojiProvider emojiProvider;
-    public static EmojiTree emojiTree = new EmojiTree();
     public static boolean isFragmentMapActive = false; // for check network
     public static boolean isRestartActivity = false; // for check passCode
     public static boolean isFirstPassCode = true; // for check passCode

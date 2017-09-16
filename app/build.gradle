@@ -109,7 +109,7 @@ dependencies {
   compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
   compile 'com.readystatesoftware.systembartint:systembartint:1.0.4'
   compile 'cat.ereza:customactivityoncrash:2.1.0'
-  compile 'com.vanniktech:emoji-one:0.5.0'
+  compile 'com.vanniktech:emoji-one:0.5.1'
   compile 'com.github.devlight.navigationtabstrip:navigationtabstrip:1.0.4'
   compile 'io.realm:android-adapters:2.1.0'
   compile 'org.osmdroid:osmdroid-android:5.6.5'

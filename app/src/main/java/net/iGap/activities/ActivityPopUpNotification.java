@@ -37,9 +37,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.emoji.Emoji;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
-import com.vanniktech.emoji.listeners.OnEmojiClickedListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
@@ -164,13 +162,9 @@ public class ActivityPopUpNotification extends AppCompatActivity {
 
     private void setUpEmojiPopup() {
         emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent_notification)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
-            @Override
-            public void onEmojiBackspaceClicked(final View v) {
 
-            }
-        }).setOnEmojiClickedListener(new OnEmojiClickedListener() {
             @Override
-            public void onEmojiClicked(final Emoji emoji) {
+            public void onEmojiBackspaceClick(View v) {
 
             }
         }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
