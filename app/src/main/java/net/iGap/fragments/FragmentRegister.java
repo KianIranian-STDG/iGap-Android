@@ -1381,7 +1381,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                     @Override
                     public void onClick(View v) {
                         if (editCheckPassword.length() > 0) {
-                            prgWaiting.setVisibility(View.VISIBLE);
+                            if (prgWaiting != null) {
+                                prgWaiting.setVisibility(View.VISIBLE);
+                            }
                             G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             new RequestUserTwoStepVerificationVerifyPassword().verifyPassword(editCheckPassword.getText().toString());
                         } else {
@@ -1509,11 +1511,11 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                             @Override
                             public void run() {
                                 G.onUserInfoResponse = null;
+                                G.currentActivity.finish();
                                 Intent intent = new Intent(context, ActivityMain.class);
                                 intent.putExtra(FragmentRegistrationNickname.ARG_USER_ID, userId);
                                 intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                                 G.context.startActivity(intent);
-                                getActivity().finish();
                             }
                         });
                     }
@@ -1694,7 +1696,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             @Override
             public void run() {
 
-                prgWaiting.setVisibility(View.GONE);
+                if (prgWaiting != null) {
+                    prgWaiting.setVisibility(View.GONE);
+                }
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 token = tokenR;
                 closeKeyboard(txtOk);
@@ -1708,7 +1712,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                prgWaiting.setVisibility(View.GONE);
+                if (prgWaiting != null) {
+                    prgWaiting.setVisibility(View.GONE);
+                }
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 dialogWaitTimeVerifyPassword(wait);
             }
@@ -1721,7 +1727,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             @Override
             public void run() {
                 closeKeyboard(txtOk);
-                prgWaiting.setVisibility(View.GONE);
+                if (prgWaiting != null) {
+                    prgWaiting.setVisibility(View.GONE);
+                }
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 error(G.context.getResources().getString(R.string.invalid_password));
             }
@@ -1734,7 +1742,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                prgWaiting.setVisibility(View.GONE);
+                if (prgWaiting != null) {
+                    prgWaiting.setVisibility(View.GONE);
+                }
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 token = tokenR;
                 vgCheckPassword.setVisibility(View.GONE);
@@ -1756,7 +1766,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                prgWaiting.setVisibility(View.GONE);
+                if (prgWaiting != null) {
+                    prgWaiting.setVisibility(View.GONE);
+                }
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 closeKeyboard(txtOk);
                 error(G.context.getResources().getString(R.string.invalid_email_token));
@@ -1770,7 +1782,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                prgWaiting.setVisibility(View.GONE);
+                if (prgWaiting != null) {
+                    prgWaiting.setVisibility(View.GONE);
+                }
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 token = tokenR;
                 vgCheckPassword.setVisibility(View.GONE);
@@ -1786,7 +1800,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                prgWaiting.setVisibility(View.GONE);
+                if (prgWaiting != null) {
+                    prgWaiting.setVisibility(View.GONE);
+                }
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 closeKeyboard(txtOk);
                 error(G.context.getResources().getString(R.string.invalid_question_token));
