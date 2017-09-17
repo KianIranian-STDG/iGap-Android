@@ -264,7 +264,7 @@ import java.nio.ByteBuffer;
         String rotation = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
 
         int videoWidth = 641;
-        int videoHeight = 481;
+        int videoHeight = 361;
         try {
             MediaMetadataRetriever re = new MediaMetadataRetriever();
             Bitmap bmp = null;
@@ -297,7 +297,7 @@ import java.nio.ByteBuffer;
             return true;
         } else {
             resultWidth = 640;
-            resultHeight = 480;
+            resultHeight = 360;
         }
 
         int rotationValue = Integer.valueOf(rotation);
