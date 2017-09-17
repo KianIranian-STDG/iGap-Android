@@ -261,7 +261,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     }
 
                     fragment.appBarLayout = fab;
-                    new HelperFragment(fragment).setResourceContainer(R.id.fragmentContainer_contact_profile).load();
+                    new HelperFragment(fragment).setResourceContainer(R.id.container_contact_profile).load();
                 }
                 realm.close();
             }
