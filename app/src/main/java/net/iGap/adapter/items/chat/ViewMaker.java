@@ -1454,6 +1454,7 @@ public class ViewMaker {
         cs_txt_contact_name.setText("Name");
 
         setTypeFace(cs_txt_contact_name);
+        cs_txt_contact_name.setEllipsize(TextUtils.TruncateAt.END);
         cs_txt_contact_name.setSingleLine(true);
         cs_txt_contact_name.setEmojiSize(i_Dp(R.dimen.dp16));
         cs_txt_contact_name.setTextColor(G.context.getResources().getColor(R.color.black90));
@@ -1525,7 +1526,11 @@ public class ViewMaker {
         cs_txt_last_message.setText("LAST MESSAGE");
         setTypeFace(cs_txt_last_message);
         cs_txt_last_message.setTextColor(Color.parseColor("#FF616161"));
-        setTextSize(cs_txt_last_message, R.dimen.dp12);
+        if (G.twoPaneMode) {
+            setTextSize(cs_txt_last_message, R.dimen.dp16);
+        } else {
+            setTextSize(cs_txt_last_message, R.dimen.dp12);
+        }
         cs_txt_last_message.setEmojiSize(i_Dp(R.dimen.dp13));
         LinearLayout.LayoutParams layout_1151 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
@@ -1534,9 +1539,6 @@ public class ViewMaker {
         } else {
             layout_1151.rightMargin = dpToPixel(3);
         }
-
-
-
 
         layout_1151.bottomMargin = dpToPixel(2);
         cs_txt_last_message.setLayoutParams(layout_1151);
