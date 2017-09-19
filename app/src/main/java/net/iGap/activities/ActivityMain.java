@@ -1041,6 +1041,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //});
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //super.onSaveInstanceState(outState);
+    }
+
     public void openActivityPassCode() {
         if (!isActivityEnterPassCode && G.isPassCode && isLock && !G.isRestartActivity) {
             enterPassword();
@@ -1335,8 +1340,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 try {
                     HelperPermision.getCameraPermission(ActivityMain.this, new OnGetPermission() {
                         @Override
-                        public void Allow() throws IOException {
-                            new HelperFragment(FragmentQrCodeNewDevice.newInstance()).load();
+                        public void Allow() throws IOException, IllegalStateException {
+                            new HelperFragment(FragmentQrCodeNewDevice.newInstance()).setStateLoss(true).load();
                         }
 
                         @Override
