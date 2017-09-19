@@ -905,15 +905,13 @@ public class FragmentMain extends BaseFragment implements OnComplete {
         }
 
         private String subStringInternal(String text) {
-
             if (text == null || text.length() == 0) {
                 return "";
             }
 
-            int subLenght = 50;
-
-            if (text.length() > subLenght) {
-                return text.substring(0, subLenght);
+            int subLength = 150;
+            if (text.length() > subLength) {
+                return text.substring(0, subLength);
             } else {
                 return text;
             }
