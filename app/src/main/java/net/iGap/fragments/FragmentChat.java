@@ -4,6 +4,7 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
@@ -68,6 +69,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.crashlytics.android.Crashlytics;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
@@ -272,6 +274,7 @@ import net.iGap.request.RequestUserInfo;
 import org.parceler.Parcels;
 
 import static android.app.Activity.RESULT_CANCELED;
+import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
@@ -1496,8 +1499,15 @@ public class FragmentChat extends BaseFragment
 
             File f = new File(backGroundPath);
             if (f.exists()) {
-                Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                imgBackGround.setImageDrawable(d);
+                try {
+                    Drawable d = Drawable.createFromPath(f.getAbsolutePath());
+                    imgBackGround.setImageDrawable(d);
+                } catch (OutOfMemoryError e) {
+                    ActivityManager activityManager = (ActivityManager) G.context.getSystemService(ACTIVITY_SERVICE);
+                    ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+                    activityManager.getMemoryInfo(memoryInfo);
+                    Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
+                }
             }
         }
 
