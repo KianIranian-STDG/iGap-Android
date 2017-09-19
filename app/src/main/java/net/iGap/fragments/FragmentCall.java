@@ -224,7 +224,7 @@ import net.iGap.request.RequestSignalingGetLog;
 
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) throws ClassCastException {
                     super.onScrolled(recyclerView, dx, dy);
 
                     if (((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {

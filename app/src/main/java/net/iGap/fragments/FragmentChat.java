@@ -2646,7 +2646,7 @@ public class FragmentChat extends BaseFragment
                 /**
                  * remove tag from edtChat if the message has deleted
                  */
-                if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
+                if (edtChat != null && edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
                     edtChat.setTag(null);
                 }
             }

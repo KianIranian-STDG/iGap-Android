@@ -230,27 +230,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        Log.i("PPPPPPPPPP", "onDestroy");
-
         if (mRealm != null && !mRealm.isClosed()) {
             mRealm.close();
         }
-
-        //if (G.mRealm != null && !G.mRealm.isClosed()) {
-        //    G.mRealm.close();
-        //}
-
-        G.imageLoader.clearMemoryCache();
-
+        if (G.imageLoader != null) {
+            G.imageLoader.clearMemoryCache();
+        }
     }
 
+    /**
+     * delete content of folder chat background in the first registration
+     */
     private void deleteContentFolderChatBackground() {
-
-        // delete  content of folder chat background in the first registeration
-
         FileUtils.deleteRecursive(new File(G.DIR_CHAT_BACKGROUND));
-
     }
 
     @Override
