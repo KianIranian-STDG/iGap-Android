@@ -1,7 +1,6 @@
 package net.iGap.fragments;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -25,9 +24,8 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
-import io.realm.RealmBasedRecyclerViewAdapter;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
-import io.realm.RealmViewHolder;
 import io.realm.Sort;
 import java.util.HashMap;
 import net.iGap.G;
@@ -149,7 +147,7 @@ import net.iGap.request.RequestSignalingGetLog;
             empty_call.setVisibility(View.VISIBLE);
         }
 
-        CallAdapter callAdapter = new CallAdapter(G.context, results);
+        CallAdapter callAdapter = new CallAdapter(results);
         mRecyclerView.setAdapter(callAdapter);
 
         onScrollListener = new RecyclerView.OnScrollListener() {
@@ -391,17 +389,13 @@ import net.iGap.request.RequestSignalingGetLog;
      * ***************************************** adapter call ***************************************************
      */
 
-    public class CallAdapter extends RealmBasedRecyclerViewAdapter<RealmCallLog, CallAdapter.ViewHolder> { //RealmRecyclerViewAdapter
-        public CallAdapter(Context context, RealmResults<RealmCallLog> realmResults) {
-            super(context, realmResults, true, false);
+    public class CallAdapter extends RealmRecyclerViewAdapter<RealmCallLog, CallAdapter.ViewHolder> {
+
+        public CallAdapter(RealmResults<RealmCallLog> realmResults) {
+            super(realmResults, true);
         }
 
-        //public CallAdapter(RealmResults<RealmCallLog> realmResults) { // realm adapter
-        //    super(realmResults, true);
-        //}
-
-
-        public class ViewHolder extends RealmViewHolder { // RecyclerView.ViewHolder
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
             private ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog;
             private CircleImageView image;
@@ -462,16 +456,16 @@ import net.iGap.request.RequestSignalingGetLog;
         }
 
         @Override
-        public ViewHolder onCreateRealmViewHolder(ViewGroup parent, int i) { // onCreateViewHolder
+        public CallAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int i) {
             //  new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_call_sub_layout, null));
+
             return new ViewHolder(ViewMaker.getViewItemCall());
         }
 
         @Override
-        public void onBindRealmViewHolder(final CallAdapter.ViewHolder viewHolder, int i) { //onBindViewHolder
+        public void onBindViewHolder(final CallAdapter.ViewHolder viewHolder, int i) {
 
-            //final ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item = viewHolder.callLog = getItem(i).getLogProto(); // for realm adapter
-            final ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item = viewHolder.callLog = realmResults.get(i).getLogProto();
+            final ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog item = viewHolder.callLog = getItem(i).getLogProto();
 
             // set icon and icon color
             switch (item.getStatus()) {

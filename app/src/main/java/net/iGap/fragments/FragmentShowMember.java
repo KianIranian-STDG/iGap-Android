@@ -31,11 +31,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import io.realm.Case;
 import io.realm.Realm;
-import io.realm.RealmBasedRecyclerViewAdapter;
 import io.realm.RealmList;
 import io.realm.RealmQuery;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
-import io.realm.RealmViewHolder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,6 +77,7 @@ import net.iGap.request.RequestChannelGetMemberList;
 import net.iGap.request.RequestGroupGetMemberList;
 import net.iGap.request.RequestUserInfo;
 
+import static net.iGap.G.inflater;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class FragmentShowMember extends BaseFragment {
@@ -598,7 +598,7 @@ public class FragmentShowMember extends BaseFragment {
         realm.close();
     }
 
-    private class MemberAdapter extends RealmBasedRecyclerViewAdapter<RealmMember, MemberAdapter.ViewHolder> {
+    private class MemberAdapter extends RealmRecyclerViewAdapter<RealmMember, MemberAdapter.ViewHolder> {
 
         public String mainRole;
         public ProtoGlobal.Room.Type roomType;
@@ -606,19 +606,19 @@ public class FragmentShowMember extends BaseFragment {
         private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
         public MemberAdapter(RealmResults<RealmMember> realmResults, ProtoGlobal.Room.Type roomType, String mainRole, long userId) {
-            super(G.context, realmResults, true, false);
+            super(realmResults, true);
             this.roomType = roomType;
             this.mainRole = mainRole;
             this.userId = userId;
         }
 
         @Override
-        public ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
+        public MemberAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View v = inflater.inflate(R.layout.contact_item_group_profile, viewGroup, false);
             return new ViewHolder(v);
         }
 
-        public class ViewHolder extends RealmViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
             protected CircleImageView image;
             protected CustomTextViewMedium title;
@@ -642,9 +642,9 @@ public class FragmentShowMember extends BaseFragment {
         }
 
         @Override
-        public void onBindRealmViewHolder(final MemberAdapter.ViewHolder holder, int i) {
+        public void onBindViewHolder(final MemberAdapter.ViewHolder holder, int i) {
 
-            final StructContactInfo mContact = convertRealmToStruct(realmResults.get(i));
+            final StructContactInfo mContact = convertRealmToStruct(getItem(i));
 
             if (mContact == null) {
                 return;

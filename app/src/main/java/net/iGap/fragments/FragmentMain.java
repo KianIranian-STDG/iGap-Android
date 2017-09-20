@@ -21,10 +21,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
-import io.realm.RealmBasedRecyclerViewAdapter;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
-import io.realm.RealmViewHolder;
 import io.realm.Sort;
 import java.util.HashMap;
 import java.util.List;
@@ -649,19 +649,19 @@ public class FragmentMain extends BaseFragment implements OnComplete {
 
 
 
-    public class RoomAdapter extends RealmBasedRecyclerViewAdapter<RealmRoom, RoomAdapter.ViewHolder> {
+    public class RoomAdapter extends RealmRecyclerViewAdapter<RealmRoom, RoomAdapter.ViewHolder> {
 
         public OnComplete mComplete;
         public String action;
         private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
-        public RoomAdapter(@Nullable RealmResults<RealmRoom> data, OnComplete complete) { // OrderedRealmCollection<RealmRoom> data
-            super(G.context, data, true, false);
+        public RoomAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, OnComplete complete) {
+            super(data, true);
             this.mComplete = complete;
         }
 
         @Override
-        public ViewHolder onCreateRealmViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
             // View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
 
@@ -669,10 +669,10 @@ public class FragmentMain extends BaseFragment implements OnComplete {
         }
 
         @Override
-        public void onBindRealmViewHolder(final ViewHolder holder, final int i) {
+        public void onBindViewHolder(final ViewHolder holder, final int i) {
 
 
-            final RealmRoom mInfo = holder.mInfo = realmResults.get(i);
+            final RealmRoom mInfo = holder.mInfo = getItem(i);
             if (mInfo == null) {
                 return;
             }
@@ -784,7 +784,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
             }
         }
 
-        public class ViewHolder extends RealmViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
             RealmRoom mInfo;
 

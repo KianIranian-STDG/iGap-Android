@@ -40,9 +40,8 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import io.realm.Case;
 import io.realm.Realm;
-import io.realm.RealmBasedRecyclerViewAdapter;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
-import io.realm.RealmViewHolder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -362,17 +361,17 @@ public class RegisteredContactsFragment extends BaseFragment {
 
     //********************************************************************************************
 
-    public class ContactListAdapter extends RealmBasedRecyclerViewAdapter<RealmContacts, ContactListAdapter.ViewHolder> {
+    public class ContactListAdapter extends RealmRecyclerViewAdapter<RealmContacts, ContactListAdapter.ViewHolder> {
 
         String lastHeader = "";
         int count;
 
         ContactListAdapter(RealmResults<RealmContacts> realmResults) {
-            super(G.context, realmResults, true, false);
+            super(realmResults, true);
             count = realmResults.size();
         }
 
-        public class ViewHolder extends RealmViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
             private RealmContacts realmContacts;
             protected CircleImageView image;
@@ -432,19 +431,19 @@ public class RegisteredContactsFragment extends BaseFragment {
         }
 
         @Override
-        public ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
+        public ContactListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             // View v = inflater.inflate(R.layout.contact_item, viewGroup, false);
 
             View v = ViewMaker.getViewRegisteredContacts();
 
-            if (realmResults != null && count != realmResults.size()) {
-                count = realmResults.size();
+            if (getData() != null && count != getData().size()) {
+                count = getData().size();
 
                 realmRecyclerView.post(new Runnable() {
                     @Override
                     public void run() {
                         realmRecyclerView.removeItemDecoration(decoration);
-                        decoration = new StickyRecyclerHeadersDecoration(new StickyHeader(realmResults.sort(RealmContactsFields.DISPLAY_NAME)));
+                        decoration = new StickyRecyclerHeadersDecoration(new StickyHeader(getData().sort(RealmContactsFields.DISPLAY_NAME)));
                         realmRecyclerView.addItemDecoration(decoration);
                     }
                 });
@@ -454,9 +453,9 @@ public class RegisteredContactsFragment extends BaseFragment {
         }
 
         @Override
-        public void onBindRealmViewHolder(final ContactListAdapter.ViewHolder viewHolder, int i) {
+        public void onBindViewHolder(final ContactListAdapter.ViewHolder viewHolder, int i) {
 
-            final RealmContacts contact = viewHolder.realmContacts = realmResults.get(i);
+            final RealmContacts contact = viewHolder.realmContacts = getItem(i);
             if (contact == null) {
                 return;
             }

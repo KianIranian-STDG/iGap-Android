@@ -13,9 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import io.realm.Realm;
-import io.realm.RealmBasedRecyclerViewAdapter;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
-import io.realm.RealmViewHolder;
 import java.util.HashMap;
 import net.iGap.G;
 import net.iGap.R;
@@ -36,6 +35,7 @@ import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyDistance;
 
 import static net.iGap.G.context;
+import static net.iGap.G.inflater;
 import static net.iGap.fragments.FragmentiGapMap.btnBack;
 import static net.iGap.fragments.FragmentiGapMap.isBackPress;
 import static net.iGap.fragments.FragmentiGapMap.pageUserList;
@@ -162,19 +162,19 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
         if (btnBack != null) btnBack.performClick();
     }
 
-    private class MapUserAdapter extends RealmBasedRecyclerViewAdapter<RealmGeoNearbyDistance, MapUserAdapter.ViewHolder> {
+    private class MapUserAdapter extends RealmRecyclerViewAdapter<RealmGeoNearbyDistance, MapUserAdapter.ViewHolder> {
         MapUserAdapter(RealmResults<RealmGeoNearbyDistance> data, boolean autoUpdate) {
-            super(G.context, data, autoUpdate, false);
+            super(data, autoUpdate);
         }
 
         @Override
-        public ViewHolder onCreateRealmViewHolder(ViewGroup parent, int viewType) {
+        public MapUserAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new MapUserAdapter.ViewHolder(inflater.inflate(R.layout.map_user_item, parent, false));
         }
 
         @Override
-        public void onBindRealmViewHolder(final MapUserAdapter.ViewHolder holder, int i) {
-            final RealmGeoNearbyDistance item = realmResults.get(i);
+        public void onBindViewHolder(final MapUserAdapter.ViewHolder holder, int i) {
+            final RealmGeoNearbyDistance item = getItem(i);
             if (item == null) {
                 return;
             }
@@ -251,7 +251,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             realm.close();
         }
 
-        class ViewHolder extends RealmViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder {
 
             public LinearLayout layoutMap;
             public CircleImageView avatar;

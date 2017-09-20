@@ -23,9 +23,8 @@ import android.view.ViewGroup;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
-import io.realm.RealmBasedRecyclerViewAdapter;
+import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
-import io.realm.RealmViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
@@ -45,6 +44,8 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
+
+import static net.iGap.G.inflater;
 
 public class FragmentBlockedUser extends BaseFragment {
 
@@ -119,13 +120,13 @@ public class FragmentBlockedUser extends BaseFragment {
         }).negativeText(R.string.B_cancel).show();
     }
 
-    public class BlockListAdapter extends RealmBasedRecyclerViewAdapter<RealmRegisteredInfo, BlockListAdapter.ViewHolder> {
+    public class BlockListAdapter extends RealmRecyclerViewAdapter<RealmRegisteredInfo, BlockListAdapter.ViewHolder> {
 
         BlockListAdapter(RealmResults<RealmRegisteredInfo> realmResults) {
-            super(G.context, realmResults, true, false);
+            super(realmResults, true);
         }
 
-        public class ViewHolder extends RealmViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
 
             RealmRegisteredInfo realmRegisteredInfo;
             protected CircleImageView image;
@@ -154,15 +155,15 @@ public class FragmentBlockedUser extends BaseFragment {
         }
 
         @Override
-        public ViewHolder onCreateRealmViewHolder(ViewGroup viewGroup, int i) {
+        public BlockListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View v = inflater.inflate(R.layout.contact_item, viewGroup, false);
             return new ViewHolder(v);
         }
 
         @Override
-        public void onBindRealmViewHolder(final BlockListAdapter.ViewHolder viewHolder, int i) {
+        public void onBindViewHolder(final BlockListAdapter.ViewHolder viewHolder, int i) {
 
-            RealmRegisteredInfo registeredInfo = viewHolder.realmRegisteredInfo = realmResults.get(i);
+            RealmRegisteredInfo registeredInfo = viewHolder.realmRegisteredInfo = getItem(i);
             if (registeredInfo == null) {
                 return;
             }
