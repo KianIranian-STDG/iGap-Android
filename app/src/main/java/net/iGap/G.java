@@ -61,6 +61,7 @@ import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnBackgroundChanged;
 import net.iGap.interfaces.OnBlockStateChanged;
 import net.iGap.interfaces.OnCallLeaveView;
+import net.iGap.interfaces.OnCallLogClear;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChannelAddAdmin;
 import net.iGap.interfaces.OnChannelAddMember;
@@ -427,6 +428,7 @@ public class G extends MultiDexApplication {
     public static IActivityFinish iActivityFinish;
     public static OnBlockStateChanged onBlockStateChanged;
     public static OnContactAdd onContactAdd;
+    public static OnCallLogClear onCallLogClear;
 
     public static IDispatchTochEvent dispatchTochEventChat;
     public static IOnBackPressed onBackPressedChat;
