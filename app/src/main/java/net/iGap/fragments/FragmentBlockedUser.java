@@ -191,8 +191,6 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
         public void bindView(final ViewHolder viewHolder, List payloads) throws IllegalStateException {
             super.bindView(viewHolder, payloads);
 
-
-            //RealmRegisteredInfo registeredInfo = viewHolder.realmRegisteredInfo = getit
             if (registeredInfo == null) {
                 return;
             }

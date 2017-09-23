@@ -10,11 +10,6 @@
 
 package net.iGap.interfaces;
 
-
-import java.util.List;
-import net.iGap.proto.ProtoSignalingGetLog;
-
-public interface ISignalingGetCallLog {
-
-    void onGetList(int size, List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> signalingLogList);
+public interface OnContactAdd {
+    void onContactAdd();
 }

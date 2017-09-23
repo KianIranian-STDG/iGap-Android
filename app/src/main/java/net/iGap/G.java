@@ -61,6 +61,7 @@ import net.iGap.interfaces.ITowPanModDesinLayout;
 import net.iGap.interfaces.OnBackgroundChanged;
 import net.iGap.interfaces.OnBlockStateChanged;
 import net.iGap.interfaces.OnCallLeaveView;
+import net.iGap.interfaces.OnCallLogClear;
 import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChannelAddAdmin;
 import net.iGap.interfaces.OnChannelAddMember;
@@ -102,6 +103,7 @@ import net.iGap.interfaces.OnClientSearchRoomHistory;
 import net.iGap.interfaces.OnClientSubscribeToRoom;
 import net.iGap.interfaces.OnClientUnsubscribeFromRoom;
 import net.iGap.interfaces.OnConnectionChangeState;
+import net.iGap.interfaces.OnContactAdd;
 import net.iGap.interfaces.OnDeleteChatFinishActivity;
 import net.iGap.interfaces.OnDraftMessage;
 import net.iGap.interfaces.OnFileDownloadResponse;
@@ -425,6 +427,8 @@ public class G extends MultiDexApplication {
     public static IMainFinish iMainFinish;
     public static IActivityFinish iActivityFinish;
     public static OnBlockStateChanged onBlockStateChanged;
+    public static OnContactAdd onContactAdd;
+    public static OnCallLogClear onCallLogClear;
 
     public static IDispatchTochEvent dispatchTochEventChat;
     public static IOnBackPressed onBackPressedChat;
