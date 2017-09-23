@@ -1085,7 +1085,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
     private void deleteContact() {
         G.onUserContactdelete = new OnUserContactDelete() {
             @Override
-            public void onContactDelete() {
+            public void onContactDelete(long userId) {
                 /**
                  * get user info after delete it for show nickname
                  */

@@ -10,9 +10,6 @@
 
 package net.iGap.interfaces;
 
-public interface OnUserContactDelete {
-
-    void onContactDelete(long userId);
-
-    void onError(int majorCode, int minorCode);
+public interface OnContactAdd {
+    void onContactAdd();
 }
