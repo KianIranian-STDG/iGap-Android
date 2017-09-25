@@ -793,19 +793,19 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     @Override
     public void onChatDelete(final long roomId) {
         adapterHashMap.get(all).removeChat(roomId);
-        getAdapterMain(roomId).removeChat(roomId);
+        adapterHashMap.get(chat).removeChat(roomId);
     }
 
     @Override
     public void onGroupDelete(long roomId) {
         adapterHashMap.get(all).removeChat(roomId);
-        getAdapterMain(roomId).removeChat(roomId);
+        adapterHashMap.get(group).removeChat(roomId);
     }
 
     @Override
     public void onChannelDelete(long roomId) {
         adapterHashMap.get(all).removeChat(roomId);
-        getAdapterMain(roomId).removeChat(roomId);
+        adapterHashMap.get(channel).removeChat(roomId);
     }
 
     @Override
@@ -851,12 +851,18 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-
-                ///AAAAAAAAAAA add in two step
                 RealmRoom realmRoom = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null && getAdapterMain(roomId).getPosition(realmRoom.getId()) == -1) {
-                    adapterHashMap.get(all).add(0, new RoomItem(mComplete, mainType).setInfo(realmRoom).withIdentifier(realmRoom.getId()));
-                    getAdapterMain(roomId).add(0, new RoomItem(mComplete, mainType).setInfo(realmRoom).withIdentifier(realmRoom.getId()));
+                    adapterHashMap.get(all).add(0, new RoomItem(mComplete, all).setInfo(realmRoom).withIdentifier(realmRoom.getId()));
+                    MainType type = all;
+                    if (realmRoom.getType() == CHAT) {
+                        type = chat;
+                    } else if (realmRoom.getType() == GROUP) {
+                        type = group;
+                    } else if (realmRoom.getType() == CHANNEL) {
+                        type = channel;
+                    }
+                    getAdapterMain(roomId).add(0, new RoomItem(mComplete, type).setInfo(realmRoom).withIdentifier(realmRoom.getId()));
                 }
             }
         });
