@@ -1441,7 +1441,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
         onClientGetRoomResponseRoomList = this;
         G.onMute = this;
         G.onClearRoomHistory = this;
-        G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
+        G.chatUpdateStatusUtil.setOnChatUpdateStatusResponseFragmentMain(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponseFragmentMainRoomList(this);
 
         if (progressBar != null) {
