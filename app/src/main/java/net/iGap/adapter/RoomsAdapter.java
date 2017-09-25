@@ -182,7 +182,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     public int getPinPosition(long roomId) {
         int count = -1;
         for (Item chat : getAdapterItems()) {
-            if (chat.mInfo.isPinned()) {
+            if (chat.mInfo.isValid() && !chat.mInfo.isDeleted() && chat.mInfo.isPinned()) {
                 if (chat.mInfo.getId() == roomId) {
                     return -1;
                 }
