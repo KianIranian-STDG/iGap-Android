@@ -174,7 +174,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     @Override
     public void onMapUsersGet(final long userId) {
         if (mAdapter != null) {
-            G.handler.post(new Runnable() {
+            G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     RealmGeoNearbyDistance realmGeoNearbyDistance = getRealmMapUsers().where(RealmGeoNearbyDistance.class).equalTo(RealmGeoNearbyDistanceFields.USER_ID, userId).findFirst();
@@ -182,7 +182,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                         mAdapter.add(new MapUserItem().setInfo(realmGeoNearbyDistance).withIdentifier(realmGeoNearbyDistance.getUserId()));
                     }
                 }
-            });
+            }, 200);
         }
     }
 
