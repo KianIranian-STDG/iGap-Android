@@ -4516,19 +4516,23 @@ public class FragmentChat extends BaseFragment
     private void storingLastPosition() {
         try {
             if (recyclerView != null && mAdapter != null) {
-                int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-                if (mAdapter.getItem(firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(firstVisiblePosition) instanceof UnreadMessage) {
-                    firstVisiblePosition++;
+                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                if (mAdapter.getItem(lastVisibleItemPosition) instanceof TimeItem || mAdapter.getItem(lastVisibleItemPosition) instanceof UnreadMessage) {
+                    lastVisibleItemPosition--;
                 }
 
-                if (mAdapter.getItem(firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(firstVisiblePosition) instanceof UnreadMessage) {
-                    firstVisiblePosition++;
+                if (mAdapter.getItem(lastVisibleItemPosition) instanceof TimeItem || mAdapter.getItem(lastVisibleItemPosition) instanceof UnreadMessage) {
+                    lastVisibleItemPosition--;
                 }
 
                 long lastScrolledMessageID = 0;
 
-                if (firstVisiblePosition + 15 < mAdapter.getAdapterItemCount()) {
-                    lastScrolledMessageID = parseLong(mAdapter.getItem(firstVisiblePosition).mMessage.messageID);
+                //if (firstVisiblePosition + 15 < mAdapter.getAdapterItemCount()) {
+                //    lastScrolledMessageID = parseLong(mAdapter.getItem(firstVisiblePosition).mMessage.messageID);
+                //}
+
+                if (lastVisibleItemPosition < mAdapter.getAdapterItemCount() - 2) {
+                    lastScrolledMessageID = parseLong(mAdapter.getItem(lastVisibleItemPosition).mMessage.messageID);
                 }
 
                 //+Realm realm = Realm.getDefaultInstance();
