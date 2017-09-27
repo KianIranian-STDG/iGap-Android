@@ -35,6 +35,17 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     public static List<Long> userInfoAlreadyRequests = new ArrayList<>();
     private Realm realmMain;
+    private Realm realmRoomsAdapter;
+
+    /**
+     * Hint: this method created for test
+     */
+    private Realm getRealmRoomsAdapter() {
+        if (realmRoomsAdapter == null || realmRoomsAdapter.isClosed()) {
+            realmRoomsAdapter = Realm.getDefaultInstance();
+        }
+        return realmRoomsAdapter;
+    }
 
     public RoomsAdapter(Realm realmMain) {
         this.realmMain = realmMain;
@@ -125,10 +136,11 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
     public void updateChatStatus(long chatId, final String status) {
         List<Item> items = getAdapterItems();
         //+Realm realm = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
         for (final Item chat : items) {
             if (checkValidationForRealm(chat, chat.mInfo) && chat.mInfo.getId() == chatId) {
                 final int pos = items.indexOf(chat);
-                realmMain.executeTransaction(new Realm.Transaction() {
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chat.mInfo.getLastMessage().getMessageId()).findFirst();
@@ -141,7 +153,7 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
                 break;
             }
         }
-        //realm.close();
+        realm.close();
     }
 
     public void goToTop(long roomId, boolean isPin) {
@@ -212,13 +224,12 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
 
     public void updateItem(long roomId) {
         //+Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realmMain.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmRoom realmRoom = getRealmRoomsAdapter().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom != null) {
             int pos = getPosition(roomId);
             if (pos != -1) {
                 set(pos, (Item) getItem(pos).setInfo(realmRoom));
             }
-
         }
         //realm.close();
     }
