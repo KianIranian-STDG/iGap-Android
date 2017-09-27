@@ -194,6 +194,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         });
     }
 
+
     public boolean isShowTime() {
         return showTime;
     }
