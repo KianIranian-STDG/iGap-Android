@@ -3685,6 +3685,24 @@ public class FragmentChat extends BaseFragment
 
             @Override
             public void resendMessage() {
+                for (int i = 0; i < failedMessages.size(); i++) {
+                    if (failedMessages.get(i).messageID.equals(message.messageID)) {
+                        if (failedMessages.get(i).attachment != null) {
+                            if (HelperUploadFile.isUploading(message.messageID)) {
+                                HelperUploadFile.reUpload(message.messageID);
+                            } else {
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                                    }
+                                }, 300);
+                            }
+                        }
+                        break;
+                    }
+                }
+
                 mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
             }
 
