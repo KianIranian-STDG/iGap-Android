@@ -864,7 +864,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                             sendIntent.setAction(Intent.ACTION_SEND);
                             sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you!");
                             sendIntent.setType("text/plain");
-                            startActivity(sendIntent);
+                            G.context.startActivity(sendIntent);
                         }
                     }).show();
 
