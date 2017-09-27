@@ -497,14 +497,14 @@ public class FragmentChat extends BaseFragment
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                RealmRoomMessage.fetchMessages(mRoomId, new OnActivityChatStart() {
+                RealmRoomMessage.fetchMessages(getRealmChat(), mRoomId, new OnActivityChatStart() {
                     @Override
                     public void resendMessage(RealmRoomMessage message) {
                         chatSendMessageUtil.build(chatType, message.getRoomId(), message);
                     }
 
                     @Override
-                    public void resendMessageNeedsUpload(RealmRoomMessage message) {
+                    public void resendMessageNeedsUpload(final RealmRoomMessage message, final long messageId) {
                         HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(), RealmRoomMessage.getReplyMessageId(message), new HelperUploadFile.UpdateListener() {
                             @Override
                             public void OnProgress(int progress, FileUploadStructure struct) {
@@ -518,6 +518,12 @@ public class FragmentChat extends BaseFragment
 
                             }
                         });
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.notifyItemChanged(mAdapter.findPositionByMessageId(messageId));
+                            }
+                        }, 300);
                     }
 
                     @Override
@@ -3670,6 +3676,24 @@ public class FragmentChat extends BaseFragment
 
             @Override
             public void resendMessage() {
+                for (int i = 0; i < failedMessages.size(); i++) {
+                    if (failedMessages.get(i).messageID.equals(message.messageID)) {
+                        if (failedMessages.get(i).attachment != null) {
+                            if (HelperUploadFile.isUploading(message.messageID)) {
+                                HelperUploadFile.reUpload(message.messageID);
+                            } else {
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                                    }
+                                }, 300);
+                            }
+                        }
+                        break;
+                    }
+                }
+
                 mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
             }
 
