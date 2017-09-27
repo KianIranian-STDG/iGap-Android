@@ -227,6 +227,8 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                     txtLastSeen.setText(realmRegisteredInfo.getStatus());
                 }
             }
+        } else {
+            txtLastSeen.setText("");
         }
     }
 
