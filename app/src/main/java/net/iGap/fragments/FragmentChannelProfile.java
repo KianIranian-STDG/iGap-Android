@@ -617,21 +617,20 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                 changeListener = new RealmChangeListener<RealmModel>() {
                     @Override
                     public void onChange(final RealmModel element) {
-
-                        if (((RealmRoom) element).isValid() && !((RealmRoom) element).isDeleted()) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (((RealmRoom) element).isValid() && !((RealmRoom) element).isDeleted()) {
                                     String countText = ((RealmRoom) element).getSharedMediaCount();
 
-                                        if (HelperCalander.isLanguagePersian) {
-                                            txtSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
-                                        } else {
-                                            txtSharedMedia.setText(countText);
-                                        }
+                                    if (HelperCalander.isLanguagePersian) {
+                                        txtSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
+                                    } else {
+                                        txtSharedMedia.setText(countText);
+                                    }
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 };
             }
@@ -718,8 +717,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
         layoutRevoke.addView(inputRevoke, layoutParams);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.channel_link_title_revoke)).positiveText(G.context.getResources().getString(R.string.revoke))
-                .customView(layoutRevoke, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.context.getResources().getString(R.string.B_cancel))
+        final MaterialDialog dialog =
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.channel_link_title_revoke)).positiveText(G.context.getResources().getString(R.string.revoke)).customView(layoutRevoke, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.context.getResources().getString(R.string.B_cancel))
                 .neutralText(R.string.array_Copy)
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
                     @Override
@@ -781,11 +780,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         layoutChannelLink.addView(txtLink, layoutParams);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.channel_link))
-            .positiveText(G.context.getResources().getString(R.string.array_Copy))
-            .customView(layoutChannelLink, true)
-            .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
-            .negativeText(G.context.getResources().getString(R.string.B_cancel))
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                .positiveText(G.context.getResources().getString(R.string.array_Copy))
+                .customView(layoutChannelLink, true)
+                .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+                .negativeText(G.context.getResources().getString(R.string.B_cancel))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String copy;
@@ -794,7 +793,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                         ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
                         clipboard.setPrimaryClip(clip);
                     }
-                }).build();
+                })
+                .build();
 
         dialog.show();
     }

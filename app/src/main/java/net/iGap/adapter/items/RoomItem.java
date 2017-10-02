@@ -106,7 +106,7 @@ public class RoomItem extends AbstractItem<RoomItem, RoomItem.ViewHolder> {
 
         holder.txtCloud = (MaterialDesignTextView) holder.itemView.findViewById(R.id.cs_txt_contact_initials);
 
-        if (mInfo == null) {
+        if (mInfo == null || !mInfo.isValid() || mInfo.isDeleted()) {
             return;
         }
 

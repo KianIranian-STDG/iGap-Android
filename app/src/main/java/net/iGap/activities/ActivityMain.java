@@ -2451,7 +2451,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void run() {
                 if (G.twoPaneMode) {
-                    if (frameFragmentContainer == null || frameFragmentContainer.getChildCount() == 0) {
+                    if (frameFragmentContainer == null || frameFragmentContainer.getChildCount() == 0 && frameFragmentBack != null) {
                         frameFragmentBack.setVisibility(View.GONE);
                     }
 

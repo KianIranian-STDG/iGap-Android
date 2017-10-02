@@ -384,7 +384,7 @@ public class FragmentChat extends BaseFragment
 
     public static int forwardMessageCount = 0;
     public static ArrayList<Parcelable> mForwardMessages;
-    private Realm realmChat;
+    public static Realm realmChat; // static for test
     public static boolean canUpdateAfterDownload = false;
 
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
@@ -3926,7 +3926,7 @@ public class FragmentChat extends BaseFragment
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    private Realm getRealmChat() {
+    public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
             realmChat = Realm.getDefaultInstance();
         }
@@ -4083,7 +4083,9 @@ public class FragmentChat extends BaseFragment
     private ArrayList<Parcelable> getMessageStructFromSelectedItems() {
         ArrayList<Parcelable> messageInfos = new ArrayList<>(mAdapter.getSelectedItems().size());
         for (AbstractMessage item : mAdapter.getSelectedItems()) {
-            messageInfos.add(Parcels.wrap(item.mMessage));
+            if (item != null && item.mMessage != null) {
+                messageInfos.add(Parcels.wrap(item.mMessage));
+            }
         }
         return messageInfos;
     }

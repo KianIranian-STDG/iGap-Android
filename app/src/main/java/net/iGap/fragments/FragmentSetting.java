@@ -944,7 +944,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                                             @Override
                                             public void run() {
                                                 hideProgressBar();
-                                                final Snackbar snack = Snackbar.make(view.findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
                                                 snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
@@ -962,7 +962,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                                             @Override
                                             public void run() {
                                                 hideProgressBar();
-                                                final Snackbar snack = Snackbar.make(view.findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
+                                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
                                                 snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {

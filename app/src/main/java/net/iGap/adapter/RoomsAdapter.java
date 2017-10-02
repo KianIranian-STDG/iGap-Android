@@ -289,7 +289,10 @@ public class RoomsAdapter<Item extends RoomItem> extends FastItemAdapter<Item> {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                remove(getPosition(roomId));
+                int position = getPosition(roomId);
+                if (position != -1) {
+                    remove(position);
+                }
             }
         });
     }
