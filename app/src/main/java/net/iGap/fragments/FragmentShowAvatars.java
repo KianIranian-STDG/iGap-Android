@@ -122,7 +122,7 @@ public class FragmentShowAvatars extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return attachToSwipeBack(inflater.inflate(R.layout.activity_show_image, container, false));
+        return inflater.inflate(R.layout.activity_show_image, container, false);
     }
 
     @Override
@@ -221,49 +221,49 @@ public class FragmentShowAvatars extends BaseFragment {
 
                 root1.setVisibility(View.VISIBLE);
 
-                txtSearch.setText(G.context.getResources().getString(R.string.Search));
+                txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.Search));
 
                 switch (from) {
                     case setting:
                         //showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
-                        txtSearch.setText(G.context.getResources().getString(R.string.array_Delete_photo));
-                        iconSearch.setText(G.context.getResources().getString(R.string.md_rubbish_delete_file));
+                        txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.array_Delete_photo));
+                        iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
                         break;
                     case group:
                         if (roleGroup == GroupChatRole.OWNER || roleGroup == GroupChatRole.ADMIN) {
                             //showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
-                            txtSearch.setText(G.context.getResources().getString(R.string.array_Delete_photo));
-                            iconSearch.setText(G.context.getResources().getString(R.string.md_rubbish_delete_file));
+                            txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.array_Delete_photo));
+                            iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
                         } else {
                             //showPopupMenu(R.array.pop_up_menu_show_avatar);
-                            txtSearch.setText(G.context.getResources().getString(R.string.save_to_gallery));
-                            iconSearch.setText(G.context.getResources().getString(R.string.md_save));
+                            txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.save_to_gallery));
+                            iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_save));
                         }
                         break;
                     case channel:
                         if (roleChannel == ChannelChatRole.OWNER || roleChannel == ChannelChatRole.ADMIN) {
                             //showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
-                            txtSearch.setText(G.context.getResources().getString(R.string.array_Delete_photo));
-                            iconSearch.setText(G.context.getResources().getString(R.string.md_rubbish_delete_file));
+                            txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.array_Delete_photo));
+                            iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
                         } else {
                             //showPopupMenu(R.array.pop_up_menu_show_avatar);
-                            txtSearch.setText(G.context.getResources().getString(R.string.save_to_gallery));
-                            iconSearch.setText(G.context.getResources().getString(R.string.md_save));
+                            txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.save_to_gallery));
+                            iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_save));
                         }
                         break;
                     case chat:
                         //showPopupMenu(R.array.pop_up_menu_show_avatar);
-                        txtSearch.setText(G.context.getResources().getString(R.string.save_to_gallery));
-                        iconSearch.setText(G.context.getResources().getString(R.string.md_save));
+                        txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.save_to_gallery));
+                        iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_save));
                         break;
                 }
                 root1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-                        if (txtSearch.getText().equals(G.context.getResources().getString(R.string.save_to_gallery))) {
+                        if (txtSearch.getText().equals(G.fragmentActivity.getResources().getString(R.string.save_to_gallery))) {
                             saveToGallery();
-                        } else if (txtSearch.getText().equals(G.context.getResources().getString(array_Delete_photo))) {
+                        } else if (txtSearch.getText().equals(G.fragmentActivity.getResources().getString(array_Delete_photo))) {
                             switch (from) {
                                 case setting:
                                     deletePhotoSetting();
@@ -343,7 +343,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
                         if (avatarListSize > 0) {
                             viewPager.getAdapter().notifyDataSetChanged();
-                            txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + G.context.getResources().getString(R.string.of) + " " + avatarListSize);
+                            txtImageNumber.setText(viewPager.getCurrentItem() + 1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + avatarListSize);
                             if (HelperCalander.isLanguagePersian) {
                                 txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
                             }
@@ -367,7 +367,7 @@ public class FragmentShowAvatars extends BaseFragment {
         mAdapter = new FragmentShowAvatars.AdapterViewPager();
         viewPager.setAdapter(mAdapter);
 
-        txtImageNumber.setText(1 + " " + G.context.getResources().getString(R.string.of) + " " + avatarList.size());
+        txtImageNumber.setText(1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + avatarList.size());
         if (HelperCalander.isLanguagePersian) {
             txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
         }
@@ -387,7 +387,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
             @Override
             public void onPageSelected(int position) {
-                txtImageNumber.setText(position + 1 + " " + G.context.getResources().getString(R.string.of) + " " + avatarList.size());
+                txtImageNumber.setText(position + 1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + avatarList.size());
                 if (HelperCalander.isLanguagePersian) {
                     txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
                 }
@@ -415,9 +415,9 @@ public class FragmentShowAvatars extends BaseFragment {
             @Override
             public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                if (text.equals(G.context.getResources().getString(R.string.save_to_gallery))) {
+                if (text.equals(G.fragmentActivity.getResources().getString(R.string.save_to_gallery))) {
                     saveToGallery();
-                } else if (text.equals(G.context.getResources().getString(array_Delete_photo))) {
+                } else if (text.equals(G.fragmentActivity.getResources().getString(array_Delete_photo))) {
                     switch (from) {
                         case setting:
                             deletePhotoSetting();
@@ -466,7 +466,7 @@ public class FragmentShowAvatars extends BaseFragment {
     //
     //            intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
     //            intent.setType("image/*");
-    //            startActivity(Intent.createChooser(intent, G.context.getResources().getString(R.string.share_image_from_igap)));
+    //            startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
     //        }
     //    }
     //}

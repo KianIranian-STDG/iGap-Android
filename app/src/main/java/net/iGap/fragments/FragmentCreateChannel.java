@@ -156,9 +156,9 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
-                                snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
+                                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();
@@ -175,9 +175,9 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
-                                snack.setAction(G.context.getResources().getString(R.string.cancel), new View.OnClickListener() {
+                                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         snack.dismiss();
@@ -273,7 +273,7 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                         txtFinish.setEnabled(false);
                         txtFinish.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
                         txtInputLayout.setErrorEnabled(true);
-                        txtInputLayout.setError("" + G.context.getResources().getString(R.string.INVALID));
+                        txtInputLayout.setError("" + G.fragmentActivity.getResources().getString(R.string.INVALID));
                     }
                 }
             }
@@ -390,17 +390,17 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                         txtFinish.setEnabled(false);
                         txtFinish.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
                         txtInputLayout.setErrorEnabled(true);
-                        txtInputLayout.setError("" + G.context.getResources().getString(R.string.INVALID));
+                        txtInputLayout.setError("" + G.fragmentActivity.getResources().getString(R.string.INVALID));
                     } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.TAKEN) {
                         txtFinish.setEnabled(false);
                         txtFinish.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
                         txtInputLayout.setErrorEnabled(true);
-                        txtInputLayout.setError("" + G.context.getResources().getString(R.string.TAKEN));
+                        txtInputLayout.setError("" + G.fragmentActivity.getResources().getString(R.string.TAKEN));
                     } else if (status == ProtoChannelCheckUsername.ChannelCheckUsernameResponse.Status.OCCUPYING_LIMIT_EXCEEDED) {
                         txtFinish.setEnabled(false);
                         txtFinish.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
                         txtInputLayout.setErrorEnabled(true);
-                        txtInputLayout.setError("" + G.context.getResources().getString(R.string.OCCUPYING_LIMIT_EXCEEDED));
+                        txtInputLayout.setError("" + G.fragmentActivity.getResources().getString(R.string.OCCUPYING_LIMIT_EXCEEDED));
                     }
                 }
             });
@@ -414,7 +414,7 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
             G.handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -434,7 +434,7 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
             G.handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.context.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
+                    final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override

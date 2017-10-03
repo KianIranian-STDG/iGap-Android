@@ -100,7 +100,7 @@ public class ContactGroupFragment extends BaseFragment {
 
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
         txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
-        txtNumberOfMember.setText("0" + "/" + participantsLimit + " " + G.context.getResources().getString(R.string.member));
+        txtNumberOfMember.setText("0" + "/" + participantsLimit + " " + G.fragmentActivity.getResources().getString(R.string.member));
 
         if (typeCreate.equals("CHANNEL")) {
             txtNumberOfMember.setText("Add Members");
@@ -408,7 +408,7 @@ public class ContactGroupFragment extends BaseFragment {
             txtNumberOfMember.setVisibility(View.GONE);
         }
         //  sizeTextEditText = textString.length();
-        txtNumberOfMember.setText(selectedNumber + "/" + participantsLimit + " " + G.context.getResources().getString(R.string.member));
+        txtNumberOfMember.setText(selectedNumber + "/" + participantsLimit + " " + G.fragmentActivity.getResources().getString(R.string.member));
 
         edtSearch.setText("");
     }

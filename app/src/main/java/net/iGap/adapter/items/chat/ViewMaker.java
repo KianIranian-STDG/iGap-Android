@@ -176,7 +176,7 @@ public class ViewMaker {
         csla_btn_play_music.setBackgroundResource(0);
         csla_btn_play_music.setGravity(Gravity.CENTER);
         csla_btn_play_music.setEnabled(false);
-        csla_btn_play_music.setText(G.context.getResources().getString(R.string.md_play_arrow));
+        csla_btn_play_music.setText(G.fragmentActivity.getResources().getString(R.string.md_play_arrow));
         csla_btn_play_music.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
         setTextSize(csla_btn_play_music, R.dimen.dp20);
         csla_btn_play_music.setTypeface(G.typeface_Fontico);
@@ -293,7 +293,7 @@ public class ViewMaker {
         setTextSize(cslum_txt_unread_message, R.dimen.dp12);
         setTypeFace(cslum_txt_unread_message);
         cslum_txt_unread_message.setGravity(CENTER);
-        cslum_txt_unread_message.setText(G.context.getResources().getString(R.string.unread_message));
+        cslum_txt_unread_message.setText(G.fragmentActivity.getResources().getString(R.string.unread_message));
         cslum_txt_unread_message.setTextColor(G.context.getResources().getColor(R.color.white));
         LinearLayout.LayoutParams layout_692 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_692.bottomMargin = i_Dp(R.dimen.dp8);
@@ -941,7 +941,7 @@ public class ViewMaker {
         txt_play_music.setBackgroundResource(0); //txt_play_music.setBackgroundResource(@null);
         txt_play_music.setTypeface(G.typeface_Fontico);
         txt_play_music.setGravity(CENTER);
-        txt_play_music.setText(G.context.getResources().getString(R.string.md_play_arrow));
+        txt_play_music.setText(G.fragmentActivity.getResources().getString(R.string.md_play_arrow));
         txt_play_music.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
         setTextSize(txt_play_music, R.dimen.dp20);
         LinearLayout.LayoutParams layout_326 = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp32), LinearLayout.LayoutParams.MATCH_PARENT);
@@ -1596,7 +1596,7 @@ public class ViewMaker {
 
         MaterialDesignTextView cs_txt_mute = new MaterialDesignTextView(G.context);
         cs_txt_mute.setId(R.id.cs_txt_mute);
-        cs_txt_mute.setText(G.context.getResources().getString(R.string.md_muted));
+        cs_txt_mute.setText(G.fragmentActivity.getResources().getString(R.string.md_muted));
         cs_txt_mute.setTextColor(G.context.getResources().getColor(R.color.grayNew));
         setTextSize(cs_txt_mute, R.dimen.dp13);
         LinearLayout.LayoutParams layout_152 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -1652,7 +1652,7 @@ public class ViewMaker {
         MaterialDesignTextView cs_txt_pinned_message = new MaterialDesignTextView(G.context);
         cs_txt_pinned_message.setId(R.id.cs_txt_pinned_message);
         cs_txt_pinned_message.setGravity(CENTER);
-        cs_txt_pinned_message.setText(G.context.getResources().getString(R.string.md_circlePin));
+        cs_txt_pinned_message.setText(G.fragmentActivity.getResources().getString(R.string.md_circlePin));
         cs_txt_pinned_message.setTextColor(Color.BLACK);
         cs_txt_pinned_message.setTextSize(i_Dp(R.dimen.dp20));
         setTextSize(cs_txt_pinned_message, R.dimen.dp20);
@@ -1756,7 +1756,7 @@ public class ViewMaker {
 
         MaterialDesignTextView fcsl_txt_icon = new MaterialDesignTextView(G.context);
         fcsl_txt_icon.setId(R.id.fcsl_txt_icon);
-        fcsl_txt_icon.setText(G.context.getResources().getString(R.string.md_call_made));
+        fcsl_txt_icon.setText(G.fragmentActivity.getResources().getString(R.string.md_call_made));
         fcsl_txt_icon.setTextColor(G.context.getResources().getColor(R.color.green));
         setTextSize(fcsl_txt_icon, R.dimen.dp18);
         LinearLayout.LayoutParams layout_178 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -1852,7 +1852,7 @@ public class ViewMaker {
         TextView subtitle = new TextView(G.context);
         subtitle.setId(R.id.subtitle);
         subtitle.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
-        subtitle.setText(G.context.getResources().getString(R.string.last_seen_recently));
+        subtitle.setText(G.fragmentActivity.getResources().getString(R.string.last_seen_recently));
         setTextSize(subtitle, R.dimen.dp14);
         subtitle.setSingleLine(true);
         setTypeFace(subtitle);

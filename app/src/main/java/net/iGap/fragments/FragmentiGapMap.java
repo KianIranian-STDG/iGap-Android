@@ -312,7 +312,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                                 new RequestGeoRegister().register(true);
                             } else {
                                 toggleGps.setChecked(false);
-                                showSnackBar(G.context.getResources().getString(R.string.please_check_your_connenction));
+                                showSnackBar(G.fragmentActivity.getResources().getString(R.string.please_check_your_connenction));
                             }
                         }
                     }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -390,7 +390,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             public void onClick(View v) {
 
 
-                if (txtSendMessageGps.getText().toString().contains(G.context.getResources().getString(R.string.md_close_button))) {
+                if (txtSendMessageGps.getText().toString().contains(G.fragmentActivity.getResources().getString(R.string.md_close_button))) {
                     new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Clear_Status).content(R.string.Clear_Status_desc).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -458,7 +458,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
                     if (isEndLine) {
                         isEndLine = false;
-                        showSnackBar(G.context.getResources().getString(R.string.exceed_4_line));
+                        showSnackBar(G.fragmentActivity.getResources().getString(R.string.exceed_4_line));
                     }
                 } else {
                     isEndLine = true;
@@ -532,19 +532,19 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
                 TextView txtItem1 = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
                 TextView icon1 = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-                txtItem1.setText(G.context.getResources().getString(R.string.list_user_map));
-                icon1.setText(G.context.getResources().getString(R.string.md_nearby));
+                txtItem1.setText(G.fragmentActivity.getResources().getString(R.string.list_user_map));
+                icon1.setText(G.fragmentActivity.getResources().getString(R.string.md_nearby));
 
                 TextView txtItem2 = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
                 TextView icon2 = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-                txtItem2.setText(G.context.getResources().getString(R.string.nearby));
-                icon2.setText(G.context.getResources().getString(R.string.md_refresh_button));
+                txtItem2.setText(G.fragmentActivity.getResources().getString(R.string.nearby));
+                icon2.setText(G.fragmentActivity.getResources().getString(R.string.md_refresh_button));
 
 
                 TextView txtItem3 = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
                 TextView icon3 = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
-                txtItem3.setText(G.context.getResources().getString(R.string.map_registration));
-                icon3.setText(G.context.getResources().getString(R.string.md_igap_map_marker_off));
+                txtItem3.setText(G.fragmentActivity.getResources().getString(R.string.map_registration));
+                icon3.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_map_marker_off));
 
                 root1.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -606,10 +606,10 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         //TextView txtIconTurnOnOrOff = (TextView) v.findViewById(R.id.txtIconTurnOnOrOff);
                         //
                         //if (mapRegisterState) {
-                        //    txtMapRegister.setText(G.context.getResources().getString(R.string.turn_off_map));
+                        //    txtMapRegister.setText(G.fragmentActivity.getResources().getString(R.string.turn_off_map));
                         //    txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_gap_eye_off));
                         //} else {
-                        //    txtMapRegister.setText(G.context.getResources().getString(R.string.turn_on_map));
+                        //    txtMapRegister.setText(G.fragmentActivity.getResources().getString(R.string.turn_on_map));
                         //    txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_visibility));
                         //}
                         //btnMapChangeRegistration.setChecked(mapRegisterState);
@@ -1131,7 +1131,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {//GPS is off
 
-            visibleViewAttention(G.context.getResources().getString(R.string.turn_on_gps_explain), true);
+            visibleViewAttention(G.fragmentActivity.getResources().getString(R.string.turn_on_gps_explain), true);
 
         } else {// GPS is on
             isGpsOn = true;
@@ -1142,7 +1142,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 rippleMoreMap.setVisibility(View.VISIBLE);
                 GPSTracker.getGpsTrackerInstance().detectLocation();
             } else {
-                visibleViewAttention(G.context.getResources().getString(R.string.Visible_Status_text), false);
+                visibleViewAttention(G.fragmentActivity.getResources().getString(R.string.Visible_Status_text), false);
             }
 
         }

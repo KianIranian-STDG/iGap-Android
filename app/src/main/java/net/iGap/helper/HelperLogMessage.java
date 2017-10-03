@@ -178,17 +178,17 @@ public class HelperLogMessage {
             typeRoom = realmRoom.getType();
 
             if (typeRoom.toString().equals("CHANNEL")) {
-                //   finalTypeRoom = G.context.getResources().getString(R.string.channel);
+                //   finalTypeRoom = G.fragmentActivity.getResources().getString(R.string.channel);
                 finalTypeRoom = "کانال";
             } else if (typeRoom.toString().equals("GROUP")) {
-                // finalTypeRoom = G.context.getResources().getString(R.string.group);
+                // finalTypeRoom = G.fragmentActivity.getResources().getString(R.string.group);
                 finalTypeRoom = "گروه";
             } else {
-                //  finalTypeRoom = G.context.getResources().getString(R.string.conversation);
+                //  finalTypeRoom = G.fragmentActivity.getResources().getString(R.string.conversation);
                 finalTypeRoom = "صفحه";
             }
         } else {
-            // finalTypeRoom = G.context.getResources().getString(R.string.conversation);
+            // finalTypeRoom = G.fragmentActivity.getResources().getString(R.string.conversation);
             finalTypeRoom = "صفحه";
         }
 
