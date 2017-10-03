@@ -153,7 +153,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_contacts_profile, container, false);
+        return attachToSwipeBack(inflater.inflate(R.layout.activity_contacts_profile, container, false));
     }
 
     @Override

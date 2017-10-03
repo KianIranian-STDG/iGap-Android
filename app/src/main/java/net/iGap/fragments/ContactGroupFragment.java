@@ -80,7 +80,7 @@ public class ContactGroupFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_contact_group, container, false);
+        return attachToSwipeBack(inflater.inflate(R.layout.fragment_contact_group, container, false));
     }
 
     @Override

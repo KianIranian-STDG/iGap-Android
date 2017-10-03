@@ -212,7 +212,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_group_profile, container, false);
+        return attachToSwipeBack(inflater.inflate(R.layout.activity_group_profile, container, false));
     }
 
     @Override

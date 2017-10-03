@@ -117,7 +117,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_contacts, container, false);
+        return attachToSwipeBack(inflater.inflate(R.layout.fragment_contacts, container, false));
     }
 
     @Override
@@ -864,7 +864,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                             sendIntent.setAction(Intent.ACTION_SEND);
                             sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you!");
                             sendIntent.setType("text/plain");
-                            startActivity(sendIntent);
+                            G.context.startActivity(sendIntent);
                         }
                     }).show();
 

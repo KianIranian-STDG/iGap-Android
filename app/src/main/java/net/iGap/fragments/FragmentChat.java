@@ -472,7 +472,7 @@ public class FragmentChat extends BaseFragment
         isNeedResume = true;
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
 
-        return rootView;
+        return attachToSwipeBack(rootView);
     }
 
     @Override

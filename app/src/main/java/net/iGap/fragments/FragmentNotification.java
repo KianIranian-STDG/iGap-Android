@@ -78,7 +78,7 @@ public class FragmentNotification extends BaseFragment {
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_notification, container, false);
+        return attachToSwipeBack(inflater.inflate(R.layout.fragment_notification, container, false));
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

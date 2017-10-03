@@ -160,7 +160,7 @@
 -verbose
 #-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 
--keep class net.iGap.module.** { *; }
+#-keep class net.iGap.module.** { *; }
 
 -keep public class * extends android.app.Activity
 -keep public class * extends android.app.Application
@@ -169,9 +169,9 @@
 -keep public class * extends android.content.ContentProvider
 -keep public class * extends android.app.backup.BackupAgentHelper
 -keep public class * extends android.preference.Preference
--keep public class * extends android.hardware.fingerprint.FingerprintManager
--keep public class * extends android.hardware.fingerprint.FingerprintManager.AuthenticationCallback
--keep public class net.iGap.module.FingerprintHandler
+#-keep public class * extends android.hardware.fingerprint.FingerprintManager
+#-keep public class * extends android.hardware.fingerprint.FingerprintManager.AuthenticationCallback
+#-keep public class net.iGap.module.FingerprintHandler
 -keep public class com.android.vending.licensing.ILicensingService
 
 -keepclasseswithmembernames class * {
