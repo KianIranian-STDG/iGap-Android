@@ -126,7 +126,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
-        return attachToSwipeBack(inflater.inflate(R.layout.activity_main_rooms, container, false));
+        return inflater.inflate(R.layout.activity_main_rooms, container, false);
     }
 
     @Override
