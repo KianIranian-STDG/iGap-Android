@@ -110,6 +110,7 @@ import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserInfoMyClient;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.interfaces.OnVerifyNewDevice;
+import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
@@ -198,6 +199,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static boolean isLock = true;
     public static boolean isActivityEnterPassCode = false;
     public static FinishActivity finishActivity;
+    public static boolean disableSwipe = false;
 
     public enum MainAction {
         downScrool, clinetCondition
@@ -392,6 +394,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             frameFragmentBack = (FrameLayout) findViewById(R.id.am_frame_fragment_back);
             frameFragmentContainer = (FrameLayout) findViewById(R.id.am_frame_fragment_container);
+
+            G.oneFragmentIsOpen = new OneFragmentIsOpen() {
+                @Override
+                public void justOne() {
+
+                    if (frameFragmentContainer.getChildCount() == 0) {
+                        disableSwipe = true;
+                    } else {
+                        disableSwipe = false;
+                    }
+
+
+                }
+            };
 
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -2481,6 +2497,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void run() {
                 if (G.twoPaneMode) {
+
+                    if (frameFragmentContainer.getChildCount() == 1) {
+                        disableSwipe = true;
+                    } else {
+                        disableSwipe = false;
+                    }
+
                     if (frameFragmentContainer == null || frameFragmentContainer.getChildCount() == 0) {
                         frameFragmentBack.setVisibility(View.GONE);
                     }

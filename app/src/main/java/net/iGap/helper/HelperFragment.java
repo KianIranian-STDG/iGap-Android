@@ -124,6 +124,10 @@ public class HelperFragment {
         } else {
             fragmentTransaction.commit();
         }
+
+        if (G.oneFragmentIsOpen != null && G.twoPaneMode) {
+            G.oneFragmentIsOpen.justOne();
+        }
     }
 
     public void remove() {

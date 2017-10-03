@@ -184,6 +184,7 @@ import net.iGap.interfaces.OnUserUpdateStatus;
 import net.iGap.interfaces.OnUserUsernameToId;
 import net.iGap.interfaces.OnUserVerification;
 import net.iGap.interfaces.OnVerifyNewDevice;
+import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.TwoStepSecurityConfirmEmail;
 import net.iGap.interfaces.UpdateListAfterKick;
@@ -464,7 +465,7 @@ public class G extends MultiDexApplication {
     public static Typeface typeface_neuropolitical;
     public static boolean isPassCode;
     public static FingerPrint fingerPrint;
-
+    public static OneFragmentIsOpen oneFragmentIsOpen;
     public static boolean isFragmentMapActive = false; // for check network
     public static boolean isRestartActivity = false; // for check passCode
     public static boolean isFirstPassCode = true; // for check passCode

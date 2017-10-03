@@ -64,7 +64,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         realmMapUsers = Realm.getDefaultInstance();
-        return inflater.inflate(R.layout.fragment_map_users, container, false);
+        return attachToSwipeBack(inflater.inflate(R.layout.fragment_map_users, container, false));
     }
 
     @Override

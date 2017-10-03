@@ -117,7 +117,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_contacts, container, false);
+        return attachToSwipeBack(inflater.inflate(R.layout.fragment_contacts, container, false));
     }
 
     @Override

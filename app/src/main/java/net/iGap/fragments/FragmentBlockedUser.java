@@ -65,7 +65,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         realmBlockedUser = Realm.getDefaultInstance();
-        return inflater.inflate(R.layout.fragment_blocked_user, container, false);
+        return attachToSwipeBack(inflater.inflate(R.layout.fragment_blocked_user, container, false));
     }
 
     @Override
