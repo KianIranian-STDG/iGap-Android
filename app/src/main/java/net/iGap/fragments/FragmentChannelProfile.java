@@ -614,25 +614,22 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         if (mRoom != null) {
 
             if (changeListener == null) {
-
                 changeListener = new RealmChangeListener<RealmModel>() {
                     @Override
                     public void onChange(final RealmModel element) {
-
-                        if (((RealmRoom) element).isValid() && !((RealmRoom) element).isDeleted()) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    String countText = ((RealmRoom) element).getSharedMediaCount();
-
-                                        if (HelperCalander.isLanguagePersian) {
-                                            txtSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
-                                        } else {
-                                            txtSharedMedia.setText(countText);
-                                        }
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                String countText = ((RealmRoom) element).getSharedMediaCount();
+                                if (((RealmRoom) element).isValid() && !((RealmRoom) element).isDeleted()) {
+                                    if (HelperCalander.isLanguagePersian) {
+                                        txtSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
+                                    } else {
+                                        txtSharedMedia.setText(countText);
+                                    }
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 };
             }
@@ -784,10 +781,12 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         layoutChannelLink.addView(inputChannelLink, layoutParams);
         layoutChannelLink.addView(txtLink, layoutParams);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.channel_link)).positiveText(G.fragmentActivity.getResources().getString(R.string.array_Copy))
-            .customView(layoutChannelLink, true)
-            .widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.channel_link))
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.array_Copy))
+                .customView(layoutChannelLink, true)
+                .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         String copy;
@@ -796,7 +795,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                         ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
                         clipboard.setPrimaryClip(clip);
                     }
-                }).build();
+                })
+                .build();
 
         dialog.show();
     }

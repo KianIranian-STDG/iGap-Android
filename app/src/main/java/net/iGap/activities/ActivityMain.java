@@ -2480,14 +2480,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void run() {
                 if (G.twoPaneMode) {
-                    //frameFragmentBack != null) {
-                    //if (frameFragmentContainer.getChildCount() == 1) {
-                    //    disableSwipe = true;
-                    //} else {
-                    //    disableSwipe = false;
-                    //}
-                    if (frameFragmentContainer == null || frameFragmentContainer.getChildCount() == 0) {
-                        frameFragmentBack.setVisibility(View.GONE);
+                    if (frameFragmentContainer != null) {
+                        if (frameFragmentContainer.getChildCount() == 0) {
+                            if (frameFragmentBack != null) {
+                                frameFragmentBack.setVisibility(View.GONE);
+                            }
+                        } else if (frameFragmentContainer.getChildCount() == 1) {
+                            disableSwipe = true;
+                        } else {
+                            disableSwipe = false;
+                        }
+                    } else {
+                        if (frameFragmentBack != null) {
+                            frameFragmentBack.setVisibility(View.GONE);
+                        }
                     }
 
                     if (G.isLandscape) {
