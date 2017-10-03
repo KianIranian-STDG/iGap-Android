@@ -807,7 +807,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.group);
                     fragment.appBarLayout = fab;
-                    new HelperFragment(fragment).setResourceContainer(R.id.fragmentContainer_group_profile).load();
+                    //new HelperFragment(fragment).setResourceContainer(R.id.fragmentContainer_group_profile).load();
+                    new HelperFragment(fragment).setReplace(false).load();
                 }
             }
         });

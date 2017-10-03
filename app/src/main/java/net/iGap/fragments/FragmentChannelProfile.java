@@ -412,7 +412,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                 if (getRealm().where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, roomId).findFirst() != null) {
                     FragmentShowAvatars fragment = FragmentShowAvatars.newInstance(roomId, FragmentShowAvatars.From.channel);
                     fragment.appBarLayout = fab;
-                    new HelperFragment(fragment).setResourceContainer(R.id.fragmentContainer_channel_profile).load();
+                    //new HelperFragment(fragment).setResourceContainer(R.id.fragmentContainer_channel_profile).load();
+                    new HelperFragment(fragment).setReplace(false).load();
                 }
             }
         });
