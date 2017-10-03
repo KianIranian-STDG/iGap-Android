@@ -543,11 +543,11 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
         //TextView txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_member);
 
         //if (selectedRole.toString().equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.MODERATOR.toString())) {
-        //    txtNumberOfMember.setText(G.context.getResources().getString(R.string.list_modereator));
+        //    txtNumberOfMember.setText(G.fragmentActivity.getResources().getString(R.string.list_modereator));
         //} else if (selectedRole.toString().equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ADMIN.toString())) {
-        //    txtNumberOfMember.setText(G.context.getResources().getString(R.string.list_admin));
+        //    txtNumberOfMember.setText(G.fragmentActivity.getResources().getString(R.string.list_admin));
         //} else {
-        //    txtNumberOfMember.setText(G.context.getResources().getString(member));
+        //    txtNumberOfMember.setText(G.fragmentActivity.getResources().getString(member));
         //}
 
         scrollListener = new EndlessRecyclerViewScrollListener(preCachingLayoutManager) {

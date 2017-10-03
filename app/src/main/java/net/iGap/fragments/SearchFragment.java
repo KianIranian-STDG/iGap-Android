@@ -207,11 +207,11 @@ public class SearchFragment extends BaseFragment {
         imvNothingFound.setVisibility(View.GONE);
 
         list.clear();
-        addHeader(G.context.getResources().getString(R.string.chats));
+        addHeader(G.fragmentActivity.getResources().getString(R.string.chats));
         fillRoomList(text);
-        addHeader(G.context.getResources().getString(R.string.contacts));
+        addHeader(G.fragmentActivity.getResources().getString(R.string.contacts));
         fillContacts(text);
-        addHeader(G.context.getResources().getString(R.string.messages));
+        addHeader(G.fragmentActivity.getResources().getString(R.string.messages));
         fillMessages(text);
 
         List<IItem> items = new ArrayList<>();

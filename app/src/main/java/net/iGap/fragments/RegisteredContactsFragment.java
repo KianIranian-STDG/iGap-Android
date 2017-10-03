@@ -870,9 +870,9 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             holder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getResources().getString(R.string.igap))
+                    new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.igap))
 
-                            .content(G.context.getResources().getString(R.string.invite_friend)).positiveText(G.context.getResources().getString(R.string.ok)).negativeText(G.context.getResources().getString(R.string.cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            .content(G.fragmentActivity.getResources().getString(R.string.invite_friend)).positiveText(G.fragmentActivity.getResources().getString(R.string.ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 

@@ -263,7 +263,7 @@ public class ShowCustomList extends BaseFragment {
                         break;
                     case 3:
                         dialog.dismiss();
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.customs).positiveText(G.context.getResources().getString(R.string.B_ok))
+                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.customs).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
                             .alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -275,7 +275,7 @@ public class ShowCustomList extends BaseFragment {
                                     popBackStackFragment();
 
                                 }
-                            }).inputType(InputType.TYPE_CLASS_NUMBER).input(G.context.getResources().getString(R.string.count_of_show_message), null, new MaterialDialog.InputCallback() {
+                            }).inputType(InputType.TYPE_CLASS_NUMBER).input(G.fragmentActivity.getResources().getString(R.string.count_of_show_message), null, new MaterialDialog.InputCallback() {
                                 @Override public void onInput(MaterialDialog dialog, CharSequence input) {
                                     if (input.toString() != null && !input.toString().isEmpty()) {
                                         Log.i("TAG", "onInput: " + input.length());

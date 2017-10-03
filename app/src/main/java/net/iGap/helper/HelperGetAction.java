@@ -89,7 +89,7 @@ public class HelperGetAction {
                     if (HelperCalander.isLanguagePersian) {
                         action = "\u200F" + realmRegisteredInfo.getDisplayName() + " " + convertActionEnum(latestStruct.action);
                     } else {
-                        action = "\u200E" + realmRegisteredInfo.getDisplayName() + " " + G.context.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
+                        action = "\u200E" + realmRegisteredInfo.getDisplayName() + " " + G.fragmentActivity.getResources().getString(R.string.is) + " " + convertActionEnum(latestStruct.action);
                     }
                     realm.close();
                     return action;
@@ -126,15 +126,15 @@ public class HelperGetAction {
                     return "\u200F" + concatenatedNames + " " + HelperConvertEnumToString.convertActionEnum(latestAction);
 
                 } else {
-                    return concatenatedNames + " " + G.context.getResources().getString(R.string.are) + " " + convertActionEnum(latestAction);
+                    return concatenatedNames + " " + G.fragmentActivity.getResources().getString(R.string.are) + " " + convertActionEnum(latestAction);
                 }
             } else {
                 if (HelperCalander.isLanguagePersian) {
 
-                    return "\u200F" + count + " " + G.context.getResources().getString(R.string.members_are) + " " + convertActionEnum(latestAction);
+                    return "\u200F" + count + " " + G.fragmentActivity.getResources().getString(R.string.members_are) + " " + convertActionEnum(latestAction);
                 } else {
 
-                    return count + " " + G.context.getResources().getString(R.string.members_are) + " " + convertActionEnum(latestAction);
+                    return count + " " + G.fragmentActivity.getResources().getString(R.string.members_are) + " " + convertActionEnum(latestAction);
                 }
             }
         }

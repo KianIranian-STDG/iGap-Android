@@ -335,10 +335,10 @@ import net.iGap.request.RequestSignalingGetLog;
         dialog.show();
 
         final TextView txtClear = (TextView) view.findViewById(R.id.dialog_text_item1_notification);
-        txtClear.setText(G.context.getResources().getString(R.string.clean_log));
+        txtClear.setText(G.fragmentActivity.getResources().getString(R.string.clean_log));
 
         TextView iconClear = (TextView) view.findViewById(R.id.dialog_icon_item1_notification);
-        iconClear.setText(G.context.getResources().getString(R.string.md_rubbish_delete_file));
+        iconClear.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
 
         ViewGroup root1 = (ViewGroup) view.findViewById(R.id.dialog_root_item1_notification);
         root1.setVisibility(View.VISIBLE);

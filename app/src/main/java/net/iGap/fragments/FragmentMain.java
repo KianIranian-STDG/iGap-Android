@@ -696,7 +696,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                         MaterialDesignTextView cs_txt_contact_initials = new MaterialDesignTextView(G.context);
                         cs_txt_contact_initials.setId(R.id.cs_txt_contact_initials);
                         cs_txt_contact_initials.setGravity(Gravity.CENTER);
-                        cs_txt_contact_initials.setText(G.context.getResources().getString(R.string.md_cloud));
+                        cs_txt_contact_initials.setText(G.fragmentActivity.getResources().getString(R.string.md_cloud));
                         cs_txt_contact_initials.setTextColor(Color.parseColor("#ad333333"));
                         ViewMaker.setTextSize(cs_txt_contact_initials, R.dimen.dp32);
                         LinearLayout.LayoutParams layout_936 = new LinearLayout.LayoutParams(ViewMaker.i_Dp(R.dimen.dp52), ViewMaker.i_Dp(R.dimen.dp52));

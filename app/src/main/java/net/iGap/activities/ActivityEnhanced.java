@@ -267,6 +267,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     public void checkLanguage() {
         try {
+            G.context = getApplicationContext();
             String selectedLanguage = G.selectedLanguage;
             if (selectedLanguage == null) return;
             Locale locale = new Locale(selectedLanguage);

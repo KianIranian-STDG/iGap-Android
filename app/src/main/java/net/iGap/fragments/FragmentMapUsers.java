@@ -225,9 +225,9 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     //        }
     //
     //        if (G.selectedLanguage.equals("en")) {
-    //            holder.arrow.setText(G.context.getResources().getString(R.string.md_right_arrow));
+    //            holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_right_arrow));
     //        } else {
-    //            holder.arrow.setText(G.context.getResources().getString(R.string.md_back_arrow));
+    //            holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow));
     //        }
     //
     //        holder.arrow.setTextColor(Color.parseColor(G.appBarColor));
@@ -348,9 +348,9 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
             }
 
             if (G.selectedLanguage.equals("en")) {
-                holder.arrow.setText(G.context.getResources().getString(R.string.md_right_arrow));
+                holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_right_arrow));
             } else {
-                holder.arrow.setText(G.context.getResources().getString(R.string.md_back_arrow));
+                holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow));
             }
 
             holder.arrow.setTextColor(Color.parseColor(G.appBarColor));
