@@ -19,11 +19,11 @@ import android.support.v4.app.FragmentActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import me.yokeyword.swipebackfragment.SwipeBackFragment;
-import me.yokeyword.swipebackfragment.SwipeBackLayout;
 import net.iGap.G;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperFragment;
+import net.iGap.libs.swipeback.SwipeBackFragment;
+import net.iGap.libs.swipeback.SwipeBackLayout;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static net.iGap.G.fragmentActivity;
