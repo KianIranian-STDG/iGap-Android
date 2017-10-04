@@ -788,7 +788,12 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
         setItem(); // invoke object
 
-        rg_prg_verify_connect.setVisibility(View.VISIBLE);
+        if (rg_prg_verify_connect == null) {
+            rg_prg_verify_connect = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_connect);
+        }
+        if (rg_prg_verify_connect != null) {
+            rg_prg_verify_connect.setVisibility(View.VISIBLE);
+        }
 
         Thread thread = new Thread(new Runnable() {
             @Override
