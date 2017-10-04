@@ -56,7 +56,7 @@ public class FragmentExplorer extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return attachToSwipeBack(inflater.inflate(R.layout.activity_explorer, container, false));
+        return inflater.inflate(R.layout.activity_explorer, container, false);
     }
 
     @Override
