@@ -384,7 +384,7 @@ public class FragmentChat extends BaseFragment
 
     public static int forwardMessageCount = 0;
     public static ArrayList<Parcelable> mForwardMessages;
-    private Realm realmChat;
+    public static Realm realmChat; // static for test
     public static boolean canUpdateAfterDownload = false;
 
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
@@ -588,6 +588,9 @@ public class FragmentChat extends BaseFragment
                         final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (room != null) {
                             room.setUnreadCount(0);
+                            if (G.onClearUnread != null) {
+                                G.onClearUnread.onClearUnread(mRoomId);
+                            }
                             realm.copyToRealmOrUpdate(room);
 
                             if (room.getType() != CHAT) {
@@ -2871,6 +2874,9 @@ public class FragmentChat extends BaseFragment
                                                 firstUnreadMessage = realmRoomMessage;
                                             }
                                             room.setUnreadCount(0);
+                                            if (G.onClearUnread != null) {
+                                                G.onClearUnread.onClearUnread(roomId);
+                                            }
                                         }
                                     }
                                 });
@@ -2901,6 +2907,9 @@ public class FragmentChat extends BaseFragment
                                                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                                                 if (room != null) {
                                                     room.setUnreadCount(0);
+                                                    if (G.onClearUnread != null) {
+                                                        G.onClearUnread.onClearUnread(roomId);
+                                                    }
                                                 }
 
                                                 if (realmClientCondition != null) {
@@ -3734,10 +3743,8 @@ public class FragmentChat extends BaseFragment
         getRealmChat().executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-
                 if (mRoomId == roomId && (userId != userIdR || (isCloudRoom))) {
                     final String action = HelperGetAction.getAction(roomId, chatType, clientAction);
-
                     final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                     if (realmRoom != null) {
                         realmRoom.setActionState(action, userId);
@@ -3747,11 +3754,6 @@ public class FragmentChat extends BaseFragment
                         @Override
                         public void run() {
                             if (action != null) {
-                                // avi.setVisibility(View.VISIBLE);
-                                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LOCALE);
-                                //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                                //}
                                 ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LOCALE);
                                 txtLastSeen.setText(action);
                             } else if (chatType == CHAT) {
@@ -3766,28 +3768,15 @@ public class FragmentChat extends BaseFragment
                                         }
                                     }
                                 }
-                                // avi.setVisibility(View.GONE);
-                                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                                //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                                //}
                                 ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
-                                //txtLastSeen.setText(userStatus);
                             } else if (chatType == GROUP) {
-                                //avi.setVisibility(View.GONE);
-                                //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                                //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                                //}
                                 ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
-
                                 if (groupParticipantsCountLabel != null && HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
                                     txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
                                 } else {
                                     txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
                                 }
                             }
-
                             // change english number to persian number
                             if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                         }
@@ -3937,7 +3926,7 @@ public class FragmentChat extends BaseFragment
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    private Realm getRealmChat() {
+    public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
             realmChat = Realm.getDefaultInstance();
         }
@@ -3973,11 +3962,15 @@ public class FragmentChat extends BaseFragment
     /**
      * clear history for this room
      */
-    public void clearHistory(long chatId) {
+    public void clearHistory(long roomId) {
         llScrollNavigate.setVisibility(View.GONE);
         saveMessageIdPositionState(0);
-        RealmRoomMessage.clearHistoryMessage(chatId);
+        RealmRoomMessage.clearHistoryMessage(roomId);
         addToView = true;
+
+        if (G.onClearRoomHistory != null) {
+            G.onClearRoomHistory.onClearRoomHistory(roomId);
+        }
     }
 
     /**
@@ -4090,7 +4083,9 @@ public class FragmentChat extends BaseFragment
     private ArrayList<Parcelable> getMessageStructFromSelectedItems() {
         ArrayList<Parcelable> messageInfos = new ArrayList<>(mAdapter.getSelectedItems().size());
         for (AbstractMessage item : mAdapter.getSelectedItems()) {
-            messageInfos.add(Parcels.wrap(item.mMessage));
+            if (item != null && item.mMessage != null) {
+                messageInfos.add(Parcels.wrap(item.mMessage));
+            }
         }
         return messageInfos;
     }
@@ -4447,6 +4442,9 @@ public class FragmentChat extends BaseFragment
             iconMute.setVisibility(View.GONE);
         }
 
+        if (G.onMute != null) {
+            G.onMute.onChangeMuteState(mRoomId, isMuteNotification);
+        }
         //realm.close();
     }
 

@@ -735,11 +735,11 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                 }
                                 String countText = ((RealmRoom) element).getSharedMediaCount();
 
-                                    if (HelperCalander.isLanguagePersian) {
-                                        txtCountOfShearedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
-                                    } else {
-                                        txtCountOfShearedMedia.setText(countText);
-                                    }
+                                if (HelperCalander.isLanguagePersian) {
+                                    txtCountOfShearedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
+                                } else {
+                                    txtCountOfShearedMedia.setText(countText);
+                                }
                             }
                         });
                     }
@@ -1059,7 +1059,10 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 dialog.dismiss();
-                clearHistory();
+                //clearHistory();
+                if (FragmentChat.onComplete != null) {
+                    FragmentChat.onComplete.complete(false, roomId + "", "");
+                }
             }
         }).negativeText(negitive).show();
     }

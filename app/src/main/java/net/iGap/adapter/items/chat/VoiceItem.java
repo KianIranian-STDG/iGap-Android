@@ -42,6 +42,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
+import static net.iGap.fragments.FragmentChat.getRealmChat;
 
 public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> {
 
@@ -157,7 +158,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
                 G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, Long.parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
 
-                realmChat.executeTransaction(new Realm.Transaction() {
+                getRealmChat().executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, holder.mRoomId).findFirst();
@@ -220,7 +221,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.mRoomId = mMessage.roomId;
 
-        RealmRegisteredInfo registeredInfo = realmChat.where(RealmRegisteredInfo.class)
+        RealmRegisteredInfo registeredInfo = getRealmChat().where(RealmRegisteredInfo.class)
             .equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID))
             .findFirst();
 

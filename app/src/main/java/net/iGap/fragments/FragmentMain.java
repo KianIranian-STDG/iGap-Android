@@ -38,9 +38,23 @@ import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperClientCondition;
+import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.interfaces.OnChannelDeleteInRoomList;
+import net.iGap.interfaces.OnChatDeleteInRoomList;
+import net.iGap.interfaces.OnChatSendMessageResponse;
+import net.iGap.interfaces.OnChatUpdateStatusResponse;
+import net.iGap.interfaces.OnClearRoomHistory;
+import net.iGap.interfaces.OnClearUnread;
+import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
+import net.iGap.interfaces.OnDraftMessage;
+import net.iGap.interfaces.OnGroupDeleteInRoomList;
+import net.iGap.interfaces.OnMute;
+import net.iGap.interfaces.OnRemoveFragment;
+import net.iGap.interfaces.OnSelectMenu;
+import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
@@ -70,20 +84,19 @@ import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
 import static net.iGap.G.firstTimeEnterToApp;
 import static net.iGap.G.userId;
+import static net.iGap.fragments.FragmentMain.MainType.all;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements OnComplete {
+public class FragmentMain extends BaseFragment implements OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnDraftMessage, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClearUnread, OnClientGetRoomResponseRoomList, OnMute, OnClearRoomHistory {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
-
     public static boolean isMenuButtonAddShown = false;
-
-    ProgressBar progressBar;
-
+    private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private OnComplete mComplete;
 
     private int mOffset = 0;
     private int mLimit = 50;
@@ -95,7 +108,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
     public MainType mainType;
     private long tagId;
     private Realm realmFragmentMain;
-
+    public static HashMap<MainType, RoomAdapter> adapterHashMap = new HashMap<>();
 
     public enum MainType {
         all, chat, group, channel
@@ -126,35 +139,32 @@ public class FragmentMain extends BaseFragment implements OnComplete {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
+        mComplete = this;
         tagId = System.currentTimeMillis();
 
         mainType = (MainType) getArguments().getSerializable(STR_MAIN_TYPE);
-
-
         progressBar = (ProgressBar) view.findViewById(R.id.ac_progress_bar_waiting);
-
-
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_main_swipe_refresh_layout);
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setEnabled(false);
-
         viewById = view.findViewById(R.id.empty_icon);
 
         initRecycleView(view);
         initListener();
-
     }
 
     //***************************************************************************************************************************
 
     private void initRecycleView(View view) {
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.cl_recycler_view_contact);
-        // mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
-        mRecyclerView.setItemAnimator(null);
-        mRecyclerView.setItemViewCacheSize(1000);
-        mRecyclerView.setLayoutManager(new PreCachingLayoutManager(G.fragmentActivity, 3000));
+        if (view != null) {
+            mRecyclerView = (RecyclerView) view.findViewById(R.id.cl_recycler_view_contact);
+            // mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
+            mRecyclerView.setItemAnimator(null);
+            mRecyclerView.setItemViewCacheSize(1000);
+            mRecyclerView.setLayoutManager(new PreCachingLayoutManager(G.fragmentActivity, 3000));
+        }
 
 
         RealmResults<RealmRoom> results = null;
@@ -199,15 +209,27 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                 break;
         }
 
-        final RoomAdapter roomAdapter = new RoomAdapter(results, this);
-        mRecyclerView.setAdapter(roomAdapter);
 
-        roomAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        final RoomAdapter roomsAdapter = new RoomAdapter(results, this);
+        mRecyclerView.setAdapter(roomsAdapter);
+
+        //fastAdapter
+        //final RoomsAdapter roomsAdapter = new RoomsAdapter(getRealmFragmentMain());
+        //for (RealmRoom realmRoom : results) {
+        //    roomsAdapter.add(new RoomItem(this, mainType).setInfo(realmRoom).withIdentifier(realmRoom.getId()));
+        //}
+        //
+        //// put adapters in hashMap
+        //adapterHashMap.put(mainType, roomsAdapter);
+        //
+        //mRecyclerView.setAdapter(roomsAdapter);
+
+        roomsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
-                if (roomAdapter.getItemCount() > 0) {
+                if (roomsAdapter.getItemCount() > 0) {
                     viewById.setVisibility(View.GONE);
                     goToTop();
                 } else {
@@ -218,45 +240,46 @@ public class FragmentMain extends BaseFragment implements OnComplete {
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 super.onItemRangeRemoved(positionStart, itemCount);
-                if (roomAdapter.getItemCount() > 0) {
+                if (roomsAdapter.getItemCount() > 0) {
                     viewById.setVisibility(View.GONE);
                 } else {
                     viewById.setVisibility(View.VISIBLE);
                 }
-
             }
         });
 
-        if (mainType == MainType.all) {
+        if (mainType == all) {
             getChatsList();
         }
 
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+        if (view != null) {
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
 
-                try {
-                    if (((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
-                        ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
-                    }
+                    try {
+                        if (((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
+                            ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
+                        }
 
-                    if (dy > 0) {
-                        // Scroll Down
-                        if (((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
-                            ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.hide();
+                        if (dy > 0) {
+                            // Scroll Down
+                            if (((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
+                                ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.hide();
+                            }
+                        } else if (dy < 0) {
+                            // Scroll Up
+                            if (!((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
+                                ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.show();
+                            }
                         }
-                    } else if (dy < 0) {
-                        // Scroll Up
-                        if (!((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
-                            ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.show();
-                        }
+                    } catch (ClassCastException e) {
+                        e.printStackTrace();
                     }
-                } catch (ClassCastException e) {
-                    e.printStackTrace();
                 }
-            }
-        });
+            });
+        }
     }
 
     private void initListener() {
@@ -293,10 +316,10 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                             if (G.currentActivity != null) {
                                 G.currentActivity.finish();
                             }
-                            Intent intent = new Intent(G.context, ActivityRegisteration.class);
+                            Intent intent = new Intent(context, ActivityRegisteration.class);
                             intent.putExtra(ActivityRegisteration.showProfile, true);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            G.context.startActivity(intent);
+                            context.startActivity(intent);
                         }
                     }
 
@@ -399,6 +422,13 @@ public class FragmentMain extends BaseFragment implements OnComplete {
 
         putChatToDatabase(roomList, deleteBefore, cleanAfter);
 
+        //fastAdapter
+        //G.handler.postDelayed(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        initRecycleView(null);
+        //    }
+        //}, 200);
 
         /**
          * to first enter to app , client first compute clientCondition then
@@ -550,21 +580,6 @@ public class FragmentMain extends BaseFragment implements OnComplete {
         G.deletedRoomList.clear();
     }
 
-    private void muteNotification(final Long id, final boolean mute) {
-        //+Realm realm = Realm.getDefaultInstance();
-        getRealmFragmentMain().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst().setMute(!mute);
-            }
-        });
-        //realm.close();
-    }
-
-    private void clearHistory(Long id) {
-        RealmRoomMessage.clearHistoryMessage(id);
-    }
-
     private void onSelectRoomMenu(String message, RealmRoom item) {
         if (checkValidationForRealm(item)) {
             switch (message) {
@@ -600,20 +615,108 @@ public class FragmentMain extends BaseFragment implements OnComplete {
         }
     }
 
-    private void pinToTop(final long id, final boolean isPinned) {
-
+    private void muteNotification(final long roomId, final boolean mute) {
         //+Realm realm = Realm.getDefaultInstance();
-
         getRealmFragmentMain().executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
-                realmRoom.setPinned(!isPinned);
-                goToTop();
+                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().setMute(!mute);
             }
         });
+
+        //fastAdapter
+        //G.handler.post(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        adapterHashMap.get(all).updateItem(roomId);
+        //        getAdapterMain(roomId).updateItem(roomId);
+        //    }
+        //});
         //realm.close();
     }
+
+    private void clearHistory(final long roomId) {
+        RealmRoomMessage.clearHistoryMessage(roomId);
+        //fastAdapter
+        //G.handler.post(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        adapterHashMap.get(all).updateItem(roomId);
+        //        getAdapterMain(roomId).updateItem(roomId);
+        //    }
+        //});
+    }
+
+    private void pinToTop(final long roomId, final boolean isPinned) {
+        //+Realm realm = Realm.getDefaultInstance();
+        getRealmFragmentMain().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                realmRoom.setPinned(!isPinned);
+                if (!isPinned) {
+                    goToTop();
+                }
+            }
+        });
+        //fastAdapter
+        //if (!isPinned) {
+        //    G.handler.post(new Runnable() {
+        //        @Override
+        //        public void run() {
+        //            adapterHashMap.get(all).goToTop(roomId, true);
+        //            getAdapterMain(roomId).goToTop(roomId, true);
+        //        }
+        //    });
+        //} else {
+        //    updateUnPin(roomId, all);
+        //
+        //    ProtoGlobal.Room.Type type = getRoomType(roomId);
+        //    if (type == CHAT) {
+        //        updateUnPin(roomId, chat);
+        //    } else if (type == GROUP) {
+        //        updateUnPin(roomId, group);
+        //    } else if (type == CHANNEL) {
+        //        updateUnPin(roomId, channel);
+        //    }
+        //}
+        //realm.close();
+    }
+
+    //fastAdapter
+    //private void updateUnPin(final long roomId, final MainType type) {
+    //    G.handler.post(new Runnable() {
+    //        @Override
+    //        public void run() {
+    //            RealmResults<RealmRoom> results = null;
+    //            String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.UPDATED_TIME};
+    //            Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING};
+    //            switch (type) {
+    //                case all:
+    //                    results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
+    //                    break;
+    //                case chat:
+    //                    results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
+    //                    break;
+    //                case group:
+    //                    results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
+    //                    break;
+    //                case channel:
+    //                    results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
+    //                    break;
+    //            }
+    //
+    //            int position = 0;
+    //            for (RealmRoom room : results) {
+    //                if (room.getId() == roomId) {
+    //                    break;
+    //                }
+    //                position++;
+    //            }
+    //            adapterHashMap.get(type).goToPosition(roomId, position);
+    //        }
+    //    });
+    //}
 
     private void goToTop() {
         G.handler.postDelayed(new Runnable() {
@@ -626,6 +729,29 @@ public class FragmentMain extends BaseFragment implements OnComplete {
         }, 50);
     }
 
+    //fastAdapter
+    //private ProtoGlobal.Room.Type getRoomType(long roomId) {
+    //    RealmRoom realmRoom = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+    //    if (realmRoom != null) {
+    //        return realmRoom.getType();
+    //    }
+    //    return null;
+    //}
+    //
+    //private RoomsAdapter getAdapterMain(long roomId) {
+    //    ProtoGlobal.Room.Type roomType = getRoomType(roomId);
+    //    if (roomType != null) {
+    //        if (roomType == CHAT) {
+    //            return adapterHashMap.get(chat);
+    //        } else if (roomType == GROUP) {
+    //            return adapterHashMap.get(group);
+    //        } else if (roomType == CHANNEL) {
+    //            return adapterHashMap.get(channel);
+    //        }
+    //    }
+    //    return adapterHashMap.get(all);
+    //}
+
     private boolean checkValidationForRealm(RealmRoom realmRoom) {
         if (realmRoom != null && realmRoom.isManaged() && realmRoom.isValid() && realmRoom.isLoaded()) {
             return true;
@@ -633,11 +759,190 @@ public class FragmentMain extends BaseFragment implements OnComplete {
         return false;
     }
 
+    /**
+     * ************************************ Callbacks ************************************
+     */
+    @Override
+    public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                getRealmFragmentMain().executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                        if (realmRoom != null && realmRoom.isValid() && !realmRoom.isDeleted() && realmRoom.getType() != null) {
+                            String action = HelperGetAction.getAction(roomId, realmRoom.getType(), clientAction);
+                            realmRoom.setActionState(action, userId);
+                        }
+                    }
+                    //fastAdapter
+                    //}, new Realm.Transaction.OnSuccess() {
+                    //    @Override
+                    //    public void onSuccess() {
+                    //        adapterHashMap.get(all).updateItem(roomId);
+                    //        getAdapterMain(roomId).updateItem(roomId);
+                    //    }
+                });
+            }
+        });
+    }
 
+    @Override
+    public void onRemoveFragment(Fragment fragment) {
+        removeFromBaseFragment(fragment);
+    }
 
+    @Override
+    public void onSelectMenu(String message, RealmRoom realmRoom) {
+        onSelectRoomMenu(message, realmRoom);
+    }
 
+    @Override
+    public void onDraftMessage(final long roomId, String draftMessage) {
+        //G.handler.post(new Runnable() {
+        //fastAdapter
+        //    @Override
+        //    public void run() {
+        //        adapterHashMap.get(all).updateItem(roomId);
+        //        getAdapterMain(roomId).updateItem(roomId);
+        //    }
+        //});
+    }
 
-    //************************
+    @Override
+    public void onChatUpdateStatus(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, long statusVersion) {
+        //fastAdapter
+        //G.handler.postDelayed(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        adapterHashMap.get(all).updateItem(roomId);
+        //        getAdapterMain(roomId).updateItem(roomId);
+        //    }
+        //}, 200);
+    }
+
+    @Override
+    public void onChatDelete(final long roomId) {
+        //fastAdapter
+        //adapterHashMap.get(all).removeChat(roomId);
+        //adapterHashMap.get(chat).removeChat(roomId);
+    }
+
+    @Override
+    public void onGroupDelete(long roomId) {
+        //fastAdapter
+        //adapterHashMap.get(all).removeChat(roomId);
+        //adapterHashMap.get(group).removeChat(roomId);
+    }
+
+    @Override
+    public void onChannelDelete(long roomId) {
+        //fastAdapter
+        //adapterHashMap.get(all).removeChat(roomId);
+        //adapterHashMap.get(channel).removeChat(roomId);
+    }
+
+    @Override
+    public void onMessageUpdate(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, String identity, ProtoGlobal.RoomMessage roomMessage) {
+        //fastAdapter
+        //G.handler.postDelayed(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        adapterHashMap.get(all).goToTop(roomId, false);
+        //        getAdapterMain(roomId).goToTop(roomId, false);
+        //    }
+        //}, 200);
+    }
+
+    @Override
+    public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType) {
+        //fastAdapter
+        //G.handler.post(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        adapterHashMap.get(all).goToTop(roomId, false);
+        //        getAdapterMain(roomId).goToTop(roomId, false);
+        //    }
+        //});
+    }
+
+    @Override
+    public void onMessageFailed(long roomId, RealmRoomMessage roomMessage) {
+
+    }
+
+    @Override
+    public void onClearUnread(final long roomId) {
+        //fastAdapter
+        //G.handler.postDelayed(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        adapterHashMap.get(all).updateItem(roomId);
+        //        getAdapterMain(roomId).updateItem(roomId);
+        //    }
+        //}, 200);
+    }
+
+    @Override
+    public void onClientGetRoomResponse(final long roomId) {
+        //fastAdapter
+        //G.handler.post(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        RealmRoom realmRoom = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        //        if (realmRoom != null && getAdapterMain(roomId).getPosition(realmRoom.getId()) == -1) {
+        //            adapterHashMap.get(all).add(0, new RoomItem(mComplete, all).setInfo(realmRoom).withIdentifier(realmRoom.getId()));
+        //            MainType type = all;
+        //            if (realmRoom.getType() == CHAT) {
+        //                type = chat;
+        //            } else if (realmRoom.getType() == GROUP) {
+        //                type = group;
+        //            } else if (realmRoom.getType() == CHANNEL) {
+        //                type = channel;
+        //            }
+        //            getAdapterMain(roomId).add(0, new RoomItem(mComplete, type).setInfo(realmRoom).withIdentifier(realmRoom.getId()));
+        //        }
+        //    }
+        //});
+    }
+
+    @Override
+    public void onChangeMuteState(final long roomId, boolean mute) {
+        //fastAdapter
+        //G.handler.post(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        adapterHashMap.get(all).updateItem(roomId);
+        //        getAdapterMain(roomId).updateItem(roomId);
+        //    }
+        //});
+    }
+
+    @Override
+    public void onClearRoomHistory(long roomId) {
+        clearHistory(roomId);
+    }
+
+    @Override
+    public void Error(int majorCode, int minorCode) {
+
+    }
+
+    @Override
+    public void onTimeOut() {
+
+    }
+
+    @Override
+    public void onChatDeleteError(int majorCode, int minorCode) {
+
+    }
+
+    @Override
+    public void onError(int majorCode, int minorCode) {
+
+    }
 
     @Override
     public void complete(boolean result, String messageOne, String MessageTow) {
@@ -645,9 +950,15 @@ public class FragmentMain extends BaseFragment implements OnComplete {
             ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
         }
     }
+
     //**************************************************************************************************************************************
 
 
+    /**
+     * **********************************************************************************
+     * ********************************** RealmAdapter **********************************
+     * **********************************************************************************
+     */
 
     public class RoomAdapter extends RealmRecyclerViewAdapter<RealmRoom, RoomAdapter.ViewHolder> {
 
@@ -662,10 +973,8 @@ public class FragmentMain extends BaseFragment implements OnComplete {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
             // View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
-
-            return new RoomAdapter.ViewHolder(ViewMaker.getViewItemRoom());
+            return new ViewHolder(ViewMaker.getViewItemRoom());
         }
 
         @Override
@@ -679,7 +988,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
 
             final boolean isMyCloud;
 
-            if (mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() > 0 && mInfo.getChatRoom().getPeerId() == G.userId) {
+            if (mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() > 0 && mInfo.getChatRoom().getPeerId() == userId) {
                 isMyCloud = true;
             } else {
                 isMyCloud = false;
@@ -693,10 +1002,10 @@ public class FragmentMain extends BaseFragment implements OnComplete {
 
                     if (holder.txtCloud == null) {
 
-                        MaterialDesignTextView cs_txt_contact_initials = new MaterialDesignTextView(G.context);
+                        MaterialDesignTextView cs_txt_contact_initials = new MaterialDesignTextView(context);
                         cs_txt_contact_initials.setId(R.id.cs_txt_contact_initials);
                         cs_txt_contact_initials.setGravity(Gravity.CENTER);
-                        cs_txt_contact_initials.setText(G.fragmentActivity.getResources().getString(R.string.md_cloud));
+                        cs_txt_contact_initials.setText(context.getResources().getString(R.string.md_cloud));
                         cs_txt_contact_initials.setTextColor(Color.parseColor("#ad333333"));
                         ViewMaker.setTextSize(cs_txt_contact_initials, R.dimen.dp32);
                         LinearLayout.LayoutParams layout_936 = new LinearLayout.LayoutParams(ViewMaker.i_Dp(R.dimen.dp52), ViewMaker.i_Dp(R.dimen.dp52));
@@ -924,20 +1233,20 @@ public class FragmentMain extends BaseFragment implements OnComplete {
             holder.txtLastMessageFileText.setVisibility(View.GONE);
             holder.txtLastMessage.setText("");
 
-            if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((isMyCloud || (mInfo.getActionStateUserId() != userId))))) {
+            if (mInfo.getActionState() != null && ((mInfo.getType() == GROUP || mInfo.getType() == CHANNEL) || ((isMyCloud || (mInfo.getActionStateUserId() != G.userId))))) {
 
                 holder.lastMessageSender.setVisibility(View.GONE);
                 holder.txtLastMessage.setText(mInfo.getActionState());
-                holder.txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_blue));
+                holder.txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
                 holder.txtLastMessage.setEllipsize(TextUtils.TruncateAt.MIDDLE);
             } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
 
                 holder.txtLastMessage.setText(subStringInternal(mInfo.getDraft().getMessage()));
-                holder.txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
+                holder.txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
 
                 holder.lastMessageSender.setVisibility(View.VISIBLE);
                 holder.lastMessageSender.setText(R.string.txt_draft);
-                holder.lastMessageSender.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
+                holder.lastMessageSender.setTextColor(context.getResources().getColor(R.color.toolbar_background));
                 holder.lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
             } else {
 
@@ -1045,7 +1354,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                                         holder.txtLastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
                                     }
                                 }
-                                holder.txtLastMessage.setTextColor(ContextCompat.getColor(G.context, R.color.room_message_gray));
+                                holder.txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
                                 holder.txtLastMessage.setText(subStringInternal(lastMessage));
                                 holder.txtLastMessage.setEllipsize(TextUtils.TruncateAt.END);
                             } else {
@@ -1100,7 +1409,7 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                         idForGetAvatar = mInfo.getId();
                     }
                     if (hashMapAvatar.get(idForGetAvatar) != null) {
-                        hashMapAvatar.get(idForGetAvatar).setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp52), initials, color));
+                        hashMapAvatar.get(idForGetAvatar).setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), initials, color));
                     }
                 }
             });
@@ -1135,9 +1444,9 @@ public class FragmentMain extends BaseFragment implements OnComplete {
                 case CHAT:
                     return "";
                 case CHANNEL:
-                    return G.context.getString(R.string.md_channel_icon);
+                    return context.getString(R.string.md_channel_icon);
                 case GROUP:
-                    return G.context.getString(R.string.md_users_social_symbol);
+                    return context.getString(R.string.md_users_social_symbol);
                 default:
                     return null;
             }
@@ -1163,6 +1472,20 @@ public class FragmentMain extends BaseFragment implements OnComplete {
     @Override
     public void onResume() {
         super.onResume();
+
+        G.onSetActionInRoom = this;
+        //G.onSelectMenu = this;
+        //G.onRemoveFragment = this;
+        //G.onDraftMessage = this;
+        //G.onChatDeleteInRoomList = this;
+        //G.onGroupDeleteInRoomList = this;
+        //G.onChannelDeleteInRoomList = this;
+        //G.onClearUnread = this;
+        //onClientGetRoomResponseRoomList = this;
+        //G.onMute = this;
+        //G.onClearRoomHistory = this;
+        //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponseFragmentMain(this);
+        //G.chatSendMessageUtil.setOnChatSendMessageResponseFragmentMainRoomList(this);
 
         if (progressBar != null) {
             AppUtils.setProgresColler(progressBar);

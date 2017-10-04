@@ -78,7 +78,6 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
@@ -95,7 +94,6 @@ import net.iGap.interfaces.OnChangeUserPhotoListener;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnChatSendMessageResponse;
-import net.iGap.interfaces.OnChatUpdateStatusResponse;
 import net.iGap.interfaces.OnClientCondition;
 import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnConnectionChangeState;
@@ -104,7 +102,6 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnRefreshActivity;
-import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnUpdateAvatar;
 import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserInfoMyClient;
@@ -145,7 +142,7 @@ import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatUpdateStatusResponse, OnChatSendMessageResponse, OnClientCondition, OnSetActionInRoom, OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -582,8 +579,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
 
-        G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
-
 
         connectionState();
 
@@ -995,20 +990,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         txtMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 try {
                     fragmentCall.openDialogMenu();
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
             }
         });
 
         if (HelperCalander.isLanguagePersian) {
-            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            //    mViewPager.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-            //    //  navigationTabStrip.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-            //}
             ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);
         }
     }
@@ -1040,7 +1030,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onStart() {
         super.onStart();
 
-        Log.i("PPPPPPPPPP", "onStart");
         if (!G.isFirstPassCode) {
             openActivityPassCode();
         }
@@ -2085,9 +2074,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
-        G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponseRoomList(this);
-        G.onSetActionInRoom = this;
         G.onClientCondition = this;
         G.onClientGetRoomListResponse = this;
 
@@ -2158,10 +2145,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //empty
     }
 
-    @Override
-    public void onChatUpdateStatus(final long roomId, long messageId, final ProtoGlobal.RoomMessageStatus status, long statusVersion) {
-        //empty
-    }
 
     @Override
     public void onUserInfoTimeOut() {
@@ -2173,21 +2156,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //empty
     }
 
-    @Override
-    public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
-        //+Realm realm = Realm.getDefaultInstance();
-        getRealm().executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null && realmRoom.isValid() && !realmRoom.isDeleted() && realmRoom.getType() != null) {
-                    String action = HelperGetAction.getAction(roomId, realmRoom.getType(), clientAction);
-                    realmRoom.setActionState(action, userId);
-                }
-            }
-        });
-        //realm.close();
-    }
+    //@Override
+    //public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
+    //    //+Realm realm = Realm.getDefaultInstance();
+    //    getRealm().executeTransactionAsync(new Realm.Transaction() {
+    //        @Override
+    //        public void execute(Realm realm) {
+    //            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+    //            if (realmRoom != null && realmRoom.isValid() && !realmRoom.isDeleted() && realmRoom.getType() != null) {
+    //                String action = HelperGetAction.getAction(roomId, realmRoom.getType(), clientAction);
+    //                realmRoom.setActionState(action, userId);
+    //            }
+    //        }
+    //    });
+    //    //realm.close();
+    //}
 
     //******* GroupAvatar and ChannelAvatar
 
