@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import com.daimajia.swipe.SwipeLayout;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -1788,9 +1789,38 @@ public class ViewMaker {
 
     public static View getViewRegisteredContacts() {
 
+        LinearLayout linearLayout_main = new LinearLayout(G.context);
+        linearLayout_main.setOrientation(VERTICAL);
+
+        LinearLayout.LayoutParams layout_main = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        linearLayout_main.setLayoutParams(layout_main);
+
+        SwipeLayout swipeRevealLayout = new SwipeLayout(G.context);
+        swipeRevealLayout.setId(R.id.swipeRevealLayout);
+
+        ViewGroup.LayoutParams layoutParams = new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        swipeRevealLayout.setLayoutParams(layoutParams);
+
+        LinearLayout LinearLayout = new LinearLayout(G.context);
+        LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        LinearLayout.setLayoutParams(layoutParams1);
+
+        TextView textView = new TextView(G.context);
+        textView.setText(G.context.getResources().getString(R.string.to_delete_contact));
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(G.context.getResources().getColor(R.color.white));
+        textView.setBackgroundColor(G.context.getResources().getColor(R.color.red));
+
+        ViewGroup.LayoutParams layoutParams2 = new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        textView.setLayoutParams(layoutParams2);
+
+        LinearLayout.addView(textView);
+        swipeRevealLayout.addView(LinearLayout);
+
         LinearLayout linearLayout_578 = new LinearLayout(G.context);
         linearLayout_578.setId(R.id.mainContainer);
         linearLayout_578.setOrientation(VERTICAL);
+        linearLayout_578.setBackgroundColor(G.context.getResources().getColor(R.color.white));
         if (HelperCalander.isLanguagePersian) {
             linearLayout_578.setPadding(i_Dp(R.dimen.dp20), 0, i_Dp(R.dimen.dp20), 0);
         } else {
@@ -1804,6 +1834,7 @@ public class ViewMaker {
         topLine.setId(R.id.topLine);
         topLine.setBackgroundColor(G.context.getResources().getColor(R.color.gray));
         LinearLayout.LayoutParams layout_323 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+        layout_323.bottomMargin = i_Dp(R.dimen.dp6);
 
         if (HelperCalander.isLanguagePersian) {
             layout_323.leftMargin = i_Dp(R.dimen.dp20);
@@ -1814,7 +1845,7 @@ public class ViewMaker {
         }
 
         topLine.setLayoutParams(layout_323);
-        linearLayout_578.addView(topLine);
+
 
         LinearLayout linearLayout_823 = new LinearLayout(G.context);
         linearLayout_823.setOrientation(HORIZONTAL);
@@ -1863,6 +1894,11 @@ public class ViewMaker {
         linearLayout_823.addView(linearLayout_673);
         linearLayout_578.addView(linearLayout_823);
 
-        return linearLayout_578;
+        swipeRevealLayout.addView(linearLayout_578);
+        linearLayout_main.addView(topLine);
+        linearLayout_main.addView(swipeRevealLayout);
+
+
+        return linearLayout_main;
     }
 }

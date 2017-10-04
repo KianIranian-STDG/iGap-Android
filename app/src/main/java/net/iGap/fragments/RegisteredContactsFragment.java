@@ -11,6 +11,7 @@
 package net.iGap.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -34,6 +35,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.daimajia.swipe.SwipeLayout;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
@@ -630,6 +632,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
         String lastHeader = "";
         int count;
+        private boolean isSwipe = false;
 
         ContactListAdapter(RealmResults<RealmContacts> realmResults) {
             super(realmResults, true);
@@ -643,6 +646,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             protected TextView title;
             protected TextView subtitle;
             protected View topLine;
+            private SwipeLayout swipeLayout;
 
             public ViewHolder(View view) {
                 super(view);
@@ -651,8 +655,8 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                 title = (TextView) view.findViewById(R.id.title);
                 subtitle = (TextView) view.findViewById(R.id.subtitle);
                 topLine = (View) view.findViewById(R.id.topLine);
-
-                itemView.setOnClickListener(new View.OnClickListener() {
+                swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipeRevealLayout);
+                swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -686,10 +690,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                                 }
                             });
                         }
-
-
-
-
                     }
                 });
             }
@@ -756,21 +756,76 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                 }
             }
 
-            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
 
-                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+            viewHolder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+            viewHolder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+                @Override
+                public void onStartOpen(SwipeLayout layout) {
+                    isSwipe = true;
+                }
+
+                @Override
+                public void onOpen(SwipeLayout layout) {
+                    MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                             new RequestUserContactsDelete().contactsDelete(realmRegisteredInfo.getPhoneNumber());
                         }
-                    }).negativeText(R.string.B_cancel).show();
+                    }).negativeText(R.string.B_cancel).onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            viewHolder.swipeLayout.close();
+                        }
+                    }).build();
 
-                    return false;
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            viewHolder.swipeLayout.close();
+                        }
+                    });
+                    dialog.show();
+                }
+
+                @Override
+                public void onStartClose(SwipeLayout layout) {
+
+
+                }
+
+                @Override
+                public void onClose(SwipeLayout layout) {
+                    isSwipe = false;
+                }
+
+                @Override
+                public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+
+                }
+
+                @Override
+                public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+
                 }
             });
+
+
+            //viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            //    @Override
+            //    public boolean onLongClick(View v) {
+            //
+            //        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+            //            @Override
+            //            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+            //
+            //                new RequestUserContactsDelete().contactsDelete(realmRegisteredInfo.getPhoneNumber());
+            //            }
+            //        }).negativeText(R.string.B_cancel).show();
+            //
+            //        return false;
+            //    }
+            //});
 
             hashMapAvatar.put(contact.getId(), viewHolder.image);
             setAvatar(viewHolder, contact.getId());

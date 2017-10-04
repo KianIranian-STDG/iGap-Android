@@ -2,78 +2,111 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingEnd="@dimen/dp20"
-    android:clickable="true"
-    android:paddingLeft="@dimen/dp52"
-    android:paddingRight="@dimen/dp20"
     >
 
+  <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/swipeRevealLayout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      >
+    <!--Your secondary layout here -->
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        >
+      <TextView
+          android:layout_width="100dp"
+          android:layout_height="match_parent"
+          android:background="@color/colorAccent"
+          android:gravity="center"
+          android:text="Test"
+          android:textColor="@color/white"
+          />
 
-    <View
-        android:id="@+id/topLine"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginLeft="@dimen/dp8"
-        android:layout_marginStart="@dimen/dp8"
-        android:layout_marginEnd="@dimen/dp20"
-        android:layout_marginRight="@dimen/dp20"
-        android:background="@color/gray" />
+    </FrameLayout>
 
-    <LinearLayout
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp16"
-        android:orientation="horizontal">
+        android:clickable="true"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/dp20"
+        android:paddingLeft="@dimen/dp52"
+        android:paddingRight="@dimen/dp20"
+        >
 
-      <net.iGap.module.CircleImageView
+
+      <View
+          android:id="@+id/topLine"
+          android:layout_width="match_parent"
+          android:layout_height="1px"
+          android:layout_marginEnd="@dimen/dp20"
+          android:layout_marginLeft="@dimen/dp8"
+          android:layout_marginRight="@dimen/dp20"
+          android:layout_marginStart="@dimen/dp8"
+          android:background="@color/gray"
+          />
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/dp16"
+          android:orientation="horizontal"
+          >
+
+        <net.iGap.module.CircleImageView
             android:id="@+id/imageView"
             android:layout_width="@dimen/dp48"
             android:layout_height="@dimen/dp48"
             />
 
-      <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp8"
             android:layout_marginStart="@dimen/dp8"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
-        <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical|start"
-                android:singleLine="true"
-                android:text="Dominika Faniz"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:textColor="#000000"
-            android:textSize="@dimen/dp16"
-            />
+          <net.iGap.module.CustomTextViewMedium
+              android:id="@+id/title"
+              android:layout_width="wrap_content"
+              android:layout_height="0dp"
+              android:layout_weight="1"
+              android:gravity="center_vertical|start"
+              android:singleLine="true"
+              android:text="Dominika Faniz"
+              android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+              android:textColor="#000000"
+              android:textSize="@dimen/dp16"
+              />
 
-        <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical|start"
-                android:singleLine="true"
-                android:text="@string/last_seen_recently"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-            android:textSize="@dimen/dp14"
-                android:textColor="#bbbbbb" />
+          <net.iGap.module.CustomTextViewMedium
+              android:id="@+id/subtitle"
+              android:layout_width="wrap_content"
+              android:layout_height="0dp"
+              android:layout_weight="1"
+              android:gravity="center_vertical|start"
+              android:singleLine="true"
+              android:text="@string/last_seen_recently"
+              android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+              android:textColor="#bbbbbb"
+              android:textSize="@dimen/dp14"
+              />
 
-        <View
-            android:id="@+id/bottomLine"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="@color/gray"
-            />
+          <View
+              android:id="@+id/bottomLine"
+              android:layout_width="match_parent"
+              android:layout_height="1px"
+              android:background="@color/gray"
+              android:visibility="gone"
+              />
 
 
+        </LinearLayout>
       </LinearLayout>
-    </LinearLayout>
 
+    </LinearLayout>
+  </com.daimajia.swipe.SwipeLayout>
 </LinearLayout>
