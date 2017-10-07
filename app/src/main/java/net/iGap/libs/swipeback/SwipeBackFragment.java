@@ -67,7 +67,7 @@ public class SwipeBackFragment extends Fragment {
 
     protected View attachToSwipeBack(View view) {
         mSwipeBackLayout.attachToFragment(this, view);
-        mSwipeBackLayout.setEdgeLevel(SwipeBackLayout.EdgeLevel.MAX);
+        mSwipeBackLayout.setEdgeLevel(SwipeBackLayout.EdgeLevel.MIN);
         return mSwipeBackLayout;
     }
 
