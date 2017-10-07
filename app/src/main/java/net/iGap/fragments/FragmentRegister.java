@@ -129,6 +129,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
     public static String isoCode = "IR";
     public static TextView btnOk;
     public static Dialog dialogChooseCountry;
+    private MaterialDialog dialogRegistration;
     public static int positionRadioButton = -1;
     ArrayList<StructCountry> structCountryArrayList = new ArrayList();
     private SoftKeyboard softKeyboard;
@@ -656,7 +657,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
                     phoneNumber = edtPhoneNumber.getText().toString();
 
-                    MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.rg_mdialog_text, true).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_edit)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    dialogRegistration = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.rg_mdialog_text, true).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_edit)).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -689,11 +690,11 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         }
                     }).build();
 
-                    View view = dialog.getCustomView();
+                    View view = dialogRegistration.getCustomView();
                     assert view != null;
                     TextView phone = (TextView) view.findViewById(R.id.rg_dialog_txt_number);
                     phone.setText(edtCodeNumber.getText().toString() + "" + edtPhoneNumber.getText().toString());
-                    dialog.show();
+                    dialogRegistration.show();
                 } else {
 
                     if (regex.equals("")) {
@@ -756,6 +757,10 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if (dialogRegistration != null) {
+            dialogRegistration.dismiss();
         }
         super.onStop();
     }

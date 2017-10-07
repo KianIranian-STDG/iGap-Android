@@ -283,10 +283,10 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 changeListener = new RealmChangeListener<RealmModel>() {
                     @Override
                     public void onChange(final RealmModel element) {
-                        if (((RealmRoom) element).isValid() && !((RealmRoom) element).isDeleted()) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (((RealmRoom) element).isValid() && !((RealmRoom) element).isDeleted()) {
                                     String countText = ((RealmRoom) element).getSharedMediaCount();
                                     if (txtNumberOfSharedMedia == null) {
                                         txtNumberOfSharedMedia = (TextView) G.fragmentActivity.findViewById(R.id.agp_txt_number_of_shared_media);
@@ -297,8 +297,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                                         txtNumberOfSharedMedia.setText(countText);
                                     }
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 };
             }
@@ -919,8 +919,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         layoutGroupLink.addView(txtLink, layoutParams);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.group_link)).positiveText(G.fragmentActivity.getResources().getString(R.string.array_Copy))
-                .customView(layoutGroupLink, true)
-                .widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.no))
+                .customView(layoutGroupLink, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.no))
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
