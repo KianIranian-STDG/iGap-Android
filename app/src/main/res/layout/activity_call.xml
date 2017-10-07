@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_call_fragment"
     android:clickable="true"
-    android:elevation="999dp"
     android:layoutDirection="ltr"
     android:orientation="vertical"
     tools:ignore="MissingPrefix"
