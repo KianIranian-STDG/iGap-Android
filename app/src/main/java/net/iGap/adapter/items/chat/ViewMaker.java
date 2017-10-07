@@ -1808,6 +1808,7 @@ public class ViewMaker {
         TextView textView = new TextView(G.context);
         textView.setText(G.context.getResources().getString(R.string.to_delete_contact));
         textView.setGravity(Gravity.CENTER);
+        setTypeFace(textView);
         textView.setTextColor(G.context.getResources().getColor(R.color.white));
         textView.setBackgroundColor(G.context.getResources().getColor(R.color.red));
 
