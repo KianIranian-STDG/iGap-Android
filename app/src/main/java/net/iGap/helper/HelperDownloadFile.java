@@ -173,8 +173,8 @@ public class HelperDownloadFile {
                     additem = true;
                     break;
                 }
-            } catch (NullPointerException e) {
-
+            } catch (NullPointerException | IndexOutOfBoundsException e) {
+                e.printStackTrace();
             }
         }
 

@@ -55,9 +55,6 @@ public abstract class MessageHandler {
             }
             WebSocketClient.reconnect(true);
         }
-        //if (BuildConfig.DEBUG) {
-        //    Log.i("MSGT", "MessageHandler timeOut : " + actionId + " || " + message);
-        //}
         error();
     }
 

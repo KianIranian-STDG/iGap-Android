@@ -22,6 +22,7 @@ import net.iGap.G;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoRequest;
 import net.iGap.proto.ProtoResponse;
+import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestWrapper;
 
 /**
@@ -152,6 +153,7 @@ public class HelperUnpackMessage {
                         instanceResponseClass(actionId, protoObject, requestWrapper.identity, "handler");
                     }
                 }
+                RequestQueue.sendRequest();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -160,7 +162,7 @@ public class HelperUnpackMessage {
         return true;
     }
 
-    public static synchronized String getResponseId(Object protoObject) {
+    private static synchronized String getResponseId(Object protoObject) {
         String responseId = null;
         try {
             Method method = protoObject.getClass().getMethod("getResponse");
@@ -175,7 +177,7 @@ public class HelperUnpackMessage {
         return responseId;
     }
 
-    public static synchronized String getRequestId(RequestWrapper requestWrapper) {
+    private static synchronized String getRequestId(RequestWrapper requestWrapper) {
 
         String requestId = null;
         try {
@@ -195,7 +197,7 @@ public class HelperUnpackMessage {
      *
      * @return objects[0] == actionId , objects[1] == className , objects[2] == payload
      */
-    public static synchronized Object[] fetchMessage(byte[] message) {
+    private static synchronized Object[] fetchMessage(byte[] message) {
 
         int actionId = getId(message);
 
@@ -222,19 +224,19 @@ public class HelperUnpackMessage {
         return value;
     }
 
-    public static synchronized String getClassName(int value) {
+    private static synchronized String getClassName(int value) {
 
         if (!G.lookupMap.containsKey(value)) return null;
 
         return G.lookupMap.get(value);
     }
 
-    public static synchronized byte[] getProtoInfo(byte[] byteArray) {
+    private static synchronized byte[] getProtoInfo(byte[] byteArray) {
         byteArray = Arrays.copyOfRange(byteArray, 2, byteArray.length);
         return byteArray;
     }
 
-    public static synchronized Object fillProtoClassData(String protoClassName, byte[] protoMessage) {
+    private static synchronized Object fillProtoClassData(String protoClassName, byte[] protoMessage) {
         Object object3 = null;
         try {
 
@@ -263,7 +265,7 @@ public class HelperUnpackMessage {
         return object3;
     }
 
-    public static synchronized Object instanceResponseClass(int actionId, Object protoObject, String identity, String optionalMethod) {
+    private static synchronized Object instanceResponseClass(int actionId, Object protoObject, String identity, String optionalMethod) {
         Object object = null;
         try {
             String className = getClassName(actionId);

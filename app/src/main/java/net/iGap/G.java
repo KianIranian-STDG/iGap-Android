@@ -229,10 +229,12 @@ public class G extends MultiDexApplication {
     public static ArrayList<String> unLogin = new ArrayList<>();// list of actionId that can be doing without secure
     public static ArrayList<String> waitingActionIds = new ArrayList<>();
     public static ArrayList<String> generalImmovableClasses = new ArrayList<>();
+    public static ArrayList<Integer> forcePriorityActionId = new ArrayList<>();
 
     public static HashMap<Integer, String> lookupMap = new HashMap<>();
     public static HashMap<String, ArrayList<Object>> requestQueueRelationMap = new HashMap<>();
     public static HashMap<Long, HelperLogMessage.StructLog> logMessageUpdatList = new HashMap<>();
+    public static HashMap<Integer, Integer> priorityActionId = new HashMap<>();
 
     public static Activity currentActivity;
     public static FragmentActivity fragmentActivity;
