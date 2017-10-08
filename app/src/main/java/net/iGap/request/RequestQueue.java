@@ -43,7 +43,7 @@ public class RequestQueue {
     public static final CopyOnWriteArrayList<RequestWrapper> WAITING_REQUEST_WRAPPERS = new CopyOnWriteArrayList<>(); // if not logged-in
     public static CopyOnWriteArrayList<RequestWrapper> RUNNING_REQUEST_WRAPPERS = new CopyOnWriteArrayList<>(); // when logged-in and WAITING_REQUEST_WRAPPERS is full
     private static ConcurrentHashMap<Integer, ArrayList<RequestWrapper[]>> priorityRequestWrapper = new ConcurrentHashMap<>();
-    private static PriorityQueue<Integer> actionIdPriority = new PriorityQueue<>(10, new Comparator<Integer>() {
+    private static PriorityQueue<Integer> actionIdPriority = new PriorityQueue<>(1000, new Comparator<Integer>() {
         @Override
         public int compare(Integer a, Integer b) {
             if (a < b) {
