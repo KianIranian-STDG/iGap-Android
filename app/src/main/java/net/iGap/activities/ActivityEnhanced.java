@@ -22,6 +22,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
@@ -46,7 +47,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ActivityEnhanced extends AppCompatActivity {
 
-    public boolean isOnGetPermistion = false;
+    public boolean isOnGetPermission = false;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -73,10 +74,9 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        boolean allwScrren = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
+        boolean allowScreen = sharedPreferences.getBoolean(SHP_SETTING.KEY_SCREEN_SHOT_LOCK, true);
 
-        if (G.isPassCode && !allwScrren) {
-
+        if (G.isPassCode && !allowScreen) {
             try {
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
             } catch (Exception e) {
@@ -90,8 +90,6 @@ public class ActivityEnhanced extends AppCompatActivity {
             }
         }
 
-
-
         super.onCreate(savedInstanceState);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -100,9 +98,11 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         makeDirectoriesIfNotExist();
 
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         boolean checkedEnableDataShams = sharedPreferences.getBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
+        if (android.provider.Settings.System.getInt(getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) != 1) {
+            checkedEnableDataShams = false;
+        }
+
         if (!checkedEnableDataShams) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         } else {
@@ -194,7 +194,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     private void makeDirectoriesIfNotExist() {
 
-        if (isOnGetPermistion) {
+        if (isOnGetPermission) {
             return;
         }
 
@@ -202,7 +202,7 @@ public class ActivityEnhanced extends AppCompatActivity {
             return;
         }
 
-        isOnGetPermistion = true;
+        isOnGetPermission = true;
 
         try {
             HelperPermision.getStoragePermision(this, new OnGetPermission() {
@@ -223,7 +223,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     private void checkIsDirectoryExist() {
 
-        isOnGetPermistion = false;
+        isOnGetPermission = false;
 
         if (new File(G.DIR_APP).exists() && new File(G.DIR_IMAGES).exists() && new File(G.DIR_VIDEOS).exists() && new File(G.DIR_AUDIOS).exists() && new File(G.DIR_DOCUMENT).exists() && new File(G.DIR_CHAT_BACKGROUND).exists() && new File(G.DIR_IMAGE_USER).exists() && new File(G.DIR_TEMP).exists()) {
             return;

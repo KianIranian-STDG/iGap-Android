@@ -289,7 +289,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             isNeedToRegister = true;
-            isOnGetPermistion = true;
+            isOnGetPermission = true;
         }
         super.onCreate(savedInstanceState);
 
