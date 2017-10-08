@@ -841,27 +841,27 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             secondBoarderColor = Color.parseColor("#55f23131");
             thirdBoarderColor = Color.parseColor("#00f23131");
 
-            firstBorderSize = 2;
+            firstBorderSize = (int) G.context.getResources().getDimension(R.dimen.dp2);
             secondBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp32);
-            thirdBoarderSize = 2;
+            thirdBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp2);
         } else {
             if (markerColor == MarkerColor.GREEN) {
                 firstBorderColor = Color.WHITE;
                 secondBoarderColor = Color.parseColor("#553dbcb3");
                 thirdBoarderColor = G.context.getResources().getColor(R.color.primary);
 
-                firstBorderSize = 2;
+                firstBorderSize = (int) G.context.getResources().getDimension(R.dimen.dp2);
                 secondBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp18);
-                thirdBoarderSize = 2;
+                thirdBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp2);
             } else {
                 firstBorderColor = Color.WHITE;
                 secondBoarderColor = Color.parseColor("#554f4f4f");
                 //thirdBoarderColor = G.context.getResources().getColor(R.color.colorOldBlack);
                 thirdBoarderColor = Color.parseColor("#004f4f4f");
 
-                firstBorderSize = 2;
+                firstBorderSize = (int) G.context.getResources().getDimension(R.dimen.dp2);
                 secondBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp10);
-                thirdBoarderSize = 2;
+                thirdBoarderSize = (int) G.context.getResources().getDimension(R.dimen.dp2);
             }
         }
 
