@@ -1414,7 +1414,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 if (isChecked) {
                     editor.putBoolean(SHP_SETTING.KEY_AUTO_ROTATE, true);
                     editor.apply();
-                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
 
                 } else {
                     editor.putBoolean(SHP_SETTING.KEY_AUTO_ROTATE, false);
