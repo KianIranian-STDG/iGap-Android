@@ -1897,6 +1897,12 @@ public class FragmentChat extends BaseFragment
                     root5.setVisibility(View.GONE);
                     root6.setVisibility(View.GONE);
                 }
+
+                if (isNotJoin) {
+                    root4.setVisibility(View.GONE);
+                    root6.setVisibility(View.GONE);
+                }
+
                 //realm.close();
 
                 root1.setOnClickListener(new View.OnClickListener() {
