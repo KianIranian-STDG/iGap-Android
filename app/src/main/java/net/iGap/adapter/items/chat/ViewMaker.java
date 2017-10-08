@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.daimajia.swipe.SwipeLayout;
@@ -34,6 +35,7 @@ import static android.support.design.R.id.center;
 import static android.view.Gravity.BOTTOM;
 import static android.view.Gravity.CENTER;
 import static android.view.Gravity.CENTER_HORIZONTAL;
+import static android.view.Gravity.CENTER_VERTICAL;
 import static android.view.Gravity.LEFT;
 import static android.view.Gravity.RIGHT;
 import static android.widget.LinearLayout.HORIZONTAL;
@@ -1801,8 +1803,9 @@ public class ViewMaker {
         ViewGroup.LayoutParams layoutParams = new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         swipeRevealLayout.setLayoutParams(layoutParams);
 
-        LinearLayout LinearLayout = new LinearLayout(G.context);
-        LinearLayout.LayoutParams layoutParams1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        RelativeLayout LinearLayout = new RelativeLayout(G.context);
+        LinearLayout.setBackgroundColor(G.context.getResources().getColor(R.color.red_swipe));
+        RelativeLayout.LayoutParams layoutParams1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         LinearLayout.setLayoutParams(layoutParams1);
 
         TextView textView = new TextView(G.context);
@@ -1810,11 +1813,21 @@ public class ViewMaker {
         textView.setGravity(Gravity.CENTER);
         setTypeFace(textView);
         textView.setTextColor(G.context.getResources().getColor(R.color.white));
-        textView.setBackgroundColor(G.context.getResources().getColor(R.color.red));
 
         ViewGroup.LayoutParams layoutParams2 = new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         textView.setLayoutParams(layoutParams2);
 
+        MaterialDesignTextView fcsl_txt_icon = new MaterialDesignTextView(G.context);
+        fcsl_txt_icon.setGravity(CENTER_VERTICAL);
+        fcsl_txt_icon.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
+        fcsl_txt_icon.setTextColor(G.context.getResources().getColor(R.color.white));
+        setTextSize(fcsl_txt_icon, R.dimen.dp22);
+        LinearLayout.LayoutParams layout_178 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp52), ViewGroup.LayoutParams.MATCH_PARENT);
+        layout_178.gravity = Gravity.LEFT;
+        layout_178.leftMargin = i_Dp(R.dimen.dp26);
+        fcsl_txt_icon.setLayoutParams(layout_178);
+
+        LinearLayout.addView(fcsl_txt_icon);
         LinearLayout.addView(textView);
         swipeRevealLayout.addView(LinearLayout);
 
