@@ -1805,6 +1805,9 @@ public class ViewMaker {
 
         RelativeLayout LinearLayout = new RelativeLayout(G.context);
         LinearLayout.setBackgroundColor(G.context.getResources().getColor(R.color.red_swipe));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            LinearLayout.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
         RelativeLayout.LayoutParams layoutParams1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         LinearLayout.setLayoutParams(layoutParams1);
 
@@ -1824,7 +1827,7 @@ public class ViewMaker {
         setTextSize(fcsl_txt_icon, R.dimen.dp22);
         LinearLayout.LayoutParams layout_178 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp52), ViewGroup.LayoutParams.MATCH_PARENT);
         layout_178.gravity = Gravity.LEFT;
-        layout_178.leftMargin = i_Dp(R.dimen.dp26);
+        layout_178.leftMargin = i_Dp(R.dimen.dp32);
         fcsl_txt_icon.setLayoutParams(layout_178);
 
         LinearLayout.addView(fcsl_txt_icon);

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -369,6 +370,12 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                     //}
                 }
             });
+
+            if (HelperCalander.isLanguagePersian) {
+                holder.username.setGravity(Gravity.RIGHT);
+            } else {
+                holder.username.setGravity(Gravity.LEFT);
+            }
 
             holder.username.setText(registeredInfo.getDisplayName());
             if (item.isHasComment()) {
