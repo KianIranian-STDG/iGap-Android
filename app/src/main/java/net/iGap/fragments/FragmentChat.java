@@ -1899,6 +1899,7 @@ public class FragmentChat extends BaseFragment
                 }
 
                 if (isNotJoin) {
+                    root2.setVisibility(View.GONE);
                     root4.setVisibility(View.GONE);
                     root6.setVisibility(View.GONE);
                 }
