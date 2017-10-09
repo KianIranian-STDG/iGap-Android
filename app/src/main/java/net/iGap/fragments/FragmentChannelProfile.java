@@ -620,8 +620,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                String countText = ((RealmRoom) element).getSharedMediaCount();
                                 if (((RealmRoom) element).isValid() && !((RealmRoom) element).isDeleted()) {
+                                    String countText = ((RealmRoom) element).getSharedMediaCount();
                                     if (HelperCalander.isLanguagePersian) {
                                         txtSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
                                     } else {

@@ -129,7 +129,9 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-
+                if (realm.isClosed()) {
+                    return;
+                }
                 realm.executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {

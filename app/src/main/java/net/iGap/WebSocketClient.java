@@ -112,6 +112,7 @@ public class WebSocketClient {
                     allowForReconnecting = true;
                     G.socketConnection = false;
                     RequestQueue.timeOutImmediately(null, true);
+                    RequestQueue.clearPriorityQueue();
                     resetMainInfo();
                     reconnect(true);
                     super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);

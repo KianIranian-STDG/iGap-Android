@@ -43,7 +43,7 @@ public class RequestQueue {
     public static final CopyOnWriteArrayList<RequestWrapper> WAITING_REQUEST_WRAPPERS = new CopyOnWriteArrayList<>(); // if not logged-in
     public static CopyOnWriteArrayList<RequestWrapper> RUNNING_REQUEST_WRAPPERS = new CopyOnWriteArrayList<>(); // when logged-in and WAITING_REQUEST_WRAPPERS is full
     private static ConcurrentHashMap<Integer, ArrayList<RequestWrapper[]>> priorityRequestWrapper = new ConcurrentHashMap<>();
-    private static PriorityQueue<Integer> actionIdPriority = new PriorityQueue<>(1000, new Comparator<Integer>() {
+    public static PriorityQueue<Integer> actionIdPriority = new PriorityQueue<>(1000, new Comparator<Integer>() {
         @Override
         public int compare(Integer a, Integer b) {
             if (a < b) {
@@ -102,11 +102,13 @@ public class RequestQueue {
         }
 
         ArrayList<RequestWrapper[]> arrayWrapper = priorityRequestWrapper.get(actionIdPriority.poll());
-        RequestWrapper[] requestWrappers = arrayWrapper.get(0);
-        arrayWrapper.remove(0);
-        priorityRequestWrapper.put(requestWrappers[0].getActionId(), arrayWrapper);
+        if (arrayWrapper != null && arrayWrapper.size() > 0) {
+            RequestWrapper[] requestWrappers = arrayWrapper.get(0);
+            arrayWrapper.remove(0);
+            priorityRequestWrapper.put(requestWrappers[0].getActionId(), arrayWrapper);
 
-        sendRequest(requestWrappers);
+            sendRequest(requestWrappers);
+        }
     }
 
     private static synchronized void prepareRequest(String randomId, RequestWrapper requestWrapper) {
@@ -279,6 +281,12 @@ public class RequestQueue {
                     requestQueueMapRemover(key);
                 }
             }
+        }
+    }
+
+    public static void clearPriorityQueue() {
+        if (actionIdPriority != null) {
+            actionIdPriority.clear();
         }
     }
 

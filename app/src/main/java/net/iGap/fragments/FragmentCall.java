@@ -196,48 +196,48 @@ import net.iGap.request.RequestSignalingGetLog;
             @Override
             public void onGetList(final int size, final List<ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog> signalingLogList) {
 
-                //if (signalingLogList != null) {
-                //    G.handler.post(new Runnable() {
-                //        @Override
-                //        public void run() {
-                //            Realm realm = Realm.getDefaultInstance();
-                //            realm.executeTransaction(new Realm.Transaction() {
-                //                @Override
-                //                public void execute(Realm realm) {
-                //                    for (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog : signalingLogList) {
-                //                        RealmCallLog realmCallLog = realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.ID, callLog.getId()).findFirst();
-                //                        if (realmCallLog != null && mAdapter.getPosition(callLog.getId()) == -1) {
-                //                            if (imgCallEmpty != null && imgCallEmpty.getVisibility() == View.VISIBLE) {
-                //                                imgCallEmpty.setVisibility(View.GONE);
-                //                                empty_call.setVisibility(View.GONE);
-                //                            }
-                //                            mAdapter.add(0, new CallItem().setInfo(realmCallLog).withIdentifier(callLog.getId()));
-                //                        }
-                //                    }
-                //                }
-                //            });
-                //            realm.close();
-                //            progressBar.setVisibility(View.GONE);
-                //        }
-                //    });
-                //}
-                //
-                //if (size == -1) {
-                //
-                //    if (attampOnError < 2) {
-                //        isSendRequestForLoading = false;
-                //        attampOnError++;
-                //    } else {
-                //        isThereAnyMoreItemToLoad = false;
-                //        mRecyclerView.removeOnScrollListener(onScrollListener);
-                //    }
-                //} else if (size == 0) {
-                //    isThereAnyMoreItemToLoad = false;
-                //    mRecyclerView.removeOnScrollListener(onScrollListener);
-                //} else {
-                //    isSendRequestForLoading = false;
-                //    mOffset += size;
-                //}
+                if (signalingLogList != null) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Realm realm = Realm.getDefaultInstance();
+                            //realm.executeTransaction(new Realm.Transaction() {
+                            //    @Override
+                            //    public void execute(Realm realm) {
+                            //        for (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog : signalingLogList) {
+                            //            RealmCallLog realmCallLog = realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.ID, callLog.getId()).findFirst();
+                            //            if (realmCallLog != null && mAdapter.getPosition(callLog.getId()) == -1) {
+                            //                if (imgCallEmpty != null && imgCallEmpty.getVisibility() == View.VISIBLE) {
+                            //                    imgCallEmpty.setVisibility(View.GONE);
+                            //                    empty_call.setVisibility(View.GONE);
+                            //                }
+                            //                mAdapter.add(0, new CallItem().setInfo(realmCallLog).withIdentifier(callLog.getId()));
+                            //            }
+                            //        }
+                            //    }
+                            //});
+                            //realm.close();
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    });
+                }
+
+                if (size == -1) {
+
+                    if (attampOnError < 2) {
+                        isSendRequestForLoading = false;
+                        attampOnError++;
+                    } else {
+                        isThereAnyMoreItemToLoad = false;
+                        mRecyclerView.removeOnScrollListener(onScrollListener);
+                    }
+                } else if (size == 0) {
+                    isThereAnyMoreItemToLoad = false;
+                    mRecyclerView.removeOnScrollListener(onScrollListener);
+                } else {
+                    isSendRequestForLoading = false;
+                    mOffset += size;
+                }
             }
         };
 

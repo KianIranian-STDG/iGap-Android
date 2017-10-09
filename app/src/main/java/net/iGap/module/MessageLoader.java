@@ -27,6 +27,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestClientGetRoomHistory;
 
+import static net.iGap.fragments.FragmentChat.getRealmChat;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.UP;
 
@@ -133,12 +134,12 @@ public final class MessageLoader {
             @Override
 
             public void onGetRoomHistory(final long roomId, final long startMessageId, final long endMessageId, final long reachMessageId, final String historyDirection) {
-                Realm realmResponse;
-                if (!realm.isClosed()) {
-                    realmResponse = realm;
-                } else {
-                    realmResponse = Realm.getDefaultInstance();
-                }
+                //Realm realmResponse;
+                //if (!realm.isClosed()) {
+                //    realmResponse = realm;
+                //} else {
+                //    realmResponse = Realm.getDefaultInstance();
+                //}
                 /**
                  * convert message from RealmRoomMessage to StructMessageInfo for send to view
                  */
@@ -153,7 +154,7 @@ public final class MessageLoader {
                          * if gapReached now check that future gap is reached or no. if future gap reached this means
                          * that with get this history , client jumped from local messages and now is in another gap
                          */
-                        if (startMessageId <= (long) gapExist(realmResponse, roomId, reachMessageId, UP)[0]) {
+                        if (startMessageId <= (long) gapExist(getRealmChat(), roomId, reachMessageId, UP)[0]) {
                             jumpOverLocal = true;
                         }
                     }
@@ -164,7 +165,7 @@ public final class MessageLoader {
                          * if gapReached now check that future gap is reached or no. if future gap reached this means
                          * that with get this history , client jumped from local messages and now is in another gap
                          */
-                        if (endMessageId >= (long) gapExist(realmResponse, roomId, reachMessageId, DOWN)[0]) {
+                        if (endMessageId >= (long) gapExist(getRealmChat(), roomId, reachMessageId, DOWN)[0]) {
                             jumpOverLocal = true;
                         }
                     }
@@ -173,7 +174,7 @@ public final class MessageLoader {
                 final boolean gapReachedFinal = gapReached;
                 final boolean jumpOverLocalFinal = jumpOverLocal;
                 //+Realm realm = Realm.getDefaultInstance();
-                realmResponse.executeTransaction(new Realm.Transaction() {
+                getRealmChat().executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         long finalMessageId;
@@ -198,7 +199,7 @@ public final class MessageLoader {
                     }
                 });
                 //realm.close();
-                realmResponse.close();
+                //realmResponse.close();
 
                 onMessageReceive.onMessage(roomId, startMessageId, endMessageId, gapReached, jumpOverLocal, historyDirection);
             }

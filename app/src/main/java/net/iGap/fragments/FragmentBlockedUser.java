@@ -40,6 +40,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
 import net.iGap.module.CustomTextViewMedium;
+import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
@@ -326,7 +327,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
             }
 
             viewHolder.title.setText(registeredInfo.getDisplayName());
-            viewHolder.subtitle.setText(registeredInfo.getPhoneNumber());
+            viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(registeredInfo.getId(), registeredInfo.getLastSeen(), false));
             if (HelperCalander.isLanguagePersian) {
                 viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
             }
