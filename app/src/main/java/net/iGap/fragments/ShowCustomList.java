@@ -11,21 +11,20 @@
 package net.iGap.fragments;
 
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -35,7 +34,10 @@ import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.adapters.HeaderAdapter;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
+import com.pchmn.materialchips.ChipsInput;
+import com.pchmn.materialchips.model.ChipInterface;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
@@ -44,6 +46,7 @@ import net.iGap.adapter.StickyHeaderAdapter;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.interfaces.OnSelectedList;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.ContactChip;
 import net.iGap.module.structs.StructContactInfo;
 
 public class ShowCustomList extends BaseFragment {
@@ -52,7 +55,7 @@ public class ShowCustomList extends BaseFragment {
     private FastAdapter fastAdapter;
     private TextView txtStatus;
     private TextView txtNumberOfMember;
-    private EditText edtSearch;
+    //private EditText edtSearch;
     private String textString = "";
     private int sizeTextEdittext = 0;
     private boolean dialogShowing = false;
@@ -60,6 +63,8 @@ public class ShowCustomList extends BaseFragment {
     private int count = 0;
     private boolean singleSelect = false;
     private RippleView rippleDown;
+    private List<ContactChip> mContactList = new ArrayList<>();
+    private ChipsInput chipsInput;
     public static ShowCustomList newInstance(List<StructContactInfo> list, OnSelectedList onSelectedListResult) {
         onSelectedList = onSelectedListResult;
         contacts = list;
@@ -92,7 +97,9 @@ public class ShowCustomList extends BaseFragment {
 
         txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
         txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
-        edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
+        //edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
+        chipsInput = (ChipsInput) view.findViewById(R.id.chips_input);
+
 
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -132,6 +139,23 @@ public class ShowCustomList extends BaseFragment {
         fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<ContactItemGroup>() {
             @Override public boolean onClick(View v, IAdapter adapter, ContactItemGroup item, int position) {
 
+                if (item.mContact.isSelected) {
+                    chipsInput.removeChipByLabel(item.mContact.displayName);
+                } else {
+                    Uri uri = null;
+                    if (item.mContact.avatar != null && item.mContact.avatar.getFile() != null && item.mContact.avatar.getFile().getLocalThumbnailPath() != null) {
+                        uri = Uri.fromFile(new File(item.mContact.avatar.getFile().getLocalThumbnailPath()));
+                    }
+                    if (uri == null) {
+
+                        Drawable d = new BitmapDrawable(getResources(), net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), item.mContact.initials, item.mContact.color));
+                        chipsInput.addChip(item.mContact.peerId, d, item.mContact.displayName, "");
+                    } else {
+                        chipsInput.addChip(item.mContact.peerId, uri, item.mContact.displayName, "");
+                    }
+
+                }
+
                 item.mContact.isSelected = !item.mContact.isSelected;
 
                 fastAdapter.notifyItemChanged(position);
@@ -151,45 +175,6 @@ public class ShowCustomList extends BaseFragment {
             }
         });
 
-        edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                if (charSequence.length() + i + i1 + i2 > 0) itemAdapter.filter(charSequence);
-
-                //if (charSequence.length() > sizeTextEdittext) {
-                //    String s = edtSearch.getText().toString().substring(sizeTextEdittext, charSequence.length());
-                //    itemAdapter.filter(s);
-                //} else {
-                //    itemAdapter.filter("");
-                //}
-                //
-                //edtSearch.setSelection(edtSearch.getText().length());
-                //fastAdapter.notifyDataSetChanged();
-
-            }
-
-            @Override public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        edtSearch.setOnKeyListener(new View.OnKeyListener() {
-            @Override public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-                if ((keyCode == KeyEvent.KEYCODE_DEL)) {
-                    if (edtSearch.getText().length() <= sizeTextEdittext) {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        });
-
-        //configure our fastAdapter
         //as we provide id's for the items we want the hasStableIds enabled to speed up things
         fastAdapter.setHasStableIds(true);
 
@@ -207,10 +192,55 @@ public class ShowCustomList extends BaseFragment {
 
         for (StructContactInfo contact : contacts) {
             if (contact != null) {
-                items.add(new ContactItemGroup().setContact(contact).withIdentifier(100 + contacts.indexOf(contact)));
+                items.add(new ContactItemGroup().setContact(contact).withIdentifier(contact.peerId));
+                Uri uri = null;
+                if (contact.avatar != null && contact.avatar.getFile() != null && contact.avatar.getFile().getLocalThumbnailPath() != null) {
+                    uri = Uri.fromFile(new File(contact.avatar.getFile().getLocalThumbnailPath()));
+                }
+
+                ContactChip contactChip;
+                if (uri == null) {
+                    Drawable d = new BitmapDrawable(getResources(), net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), contact.initials, contact.color));
+                    contactChip = new ContactChip(contact.peerId, d, contact.displayName);
+                } else {
+                    contactChip = new ContactChip(contact.peerId, uri, contact.displayName);
+                }
+
+                mContactList.add(contactChip);
             }
         }
+
+        chipsInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        chipsInput.setFilterableList(mContactList);
+
         itemAdapter.add(items);
+
+        chipsInput.addChipsListener(new ChipsInput.ChipsListener() {
+            @Override
+            public void onChipAdded(ChipInterface chip, int newSize) {
+                // chip added
+                // newSize is the size of the updated selected chip list
+            }
+
+            @Override
+            public void onChipRemoved(ChipInterface chip, int newSize) {
+
+                ((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))).mContact.isSelected = !((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))).mContact.isSelected;
+                fastAdapter.notifyItemChanged(fastAdapter.getPosition((Long) chip.getId()));
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence text) {
+                // text changed
+            }
+        });
 
         //so the headers are aware of changes
         stickyHeaderAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -313,7 +343,7 @@ public class ShowCustomList extends BaseFragment {
 
         txtNumberOfMember.setText(selectedNumber + " / " + size);
         // sizeTextEdittext = textString.length();
-        edtSearch.setText("");
+        //edtSearch.setText("");
     }
 
     private ArrayList<StructContactInfo> getSelectedList() {

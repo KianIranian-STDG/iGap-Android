@@ -10,6 +10,7 @@
 
 package net.iGap.adapter.items;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -34,6 +35,7 @@ import net.iGap.proto.ProtoGlobal;
 public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItemGroup.ViewHolder> {
     public StructContactInfo mContact;
     private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
+    public static OnClickAdapter OnClickAdapter;
 
     public ContactItemGroup setContact(StructContactInfo contact) {
         this.mContact = contact;
@@ -109,7 +111,7 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
         });
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected class ViewHolder extends RecyclerView.ViewHolder {
 
         protected CircleImageView image;
         protected CustomTextViewMedium title;
@@ -125,7 +127,13 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
             subtitle = (CustomTextViewMedium) view.findViewById(R.id.subtitle);
             topLine = (View) view.findViewById(R.id.topLine);
             checkBoxSelect = (AnimateCheckBox) view.findViewById(R.id.cig_checkBox_select_user);
+
         }
+
+    }
+
+    public interface OnClickAdapter {
+        void onclick(long peerId, Uri uri, String displayName, boolean checked);
     }
 
     @Override
