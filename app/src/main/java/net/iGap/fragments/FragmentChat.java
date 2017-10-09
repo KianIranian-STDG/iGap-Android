@@ -1967,7 +1967,12 @@ public class FragmentChat extends BaseFragment
                                 //finish();
                                 finishChat();
                                 dialog.dismiss();
-                                G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        G.onConvertToGroup.openFragmentOnActivity("ConvertToGroup", mRoomId);
+                                    }
+                                });
                             }
                         }).show();
                     }
