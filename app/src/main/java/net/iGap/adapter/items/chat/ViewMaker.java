@@ -42,6 +42,7 @@ import static android.widget.LinearLayout.HORIZONTAL;
 import static android.widget.LinearLayout.VERTICAL;
 import static java.lang.Boolean.TRUE;
 import static net.iGap.G.context;
+import static net.iGap.R.dimen.dp1_minus;
 import static net.iGap.R.dimen.dp32;
 import static net.iGap.R.dimen.dp4;
 import static net.iGap.R.dimen.dp52;
@@ -509,7 +510,7 @@ public class ViewMaker {
         //AppUtils.setImageDrawable(cslr_txt_tic, R.drawable.ic_double_check);
         LinearLayout.LayoutParams layout_311 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp16), ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_311.leftMargin = i_Dp(dp4);
-        layout_311.topMargin = dpToPixel(-5);
+        layout_311.topMargin = i_Dp(dp1_minus);
         cslr_txt_tic.setLayoutParams(layout_311);
 
         csl_ll_time.addView(txtEditedIndicator);

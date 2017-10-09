@@ -18,6 +18,7 @@
   <dimen name="messageBox_minusLeftRightMargin">-10dp</dimen>
 
   <dimen name="dp14_Popup">14dp</dimen>
+  <dimen name="dp1_minus">-2dp</dimen>
   <dimen name="dp2">4dp</dimen>
   <dimen name="dp4">8dp</dimen>
   <dimen name="dp6">12dp</dimen>
