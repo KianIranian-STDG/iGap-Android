@@ -730,7 +730,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (!((RealmRoom) element).isValid() || ((RealmRoom) element).isDeleted()) {
+                                if (!((RealmRoom) element).isValid()) {
                                     return;
                                 }
                                 String countText = ((RealmRoom) element).getSharedMediaCount();

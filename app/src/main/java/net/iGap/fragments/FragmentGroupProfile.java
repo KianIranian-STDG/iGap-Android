@@ -286,7 +286,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (((RealmRoom) element).isValid() && !((RealmRoom) element).isDeleted()) {
+                                if (((RealmRoom) element).isValid()) {
                                     String countText = ((RealmRoom) element).getSharedMediaCount();
                                     if (txtNumberOfSharedMedia == null) {
                                         txtNumberOfSharedMedia = (TextView) G.fragmentActivity.findViewById(R.id.agp_txt_number_of_shared_media);
