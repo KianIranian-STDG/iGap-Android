@@ -32,6 +32,10 @@
 
 #Warning:cat.ereza.customactivityoncrash.config.CaocConfig$Builder: can't find referenced class cat.ereza.customactivityoncrash.config.CaocConfig$BackgroundMode
 
+###Chips
+-dontwarn com.beloo.widget.chipslayoutmanager.Orientation
+#
+
 ###CustomCrash
 -keep class cat.ereza.customactivityoncrash.** { *; }
 -dontwarn cat.ereza.customactivityoncrash.**
