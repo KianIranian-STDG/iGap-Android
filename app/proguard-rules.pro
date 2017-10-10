@@ -31,6 +31,9 @@
 ###
 
 #Warning:cat.ereza.customactivityoncrash.config.CaocConfig$Builder: can't find referenced class cat.ereza.customactivityoncrash.config.CaocConfig$BackgroundMode
+###
+
+#
 
 ###Chips
 -dontwarn com.beloo.widget.chipslayoutmanager.Orientation
@@ -80,6 +83,8 @@
 -dontwarn org.whispersystems.**
 -keep class org.webrtc.** { *; }
 -dontwarn org.webrtc.**
+-keep class org.chromium.** { *; }
+-dontwarn org.chromium.**
 ###
 
 ###protobuf
