@@ -76,6 +76,7 @@ public class ContactGroupFragment extends BaseFragment {
     private List<ContactChip> mContactList = new ArrayList<>();
     private int sizeTextEditText = 0;
     private List<StructContactInfo> contacts;
+    private boolean isRemove = true;
 
     public static ContactGroupFragment newInstance() {
         return new ContactGroupFragment();
@@ -239,10 +240,9 @@ public class ContactGroupFragment extends BaseFragment {
 
 
 
-                item.mContact.isSelected = !item.mContact.isSelected;
-                fastAdapter.notifyItemChanged(position);
-
-                refreshView();
+                if (isRemove) {
+                    notifyAdapter(item, position);
+                }
 
 
                 return false;
@@ -288,19 +288,19 @@ public class ContactGroupFragment extends BaseFragment {
         }
         chipsInput.setFilterableList(mContactList);
         itemAdapter.add(items);
-
         chipsInput.addChipsListener(new ChipsInput.ChipsListener() {
             @Override
             public void onChipAdded(ChipInterface chip, int newSize) {
                 // chip added
                 // newSize is the size of the updated selected chip list
+                notifyAdapter(((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))), fastAdapter.getPosition((Long) chip.getId()));
+                isRemove = false;
             }
 
             @Override
             public void onChipRemoved(ChipInterface chip, int newSize) {
-
-                ((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))).mContact.isSelected = !((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))).mContact.isSelected;
-                fastAdapter.notifyItemChanged(fastAdapter.getPosition((Long) chip.getId()));
+                notifyAdapter(((ContactItemGroup) fastAdapter.getItem(fastAdapter.getPosition((Long) chip.getId()))), fastAdapter.getPosition((Long) chip.getId()));
+                isRemove = false;
 
             }
 
@@ -362,6 +362,20 @@ public class ContactGroupFragment extends BaseFragment {
             removeFromBaseFragment(ContactGroupFragment.this);
             new GoToChatActivity(roomId).startActivity();
         }
+
+    }
+
+    private void notifyAdapter(ContactItemGroup item, int position) {
+
+        item.mContact.isSelected = !item.mContact.isSelected;
+        fastAdapter.notifyItemChanged(position);
+        refreshView();
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isRemove = true;
+            }
+        }, 50);
 
     }
 
