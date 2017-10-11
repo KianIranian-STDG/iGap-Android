@@ -39,7 +39,8 @@ public class HelperDownloadFile {
     public HelperDownloadFile() {
 
         onFileDownloadResponse = new OnFileDownloadResponse() {
-            @Override public void onFileDownload(String cashId, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
+            @Override
+            public void onFileDownload(String cashId, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
 
                 String PrimaryKey = cashId + selector;
 
@@ -68,7 +69,8 @@ public class HelperDownloadFile {
                 }
             }
 
-            @Override public void onError(int majorCode, int minorCode, String cashId, ProtoFileDownload.FileDownload.Selector selector) {
+            @Override
+            public void onError(int majorCode, int minorCode, String cashId, ProtoFileDownload.FileDownload.Selector selector) {
 
                 String primaryKey = cashId + selector;
 
@@ -169,9 +171,11 @@ public class HelperDownloadFile {
                 if (priority > mQueue.get(i).priority) {
                     continue;
                 } else {
-                    mQueue.add(i + 1, sq);
-                    additem = true;
-                    break;
+                    if (mQueue.size() >= (i + 1)) {
+                        mQueue.add(i + 1, sq);
+                        additem = true;
+                        break;
+                    }
                 }
             } catch (NullPointerException | IndexOutOfBoundsException e) {
                 e.printStackTrace();
@@ -183,8 +187,7 @@ public class HelperDownloadFile {
         }
     }
 
-    public static void startDownload(String messageID, String token, String cashId, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, int periority,
-        UpdateListener update) {
+    public static void startDownload(String messageID, String token, String cashId, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, int periority, UpdateListener update) {
 
         StructDownLoad item;
 
@@ -380,7 +383,8 @@ public class HelperDownloadFile {
 
         final Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
                 for (RealmAttachment attachment : attachments) {
                     attachment.setLocalThumbnailPath(path);
@@ -404,7 +408,8 @@ public class HelperDownloadFile {
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
 
                 for (RealmAttachment attachment : attachments) {

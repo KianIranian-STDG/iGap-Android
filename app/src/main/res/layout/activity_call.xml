@@ -139,7 +139,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_gravity="center"
-              android:layout_marginBottom="@dimen/dp24"
+              android:layout_marginTop="@dimen/dp68"
               android:orientation="vertical"
               ></net.iGap.module.AvlDirectCall>
 

@@ -637,7 +637,9 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             mRoom.addChangeListener(changeListener);
             changeListener.onChange(mRoom);
         } else {
-            txtSharedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
+            if (txtSharedMedia != null) {
+                txtSharedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
+            }
         }
     }
 

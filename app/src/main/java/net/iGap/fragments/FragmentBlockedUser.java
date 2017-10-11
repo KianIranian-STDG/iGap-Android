@@ -79,7 +79,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                removeFromBaseFragment(FragmentBlockedUser.this);
+                popBackStackFragment();
             }
         });
 

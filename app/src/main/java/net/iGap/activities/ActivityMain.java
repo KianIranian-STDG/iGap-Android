@@ -1256,48 +1256,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (!waitingForConfiguration) {
-                    waitingForConfiguration = true;
-                    if (mapUrls == null || mapUrls.isEmpty() || mapUrls.size() == 0) {
-                        G.onGeoGetConfiguration = new OnGeoGetConfiguration() {
-                            @Override
-                            public void onGetConfiguration() {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        G.handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                waitingForConfiguration = false;
-                                            }
-                                        }, 2000);
-                                        openMapFragment();
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void getConfigurationTimeOut() {
-                                G.handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        waitingForConfiguration = false;
-                                    }
-                                }, 2000);
-                            }
-                        };
-                        new RequestGeoGetConfiguration().getConfiguration();
-                    } else {
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                waitingForConfiguration = false;
-                            }
-                        }, 2000);
-                        openMapFragment();
-                    }
-                }
+                openMapFragment();
             }
         });
 
@@ -1662,7 +1621,48 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 @Override
                 public void Allow() throws IOException {
                     try {
-                        new HelperFragment(FragmentiGapMap.getInstance()).load();
+                        if (!waitingForConfiguration) {
+                            waitingForConfiguration = true;
+                            if (mapUrls == null || mapUrls.isEmpty() || mapUrls.size() == 0) {
+                                G.onGeoGetConfiguration = new OnGeoGetConfiguration() {
+                                    @Override
+                                    public void onGetConfiguration() {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                G.handler.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        waitingForConfiguration = false;
+                                                    }
+                                                }, 2000);
+                                                new HelperFragment(FragmentiGapMap.getInstance()).load();
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void getConfigurationTimeOut() {
+                                        G.handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                waitingForConfiguration = false;
+                                            }
+                                        }, 2000);
+                                    }
+                                };
+                                new RequestGeoGetConfiguration().getConfiguration();
+                            } else {
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        waitingForConfiguration = false;
+                                    }
+                                }, 2000);
+                                new HelperFragment(FragmentiGapMap.getInstance()).load();
+                            }
+                        }
+
                     } catch (Exception e) {
                         e.getStackTrace();
                     }
