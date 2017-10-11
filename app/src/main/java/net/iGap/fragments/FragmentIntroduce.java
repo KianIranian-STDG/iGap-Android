@@ -84,7 +84,7 @@ public class FragmentIntroduce extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return attachToSwipeBack(inflater.inflate(R.layout.activity_introduce, container, false));
+        return inflater.inflate(R.layout.activity_introduce, container, false);
 
     }
 

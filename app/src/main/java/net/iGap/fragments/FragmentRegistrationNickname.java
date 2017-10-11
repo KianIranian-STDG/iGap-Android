@@ -89,7 +89,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return attachToSwipeBack(inflater.inflate(R.layout.fragment_registration_nickname, container, false));
+        return inflater.inflate(R.layout.fragment_registration_nickname, container, false);
     }
 
     @Override
