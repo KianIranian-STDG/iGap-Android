@@ -797,7 +797,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
         G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
             @Override
-            public void onClientSearchRoomHistory(int totalCount, final int notDeletedCount, final List<ProtoGlobal.RoomMessage> resultList, String identity) {
+            public void onClientSearchRoomHistory(int totalCount, final int notDeletedCount, final List<ProtoGlobal.RoomMessage> resultList, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter identity) {
 
                 G.handler.post(new Runnable() {
                     @Override
@@ -836,7 +836,7 @@ public class FragmentShearedMedia extends BaseFragment {
             }
 
             @Override
-            public void onError(final int majorCode, int minorCode, String identity) {
+            public void onError(final int majorCode, int minorCode, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter identity) {
 
                 G.handler.post(new Runnable() {
                     @Override

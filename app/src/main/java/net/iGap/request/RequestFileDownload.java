@@ -14,7 +14,7 @@ import net.iGap.proto.ProtoFileDownload;
 
 public class RequestFileDownload {
 
-    public void download(String token, long offset, int maxLimit, ProtoFileDownload.FileDownload.Selector selector, Object identity) {
+    public void download(String token, long offset, int maxLimit, ProtoFileDownload.FileDownload.Selector selector, IdentityFileDownload identity) {
         ProtoFileDownload.FileDownload.Builder builder = ProtoFileDownload.FileDownload.newBuilder();
 
         if (token == null) {
