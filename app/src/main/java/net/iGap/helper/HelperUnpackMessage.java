@@ -250,42 +250,31 @@ public class HelperUnpackMessage {
             object3 = method2.invoke(object2, protoMessage);
             Method method3 = object3.getClass().getMethod("build");
             method3.invoke(object3);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
 
         return object3;
     }
 
-    private static synchronized Object instanceResponseClass(int actionId, Object protoObject, String identity, String optionalMethod) {
+    private static synchronized Object instanceResponseClass(int actionId, Object protoObject, Object identity, String optionalMethod) {
         Object object = null;
         try {
             String className = getClassName(actionId);
             String responseClassName = HelperClassNamePreparation.preparationResponseClassName(className);
             Class<?> responseClass = Class.forName(responseClassName);
-            Constructor<?> constructor = responseClass.getDeclaredConstructor(int.class, Object.class, String.class);
+            Constructor<?> constructor;
+            try {
+                constructor = responseClass.getDeclaredConstructor(int.class, Object.class, Object.class);
+            } catch (NoSuchMethodException e) {
+                constructor = responseClass.getDeclaredConstructor(int.class, Object.class, String.class);
+            }
             constructor.setAccessible(true);
             object = constructor.newInstance(actionId, protoObject, identity);
             if (optionalMethod != null) {
                 responseClass.getMethod(optionalMethod).invoke(object);
             }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return object;

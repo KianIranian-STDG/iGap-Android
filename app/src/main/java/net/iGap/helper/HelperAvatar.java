@@ -506,9 +506,7 @@ public class HelperAvatar {
                 fileSize = realmAttachment.getSmallThumbnail().getSize();
             }
 
-            String identity = realmAttachment.getToken() + '*' + selector.toString() + '*' + fileSize + '*' + filePath + '*' + 0 + '*' + false;
-
-            new RequestFileDownload().download(realmAttachment.getToken(), 0, (int) fileSize, selector, identity);
+            new RequestFileDownload().download(realmAttachment.getToken(), 0, (int) fileSize, selector, new RequestFileDownload.IdentityFileDownload(realmAttachment.getToken(), filePath, selector, fileSize, 0, false));
         }
 
         @Override
@@ -527,8 +525,7 @@ public class HelperAvatar {
                  * don't use offset in getting thumbnail
                  */
                 try {
-                    String identity = token + '*' + selector.toString() + '*' + fileSize + '*' + filePath + '*' + offset + '*' + false;
-                    new RequestFileDownload().download(token, offset, (int) fileSize, selector, identity);
+                    new RequestFileDownload().download(token, offset, (int) fileSize, selector, new RequestFileDownload.IdentityFileDownload(token, filePath, selector, fileSize, 0, false));
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                 }
@@ -536,15 +533,13 @@ public class HelperAvatar {
         }
 
         @Override
-        public void onError(int major, String identity) {
+        public void onError(int major, Object identity) {
             if (major == 5 && identity != null) { //if is time out reDownload once
-                String[] identityParams = identity.split("\\*");
-                String token = identityParams[0];
+                RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
+                String token = identityFileDownload.cacheId;
                 if (!reDownloadFiles.contains(token)) {
                     reDownloadFiles.add(token);
-                    ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.valueOf(identityParams[1]);
-                    long fileSize = Long.parseLong(identityParams[2]);
-                    new RequestFileDownload().download(token, 0, (int) fileSize, selector, identity);
+                    new RequestFileDownload().download(token, 0, (int) identityFileDownload.size, identityFileDownload.selector, identity);
                 }
             }
         }

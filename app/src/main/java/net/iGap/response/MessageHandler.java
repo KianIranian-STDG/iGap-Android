@@ -26,9 +26,9 @@ public abstract class MessageHandler {
 
     public Object message;
     int actionId;
-    String identity;
+    Object identity;
 
-    public MessageHandler(int actionId, Object protoClass, String identity) {
+    public MessageHandler(int actionId, Object protoClass, Object identity) {
         this.actionId = actionId;
         this.message = protoClass;
         this.identity = identity;

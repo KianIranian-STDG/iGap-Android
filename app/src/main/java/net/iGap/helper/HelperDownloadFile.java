@@ -344,10 +344,7 @@ public class HelperDownloadFile {
         }
 
         updateView(item);
-
-        ProtoFileDownload.FileDownload.Selector selector = item.selector;
-        item.identity = item.cashId + '*' + selector.toString() + '*' + item.size + '*' + item.path + '*' + item.offset + '*' + true;
-        new RequestFileDownload().download(item.Token, item.offset, (int) item.size, selector, item.identity);
+        new RequestFileDownload().download(item.Token, item.offset, (int) item.size, item.selector, new RequestFileDownload.IdentityFileDownload(item.cashId, item.path, item.selector, item.size, item.offset, true));
     }
 
     private static void moveTmpFileToOrginFolder(String token, ProtoFileDownload.FileDownload.Selector selector, String cashId) {
@@ -433,7 +430,7 @@ public class HelperDownloadFile {
         for (Iterator<Map.Entry<String, RequestWrapper>> it = G.requestQueueMap.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<String, RequestWrapper> entry = it.next();
 
-            if (entry.getValue().identity != null && entry.getValue().identity.contains(identity)) {
+            if (entry.getValue().identity != null && entry.getValue().identity.toString().contains(identity)) {
                 G.requestQueueMap.remove(entry.getKey());
                 return true;
             }
