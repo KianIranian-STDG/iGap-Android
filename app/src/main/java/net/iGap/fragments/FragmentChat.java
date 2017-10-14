@@ -7444,7 +7444,7 @@ public class FragmentChat extends BaseFragment
 
             MessageLoader.getOnlineMessage(getRealmChat(), mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
                 @Override
-                public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached, boolean jumpOverLocal, String directionString) {
+                public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached, boolean jumpOverLocal, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
                     if (roomId != mRoomId) {
                         return;
                     }
@@ -7452,22 +7452,19 @@ public class FragmentChat extends BaseFragment
                     /**
                      * hide progress received history
                      */
-                    progressItem(HIDE, directionString);
+                    progressItem(HIDE, direction);
 
                     //Realm realm = Realm.getDefaultInstance();
                     RealmResults<RealmRoomMessage> realmRoomMessages;
                     Sort sort;
-                    ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction directionEnum;
-                    if (directionString.equals(UP.toString())) {
+                    if (direction == UP) {
                         firstUp = false;
                         startFutureMessageIdUp = startMessageId;
-                        directionEnum = UP;
                         sort = Sort.DESCENDING;
                         isWaitingForHistoryUp = false;
                     } else {
                         firstDown = false;
                         startFutureMessageIdDown = endMessageId;
-                        directionEnum = DOWN;
                         sort = Sort.ASCENDING;
                         isWaitingForHistoryDown = false;
                     }
@@ -7485,8 +7482,8 @@ public class FragmentChat extends BaseFragment
                     /**
                      * I do this for set addToView true
                      */
-                    if (directionEnum == DOWN && realmRoomMessages.size() < (Config.LIMIT_GET_HISTORY_NORMAL - 1)) {
-                        getOnlineMessage(startFutureMessageIdDown, directionEnum);
+                    if (direction == DOWN && realmRoomMessages.size() < (Config.LIMIT_GET_HISTORY_NORMAL - 1)) {
+                        getOnlineMessage(startFutureMessageIdDown, direction);
                     }
 
                     /**
@@ -7495,7 +7492,7 @@ public class FragmentChat extends BaseFragment
                      * local after that gap reached true for allow that get message from
                      */
                     if (gapReached && !jumpOverLocal) {
-                        if (directionEnum == UP) {
+                        if (direction == UP) {
                             gapMessageIdUp = 0;
                             reachMessageIdUp = 0;
                             topMore = true;
@@ -7505,8 +7502,8 @@ public class FragmentChat extends BaseFragment
                             bottomMore = true;
                         }
 
-                        gapDetection(realmRoomMessages, directionEnum);
-                    } else if ((directionEnum == UP && isReachedToTopView()) || directionEnum == DOWN && isReachedToBottomView()) {
+                        gapDetection(realmRoomMessages, direction);
+                    } else if ((direction == UP && isReachedToTopView()) || direction == DOWN && isReachedToBottomView()) {
                         /**
                          * check this state because if user is near to top view and not scroll get top message from server
                          */
@@ -7518,7 +7515,7 @@ public class FragmentChat extends BaseFragment
                         structMessageInfos.add(StructMessageInfo.convert(getRealmChat(), realmRoomMessage));
                     }
 
-                    if (directionString.equals(UP.toString())) {
+                    if (direction == UP) {
                         switchAddItem(structMessageInfos, true);
                     } else {
                         switchAddItem(structMessageInfos, false);
@@ -7528,7 +7525,7 @@ public class FragmentChat extends BaseFragment
                 }
 
                 @Override
-                public void onError(int majorCode, int minorCode, long messageIdGetHistory, String direction) {
+                public void onError(int majorCode, int minorCode, long messageIdGetHistory, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
                     hideProgress();
                     /**
                      * hide progress if have any error
@@ -7545,7 +7542,7 @@ public class FragmentChat extends BaseFragment
                             });
                         }
 
-                        if (direction.equals(UP.toString())) {
+                        if (direction == UP) {
                             isWaitingForHistoryUp = false;
                             isWaitingForHistoryUp = false;
                             allowGetHistoryUp = false;
@@ -7567,7 +7564,7 @@ public class FragmentChat extends BaseFragment
                      * if time out came up try again for get history with previous value
                      */
                     if (majorCode == 5) {
-                        if (direction.equals(UP.toString())) {
+                        if (direction == UP) {
                             getOnlineMessage(messageIdGetHistory, UP);
                         } else {
                             getOnlineMessage(messageIdGetHistory, DOWN);
