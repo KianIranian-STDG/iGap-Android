@@ -12,7 +12,7 @@ import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMain;
 
-import static net.iGap.fragments.FragmentCall.strGonTitle;
+import static net.iGap.fragments.FragmentCall.OPEN_IN_FRAGMENT_MAIN;
 
 public class HelperFragment {
 
@@ -152,7 +152,7 @@ public class HelperFragment {
                             continue;
                         }
                         if (fragment instanceof FragmentCall) {
-                            if (fragment.getArguments().getBoolean(strGonTitle)) {
+                            if (fragment.getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN)) {
                                 continue;
                             }
                         }

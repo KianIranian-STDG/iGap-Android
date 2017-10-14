@@ -60,8 +60,8 @@ import net.iGap.request.RequestSignalingGetLog;
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN) public class FragmentCall extends BaseFragment implements OnCallLogClear {
 
-    public static final String strGonTitle = "strGonTitle";
-    boolean goneTitle = false;
+    public static final String OPEN_IN_FRAGMENT_MAIN = "OPEN_IN_FRAGMENT_MAIN";
+    boolean openInMain = false;
 
     private int mOffset = 0;
     private int mLimit = 50;
@@ -79,12 +79,12 @@ import net.iGap.request.RequestSignalingGetLog;
     private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
     //private CallAdapterA mAdapter;
 
-    public static FragmentCall newInstance(boolean goneTitle) {
+    public static FragmentCall newInstance(boolean openInFragmentMain) {
 
         FragmentCall fragmentCall = new FragmentCall();
 
         Bundle bundle = new Bundle();
-        bundle.putBoolean(strGonTitle, goneTitle);
+        bundle.putBoolean(OPEN_IN_FRAGMENT_MAIN, openInFragmentMain);
         fragmentCall.setArguments(bundle);
 
         return fragmentCall;
@@ -93,6 +93,10 @@ import net.iGap.request.RequestSignalingGetLog;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
+        if (openInMain) {
+            return inflater.inflate(R.layout.fragment_call, container, false);
+        }
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_call, container, false));
     }
 
@@ -101,8 +105,7 @@ import net.iGap.request.RequestSignalingGetLog;
         super.onViewCreated(view, savedInstanceState);
 
         //G.onCallLogClear = this;
-
-        goneTitle = getArguments().getBoolean(strGonTitle);
+        //openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
 
         view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));  //set title bar color
 
@@ -256,7 +259,7 @@ import net.iGap.request.RequestSignalingGetLog;
 
         getLogListWithOffset();
 
-        if (goneTitle) {
+        if (openInMain) {
 
             fabContactList.setVisibility(View.GONE);
 
