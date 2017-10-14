@@ -290,7 +290,7 @@ public class FragmentAddContact extends BaseFragment {
 
         contacts.add(contact);
 
-        new RequestUserContactImport().contactImportAndGetResponse(contacts, true);
+        new RequestUserContactImport().contactImport(contacts, true);
     }
 
     private void addToContactList(View view) {

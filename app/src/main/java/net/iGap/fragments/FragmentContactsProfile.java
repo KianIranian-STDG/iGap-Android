@@ -944,7 +944,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
         contacts.add(contact);
 
-        new RequestUserContactImport().contactImportAndGetResponse(contacts, true);
+        new RequestUserContactImport().contactImport(contacts, true);
     }
 
     private void showPopUp() {
