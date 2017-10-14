@@ -309,9 +309,11 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
     private void getRoom(final Long roomId, final ProtoGlobal.Room.Type type) {
         G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
             @Override
-            public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, String identity) {
+            public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, RequestClientGetRoom.IdentityClientGetRoom identity) {
 
-                if (!identity.equals(RequestClientGetRoom.CreateRoomMode.requestFromOwner.toString())) return;
+                if (identity.createRoomMode != RequestClientGetRoom.CreateRoomMode.requestFromOwner) {
+                    return;
+                }
 
                 try {
                     if (G.fragmentActivity != null) {
