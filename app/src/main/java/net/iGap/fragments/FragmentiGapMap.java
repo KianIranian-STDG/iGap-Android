@@ -879,7 +879,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         if (mineAvatar) {
             sice = Math.min((int) G.context.getResources().getDimension(R.dimen.dp10), (int) G.context.getResources().getDimension(R.dimen.dp10));
         } else {
-            sice = Math.min((int) G.context.getResources().getDimension(R.dimen.dp24), (int) G.context.getResources().getDimension(R.dimen.dp24));
+            sice = Math.min((int) G.context.getResources().getDimension(R.dimen.dp32), (int) G.context.getResources().getDimension(R.dimen.dp32));
         }
         Bitmap bitmap = ThumbnailUtils.extractThumbnail(bm, sice, sice);
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
@@ -916,7 +916,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(borderWidth);
         paint.setAntiAlias(true);
-        canvas.drawCircle(canvas.getWidth() / 2, canvas.getWidth() / 2, canvas.getWidth() / 2 - borderWidth / 2, paint);
+        canvas.drawCircle(canvas.getWidth() / 2, canvas.getWidth() / 2, canvas.getWidth() / 2 - (borderWidth / 2 + G.context.getResources().getDimension(R.dimen.dp1)), paint);
         if (!srcBitmap.isRecycled()) {
             srcBitmap.recycle();
             srcBitmap = null;
@@ -943,15 +943,15 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         paintSharp.setAntiAlias(true);
 
         Path path1 = new Path();
-        path1.moveTo(borderWidth + 3, canvas.getWidth() / 2);// first point
-        path1.lineTo(canvas.getWidth() - borderWidth - 3, canvas.getWidth() / 2);
-        path1.lineTo((canvas.getWidth() / 2), srcBitmap.getWidth() + borderWidth + (srcBitmap.getWidth() / 5));
-        path1.lineTo(borderWidth + 3, canvas.getWidth() / 2);// last point
+        path1.moveTo(borderWidth + G.context.getResources().getDimension(R.dimen.dp1), canvas.getWidth() / 2);// first point
+        path1.lineTo(canvas.getWidth() - borderWidth - G.context.getResources().getDimension(R.dimen.dp1), canvas.getWidth() / 2);
+        path1.lineTo((canvas.getWidth() / 2), srcBitmap.getWidth() + borderWidth + (srcBitmap.getWidth() / 8));
+        path1.lineTo(borderWidth + G.context.getResources().getDimension(R.dimen.dp1), canvas.getWidth() / 2);// last point
         path1.close();
         paintSharp.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));//DST_OVER
         canvas.drawPath(path1, paintSharp);
 
-        canvas.drawCircle(canvas.getWidth() / 2, canvas.getWidth() / 2, canvas.getWidth() / 2 - borderWidth / 2, paint);
+        canvas.drawCircle(canvas.getWidth() / 2, canvas.getWidth() / 2, canvas.getWidth() / 2 - (borderWidth / 2 + G.context.getResources().getDimension(R.dimen.dp1)), paint);
 
         if (!srcBitmap.isRecycled()) {
             srcBitmap.recycle();

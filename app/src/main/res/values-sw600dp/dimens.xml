@@ -20,6 +20,7 @@
 
   <dimen name="dp14_Popup">14dp</dimen>
   <dimen name="dp1_minus">-1dp</dimen>
+  <dimen name="dp1">1dp</dimen>
   <dimen name="dp2">2dp</dimen>
   <dimen name="dp4">4dp</dimen>
   <dimen name="dp6">6dp</dimen>
