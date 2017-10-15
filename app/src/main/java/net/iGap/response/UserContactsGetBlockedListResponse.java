@@ -81,7 +81,7 @@ public class UserContactsGetBlockedListResponse extends MessageHandler {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, registeredInfo.getId()).findFirst();
+                            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, registeredInfo.getId());
                             RealmContacts realmContact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, registeredInfo.getId()).findFirst();
                             if (realmRegisteredInfo != null) {
                                 realmRegisteredInfo.setBlockUser(true);

@@ -99,7 +99,6 @@ import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmPrivacy;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmUserInfo;
@@ -2467,7 +2466,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             }
         });
 
-        mRealmRegisteredInfo = getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, G.userId).findFirst();
+        mRealmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), G.userId);
         if (mRealmRegisteredInfo != null) {
             mRealmRegisteredInfo.addChangeListener(new RealmChangeListener<RealmModel>() {
                 @Override

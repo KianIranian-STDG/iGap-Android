@@ -52,7 +52,6 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChannelAvatarDelete;
@@ -304,7 +303,7 @@ public class FragmentShowAvatars extends BaseFragment {
         switch (from) {
             case chat:
             case setting:
-                RealmRegisteredInfo user = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mPeerId).findFirst();
+                RealmRegisteredInfo user = RealmRegisteredInfo.getRegistrationInfo(realm, mPeerId);
                 if (user != null) {
                     new RequestUserAvatarGetList().userAvatarGetList(mPeerId);
                     isRoomExist = true;

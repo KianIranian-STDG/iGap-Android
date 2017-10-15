@@ -19,7 +19,6 @@ import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnGeoGetComment;
 import net.iGap.interfaces.OnInfo;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestGeoGetComment;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
@@ -73,7 +72,7 @@ public class MyInfoWindow extends InfoWindow {
         }
 
         Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
         if (realmRegisteredInfo == null) {
             RealmRegisteredInfo.getRegistrationInfo(userId, new OnInfo() {
                 @Override

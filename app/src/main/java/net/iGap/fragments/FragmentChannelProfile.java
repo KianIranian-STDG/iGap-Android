@@ -109,7 +109,6 @@ import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChannelAddAdmin;
@@ -1085,7 +1084,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             setMemberCount(roomId, true);
 
             //+Realm realm = Realm.getDefaultInstance();
-            RealmRegisteredInfo realmRegistered = getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+            RealmRegisteredInfo realmRegistered = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
             if (realmRegistered == null) {
                 new RequestUserInfo().userInfo(userId, roomId + "");
             }

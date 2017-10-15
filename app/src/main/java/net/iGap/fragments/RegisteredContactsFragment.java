@@ -73,7 +73,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsGetList;
 
@@ -737,7 +736,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
             viewHolder.title.setText(contact.getDisplay_name());
 
-            final RealmRegisteredInfo realmRegisteredInfo = getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, contact.getId()).findFirst();
+            final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, contact.getId());
             if (realmRegisteredInfo != null) {
                 viewHolder.subtitle.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
                 if (realmRegisteredInfo.getStatus() != null) {

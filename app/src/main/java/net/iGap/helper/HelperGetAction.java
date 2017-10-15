@@ -19,7 +19,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 
 import static net.iGap.helper.HelperConvertEnumToString.convertActionEnum;
 
@@ -82,7 +81,7 @@ public class HelperGetAction {
 
                 Realm realm = Realm.getDefaultInstance();
 
-                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, latestStruct.userId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, latestStruct.userId);
                 if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName().length() > 0) {
                     String action;
 
@@ -107,7 +106,7 @@ public class HelperGetAction {
                 while (iterator.hasNext()) {
                     StructAction struct = iterator.next();
                     if (struct.action == latestAction) {
-                        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, struct.userId).findFirst();
+                        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, struct.userId);
                         if (realmRegisteredInfo != null) {
                             concatenatedNames += realmRegisteredInfo.getDisplayName() + ",";
                         }

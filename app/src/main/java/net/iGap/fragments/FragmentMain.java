@@ -68,7 +68,6 @@ import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -1281,7 +1280,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                                 lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                             } else {
 
-                                RealmRegisteredInfo realmRegisteredInfo = getRealmFragmentMain().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirst();
+                                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmFragmentMain(), mInfo.getLastMessage().getUserId());
                                 if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
 
                                     String _name = realmRegisteredInfo.getDisplayName();

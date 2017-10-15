@@ -82,7 +82,6 @@ import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyCoordinate;
 import net.iGap.request.RequestGeoRegister;
@@ -820,7 +819,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     private static Bitmap getInitials(Realm realm, long userId) {
         String initials = "";
         String color = "";
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
         if (realmRegisteredInfo != null) {
             initials = realmRegisteredInfo.getInitials();
             color = realmRegisteredInfo.getColor();

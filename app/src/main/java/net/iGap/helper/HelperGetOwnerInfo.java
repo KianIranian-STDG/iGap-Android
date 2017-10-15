@@ -17,7 +17,6 @@ import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientGetRoom;
@@ -92,7 +91,7 @@ public class HelperGetOwnerInfo {
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+        RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
 
         if (registeredInfo == null) {
 

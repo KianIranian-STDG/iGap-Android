@@ -79,7 +79,6 @@ import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -180,7 +179,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
             shearedId = roomId;
         }
 
-        rrg = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+        rrg = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
 
         if (rrg != null) {
 
@@ -194,7 +193,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
             });
         }
 
-        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
 
         if (realmRegisteredInfo != null) {
             if (realmRegisteredInfo.getLastAvatar() != null) {
@@ -540,7 +539,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                         contact.setDisplay_name(displayName.trim());
                                     }
 
-                                    RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+                                    RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
                                     if (registeredInfo != null) {
                                         registeredInfo.setFirstName(firstName);
                                         registeredInfo.setLastName(lastName);

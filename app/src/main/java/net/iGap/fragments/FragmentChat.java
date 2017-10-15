@@ -245,7 +245,6 @@ import net.iGap.realm.RealmOfflineDeleteFields;
 import net.iGap.realm.RealmOfflineEdited;
 import net.iGap.realm.RealmOfflineSeen;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomDraft;
 import net.iGap.realm.RealmRoomFields;
@@ -624,7 +623,7 @@ public class FragmentChat extends BaseFragment
                                     });
                                 }
                             } else {
-                                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, room.getChatRoom().getPeerId()).findFirst();
+                                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, room.getChatRoom().getPeerId());
                                 if (realmRegisteredInfo != null) {
                                     setUserStatus(realmRegisteredInfo.getStatus(), realmRegisteredInfo.getLastSeen());
                                 }
@@ -1225,7 +1224,8 @@ public class FragmentChat extends BaseFragment
                 chatType = realmRoom.getType();
                 if (chatType == CHAT) {
                     chatPeerId = realmRoom.getChatRoom().getPeerId();
-                    RealmRegisteredInfo realmRegisteredInfo = getRealmChat().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
+                    ;
                     if (realmRegisteredInfo != null) {
                         title = realmRegisteredInfo.getDisplayName();
                         lastSeen = realmRegisteredInfo.getLastSeen();
@@ -1267,7 +1267,7 @@ public class FragmentChat extends BaseFragment
                  * when user start new chat this block will be called
                  */
                 chatType = CHAT;
-                RealmRegisteredInfo realmRegisteredInfo = getRealmChat().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
                 title = realmRegisteredInfo.getDisplayName();
                 lastSeen = realmRegisteredInfo.getLastSeen();
                 userStatus = realmRegisteredInfo.getStatus();
@@ -1443,7 +1443,7 @@ public class FragmentChat extends BaseFragment
 
                 if (chatType == CHAT) {
 
-                    RealmRegisteredInfo realmRegisteredInfo = getRealmChat().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
                     if (realmRegisteredInfo != null) {
                         initialize = realmRegisteredInfo.getInitials();
                         color = realmRegisteredInfo.getColor();
@@ -1466,7 +1466,7 @@ public class FragmentChat extends BaseFragment
             } else {
                 chatPeerId = extras.getLong("peerId");
                 chatType = CHAT;
-                RealmRegisteredInfo realmRegisteredInfo = getRealmChat().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
                 if (realmRegisteredInfo != null) {
                     title = realmRegisteredInfo.getDisplayName();
                     initialize = realmRegisteredInfo.getInitials();
@@ -5228,7 +5228,7 @@ public class FragmentChat extends BaseFragment
             public void run() {
 
                 //+Realm realm = Realm.getDefaultInstance();
-                RealmRegisteredInfo realmRegisteredInfo = getRealmChat().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, chatPeerId).findFirst();
+                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
                 RealmContacts realmContacts = getRealmChat().where(RealmContacts.class).equalTo(RealmContactsFields.ID, chatPeerId).findFirst();
                 if (realmRegisteredInfo != null && realmRegisteredInfo.getId() != G.userId) {
                     if (phoneNumber == null) {
@@ -5818,7 +5818,7 @@ public class FragmentChat extends BaseFragment
                     replayFrom.setText(realmRoom.getTitle());
                 }
             } else {
-                RealmRegisteredInfo userInfo = getRealmChat().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, parseLong(chatItem.senderID)).findFirst();
+                RealmRegisteredInfo userInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), parseLong(chatItem.senderID));
                 if (userInfo != null) {
                     replayFrom.setText(userInfo.getDisplayName());
                 }

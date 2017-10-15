@@ -32,7 +32,6 @@ import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.realm.RealmGeoNearbyDistance;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyDistance;
 
@@ -342,7 +341,7 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                 return;
             }
             Realm realm = Realm.getDefaultInstance();
-            RealmRegisteredInfo registeredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, item.getUserId()).findFirst();
+            RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, item.getUserId());
             if (registeredInfo == null) {
                 realm.close();
                 return;

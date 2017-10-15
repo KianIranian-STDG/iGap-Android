@@ -67,7 +67,6 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelExtraFields;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -464,7 +463,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 if (view.findViewById(R.id.messageSenderName) == null) {
-                    RealmRegisteredInfo realmRegisteredInfo = getRealmChat().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(mMessage.senderID)).findFirst();
+                    RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), Long.parseLong(mMessage.senderID));
                     if (realmRegisteredInfo != null) {
                         final EmojiTextViewE _tv = (EmojiTextViewE) ViewMaker.makeHeaderTextView(realmRegisteredInfo.getDisplayName());
 
@@ -494,20 +493,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         mContainer.addView(_tv, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     }
                 }
-                //else {
-                //
-                //    EmojiTextViewE _senderName = (EmojiTextViewE) view.findViewById(R.id.messageSenderName);
-                //
-                //    if (mContainer.getChildAt(0) != _senderName) {
-                //        mContainer.removeView(_senderName);
-                //        mContainer.addView(_senderName, 0 , new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                //    }
-                //    _senderName.setVisibility(View.VISIBLE);
-                //    RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(mMessage.senderID)).findFirst();
-                //    if (realmRegisteredInfo != null) {
-                //        _senderName.setText(realmRegisteredInfo.getDisplayName());
-                //    }
-                //}
             }
         }
     }
@@ -780,7 +765,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         replyFrom.setText(realmRoom.getTitle());
                     }
                 } else {
-                    RealmRegisteredInfo replayToInfo = getRealmChat().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.replayTo.getUserId()).findFirst();
+                    RealmRegisteredInfo replayToInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), mMessage.replayTo.getUserId());
                     if (replayToInfo != null) {
                         replyFrom.setText(replayToInfo.getDisplayName());
                     }
@@ -862,7 +847,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
              * if forward message from chat or group , sender is user
              * but if message forwarded from channel sender is room
              */
-            RealmRegisteredInfo info = getRealmChat().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom.getUserId()).findFirst();
+            RealmRegisteredInfo info = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), mMessage.forwardedFrom.getUserId());
             if (info != null) {
 
                 if (HelperInfo.needUpdateUser(info.getId(), info.getCacheId())) {

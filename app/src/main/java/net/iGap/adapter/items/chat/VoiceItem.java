@@ -39,7 +39,6 @@ import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmClientConditionFields;
 import net.iGap.realm.RealmOfflineListen;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
@@ -221,9 +220,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.mRoomId = mMessage.roomId;
 
-        RealmRegisteredInfo registeredInfo = getRealmChat().where(RealmRegisteredInfo.class)
-            .equalTo(RealmRegisteredInfoFields.ID, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID))
-            .findFirst();
+        RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getUserId() : Long.parseLong(mMessage.senderID));
 
         if (registeredInfo != null) {
             holder.author.setText(G.context.getString(R.string.recorded_by) + " " + registeredInfo.getDisplayName());

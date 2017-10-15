@@ -1269,7 +1269,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
             Realm realm = Realm.getDefaultInstance();
             String role = realmMember.getRole();
             long id = realmMember.getPeerId();
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, id).findFirst();
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, id);
             if (realmRegisteredInfo != null) {
                 StructContactInfo s = new StructContactInfo(realmRegisteredInfo.getId(), realmRegisteredInfo.getDisplayName(), realmRegisteredInfo.getStatus(), false, false, realmRegisteredInfo.getPhoneNumber() + "");
                 s.role = role;

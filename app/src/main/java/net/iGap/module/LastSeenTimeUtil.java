@@ -24,7 +24,6 @@ import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 
 public class LastSeenTimeUtil {
     private LastSeenTimeUtil() throws InstantiationException {
@@ -143,7 +142,7 @@ public class LastSeenTimeUtil {
             Map.Entry<Long, Long> entry = it.next();
             long userId = entry.getKey();
             long value = entry.getValue();
-            RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
             if (realmRegisteredInfo != null) {
                 if (realmRegisteredInfo.getStatus() != null && realmRegisteredInfo.getMainStatus() != null && !realmRegisteredInfo.getStatus().equals("online") && !realmRegisteredInfo.getStatus().equals("آنلاین") && !realmRegisteredInfo.getMainStatus().equals(ProtoGlobal.RegisteredUser.Status.LONG_TIME_AGO.toString())) {
                     String showLastSeen;

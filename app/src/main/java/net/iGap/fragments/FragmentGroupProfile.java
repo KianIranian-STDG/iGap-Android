@@ -107,7 +107,6 @@ import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -918,8 +917,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         layoutGroupLink.addView(inputGroupLink, layoutParams);
         layoutGroupLink.addView(txtLink, layoutParams);
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.group_link)).positiveText(G.fragmentActivity.getResources().getString(R.string.array_Copy))
-                .customView(layoutGroupLink, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.no))
+        final MaterialDialog dialog =
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.group_link)).positiveText(G.fragmentActivity.getResources().getString(R.string.array_Copy)).customView(layoutGroupLink, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.no))
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -1764,17 +1763,17 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     private void onGroupAddMemberCallback() {
         G.onGroupAddMember = new OnGroupAddMember() {
             @Override
-            public void onGroupAddMember(final Long roomIdUser, final Long UserId) {
+            public void onGroupAddMember(final Long roomIdUser, final Long userId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
                         setMemberCount(roomIdUser, true);
                         //+Realm realm = Realm.getDefaultInstance();
-                        RealmRegisteredInfo realmRegistered = getRealm().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, UserId).findFirst();
+                        RealmRegisteredInfo realmRegistered = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
 
                         if (realmRegistered == null) {
                             if (roomIdUser == roomId) {
-                                new RequestUserInfo().userInfo(UserId, roomId + "");
+                                new RequestUserInfo().userInfo(userId, roomId + "");
                             }
                         }
                         //realm.close();
