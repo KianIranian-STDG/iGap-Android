@@ -33,8 +33,6 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.pchmn.materialchips.ChipsInput;
 import com.pchmn.materialchips.model.ChipInterface;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
-import io.realm.RealmList;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,14 +46,9 @@ import net.iGap.interfaces.OnGroupAddMember;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.ContactChip;
 import net.iGap.module.Contacts;
-import net.iGap.module.SUID;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmChannelRoom;
-import net.iGap.realm.RealmGroupRoom;
-import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChannelAddMember;
 import net.iGap.request.RequestGroupAddMember;
 
@@ -134,7 +127,7 @@ public class ContactGroupFragment extends BaseFragment {
                         public void onChannelAddMember(Long RoomId, Long UserId, ProtoGlobal.ChannelRoom.Role role) {
                             countAddMemberResponse++;
                             if (countAddMemberResponse == countAddMemberRequest) {
-                                channelAddMember(RoomId);
+                                addMember(RoomId, ProtoGlobal.Room.Type.CHANNEL);
                             }
                         }
 
@@ -142,7 +135,7 @@ public class ContactGroupFragment extends BaseFragment {
                         public void onError(int majorCode, int minorCode) {
                             countAddMemberResponse++;
                             if (countAddMemberResponse == countAddMemberRequest) {
-                                channelAddMember(roomId);
+                                addMember(roomId, ProtoGlobal.Room.Type.CHANNEL);
                             }
                         }
 
@@ -171,7 +164,7 @@ public class ContactGroupFragment extends BaseFragment {
                         public void onGroupAddMember(Long roomId, Long UserId) {
                             countAddMemberResponse++;
                             if (countAddMemberResponse == countAddMemberRequest) {
-                                groupAddMember(roomId);
+                                addMember(roomId, ProtoGlobal.Room.Type.GROUP);
                             }
                         }
 
@@ -179,7 +172,7 @@ public class ContactGroupFragment extends BaseFragment {
                         public void onError(int majorCode, int minorCode) {
                             countAddMemberResponse++;
                             if (countAddMemberResponse == countAddMemberRequest) {
-                                groupAddMember(roomId);
+                                addMember(roomId, ProtoGlobal.Room.Type.GROUP);
                             }
                         }
                     };
@@ -322,51 +315,16 @@ public class ContactGroupFragment extends BaseFragment {
         fastAdapter.withSavedInstanceState(savedInstanceState);
     }
 
-    private void groupAddMember(long roomId) {
-        addOwnerToDatabase(roomId, ProtoGlobal.Room.Type.GROUP);
-
-        Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realmRoom.getGroupRoom().setParticipantsCountLabel(realmRoom.getGroupRoom().getMembers().size() + "");
-                //realmRoom.getGroupRoom().setParticipants_count_limit_label(participantsLimit);
-            }
-        });
-        realm.close();
-
+    private void addMember(long roomId, ProtoGlobal.Room.Type roomType) {
+        RealmRoom.addOwnerToDatabase(roomId, roomType);
+        RealmRoom.updateMemberCount(roomId, roomType, countAddMemberRequest);
         if (isAdded()) {
             removeFromBaseFragment(ContactGroupFragment.this);
             new GoToChatActivity(roomId).startActivity();
         }
-
-    }
-
-    private void channelAddMember(long roomId) {
-        addOwnerToDatabase(roomId, ProtoGlobal.Room.Type.CHANNEL);
-
-        Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realmRoom.getChannelRoom().setParticipantsCountLabel(realmRoom.getChannelRoom().getMembers().size() + "");
-            }
-        });
-        realm.close();
-
-        if (isAdded()) {
-            removeFromBaseFragment(ContactGroupFragment.this);
-            new GoToChatActivity(roomId).startActivity();
-        }
-
     }
 
     private void notifyAdapter(ContactItemGroup item, int position) {
-
         item.mContact.isSelected = !item.mContact.isSelected;
         fastAdapter.notifyItemChanged(position);
         refreshView();
@@ -376,57 +334,8 @@ public class ContactGroupFragment extends BaseFragment {
                 isRemove = true;
             }
         }, 50);
-
     }
 
-    private void addOwnerToDatabase(Long roomId, ProtoGlobal.Room.Type type) {
-
-        Realm realm = Realm.getDefaultInstance();
-
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-        if (realmRoom != null) {
-
-            if (type == ProtoGlobal.Room.Type.CHANNEL) {
-
-                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                if (realmChannelRoom != null) {
-                    final RealmList<RealmMember> members = realmChannelRoom.getMembers();
-
-                    final RealmMember realmMember = new RealmMember();
-                    realmMember.setId(SUID.id().get());
-                    realmMember.setPeerId(G.userId);
-                    realmMember.setRole(ProtoGlobal.ChannelRoom.Role.OWNER.toString());
-
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            members.add(realmMember);
-                        }
-                    });
-                }
-            } else if (type == ProtoGlobal.Room.Type.GROUP) {
-                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                if (realmGroupRoom != null) {
-                    final RealmList<RealmMember> members = realmGroupRoom.getMembers();
-
-                    final RealmMember realmMember = new RealmMember();
-                    realmMember.setId(SUID.id().get());
-                    realmMember.setPeerId(G.userId);
-                    realmMember.setRole(ProtoGlobal.GroupRoom.Role.OWNER.toString());
-
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            members.add(realmMember);
-                        }
-                    });
-                }
-            }
-        }
-
-        realm.close();
-    }
 
     private void refreshView() {
         int selectedNumber = 0;
