@@ -158,7 +158,7 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == 13) {
             RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
             if (realmUserInfo != null) {
-                realmUserInfo.addField(RealmUserInfoFields.IS_PASS_CODE, boolean.class).addField(RealmUserInfoFields.IS_FINGER_PRINT, boolean.class).addField(RealmUserInfoFields.KIND_PASS_CODE, int.class).addField(RealmUserInfoFields.PASS_CODE, String.class);
+                realmUserInfo.addField(RealmUserInfoFields.IS_PASS_CODE, boolean.class, FieldAttribute.REQUIRED).addField(RealmUserInfoFields.IS_FINGER_PRINT, boolean.class, FieldAttribute.REQUIRED).addField(RealmUserInfoFields.KIND_PASS_CODE, int.class, FieldAttribute.REQUIRED).addField(RealmUserInfoFields.PASS_CODE, String.class);
             }
             oldVersion++;
         }
@@ -166,12 +166,17 @@ public class RealmMigration implements io.realm.RealmMigration {
         if (oldVersion == REALM_LATEST_MIGRATION_VERSION) {
             RealmObjectSchema realmOfflineDelete = schema.get(RealmOfflineDelete.class.getSimpleName());
             if (realmOfflineDelete != null) {
-                realmOfflineDelete.addField(RealmOfflineDeleteFields.BOTH, boolean.class);
+                realmOfflineDelete.addField(RealmOfflineDeleteFields.BOTH, boolean.class, FieldAttribute.REQUIRED);
             }
 
             RealmObjectSchema realmRoom = schema.get(RealmRoom.class.getSimpleName());
             if (realmRoom != null) {
-                realmRoom.addField(RealmRoomFields.PIN_ID, long.class);
+                realmRoom.addField(RealmRoomFields.PIN_ID, long.class, FieldAttribute.REQUIRED);
+            }
+
+            RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
+            if (realmUserInfo != null) {
+                realmUserInfo.addField("bio", String.class);
             }
             oldVersion++;
         }

@@ -166,6 +166,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     private String userName;
     private String phoneName;
     private String userEmail;
+    private String bio;
     private long userId;
     public ProgressBar prgWait;
     private TextView txtGander;
@@ -2103,6 +2104,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             phoneName = userInfo.getUserInfo().getPhoneNumber();
             ProtoGlobal.Gender userGender = userInfo.getGender();
             userEmail = userInfo.getEmail();
+            bio = userInfo.getBio();
 
             if (nickName != null) {
                 txtNickName.setText(nickName);

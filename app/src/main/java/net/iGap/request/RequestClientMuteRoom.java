@@ -12,13 +12,12 @@ package net.iGap.request;
 
 import net.iGap.proto.ProtoClientMuteRoom;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoom;
 
 public class RequestClientMuteRoom {
 
     public void muteRoom(long roomId, ProtoGlobal.RoomMute mute) {
 
-        RealmRoom.roomMute(roomId, mute);
+        //RealmRoom.roomMute(roomId, mute); // just in response update this value
 
         ProtoClientMuteRoom.ClientMuteRoom.Builder builder = ProtoClientMuteRoom.ClientMuteRoom.newBuilder();
         builder.setRoomId(roomId);

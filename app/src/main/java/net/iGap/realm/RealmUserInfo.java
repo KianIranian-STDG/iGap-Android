@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import io.realm.Realm;
 import io.realm.RealmObject;
 import net.iGap.helper.HelperString;
 import net.iGap.proto.ProtoGlobal;
@@ -27,6 +28,7 @@ public class RealmUserInfo extends RealmObject {
     private int selfRemove;
     private String token;
     private String authorHash;
+    private String bio;
 
     public RealmRegisteredInfo getUserInfo() {
         return userInfo;
@@ -130,5 +132,28 @@ public class RealmUserInfo extends RealmObject {
             return true;
         }
         return false;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public static RealmUserInfo getRealmUserInfo(Realm realm) {
+        return realm.where(RealmUserInfo.class).findFirst();
+    }
+
+    public static void updateBio(final String bio) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmUserInfo.getRealmUserInfo(realm).setBio(bio);
+            }
+        });
+        realm.close();
     }
 }
