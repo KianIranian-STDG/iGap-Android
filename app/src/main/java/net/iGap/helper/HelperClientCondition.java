@@ -89,25 +89,29 @@ public class HelperClientCondition {
                 room.setDeleteVersion(realmClientCondition.getDeleteVersion());
 
                 for (RealmOfflineDelete offlineDeleted : realmClientCondition.getOfflineDeleted()) {
-                    room.addOfflineDeleted(offlineDeleted.getOfflineDelete());
+                    ProtoClientCondition.ClientCondition.Room.OfflineDeleted.Builder offlineDeletedBuilder = ProtoClientCondition.ClientCondition.Room.OfflineDeleted.newBuilder();
+                    offlineDeletedBuilder.setMessageId(offlineDeleted.getOfflineDelete());
+                    offlineDeletedBuilder.setBoth(offlineDeleted.isBoth());
+                    room.addOfflineDeleted(offlineDeletedBuilder);
+                    //room.addOfflineDeleted(offlineDeleted.getOfflineDelete()); //DEPRECATED
                 }
 
-                for (RealmOfflineEdited realmOfflineEdited : realmClientCondition.getOfflineEdited()) { // server have problem
+                for (RealmOfflineEdited realmOfflineEdited : realmClientCondition.getOfflineEdited()) {
                     ProtoClientCondition.ClientCondition.Room.OfflineEdited.Builder offlineEdited = ProtoClientCondition.ClientCondition.Room.OfflineEdited.newBuilder();
                     offlineEdited.setMessageId(realmOfflineEdited.getMessageId());
                     offlineEdited.setMessage(realmOfflineEdited.getMessage());
                     room.addOfflineEdited(offlineEdited);
                 }
 
-                for (RealmOfflineSeen offlineSeen : realmClientCondition.getOfflineSeen()) { // DONE
+                for (RealmOfflineSeen offlineSeen : realmClientCondition.getOfflineSeen()) {
                     room.addOfflineSeen(offlineSeen.getOfflineSeen());
                 }
 
-                for (RealmOfflineListen offlineListen : realmClientCondition.getOfflineListen()) { // DONE
+                for (RealmOfflineListen offlineListen : realmClientCondition.getOfflineListen()) {
                     room.addOfflineListened(offlineListen.getOfflineListen());
                 }
 
-                room.setClearId(realmClientCondition.getClearId()); //DONE
+                room.setClearId(realmClientCondition.getClearId());
 
                 List<RealmRoomMessage> allItemsAscending = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, realmClientCondition.getRoomId()).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
                 for (RealmRoomMessage item : allItemsAscending) {

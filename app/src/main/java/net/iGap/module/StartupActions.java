@@ -33,6 +33,7 @@ import net.iGap.webrtc.CallObserver;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.Config.REALM_SCHEMA_VERSION;
 import static net.iGap.G.DIR_APP;
 import static net.iGap.G.DIR_AUDIOS;
 import static net.iGap.G.DIR_CHAT_BACKGROUND;
@@ -295,15 +296,15 @@ public final class StartupActions {
          */
         Realm.init(context);
 
-        RealmConfiguration configuration = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm").schemaVersion(14).migration(new RealmMigration()).build();
+        RealmConfiguration configuration = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm").schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
         DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);
         /**
          * Returns version of Realm file on disk
          */
         if (dynamicRealm.getVersion() == -1) {
-            Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabase.realm").schemaVersion(14).deleteRealmIfMigrationNeeded().build());
+            Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabase.realm").schemaVersion(REALM_SCHEMA_VERSION).deleteRealmIfMigrationNeeded().build());
         } else {
-            Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabase.realm").schemaVersion(14).migration(new RealmMigration()).build());
+            Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabase.realm").schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build());
         }
         dynamicRealm.close();
 

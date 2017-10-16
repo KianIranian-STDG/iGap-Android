@@ -16,6 +16,8 @@ public class Config {
 
     public static final int ACCEPT = 1;
     public static final int REJECT = 0;
+    public static final int REALM_SCHEMA_VERSION = 15;
+    public static final int REALM_LATEST_MIGRATION_VERSION = REALM_SCHEMA_VERSION - 1;
     public static final int TIME_OUT_DELAY_MS = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int FAKE_PM_DELAY = (int) (10 * DateUtils.SECOND_IN_MILLIS);
     public static final int TIME_OUT_MS = (int) (10 * DateUtils.SECOND_IN_MILLIS);

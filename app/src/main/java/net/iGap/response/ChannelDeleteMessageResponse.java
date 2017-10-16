@@ -10,7 +10,6 @@
 
 package net.iGap.response;
 
-import android.util.Log;
 import net.iGap.helper.HelperDeleteMessage;
 import net.iGap.proto.ProtoChannelDeleteMessage;
 
@@ -30,9 +29,7 @@ public class ChannelDeleteMessageResponse extends MessageHandler {
 
     @Override public void handler() {
         super.handler();
-        Log.i("DDD", "ChannelDeleteMessageResponse 1");
         final ProtoChannelDeleteMessage.ChannelDeleteMessageResponse.Builder builder = (ProtoChannelDeleteMessage.ChannelDeleteMessageResponse.Builder) message;
-        Log.i("DDD", "ChannelDeleteMessageResponse 2");
         HelperDeleteMessage.deleteMessage(builder.getRoomId(), builder.getMessageId(), builder.getDeleteVersion(), builder.getResponse());
     }
 

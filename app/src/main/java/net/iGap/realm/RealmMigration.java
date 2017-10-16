@@ -15,6 +15,8 @@ import io.realm.FieldAttribute;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
 
+import static net.iGap.Config.REALM_LATEST_MIGRATION_VERSION;
+
 public class RealmMigration implements io.realm.RealmMigration {
 
     @Override
@@ -157,6 +159,14 @@ public class RealmMigration implements io.realm.RealmMigration {
             RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
             if (realmUserInfo != null) {
                 realmUserInfo.addField(RealmUserInfoFields.IS_PASS_CODE, boolean.class).addField(RealmUserInfoFields.IS_FINGER_PRINT, boolean.class).addField(RealmUserInfoFields.KIND_PASS_CODE, int.class).addField(RealmUserInfoFields.PASS_CODE, String.class);
+            }
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) {
+            RealmObjectSchema realmObjectSchema = schema.get(RealmOfflineDelete.class.getSimpleName());
+            if (realmObjectSchema != null) {
+                realmObjectSchema.addField("both", boolean.class);
             }
             oldVersion++;
         }

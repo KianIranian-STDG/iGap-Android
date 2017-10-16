@@ -3568,9 +3568,8 @@ public class FragmentChat extends BaseFragment
                                 if (roomMessage != null) {
                                     roomMessage.setDeleted(true);
                                 }
-                                RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
-                                realmOfflineDelete.setOfflineDelete(parseLong(message.messageID));
-                                realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
+
+                                realmClientCondition.getOfflineDeleted().add(RealmOfflineDelete.setOfflineDeleted(realm, parseLong(message.messageID), chatType, true));
                                 // delete message
                                 if (chatType == GROUP) {
                                     new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(message.messageID));

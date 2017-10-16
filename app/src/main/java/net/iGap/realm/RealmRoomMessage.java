@@ -927,11 +927,8 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
                         roomMessage.setDeleted(true);
                     }
 
-                    RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
-                    realmOfflineDelete.setOfflineDelete(messageId);
-
                     if (realmClientCondition != null) {
-                        realmClientCondition.getOfflineDeleted().add(realmOfflineDelete);
+                        realmClientCondition.getOfflineDeleted().add(RealmOfflineDelete.setOfflineDeleted(realm, messageId, chatType, true));
                     }
 
                     if (chatType == GROUP) {
