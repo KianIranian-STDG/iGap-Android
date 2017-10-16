@@ -11,7 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.proto.ProtoClientMuteRoom;
-import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRoom;
 
 public class ClientMuteRoomResponse extends MessageHandler {
 
@@ -30,11 +30,10 @@ public class ClientMuteRoomResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-
         ProtoClientMuteRoom.ClientMuteRoomResponse.Builder builder = (ProtoClientMuteRoom.ClientMuteRoomResponse.Builder) message;
-        builder.getRoomId();
-        ProtoGlobal.RoomMute roomMute = builder.getRoomMute();
-        roomMute.getNumber(); //MUTE, UNMUTE
+        if (builder.getResponse().getId().isEmpty()) {
+            RealmRoom.roomMute(builder.getRoomId(), builder.getRoomMute());
+        }
     }
 
     @Override

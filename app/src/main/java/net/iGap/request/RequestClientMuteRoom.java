@@ -12,10 +12,14 @@ package net.iGap.request;
 
 import net.iGap.proto.ProtoClientMuteRoom;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRoom;
 
 public class RequestClientMuteRoom {
 
     public void muteRoom(long roomId, ProtoGlobal.RoomMute mute) {
+
+        RealmRoom.roomMute(roomId, mute);
+
         ProtoClientMuteRoom.ClientMuteRoom.Builder builder = ProtoClientMuteRoom.ClientMuteRoom.newBuilder();
         builder.setRoomId(roomId);
         builder.setRoomMute(mute);
@@ -25,6 +29,14 @@ public class RequestClientMuteRoom {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void muteRoom(long roomId, boolean mute) {
+        if (mute) {
+            muteRoom(roomId, ProtoGlobal.RoomMute.MUTE);
+        } else {
+            muteRoom(roomId, ProtoGlobal.RoomMute.UNMUTE);
         }
     }
 }

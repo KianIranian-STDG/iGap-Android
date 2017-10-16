@@ -76,6 +76,8 @@ import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestClientCondition;
 import net.iGap.request.RequestClientGetRoomList;
+import net.iGap.request.RequestClientMuteRoom;
+import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 
@@ -167,8 +169,8 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
 
         RealmResults<RealmRoom> results = null;
-        String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.UPDATED_TIME};
-        Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING};
+        String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
+        Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
         switch (mainType) {
 
             case all:
@@ -616,12 +618,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
     private void muteNotification(final long roomId, final boolean mute) {
         //+Realm realm = Realm.getDefaultInstance();
-        getRealmFragmentMain().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst().setMute(!mute);
-            }
-        });
+        new RequestClientMuteRoom().muteRoom(roomId, !mute);
 
         //fastAdapter
         //G.handler.post(new Runnable() {
@@ -648,16 +645,12 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
     private void pinToTop(final long roomId, final boolean isPinned) {
         //+Realm realm = Realm.getDefaultInstance();
-        getRealmFragmentMain().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                realmRoom.setPinned(!isPinned);
-                if (!isPinned) {
-                    goToTop();
-                }
-            }
-        });
+
+        new RequestClientPinRoom().pinRoom(roomId, isPinned);
+        if (!isPinned) {
+            goToTop();
+        }
+
         //fastAdapter
         //if (!isPinned) {
         //    G.handler.post(new Runnable() {

@@ -261,6 +261,7 @@ import net.iGap.request.RequestChatDeleteMessage;
 import net.iGap.request.RequestChatEditMessage;
 import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientJoinByUsername;
+import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientSubscribeToRoom;
 import net.iGap.request.RequestClientUnsubscribeFromRoom;
 import net.iGap.request.RequestGroupDeleteMessage;
@@ -1933,7 +1934,7 @@ public class FragmentChat extends BaseFragment
                         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                onSelectRoomMenu("txtClearHistory", (int) mRoomId);
+                                onSelectRoomMenu("txtClearHistory", mRoomId);
                             }
                         }).negativeText(R.string.no).show();
                     }
@@ -1945,7 +1946,7 @@ public class FragmentChat extends BaseFragment
                         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.delete_chat).content(R.string.delete_chat_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                onSelectRoomMenu("txtDeleteChat", (int) mRoomId);
+                                onSelectRoomMenu("txtDeleteChat", mRoomId);
                             }
                         }).negativeText(R.string.no).show();
                     }
@@ -1954,7 +1955,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-                        onSelectRoomMenu("txtMuteNotification", (int) mRoomId);
+                        onSelectRoomMenu("txtMuteNotification", mRoomId);
                     }
                 });
                 root5.setOnClickListener(new View.OnClickListener() {
@@ -4413,7 +4414,7 @@ public class FragmentChat extends BaseFragment
         //realm.close();
     }
 
-    private void onSelectRoomMenu(String message, int item) {
+    private void onSelectRoomMenu(String message, long item) {
         switch (message) {
             case "txtMuteNotification":
                 muteNotification(item);
@@ -4427,23 +4428,15 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void deleteChat(final int chatId) {
+    private void deleteChat(final long chatId) {
         new RequestChatDelete().chatDelete(chatId);
     }
 
-    private void muteNotification(final int item) {
+    private void muteNotification(final long roomId) {
         //+Realm realm = Realm.getDefaultInstance();
 
         isMuteNotification = !isMuteNotification;
-        getRealmChat().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item).findFirst();
-                if (realmRoom != null) {
-                    realmRoom.setMute(isMuteNotification);
-                }
-            }
-        });
+        new RequestClientMuteRoom().muteRoom(roomId, isMuteNotification);
 
         if (isMuteNotification) {
             ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.unmute);
@@ -5841,7 +5834,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View view) {
 
-                onSelectRoomMenu("txtMuteNotification", (int) mRoomId);
+                onSelectRoomMenu("txtMuteNotification", mRoomId);
             }
         });
 

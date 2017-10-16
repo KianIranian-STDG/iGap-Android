@@ -11,10 +11,14 @@
 package net.iGap.request;
 
 import net.iGap.proto.ProtoClientPinRoom;
+import net.iGap.realm.RealmRoom;
 
 public class RequestClientPinRoom {
 
     public void pinRoom(long roomId, boolean pin) {
+
+        RealmRoom.roomPin(roomId, pin, 0);
+
         ProtoClientPinRoom.ClientPinRoom.Builder builder = ProtoClientPinRoom.ClientPinRoom.newBuilder();
         builder.setRoomId(roomId);
         builder.setPin(pin);

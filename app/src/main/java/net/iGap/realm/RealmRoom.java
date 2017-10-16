@@ -51,6 +51,7 @@ public class RealmRoom extends RealmObject {
     private String actionState;
     private boolean isDeleted = false;
     private boolean isPinned;
+    private long pinId;
     /**
      * client need keepRoom info for show in forward message that forward
      * from a room that user don't have that room
@@ -130,8 +131,12 @@ public class RealmRoom extends RealmObject {
         return mute;
     }
 
-    public void setMute(boolean mute) {
-        this.mute = mute;
+    public void setMute(ProtoGlobal.RoomMute muteState) {
+        if (muteState == ProtoGlobal.RoomMute.MUTE) {
+            this.mute = true;
+        } else {
+            this.mute = false;
+        }
     }
 
     public RealmChatRoom getChatRoom() {
@@ -249,6 +254,14 @@ public class RealmRoom extends RealmObject {
         isPinned = pinned;
     }
 
+    public long getPinId() {
+        return pinId;
+    }
+
+    public void setPinId(long pinId) {
+        this.pinId = pinId;
+    }
+
     public long getUpdatedTime() {
         if (getLastMessage() != null && getLastMessage().isValid()) {
             if (getLastMessage().getUpdateOrCreateTime() > updatedTime) {
@@ -317,6 +330,10 @@ public class RealmRoom extends RealmObject {
         }
     }
 
+    public static RealmRoom getRealmRoom(Realm realm, long roomId) {
+        return realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+    }
+
     /**
      * convert ProtoGlobal.Room to RealmRoom for saving into database
      * hint : call this method in execute transaction
@@ -343,7 +360,13 @@ public class RealmRoom extends RealmObject {
         realmRoom.setType(RoomType.convert(room.getType()));
         realmRoom.setUnreadCount(room.getUnreadCount());
         realmRoom.setReadOnly(room.getReadOnly());
-        //realmRoom.setMute(false);
+        realmRoom.setMute(room.getRoomMute());
+        realmRoom.setPinId(room.getPinId());
+        if (room.getPinId() > 0) {
+            realmRoom.setPinned(true);
+        } else {
+            realmRoom.setPinned(false);
+        }
         realmRoom.setActionState(null, 0);
         switch (room.getType()) {
             case CHANNEL:
@@ -698,6 +721,37 @@ public class RealmRoom extends RealmObject {
                 } else {
                     if (realmRoom != null && realmRoom.getGroupRoom() != null) {
                         realmRoom.getGroupRoom().setParticipantsCountLabel(memberCount + "");
+                    }
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static void roomMute(final long roomId, final ProtoGlobal.RoomMute muteState) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (room != null) {
+                    room.setMute(muteState);
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static void roomPin(final long roomId, final boolean pin, final long pinId) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
+                if (room != null) {
+                    room.setPinned(pin);
+                    if (pinId != 0) {
+                        room.setPinId(pinId);
                     }
                 }
             }

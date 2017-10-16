@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.proto.ProtoClientPinRoom;
+import net.iGap.realm.RealmRoom;
 
 public class ClientPinRoomResponse extends MessageHandler {
 
@@ -30,8 +31,7 @@ public class ClientPinRoomResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoClientPinRoom.ClientPinRoomResponse.Builder builder = (ProtoClientPinRoom.ClientPinRoomResponse.Builder) message;
-        builder.getRoomId();
-        builder.getPinId();
+        RealmRoom.roomPin(builder.getRoomId(), true, builder.getPinId());
     }
 
     @Override
