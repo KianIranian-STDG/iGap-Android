@@ -10,8 +10,8 @@
 
 package net.iGap.response;
 
-import net.iGap.helper.HelperDeleteMessage;
 import net.iGap.proto.ProtoChannelDeleteMessage;
+import net.iGap.realm.RealmRoomMessage;
 
 public class ChannelDeleteMessageResponse extends MessageHandler {
 
@@ -30,7 +30,7 @@ public class ChannelDeleteMessageResponse extends MessageHandler {
     @Override public void handler() {
         super.handler();
         final ProtoChannelDeleteMessage.ChannelDeleteMessageResponse.Builder builder = (ProtoChannelDeleteMessage.ChannelDeleteMessageResponse.Builder) message;
-        HelperDeleteMessage.deleteMessage(builder.getRoomId(), builder.getMessageId(), builder.getDeleteVersion(), builder.getResponse());
+        RealmRoomMessage.deleteMessageServerResponse(builder.getRoomId(), builder.getMessageId(), builder.getDeleteVersion(), builder.getResponse());
     }
 
     @Override public void timeOut() {

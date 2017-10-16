@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -134,5 +135,21 @@ public class RealmClientCondition extends RealmObject {
 
     public void setOfflineListen(RealmList<RealmOfflineListen> offlineListen) {
         this.offlineListen = offlineListen;
+    }
+
+    /**
+     * update delete version and remove offline deleted if exist
+     */
+    public static void deleteManage(Realm realm, long roomId, long messageId, long deleteVersion) {
+        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
+        if (realmClientCondition != null) {
+            realmClientCondition.setDeleteVersion(deleteVersion);
+            for (RealmOfflineDelete realmOfflineDeleted : realmClientCondition.getOfflineDeleted()) {
+                if (realmOfflineDeleted.getOfflineDelete() == messageId) {
+                    realmOfflineDeleted.deleteFromRealm();
+                    break;
+                }
+            }
+        }
     }
 }

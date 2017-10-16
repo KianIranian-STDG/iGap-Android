@@ -37,6 +37,7 @@ import net.iGap.module.SUID;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoResponse;
 import net.iGap.request.RequestChannelDeleteMessage;
 import net.iGap.request.RequestChatDeleteMessage;
 import net.iGap.request.RequestGroupDeleteMessage;
@@ -941,5 +942,33 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
                 }
             }
         });
+    }
+
+    public static void deleteMessageServerResponse(final long roomId, final long messageId, final long deleteVersion, final ProtoResponse.Response response) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                /**
+                 * if another account deleted this message set deleted true
+                 * otherwise before this state was set
+                 */
+                if (response.getId().isEmpty()) {
+                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                    if (roomMessage != null) {
+                        roomMessage.setDeleted(true);
+                    }
+                }
+
+                RealmClientCondition.deleteManage(realm, roomId, messageId, deleteVersion);
+
+                if (G.onChatDeleteMessageResponse != null) {
+                    G.onChatDeleteMessageResponse.onChatDeleteMessage(deleteVersion, messageId, roomId, response);
+                }
+            }
+        });
+
+        realm.close();
     }
 }
