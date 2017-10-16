@@ -240,8 +240,6 @@ import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
-import net.iGap.realm.RealmOfflineDelete;
-import net.iGap.realm.RealmOfflineDeleteFields;
 import net.iGap.realm.RealmOfflineEdited;
 import net.iGap.realm.RealmOfflineSeen;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -253,18 +251,15 @@ import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmRoomMessageLocation;
 import net.iGap.realm.RealmUserInfo;
-import net.iGap.request.RequestChannelDeleteMessage;
 import net.iGap.request.RequestChannelEditMessage;
 import net.iGap.request.RequestChannelUpdateDraft;
 import net.iGap.request.RequestChatDelete;
-import net.iGap.request.RequestChatDeleteMessage;
 import net.iGap.request.RequestChatEditMessage;
 import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientJoinByUsername;
 import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientSubscribeToRoom;
 import net.iGap.request.RequestClientUnsubscribeFromRoom;
-import net.iGap.request.RequestGroupDeleteMessage;
 import net.iGap.request.RequestGroupEditMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
 import net.iGap.request.RequestSignalingGetConfiguration;
@@ -3556,33 +3551,9 @@ public class FragmentChat extends BaseFragment
                     }
                 });
                 //final Realm realmCondition = Realm.getDefaultInstance();
-                final RealmClientCondition realmClientCondition = getRealmChat().where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, message.roomId).findFirst();
-
-                if (realmClientCondition != null) {
-
-                    getRealmChat().executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-
-                            if (realm.where(RealmOfflineDelete.class).equalTo(RealmOfflineDeleteFields.OFFLINE_DELETE, parseLong(message.messageID)).findFirst() == null) {
-                                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(message.messageID)).findFirst();
-                                if (roomMessage != null) {
-                                    roomMessage.setDeleted(true);
-                                }
-
-                                realmClientCondition.getOfflineDeleted().add(RealmOfflineDelete.setOfflineDeleted(realm, parseLong(message.messageID), chatType, true));
-                                // delete message
-                                if (chatType == GROUP) {
-                                    new RequestGroupDeleteMessage().groupDeleteMessage(mRoomId, parseLong(message.messageID));
-                                } else if (chatType == CHAT) {
-                                    new RequestChatDeleteMessage().chatDeleteMessage(mRoomId, parseLong(message.messageID));
-                                } else if (chatType == CHANNEL) {
-                                    new RequestChannelDeleteMessage().channelDeleteMessage(mRoomId, parseLong(message.messageID));
-                                }
-                            }
-                        }
-                    });
-                }
+                ArrayList<Long> messageIds = new ArrayList<>();
+                messageIds.add(Long.parseLong(message.messageID));
+                RealmRoomMessage.deleteSelectedMessages(getRealmChat(), message.roomId, messageIds, chatType);
                 //realmCondition.close();
             }
         });
