@@ -1924,6 +1924,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void getUserInfo(final RealmUserInfo realmUserInfo) {
+        if (!realmUserInfo.isValid()) {
+            return;
+        }
         if (G.userLogin) {
             new RequestUserInfo().userInfo(realmUserInfo.getUserId());
         } else {
