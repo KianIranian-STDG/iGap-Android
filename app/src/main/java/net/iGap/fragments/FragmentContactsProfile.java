@@ -1118,6 +1118,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     public void run() {
                         txtNickname.setText(user.getDisplayName());
                         titleToolbar.setText(user.getDisplayName());
+                        setAvatar();
                     }
                 });
             }

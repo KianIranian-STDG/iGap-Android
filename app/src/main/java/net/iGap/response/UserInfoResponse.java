@@ -22,6 +22,7 @@ import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserInfo;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestUserInfo;
 
 import static net.iGap.G.userId;
@@ -49,7 +50,6 @@ public class UserInfoResponse extends MessageHandler {
             @Override
             public void run() {
                 final Realm realm = Realm.getDefaultInstance();
-                RealmRegisteredInfo realmRegisteredInfo;
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -81,6 +81,10 @@ public class UserInfoResponse extends MessageHandler {
                         RequestUserInfo.userIdArrayList.remove(String.valueOf(builder.getUser().getId()));
                     }
                 }, RequestUserInfo.CLEAR_ARRAY_TIME);
+
+                if (identity != null && identity.equals(RequestUserInfo.InfoType.UPDATE_ROOM.toString())) {
+                    RealmRoom.updateChatRoom(builder.getUser().getId());
+                }
 
                 if (identity != null && identity.equals(RequestUserInfo.InfoType.JUST_INFO.toString())) {
                     G.onRegistrationInfo.onInfo(builder.getUser());

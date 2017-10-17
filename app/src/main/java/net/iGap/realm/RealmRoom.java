@@ -29,6 +29,8 @@ import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientGetRoom;
 
+import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
+
 public class RealmRoom extends RealmObject {
     @PrimaryKey private long id;
     private String type;
@@ -751,6 +753,23 @@ public class RealmRoom extends RealmObject {
                 if (room != null) {
                     room.setPinned(pin);
                     room.setPinId(pinId);
+                }
+            }
+        });
+        realm.close();
+    }
+
+    /**
+     * check exist chat room with userId(peerId) and set a value for notify room item
+     */
+    public static void updateChatRoom(final long userId) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.TYPE, CHAT.toString()).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, userId).findFirst();
+                if (room != null) {
+                    room.setReadOnly(room.getReadOnly());// set data for update room item
                 }
             }
         });
