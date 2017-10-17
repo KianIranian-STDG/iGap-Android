@@ -140,6 +140,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
     private static final String ENTER_FROM = "enterFrom";
     public static final String FRAGMENT_TAG = "FragmentContactsProfile";
     private boolean disableDeleteContact = false;
+    private String bio;
 
     public static FragmentContactsProfile newInstance(long roomId, long peerId, String enterFrom) {
         Bundle args = new Bundle();
@@ -224,6 +225,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
             color = realmRegisteredInfo.getColor();
             initials = realmRegisteredInfo.getInitials();
             userStatus = realmRegisteredInfo.getStatus();
+            bio = realmRegisteredInfo.getBio();
         } else if (realmUser != null) {
             phone = Long.toString(realmUser.getPhone());
             displayName = realmUser.getDisplay_name();
@@ -344,6 +346,11 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         txtPhoneNumber = (TextView) view.findViewById(R.id.chi_txt_phoneNumber);
         vgPhoneNumber = (ViewGroup) view.findViewById(R.id.chi_layout_phoneNumber);
         txtClearChat = (TextView) view.findViewById(R.id.chi_txt_clearChat);
+        TextView txtBio = (TextView) view.findViewById(R.id.st_txt_bio);
+
+        if (txtBio != null) {
+            txtBio.setText(bio);
+        }
 
         if (phone.equals("0")) {
             vgPhoneNumber.setVisibility(View.GONE);

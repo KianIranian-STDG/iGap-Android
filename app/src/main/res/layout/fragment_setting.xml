@@ -466,7 +466,6 @@
               android:gravity="center_vertical"
               android:paddingEnd="@dimen/dp4"
               android:paddingStart="@dimen/dp4"
-              android:singleLine="true"
               android:text="@string/st_bio"
               android:textColor="@color/gray_5c"
               android:textSize="@dimen/dp14"

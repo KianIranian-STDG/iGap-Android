@@ -218,8 +218,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
         txtBio = (TextView) view.findViewById(R.id.st_txt_bio);
 
-
-
         ViewGroup layoutBio = (ViewGroup) view.findViewById(R.id.st_layout_bio);
         layoutBio.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -74,7 +73,8 @@ public class FragmentBio extends Fragment {
                     new RequestUserProfileSetBio().setBio(edtBio.getText().toString());
                     closeKeyboard(v);
                 } else {
-                    Toast.makeText(G.fragmentActivity, "error", Toast.LENGTH_SHORT).show();
+                    error(G.context.getResources().getString(R.string.st_limit_bio));
+                    closeKeyboard(v);
                 }
 
                 G.fragmentActivity.onBackPressed();

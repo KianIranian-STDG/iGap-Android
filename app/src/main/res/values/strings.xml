@@ -1081,7 +1081,7 @@
   <string name="send_message_to">Send Message To </string>
 
   <string name="st_bio">Bio</string>
-  <string name="st_des_bio">You can add a few lines yourself. anyone who open your profile will see text.</string>
+  <string name="st_des_bio">You can add a few lines about yourself. anyone who opens your profile will see this text.</string>
   <string name="st_Report">Report</string>
   <string name="st_Spam">Spam</string>
   <string name="st_Violence">Violence</string>
@@ -1089,5 +1089,6 @@
   <string name="st_Other">Other</string>
   <string name="st_Abuse">Abuse</string>
   <string name="st_FakeAccount">FakeAccount</string>
+  <string name="st_limit_bio">You have exceeded the allowed number of characters. You can use only 70 characters for Bio.</string>
 
 </resources>

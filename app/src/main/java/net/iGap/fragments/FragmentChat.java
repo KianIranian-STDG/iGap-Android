@@ -6082,7 +6082,7 @@ public class FragmentChat extends BaseFragment
             public void onComplete(RippleView rippleView) {
 
                 final ArrayList<Long> list = new ArrayList<Long>();
-                final ArrayList<Long> bothDeleteMessageId = new ArrayList<Long>();
+                bothDeleteMessageId = new ArrayList<Long>();
 
                 G.handler.post(new Runnable() {
                     @Override
@@ -6101,13 +6101,31 @@ public class FragmentChat extends BaseFragment
                             }
                         }
 
-                        deleteSelectedMessageFromAdapter(list);
-
-                        if (chatType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId.size() > 0) {
+                        if (chatType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().mMessage.senderID.equalsIgnoreCase(Long.toString(G.userId)) && list.size() == 1) {
                             // show both Delete check box
-                        }
+                            new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    if (!dialog.isPromptCheckBoxChecked()) {
+                                        bothDeleteMessageId = null;
+                                    }
 
-                        RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, bothDeleteMessageId, chatType);
+                                    RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, bothDeleteMessageId, chatType);
+                                    deleteSelectedMessageFromAdapter(list);
+                                }
+                            }).checkBoxPromptRes(R.string.delete_item_dialog, false, null).show();
+
+                        } else {
+
+                            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(R.string.deleted_message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    bothDeleteMessageId = null;
+                                    RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, bothDeleteMessageId, chatType);
+                                    deleteSelectedMessageFromAdapter(list);
+                                }
+                            }).show();
+                        }
                     }
                 });
             }
