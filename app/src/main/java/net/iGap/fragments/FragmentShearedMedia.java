@@ -353,6 +353,8 @@ public class FragmentShearedMedia extends BaseFragment {
             }
         });
 
+        final String count = SelectedList.size() + "";
+
         RippleView rippleDeleteSelected = (RippleView) view.findViewById(R.id.asm_riple_delete_selected);
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -363,7 +365,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
                 if (roomType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId != null && bothDeleteMessageId.size() > 0) {
                     // show both Delete check box
-                    new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(G.context.getResources().getString(R.string.st_desc_delete, count)).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             if (!dialog.isPromptCheckBoxChecked()) {
@@ -379,7 +381,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
                 } else {
 
-                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(R.string.deleted_message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(G.context.getResources().getString(R.string.st_desc_delete, count)).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             bothDeleteMessageId = null;

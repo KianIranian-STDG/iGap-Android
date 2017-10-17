@@ -3711,7 +3711,7 @@ public class FragmentChat extends BaseFragment
 
                 if (chatType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId.size() > 0 && message.senderID.equalsIgnoreCase(Long.toString(G.userId))) {
                     // show both Delete check box
-                    new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(G.context.getResources().getString(R.string.st_desc_delete, "1")).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             if (!dialog.isPromptCheckBoxChecked()) {
@@ -3720,11 +3720,11 @@ public class FragmentChat extends BaseFragment
 
                             deleteMassage(getRealmChat(), message, messageIds, bothDeleteMessageId, chatType);
                         }
-                    }).checkBoxPromptRes(R.string.delete_item_dialog, false, null).show();
+                    }).checkBoxPrompt(G.context.getResources().getString(R.string.st_checkbox_delete, title), false, null).show();
 
                 } else {
 
-                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(R.string.deleted_message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(G.context.getResources().getString(R.string.st_desc_delete, "1")).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             bothDeleteMessageId = null;
@@ -6101,9 +6101,11 @@ public class FragmentChat extends BaseFragment
                             }
                         }
 
+                        final String count = list.size() + "";
+
                         if (chatType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().mMessage.senderID.equalsIgnoreCase(Long.toString(G.userId)) && list.size() == 1) {
                             // show both Delete check box
-                            new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(G.context.getResources().getString(R.string.st_desc_delete, count)).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     if (!dialog.isPromptCheckBoxChecked()) {
@@ -6113,11 +6115,11 @@ public class FragmentChat extends BaseFragment
                                     RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, bothDeleteMessageId, chatType);
                                     deleteSelectedMessageFromAdapter(list);
                                 }
-                            }).checkBoxPromptRes(R.string.delete_item_dialog, false, null).show();
+                            }).checkBoxPrompt(G.context.getResources().getString(R.string.st_checkbox_delete, title), false, null).show();
 
                         } else {
 
-                            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(R.string.deleted_message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(G.context.getResources().getString(R.string.st_desc_delete, count)).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     bothDeleteMessageId = null;
