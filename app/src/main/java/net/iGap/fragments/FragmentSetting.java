@@ -2124,7 +2124,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             phoneName = userInfo.getUserInfo().getPhoneNumber();
             ProtoGlobal.Gender userGender = userInfo.getGender();
             userEmail = userInfo.getEmail();
-            bio = userInfo.getBio();
+            bio = userInfo.getUserInfo().getBio();
 
             if (nickName != null) {
                 txtNickName.setText(nickName);

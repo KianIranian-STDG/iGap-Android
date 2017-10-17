@@ -36,6 +36,7 @@ public class RealmRegisteredInfo extends RealmObject {
     private String cacheId;
     private int lastSeen;
     private int avatarCount;
+    private String bio;
 
     private boolean mutual;
     private boolean blockUser = false;
@@ -158,6 +159,14 @@ public class RealmRegisteredInfo extends RealmObject {
 
     public void setAvatarCount(int avatarCount) {
         this.avatarCount = avatarCount;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     public boolean isMutual() {
@@ -296,5 +305,16 @@ public class RealmRegisteredInfo extends RealmObject {
 
     public static RealmRegisteredInfo getRegistrationInfo(Realm realm, long userId) {
         return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+    }
+
+    public static void updateBio(final String bio) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRegisteredInfo.getRegistrationInfo(realm, G.userId).setBio(bio);
+            }
+        });
+        realm.close();
     }
 }

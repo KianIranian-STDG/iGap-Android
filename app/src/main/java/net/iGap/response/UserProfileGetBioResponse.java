@@ -11,7 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.proto.ProtoUserProfileGetBio;
-import net.iGap.realm.RealmUserInfo;
+import net.iGap.realm.RealmRegisteredInfo;
 
 public class UserProfileGetBioResponse extends MessageHandler {
 
@@ -31,7 +31,7 @@ public class UserProfileGetBioResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserProfileGetBio.UserProfileGetBioResponse.Builder builder = (ProtoUserProfileGetBio.UserProfileGetBioResponse.Builder) message;
-        RealmUserInfo.updateBio(builder.getBio());
+        RealmRegisteredInfo.updateBio(builder.getBio());
     }
 
     @Override

@@ -174,9 +174,9 @@ public class RealmMigration implements io.realm.RealmMigration {
                 realmRoom.addField(RealmRoomFields.PIN_ID, long.class, FieldAttribute.REQUIRED);
             }
 
-            RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
-            if (realmUserInfo != null) {
-                realmUserInfo.addField("bio", String.class);
+            RealmObjectSchema registeredInfo = schema.get(RealmRegisteredInfo.class.getSimpleName());
+            if (registeredInfo != null) {
+                registeredInfo.addField("bio", String.class);
             }
             oldVersion++;
         }

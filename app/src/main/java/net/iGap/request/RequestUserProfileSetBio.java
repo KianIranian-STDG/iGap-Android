@@ -15,7 +15,7 @@ import net.iGap.proto.ProtoUserProfileBio;
 public class RequestUserProfileSetBio {
 
     public void setBio(String bio) {
-        //RealmUserInfo.updateBio(bio); // just in response update this value
+        //RealmRegisteredInfo.updateBio(bio); // just in response update this value
 
         ProtoUserProfileBio.UserProfileSetBio.Builder builder = ProtoUserProfileBio.UserProfileSetBio.newBuilder();
         builder.setBio(bio);
