@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
@@ -40,6 +41,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -361,9 +363,31 @@ public class FragmentShearedMedia extends BaseFragment {
 
                 if (roomType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId != null && bothDeleteMessageId.size() > 0) {
                     // show both Delete check box
-                }
-                if (realmRoom != null) {
-                    RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, SelectedList, bothDeleteMessageId, roomType);
+                    new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            if (!dialog.isPromptCheckBoxChecked()) {
+                                bothDeleteMessageId = null;
+                            }
+                            if (realmRoom != null) {
+                                RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, SelectedList, bothDeleteMessageId, roomType);
+                            }
+                        }
+                    }).checkBoxPromptRes(R.string.delete_item_dialog, false, null).show();
+
+
+
+                } else {
+
+                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(R.string.deleted_message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            bothDeleteMessageId = null;
+                            if (realmRoom != null) {
+                                RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, SelectedList, bothDeleteMessageId, roomType);
+                            }
+                        }
+                    }).show();
                 }
 
                 for (Long Id : SelectedList) {
