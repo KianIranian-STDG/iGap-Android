@@ -226,6 +226,7 @@ import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructUploadVideo;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoClientGetRoomHistory;
+import net.iGap.proto.ProtoClientRoomReport;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
@@ -258,6 +259,7 @@ import net.iGap.request.RequestChatEditMessage;
 import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientJoinByUsername;
 import net.iGap.request.RequestClientMuteRoom;
+import net.iGap.request.RequestClientRoomReport;
 import net.iGap.request.RequestClientSubscribeToRoom;
 import net.iGap.request.RequestClientUnsubscribeFromRoom;
 import net.iGap.request.RequestGroupEditMessage;
@@ -1820,6 +1822,7 @@ public class FragmentChat extends BaseFragment
                 ViewGroup root4 = (ViewGroup) v.findViewById(R.id.dialog_root_item4_notification);
                 ViewGroup root5 = (ViewGroup) v.findViewById(R.id.dialog_root_item5_notification);
                 ViewGroup root6 = (ViewGroup) v.findViewById(R.id.dialog_root_item6_notification);
+                ViewGroup root7 = (ViewGroup) v.findViewById(R.id.dialog_root_item7_notification);
 
                 TextView txtSearch = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
                 TextView txtClearHistory = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
@@ -1827,6 +1830,7 @@ public class FragmentChat extends BaseFragment
                 TextView txtMuteNotification = (TextView) v.findViewById(R.id.dialog_text_item4_notification);
                 TextView txtChatToGroup = (TextView) v.findViewById(R.id.dialog_text_item5_notification);
                 TextView txtCleanUp = (TextView) v.findViewById(R.id.dialog_text_item6_notification);
+                TextView txtReport = (TextView) v.findViewById(R.id.dialog_text_item7_notification);
 
                 TextView iconSearch = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
                 iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_searching_magnifying_glass));
@@ -1845,6 +1849,9 @@ public class FragmentChat extends BaseFragment
                 TextView iconCleanUp = (TextView) v.findViewById(R.id.dialog_icon_item6_notification);
                 iconCleanUp.setText(G.fragmentActivity.getResources().getString(R.string.md_clean_up));
 
+                TextView iconReport = (TextView) v.findViewById(R.id.dialog_icon_item7_notification);
+                iconCleanUp.setText(G.fragmentActivity.getResources().getString(R.string.md_clean_up));
+
                 root1.setVisibility(View.VISIBLE);
                 root2.setVisibility(View.VISIBLE);
                 root3.setVisibility(View.VISIBLE);
@@ -1858,6 +1865,7 @@ public class FragmentChat extends BaseFragment
                 txtMuteNotification.setText(G.fragmentActivity.getResources().getString(R.string.mute_notification));
                 txtChatToGroup.setText(G.fragmentActivity.getResources().getString(R.string.chat_to_group));
                 txtCleanUp.setText(G.fragmentActivity.getResources().getString(R.string.clean_up));
+                txtReport.setText(G.fragmentActivity.getResources().getString(R.string.report));
 
                 if (chatType == CHAT) {
                     root3.setVisibility(View.VISIBLE);
@@ -1872,6 +1880,15 @@ public class FragmentChat extends BaseFragment
 
                     if (chatType == CHANNEL) {
                         root2.setVisibility(View.GONE);
+                        if (channelRole != ChannelChatRole.OWNER || isNotJoin) {
+
+                            root7.setVisibility(View.VISIBLE);
+                        } else {
+                            root7.setVisibility(View.GONE);
+                        }
+
+
+
                     }
                 }
 
@@ -1993,6 +2010,14 @@ public class FragmentChat extends BaseFragment
                         resetMessagingValue();
                         topMore = true;
                         getOnlineMessage(0, UP);
+                    }
+                });
+
+                root7.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        dialogReport(false);
                     }
                 });
             }
@@ -2607,6 +2632,132 @@ public class FragmentChat extends BaseFragment
         });
 
         //realm.close();
+    }
+
+    private void dialogReport(final boolean isMessage) {
+
+        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+
+        View v = dialog.getCustomView();
+        if (v == null) {
+            return;
+        }
+
+        DialogAnimation.animationDown(dialog);
+        dialog.show();
+
+        ViewGroup rooAbuse = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
+        ViewGroup rootSpam = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
+        ViewGroup rootViolence = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
+        ViewGroup rootPornography = (ViewGroup) v.findViewById(R.id.dialog_root_item4_notification);
+        ViewGroup rootOther = (ViewGroup) v.findViewById(R.id.dialog_root_item5_notification);
+
+        TextView txtAbuse = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
+        TextView txtSpam = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
+        TextView txtViolence = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
+        TextView txtPornography = (TextView) v.findViewById(R.id.dialog_text_item4_notification);
+        TextView txtOther = (TextView) v.findViewById(R.id.dialog_text_item5_notification);
+
+        TextView iconAbuse = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
+        iconAbuse.setVisibility(View.GONE);
+        iconAbuse.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow_reply));
+
+        TextView iconSpam = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
+        iconSpam.setVisibility(View.GONE);
+        iconSpam.setText(G.fragmentActivity.getResources().getString(R.string.md_copy));
+
+        TextView iconViolence = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
+        iconViolence.setVisibility(View.GONE);
+        iconViolence.setText(G.fragmentActivity.getResources().getString(R.string.md_share_button));
+
+        TextView iconPornography = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
+        iconPornography.setVisibility(View.GONE);
+        iconPornography.setText(G.fragmentActivity.getResources().getString(R.string.md_forward));
+
+        TextView icoOther = (TextView) v.findViewById(R.id.dialog_icon_item5_notification);
+        icoOther.setVisibility(View.GONE);
+        icoOther.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
+
+        rooAbuse.setVisibility(View.VISIBLE);
+        rootSpam.setVisibility(View.VISIBLE);
+        rootViolence.setVisibility(View.VISIBLE);
+        rootPornography.setVisibility(View.VISIBLE);
+        rootOther.setVisibility(View.VISIBLE);
+
+        txtAbuse.setText(R.string.st_Abuse);
+        txtSpam.setText(R.string.st_Spam);
+        txtViolence.setText(R.string.st_Violence);
+        txtPornography.setText(R.string.st_Pornography);
+        txtOther.setText(R.string.st_Other);
+
+
+        rooAbuse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if (isMessage) {
+                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.ABUSE, "");
+                } else {
+                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.ABUSE, "");
+                }
+
+            }
+        });
+        rootSpam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if (isMessage) {
+                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.SPAM, "");
+                } else {
+                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.SPAM, "");
+                }
+            }
+        });
+        rootViolence.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if (isMessage) {
+                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.VIOLENCE, "");
+                } else {
+                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.VIOLENCE, "");
+                }
+            }
+        });
+        rootPornography.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                if (isMessage) {
+                    new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.PORNOGRAPHY, "");
+                } else {
+                    new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.PORNOGRAPHY, "");
+                }
+
+            }
+        });
+        rootOther.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                FragmentReport fragmentReport = new FragmentReport();
+                Bundle bundle = new Bundle();
+                bundle.putLong("ROOM_ID", mRoomId);
+                if (isMessage) {
+                    bundle.putLong("MESSAGE_ID", messageId);
+                } else {
+                    bundle.putLong("MESSAGE_ID", 0);
+                }
+                bundle.putBoolean("USER_ID", false);
+                fragmentReport.setArguments(bundle);
+                new HelperFragment(fragmentReport).setReplace(false).load();
+            }
+        });
+
+
     }
 
     private void putExtra(Intent intent, StructMessageInfo messageInfo) {
@@ -3279,6 +3430,7 @@ public class FragmentChat extends BaseFragment
         ViewGroup rootDelete = (ViewGroup) v.findViewById(R.id.dialog_root_item5_notification);
         ViewGroup rootEdit = (ViewGroup) v.findViewById(R.id.dialog_root_item6_notification);
         final ViewGroup rootSaveToDownload = (ViewGroup) v.findViewById(R.id.dialog_root_item7_notification);
+        final ViewGroup rootReport = (ViewGroup) v.findViewById(R.id.dialog_root_item8_notification);
 
         TextView txtItemReplay = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
         TextView txtItemCopy = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
@@ -3287,6 +3439,7 @@ public class FragmentChat extends BaseFragment
         TextView txtItemDelete = (TextView) v.findViewById(R.id.dialog_text_item5_notification);
         TextView txtItemEdit = (TextView) v.findViewById(R.id.dialog_text_item6_notification);
         final TextView txtItemSaveToDownload = (TextView) v.findViewById(R.id.dialog_text_item7_notification);
+        final TextView txtReport = (TextView) v.findViewById(R.id.dialog_text_item8_notification);
 
         TextView iconReplay = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
         iconReplay.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow_reply));
@@ -3309,6 +3462,15 @@ public class FragmentChat extends BaseFragment
         TextView iconItemSaveToDownload = (TextView) v.findViewById(R.id.dialog_icon_item7_notification);
         iconItemSaveToDownload.setText(G.fragmentActivity.getResources().getString(R.string.md_save));
 
+        TextView iconReport = (TextView) v.findViewById(R.id.dialog_icon_item8_notification);
+        iconReport.setText(G.fragmentActivity.getResources().getString(R.string.md_save));
+
+        if (channelRole != ChannelChatRole.OWNER || isNotJoin) {
+            rootReport.setVisibility(View.VISIBLE);
+        } else {
+            rootReport.setVisibility(View.GONE);
+        }
+
         @ArrayRes int itemsRes = 0;
         switch (message.messageType) {
             case TEXT:
@@ -3320,6 +3482,7 @@ public class FragmentChat extends BaseFragment
                 txtItemForward.setText(R.string.forward_item_dialog);
                 txtItemDelete.setText(R.string.delete_item_dialog);
                 txtItemEdit.setText(R.string.edit_item_dialog);
+                txtReport.setText(R.string.report);
 
                 rootReplay.setVisibility(View.VISIBLE);
                 rootCopy.setVisibility(View.VISIBLE);
@@ -3663,6 +3826,13 @@ public class FragmentChat extends BaseFragment
 
                     onDownloadAllEqualCashId(_cashid, message.messageID);
                 }
+            }
+        });
+
+        rootReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogReport(true);
             }
         });
     }

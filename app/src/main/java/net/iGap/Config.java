@@ -20,7 +20,7 @@ public class Config {
     public static final int REALM_LATEST_MIGRATION_VERSION = REALM_SCHEMA_VERSION - 1;
     public static final int TIME_OUT_DELAY_MS = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int FAKE_PM_DELAY = (int) (10 * DateUtils.SECOND_IN_MILLIS);
-    public static final int TIME_OUT_MS = (int) (10 * DateUtils.SECOND_IN_MILLIS);
+    public static final int TIME_OUT_MS = (int) (100 * DateUtils.SECOND_IN_MILLIS);
     public static final int ALLOW_RECONNECT_AGAIN_NORMAL = (int) (3 * DateUtils.SECOND_IN_MILLIS);
     public static final int REPEAT_CONNECTION_CHECKING = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int DEFAULT_TIME_OUT = (int) (10 * DateUtils.SECOND_IN_MILLIS);
@@ -58,7 +58,7 @@ public class Config {
     public static String default_headerTextColor = "#00B0BF";
     public static String default_progressColor = "#00B0BF";
 
-    public static final String URL_WEBSOCKET = "wss://secure.igap.net/hybrid/";
+    public static final String URL_WEBSOCKET = "ws://test.igap.net:5523";
     public static final String URL_MAP = "https://c.tile.openstreetmap.org/";
 
     public static final String PUBLIC_KEY_CLIENT = "-----BEGIN PUBLIC KEY-----\n"

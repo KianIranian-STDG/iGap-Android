@@ -1088,4 +1088,14 @@
   <string name="text_empty_user_map">متأسفانه هیچ کاربری اطراف شما نفشه خود را فعال نکرده است</string>
   <string name="send_message_to">ارسال پیام به  </string>
 
+  <string name="st_bio">بیوگرافی</string>
+  <string name="st_des_bio">You can add a few lines yourself. anyone who open your profile will see text.</string>
+  <string name="st_Report">Report</string>
+  <string name="st_Spam">Spam</string>
+  <string name="st_Violence">Violence</string>
+  <string name="st_Pornography">Pornography</string>
+  <string name="st_Other">Other</string>
+  <string name="st_Abuse">Abuse</string>
+  <string name="st_FakeAccount">FakeAccount</string>
+
 </resources>

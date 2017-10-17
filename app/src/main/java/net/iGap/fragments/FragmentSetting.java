@@ -104,6 +104,7 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserProfileCheckUsername;
+import net.iGap.request.RequestUserProfileGetBio;
 import net.iGap.request.RequestUserProfileGetEmail;
 import net.iGap.request.RequestUserProfileGetGender;
 import net.iGap.request.RequestUserProfileSetEmail;
@@ -175,6 +176,8 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     static boolean isActiveRun = false;
     private Realm mRealm;
     private Fragment fragment;
+    private ViewGroup ltBio;
+    private TextView txtBio;
 
 
     RealmUserInfo realmUserInfo;
@@ -212,10 +215,25 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         txtGander = (TextView) view.findViewById(R.id.st_txt_gander);
         txtEmail = (TextView) view.findViewById(R.id.st_txt_email);
         prgWait = (ProgressBar) view.findViewById(R.id.st_prgWaiting_addContact);
+
+        txtBio = (TextView) view.findViewById(R.id.st_txt_bio);
+
+
+
+        ViewGroup layoutBio = (ViewGroup) view.findViewById(R.id.st_layout_bio);
+        layoutBio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentBio fragmentBio = new FragmentBio();
+                new HelperFragment(fragmentBio).setReplace(false).load();
+            }
+        });
+
         AppUtils.setProgresColler(prgWait);
 
         new RequestUserProfileGetGender().userProfileGetGender();
         new RequestUserProfileGetEmail().userProfileGetEmail();
+        new RequestUserProfileGetBio().getBio();
 
         realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
@@ -1448,31 +1466,33 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_title_message_textSize))
-                        .titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black))
-                        .items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
-                        .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
-                            @Override
-                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    .titleGravity(GravityEnum.START)
+                    .titleColor(G.context.getResources().getColor(android.R.color.black))
+                    .items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
+                    .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
+                        @Override
+                        public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                                if (text != null) {
-                                    txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+                            if (text != null) {
+                                txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
 
-                                    if (HelperCalander.isLanguagePersian) {
-                                        txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
-                                    }
+                                if (HelperCalander.isLanguagePersian) {
+                                    txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
                                 }
-                                poRbDialogTextSize = which;
-                                int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
-                                editor.apply();
-
-                                StartupActions.textSizeDetection(sharedPreferences);
-
-                                return false;
                             }
-                        }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
-                        .show();
+                            poRbDialogTextSize = which;
+                            int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
+                            editor.apply();
+
+                            StartupActions.textSizeDetection(sharedPreferences);
+
+                            return false;
+                        }
+                    })
+                    .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                    .show();
             }
         });
 
@@ -1708,7 +1728,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 KEY_AD_DATA_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, 5);
 
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.title_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
-                        KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
+                    KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -1759,7 +1779,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 KEY_AD_WIFI_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, 5);
 
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.title_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
-                        KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
+                    KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -1813,7 +1833,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 KEY_AD_ROAMINGN_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
 
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.title_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
-                        KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
+                    KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -2109,6 +2129,9 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             if (nickName != null) {
                 txtNickName.setText(nickName);
                 txtNickNameTitle.setText(nickName);
+            }
+            if (bio != null) {
+                txtBio.setText(bio);
             }
 
             if (userName != null) txtUserName.setText(userName);
