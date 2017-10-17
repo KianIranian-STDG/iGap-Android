@@ -3534,6 +3534,13 @@ public class FragmentChat extends BaseFragment
         rootDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                boolean bothDelete = RealmRoomMessage.isBothDelete(message.time);
+                ArrayList<Long> bothDeleteMessageId = new ArrayList<Long>();
+                if (bothDelete) {
+                    bothDeleteMessageId.add(Long.parseLong(message.messageID));
+                }
+
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -3553,7 +3560,12 @@ public class FragmentChat extends BaseFragment
                 //final Realm realmCondition = Realm.getDefaultInstance();
                 ArrayList<Long> messageIds = new ArrayList<>();
                 messageIds.add(Long.parseLong(message.messageID));
-                RealmRoomMessage.deleteSelectedMessages(getRealmChat(), message.roomId, messageIds, chatType);
+
+                if (chatType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId.size() > 0) {
+                    // show both Delete check box
+                }
+
+                RealmRoomMessage.deleteSelectedMessages(getRealmChat(), message.roomId, messageIds, bothDeleteMessageId, chatType);
                 //realmCondition.close();
             }
         });
@@ -5877,16 +5889,19 @@ public class FragmentChat extends BaseFragment
             public void onComplete(RippleView rippleView) {
 
                 final ArrayList<Long> list = new ArrayList<Long>();
+                final ArrayList<Long> bothDeleteMessageId = new ArrayList<Long>();
 
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-
-                        for (final AbstractMessage messageID : mAdapter.getSelectedItems()) {
+                        for (final AbstractMessage item : mAdapter.getSelectedItems()) {
                             try {
-                                if (messageID != null && messageID.mMessage != null && messageID.mMessage.messageID != null) {
-                                    Long messageId = parseLong(messageID.mMessage.messageID);
+                                if (item != null && item.mMessage != null && item.mMessage.messageID != null) {
+                                    Long messageId = parseLong(item.mMessage.messageID);
                                     list.add(messageId);
+                                    if (RealmRoomMessage.isBothDelete(item.mMessage.time)) {
+                                        bothDeleteMessageId.add(messageId);
+                                    }
                                 }
                             } catch (NullPointerException e) {
                                 e.printStackTrace();
@@ -5895,7 +5910,11 @@ public class FragmentChat extends BaseFragment
 
                         deleteSelectedMessageFromAdapter(list);
 
-                        RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, chatType);
+                        if (chatType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId.size() > 0) {
+                            // show both Delete check box
+                        }
+
+                        RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, bothDeleteMessageId, chatType);
                     }
                 });
             }

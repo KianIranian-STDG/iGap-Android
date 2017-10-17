@@ -31,9 +31,7 @@ public class ClientMuteRoomResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoClientMuteRoom.ClientMuteRoomResponse.Builder builder = (ProtoClientMuteRoom.ClientMuteRoomResponse.Builder) message;
-        if (builder.getResponse().getId().isEmpty()) {
-            RealmRoom.roomMute(builder.getRoomId(), builder.getRoomMute());
-        }
+        RealmRoom.roomMute(builder.getRoomId(), builder.getRoomMute());
     }
 
     @Override

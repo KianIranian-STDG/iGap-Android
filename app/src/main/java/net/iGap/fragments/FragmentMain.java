@@ -646,7 +646,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     private void pinToTop(final long roomId, final boolean isPinned) {
         //+Realm realm = Realm.getDefaultInstance();
 
-        new RequestClientPinRoom().pinRoom(roomId, isPinned);
+        new RequestClientPinRoom().pinRoom(roomId, !isPinned);
         if (!isPinned) {
             goToTop();
         }

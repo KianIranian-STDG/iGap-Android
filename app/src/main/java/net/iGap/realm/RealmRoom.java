@@ -750,9 +750,7 @@ public class RealmRoom extends RealmObject {
                 RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
                 if (room != null) {
                     room.setPinned(pin);
-                    if (pinId != 0) {
-                        room.setPinId(pinId);
-                    }
+                    room.setPinId(pinId);
                 }
             }
         });

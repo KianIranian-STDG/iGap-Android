@@ -53,7 +53,6 @@ public class RealmOfflineDelete extends RealmObject {
         if (roomType != ProtoGlobal.Room.Type.CHAT) {
             both = false;
         }
-        both = false;
         RealmOfflineDelete realmOfflineDelete = realm.createObject(RealmOfflineDelete.class, SUID.id().get());
         realmOfflineDelete.setOfflineDelete(messageId);
         realmOfflineDelete.setBoth(both);

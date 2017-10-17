@@ -206,6 +206,8 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.request.RequestWrapper;
 
+import static net.iGap.Config.DEFAULT_BOTH_CHAT_DELETE_TIME;
+
 public class G extends MultiDexApplication {
 
     public static Context context;
@@ -292,6 +294,7 @@ public class G extends MultiDexApplication {
     public static boolean isUpdateNotificaionColorGroup = false;
     public static boolean isUpdateNotificaionColorChat = false;
     public static boolean isUpdateNotificaionCall = false;
+    public static boolean isCalculatKeepMedia = true;
 
     public static boolean twoPaneMode = false;
     public static boolean isLandscape = false;
@@ -303,12 +306,13 @@ public class G extends MultiDexApplication {
     public static int ivSize;
     public static int userTextSize = 0;
     public static int COPY_BUFFER_SIZE = 1024;
-    public static boolean isCalculatKeepMedia = true;
     public static int maxChatBox = 0;
+    public static int bothChatDeleteTime = DEFAULT_BOTH_CHAT_DELETE_TIME;
 
     public static long currentTime;
     public static long userId;
     public static long latestHearBeatTime = System.currentTimeMillis();
+    public static long currentServerTime;
     public static long latestResponse = System.currentTimeMillis();
     public static long serverHeartBeatTiming = 60 * 1000;
 

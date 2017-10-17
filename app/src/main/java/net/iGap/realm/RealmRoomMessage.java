@@ -29,6 +29,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperString;
+import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnActivityChatStart;
@@ -709,6 +710,10 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         realm.close();
     }
 
+    public static RealmRoomMessage getRealmRoomMessage(Realm realm, long messageId) {
+        return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+    }
+
     public static void ClearAllMessage(Realm realm, boolean deleteAllMessage, final long roomId) {
 
         //+Realm realm = Realm.getDefaultInstance();
@@ -914,7 +919,8 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         realm.close();
     }
 
-    public static void deleteSelectedMessages(Realm realm, final long RoomId, final ArrayList<Long> list, final ProtoGlobal.Room.Type chatType) {
+    public static void deleteSelectedMessages(Realm realm, final long RoomId, final ArrayList<Long> list, final ArrayList<Long> bothDeleteMessageId, final ProtoGlobal.Room.Type chatType) {
+
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -928,14 +934,21 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
                         roomMessage.setDeleted(true);
                     }
 
+                    boolean bothDelete = false;
+                    if (bothDeleteMessageId != null && bothDeleteMessageId.contains(messageId)) {
+                        bothDelete = true;
+                    }
+
+                    // check here with bothDeleteMessageId for send both or no
+
                     if (realmClientCondition != null) {
-                        realmClientCondition.getOfflineDeleted().add(RealmOfflineDelete.setOfflineDeleted(realm, messageId, chatType, true));
+                        realmClientCondition.getOfflineDeleted().add(RealmOfflineDelete.setOfflineDeleted(realm, messageId, chatType, bothDelete));
                     }
 
                     if (chatType == GROUP) {
                         new RequestGroupDeleteMessage().groupDeleteMessage(RoomId, messageId);
                     } else if (chatType == CHAT) {
-                        new RequestChatDeleteMessage().chatDeleteMessage(RoomId, messageId);
+                        new RequestChatDeleteMessage().chatDeleteMessage(RoomId, messageId, bothDelete);
                     } else if (chatType == CHANNEL) {
                         new RequestChannelDeleteMessage().channelDeleteMessage(RoomId, messageId);
                     }
@@ -970,5 +983,24 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         });
 
         realm.close();
+    }
+
+    public static boolean isBothDelete(long messageTime) {
+        long currentTime;
+        if (G.userLogin) {
+            currentTime = G.currentServerTime * DateUtils.SECOND_IN_MILLIS;
+        } else {
+            currentTime = System.currentTimeMillis();
+        }
+
+        return !HelperTimeOut.timeoutChecking(currentTime, messageTime, G.bothChatDeleteTime);
+    }
+
+    public static long getMessageTime(long messageId) {
+        Realm realm = Realm.getDefaultInstance();
+        long messageTime = RealmRoomMessage.getRealmRoomMessage(realm, messageId).getUpdateTime();
+        realm.close();
+
+        return messageTime;
     }
 }

@@ -97,6 +97,7 @@ public class FragmentShearedMedia extends BaseFragment {
     private RealmResults<RealmRoomMessage> mRealmList;
     private ArrayList<StructShearedMedia> mNewList;
     public ArrayList<Long> SelectedList = new ArrayList<>();
+    public ArrayList<Long> bothDeleteMessageId = new ArrayList<>();
     public static ArrayList<Long> list = new ArrayList<>();
     protected ArrayMap<Long, Boolean> needDownloadList = new ArrayMap<>();
     private RealmChangeListener<RealmResults<RealmRoomMessage>> changeListener;
@@ -112,6 +113,7 @@ public class FragmentShearedMedia extends BaseFragment {
     private LinearLayout mediaLayout;
     private TextView txtSharedMedia;
     private TextView txtNumberOfSelected;
+    private ProtoGlobal.Room.Type roomType;
 
     private int numberOfSelected = 0;
     private int listCount = 0;
@@ -167,6 +169,12 @@ public class FragmentShearedMedia extends BaseFragment {
         MusicPlayer.setMusicPlayer(mediaLayout);
 
         roomId = getArguments().getLong(ROOM_ID);
+
+        RealmRoom realmRoom = RealmRoom.getRealmRoom(getRealm(), roomId);
+        if (realmRoom != null) {
+            roomType = realmRoom.getType();
+        }
+
         initComponent(view);
     }
 
@@ -349,10 +357,13 @@ public class FragmentShearedMedia extends BaseFragment {
             public void onComplete(RippleView rippleView) {
 
                 //+Realm realm = Realm.getDefaultInstance();
-                final RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                final RealmRoom realmRoom = RealmRoom.getRealmRoom(getRealm(), roomId);
 
+                if (roomType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId != null && bothDeleteMessageId.size() > 0) {
+                    // show both Delete check box
+                }
                 if (realmRoom != null) {
-                    RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, SelectedList, realmRoom.getType());
+                    RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, SelectedList, bothDeleteMessageId, roomType);
                 }
 
                 for (Long Id : SelectedList) {
@@ -1184,19 +1195,27 @@ public class FragmentShearedMedia extends BaseFragment {
 
         private void setSelectedItem(final int position) {
 
-            Long id = mList.get(position).messageId;
+            Long messageId = mList.get(position).messageId;
 
-            int index = SelectedList.indexOf(id);
+            int index = SelectedList.indexOf(messageId);
 
             if (index >= 0) {
                 SelectedList.remove(index);
                 numberOfSelected--;
+                if (bothDeleteMessageId.contains(messageId)) {
+                    bothDeleteMessageId.remove(messageId);
+                }
 
                 if (numberOfSelected < 1) {
                     isSelectedMode = false;
                 }
             } else {
-                SelectedList.add(id);
+                SelectedList.add(messageId);
+
+                if (RealmRoomMessage.isBothDelete(RealmRoomMessage.getMessageTime(messageId))) {
+                    bothDeleteMessageId.add(messageId);
+                }
+
                 numberOfSelected++;
             }
             notifyItemChanged(position);

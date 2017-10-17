@@ -1697,6 +1697,11 @@ public final class ProtoUserLogin {
      * <code>optional bool update_available = 4;</code>
      */
     boolean getUpdateAvailable();
+
+      /**
+       * <code>optional uint32 chat_delete_message_for_both_period = 5;</code>
+       */
+      int getChatDeleteMessageForBothPeriod();
   }
   /**
    * Protobuf type {@code proto.UserLoginResponse}
@@ -1713,6 +1718,7 @@ public final class ProtoUserLogin {
       deprecatedClient_ = false;
       secondaryNodeName_ = "";
       updateAvailable_ = false;
+        chatDeleteMessageForBothPeriod_ = 0;
     }
 
     @java.lang.Override
@@ -1769,6 +1775,11 @@ public final class ProtoUserLogin {
               updateAvailable_ = input.readBool();
               break;
             }
+              case 40: {
+
+                  chatDeleteMessageForBothPeriod_ = input.readUInt32();
+                  break;
+              }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1865,6 +1876,16 @@ public final class ProtoUserLogin {
       return updateAvailable_;
     }
 
+      public static final int CHAT_DELETE_MESSAGE_FOR_BOTH_PERIOD_FIELD_NUMBER = 5;
+      private int chatDeleteMessageForBothPeriod_;
+
+      /**
+       * <code>optional uint32 chat_delete_message_for_both_period = 5;</code>
+       */
+      public int getChatDeleteMessageForBothPeriod() {
+          return chatDeleteMessageForBothPeriod_;
+    }
+
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -1889,6 +1910,9 @@ public final class ProtoUserLogin {
       if (updateAvailable_ != false) {
         output.writeBool(4, updateAvailable_);
       }
+        if (chatDeleteMessageForBothPeriod_ != 0) {
+            output.writeUInt32(5, chatDeleteMessageForBothPeriod_);
+      }
     }
 
     public int getSerializedSize() {
@@ -1910,6 +1934,9 @@ public final class ProtoUserLogin {
       if (updateAvailable_ != false) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(4, updateAvailable_);
+      }
+        if (chatDeleteMessageForBothPeriod_ != 0) {
+            size += com.google.protobuf.CodedOutputStream.computeUInt32Size(5, chatDeleteMessageForBothPeriod_);
       }
       memoizedSize = size;
       return size;
@@ -1938,6 +1965,7 @@ public final class ProtoUserLogin {
           .equals(other.getSecondaryNodeName());
       result = result && (getUpdateAvailable()
           == other.getUpdateAvailable());
+        result = result && (getChatDeleteMessageForBothPeriod() == other.getChatDeleteMessageForBothPeriod());
       return result;
     }
 
@@ -1960,6 +1988,8 @@ public final class ProtoUserLogin {
       hash = (37 * hash) + UPDATE_AVAILABLE_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
           getUpdateAvailable());
+        hash = (37 * hash) + CHAT_DELETE_MESSAGE_FOR_BOTH_PERIOD_FIELD_NUMBER;
+        hash = (53 * hash) + getChatDeleteMessageForBothPeriod();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -2090,6 +2120,8 @@ public final class ProtoUserLogin {
 
         updateAvailable_ = false;
 
+          chatDeleteMessageForBothPeriod_ = 0;
+
         return this;
       }
 
@@ -2120,6 +2152,7 @@ public final class ProtoUserLogin {
         result.deprecatedClient_ = deprecatedClient_;
         result.secondaryNodeName_ = secondaryNodeName_;
         result.updateAvailable_ = updateAvailable_;
+          result.chatDeleteMessageForBothPeriod_ = chatDeleteMessageForBothPeriod_;
         onBuilt();
         return result;
       }
@@ -2173,6 +2206,9 @@ public final class ProtoUserLogin {
         }
         if (other.getUpdateAvailable() != false) {
           setUpdateAvailable(other.getUpdateAvailable());
+        }
+          if (other.getChatDeleteMessageForBothPeriod() != 0) {
+              setChatDeleteMessageForBothPeriod(other.getChatDeleteMessageForBothPeriod());
         }
         onChanged();
         return this;
@@ -2437,6 +2473,35 @@ public final class ProtoUserLogin {
         onChanged();
         return this;
       }
+
+        private int chatDeleteMessageForBothPeriod_;
+
+        /**
+         * <code>optional uint32 chat_delete_message_for_both_period = 5;</code>
+         */
+        public int getChatDeleteMessageForBothPeriod() {
+            return chatDeleteMessageForBothPeriod_;
+        }
+
+        /**
+         * <code>optional uint32 chat_delete_message_for_both_period = 5;</code>
+         */
+        public Builder setChatDeleteMessageForBothPeriod(int value) {
+
+            chatDeleteMessageForBothPeriod_ = value;
+            onChanged();
+            return this;
+        }
+
+        /**
+         * <code>optional uint32 chat_delete_message_for_both_period = 5;</code>
+         */
+        public Builder clearChatDeleteMessageForBothPeriod() {
+
+            chatDeleteMessageForBothPeriod_ = 0;
+            onChanged();
+            return this;
+      }
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
         return this;
@@ -2513,12 +2578,10 @@ public final class ProtoUserLogin {
       "version\030\006 \001(\t\022!\n\010platform\030\007 \001(\0162\017.proto." +
       "Platform\022\030\n\020platform_version\030\010 \001(\t\022\035\n\006de" +
       "vice\030\t \001(\0162\r.proto.Device\022\023\n\013device_name" +
-      "\030\n \001(\t\022!\n\010language\030\013 \001(\0162\017.proto.Languag" +
-      "e\"\210\001\n\021UserLoginResponse\022!\n\010response\030\001 \001(",
+      "\030\n \001(\t\022!\n\010language\030\013 \001(\0162\017.proto.Languag" + "e\"\265\001\n\021UserLoginResponse\022!\n\010response\030\001 \001(",
       "\0132\017.proto.Response\022\031\n\021deprecated_client\030" +
-      "\002 \001(\010\022\033\n\023secondary_node_name\030\003 \001(\t\022\030\n\020up" +
-      "date_available\030\004 \001(\010B \n\016net.iGap.protoB\016" +
-      "ProtoUserLoginb\006proto3"
+      "\002 \001(\010\022\033\n\023secondary_node_name\030\003 \001(\t\022\030\n\020up" + "date_available\030\004 \001(\010\022+\n#chat_delete_mess" + "age_for_both_period\030\005 \001(\rB \n\016net.iGap.pr" +
+      "otoB\016ProtoUserLoginb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -2544,9 +2607,7 @@ public final class ProtoUserLogin {
     internal_static_proto_UserLoginResponse_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_proto_UserLoginResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_proto_UserLoginResponse_descriptor,
-        new java.lang.String[] { "Response", "DeprecatedClient", "SecondaryNodeName", "UpdateAvailable", });
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserLoginResponse_descriptor, new java.lang.String[]{"Response", "DeprecatedClient", "SecondaryNodeName", "UpdateAvailable", "ChatDeleteMessageForBothPeriod", });
     net.iGap.proto.ProtoRequest.getDescriptor();
     net.iGap.proto.ProtoResponse.getDescriptor();
     net.iGap.proto.ProtoGlobal.getDescriptor();
