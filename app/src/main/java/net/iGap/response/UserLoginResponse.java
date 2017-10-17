@@ -43,7 +43,7 @@ public class UserLoginResponse extends MessageHandler {
         builder.getSecondaryNodeName();
         builder.getUpdateAvailable();*/
         G.currentServerTime = builder.getResponse().getTimestamp();
-        G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod();
+        G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod() * 1000;
         G.userLogin = true;
 
         /**

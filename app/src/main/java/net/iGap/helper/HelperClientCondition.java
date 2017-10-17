@@ -12,7 +12,6 @@ package net.iGap.helper;
 
 import android.util.Log;
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -141,23 +140,10 @@ public class HelperClientCondition {
 
                 clientCondition.addRooms(room);
                 Log.i("CLI", "room : " + room);
-                clearOffline(realmClientCondition, realm);
             }
         }
         realm.close();
 
         return clientCondition;
-    }
-
-    private static void clearOffline(final RealmClientCondition realmClientCondition, Realm realm) {
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realmClientCondition.setOfflineEdited(new RealmList<RealmOfflineEdited>());
-                realmClientCondition.setOfflineDeleted(new RealmList<RealmOfflineDelete>());
-                realmClientCondition.setOfflineSeen(new RealmList<RealmOfflineSeen>());
-                realmClientCondition.setOfflineListen(new RealmList<RealmOfflineListen>());
-            }
-        });
     }
 }

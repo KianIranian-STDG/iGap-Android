@@ -1237,6 +1237,9 @@ public class FragmentShearedMedia extends BaseFragment {
                 SelectedList.add(messageId);
 
                 if (RealmRoomMessage.isBothDelete(RealmRoomMessage.getMessageTime(messageId))) {
+                    if (bothDeleteMessageId == null) {
+                        bothDeleteMessageId = new ArrayList<>();
+                    }
                     bothDeleteMessageId.add(messageId);
                 }
 
