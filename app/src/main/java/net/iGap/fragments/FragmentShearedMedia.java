@@ -353,13 +353,11 @@ public class FragmentShearedMedia extends BaseFragment {
             }
         });
 
-        final String count = SelectedList.size() + "";
-
         RippleView rippleDeleteSelected = (RippleView) view.findViewById(R.id.asm_riple_delete_selected);
         rippleDeleteSelected.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-
+                String count = SelectedList.size() + "";
                 //+Realm realm = Realm.getDefaultInstance();
                 final RealmRoom realmRoom = RealmRoom.getRealmRoom(getRealm(), roomId);
 

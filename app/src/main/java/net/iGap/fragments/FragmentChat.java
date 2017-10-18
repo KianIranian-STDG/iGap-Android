@@ -1483,8 +1483,8 @@ public class FragmentChat extends BaseFragment
             //realm.close();
         }
 
-        initAppbarSelected();
         initComponent();
+        initAppbarSelected();
         getDraft();
         getUserInfo();
         insertShearedData();
@@ -6126,7 +6126,7 @@ public class FragmentChat extends BaseFragment
         });
         txtNumberOfSelected = (TextView) G.fragmentActivity.findViewById(R.id.chl_txt_number_of_selected);
 
-        if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER && !isNotJoin) {
+        if (chatType == CHANNEL && !isNotJoin) {
             initLayoutChannelFooter();
         }
     }
