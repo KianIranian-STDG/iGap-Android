@@ -982,7 +982,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         iconDeleteContact.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
 
         TextView iconReport = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
-        iconReport.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
+        iconReport.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_account_alert));
 
         root1.setVisibility(View.VISIBLE);
         root2.setVisibility(View.VISIBLE);

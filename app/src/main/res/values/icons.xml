@@ -129,6 +129,8 @@
   <string name="md_igap_lock">\uf33e</string>
   <string name="md_igap_lock_open_outline">\uf33f</string>
   <string name="md_igap_fingerprint">\uf237</string>
+  <string name="md_igap_account_alert">\uf005</string>
+  <string name="md_igap_alert_box">\f027</string>
 
 
 </resources>

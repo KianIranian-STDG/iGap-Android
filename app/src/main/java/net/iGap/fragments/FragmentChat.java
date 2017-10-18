@@ -461,6 +461,7 @@ public class FragmentChat extends BaseFragment
     private boolean isCameraAttached = false;
     private boolean isPermissionCamera = false;
     private ArrayList<Long> bothDeleteMessageId;
+    private RelativeLayout layoutMute;
 
     private View rootView;
 
@@ -1332,7 +1333,9 @@ public class FragmentChat extends BaseFragment
 
             if (isNotJoin) {
                 final LinearLayout layoutJoin = (LinearLayout) rootView.findViewById(R.id.ac_ll_join);
-                final RelativeLayout layoutMute = (RelativeLayout) rootView.findViewById(R.id.chl_ll_channel_footer);
+                if (layoutMute == null) {
+                    layoutMute = (RelativeLayout) rootView.findViewById(R.id.chl_ll_channel_footer);
+                }
                 layoutJoin.setBackgroundColor(Color.parseColor(G.appBarColor));
                 layoutJoin.setVisibility(View.VISIBLE);
                 layoutMute.setVisibility(View.GONE);
@@ -1353,8 +1356,10 @@ public class FragmentChat extends BaseFragment
                                         layoutJoin.setVisibility(View.GONE);
                                         if (chatType == CHANNEL) {
                                             layoutMute.setVisibility(View.VISIBLE);
+                                            initLayoutChannelFooter();
                                         }
                                         rootView.findViewById(ac_ll_parent).invalidate();
+
 
                                         if (chatType == GROUP) {
                                             viewAttachFile.setVisibility(View.VISIBLE);
@@ -1850,7 +1855,7 @@ public class FragmentChat extends BaseFragment
                 iconCleanUp.setText(G.fragmentActivity.getResources().getString(R.string.md_clean_up));
 
                 TextView iconReport = (TextView) v.findViewById(R.id.dialog_icon_item7_notification);
-                iconCleanUp.setText(G.fragmentActivity.getResources().getString(R.string.md_clean_up));
+                iconReport.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_alert_box));
 
                 root1.setVisibility(View.VISIBLE);
                 root2.setVisibility(View.VISIBLE);
@@ -1878,17 +1883,13 @@ public class FragmentChat extends BaseFragment
                     root3.setVisibility(View.GONE);
                     root5.setVisibility(View.GONE);
 
-                    if (chatType == CHANNEL) {
+                    if (chatType == CHANNEL && chatType == GROUP) {
                         root2.setVisibility(View.GONE);
                         if (channelRole != ChannelChatRole.OWNER || isNotJoin) {
-
                             root7.setVisibility(View.VISIBLE);
                         } else {
                             root7.setVisibility(View.GONE);
                         }
-
-
-
                     }
                 }
 
@@ -3455,7 +3456,7 @@ public class FragmentChat extends BaseFragment
         iconItemSaveToDownload.setText(G.fragmentActivity.getResources().getString(R.string.md_save));
 
         TextView iconReport = (TextView) v.findViewById(R.id.dialog_icon_item8_notification);
-        iconReport.setText(G.fragmentActivity.getResources().getString(R.string.md_save));
+        iconReport.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_alert_box));
 
         if (channelRole != ChannelChatRole.OWNER || isNotJoin) {
             rootReport.setVisibility(View.VISIBLE);
@@ -5317,7 +5318,7 @@ public class FragmentChat extends BaseFragment
                 viewAttachFile.setVisibility(View.GONE);
 
                 if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
-                    rootView.findViewById(R.id.chl_ll_channel_footer).setVisibility(View.GONE);
+                    if (layoutMute != null) layoutMute.setVisibility(View.GONE);
                 }
             }
         };
@@ -5349,7 +5350,7 @@ public class FragmentChat extends BaseFragment
                 mAdapter.toggleSelection(searchHash.lastMessageId, false, null);
 
                 if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
-                    rootView.findViewById(R.id.chl_ll_channel_footer).setVisibility(View.VISIBLE);
+                    layoutMute.setVisibility(View.VISIBLE);
                 } else {
                     viewAttachFile.setVisibility(View.VISIBLE);
                 }
@@ -5987,21 +5988,24 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initLayoutChannelFooter() {
-        LinearLayout layoutAttach = (LinearLayout) rootView.findViewById(R.id.chl_ll_attach);
-        RelativeLayout layoutChannelFooter = (RelativeLayout) rootView.findViewById(R.id.chl_ll_channel_footer);
+        LinearLayout layoutAttach = (LinearLayout) rootView.findViewById(R.id.layout_attach_file);
+        if (layoutMute == null) {
+            layoutMute = (RelativeLayout) rootView.findViewById(R.id.chl_ll_channel_footer);
+        }
+
 
         layoutAttach.setVisibility(View.GONE);
-        layoutChannelFooter.setVisibility(View.VISIBLE);
+        layoutMute.setVisibility(View.VISIBLE);
 
-        txtChannelMute = (TextView) rootView.findViewById(R.id.chl_txt_mute_channel);
-        txtChannelMute.setOnClickListener(new View.OnClickListener() {
+
+        layoutMute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 onSelectRoomMenu("txtMuteNotification", mRoomId);
             }
         });
-
+        if (txtChannelMute == null) txtChannelMute = (TextView) rootView.findViewById(R.id.chl_txt_mute_channel);
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);
         } else {
