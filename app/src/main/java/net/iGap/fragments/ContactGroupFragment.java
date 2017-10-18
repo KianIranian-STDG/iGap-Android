@@ -156,9 +156,7 @@ public class ContactGroupFragment extends BaseFragment {
                             new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
                         }
                     }
-                }
-
-                if (typeCreate.equals("GROUP")) { //  addMemberGroup
+                } else if (typeCreate.equals("GROUP")) { // addMemberGroup
                     G.onGroupAddMember = new OnGroupAddMember() {
                         @Override
                         public void onGroupAddMember(Long roomId, Long UserId) {
@@ -317,7 +315,7 @@ public class ContactGroupFragment extends BaseFragment {
 
     private void addMember(long roomId, ProtoGlobal.Room.Type roomType) {
         RealmRoom.addOwnerToDatabase(roomId, roomType);
-        RealmRoom.updateMemberCount(roomId, roomType, countAddMemberRequest);
+        RealmRoom.updateMemberCount(roomId, roomType, countAddMemberRequest + 1); // plus with 1 , for own account
         if (isAdded()) {
             removeFromBaseFragment(ContactGroupFragment.this);
             new GoToChatActivity(roomId).startActivity();
