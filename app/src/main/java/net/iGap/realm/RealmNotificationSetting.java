@@ -10,7 +10,9 @@
 
 package net.iGap.realm;
 
+import io.realm.Realm;
 import io.realm.RealmObject;
+import net.iGap.proto.ProtoGlobal;
 
 public class RealmNotificationSetting extends RealmObject {
 
@@ -43,7 +45,7 @@ public class RealmNotificationSetting extends RealmObject {
         return sound;
     }
 
-    public void setSound(String sound) {
+    public void sound(String sound) {
         this.sound = sound;
     }
 
@@ -85,5 +87,151 @@ public class RealmNotificationSetting extends RealmObject {
 
     public void setLedColor(int ledColor) {
         this.ledColor = ledColor;
+    }
+
+
+    public static void sound(final long roomId, final String sound, final int which, final ProtoGlobal.Room.Type roomType) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null) {
+                    switch (roomType) {
+                        case CHAT:
+                            if (realmRoom.getChatRoom() != null) {
+                                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                                realmChatRoom.getRealmNotificationSetting().sound(sound);
+                                realmChatRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
+                            }
+                            break;
+                        case GROUP:
+                            if (realmRoom.getGroupRoom() != null) {
+                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                                realmGroupRoom.getRealmNotificationSetting().sound(sound);
+                                realmGroupRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
+                            }
+                            break;
+                        case CHANNEL:
+                            if (realmRoom.getChannelRoom() != null) {
+                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                                realmChannelRoom.getRealmNotificationSetting().sound(sound);
+                                realmChannelRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
+                            }
+                            break;
+                    }
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static void popupNotification(final long roomId, final ProtoGlobal.Room.Type roomType, final int notification) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null) {
+                    switch (roomType) {
+                        case CHAT: {
+                            if (realmRoom.getChatRoom() != null) {
+                                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                                realmChatRoom.getRealmNotificationSetting().setNotification(notification);
+                            }
+                            break;
+                        }
+                        case GROUP: {
+                            if (realmRoom.getGroupRoom() != null) {
+                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                                realmGroupRoom.getRealmNotificationSetting().setNotification(notification);
+                            }
+                            break;
+                        }
+                        case CHANNEL: {
+                            if (realmRoom.getChannelRoom() != null) {
+                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                                realmChannelRoom.getRealmNotificationSetting().setNotification(notification);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static void vibrate(final long roomId, final ProtoGlobal.Room.Type roomType, final int vibrateLevel) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null) {
+                    switch (roomType) {
+                        case CHAT: {
+                            if (realmRoom.getChatRoom() != null) {
+                                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                                realmChatRoom.getRealmNotificationSetting().setVibrate(vibrateLevel);
+                            }
+                            break;
+                        }
+                        case GROUP: {
+                            if (realmRoom.getGroupRoom() != null) {
+                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                                realmGroupRoom.getRealmNotificationSetting().setVibrate(vibrateLevel);
+                            }
+                            break;
+                        }
+                        case CHANNEL: {
+                            if (realmRoom.getChannelRoom() != null) {
+                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                                realmChannelRoom.getRealmNotificationSetting().setVibrate(vibrateLevel);
+                            }
+                            break;
+                        }
+
+                    }
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static void ledColor(final long roomId, final ProtoGlobal.Room.Type roomType, final int ledColor) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null) {
+                    switch (roomType) {
+                        case CHAT: {
+                            if (realmRoom.getChatRoom() != null) {
+                                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                                realmChatRoom.getRealmNotificationSetting().setLedColor(ledColor);
+                            }
+                            break;
+                        }
+                        case GROUP: {
+                            if (realmRoom.getGroupRoom() != null) {
+                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                                realmGroupRoom.getRealmNotificationSetting().setLedColor(ledColor);
+                            }
+                            break;
+                        }
+                        case CHANNEL: {
+                            if (realmRoom.getChannelRoom() != null) {
+                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                                realmChannelRoom.getRealmNotificationSetting().setLedColor(ledColor);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+        realm.close();
     }
 }

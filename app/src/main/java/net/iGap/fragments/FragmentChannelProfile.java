@@ -1493,16 +1493,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
                 //+Realm realm = Realm.getDefaultInstance();
                 //channel info
-                final RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                final RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                getRealm().executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-
-                        realmChannelRoom.setInviteLink(inviteLink);
-                        realmChannelRoom.setInvite_token(inviteToken);
-                    }
-                });
+                RealmChannelRoom.revokeLink(inviteLink, inviteToken);
             }
         });
         //realm.close();
@@ -1595,14 +1586,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                         isPrivate = true;
                         setTextChannelLik();
                         //+Realm realm = Realm.getDefaultInstance();
-                        getRealm().executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                realmChannelRoom.setPrivate(true);
-                            }
-                        });
+                        RealmChannelRoom.removeUsername(roomId);
                         //realm.close();
                     }
                 });
@@ -1765,17 +1749,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                         linkUsername = username;
                         setTextChannelLik();
 
-                        //+Realm realm = Realm.getDefaultInstance();
-                        getRealm().executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                realmChannelRoom.setUsername("iGap.net" + edtUserName.getText().toString());
-                                realmChannelRoom.setPrivate(false);
-                            }
-                        });
-                        //realm.close();
+                        RealmChannelRoom.updateUsername(edtUserName.getText().toString());
                     }
                 });
             }

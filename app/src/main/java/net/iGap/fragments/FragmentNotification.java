@@ -36,6 +36,7 @@ import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmChatRoom;
 import net.iGap.realm.RealmGroupRoom;
@@ -73,21 +74,27 @@ public class FragmentNotification extends BaseFragment {
     private int realmTimes;
     private int realmLedColor;
     private RealmNotificationSetting realmNotificationSetting;
+    private ProtoGlobal.Room.Type roomType;
+
     public FragmentNotification() {
         // Required empty public constructor
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_notification, container, false));
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.toolbar2).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         page = getArguments().getString("PAGE");
         roomId = getArguments().getLong("ID");
+
+        convertRoomType(page);
         callObject(view);
 
         //=================================================Realm
@@ -160,7 +167,8 @@ public class FragmentNotification extends BaseFragment {
         //=================================================Realm
 
         txtBack.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 try {
                     //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
 
@@ -186,130 +194,30 @@ public class FragmentNotification extends BaseFragment {
         }
 
         ltPopupNotification.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_popupNotification)).items(R.array.notifications_notification).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                    .itemsCallback(new MaterialDialog.ListCallback() {
-                        @Override public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                            switch (which) {
-                                case 0: {
-                                    txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_Default));
-                                    Realm realm = Realm.getDefaultInstance();
-                                    realm.executeTransaction(new Realm.Transaction() {
-                                        @Override public void execute(Realm realm) {
-                                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                                            if (realmRoom != null) {
-                                                switch (page) {
-                                                    case "GROUP": {
-                                                        if (realmRoom.getGroupRoom() != null) {
-                                                            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                            realmGroupRoom.getRealmNotificationSetting().setNotification(0);
-                                                        }
-                                                        break;
-                                                    }
-                                                    case "CHANNEL": {
-                                                        if (realmRoom.getChannelRoom() != null) {
-                                                            RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                            realmChannelRoom.getRealmNotificationSetting().setNotification(0);
-                                                        }
-                                                        break;
-                                                    }
-                                                    case "CONTACT": {
-                                                        if (realmRoom.getChatRoom() != null) {
-                                                            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                            realmChatRoom.getRealmNotificationSetting().setNotification(0);
-                                                        }
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    });
-                                    realm.close();
-                                    break;
-                                }
-                                case 1: {
-                                    txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_enable));
-                                    Realm realm = Realm.getDefaultInstance();
-                                    realm.executeTransaction(new Realm.Transaction() {
-                                        @Override public void execute(Realm realm) {
-                                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                            if (realmRoom != null) {
-                                                switch (page) {
-                                                    case "GROUP": {
-                                                        if (realmRoom.getGroupRoom() != null) {
-
-                                                            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                            realmGroupRoom.getRealmNotificationSetting().setNotification(1);
-                                                        }
-                                                        break;
-                                                    }
-                                                    case "CHANNEL": {
-                                                        if (realmRoom.getChannelRoom() != null) {
-
-                                                            RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                            realmChannelRoom.getRealmNotificationSetting().setNotification(1);
-                                                        }
-                                                        break;
-                                                    }
-                                                    case "CONTACT": {
-                                                        if (realmRoom.getChatRoom() != null) {
-                                                            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                            realmChatRoom.getRealmNotificationSetting().setNotification(1);
-                                                        }
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    });
-                                    realm.close();
-                                    break;
-                                }
-                                case 2: {
-                                    txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_Disable));
-                                    Realm realm = Realm.getDefaultInstance();
-                                    realm.executeTransaction(new Realm.Transaction() {
-                                        @Override public void execute(Realm realm) {
-                                            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                            if (realmRoom != null) {
-                                                switch (page) {
-                                                    case "GROUP": {
-                                                        if (realmRoom.getGroupRoom() != null) {
-
-                                                            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                            realmGroupRoom.getRealmNotificationSetting().setNotification(2);
-                                                        }
-                                                        break;
-                                                    }
-                                                    case "CHANNEL": {
-                                                        if (realmRoom.getChannelRoom() != null) {
-
-                                                            RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                            realmChannelRoom.getRealmNotificationSetting().setNotification(2);
-                                                        }
-                                                        break;
-                                                    }
-                                                    case "CONTACT": {
-                                                        if (realmRoom.getChatRoom() != null) {
-
-                                                            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                            realmChatRoom.getRealmNotificationSetting().setNotification(2);
-                                                        }
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    });
-                                    realm.close();
-                                    break;
-                                }
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_popupNotification)).items(R.array.notifications_notification).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        switch (which) {
+                            case DEFAULT: {
+                                txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_Default));
+                                RealmNotificationSetting.popupNotification(roomId, roomType, DEFAULT);
+                                break;
+                            }
+                            case ENABLE: {
+                                txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_enable));
+                                RealmNotificationSetting.popupNotification(roomId, roomType, ENABLE);
+                                break;
+                            }
+                            case DISABLE: {
+                                txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_Disable));
+                                RealmNotificationSetting.popupNotification(roomId, roomType, DISABLE);
+                                break;
                             }
                         }
-                    })
-                    .show();
+                    }
+                }).show();
             }
         });
 
@@ -320,101 +228,66 @@ public class FragmentNotification extends BaseFragment {
             txtSound.setText(realmSound);
         }
         ltSound.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.Ringtone))
-                    .titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black))
-                    .items(R.array.sound_message)
-                    .alwaysCallSingleChoiceCallback()
-                    .itemsCallbackSingleChoice(realmIdSound, new MaterialDialog.ListCallbackSingleChoice() {
-                        @Override public boolean onSelection(MaterialDialog dialog, View view, final int which, final CharSequence text) {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.Ringtone)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.sound_message).alwaysCallSingleChoiceCallback().itemsCallbackSingleChoice(realmIdSound, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, final int which, final CharSequence text) {
 
-                            switch (which) {
-                                case 0:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.igap).start();
-                                    break;
-                                case 1:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.aooow).start();
-                                    break;
-                                case 2:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.bbalert).start();
-                                    break;
-                                case 3:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.boom).start();
-                                    break;
-                                case 4:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.bounce).start();
-                                    break;
-                                case 5:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.doodoo).start();
-                                    break;
+                        switch (which) {
+                            case 0:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.igap).start();
+                                break;
+                            case 1:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.aooow).start();
+                                break;
+                            case 2:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.bbalert).start();
+                                break;
+                            case 3:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.boom).start();
+                                break;
+                            case 4:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.bounce).start();
+                                break;
+                            case 5:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.doodoo).start();
+                                break;
 
-                                case 6:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.jing).start();
-                                    break;
-                                case 7:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.lili).start();
-                                    break;
-                                case 8:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.msg).start();
-                                    break;
-                                case 9:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.newa).start();
-                                    break;
-                                case 10:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.none).start();
-                                    break;
-                                case 11:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.onelime).start();
-                                    break;
-                                case 12:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.tone).start();
-                                    break;
-                                case 13:
-                                    MediaPlayer.create(G.fragmentActivity, R.raw.woow).start();
-                                    break;
-                            }
-
-                            txtSound.setText(text.toString());
-                            realmIdSound = which;
-                            Realm realm = Realm.getDefaultInstance();
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override public void execute(Realm realm) {
-                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                    if (realmRoom != null) {
-                                        switch (page) {
-                                            case "GROUP": {
-                                                if (realmRoom.getGroupRoom() != null) {
-                                                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                    realmGroupRoom.getRealmNotificationSetting().setSound(text.toString());
-                                                    realmGroupRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
-                                                }
-                                                break;
-                                            }
-                                            case "CHANNEL": {
-                                                if (realmRoom.getChannelRoom() != null) {
-                                                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                    realmChannelRoom.getRealmNotificationSetting().setSound(text.toString());
-                                                    realmChannelRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
-                                                }
-                                                break;
-                                            }
-                                            case "CONTACT": {
-                                                if (realmRoom.getChatRoom() != null) {
-                                                    RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                    realmChatRoom.getRealmNotificationSetting().setSound(text.toString());
-                                                    realmChatRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
-                                                }
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            });
-                            realm.close();
-                            return true;
+                            case 6:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.jing).start();
+                                break;
+                            case 7:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.lili).start();
+                                break;
+                            case 8:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.msg).start();
+                                break;
+                            case 9:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.newa).start();
+                                break;
+                            case 10:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.none).start();
+                                break;
+                            case 11:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.onelime).start();
+                                break;
+                            case 12:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.tone).start();
+                                break;
+                            case 13:
+                                MediaPlayer.create(G.fragmentActivity, R.raw.woow).start();
+                                break;
                         }
-                    }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                    .show();
+
+                        txtSound.setText(text.toString());
+                        realmIdSound = which;
+
+                        RealmNotificationSetting.sound(roomId, text.toString(), which, roomType);
+
+                        return true;
+                    }
+                }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).show();
             }
         });
 
@@ -439,82 +312,48 @@ public class FragmentNotification extends BaseFragment {
         }
 
         ltVibrate.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                    .itemsCallback(new MaterialDialog.ListCallback() {
-                        @Override public void onSelection(MaterialDialog dialog, View view, final int which, CharSequence text) {
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_vibrate)).items(R.array.vibrate).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, final int vibrateLevel, CharSequence text) {
 
-                            txtVibrate.setText(text.toString());
+                        txtVibrate.setText(text.toString());
 
-                            switch (which) {
-                                case 0:
-                                    Vibrator vDisable = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                                    vDisable.vibrate(0);
-                                    break;
-                                case 1:
+                        switch (vibrateLevel) {
+                            case 0:
+                                Vibrator vDisable = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                vDisable.vibrate(0);
+                                break;
+                            case 1:
 
-                                    Vibrator vDefault = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                                    vDefault.vibrate(350);
+                                Vibrator vDefault = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                vDefault.vibrate(350);
 
-                                    break;
-                                case 2:
-                                    Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                                    vShort.vibrate(200);
-                                    break;
-                                case 3:
-                                    Vibrator vLong = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                                    vLong.vibrate(500);
-                                    break;
-                                case 4:
-                                    AudioManager am2 = (AudioManager) G.fragmentActivity.getSystemService(Context.AUDIO_SERVICE);
+                                break;
+                            case 2:
+                                Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                vShort.vibrate(200);
+                                break;
+                            case 3:
+                                Vibrator vLong = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                vLong.vibrate(500);
+                                break;
+                            case 4:
+                                AudioManager am2 = (AudioManager) G.fragmentActivity.getSystemService(Context.AUDIO_SERVICE);
 
-                                    switch (am2.getRingerMode()) {
-                                        case AudioManager.RINGER_MODE_SILENT:
-                                            Vibrator vSilent = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                                            vSilent.vibrate(AudioManager.VIBRATE_SETTING_ONLY_SILENT);
-                                    }
-                                    break;
-                            }
-
-                            Realm realm = Realm.getDefaultInstance();
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override public void execute(Realm realm) {
-                                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-                                    if (realmRoom != null) {
-                                        switch (page) {
-                                            case "GROUP": {
-                                                if (realmRoom.getGroupRoom() != null) {
-
-                                                    RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                    realmGroupRoom.getRealmNotificationSetting().setVibrate(which);
-                                                }
-                                                break;
-                                            }
-                                            case "CHANNEL": {
-                                                if (realmRoom.getChannelRoom() != null) {
-
-                                                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                    realmChannelRoom.getRealmNotificationSetting().setVibrate(which);
-                                                }
-                                                break;
-                                            }
-                                            case "CONTACT": {
-                                                if (realmRoom.getChatRoom() != null) {
-                                                    RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                    realmChatRoom.getRealmNotificationSetting().setVibrate(which);
-                                                }
-                                                break;
-                                            }
-                                        }
-                                    }
+                                switch (am2.getRingerMode()) {
+                                    case AudioManager.RINGER_MODE_SILENT:
+                                        Vibrator vSilent = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                        vSilent.vibrate(AudioManager.VIBRATE_SETTING_ONLY_SILENT);
                                 }
-                            });
-                            realm.close();
+                                break;
                         }
-                    })
-                    .show();
+
+                        RealmNotificationSetting.vibrate(roomId, roomType, vibrateLevel);
+                    }
+                }).show();
             }
         });
 
@@ -522,14 +361,11 @@ public class FragmentNotification extends BaseFragment {
 
         txtSmartNotification.setText("Sound at must " + realmTimes + " times within " + realmMinutes + " minutes");
         ltSmartNotification.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title("Smart Notifications")
-                    .customView(R.layout.dialog_number_picker, wrapInScrollView)
-                    .positiveText(R.string.B_ok)
-                    .negativeText(R.string.B_cancel)
-                    .build();
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title("Smart Notifications").customView(R.layout.dialog_number_picker, wrapInScrollView).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).build();
 
                 View view1 = dialog.getCustomView();
 
@@ -549,11 +385,13 @@ public class FragmentNotification extends BaseFragment {
 
                 View btnPositive = dialog.getActionButton(DialogAction.POSITIVE);
                 btnPositive.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
                         txtSmartNotification.setText("Sound at must " + numberPickerTimes.getValue() + " times within " + numberPickerMinutes.getValue() + " minutes");
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
+                            @Override
+                            public void execute(Realm realm) {
                                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                                 if (realmRoom != null) {
                                     switch (page) {
@@ -604,20 +442,21 @@ public class FragmentNotification extends BaseFragment {
         GradientDrawable bgShape = (GradientDrawable) imgLED.getBackground();
         bgShape.setColor(realmLedColor);
         ltLedColor.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color))
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                final MaterialDialog dialog =
+                        new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        }
-                    })
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            }
+                        }).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        }
-                    })
-                    .build();
+                            }
+                        }).build();
 
                 View view1 = dialog.getCustomView();
                 assert view1 != null;
@@ -628,47 +467,13 @@ public class FragmentNotification extends BaseFragment {
                 picker.addOpacityBar(opacityBar);
 
                 dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View view) {
-
+                    @Override
+                    public void onClick(View view) {
                         dialog.dismiss();
                         GradientDrawable bgShape = (GradientDrawable) imgLED.getBackground();
                         bgShape.setColor(picker.getColor());
 
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override public void execute(Realm realm) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                if (realmRoom != null) {
-                                    switch (page) {
-                                        case "GROUP": {
-                                            if (realmRoom.getGroupRoom() != null) {
-
-                                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                realmGroupRoom.getRealmNotificationSetting().setLedColor(picker.getColor());
-                                            }
-                                            break;
-                                        }
-                                        case "CHANNEL": {
-                                            if (realmRoom.getChannelRoom() != null) {
-
-                                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                realmChannelRoom.getRealmNotificationSetting().setLedColor(picker.getColor());
-                                            }
-                                            break;
-                                        }
-                                        case "CONTACT": {
-                                            if (realmRoom.getChatRoom() != null) {
-                                                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                realmChatRoom.getRealmNotificationSetting().setLedColor(picker.getColor());
-                                            }
-
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                        realm.close();
+                        RealmNotificationSetting.ledColor(roomId, roomType, picker.getColor());
                     }
                 });
 
@@ -677,14 +482,30 @@ public class FragmentNotification extends BaseFragment {
         });
     }
 
+    private void convertRoomType(String type) {
+        switch (type) {
+            case "CONTACT":
+                roomType = ProtoGlobal.Room.Type.CHAT;
+                break;
+            case "GROUP":
+                roomType = ProtoGlobal.Room.Type.GROUP;
+                break;
+            case "CHANNEL":
+                roomType = ProtoGlobal.Room.Type.CHANNEL;
+                break;
+        }
+
+    }
+
     private void setRealm(Realm realm, final RealmGroupRoom realmGroupRoom, final RealmChannelRoom realmChannelRoom, final RealmChatRoom realmChatRoom) {
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
                 realmNotificationSetting = realm.createObject(RealmNotificationSetting.class);
 
                 realmNotificationSetting.setNotification(0);
                 realmNotificationSetting.setVibrate(-1);
-                realmNotificationSetting.setSound(G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
+                realmNotificationSetting.sound(G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
                 realmNotificationSetting.setIdRadioButtonSound(-1);
                 realmNotificationSetting.setSmartNotification(G.fragmentActivity.getResources().getString(R.string.array_Default));
                 realmNotificationSetting.setTimes(-1);

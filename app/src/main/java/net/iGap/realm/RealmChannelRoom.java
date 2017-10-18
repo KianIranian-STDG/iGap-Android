@@ -18,6 +18,8 @@ import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 
+import static net.iGap.module.MusicPlayer.roomId;
+
 public class RealmChannelRoom extends RealmObject {
     private String role;
     private int participants_count;
@@ -78,6 +80,59 @@ public class RealmChannelRoom extends RealmObject {
                 realmChannelRoom.setRole(ChannelChatRole.MEMBER);// set default role
 
                 realmRoom.setChannelRoom(realmChannelRoom);
+            }
+        });
+        realm.close();
+    }
+
+    public static void revokeLink(final String inviteLink, final String inviteToken) {
+        Realm realm = Realm.getDefaultInstance();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            final RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+            if (realmChannelRoom != null) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realmChannelRoom.setInviteLink(inviteLink);
+                        realmChannelRoom.setInvite_token(inviteToken);
+                    }
+                });
+            }
+        }
+        realm.close();
+    }
+
+    public static void removeUsername(final long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null) {
+                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                    if (realmChannelRoom != null) {
+                        realmChannelRoom.setPrivate(true);
+                    }
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static void updateUsername(final String username) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null) {
+                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                    if (realmChannelRoom != null) {
+                        realmChannelRoom.setUsername("iGap.net" + username);
+                        realmChannelRoom.setPrivate(false);
+                    }
+                }
             }
         });
         realm.close();
@@ -158,14 +213,6 @@ public class RealmChannelRoom extends RealmObject {
     public void setMembers(RealmList<RealmMember> members) {
         this.members = members;
     }
-
-    //    public String getInvite_link() {
-    //        return invite_link;
-    //    }
-    //
-    //    public void setInvite_link(String invite_link) {
-    //        this.invite_link = invite_link;
-    //    }
 
     public String getInvite_token() {
         return invite_token;
