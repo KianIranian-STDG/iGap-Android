@@ -22,8 +22,7 @@ import net.iGap.proto.ProtoGlobal;
 import org.parceler.Parcel;
 import org.parceler.ParcelPropertyConverter;
 
-@Parcel(implementations = { RealmRoomMessageContactRealmProxy.class }, value = Parcel.Serialization.BEAN, analyze = { RealmRoomMessageContact.class }) public class RealmRoomMessageContact
-    extends RealmObject {
+@Parcel(implementations = {RealmRoomMessageContactRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessageContact.class}) public class RealmRoomMessageContact extends RealmObject {
 
     private String firstName;
     private String lastName;
@@ -97,23 +96,20 @@ import org.parceler.ParcelPropertyConverter;
         return phones;
     }
 
-    @ParcelPropertyConverter(StringListParcelConverter.class) public void setPhones(RealmList<RealmString> phones) {
+    @ParcelPropertyConverter(StringListParcelConverter.class)
+    public void setPhones(RealmList<RealmString> phones) {
         this.phones = phones;
     }
 
     public void addPhone(String phone) {
         Realm realm = Realm.getDefaultInstance();
-        RealmString realmString = realm.createObject(RealmString.class);
-        realmString.setString(phone);
-        phones.add(realmString);
+        phones.add(RealmString.string(realm, phone));
         realm.close();
     }
 
     public void addEmail(String email) {
         Realm realm = Realm.getDefaultInstance();
-        RealmString realmString = realm.createObject(RealmString.class);
-        realmString.setString(email);
-        phones.add(realmString);
+        phones.add(RealmString.string(realm, email));
         realm.close();
     }
 
@@ -128,7 +124,8 @@ import org.parceler.ParcelPropertyConverter;
         return emails;
     }
 
-    @ParcelPropertyConverter(StringListParcelConverter.class) public void setEmails(RealmList<RealmString> emails) {
+    @ParcelPropertyConverter(StringListParcelConverter.class)
+    public void setEmails(RealmList<RealmString> emails) {
         this.emails = emails;
     }
 }
