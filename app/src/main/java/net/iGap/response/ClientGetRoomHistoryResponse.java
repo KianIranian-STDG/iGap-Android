@@ -58,7 +58,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
                             if (roomMessage.getAuthor().hasUser()) {
                                 HelperInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                             }
-                            RealmRoomMessage.putOrUpdate(roomMessage, roomId);
+                            RealmRoomMessage.putOrUpdate(roomMessage, roomId, false, true, realm);
                         }
                     }
                 }, new Realm.Transaction.OnSuccess() {

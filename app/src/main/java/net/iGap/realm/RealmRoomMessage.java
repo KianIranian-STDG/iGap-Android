@@ -207,28 +207,11 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         this.showTime = showTime;
     }
 
-    public static RealmRoomMessage putOrUpdateGetRoom(ProtoGlobal.RoomMessage input, long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessage message = putOrUpdate(input, roomId, true, false, false, realm);
-        realm.close();
-        return message;
+    private static RealmRoomMessage putOrUpdateForwardOrReply(ProtoGlobal.RoomMessage input, long roomId, Realm realm) {
+        return putOrUpdate(input, roomId, true, true, realm);
     }
 
-    public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessage message = putOrUpdate(input, roomId, true, false, true, realm);
-        realm.close();
-        return message;
-    }
-
-    private static RealmRoomMessage putOrUpdateForwardOrReply(ProtoGlobal.RoomMessage input, long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessage message = putOrUpdate(input, roomId, true, true, true, realm);
-        realm.close();
-        return message;
-    }
-
-    public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId, boolean showMessage, boolean forwardOrReply, boolean setGap, Realm realm) {
+    public static RealmRoomMessage putOrUpdate(ProtoGlobal.RoomMessage input, long roomId, boolean forwardOrReply, boolean setGap, Realm realm) {
         long messageId;
         if (forwardOrReply) {
             /**
@@ -246,10 +229,10 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
             message.setRoomId(roomId);
 
             if (input.hasForwardFrom()) {
-                message.setForwardMessage(RealmRoomMessage.putOrUpdateForwardOrReply(input.getForwardFrom(), -1));
+                message.setForwardMessage(RealmRoomMessage.putOrUpdateForwardOrReply(input.getForwardFrom(), -1, realm));
             }
             if (input.hasReplyTo()) {
-                message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), -1));
+                message.setReplyTo(RealmRoomMessage.putOrUpdateForwardOrReply(input.getReplyTo(), -1, realm));
             }
             message.setShowMessage(true);
         }

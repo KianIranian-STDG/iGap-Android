@@ -411,8 +411,7 @@ public class RealmRoom extends RealmObject {
          * set setFirstUnreadMessage
          */
         if (room.hasFirstUnreadMessage()) {
-            RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdateGetRoom(room.getFirstUnreadMessage(), room.getId());
-            //realmRoomMessage.setPreviousMessageId(room.getFirstUnreadMessage().getMessageId());
+            RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(room.getFirstUnreadMessage(), room.getId(), false, false, realm);
             realmRoomMessage.setFutureMessageId(room.getFirstUnreadMessage().getMessageId());
             realmRoom.setFirstUnreadMessage(realmRoomMessage);
         }
@@ -425,7 +424,7 @@ public class RealmRoom extends RealmObject {
             if (!RealmRoomMessage.existMessage(room.getLastMessage().getMessageId())) {
                 setGap = true;
             }
-            RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdateGetRoom(room.getLastMessage(), room.getId());
+            RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(room.getLastMessage(), room.getId(), false, false, realm);
             if (setGap) {
                 realmRoomMessage.setPreviousMessageId(room.getLastMessage().getMessageId());
                 realmRoomMessage.setFutureMessageId(room.getLastMessage().getMessageId());
@@ -446,8 +445,6 @@ public class RealmRoom extends RealmObject {
         realmRoomDraft.setReplyToMessageId(room.getDraft().getReplyTo());
 
         realmRoom.setDraft(realmRoomDraft);
-
-
 
         return realmRoom;
     }

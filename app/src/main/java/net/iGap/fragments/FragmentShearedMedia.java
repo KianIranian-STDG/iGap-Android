@@ -911,7 +911,7 @@ public class FragmentShearedMedia extends BaseFragment {
                     @Override
                     public void execute(Realm realm) {
                         for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
-                            RealmRoomMessage.putOrUpdate(roomMessage, roomId, false, false, false, realm);
+                            RealmRoomMessage.putOrUpdate(roomMessage, roomId, false, false, realm);
                         }
                     }
                     //}, new Realm.Transaction.OnSuccess() {

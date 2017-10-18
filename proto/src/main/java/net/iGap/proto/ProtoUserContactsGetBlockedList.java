@@ -711,6 +711,16 @@ public final class ProtoUserContactsGetBlockedList {
        * <code>optional uint64 user_id = 1;</code>
        */
       long getUserId();
+
+        /**
+         * <code>optional string cache_id = 2;</code>
+         */
+        java.lang.String getCacheId();
+
+        /**
+         * <code>optional string cache_id = 2;</code>
+         */
+        com.google.protobuf.ByteString getCacheIdBytes();
     }
     /**
      * Protobuf type {@code proto.UserContactsGetBlockedListResponse.User}
@@ -724,7 +734,8 @@ public final class ProtoUserContactsGetBlockedList {
         super(builder);
       }
       private User() {
-        userId_ = 0L;
+          userId_ = 0L;
+        cacheId_ = "";
       }
 
       @java.lang.Override
@@ -755,7 +766,13 @@ public final class ProtoUserContactsGetBlockedList {
               case 8: {
 
                 userId_ = input.readUInt64();
-                break;
+                  break;
+              }
+                case 18: {
+                    java.lang.String s = input.readStringRequireUtf8();
+
+                    cacheId_ = s;
+                    break;
               }
             }
           }
@@ -789,6 +806,38 @@ public final class ProtoUserContactsGetBlockedList {
         return userId_;
       }
 
+        public static final int CACHE_ID_FIELD_NUMBER = 2;
+        private volatile java.lang.Object cacheId_;
+
+        /**
+         * <code>optional string cache_id = 2;</code>
+         */
+        public java.lang.String getCacheId() {
+            java.lang.Object ref = cacheId_;
+            if (ref instanceof java.lang.String) {
+                return (java.lang.String) ref;
+            } else {
+                com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+                java.lang.String s = bs.toStringUtf8();
+                cacheId_ = s;
+                return s;
+            }
+        }
+
+        /**
+         * <code>optional string cache_id = 2;</code>
+         */
+        public com.google.protobuf.ByteString getCacheIdBytes() {
+            java.lang.Object ref = cacheId_;
+            if (ref instanceof java.lang.String) {
+                com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+                cacheId_ = b;
+                return b;
+            } else {
+                return (com.google.protobuf.ByteString) ref;
+        }
+      }
+
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
@@ -802,7 +851,10 @@ public final class ProtoUserContactsGetBlockedList {
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         if (userId_ != 0L) {
-          output.writeUInt64(1, userId_);
+            output.writeUInt64(1, userId_);
+        }
+          if (!getCacheIdBytes().isEmpty()) {
+              com.google.protobuf.GeneratedMessageV3.writeString(output, 2, cacheId_);
         }
       }
 
@@ -812,8 +864,10 @@ public final class ProtoUserContactsGetBlockedList {
 
         size = 0;
         if (userId_ != 0L) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeUInt64Size(1, userId_);
+          size += com.google.protobuf.CodedOutputStream.computeUInt64Size(1, userId_);
+        }
+          if (!getCacheIdBytes().isEmpty()) {
+              size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, cacheId_);
         }
         memoizedSize = size;
         return size;
@@ -831,8 +885,9 @@ public final class ProtoUserContactsGetBlockedList {
         net.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User other = (net.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User) obj;
 
         boolean result = true;
-        result = result && (getUserId()
-            == other.getUserId());
+        result = result && (getUserId() == other.getUserId());
+          result = result && getCacheId()
+            .equals(other.getCacheId());
         return result;
       }
 
@@ -844,8 +899,9 @@ public final class ProtoUserContactsGetBlockedList {
         int hash = 41;
         hash = (19 * hash) + getDescriptorForType().hashCode();
         hash = (37 * hash) + USER_ID_FIELD_NUMBER;
-        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-            getUserId());
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(getUserId());
+          hash = (37 * hash) + CACHE_ID_FIELD_NUMBER;
+          hash = (53 * hash) + getCacheId().hashCode();
         hash = (29 * hash) + unknownFields.hashCode();
         memoizedHashCode = hash;
         return hash;
@@ -963,8 +1019,10 @@ public final class ProtoUserContactsGetBlockedList {
           }
         }
         public Builder clear() {
-          super.clear();
-          userId_ = 0L;
+            super.clear();
+            userId_ = 0L;
+
+          cacheId_ = "";
 
           return this;
         }
@@ -988,7 +1046,8 @@ public final class ProtoUserContactsGetBlockedList {
 
         public net.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User buildPartial() {
           net.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User result = new net.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User(this);
-          result.userId_ = userId_;
+            result.userId_ = userId_;
+          result.cacheId_ = cacheId_;
           onBuilt();
           return result;
         }
@@ -1031,7 +1090,11 @@ public final class ProtoUserContactsGetBlockedList {
         public Builder mergeFrom(net.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User other) {
           if (other == net.iGap.proto.ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User.getDefaultInstance()) return this;
           if (other.getUserId() != 0L) {
-            setUserId(other.getUserId());
+              setUserId(other.getUserId());
+          }
+            if (!other.getCacheId().isEmpty()) {
+                cacheId_ = other.cacheId_;
+            onChanged();
           }
           onChanged();
           return this;
@@ -1081,7 +1144,75 @@ public final class ProtoUserContactsGetBlockedList {
         public Builder clearUserId() {
           
           userId_ = 0L;
-          onChanged();
+            onChanged();
+            return this;
+        }
+
+          private java.lang.Object cacheId_ = "";
+
+          /**
+           * <code>optional string cache_id = 2;</code>
+           */
+          public java.lang.String getCacheId() {
+              java.lang.Object ref = cacheId_;
+              if (!(ref instanceof java.lang.String)) {
+                  com.google.protobuf.ByteString bs = (com.google.protobuf.ByteString) ref;
+                  java.lang.String s = bs.toStringUtf8();
+                  cacheId_ = s;
+                  return s;
+              } else {
+                  return (java.lang.String) ref;
+              }
+          }
+
+          /**
+           * <code>optional string cache_id = 2;</code>
+           */
+          public com.google.protobuf.ByteString getCacheIdBytes() {
+              java.lang.Object ref = cacheId_;
+              if (ref instanceof String) {
+                  com.google.protobuf.ByteString b = com.google.protobuf.ByteString.copyFromUtf8((java.lang.String) ref);
+                  cacheId_ = b;
+                  return b;
+              } else {
+                  return (com.google.protobuf.ByteString) ref;
+              }
+          }
+
+          /**
+           * <code>optional string cache_id = 2;</code>
+           */
+          public Builder setCacheId(java.lang.String value) {
+              if (value == null) {
+                  throw new NullPointerException();
+              }
+
+              cacheId_ = value;
+              onChanged();
+              return this;
+          }
+
+          /**
+           * <code>optional string cache_id = 2;</code>
+           */
+          public Builder clearCacheId() {
+
+              cacheId_ = getDefaultInstance().getCacheId();
+              onChanged();
+              return this;
+          }
+
+          /**
+           * <code>optional string cache_id = 2;</code>
+           */
+          public Builder setCacheIdBytes(com.google.protobuf.ByteString value) {
+              if (value == null) {
+                  throw new NullPointerException();
+              }
+              checkByteStringIsUtf8(value);
+
+              cacheId_ = value;
+              onChanged();
           return this;
         }
         public final Builder setUnknownFields(
@@ -1961,14 +2092,11 @@ public final class ProtoUserContactsGetBlockedList {
   static {
     java.lang.String[] descriptorData = {
       "\n UserContactsGetBlockedList.proto\022\005prot" +
-      "o\032\rRequest.proto\032\016Response.proto\"=\n\032User" +
-      "ContactsGetBlockedList\022\037\n\007request\030\001 \001(\0132" +
-      "\016.proto.Request\"\236\001\n\"UserContactsGetBlock" +
-      "edListResponse\022!\n\010response\030\001 \001(\0132\017.proto" +
-      ".Response\022<\n\004user\030\002 \003(\0132..proto.UserCont" +
-      "actsGetBlockedListResponse.User\032\027\n\004User\022" +
-      "\017\n\007user_id\030\001 \001(\004B1\n\016net.iGap.protoB\037Prot" +
-      "oUserContactsGetBlockedListb\006proto3"
+      "o\032\rRequest.proto\032\016Response.proto\"=\n\032User" + "ContactsGetBlockedList\022\037\n\007request\030\001 \001(\0132" +
+      "\016.proto.Request\"\260\001\n\"UserContactsGetBlock" +
+      "edListResponse\022!\n\010response\030\001 \001(\0132\017.proto" + ".Response\022<\n\004user\030\002 \003(\0132..proto.UserCont" + "actsGetBlockedListResponse.User\032)\n\004User\022" + "\017\n\007user_id\030\001 \001(\004\022\020\n\010cache_id\030\002 \001(\tB1\n\016ne" +
+      "t.iGap.protoB\037ProtoUserContactsGetBlocke" +
+      "dListb\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -1999,9 +2127,8 @@ public final class ProtoUserContactsGetBlockedList {
     internal_static_proto_UserContactsGetBlockedListResponse_User_descriptor =
       internal_static_proto_UserContactsGetBlockedListResponse_descriptor.getNestedTypes().get(0);
     internal_static_proto_UserContactsGetBlockedListResponse_User_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_proto_UserContactsGetBlockedListResponse_User_descriptor,
-        new java.lang.String[] { "UserId", });
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(internal_static_proto_UserContactsGetBlockedListResponse_User_descriptor,
+        new java.lang.String[] { "UserId", "CacheId", });
     net.iGap.proto.ProtoRequest.getDescriptor();
     net.iGap.proto.ProtoResponse.getDescriptor();
   }

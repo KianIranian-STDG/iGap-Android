@@ -39,7 +39,7 @@ public class HelperMessageResponse {
                 /**
                  * put message to realm
                  */
-                RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(roomMessage, roomId);
+                RealmRoomMessage realmRoomMessage = RealmRoomMessage.putOrUpdate(roomMessage, roomId, false, true, realm);
                 final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 /**
                  * because user may have more than one device, his another device should not
