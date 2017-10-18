@@ -26,7 +26,7 @@ import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoGlobal;
 import org.parceler.Parcel;
 
-@Parcel(implementations = { RealmAttachmentRealmProxy.class }, value = Parcel.Serialization.BEAN, analyze = { RealmAttachment.class }) public class RealmAttachment extends RealmObject {
+@Parcel(implementations = {RealmAttachmentRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmAttachment.class}) public class RealmAttachment extends RealmObject {
     // should be message id for message attachment and user id for avatar
     @PrimaryKey private long id;
     private String token;
@@ -50,6 +50,30 @@ import org.parceler.Parcel;
         realm.close();
     }
 
+    public static RealmAttachment putOrUpdate(Realm realm, long messageId, RealmAttachment realmAttachment, ProtoGlobal.File attachment) {
+        if (realmAttachment == null) {
+            realmAttachment = realm.createObject(RealmAttachment.class, messageId);
+        }
+        realmAttachment.setCacheId(attachment.getCacheId());
+        realmAttachment.setDuration(attachment.getDuration());
+        realmAttachment.setHeight(attachment.getHeight());
+        realmAttachment.setName(attachment.getName());
+        realmAttachment.setSize(attachment.getSize());
+        realmAttachment.setToken(attachment.getToken());
+        realmAttachment.setWidth(attachment.getWidth());
+
+        long smallMessageThumbnail = SUID.id().get();
+        RealmThumbnail.put(smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
+
+        long largeMessageThumbnail = SUID.id().get();
+        RealmThumbnail.put(largeMessageThumbnail, messageId, attachment.getSmallThumbnail());
+
+        realmAttachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo(RealmThumbnailFields.ID, smallMessageThumbnail).findFirst());
+        realmAttachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo(RealmThumbnailFields.ID, largeMessageThumbnail).findFirst());
+
+        return realmAttachment;
+    }
+
     public static RealmAttachment build(ProtoGlobal.File file, AttachmentFor attachmentFor, @Nullable ProtoGlobal.RoomMessageType messageType) {
         Realm realm = Realm.getDefaultInstance();
 
@@ -63,9 +87,9 @@ import org.parceler.Parcel;
             realmAttachment.setHeight(file.getHeight());
 
             long largeId = SUID.id().get();
-            RealmThumbnail.create(largeId, id, file.getLargeThumbnail());
+            RealmThumbnail.put(largeId, id, file.getLargeThumbnail());
             long smallId = SUID.id().get();
-            RealmThumbnail.create(smallId, id, file.getSmallThumbnail());
+            RealmThumbnail.put(smallId, id, file.getSmallThumbnail());
 
             RealmThumbnail largeThumbnail = realm.where(RealmThumbnail.class).equalTo("id", largeId).findFirst();
             realmAttachment.setLargeThumbnail(largeThumbnail);
@@ -139,13 +163,6 @@ import org.parceler.Parcel;
                                     e.printStackTrace();
                                 }
                             }
-
-
-
-
-
-
-
                         }
                     }
                 }
@@ -173,7 +190,8 @@ import org.parceler.Parcel;
         this.smallThumbnail = smallThumbnail;
     }
 
-    @Nullable public String getLocalThumbnailPath() {
+    @Nullable
+    public String getLocalThumbnailPath() {
         return localThumbnailPath;
     }
 
@@ -189,7 +207,8 @@ import org.parceler.Parcel;
         return localFilePath != null && new File(localFilePath).exists();
     }
 
-    @Nullable public String getLocalFilePath() {
+    @Nullable
+    public String getLocalFilePath() {
         return localFilePath;
     }
 

@@ -266,7 +266,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
             if (message.getAttachment().getSmallThumbnail() == null) {
                 long smallId = SUID.id().get();
-                RealmThumbnail smallThumbnail = RealmThumbnail.create(smallId, message.getAttachment().getId(), input.getAttachment().getSmallThumbnail());
+                RealmThumbnail smallThumbnail = RealmThumbnail.put(smallId, message.getAttachment().getId(), input.getAttachment().getSmallThumbnail());
                 message.getAttachment().setSmallThumbnail(smallThumbnail);
             }
 
@@ -286,7 +286,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
             message.setLocation(RealmRoomMessageLocation.put(input.getLocation(), id));
         }
         if (input.hasLog()) {
-            message.setLog(RealmRoomMessageLog.build(input.getLog()));
+            message.setLog(RealmRoomMessageLog.put(input.getLog()));
             message.setLogMessage(HelperLogMessage.logMessage(roomId, input.getAuthor(), input.getLog(), message.getMessageId()));
 
         }
@@ -609,43 +609,10 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         Realm realm = Realm.getDefaultInstance();
         if (!attachment.getToken().isEmpty()) {
             if (this.attachment == null) {
-                final RealmAttachment realmAttachment = realm.createObject(RealmAttachment.class, messageId);
-                realmAttachment.setCacheId(attachment.getCacheId());
-                realmAttachment.setDuration(attachment.getDuration());
-                realmAttachment.setHeight(attachment.getHeight());
-                realmAttachment.setName(attachment.getName());
-                realmAttachment.setSize(attachment.getSize());
-                realmAttachment.setToken(attachment.getToken());
-                realmAttachment.setWidth(attachment.getWidth());
-
-                long smallMessageThumbnail = SUID.id().get();
-                RealmThumbnail.create(smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
-
-                long largeMessageThumbnail = SUID.id().get();
-                RealmThumbnail.create(largeMessageThumbnail, messageId, attachment.getSmallThumbnail());
-
-                realmAttachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo(RealmThumbnailFields.ID, smallMessageThumbnail).findFirst());
-                realmAttachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo(RealmThumbnailFields.ID, largeMessageThumbnail).findFirst());
-
-                this.attachment = realmAttachment;
+                this.attachment = RealmAttachment.putOrUpdate(realm, messageId, null, attachment);
             } else {
                 if (this.attachment.isValid()) {
-                    this.attachment.setCacheId(attachment.getCacheId());
-                    this.attachment.setDuration(attachment.getDuration());
-                    this.attachment.setHeight(attachment.getHeight());
-                    this.attachment.setName(attachment.getName());
-                    this.attachment.setSize(attachment.getSize());
-                    this.attachment.setToken(attachment.getToken());
-                    this.attachment.setWidth(attachment.getWidth());
-
-                    long smallMessageThumbnail = SUID.id().get();
-                    RealmThumbnail.create(smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
-
-                    long largeMessageThumbnail = SUID.id().get();
-                    RealmThumbnail.create(largeMessageThumbnail, messageId, attachment.getSmallThumbnail());
-
-                    this.attachment.setSmallThumbnail(realm.where(RealmThumbnail.class).equalTo(RealmThumbnailFields.ID, smallMessageThumbnail).findFirst());
-                    this.attachment.setLargeThumbnail(realm.where(RealmThumbnail.class).equalTo(RealmThumbnailFields.ID, largeMessageThumbnail).findFirst());
+                    this.attachment = RealmAttachment.putOrUpdate(realm, messageId, this.attachment, attachment);
                 }
             }
             realm.close();
