@@ -6751,11 +6751,7 @@ public class FragmentChat extends BaseFragment
                 }
 
                 if (finalMessageType == CONTACT) {
-                    RealmRoomMessageContact realmRoomMessageContact = realm.createObject(RealmRoomMessageContact.class, SUID.id().get());
-                    realmRoomMessageContact.setFirstName(finalMessageInfo.userInfo.firstName);
-                    realmRoomMessageContact.setLastName(finalMessageInfo.userInfo.lastName);
-                    realmRoomMessageContact.addPhone(finalMessageInfo.userInfo.phone);
-                    roomMessage.setRoomMessageContact(realmRoomMessageContact);
+                    roomMessage.setRoomMessageContact(RealmRoomMessageContact.put(realm, finalMessageInfo));
                 }
 
                 if (finalMessageType != CONTACT) {
@@ -6901,12 +6897,8 @@ public class FragmentChat extends BaseFragment
             @Override
             public void execute(Realm realm) {
 
-                RealmRoomMessageLocation messageLocation = realm.createObject(RealmRoomMessageLocation.class, SUID.id().get());
-                messageLocation.setLocationLat(latitude);
-                messageLocation.setLocationLong(longitude);
-                messageLocation.setImagePath(imagePath);
                 RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, id);
-                roomMessage.setLocation(messageLocation);
+                roomMessage.setLocation(RealmRoomMessageLocation.put(realm, latitude, longitude, imagePath));
                 roomMessage.setCreateTime(TimeUtils.currentLocalTime());
                 roomMessage.setMessageType(ProtoGlobal.RoomMessageType.LOCATION);
                 roomMessage.setRoomId(mRoomId);

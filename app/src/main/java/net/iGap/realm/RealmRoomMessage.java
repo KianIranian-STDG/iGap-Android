@@ -283,7 +283,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
             Long id = null;
             if (message.getLocation() != null) id = message.getLocation().getId();
 
-            message.setLocation(RealmRoomMessageLocation.build(input.getLocation(), id));
+            message.setLocation(RealmRoomMessageLocation.put(input.getLocation(), id));
         }
         if (input.hasLog()) {
             message.setLog(RealmRoomMessageLog.build(input.getLog()));
@@ -291,7 +291,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
         }
         if (input.hasContact()) {
-            message.setRoomMessageContact(RealmRoomMessageContact.build(input.getContact()));
+            message.setRoomMessageContact(RealmRoomMessageContact.put(input.getContact()));
         }
         message.setMessageType(input.getMessageType());
         message.setMessageVersion(input.getMessageVersion());

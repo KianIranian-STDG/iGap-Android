@@ -18,6 +18,7 @@ import io.realm.annotations.PrimaryKey;
 import net.iGap.helper.HelperString;
 import net.iGap.module.SUID;
 import net.iGap.module.StringListParcelConverter;
+import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
 import org.parceler.Parcel;
 import org.parceler.ParcelPropertyConverter;
@@ -31,21 +32,29 @@ import org.parceler.ParcelPropertyConverter;
     private RealmList<RealmString> emails = new RealmList<>();
     @PrimaryKey private long id;
 
-    public static RealmRoomMessageContact build(final ProtoGlobal.RoomMessageContact input) {
+    public static RealmRoomMessageContact put(final ProtoGlobal.RoomMessageContact input) {
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessageContact messageContact = realm.createObject(RealmRoomMessageContact.class, SUID.id().get());
+        messageContact.setLastName(input.getLastName());
+        messageContact.setFirstName(input.getFirstName());
+        messageContact.setNickName(input.getNickname());
         for (String phone : input.getPhoneList()) {
             messageContact.addPhone(phone);
         }
-        messageContact.setLastName(input.getLastName());
-        messageContact.setFirstName(input.getFirstName());
         for (String email : input.getEmailList()) {
             messageContact.addEmail(email);
         }
-        messageContact.setNickName(input.getNickname());
         realm.close();
 
         return messageContact;
+    }
+
+    public static RealmRoomMessageContact put(Realm realm, StructMessageInfo structMessageInfo) {
+        RealmRoomMessageContact realmRoomMessageContact = realm.createObject(RealmRoomMessageContact.class, SUID.id().get());
+        realmRoomMessageContact.setFirstName(structMessageInfo.userInfo.firstName);
+        realmRoomMessageContact.setLastName(structMessageInfo.userInfo.lastName);
+        realmRoomMessageContact.addPhone(structMessageInfo.userInfo.phone);
+        return realmRoomMessageContact;
     }
 
     public long getId() {
