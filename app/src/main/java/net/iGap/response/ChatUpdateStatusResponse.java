@@ -18,8 +18,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmClientConditionFields;
-import net.iGap.realm.RealmOfflineListen;
-import net.iGap.realm.RealmOfflineSeen;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
@@ -51,22 +49,16 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                 if (!response.getId().isEmpty()) { // I'm sender
 
                     if (chatUpdateStatus.getStatus() == ProtoGlobal.RoomMessageStatus.SEEN) {
-                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatUpdateStatus.getRoomId()).findFirst();
-                        for (RealmOfflineSeen realmOfflineSeen : realmClientCondition.getOfflineSeen()) {
-                            if (realmOfflineSeen.getOfflineSeen() == chatUpdateStatus.getMessageId()) {
-                                realmOfflineSeen.deleteFromRealm();
-                                break;
-                            }
+                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.OFFLINE_SEEN.OFFLINE_SEEN, chatUpdateStatus.getMessageId()).findFirst();
+                        if (realmClientCondition != null) {
+                            realmClientCondition.getOfflineSeen().deleteFirstFromRealm();
                         }
                     } else if (chatUpdateStatus.getStatus() == ProtoGlobal.RoomMessageStatus.LISTENED) {
-                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatUpdateStatus.getRoomId()).findFirst();
-                        for (RealmOfflineListen realmOfflineListen : realmClientCondition.getOfflineListen()) {
-                            if (realmOfflineListen.getOfflineListen() == chatUpdateStatus.getMessageId()) {
-                                realmOfflineListen.deleteFromRealm();
-
-                                break;
-                            }
+                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.OFFLINE_LISTEN.OFFLINE_LISTEN, chatUpdateStatus.getMessageId()).findFirst();
+                        if (realmClientCondition != null) {
+                            realmClientCondition.getOfflineListen().deleteFirstFromRealm();
                         }
+
                     }
                 } else { // I'm recipient
                     /**

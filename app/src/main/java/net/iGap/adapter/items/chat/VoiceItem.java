@@ -32,7 +32,6 @@ import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
-import net.iGap.module.SUID;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmClientCondition;
@@ -164,8 +163,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
                         if (realmClientCondition != null) {
 
-                            RealmOfflineListen realmOfflineListen = realm.createObject(RealmOfflineListen.class, SUID.id().get());
-                            realmOfflineListen.setOfflineListen(Long.parseLong(holder.mMessageID));
+                            RealmOfflineListen realmOfflineListen = RealmOfflineListen.put(realm, Long.parseLong(holder.mMessageID));
                             if (realmClientCondition.getOfflineListen() != null) {
                                 realmClientCondition.getOfflineListen().add(realmOfflineListen);
                             } else {

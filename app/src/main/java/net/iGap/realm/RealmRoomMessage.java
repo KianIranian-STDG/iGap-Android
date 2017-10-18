@@ -151,10 +151,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
                                      */
                                     if (roomMessage.getUserId() != G.userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
                                         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-                                        RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
-                                        realmOfflineSeen.setOfflineSeen(roomMessage.getMessageId());
-
-                                        realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
+                                        realmClientCondition.getOfflineSeen().add(RealmOfflineSeen.put(realm, roomMessage.getMessageId()));
                                         callback.sendSeenStatus(roomMessage);
                                         count++;
                                         if (count >= 100) { // do this block for 100 item, (client need to send all status in one request, wait for server change...)

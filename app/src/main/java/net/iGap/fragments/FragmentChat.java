@@ -304,7 +304,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 
 public class FragmentChat extends BaseFragment
-    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
 
     public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
@@ -2333,13 +2333,9 @@ public class FragmentChat extends BaseFragment
                                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
 
                                 RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
-
-                                RealmOfflineEdited realmOfflineEdited = realm.createObject(RealmOfflineEdited.class, SUID.id().get());
-                                realmOfflineEdited.setMessageId(parseLong(messageInfo.messageID));
-                                realmOfflineEdited.setMessage(message);
-                                realmOfflineEdited = realm.copyToRealm(realmOfflineEdited);
-
-                                realmClientCondition.getOfflineEdited().add(realmOfflineEdited);
+                                if (realmClientCondition != null) {
+                                    realmClientCondition.getOfflineEdited().add(RealmOfflineEdited.put(realm, Long.parseLong(messageInfo.messageID), message));
+                                }
 
                                 if (roomMessage != null) {
                                     // update message text in database
@@ -3075,9 +3071,7 @@ public class FragmentChat extends BaseFragment
                                                     if (realmRoomMessage.isValid() && !realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
                                                         realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
-                                                        RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
-                                                        realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
-                                                        realm.copyToRealmOrUpdate(realmOfflineSeen);
+                                                        RealmOfflineSeen realmOfflineSeen = RealmOfflineSeen.put(realm, realmRoomMessage.getMessageId());
                                                         if (realmClientCondition.getOfflineSeen() != null) {
                                                             realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
                                                         } else {
@@ -3192,14 +3186,14 @@ public class FragmentChat extends BaseFragment
 
         if (userTriesReplay()) {
             messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
         } else {
             if (isMessageWrote()) {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             } else {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             }
         }
 
@@ -3365,9 +3359,7 @@ public class FragmentChat extends BaseFragment
                             if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
                                 realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
 
-                                RealmOfflineSeen realmOfflineSeen = realm.createObject(RealmOfflineSeen.class, SUID.id().get());
-                                realmOfflineSeen.setOfflineSeen(realmRoomMessage.getMessageId());
-                                realm.copyToRealmOrUpdate(realmOfflineSeen);
+                                RealmOfflineSeen realmOfflineSeen = RealmOfflineSeen.put(realm, realmRoomMessage.getMessageId());
                                 if (realmClientCondition.getOfflineSeen() != null) {
                                     realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
                                 } else {
@@ -4812,7 +4804,7 @@ public class FragmentChat extends BaseFragment
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-            MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+                MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         };
 
         cursor = activity.getContentResolver().query(uri, projection, null, null, null);
@@ -5669,9 +5661,9 @@ public class FragmentChat extends BaseFragment
                                         public void run() {
 
                                             fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                .lensPosition(back())       // we want back camera
-                                                .build();
+                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                    .lensPosition(back())       // we want back camera
+                                                    .build();
 
                                             fotoapparatSwitcher.start();
                                         }
@@ -5712,9 +5704,9 @@ public class FragmentChat extends BaseFragment
                                         @Override
                                         public void run() {
                                             fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                .lensPosition(back())       // we want back camera
-                                                .build();
+                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                    .lensPosition(back())       // we want back camera
+                                                    .build();
 
                                             fotoapparatSwitcher.stop();
                                         }
@@ -7393,7 +7385,7 @@ public class FragmentChat extends BaseFragment
         long gapMessageId;
         if (direction == DOWN) {
             resultsUp =
-                getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+                    getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
              * if for UP state client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
