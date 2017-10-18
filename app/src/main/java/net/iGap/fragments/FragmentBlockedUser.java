@@ -22,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
@@ -53,7 +55,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
     //private BlockListAdapter mAdapter;
     private Realm realmBlockedUser;
-
+    private StickyRecyclerHeadersDecoration decoration;
     private Realm getRealmBlockedUser() {
         if (realmBlockedUser == null || realmBlockedUser.isClosed()) {
             realmBlockedUser = Realm.getDefaultInstance();
@@ -131,11 +133,12 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
         //});
 
         RealmResults<RealmRegisteredInfo> results = getRealmBlockedUser().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.BLOCK_USER, true).findAll();
-        BlockListAdapter blockListAdapter = new BlockListAdapter(results);
+        BlockListAdapter blockListAdapter = new BlockListAdapter(results.sort(RealmRegisteredInfoFields.DISPLAY_NAME));
         realmRecyclerView.setAdapter(blockListAdapter);
-
-
+        decoration = new StickyRecyclerHeadersDecoration(new StickyHeader(results.sort(RealmRegisteredInfoFields.DISPLAY_NAME)));
+        realmRecyclerView.addItemDecoration(decoration);
     }
+
 
     @Override
     public void onDestroy() {
@@ -353,6 +356,39 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                     });
                 }
             });
+        }
+    }
+
+    private class StickyHeader implements StickyRecyclerHeadersAdapter {
+
+        RealmResults<RealmRegisteredInfo> realmResults;
+
+        StickyHeader(RealmResults<RealmRegisteredInfo> realmResults) {
+            this.realmResults = realmResults;
+        }
+
+        @Override
+        public long getHeaderId(int position) {
+            return realmResults.get(position).getDisplayName().toUpperCase().charAt(0);
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_header_item, parent, false);
+            return new RecyclerView.ViewHolder(view) {
+            };
+        }
+
+        @Override
+        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+            CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
+            textView.setText(realmResults.get(position).getDisplayName().toUpperCase().substring(0, 1));
+        }
+
+        @Override
+        public int getItemCount() {
+            return realmResults.size();
         }
     }
 }
