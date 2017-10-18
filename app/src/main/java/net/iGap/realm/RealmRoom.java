@@ -437,14 +437,7 @@ public class RealmRoom extends RealmObject {
             }
         }
 
-        RealmRoomDraft realmRoomDraft = realmRoom.getDraft();
-        if (realmRoomDraft == null) {
-            realmRoomDraft = realm.createObject(RealmRoomDraft.class);
-        }
-        realmRoomDraft.setMessage(room.getDraft().getMessage());
-        realmRoomDraft.setReplyToMessageId(room.getDraft().getReplyTo());
-
-        realmRoom.setDraft(realmRoomDraft);
+        realmRoom.setDraft(RealmRoomDraft.putOrUpdate(realm, realmRoom.getDraft(), room.getDraft().getMessage(), room.getDraft().getReplyTo()));
 
         return realmRoom;
     }
@@ -528,10 +521,7 @@ public class RealmRoom extends RealmObject {
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null) {
-                    RealmRoomDraft realmRoomDraft = realm.createObject(RealmRoomDraft.class);
-                    realmRoomDraft.setMessage(message);
-                    realmRoomDraft.setReplyToMessageId(replyToMessageId);
-                    realmRoom.setDraft(realmRoomDraft);
+                    realmRoom.setDraft(RealmRoomDraft.put(realm, message, replyToMessageId));
 
                     if (G.onDraftMessage != null) {
                         G.onDraftMessage.onDraftMessage(roomId, message);

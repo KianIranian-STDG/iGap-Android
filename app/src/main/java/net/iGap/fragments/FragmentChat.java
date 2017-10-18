@@ -5020,11 +5020,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void execute(Realm realm) {
 
-                        RealmRoomDraft draft = realm.createObject(RealmRoomDraft.class);
-                        draft.setMessage(finalMessage);
-                        draft.setReplyToMessageId(replyToMessageId);
-
-                        realmRoom.setDraft(draft);
+                        realmRoom.setDraft(RealmRoomDraft.put(realm, finalMessage, replyToMessageId));
 
                         if (chatType == CHAT) {
                             new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, finalMessage, replyToMessageId);
