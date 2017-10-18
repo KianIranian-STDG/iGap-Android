@@ -74,7 +74,7 @@ public class UserContactsGetBlockedListResponse extends MessageHandler {
         realm.close();
 
         for (ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User user : list) {
-            RealmRegisteredInfo.getRegistrationInfo(user.getUserId(), new OnInfo() {
+            RealmRegisteredInfo.getRegistrationInfo(user.getUserId(), user.getCacheId(), new OnInfo() {
                 @Override
                 public void onInfo(final RealmRegisteredInfo registeredInfo) {
                     Realm realm = Realm.getDefaultInstance();

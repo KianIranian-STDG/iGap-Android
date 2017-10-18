@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import android.support.annotation.Nullable;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -270,16 +271,16 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
     /**
-     * check info existence in realm if exist will be returned that otherwise send
-     * 'RequestUserInfo' to server and after get response will be called 'OnInfo'
-     * for return 'RealmRegisteredInfo'
+     * check info existence in realm if exist and cacheId is equal, will be returned;
+     * otherwise send 'RequestUserInfo' to server and after get response will be called
+     * 'OnInfo' for return 'RealmRegisteredInfo'
      *
      * @param onRegistrationInfo RealmRegisteredInfo will be returned with this interface
      */
-    public static void getRegistrationInfo(long userId, final OnInfo onRegistrationInfo) {
+    public static void getRegistrationInfo(long userId, @Nullable String cacheId, final OnInfo onRegistrationInfo) {
         Realm realm = Realm.getDefaultInstance();
         final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
-        if (realmRegisteredInfo != null) {
+        if (realmRegisteredInfo != null && (cacheId == null || realmRegisteredInfo.getCacheId().equals(cacheId))) {
             onRegistrationInfo.onInfo(realmRegisteredInfo);
         } else {
             RequestUserInfo.infoHashMap.put(userId, onRegistrationInfo);
@@ -301,6 +302,10 @@ public class RealmRegisteredInfo extends RealmObject {
             new RequestUserInfo().userInfo(userId, RequestUserInfo.InfoType.JUST_INFO.toString());
         }
         realm.close();
+    }
+
+    public static void getRegistrationInfo(long userId, final OnInfo onRegistrationInfo) {
+        getRegistrationInfo(userId, null, onRegistrationInfo);
     }
 
     public static RealmRegisteredInfo getRegistrationInfo(Realm realm, long userId) {
