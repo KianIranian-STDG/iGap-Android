@@ -1883,13 +1883,13 @@ public class FragmentChat extends BaseFragment
                     root3.setVisibility(View.GONE);
                     root5.setVisibility(View.GONE);
 
-                    if (chatType == CHANNEL && chatType == GROUP) {
+                    if (chatType == CHANNEL) {
                         root2.setVisibility(View.GONE);
-                        if (channelRole != ChannelChatRole.OWNER || isNotJoin) {
-                            root7.setVisibility(View.VISIBLE);
-                        } else {
-                            root7.setVisibility(View.GONE);
-                        }
+                    }
+                    if (channelRole != ChannelChatRole.OWNER || groupRole != GroupChatRole.OWNER || isNotJoin) {
+                        root7.setVisibility(View.VISIBLE);
+                    } else {
+                        root7.setVisibility(View.GONE);
                     }
                 }
 
@@ -3458,7 +3458,7 @@ public class FragmentChat extends BaseFragment
         TextView iconReport = (TextView) v.findViewById(R.id.dialog_icon_item8_notification);
         iconReport.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_alert_box));
 
-        if (channelRole != ChannelChatRole.OWNER || isNotJoin) {
+        if (channelRole != ChannelChatRole.OWNER || groupRole != GroupChatRole.OWNER || isNotJoin) {
             rootReport.setVisibility(View.VISIBLE);
         } else {
             rootReport.setVisibility(View.GONE);
