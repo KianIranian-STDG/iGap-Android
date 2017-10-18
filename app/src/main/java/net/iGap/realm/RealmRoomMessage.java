@@ -311,12 +311,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         }
 
         if (input.hasChannelExtra()) {
-            RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
-            realmChannelExtra.setMessageId(input.getMessageId());
-            realmChannelExtra.setSignature(input.getChannelExtra().getSignature());
-            realmChannelExtra.setThumbsDown(input.getChannelExtra().getThumbsDownLabel());
-            realmChannelExtra.setThumbsUp(input.getChannelExtra().getThumbsUpLabel());
-            realmChannelExtra.setViewsLabel(input.getChannelExtra().getViewsLabel());
+            RealmChannelExtra.putOrUpdate(realm, input.getMessageId(), input.getChannelExtra());
         }
 
         addTimeIfNeed(message, realm);

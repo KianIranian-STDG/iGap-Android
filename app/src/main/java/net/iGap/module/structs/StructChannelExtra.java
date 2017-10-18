@@ -27,33 +27,12 @@ import org.parceler.Parcel;
 
     public static StructChannelExtra convert(RealmChannelExtra realmChannelExtra) {
         StructChannelExtra structChannelExtra = new StructChannelExtra();
-
-        /*if (realmChannelExtra.getSignature().isEmpty()) {
-            if (showSignature(roomId)) {
-                structChannelExtra.signature = getName();
-            }
-        } else {
-            structChannelExtra.signature = realmChannelExtra.getSignature();
-        }*/
-
         structChannelExtra.signature = realmChannelExtra.getSignature();
         structChannelExtra.thumbsUp = realmChannelExtra.getThumbsUp();
         structChannelExtra.thumbsDown = realmChannelExtra.getThumbsDown();
         structChannelExtra.viewsLabel = realmChannelExtra.getViewsLabel();
         return structChannelExtra;
     }
-
-    private static boolean showSignature(long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        boolean signature = false;
-        if (realmRoom != null && realmRoom.getChannelRoom() != null) {
-            signature = realmRoom.getChannelRoom().isSignature();
-        }
-        realm.close();
-        return signature;
-    }
-
 
     public static StructChannelExtra makeDefaultStructure(long messageId, long roomId) {
         StructChannelExtra structChannelExtra = new StructChannelExtra();

@@ -17,7 +17,7 @@ import net.iGap.module.structs.StructChannelExtra;
 import net.iGap.proto.ProtoGlobal;
 import org.parceler.Parcel;
 
-@Parcel(implementations = { RealmChannelExtraRealmProxy.class }, value = Parcel.Serialization.BEAN, analyze = { RealmChannelExtra.class }) public class RealmChannelExtra extends RealmObject {
+@Parcel(implementations = {RealmChannelExtraRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmChannelExtra.class}) public class RealmChannelExtra extends RealmObject {
 
     private long messageId;
     private String signature;
@@ -75,16 +75,26 @@ import org.parceler.Parcel;
         return realmChannelExtra;
     }
 
-    /**
-     * get latest count for vote and increase it
-     *
-     * @param reaction Up or Down
-     */
-    public void setVote(ProtoGlobal.RoomMessageReaction reaction, String voteCount) {
-        if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
-            setThumbsUp(voteCount);
-        } else if (reaction == ProtoGlobal.RoomMessageReaction.THUMBS_DOWN) {
-            setThumbsDown(voteCount);
+    public static RealmChannelExtra putOrUpdate(Realm realm, long messageId, ProtoGlobal.RoomMessage.ChannelExtra channelExtra) {
+        RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
+        realmChannelExtra.setMessageId(messageId);
+        realmChannelExtra.setSignature(channelExtra.getSignature());
+        realmChannelExtra.setThumbsUp(channelExtra.getThumbsUpLabel());
+        realmChannelExtra.setThumbsDown(channelExtra.getThumbsDownLabel());
+        realmChannelExtra.setViewsLabel(channelExtra.getViewsLabel());
+        return realmChannelExtra;
+    }
+
+    public static void setVote(long messageId, ProtoGlobal.RoomMessageReaction messageReaction, String counterLabel) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+        if (realmChannelExtra != null) {
+            if (messageReaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+                realmChannelExtra.setThumbsUp(counterLabel);
+            } else {
+                realmChannelExtra.setThumbsDown(counterLabel);
+            }
         }
+        realm.close();
     }
 }
