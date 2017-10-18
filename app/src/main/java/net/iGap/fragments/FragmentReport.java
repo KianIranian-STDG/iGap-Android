@@ -9,7 +9,6 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ import net.iGap.request.RequestUserReport;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentReport extends Fragment {
+public class FragmentReport extends BaseFragment {
 
     private RippleView txtBack;
     private RippleView rippleOk;
@@ -35,8 +34,6 @@ public class FragmentReport extends Fragment {
     private long roomId;
     private long messageId = 0;
     private boolean isUserReport;
-
-
 
     public FragmentReport() {
         // Required empty public constructor
@@ -46,7 +43,7 @@ public class FragmentReport extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_report, container, false);
+        return attachToSwipeBack(inflater.inflate(R.layout.fragment_report, container, false));
     }
 
     @Override
@@ -60,10 +57,6 @@ public class FragmentReport extends Fragment {
             messageId = extras.getLong("MESSAGE_ID");
             isUserReport = extras.getBoolean("USER_ID");
         }
-
-        Log.i("GGGGGGGGGGGG", "roomId: " + roomId);
-        Log.i("GGGGGGGGGGGG", "messageId: " + messageId);
-        Log.i("GGGGGGGGGGGG", "isUserReport: " + isUserReport);
 
         txtBack = (RippleView) view.findViewById(R.id.stns_ripple_back);
         rippleOk = (RippleView) view.findViewById(R.id.verifyPassword_rippleOk);

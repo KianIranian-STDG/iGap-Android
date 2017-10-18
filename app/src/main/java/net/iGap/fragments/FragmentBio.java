@@ -25,7 +25,7 @@ import net.iGap.request.RequestUserProfileSetBio;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentBio extends Fragment {
+public class FragmentBio extends BaseFragment {
 
     private RippleView txtBack;
     private RippleView rippleOk;
@@ -43,7 +43,7 @@ public class FragmentBio extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bio, container, false);
+        return attachToSwipeBack(inflater.inflate(R.layout.fragment_bio, container, false));
     }
 
     @Override
