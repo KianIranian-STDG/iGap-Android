@@ -11,11 +11,8 @@
 package net.iGap.response;
 
 import io.realm.Realm;
-import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoUserAvatarGetList;
-import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 
 public class UserAvatarGetListResponse extends MessageHandler {
 
@@ -33,25 +30,17 @@ public class UserAvatarGetListResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-
+        final ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder builder = (ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder) message;
         Realm realm = Realm.getDefaultInstance();
-        final long userId = Long.parseLong(identity);
-
+        final long ownerId = Long.parseLong(identity);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-
-                realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll().deleteAllFromRealm();
-                ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder builder = (ProtoUserAvatarGetList.UserAvatarGetListResponse.Builder) message;
-
                 for (int i = 0; i < builder.getAvatarList().size(); i++) {
-                    RealmAvatar realmAvatar = realm.createObject(RealmAvatar.class, builder.getAvatarList().get(i).getId());
-                    realmAvatar.setOwnerId(userId);
-                    realmAvatar.setFile(RealmAttachment.build(builder.getAvatarList().get(i).getFile(), AttachmentFor.AVATAR, null));
+                    RealmAvatar.putAndGet(realm, ownerId, builder.getAvatar(i));
                 }
             }
         });
-
         realm.close();
     }
 
