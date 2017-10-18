@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
@@ -68,7 +69,7 @@ import net.iGap.request.RequestSignalingGetLog;
     private RecyclerView.OnScrollListener onScrollListener;
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = true;
-    private AppCompatImageView imgCallEmpty;
+    private ImageView imgCallEmpty;
     private TextView empty_call;
     ProgressBar progressBar;
     private int attampOnError = 0;
@@ -143,7 +144,7 @@ import net.iGap.request.RequestSignalingGetLog;
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<RealmCallLog> results = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING);
+        final RealmResults<RealmCallLog> results = realm.where(RealmCallLog.class).findAllSorted(RealmCallLogFields.TIME, Sort.DESCENDING);
 
         if (results.size() > 0) {
             imgCallEmpty.setVisibility(View.GONE);
@@ -156,6 +157,36 @@ import net.iGap.request.RequestSignalingGetLog;
 
         CallAdapter callAdapter = new CallAdapter(results);
         mRecyclerView.setAdapter(callAdapter);
+
+        callAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                if (results.size() > 0) {
+                    imgCallEmpty.setVisibility(View.GONE);
+                    empty_call.setVisibility(View.GONE);
+
+                } else {
+                    imgCallEmpty.setVisibility(View.VISIBLE);
+                    empty_call.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                if (results.size() > 0) {
+                    imgCallEmpty.setVisibility(View.GONE);
+                    empty_call.setVisibility(View.GONE);
+
+                } else {
+                    imgCallEmpty.setVisibility(View.VISIBLE);
+                    empty_call.setVisibility(View.VISIBLE);
+                }
+            }
+
+        });
 
         //fastAdapter
         //mAdapter = new CallAdapterA();
