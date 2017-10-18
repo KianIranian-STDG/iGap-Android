@@ -6095,7 +6095,7 @@ public class FragmentChat extends BaseFragment
 
                         final String count = list.size() + "";
 
-                        if (chatType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().mMessage.senderID.equalsIgnoreCase(Long.toString(G.userId)) && list.size() == 1) {
+                        if (chatType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().mMessage.senderID.equalsIgnoreCase(Long.toString(G.userId))) {
                             // show both Delete check box
                             new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(G.context.getResources().getString(R.string.st_desc_delete, count)).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
