@@ -1090,7 +1090,7 @@
   <string name="st_Abuse">Abuse</string>
   <string name="st_FakeAccount">FakeAccount</string>
   <string name="st_limit_bio">You have exceeded the allowed number of characters. You can use only 70 characters for Bio.</string>
-  <string name="st_checkbox_delete">Delete for %1$s</string>
+  <string name="st_checkbox_delete">Delete for</string>
   <string name="st_desc_delete">Are you sure you want to delete %1$s message(s)?</string>
 
 </resources>

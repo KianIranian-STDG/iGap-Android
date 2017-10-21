@@ -279,6 +279,7 @@ import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.R.string.item;
+import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.helper.HelperGetDataFromOtherApp.messageType;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.getPathN;
@@ -615,7 +616,7 @@ public class FragmentChat extends BaseFragment
                                             }
                                             //    avi.setVisibility(View.GONE);
 
-                                            if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                                            if (HelperCalander.isLanguagePersian) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                                         }
                                     });
                                 }
@@ -1281,7 +1282,7 @@ public class FragmentChat extends BaseFragment
                 txtName.setText(txtName.getText().toString());
             }
             if (HelperCalander.isLanguagePersian) {
-                txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
             }
         }
 
@@ -2845,7 +2846,7 @@ public class FragmentChat extends BaseFragment
             txtNumberOfSelected.setText(selectedCount + "");
 
             if (HelperCalander.isLanguagePersian) {
-                txtNumberOfSelected.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNumberOfSelected.getText().toString()));
+                txtNumberOfSelected.setText(convertToUnicodeFarsiNumber(txtNumberOfSelected.getText().toString()));
             }
 
             if (selectedCount > 1) {
@@ -3673,7 +3674,16 @@ public class FragmentChat extends BaseFragment
 
                 if (chatType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId.size() > 0 && message.senderID.equalsIgnoreCase(Long.toString(G.userId))) {
                     // show both Delete check box
-                    new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(G.context.getResources().getString(R.string.st_desc_delete, "1")).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+
+                    String delete;
+                    String textCheckBox = G.context.getResources().getString(R.string.st_checkbox_delete) + " " + title;
+                    if (HelperCalander.isLanguagePersian) {
+                        delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "1"));
+                    } else {
+                        delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
+                    }
+
+                    new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(delete).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             if (!dialog.isPromptCheckBoxChecked()) {
@@ -3682,7 +3692,7 @@ public class FragmentChat extends BaseFragment
 
                             deleteMassage(getRealmChat(), message, messageIds, bothDeleteMessageId, chatType);
                         }
-                    }).checkBoxPrompt(G.context.getResources().getString(R.string.st_checkbox_delete, title), false, null).show();
+                    }).checkBoxPrompt(textCheckBox, false, null).show();
 
                 } else {
 
@@ -3929,7 +3939,7 @@ public class FragmentChat extends BaseFragment
                                 }
                             }
                             // change english number to persian number
-                            if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                            if (HelperCalander.isLanguagePersian) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                         }
                     });
                 }
@@ -3960,7 +3970,7 @@ public class FragmentChat extends BaseFragment
                     //}
                     ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                     // change english number to persian number
-                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             }
         });
@@ -4275,7 +4285,7 @@ public class FragmentChat extends BaseFragment
                         //}
                         ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                         // change english number to persian number
-                        if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                        if (HelperCalander.isLanguagePersian) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
                         checkAction();
                     }
@@ -4344,7 +4354,7 @@ public class FragmentChat extends BaseFragment
                         }
                     }
                     // change english number to persian number
-                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             });
         }
@@ -6067,7 +6077,17 @@ public class FragmentChat extends BaseFragment
 
                         if (chatType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId.size() > 0 && mAdapter.getSelectedItems().iterator().next().mMessage.senderID.equalsIgnoreCase(Long.toString(G.userId))) {
                             // show both Delete check box
-                            new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(G.context.getResources().getString(R.string.st_desc_delete, count)).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+
+                            String delete;
+                            String textCheckBox = G.context.getResources().getString(R.string.st_checkbox_delete) + " " + title;
+                            if (HelperCalander.isLanguagePersian) {
+                                delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, count));
+
+                            } else {
+                                delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
+
+                            }
+                            new MaterialDialog.Builder(G.fragmentActivity).limitIconToDefaultSize().content(delete).title(R.string.message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
                                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     if (!dialog.isPromptCheckBoxChecked()) {
@@ -6077,7 +6097,7 @@ public class FragmentChat extends BaseFragment
                                     RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, bothDeleteMessageId, chatType);
                                     deleteSelectedMessageFromAdapter(list);
                                 }
-                            }).checkBoxPrompt(G.context.getResources().getString(R.string.st_checkbox_delete, title), false, null).show();
+                            }).checkBoxPrompt(textCheckBox, false, null).show();
 
                         } else {
 
@@ -7008,7 +7028,7 @@ public class FragmentChat extends BaseFragment
 
                 if (HelperCalander.isLanguagePersian) {
 
-                    emMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(_count + " " + str));
+                    emMessage.setText(convertToUnicodeFarsiNumber(_count + " " + str));
                 } else {
 
                     emMessage.setText(_count + " " + str);

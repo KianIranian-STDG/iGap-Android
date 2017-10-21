@@ -1088,7 +1088,7 @@
   <string name="text_empty_user_map">متأسفانه هیچ کاربری اطراف شما نفشه خود را فعال نکرده است</string>
   <string name="send_message_to">ارسال پیام به  </string>
 
-  <string name="st_bio">بیوگرافی</string>
+  <string name="st_bio">بیو</string>
   <string name="st_des_bio">شما می توانید توضیح مختصری دربارهٔ خود در پروفایل وارد کنید. لازم به ذکر است هر کاربر با ورود به پروفایل شما این متن را خواهد دید.</string>
   <string name="st_Report">گزارش تخلف</string>
   <string name="st_Spam">اسپم</string>
@@ -1098,7 +1098,7 @@
   <string name="st_Abuse">محتوای توهین آمیز و آزاردهنده</string>
   <string name="st_FakeAccount">حساب کاربری جعلی</string>
   <string name="st_limit_bio">کاراکترهای استفاده شده بیش از حد مجاز است. تنها 70 کاراکتر در این قسمت قابل استفاده اند</string>
-  <string name="st_checkbox_delete">%1$s حذف برای</string>
+  <string name="st_checkbox_delete">حذف برای</string>
   <string name="st_desc_delete">آیا از حذف این %1$s پیام اطمینان دارید؟</string>
 
 </resources>
