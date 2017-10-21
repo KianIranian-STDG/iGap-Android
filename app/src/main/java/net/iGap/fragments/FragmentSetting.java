@@ -223,6 +223,10 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onClick(View v) {
                 FragmentBio fragmentBio = new FragmentBio();
+                Bundle bundle = new Bundle();
+                bundle.putString("BIO", txtBio.getText().toString());
+                fragmentBio.setArguments(bundle);
+
                 new HelperFragment(fragmentBio).setReplace(false).load();
             }
         });

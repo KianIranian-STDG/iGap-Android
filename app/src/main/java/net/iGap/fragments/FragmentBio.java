@@ -34,6 +34,7 @@ public class FragmentBio extends BaseFragment {
     private TextView txtCount;
     private boolean isEndLine = true;
     private String specialRequests;
+    private String bio;
 
     public FragmentBio() {
         // Required empty public constructor
@@ -50,6 +51,13 @@ public class FragmentBio extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.asn_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+
+
+        Bundle bundle = getArguments();
+
+        if (bundle != null) {
+            bio = bundle.getString("BIO");
+        }
 
 
         txtBack = (RippleView) view.findViewById(R.id.stns_ripple_back);
@@ -83,6 +91,7 @@ public class FragmentBio extends BaseFragment {
 
 
         edtBio = (EditText) view.findViewById(R.id.edtBio);
+        edtBio.setText(bio);
 
         edtBio.addTextChangedListener(new TextWatcher() {
             @Override
