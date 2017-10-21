@@ -29,6 +29,8 @@ import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientGetRoom;
 
+import static net.iGap.G.context;
+import static net.iGap.G.userId;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 
 public class RealmRoom extends RealmObject {
@@ -192,7 +194,7 @@ public class RealmRoom extends RealmObject {
     public String getSharedMediaCount() {
 
         if (sharedMediaCount == null || sharedMediaCount.length() == 0) {
-            return G.context.getString(R.string.there_is_no_sheared_media);
+            return context.getString(R.string.there_is_no_sheared_media);
         }
 
         String countList[] = sharedMediaCount.split("\n");
@@ -208,18 +210,18 @@ public class RealmRoom extends RealmObject {
 
             String result = "";
 
-            if (countOFImage > 0) result += "\n" + countOFImage + " " + G.context.getString(R.string.shared_image);
-            if (countOFVIDEO > 0) result += "\n" + countOFVIDEO + " " + G.context.getString(R.string.shared_video);
-            if (countOFAUDIO > 0) result += "\n" + countOFAUDIO + " " + G.context.getString(R.string.shared_audio);
-            if (countOFVOICE > 0) result += "\n" + countOFVOICE + " " + G.context.getString(R.string.shared_voice);
-            if (countOFGIF > 0) result += "\n" + countOFGIF + " " + G.context.getString(R.string.shared_gif);
-            if (countOFFILE > 0) result += "\n" + countOFFILE + " " + G.context.getString(R.string.shared_file);
-            if (countOFLink > 0) result += "\n" + countOFLink + " " + G.context.getString(R.string.shared_links);
+            if (countOFImage > 0) result += "\n" + countOFImage + " " + context.getString(R.string.shared_image);
+            if (countOFVIDEO > 0) result += "\n" + countOFVIDEO + " " + context.getString(R.string.shared_video);
+            if (countOFAUDIO > 0) result += "\n" + countOFAUDIO + " " + context.getString(R.string.shared_audio);
+            if (countOFVOICE > 0) result += "\n" + countOFVOICE + " " + context.getString(R.string.shared_voice);
+            if (countOFGIF > 0) result += "\n" + countOFGIF + " " + context.getString(R.string.shared_gif);
+            if (countOFFILE > 0) result += "\n" + countOFFILE + " " + context.getString(R.string.shared_file);
+            if (countOFLink > 0) result += "\n" + countOFLink + " " + context.getString(R.string.shared_links);
 
             result = result.trim();
 
             if (result.length() < 1) {
-                result = G.context.getString(R.string.there_is_no_sheared_media);
+                result = context.getString(R.string.there_is_no_sheared_media);
             }
 
             return result;
@@ -587,7 +589,7 @@ public class RealmRoom extends RealmObject {
 
         Realm realm = Realm.getDefaultInstance();
 
-        if (memberId == G.userId) {
+        if (memberId == userId) {
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
             realm.executeTransaction(new Realm.Transaction() {
@@ -655,7 +657,7 @@ public class RealmRoom extends RealmObject {
 
                     final RealmMember realmMember = new RealmMember();
                     realmMember.setId(SUID.id().get());
-                    realmMember.setPeerId(G.userId);
+                    realmMember.setPeerId(userId);
                     realmMember.setRole(ProtoGlobal.ChannelRoom.Role.OWNER.toString());
 
                     realm.executeTransaction(new Realm.Transaction() {
@@ -672,7 +674,7 @@ public class RealmRoom extends RealmObject {
 
                     final RealmMember realmMember = new RealmMember();
                     realmMember.setId(SUID.id().get());
-                    realmMember.setPeerId(G.userId);
+                    realmMember.setPeerId(userId);
                     realmMember.setRole(ProtoGlobal.GroupRoom.Role.OWNER.toString());
 
                     realm.executeTransaction(new Realm.Transaction() {
@@ -752,5 +754,24 @@ public class RealmRoom extends RealmObject {
             }
         });
         realm.close();
+    }
+
+    public static boolean isNotificationServices(long imRoomId) {
+
+        Realm realm = Realm.getDefaultInstance();
+        final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, imRoomId).findFirst();
+        if (room != null) {
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, room.getChatRoom().getPeerId());
+            if (realmRegisteredInfo.getStatus().equals(G.context.getResources().getString(R.string.service_notification))) {
+                realm.close();
+                return true;
+            } else {
+                realm.close();
+                return false;
+            }
+        } else {
+            realm.close();
+            return false;
+        }
     }
 }

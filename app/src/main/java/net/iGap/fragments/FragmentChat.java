@@ -1916,6 +1916,12 @@ public class FragmentChat extends BaseFragment
                     root6.setVisibility(View.GONE);
                 }
 
+
+
+                if (chatType == CHAT && RealmRoom.isNotificationServices(mRoomId)) {
+                    root7.setVisibility(View.GONE);
+                }
+
                 //realm.close();
 
                 root1.setOnClickListener(new View.OnClickListener() {
@@ -3612,6 +3618,12 @@ public class FragmentChat extends BaseFragment
             _savedFolderName = G.fragmentActivity.getResources().getString(R.string.save_to_Music);
         } else {
             _savedFolderName = G.fragmentActivity.getResources().getString(R.string.saveToDownload_item_dialog);
+        }
+
+
+
+        if (chatType == CHAT && RealmRoom.isNotificationServices(mRoomId)) {
+            rootReport.setVisibility(View.GONE);
         }
 
         txtItemSaveToDownload.setText(_savedFolderName);

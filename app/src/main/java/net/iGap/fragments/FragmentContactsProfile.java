@@ -1000,6 +1000,11 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         txtDeleteContact.setText(G.fragmentActivity.getResources().getString(R.string.delete_contact));
         txtReport.setText(G.fragmentActivity.getResources().getString(R.string.report));
 
+
+        if (RealmRoom.isNotificationServices(roomId)) {
+            root4.setVisibility(View.GONE);
+        }
+
         root1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
