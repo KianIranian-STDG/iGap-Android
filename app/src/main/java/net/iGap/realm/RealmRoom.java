@@ -756,22 +756,19 @@ public class RealmRoom extends RealmObject {
         realm.close();
     }
 
-    public static boolean isNotificationServices(long imRoomId) {
+    public static boolean isNotificationServices(long roomId) {
+        boolean isNotificationService = false;
 
         Realm realm = Realm.getDefaultInstance();
-        final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, imRoomId).findFirst();
-        if (room != null) {
+        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (room != null && room.getType() == CHAT && room.getChatRoom() != null) {
             RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, room.getChatRoom().getPeerId());
-            if (realmRegisteredInfo.getStatus().equals(G.context.getResources().getString(R.string.service_notification))) {
-                realm.close();
-                return true;
-            } else {
-                realm.close();
-                return false;
+            if (realmRegisteredInfo.getMainStatus().equals(ProtoGlobal.RegisteredUser.Status.SERVICE_NOTIFICATIONS.toString())) {
+                isNotificationService = true;
             }
-        } else {
-            realm.close();
-            return false;
         }
+        realm.close();
+
+        return isNotificationService;
     }
 }

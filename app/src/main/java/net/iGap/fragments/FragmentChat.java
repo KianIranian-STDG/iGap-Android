@@ -1916,9 +1916,7 @@ public class FragmentChat extends BaseFragment
                     root6.setVisibility(View.GONE);
                 }
 
-
-
-                if (chatType == CHAT && RealmRoom.isNotificationServices(mRoomId)) {
+                if (RealmRoom.isNotificationServices(mRoomId)) {
                     root7.setVisibility(View.GONE);
                 }
 
@@ -3620,9 +3618,7 @@ public class FragmentChat extends BaseFragment
             _savedFolderName = G.fragmentActivity.getResources().getString(R.string.saveToDownload_item_dialog);
         }
 
-
-
-        if (chatType == CHAT && RealmRoom.isNotificationServices(mRoomId)) {
+        if (RealmRoom.isNotificationServices(mRoomId)) {
             rootReport.setVisibility(View.GONE);
         }
 

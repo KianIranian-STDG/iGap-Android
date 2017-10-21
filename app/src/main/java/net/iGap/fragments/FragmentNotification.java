@@ -322,31 +322,28 @@ public class FragmentNotification extends BaseFragment {
 
                         switch (vibrateLevel) {
                             case 0:
-                                Vibrator vDisable = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                                vDisable.vibrate(0);
-                                break;
-                            case 1:
-
                                 Vibrator vDefault = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                                 vDefault.vibrate(350);
-
                                 break;
-                            case 2:
+                            case 1:
                                 Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                                 vShort.vibrate(200);
                                 break;
-                            case 3:
+                            case 2:
                                 Vibrator vLong = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                                 vLong.vibrate(500);
                                 break;
-                            case 4:
+                            case 3:
                                 AudioManager am2 = (AudioManager) G.fragmentActivity.getSystemService(Context.AUDIO_SERVICE);
-
                                 switch (am2.getRingerMode()) {
                                     case AudioManager.RINGER_MODE_SILENT:
                                         Vibrator vSilent = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
                                         vSilent.vibrate(AudioManager.VIBRATE_SETTING_ONLY_SILENT);
                                 }
+                                break;
+                            case 4:
+                                Vibrator vDisable = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+                                vDisable.vibrate(0);
                                 break;
                         }
 
