@@ -112,7 +112,6 @@ public class FragmentNotification extends BaseFragment {
                         if (realmGroupRoom.getRealmNotificationSetting() == null) {
                             setRealm(realm, realmGroupRoom, null, null);
                         } else {
-
                             realmNotificationSetting = realmGroupRoom.getRealmNotificationSetting();
                         }
                         getRealm();
@@ -359,83 +358,83 @@ public class FragmentNotification extends BaseFragment {
 
         //==========================================================number pick
 
-        txtSmartNotification.setText("Sound at must " + realmTimes + " times within " + realmMinutes + " minutes");
-        ltSmartNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                boolean wrapInScrollView = true;
-                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title("Smart Notifications").customView(R.layout.dialog_number_picker, wrapInScrollView).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).build();
-
-                View view1 = dialog.getCustomView();
-
-                assert view1 != null;
-                numberPickerMinutes = (NumberPicker) view1.findViewById(R.id.dialog_np_minutes);
-                numberPickerTimes = (NumberPicker) view1.findViewById(R.id.dialog_np_times);
-                numberPickerMinutes.setMinValue(0);
-                numberPickerMinutes.setMaxValue(10);
-                numberPickerTimes.setMinValue(0);
-                numberPickerTimes.setMaxValue(10);
-                numberPickerMinutes.setWrapSelectorWheel(true);
-
-                numberPickerMinutes.setValue(realmMinutes);
-                numberPickerTimes.setValue(realmTimes);
-
-                numberPickerTimes.setWrapSelectorWheel(true);
-
-                View btnPositive = dialog.getActionButton(DialogAction.POSITIVE);
-                btnPositive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        txtSmartNotification.setText("Sound at must " + numberPickerTimes.getValue() + " times within " + numberPickerMinutes.getValue() + " minutes");
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                if (realmRoom != null) {
-                                    switch (page) {
-                                        case "GROUP": {
-                                            if (realmRoom.getGroupRoom() != null) {
-
-                                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                                                realmGroupRoom.getRealmNotificationSetting().setMinutes(numberPickerMinutes.getValue());
-                                                realmGroupRoom.getRealmNotificationSetting().setTimes(numberPickerTimes.getValue());
-                                            }
-                                            break;
-                                        }
-                                        case "CHANNEL": {
-                                            if (realmRoom.getChannelRoom() != null) {
-
-                                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                                                realmChannelRoom.getRealmNotificationSetting().setMinutes(numberPickerMinutes.getValue());
-                                                realmChannelRoom.getRealmNotificationSetting().setTimes(numberPickerTimes.getValue());
-                                            }
-
-                                            break;
-                                        }
-                                        case "CONTACT": {
-                                            if (realmRoom.getChatRoom() != null) {
-
-                                                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-                                                realmChatRoom.getRealmNotificationSetting().setMinutes(numberPickerMinutes.getValue());
-                                                realmChatRoom.getRealmNotificationSetting().setTimes(numberPickerTimes.getValue());
-                                            }
-
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                        realm.close();
-
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
-            }
-        });
+        //txtSmartNotification.setText("Sound at must " + realmTimes + " times within " + realmMinutes + " minutes");
+        //ltSmartNotification.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //
+        //        boolean wrapInScrollView = true;
+        //        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title("Smart Notifications").customView(R.layout.dialog_number_picker, wrapInScrollView).positiveText(R.string.B_ok).negativeText(R.string.B_cancel).build();
+        //
+        //        View view1 = dialog.getCustomView();
+        //
+        //        assert view1 != null;
+        //        numberPickerMinutes = (NumberPicker) view1.findViewById(R.id.dialog_np_minutes);
+        //        numberPickerTimes = (NumberPicker) view1.findViewById(R.id.dialog_np_times);
+        //        numberPickerMinutes.setMinValue(0);
+        //        numberPickerMinutes.setMaxValue(10);
+        //        numberPickerTimes.setMinValue(0);
+        //        numberPickerTimes.setMaxValue(10);
+        //        numberPickerMinutes.setWrapSelectorWheel(true);
+        //
+        //        numberPickerMinutes.setValue(realmMinutes);
+        //        numberPickerTimes.setValue(realmTimes);
+        //
+        //        numberPickerTimes.setWrapSelectorWheel(true);
+        //
+        //        View btnPositive = dialog.getActionButton(DialogAction.POSITIVE);
+        //        btnPositive.setOnClickListener(new View.OnClickListener() {
+        //            @Override
+        //            public void onClick(View view) {
+        //                txtSmartNotification.setText("Sound at must " + numberPickerTimes.getValue() + " times within " + numberPickerMinutes.getValue() + " minutes");
+        //                Realm realm = Realm.getDefaultInstance();
+        //                realm.executeTransaction(new Realm.Transaction() {
+        //                    @Override
+        //                    public void execute(Realm realm) {
+        //                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        //                        if (realmRoom != null) {
+        //                            switch (page) {
+        //                                case "GROUP": {
+        //                                    if (realmRoom.getGroupRoom() != null) {
+        //
+        //                                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+        //                                        realmGroupRoom.getRealmNotificationSetting().setMinutes(numberPickerMinutes.getValue());
+        //                                        realmGroupRoom.getRealmNotificationSetting().setTimes(numberPickerTimes.getValue());
+        //                                    }
+        //                                    break;
+        //                                }
+        //                                case "CHANNEL": {
+        //                                    if (realmRoom.getChannelRoom() != null) {
+        //
+        //                                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+        //                                        realmChannelRoom.getRealmNotificationSetting().setMinutes(numberPickerMinutes.getValue());
+        //                                        realmChannelRoom.getRealmNotificationSetting().setTimes(numberPickerTimes.getValue());
+        //                                    }
+        //
+        //                                    break;
+        //                                }
+        //                                case "CONTACT": {
+        //                                    if (realmRoom.getChatRoom() != null) {
+        //
+        //                                        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+        //                                        realmChatRoom.getRealmNotificationSetting().setMinutes(numberPickerMinutes.getValue());
+        //                                        realmChatRoom.getRealmNotificationSetting().setTimes(numberPickerTimes.getValue());
+        //                                    }
+        //
+        //                                    break;
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //                });
+        //                realm.close();
+        //
+        //                dialog.dismiss();
+        //            }
+        //        });
+        //        dialog.show();
+        //    }
+        //});
 
         //=======================================================================led color
 
@@ -501,28 +500,7 @@ public class FragmentNotification extends BaseFragment {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realmNotificationSetting = realm.createObject(RealmNotificationSetting.class);
-
-                realmNotificationSetting.setNotification(0);
-                realmNotificationSetting.setVibrate(-1);
-                realmNotificationSetting.sound(G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
-                realmNotificationSetting.setIdRadioButtonSound(-1);
-                realmNotificationSetting.setSmartNotification(G.fragmentActivity.getResources().getString(R.string.array_Default));
-                realmNotificationSetting.setTimes(-1);
-                realmNotificationSetting.setMinutes(-1);
-                realmNotificationSetting.setLedColor(-1);
-
-                if (realmGroupRoom != null) {
-                    realmGroupRoom.setRealmNotificationSetting(realmNotificationSetting);
-                }
-
-                if (realmChannelRoom != null) {
-                    realmChannelRoom.setRealmNotificationSetting(realmNotificationSetting);
-                }
-
-                if (realmChatRoom != null) {
-                    realmChatRoom.setRealmNotificationSetting(realmNotificationSetting);
-                }
+                realmNotificationSetting = RealmNotificationSetting.put(realm, realmChatRoom, realmGroupRoom, realmChannelRoom);
             }
         });
     }

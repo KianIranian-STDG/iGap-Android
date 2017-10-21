@@ -14,7 +14,6 @@ import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.proto.ProtoUserContactsBlock;
 import net.iGap.realm.RealmContacts;
-import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
 
 public class UserContactsBlockResponse extends MessageHandler {
@@ -50,19 +49,9 @@ public class UserContactsBlockResponse extends MessageHandler {
                 }
             });
         }
-
-        // set block to realm contact
-        final RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
-        if (realmContacts != null) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realmContacts.setBlockUser(true);
-                }
-            });
-        }
-
         realm.close();
+
+        RealmContacts.updateBlock(userId, true);
 
         if (G.onUserContactsBlock != null) {
             G.onUserContactsBlock.onUserContactsBlock(builder.getUserId());

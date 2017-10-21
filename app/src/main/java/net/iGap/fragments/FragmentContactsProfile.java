@@ -434,11 +434,11 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
                     final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.pu_nikname_profileUser))
-                        .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
-                        .customView(layoutNickname, true)
-                        .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
-                        .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                        .build();
+                            .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                            .customView(layoutNickname, true)
+                            .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+                            .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                            .build();
 
                     final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                     positive.setEnabled(false);
@@ -526,26 +526,15 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                         @Override
                         public void onContactEdit(final String firstName, final String lastName, final String initials) {
                             Realm realm1 = Realm.getDefaultInstance();
-                            final RealmContacts realmUser = realm1.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
                             realm1.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
-                                    realmUser.setFirst_name(firstName);
-                                    realmUser.setLast_name(lastName);
-
                                     String displayName = firstName + " " + lastName;
 
                                     for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.TYPE, ProtoGlobal.Room.Type.CHAT.toString()).findAll()) {
                                         if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == userId) {
                                             realmRoom.setTitle(displayName.trim());
                                         }
-                                    }
-
-                                    RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
-                                    if (contact != null) {
-                                        contact.setFirst_name(firstName);
-                                        contact.setLast_name(lastName);
-                                        contact.setDisplay_name(displayName.trim());
                                     }
 
                                     RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
@@ -560,6 +549,9 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                 }
                             });
                             realm1.close();
+
+                            RealmContacts.updateName(userId, firstName, lastName);
+
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -839,7 +831,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         boolean isExist = false;
         Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
         String[] mPhoneNumberProjection = {
-            ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME
+                ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME
         };
         Cursor cur = context.getContentResolver().query(lookupUri, mPhoneNumberProjection, null, null, null);
         try {
@@ -897,12 +889,12 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                             //------------------------------------------------------ Mobile Number
 
                             ops.add(ContentProviderOperation.
-                                newInsert(ContactsContract.Data.CONTENT_URI)
-                                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
-                                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
-                                .build());
+                                    newInsert(ContactsContract.Data.CONTENT_URI)
+                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                                    .build());
 
                             try {
                                 G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);

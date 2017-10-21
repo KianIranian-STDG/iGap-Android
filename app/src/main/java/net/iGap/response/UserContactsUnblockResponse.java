@@ -14,7 +14,6 @@ import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.proto.ProtoUserContactsUnblock;
 import net.iGap.realm.RealmContacts;
-import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
 
 public class UserContactsUnblockResponse extends MessageHandler {
@@ -50,19 +49,9 @@ public class UserContactsUnblockResponse extends MessageHandler {
                 }
             });
         }
-
-        // set Unblock to realm contact
-        final RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
-        if (realmContacts != null) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    realmContacts.setBlockUser(false);
-                }
-            });
-        }
-
         realm.close();
+
+        RealmContacts.updateBlock(userId, false);
 
         if (G.onUserContactsUnBlock != null) {
             G.onUserContactsUnBlock.onUserContactsUnBlock(builder.getUserId());

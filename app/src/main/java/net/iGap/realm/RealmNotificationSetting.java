@@ -12,6 +12,8 @@ package net.iGap.realm;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import net.iGap.G;
+import net.iGap.R;
 import net.iGap.proto.ProtoGlobal;
 
 public class RealmNotificationSetting extends RealmObject {
@@ -89,6 +91,27 @@ public class RealmNotificationSetting extends RealmObject {
         this.ledColor = ledColor;
     }
 
+
+    public static RealmNotificationSetting put(Realm realm, final RealmChatRoom realmChatRoom, final RealmGroupRoom realmGroupRoom, final RealmChannelRoom realmChannelRoom) {
+        RealmNotificationSetting realmNotificationSetting = realm.createObject(RealmNotificationSetting.class);
+        realmNotificationSetting.setNotification(0);
+        realmNotificationSetting.setVibrate(-1);
+        realmNotificationSetting.sound(G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
+        realmNotificationSetting.setIdRadioButtonSound(-1);
+        realmNotificationSetting.setSmartNotification(G.fragmentActivity.getResources().getString(R.string.array_Default));
+        realmNotificationSetting.setTimes(-1);
+        realmNotificationSetting.setMinutes(-1);
+        realmNotificationSetting.setLedColor(-1);
+
+        if (realmChatRoom != null) {
+            realmChatRoom.setRealmNotificationSetting(realmNotificationSetting);
+        } else if (realmGroupRoom != null) {
+            realmGroupRoom.setRealmNotificationSetting(realmNotificationSetting);
+        } else if (realmChannelRoom != null) {
+            realmChannelRoom.setRealmNotificationSetting(realmNotificationSetting);
+        }
+        return realmNotificationSetting;
+    }
 
     public static void sound(final long roomId, final String sound, final int which, final ProtoGlobal.Room.Type roomType) {
         Realm realm = Realm.getDefaultInstance();

@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import io.realm.Realm;
 import io.realm.RealmObject;
 import net.iGap.helper.HelperString;
 
@@ -156,5 +157,36 @@ public class RealmContacts extends RealmObject {
 
     public void setBlockUser(boolean blockUser) {
         this.blockUser = blockUser;
+    }
+
+
+    public static void updateName(final long userId, final String firstName, final String lastName) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+                if (contact != null) {
+                    contact.setFirst_name(firstName);
+                    contact.setLast_name(lastName);
+                    contact.setDisplay_name((firstName + " " + lastName).trim());
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static void updateBlock(final long userId, final boolean block) {
+        Realm realm = Realm.getDefaultInstance();
+        final RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+        if (realmContacts != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realmContacts.setBlockUser(block);
+                }
+            });
+        }
+        realm.close();
     }
 }
