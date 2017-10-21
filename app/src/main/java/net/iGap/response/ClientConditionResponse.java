@@ -42,15 +42,10 @@ public class ClientConditionResponse extends MessageHandler {
             @Override
             public void execute(Realm realm) {
                 for (final RealmClientCondition realmClientCondition : realm.where(RealmClientCondition.class).findAll()) {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            realmClientCondition.setOfflineEdited(new RealmList<RealmOfflineEdited>());
-                            realmClientCondition.setOfflineDeleted(new RealmList<RealmOfflineDelete>());
-                            realmClientCondition.setOfflineSeen(new RealmList<RealmOfflineSeen>());
-                            realmClientCondition.setOfflineListen(new RealmList<RealmOfflineListen>());
-                        }
-                    });
+                    realmClientCondition.setOfflineEdited(new RealmList<RealmOfflineEdited>());
+                    realmClientCondition.setOfflineDeleted(new RealmList<RealmOfflineDelete>());
+                    realmClientCondition.setOfflineSeen(new RealmList<RealmOfflineSeen>());
+                    realmClientCondition.setOfflineListen(new RealmList<RealmOfflineListen>());
                 }
             }
         });

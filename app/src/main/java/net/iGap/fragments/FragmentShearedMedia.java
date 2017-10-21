@@ -358,7 +358,6 @@ public class FragmentShearedMedia extends BaseFragment {
             @Override
             public void onComplete(RippleView rippleView) {
                 String count = SelectedList.size() + "";
-                //+Realm realm = Realm.getDefaultInstance();
                 final RealmRoom realmRoom = RealmRoom.getRealmRoom(getRealm(), roomId);
 
                 if (roomType == ProtoGlobal.Room.Type.CHAT && bothDeleteMessageId != null && bothDeleteMessageId.size() > 0) {
@@ -372,13 +371,11 @@ public class FragmentShearedMedia extends BaseFragment {
                             if (realmRoom != null) {
                                 RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, SelectedList, bothDeleteMessageId, roomType);
                             }
+                            resetItems();
                         }
                     }).checkBoxPromptRes(R.string.delete_item_dialog, false, null).show();
 
-
-
                 } else {
-
                     new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(G.context.getResources().getString(R.string.st_desc_delete, count)).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -386,50 +383,50 @@ public class FragmentShearedMedia extends BaseFragment {
                             if (realmRoom != null) {
                                 RealmRoomMessage.deleteSelectedMessages(getRealm(), roomId, SelectedList, bothDeleteMessageId, roomType);
                             }
+                            resetItems();
                         }
                     }).show();
                 }
-
-                for (Long Id : SelectedList) {
-                    list.add(Id);
-                }
-
-
-                switch (mFilter) {
-                    case IMAGE:
-                        countOFImage -= SelectedList.size();
-                        break;
-                    case VIDEO:
-                        countOFVIDEO -= SelectedList.size();
-                        break;
-                    case AUDIO:
-                        countOFAUDIO -= SelectedList.size();
-                        break;
-                    case FILE:
-                        countOFFILE -= SelectedList.size();
-                        break;
-                    case GIF:
-                        countOFGIF -= SelectedList.size();
-                        break;
-                    case VOICE:
-                        countOFVOICE -= SelectedList.size();
-                        break;
-                    case URL:
-                        countOFLink -= SelectedList.size();
-                        break;
-                }
-
-                updateStringSharedMediaCount(null, roomId);
-
-                adapter.resetSelected();
-
-                //realm.close();
             }
         });
 
         txtNumberOfSelected = (TextView) view.findViewById(R.id.asm_txt_number_of_selected);
 
         ll_AppBarSelected = (LinearLayout) view.findViewById(R.id.asm_ll_appbar_selelected);
+    }
+
+    private void resetItems() {
+        for (Long Id : SelectedList) {
+            list.add(Id);
+        }
+
+        switch (mFilter) {
+            case IMAGE:
+                countOFImage -= SelectedList.size();
+                break;
+            case VIDEO:
+                countOFVIDEO -= SelectedList.size();
+                break;
+            case AUDIO:
+                countOFAUDIO -= SelectedList.size();
+                break;
+            case FILE:
+                countOFFILE -= SelectedList.size();
+                break;
+            case GIF:
+                countOFGIF -= SelectedList.size();
+                break;
+            case VOICE:
+                countOFVOICE -= SelectedList.size();
+                break;
+            case URL:
+                countOFLink -= SelectedList.size();
+                break;
+        }
+
+        updateStringSharedMediaCount(null, roomId);
+
+        adapter.resetSelected();
     }
 
     private void callBack(boolean result, int whatAction, String number) {
