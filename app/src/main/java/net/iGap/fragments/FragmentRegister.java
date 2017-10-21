@@ -99,7 +99,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoRequest;
 import net.iGap.proto.ProtoUserRegister;
 import net.iGap.proto.ProtoUserVerify;
-import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestInfoCountry;
 import net.iGap.request.RequestQrCodeNewDevice;
@@ -1422,22 +1421,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                //RealmUserInfo userInfo = realm.where(RealmUserInfo.class).equalTo(RealmUserInfoFields.USER_INFO.ID, userId).findFirst();
-                                RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
-                                if (userInfo == null) {
-                                    userInfo = realm.createObject(RealmUserInfo.class);
-                                    RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
-
-                                    if (registeredInfo == null) {
-                                        registeredInfo = realm.createObject(RealmRegisteredInfo.class, userId);
-                                    }
-                                    userInfo.setUserInfo(registeredInfo);
-                                }
-                                userInfo.getUserInfo().setUsername(userName);
-                                userInfo.getUserInfo().setPhoneNumber(phoneNumber);
-                                userInfo.setToken(token);
-                                userInfo.setAuthorHash(authorHash);
-                                userInfo.setUserRegistrationState(true);
+                                RealmUserInfo.putOrUpdate(realm, userId, userName, phoneNumber, token, authorHash);
                             }
                         });
 
@@ -1508,13 +1492,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                        realmUserInfo.getUserInfo().setDisplayName(user.getDisplayName());
                         G.displayName = user.getDisplayName();
 
-                        realmUserInfo.getUserInfo().setInitials(user.getInitials());
-                        realmUserInfo.getUserInfo().setColor(user.getColor());
-                        realmUserInfo.setUserRegistrationState(true);
+                        RealmUserInfo.putOrUpdate(realm, user);
 
                         G.handler.post(new Runnable() {
                             @Override

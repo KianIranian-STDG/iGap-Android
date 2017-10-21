@@ -33,7 +33,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
-import io.realm.RealmResults;
 import java.io.IOException;
 import net.iGap.G;
 import net.iGap.R;
@@ -58,7 +57,6 @@ import net.iGap.module.FileUploadStructure;
 import net.iGap.module.IntentRequests;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
-import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserInfo;
@@ -313,14 +311,9 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
-                                realmUserInfo.getUserInfo().setDisplayName(user.getDisplayName());
                                 G.displayName = user.getDisplayName();
 
-                                realmUserInfo.getUserInfo().setInitials(user.getInitials());
-                                realmUserInfo.getUserInfo().setColor(user.getColor());
-
-                                final long userId = realmUserInfo.getUserId();
+                                RealmUserInfo.putOrUpdate(realm, user);
 
                                 G.handler.post(new Runnable() {
                                     @Override
@@ -328,7 +321,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                                         G.onUserInfoResponse = null;
                                         hideProgressBar();
                                         Intent intent = new Intent(context, ActivityMain.class);
-                                        intent.putExtra(ARG_USER_ID, userId);
+                                        intent.putExtra(ARG_USER_ID, user.getId());
                                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         G.context.startActivity(intent);
                                         G.fragmentActivity.finish();
@@ -479,16 +472,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
-
-            final RealmResults<RealmAvatar> realmAvatars = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, G.userId).findAll();
-            if (!realmAvatars.isEmpty()) {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realmAvatars.deleteAllFromRealm();
-                    }
-                });
-            }
+            RealmAvatar.deleteAvatarWithOwnerId(G.userId);
         }
         realm.close();
     }

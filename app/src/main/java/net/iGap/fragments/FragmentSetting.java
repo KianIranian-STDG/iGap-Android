@@ -2461,17 +2461,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         }
     }
 
-    private void showInitials() {
-
-        RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
-        circleImageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) circleImageView.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
-
-
-        if (G.onChangeUserPhotoListener != null) {
-            G.onChangeUserPhotoListener.onChangePhoto(null);
-        }
-    }
-
 
     @Override
     public void onResume() {
