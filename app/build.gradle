@@ -73,7 +73,6 @@ dependencies {
     exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
   }
 
-  //  compile 'me.yokeyword:swipebackfragment:0.3.0'
   compile 'com.mikepenz:fastadapter-commons:2.6.3@aar'
   compile 'com.mikepenz:fastadapter-extensions:2.6.3@aar'
   compile 'com.mikepenz:materialize:1.0.3@aar'

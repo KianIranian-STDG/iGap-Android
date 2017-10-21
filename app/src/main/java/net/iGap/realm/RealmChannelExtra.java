@@ -85,16 +85,21 @@ import org.parceler.Parcel;
         return realmChannelExtra;
     }
 
-    public static void setVote(long messageId, ProtoGlobal.RoomMessageReaction messageReaction, String counterLabel) {
+    public static void setVote(final long messageId, final ProtoGlobal.RoomMessageReaction messageReaction, final String counterLabel) {
         Realm realm = Realm.getDefaultInstance();
-        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
-        if (realmChannelExtra != null) {
-            if (messageReaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
-                realmChannelExtra.setThumbsUp(counterLabel);
-            } else {
-                realmChannelExtra.setThumbsDown(counterLabel);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+                if (realmChannelExtra != null) {
+                    if (messageReaction == ProtoGlobal.RoomMessageReaction.THUMBS_UP) {
+                        realmChannelExtra.setThumbsUp(counterLabel);
+                    } else {
+                        realmChannelExtra.setThumbsDown(counterLabel);
+                    }
+                }
             }
-        }
+        });
         realm.close();
     }
 }
