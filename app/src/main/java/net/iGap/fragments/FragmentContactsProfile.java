@@ -1069,15 +1069,19 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
         TextView iconSpam = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
         iconSpam.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow_reply));
+        iconSpam.setVisibility(View.GONE);
 
         TextView iconAbuse = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
         iconAbuse.setText(G.fragmentActivity.getResources().getString(R.string.md_copy));
+        iconAbuse.setVisibility(View.GONE);
 
         TextView iconFakeAccount = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
         iconFakeAccount.setText(G.fragmentActivity.getResources().getString(R.string.md_share_button));
+        iconFakeAccount.setVisibility(View.GONE);
 
         TextView iconOther = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
         iconOther.setText(G.fragmentActivity.getResources().getString(R.string.md_forward));
+        iconOther.setVisibility(View.GONE);
 
 
         rootSpam.setVisibility(View.VISIBLE);

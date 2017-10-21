@@ -3828,6 +3828,7 @@ public class FragmentChat extends BaseFragment
         rootReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.dismiss();
                 dialogReport(true);
             }
         });
