@@ -6096,7 +6096,7 @@ public class FragmentChat extends BaseFragment
         });
         txtNumberOfSelected = (TextView) G.fragmentActivity.findViewById(R.id.chl_txt_number_of_selected);
 
-        if (chatType == CHANNEL && !isNotJoin) {
+        if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER && !isNotJoin) {
             initLayoutChannelFooter();
         }
     }
