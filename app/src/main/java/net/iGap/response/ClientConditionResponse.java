@@ -10,14 +10,8 @@
 
 package net.iGap.response;
 
-import io.realm.Realm;
-import io.realm.RealmList;
 import net.iGap.G;
 import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmOfflineDelete;
-import net.iGap.realm.RealmOfflineEdited;
-import net.iGap.realm.RealmOfflineListen;
-import net.iGap.realm.RealmOfflineSeen;
 
 public class ClientConditionResponse extends MessageHandler {
 
@@ -37,20 +31,7 @@ public class ClientConditionResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for (final RealmClientCondition realmClientCondition : realm.where(RealmClientCondition.class).findAll()) {
-                    realmClientCondition.setOfflineEdited(new RealmList<RealmOfflineEdited>());
-                    realmClientCondition.setOfflineDeleted(new RealmList<RealmOfflineDelete>());
-                    realmClientCondition.setOfflineSeen(new RealmList<RealmOfflineSeen>());
-                    realmClientCondition.setOfflineListen(new RealmList<RealmOfflineListen>());
-                }
-            }
-        });
-        realm.close();
-
+        RealmClientCondition.clearOfflineAction();
         if (G.onClientCondition != null) {
             G.onClientCondition.onClientCondition();
         }

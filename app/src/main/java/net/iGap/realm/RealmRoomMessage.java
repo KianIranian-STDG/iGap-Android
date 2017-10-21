@@ -36,6 +36,8 @@ import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnActivityMainStart;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.AttachmentFor;
+import net.iGap.module.enums.ClientConditionOffline;
+import net.iGap.module.enums.ClientConditionVersion;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
@@ -151,7 +153,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
                                      */
                                     if (roomMessage.getUserId() != G.userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
                                         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-                                        realmClientCondition.getOfflineSeen().add(RealmOfflineSeen.put(realm, roomMessage.getMessageId()));
+                                        RealmClientCondition.addOfflineSeen(realm, realmClientCondition, roomMessage.getMessageId());
                                         callback.sendSeenStatus(roomMessage);
                                         count++;
                                         if (count >= 100) { // do this block for 100 item, (client need to send all status in one request, wait for server change...)
@@ -861,7 +863,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         realm.close();
     }
 
-    public static void deleteSelectedMessages(Realm realm, final long RoomId, final ArrayList<Long> list, final ArrayList<Long> bothDeleteMessageId, final ProtoGlobal.Room.Type chatType) {
+    public static void deleteSelectedMessages(Realm realm, final long RoomId, final ArrayList<Long> list, final ArrayList<Long> bothDeleteMessageId, final ProtoGlobal.Room.Type roomType) {
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -884,14 +886,14 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
                     // check here with bothDeleteMessageId for send both or no
 
                     if (realmClientCondition != null) {
-                        realmClientCondition.getOfflineDeleted().add(RealmOfflineDelete.setOfflineDeleted(realm, messageId, chatType, bothDelete));
+                        RealmClientCondition.addOfflineDelete(realm, realmClientCondition, messageId, roomType, bothDelete);
                     }
 
-                    if (chatType == GROUP) {
+                    if (roomType == GROUP) {
                         new RequestGroupDeleteMessage().groupDeleteMessage(RoomId, messageId);
-                    } else if (chatType == CHAT) {
+                    } else if (roomType == CHAT) {
                         new RequestChatDeleteMessage().chatDeleteMessage(RoomId, messageId, bothDelete);
-                    } else if (chatType == CHANNEL) {
+                    } else if (roomType == CHANNEL) {
                         new RequestChannelDeleteMessage().channelDeleteMessage(RoomId, messageId);
                     }
                 }
@@ -900,6 +902,9 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
     }
 
     public static void deleteMessageServerResponse(final long roomId, final long messageId, final long deleteVersion, final ProtoResponse.Response response) {
+        RealmClientCondition.setVersion(roomId, deleteVersion, ClientConditionVersion.DELETE);
+        RealmClientCondition.deleteOfflineAction(messageId, ClientConditionOffline.DELETE);
+
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -915,8 +920,6 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
                         roomMessage.setDeleted(true);
                     }
                 }
-
-                RealmClientCondition.deleteManage(realm, roomId, messageId, deleteVersion);
 
                 if (G.onChatDeleteMessageResponse != null) {
                     G.onChatDeleteMessageResponse.onChatDeleteMessage(deleteVersion, messageId, roomId, response);

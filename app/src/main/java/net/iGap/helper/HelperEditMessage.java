@@ -10,14 +10,13 @@
 
 package net.iGap.helper;
 
-import android.util.Log;
 import io.realm.Realm;
 import net.iGap.G;
+import net.iGap.module.enums.ClientConditionOffline;
+import net.iGap.module.enums.ClientConditionVersion;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmClientConditionFields;
-import net.iGap.realm.RealmOfflineEdited;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 
@@ -26,33 +25,18 @@ import net.iGap.realm.RealmRoomMessageFields;
  */
 public class HelperEditMessage {
 
-    public static void editMessage(final long roomId, final long messageId, final long messageVersion, final ProtoGlobal.RoomMessageType messageType, final String message,
-        final ProtoResponse.Response response) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+    public static void editMessage(final long roomId, final long messageId, final long messageVersion, final ProtoGlobal.RoomMessageType messageType, final String message, final ProtoResponse.Response response) {
 
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-                if (realmClientCondition != null) {
-                    Log.i("EEE", "editMessage");
-                    realmClientCondition.setMessageVersion(messageVersion);
-                }
-
-                if (!response.getId().isEmpty()) {
-                    if (realmClientCondition != null) {
-                        for (RealmOfflineEdited realmOfflineEdited : realmClientCondition.getOfflineEdited()) {
-                            if (realmOfflineEdited.getMessageId() == messageId) {
-                                realmOfflineEdited.deleteFromRealm();
-                                break;
-                            }
-                        }
-                    }
-                } else {
+        RealmClientCondition.setVersion(roomId, messageVersion, ClientConditionVersion.EDIT);
+        if (!response.getId().isEmpty()) {
+            RealmClientCondition.deleteOfflineAction(messageId, ClientConditionOffline.EDIT);
+        } else {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
                     RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                     if (roomMessage != null) {
-                        /**
-                         * update message text in database
-                         */
                         roomMessage.setMessage(message);
                         roomMessage.setMessageVersion(messageVersion);
                         roomMessage.setEdited(true);
@@ -62,8 +46,8 @@ public class HelperEditMessage {
                         }
                     }
                 }
-            }
-        });
-        realm.close();
+            });
+            realm.close();
+        }
     }
 }

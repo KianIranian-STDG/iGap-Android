@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import io.realm.Realm;
-import io.realm.RealmList;
 import java.io.File;
 import java.util.List;
 import net.iGap.G;
@@ -35,8 +34,6 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmClientConditionFields;
-import net.iGap.realm.RealmOfflineListen;
 import net.iGap.realm.RealmRegisteredInfo;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
@@ -156,24 +153,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
                 G.chatUpdateStatusUtil.sendUpdateStatus(holder.mType, holder.mRoomId, Long.parseLong(holder.mMessageID), ProtoGlobal.RoomMessageStatus.LISTENED);
 
-                getRealmChat().executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, holder.mRoomId).findFirst();
-
-                        if (realmClientCondition != null) {
-
-                            RealmOfflineListen realmOfflineListen = RealmOfflineListen.put(realm, Long.parseLong(holder.mMessageID));
-                            if (realmClientCondition.getOfflineListen() != null) {
-                                realmClientCondition.getOfflineListen().add(realmOfflineListen);
-                            } else {
-                                RealmList<RealmOfflineListen> offlineSeenListen = new RealmList<>();
-                                offlineSeenListen.add(realmOfflineListen);
-                                realmClientCondition.setOfflineListen(offlineSeenListen);
-                            }
-                        }
-                    }
-                });
+                RealmClientCondition.addOfflineListen(holder.mRoomId, Long.parseLong(holder.mMessageID));
 
                 if (holder.mMessageID.equals(MusicPlayer.messageId)) {
                     MusicPlayer.onCompleteChat = holder.complete;

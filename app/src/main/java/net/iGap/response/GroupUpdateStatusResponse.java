@@ -11,14 +11,11 @@
 package net.iGap.response;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import net.iGap.G;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupUpdateStatus;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmClientConditionFields;
-import net.iGap.realm.RealmOfflineSeen;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
@@ -43,21 +40,13 @@ public class GroupUpdateStatusResponse extends MessageHandler {
         final ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder builder = (ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder) message;
         final ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(builder.getResponse());
 
-        final Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-                if (!response.getId().isEmpty()) { // I'm sender
-
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
-                    RealmList<RealmOfflineSeen> offlineSeen = realmClientCondition.getOfflineSeen();
-                    for (int i = offlineSeen.size() - 1; i >= 0; i--) {
-                        RealmOfflineSeen realmOfflineSeen = offlineSeen.get(i);
-                        realmOfflineSeen.deleteFromRealm();
-                    }
-                } else { // I'm recipient
-
+        if (!response.getId().isEmpty()) { // I'm sender
+            RealmClientCondition.deleteOfflineAction(builder.getMessageId(), builder.getStatus());
+        } else { // I'm recipient
+            final Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
                     /**
                      * clear unread count if another account was saw this message
                      */
@@ -92,9 +81,9 @@ public class GroupUpdateStatusResponse extends MessageHandler {
                         }
                     }
                 }
-            }
-        });
-        realm.close();
+            });
+            realm.close();
+        }
     }
 
     @Override

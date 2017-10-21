@@ -16,7 +16,6 @@ import net.iGap.G;
 import net.iGap.proto.ProtoChannelLeft;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmClientConditionFields;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmMemberFields;
 import net.iGap.realm.RealmRoom;
@@ -38,14 +37,16 @@ public class ChannelLeftResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
 
         final ProtoChannelLeft.ChannelLeftResponse.Builder builder = (ProtoChannelLeft.ChannelLeftResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
+            @Override
+            public void execute(Realm realm) {
 
                 if (G.userId == builder.getMemberId()) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
@@ -56,10 +57,7 @@ public class ChannelLeftResponse extends MessageHandler {
                     RealmResults<RealmRoomMessage> realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findAll();
                     realmRoomMessage.deleteAllFromRealm();
 
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, builder.getRoomId()).findFirst();
-                    if (realmClientCondition != null) {
-                        realmClientCondition.deleteFromRealm();
-                    }
+                    RealmClientCondition.deleteCondition(realm, builder.getRoomId());
 
                     if (G.onChannelLeft != null) {
                         G.onChannelLeft.onChannelLeft(builder.getRoomId(), builder.getMemberId());
@@ -77,7 +75,7 @@ public class ChannelLeftResponse extends MessageHandler {
                                 member.deleteFromRealm();
                             }
                         } catch (NullPointerException e) {
-
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -86,14 +84,16 @@ public class ChannelLeftResponse extends MessageHandler {
         realm.close();
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
         if (G.onChannelLeft != null) {
             G.onChannelLeft.onTimeOut();
         }
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

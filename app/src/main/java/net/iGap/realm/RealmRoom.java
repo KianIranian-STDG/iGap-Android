@@ -345,7 +345,7 @@ public class RealmRoom extends RealmObject {
      */
     public static RealmRoom putOrUpdate(ProtoGlobal.Room room, Realm realm) {
 
-        putChatToClientCondition(realm, room);
+        RealmClientCondition.putOrUpdateIncomplete(realm, room.getId());
 
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
 
@@ -486,7 +486,7 @@ public class RealmRoom extends RealmObject {
                                  * transaction and client can't use a transaction inside another
                                  */
                                 realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
-                                realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
+                                RealmClientCondition.deleteCondition(realm, item.getId());
                                 item.deleteFromRealm();
                             }
                         }
@@ -505,12 +505,6 @@ public class RealmRoom extends RealmObject {
                 });
             }
         });
-    }
-
-    private static void putChatToClientCondition(Realm realm, final ProtoGlobal.Room room) {
-        if (realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, room.getId()).findFirst() == null) {
-            realm.createObject(RealmClientCondition.class, room.getId());
-        }
     }
 
     public static void convertAndSetDraft(final long roomId, final String message, final long replyToMessageId) {
@@ -642,10 +636,7 @@ public class RealmRoom extends RealmObject {
                     realmRoom.deleteFromRealm();
                 }
 
-                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-                if (realmClientCondition != null) {
-                    realmClientCondition.deleteFromRealm();
-                }
+                RealmClientCondition.deleteCondition(realm, roomId);
 
                 realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
             }

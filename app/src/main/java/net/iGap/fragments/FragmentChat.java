@@ -236,13 +236,10 @@ import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelRoom;
 import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmClientConditionFields;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmGroupRoom;
 import net.iGap.realm.RealmMember;
-import net.iGap.realm.RealmOfflineEdited;
-import net.iGap.realm.RealmOfflineSeen;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomDraft;
@@ -2332,12 +2329,6 @@ public class FragmentChat extends BaseFragment
                             @Override
                             public void execute(Realm realm) {
                                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
-
-                                RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
-                                if (realmClientCondition != null) {
-                                    realmClientCondition.getOfflineEdited().add(RealmOfflineEdited.put(realm, Long.parseLong(messageInfo.messageID), message));
-                                }
-
                                 if (roomMessage != null) {
                                     // update message text in database
                                     roomMessage.setMessage(message);
@@ -2354,7 +2345,7 @@ public class FragmentChat extends BaseFragment
                                 }
                             }
                         });
-
+                        RealmClientCondition.addOfflineEdit(mRoomId, Long.parseLong(messageInfo.messageID), message);
                         //End
 
                         // I'm in the room
@@ -3045,10 +3036,11 @@ public class FragmentChat extends BaseFragment
                                  */
 
                                 //Start ClientCondition OfflineSeen
+                                RealmClientCondition.addOfflineSeen(mRoomId, realmRoomMessage.getMessageId());
+
                                 getRealmChat().executeTransaction(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
-                                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
                                         if (!isNotJoin) {
                                             // make update status to message sender that i've read his message
 
@@ -3068,19 +3060,8 @@ public class FragmentChat extends BaseFragment
                                                     }
                                                 }
 
-                                                if (realmClientCondition != null) {
-                                                    if (realmRoomMessage.isValid() && !realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
-                                                        realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-
-                                                        RealmOfflineSeen realmOfflineSeen = RealmOfflineSeen.put(realm, realmRoomMessage.getMessageId());
-                                                        if (realmClientCondition.getOfflineSeen() != null) {
-                                                            realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-                                                        } else {
-                                                            RealmList<RealmOfflineSeen> offlineSeenList = new RealmList<>();
-                                                            offlineSeenList.add(realmOfflineSeen);
-                                                            realmClientCondition.setOfflineSeen(offlineSeenList);
-                                                        }
-                                                    }
+                                                if (realmRoomMessage.isValid() && !realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                                                    realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
                                                 }
 
                                                 roomMessageStatus = ProtoGlobal.RoomMessageStatus.SEEN;
@@ -3344,6 +3325,7 @@ public class FragmentChat extends BaseFragment
              */
             messageInfo.status = ProtoGlobal.RoomMessageStatus.SEEN.toString();
 
+            RealmClientCondition.addOfflineSeen(mRoomId, Long.parseLong(messageInfo.messageID));
             //+final Realm realm = Realm.getDefaultInstance();
             getRealmChat().executeTransaction(new Realm.Transaction() {
                 @Override
@@ -3355,22 +3337,9 @@ public class FragmentChat extends BaseFragment
                      */
                     RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
                     if (realmRoomMessage != null) {
-                        final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, mRoomId).findFirst();
-                        if (realmClientCondition != null) {
-                            if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
-                                realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
-
-                                RealmOfflineSeen realmOfflineSeen = RealmOfflineSeen.put(realm, realmRoomMessage.getMessageId());
-                                if (realmClientCondition.getOfflineSeen() != null) {
-                                    realmClientCondition.getOfflineSeen().add(realmOfflineSeen);
-                                } else {
-                                    RealmList<RealmOfflineSeen> offlineSeenList = new RealmList<>();
-                                    offlineSeenList.add(realmOfflineSeen);
-                                    realmClientCondition.setOfflineSeen(offlineSeenList);
-                                }
-                            }
+                        if (!realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
+                            realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
                         }
-
                         G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, realmRoomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                     }
                 }

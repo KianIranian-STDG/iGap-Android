@@ -16,7 +16,6 @@ import net.iGap.G;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupLeft;
 import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmClientConditionFields;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmMemberFields;
 import net.iGap.realm.RealmRoom;
@@ -59,10 +58,7 @@ public class GroupLeftResponse extends MessageHandler {
                     RealmResults<RealmRoomMessage> realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll();
                     realmRoomMessage.deleteAllFromRealm();
 
-                    RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, roomId).findFirst();
-                    if (realmClientCondition != null) {
-                        realmClientCondition.deleteFromRealm();
-                    }
+                    RealmClientCondition.deleteCondition(realm, roomId);
 
                     if (G.onGroupLeft != null) {
                         G.onGroupLeft.onGroupLeft(roomId, memberId);

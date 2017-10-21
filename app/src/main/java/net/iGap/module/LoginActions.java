@@ -6,13 +6,13 @@ import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 import io.realm.Realm;
 import net.iGap.G;
-import net.iGap.helper.HelperClientCondition;
 import net.iGap.helper.HelperLogout;
 import net.iGap.interfaces.OnSecuring;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserUpdateStatus;
+import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmPhoneContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmUserInfo;
@@ -66,7 +66,7 @@ public class LoginActions extends Application {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        G.clientConditionGlobal = HelperClientCondition.computeClientCondition(null);
+                        G.clientConditionGlobal = RealmClientCondition.computeClientCondition(null);
                         /**
                          * in first enter to app client send clientCondition after get room list
                          * but, in another login when user not closed app after login client send

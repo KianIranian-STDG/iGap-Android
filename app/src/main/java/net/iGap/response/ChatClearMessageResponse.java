@@ -14,7 +14,6 @@ import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.proto.ProtoChatClearMessage;
 import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmClientConditionFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -38,20 +37,12 @@ public class ChatClearMessageResponse extends MessageHandler {
         super.handler();
         final ProtoChatClearMessage.ChatClearMessageResponse.Builder chatClearMessage = (ProtoChatClearMessage.ChatClearMessageResponse.Builder) message;
 
-        Realm realm = Realm.getDefaultInstance();
         if (chatClearMessage.getResponse().getId().isEmpty()) { // another account cleared message
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    final RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.ROOM_ID, chatClearMessage.getRoomId()).findFirst();
-                    if (realmClientCondition != null) {
-                        realmClientCondition.setClearId(chatClearMessage.getClearId());
-                    }
-                }
-            });
+            RealmClientCondition.setClearId(chatClearMessage.getRoomId(), chatClearMessage.getClearId());
             G.clearMessagesUtil.onChatClearMessage(chatClearMessage.getRoomId(), chatClearMessage.getClearId(), chatClearMessage.getResponse());
         }
 
+        Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatClearMessage.getRoomId()).findFirst();
         realm.executeTransaction(new Realm.Transaction() {
             @Override

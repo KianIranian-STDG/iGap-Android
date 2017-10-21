@@ -13,11 +13,9 @@ package net.iGap.response;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.proto.ProtoChatUpdateStatus;
-import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmClientConditionFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
@@ -39,28 +37,15 @@ public class ChatUpdateStatusResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder chatUpdateStatus = (ProtoChatUpdateStatus.ChatUpdateStatusResponse.Builder) message;
-
         final ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(chatUpdateStatus.getResponse());
 
-        final Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                if (!response.getId().isEmpty()) { // I'm sender
-
-                    if (chatUpdateStatus.getStatus() == ProtoGlobal.RoomMessageStatus.SEEN) {
-                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.OFFLINE_SEEN.OFFLINE_SEEN, chatUpdateStatus.getMessageId()).findFirst();
-                        if (realmClientCondition != null) {
-                            realmClientCondition.getOfflineSeen().deleteFirstFromRealm();
-                        }
-                    } else if (chatUpdateStatus.getStatus() == ProtoGlobal.RoomMessageStatus.LISTENED) {
-                        RealmClientCondition realmClientCondition = realm.where(RealmClientCondition.class).equalTo(RealmClientConditionFields.OFFLINE_LISTEN.OFFLINE_LISTEN, chatUpdateStatus.getMessageId()).findFirst();
-                        if (realmClientCondition != null) {
-                            realmClientCondition.getOfflineListen().deleteFirstFromRealm();
-                        }
-
-                    }
-                } else { // I'm recipient
+        if (!response.getId().isEmpty()) { // I'm sender
+            RealmClientCondition.deleteOfflineAction(chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus());
+        } else {  // I'm recipient
+            final Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
                     /**
                      * clear unread count if another account was saw this message
                      */
@@ -95,10 +80,10 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                         }
                     }
                 }
-            }
-        });
+            });
 
-        realm.close();
+            realm.close();
+        }
     }
 
     @Override
@@ -109,9 +94,6 @@ public class ChatUpdateStatusResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        int majorCode = errorResponse.getMajorCode();
-        int minorCode = errorResponse.getMinorCode();
     }
 }
 

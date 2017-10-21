@@ -37,7 +37,6 @@ import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperClientCondition;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnAvatarGet;
@@ -67,6 +66,7 @@ import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
+import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
@@ -448,7 +448,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                     if (G.clientConditionGlobal != null) {
                         new RequestClientCondition().clientCondition(G.clientConditionGlobal);
                     } else {
-                        new RequestClientCondition().clientCondition(HelperClientCondition.computeClientCondition(null));
+                        new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
                     }
 
 
