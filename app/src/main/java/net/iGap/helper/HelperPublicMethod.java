@@ -53,7 +53,8 @@ public class HelperPublicMethod {
             goToRoom(realmRoom.getId(), -1);
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
-                @Override public void onChatGetRoom(final long roomId) {
+                @Override
+                public void onChatGetRoom(final long roomId) {
 
                     if (onError != null) {
                         onError.error();
@@ -64,18 +65,21 @@ public class HelperPublicMethod {
                     G.onChatGetRoom = null;
                 }
 
-                @Override public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
+                @Override
+                public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
 
                 }
 
-                @Override public void onChatGetRoomTimeOut() {
+                @Override
+                public void onChatGetRoomTimeOut() {
 
                     if (onError != null) {
                         onError.error();
                     }
                 }
 
-                @Override public void onChatGetRoomError(int majorCode, int minorCode) {
+                @Override
+                public void onChatGetRoomError(int majorCode, int minorCode) {
 
                     if (onError != null) {
                         onError.error();
@@ -91,16 +95,19 @@ public class HelperPublicMethod {
     private static void getUserInfo(final long peerId, final long roomId, final OnComplete onComplete, final OnError onError) {
 
         G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
 
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         if (user.getId() == peerId) {
                             Realm realm = Realm.getDefaultInstance();
 
                             realm.executeTransactionAsync(new Realm.Transaction() {
-                                @Override public void execute(Realm realm) {
+                                @Override
+                                public void execute(Realm realm) {
                                     RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, user.getId());
                                     if (realmRegisteredInfo == null) {
                                         realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class);
@@ -108,7 +115,7 @@ public class HelperPublicMethod {
                                         realmRegisteredInfo.setDoNotshowSpamBar(false);
                                     }
 
-                                    RealmAvatar.putAndGet(realm, user.getId(), user.getAvatar());
+                                    RealmAvatar.putOrUpdateAndManageDelete(realm, user.getId(), user.getAvatar());
                                     realmRegisteredInfo.setUsername(user.getUsername());
                                     realmRegisteredInfo.setPhoneNumber(Long.toString(user.getPhone()));
                                     realmRegisteredInfo.setFirstName(user.getFirstName());
@@ -121,7 +128,8 @@ public class HelperPublicMethod {
                                     realmRegisteredInfo.setMutual(user.getMutual());
                                 }
                             }, new Realm.Transaction.OnSuccess() {
-                                @Override public void onSuccess() {
+                                @Override
+                                public void onSuccess() {
                                     try {
 
                                         if (onComplete != null) {
@@ -144,14 +152,16 @@ public class HelperPublicMethod {
                 });
             }
 
-            @Override public void onUserInfoTimeOut() {
+            @Override
+            public void onUserInfoTimeOut() {
 
                 if (onError != null) {
                     onError.error();
                 }
             }
 
-            @Override public void onUserInfoError(int majorCode, int minorCode) {
+            @Override
+            public void onUserInfoError(int majorCode, int minorCode) {
 
                 if (onError != null) {
                     onError.error();

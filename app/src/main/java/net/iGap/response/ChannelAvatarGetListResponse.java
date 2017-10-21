@@ -12,6 +12,7 @@ package net.iGap.response;
 
 import io.realm.Realm;
 import net.iGap.proto.ProtoChannelAvatarGetList;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 
 public class ChannelAvatarGetListResponse extends MessageHandler {
@@ -32,14 +33,15 @@ public class ChannelAvatarGetListResponse extends MessageHandler {
     public void handler() {
         super.handler();
         final ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder builder = (ProtoChannelAvatarGetList.ChannelAvatarGetListResponse.Builder) message;
+        final long ownerId = Long.parseLong(identity);
 
         Realm realm = Realm.getDefaultInstance();
-        final long ownerId = Long.parseLong(identity);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                for (int i = 0; i < builder.getAvatarList().size(); i++) {
-                    RealmAvatar.putAndGet(realm, ownerId, builder.getAvatar(i));
+                RealmAvatar.deleteAllAvatars(ownerId, realm);
+                for (ProtoGlobal.Avatar avatar : builder.getAvatarList()) {
+                    RealmAvatar.putOrUpdate(realm, ownerId, avatar);
                 }
             }
         });

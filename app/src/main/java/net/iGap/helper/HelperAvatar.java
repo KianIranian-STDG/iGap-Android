@@ -379,7 +379,7 @@ public class HelperAvatar {
                 realmRegisteredInfo.setCacheId(registeredUser.getCacheId());
                 realmRegisteredInfo.setBio(registeredUser.getBio());
 
-                RealmAvatar.putAndGet(realm, registeredUser.getId(), registeredUser.getAvatar());
+                RealmAvatar.putOrUpdateAndManageDelete(realm, registeredUser.getId(), registeredUser.getAvatar());
             }
         });
     }

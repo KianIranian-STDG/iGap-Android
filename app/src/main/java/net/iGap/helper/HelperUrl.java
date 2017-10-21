@@ -849,7 +849,7 @@ public class HelperUrl {
                             realmRegisteredInfo.setId(user.getId());
                             realmRegisteredInfo.setDoNotshowSpamBar(false);
                         }
-                        RealmAvatar.putAndGet(realm, user.getId(), user.getAvatar());
+                        RealmAvatar.putOrUpdateAndManageDelete(realm, user.getId(), user.getAvatar());
                         realmRegisteredInfo.setUsername(user.getUsername());
                         realmRegisteredInfo.setPhoneNumber(Long.toString(user.getPhone()));
                         realmRegisteredInfo.setFirstName(user.getFirstName());

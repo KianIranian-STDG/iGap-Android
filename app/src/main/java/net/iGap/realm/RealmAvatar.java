@@ -34,11 +34,11 @@ public class RealmAvatar extends RealmObject {
     }
 
     /**
-     * HINT : use this method in transaction.
+     * HINT : use this method in transaction. and never use this method in loop for one userId.
      *
      * put avatar to realm and if exist just return
      */
-    public static RealmAvatar putAndGet(Realm realm, final long ownerId, final ProtoGlobal.Avatar input) {
+    public static RealmAvatar putOrUpdateAndManageDelete(Realm realm, final long ownerId, final ProtoGlobal.Avatar input) {
         if (!input.hasFile()) {
             deleteAllAvatars(ownerId, realm);
             return null;

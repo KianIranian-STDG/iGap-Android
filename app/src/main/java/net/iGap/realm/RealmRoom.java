@@ -375,7 +375,7 @@ public class RealmRoom extends RealmObject {
                 realmRoom.setType(RoomType.CHANNEL);
                 realmRoom.setChannelRoom(RealmChannelRoom.convert(room.getChannelRoomExtra(), realmRoom.getChannelRoom(), realm));
                 realmRoom.getChannelRoom().setDescription(room.getChannelRoomExtra().getDescription());
-                realmRoom.setAvatar(RealmAvatar.putAndGet(realm, realmRoom.getId(), room.getChannelRoomExtra().getAvatar()));
+                realmRoom.setAvatar(RealmAvatar.putOrUpdateAndManageDelete(realm, realmRoom.getId(), room.getChannelRoomExtra().getAvatar()));
                 realmRoom.getChannelRoom().setInviteLink(room.getChannelRoomExtra().getPrivateExtra().getInviteLink());
                 realmRoom.getChannelRoom().setInvite_token(room.getChannelRoomExtra().getPrivateExtra().getInviteToken());
                 realmRoom.getChannelRoom().setUsername(room.getChannelRoomExtra().getPublicExtra().getUsername());
@@ -391,13 +391,13 @@ public class RealmRoom extends RealmObject {
                  */
 
                 RealmRegisteredInfo.putOrUpdate(room.getChatRoomExtra().getPeer());
-                realmRoom.setAvatar(RealmAvatar.putAndGet(realm, room.getChatRoomExtra().getPeer().getId(), room.getChatRoomExtra().getPeer().getAvatar()));
+                realmRoom.setAvatar(RealmAvatar.putOrUpdateAndManageDelete(realm, room.getChatRoomExtra().getPeer().getId(), room.getChatRoomExtra().getPeer().getAvatar()));
                 break;
             case GROUP:
                 realmRoom.setType(RoomType.GROUP);
                 realmRoom.setGroupRoom(RealmGroupRoom.putOrUpdate(room.getGroupRoomExtra(), realmRoom.getGroupRoom(), realm));
                 realmRoom.getGroupRoom().setDescription(room.getGroupRoomExtra().getDescription());
-                realmRoom.setAvatar(RealmAvatar.putAndGet(realm, realmRoom.getId(), room.getGroupRoomExtra().getAvatar()));
+                realmRoom.setAvatar(RealmAvatar.putOrUpdateAndManageDelete(realm, realmRoom.getId(), room.getGroupRoomExtra().getAvatar()));
                 realmRoom.getGroupRoom().setInvite_token(room.getGroupRoomExtra().getPrivateExtra().getInviteToken());
                 if (!room.getGroupRoomExtra().getPrivateExtra().getInviteLink().isEmpty()) {
                     realmRoom.getGroupRoom().setInvite_link(room.getGroupRoomExtra().getPrivateExtra().getInviteLink());
