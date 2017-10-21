@@ -31,28 +31,6 @@ public class RealmGroupRoom extends RealmObject {
     private boolean isPrivate;
     private String username;
 
-    /**
-     * convert ProtoGlobal.GroupRoom to RealmGroupRoom
-     *
-     * @param room ProtoGlobal.GroupRoom
-     * @return RealmGroupRoom
-     */
-    public static RealmGroupRoom convert(ProtoGlobal.GroupRoom room, RealmGroupRoom realmGroupRoom, Realm realm) {
-        if (realmGroupRoom == null) {
-            realmGroupRoom = realm.createObject(RealmGroupRoom.class);
-        }
-        realmGroupRoom.setRole(GroupChatRole.convert(room.getRole()));
-        realmGroupRoom.setParticipants_count(room.getParticipantsCount());
-        realmGroupRoom.setParticipantsCountLabel(room.getParticipantsCountLabel());
-        realmGroupRoom.setDescription(room.getDescription());
-        if (!room.getPrivateExtra().getInviteLink().isEmpty()) {
-            realmGroupRoom.setInvite_link(room.getPrivateExtra().getInviteLink());
-        }
-        realmGroupRoom.setInvite_token(room.getPrivateExtra().getInviteToken());
-        realmGroupRoom.setUsername(room.getPublicExtra().getUsername());
-        return realmGroupRoom;
-    }
-
     public GroupChatRole getRole() {
         return (role != null) ? GroupChatRole.valueOf(role) : null;
     }
@@ -154,5 +132,58 @@ public class RealmGroupRoom extends RealmObject {
 
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
+    }
+
+
+    public static RealmGroupRoom putIncomplete(Realm realm, ProtoGlobal.GroupRoom.Role role, String description, String participantsCountLabel) {
+        RealmGroupRoom realmGroupRoom = realm.createObject(RealmGroupRoom.class);
+        if (role == ProtoGlobal.GroupRoom.Role.OWNER) {
+            realmGroupRoom.setRole(GroupChatRole.OWNER);
+        } else {
+            realmGroupRoom.setRole(GroupChatRole.MEMBER);
+        }
+        realmGroupRoom.setDescription(description);
+        realmGroupRoom.setParticipantsCountLabel(participantsCountLabel);
+        return realmGroupRoom;
+    }
+
+    /**
+     * convert ProtoGlobal.GroupRoom to RealmGroupRoom
+     *
+     * @param room ProtoGlobal.GroupRoom
+     * @return RealmGroupRoom
+     */
+    public static RealmGroupRoom putOrUpdate(ProtoGlobal.GroupRoom room, RealmGroupRoom realmGroupRoom, Realm realm) {
+        if (realmGroupRoom == null) {
+            realmGroupRoom = realm.createObject(RealmGroupRoom.class);
+        }
+        realmGroupRoom.setRole(GroupChatRole.convert(room.getRole()));
+        realmGroupRoom.setParticipants_count(room.getParticipantsCount());
+        realmGroupRoom.setParticipantsCountLabel(room.getParticipantsCountLabel());
+        realmGroupRoom.setDescription(room.getDescription());
+        if (!room.getPrivateExtra().getInviteLink().isEmpty()) {
+            realmGroupRoom.setInvite_link(room.getPrivateExtra().getInviteLink());
+        }
+        realmGroupRoom.setInvite_token(room.getPrivateExtra().getInviteToken());
+        realmGroupRoom.setUsername(room.getPublicExtra().getUsername());
+        return realmGroupRoom;
+    }
+
+    public static void revokeLink(long roomId, final String inviteLink, final String inviteToken) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            final RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+            if (realmGroupRoom != null) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realmGroupRoom.setInvite_link(inviteLink);
+                        realmGroupRoom.setInvite_token(inviteToken);
+                    }
+                });
+            }
+        }
+        realm.close();
     }
 }

@@ -395,7 +395,7 @@ public class RealmRoom extends RealmObject {
                 break;
             case GROUP:
                 realmRoom.setType(RoomType.GROUP);
-                realmRoom.setGroupRoom(RealmGroupRoom.convert(room.getGroupRoomExtra(), realmRoom.getGroupRoom(), realm));
+                realmRoom.setGroupRoom(RealmGroupRoom.putOrUpdate(room.getGroupRoomExtra(), realmRoom.getGroupRoom(), realm));
                 realmRoom.getGroupRoom().setDescription(room.getGroupRoomExtra().getDescription());
                 realmRoom.setAvatar(RealmAvatar.putAndGet(realm, realmRoom.getId(), room.getGroupRoomExtra().getAvatar()));
                 realmRoom.getGroupRoom().setInvite_token(room.getGroupRoomExtra().getPrivateExtra().getInviteToken());

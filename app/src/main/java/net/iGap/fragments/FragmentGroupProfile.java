@@ -1910,23 +1910,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     public void onGroupRevokeLink(final long roomId, final String inviteLink, final String inviteToken) {
         hideProgressBar();
 
+        RealmGroupRoom.revokeLink(roomId, inviteLink, inviteToken);
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                //+Realm realm = Realm.getDefaultInstance();
-                RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                final RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-
-                getRealm().executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        txtGroupLink.setText("" + inviteLink);
-                        realmGroupRoom.setInvite_link(inviteLink);
-                        realmGroupRoom.setInvite_token(inviteToken);
-                    }
-                });
-
-                //realm.close();
+                txtGroupLink.setText("" + inviteLink);
             }
         });
     }
