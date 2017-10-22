@@ -12,16 +12,23 @@ package net.iGap.realm;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.Nullable;
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import io.realm.annotations.PrimaryKey;
 import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.module.SUID;
 import net.iGap.proto.ProtoChannelGetMemberList;
+import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupGetMemberList;
+
+import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class RealmMember extends RealmObject {
 
@@ -54,6 +61,99 @@ public class RealmMember extends RealmObject {
         this.role = role;
     }
 
+    public static RealmMember put(Realm realm, long userId, String role) {
+        RealmMember realmMember = realm.createObject(RealmMember.class, SUID.id().get());
+        realmMember.setRole(role);
+        realmMember.setPeerId(userId);
+        realmMember = realm.copyToRealm(realmMember);
+        return realmMember;
+    }
+
+    public static RealmMember put(Realm realm, ProtoGroupGetMemberList.GroupGetMemberListResponse.Member member) {
+        RealmMember realmMember = realm.createObject(RealmMember.class, SUID.id().get());
+        realmMember.setRole(member.getRole().toString());
+        realmMember.setPeerId(member.getUserId());
+        realmMember = realm.copyToRealm(realmMember);
+        return realmMember;
+    }
+
+    public static RealmMember put(Realm realm, ProtoChannelGetMemberList.ChannelGetMemberListResponse.Member member) {
+        RealmMember realmMember = realm.createObject(RealmMember.class, SUID.id().get());
+        realmMember.setRole(member.getRole().toString());
+        realmMember.setPeerId(member.getUserId());
+        realmMember = realm.copyToRealm(realmMember);
+        return realmMember;
+    }
+
+    public static void addMember(final long roomId, final long userId, final String role) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+
+                if (realmRoom != null) {
+                    RealmList<RealmMember> members = new RealmList<>();
+                    if (realmRoom.getType() == GROUP) {
+                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                        if (realmGroupRoom != null) {
+                            members = realmGroupRoom.getMembers();
+                        }
+                    } else {
+                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                        if (realmChannelRoom != null) {
+                            members = realmChannelRoom.getMembers();
+                        }
+                    }
+                    members.add(RealmMember.put(realm, userId, role));
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static boolean kickMember(Realm realm, final long roomId, final long userId) {
+
+        //test this <code>realmRoom.getGroupRoom().getMembers().where().equalTo(RealmMemberFields.PEER_ID, builder.getMemberId()).findFirst();</code> for kick member
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            RealmList<RealmMember> realmMembers = new RealmList<>();
+            if (realmRoom.getType() == GROUP) {
+                if (realmRoom.getGroupRoom() != null) {
+                    realmMembers = realmRoom.getGroupRoom().getMembers();
+                }
+            } else {
+                if (realmRoom.getChannelRoom() != null) {
+                    realmMembers = realmRoom.getChannelRoom().getMembers();
+                }
+            }
+            for (RealmMember realmMember : realmMembers) {
+                if (realmMember.getPeerId() == userId) {
+                    realmMember.deleteFromRealm();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static RealmList<RealmMember> getMembers(Realm realm, long roomId) {
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        RealmList<RealmMember> memberList = new RealmList<>();
+        if (realmRoom != null) {
+            if (realmRoom.getType() == GROUP) {
+                if (realmRoom.getGroupRoom() != null) {
+                    memberList = realmRoom.getGroupRoom().getMembers();
+                }
+            } else {
+                if (realmRoom.getChannelRoom() != null) {
+                    memberList = realmRoom.getChannelRoom().getMembers();
+                }
+            }
+        }
+        return memberList;
+    }
+
     public static void convertProtoMemberListToRealmMember(final ProtoChannelGetMemberList.ChannelGetMemberListResponse.Builder builder, final String identity) {
         final RealmList<RealmMember> newMembers = new RealmList<>();
 
@@ -76,10 +176,7 @@ public class RealmMember extends RealmObject {
 
                                 final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, member.getUserId());
                                 if (realmRegisteredInfo != null) {
-                                    RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
-                                    realmMem.setRole(member.getRole().toString());
-                                    realmMem.setPeerId(member.getUserId());
-                                    newMembers.add(realmMem);
+                                    newMembers.add(RealmMember.put(realm, member.getUserId(), member.getRole().toString()));
                                 } else {
                                     members.add(member);
                                 }
@@ -130,10 +227,7 @@ public class RealmMember extends RealmObject {
 
                                 final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, member.getUserId());
                                 if (realmRegisteredInfo != null) {
-                                    RealmMember realmMem = realm.createObject(RealmMember.class, SUID.id().get());
-                                    realmMem.setRole(member.getRole().toString());
-                                    realmMem.setPeerId(member.getUserId());
-                                    newMembers.add(realmMem);
+                                    newMembers.add(RealmMember.put(realm, member.getUserId(), member.getRole().toString()));
                                 } else {
                                     members.add(member);
                                 }
@@ -159,5 +253,71 @@ public class RealmMember extends RealmObject {
                 });
             }
         });
+    }
+
+    public static RealmResults<RealmMember> filterMember(long roomId, @Nullable String filter) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom == null) {
+            return emptyResult(realm);
+        }
+
+        RealmResults<RealmMember> searchMember = emptyResult(realm);
+        RealmResults<RealmRegisteredInfo> findMember;
+
+        if (filter != null && filter.length() > 0) {
+            findMember = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.DISPLAY_NAME, filter, Case.INSENSITIVE).findAllSorted(RealmRegisteredInfoFields.DISPLAY_NAME);
+        } else {
+            findMember = realm.where(RealmRegisteredInfo.class).equalTo(RealmRoomFields.ID, roomId).findAllSorted(RealmRegisteredInfoFields.DISPLAY_NAME);
+        }
+        try {
+            RealmQuery<RealmMember> query;
+            if (realmRoom.getType() == GROUP) {
+                query = realmRoom.getGroupRoom().getMembers().where();
+            } else {
+                query = realmRoom.getChannelRoom().getMembers().where();
+            }
+
+            for (int i = 0; i < findMember.size(); i++) {
+                if (i != 0) {
+                    query = query.or();
+                }
+                query = query.equalTo(RealmMemberFields.PEER_ID, findMember.get(i).getId());
+            }
+            searchMember = query.findAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return searchMember;
+    }
+
+    /**
+     * make empty result for avoid from null state
+     */
+    public static RealmResults<RealmMember> emptyResult(Realm realm) {
+        return realm.where(RealmMember.class).equalTo(RealmMemberFields.ID, -1).findAll();
+    }
+
+    public static RealmResults<RealmMember> filterRole(long roomId, ProtoGlobal.Room.Type roomType, String role) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmList<RealmMember> memberList = null;
+        RealmResults<RealmMember> mList = emptyResult(realm);
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            if (roomType == ProtoGlobal.Room.Type.GROUP) {
+                memberList = realmRoom.getGroupRoom().getMembers();
+            } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+                memberList = realmRoom.getChannelRoom().getMembers();
+            }
+
+            if (memberList != null && memberList.size() > 0) {
+                if (role.equals(ProtoGroupGetMemberList.GroupGetMemberList.FilterRole.ALL.toString())) {
+                    mList = memberList.where().findAll();
+                } else {
+                    mList = memberList.where().equalTo(RealmMemberFields.ROLE, role).findAll();
+                }
+            }
+        }
+        return mList;
     }
 }

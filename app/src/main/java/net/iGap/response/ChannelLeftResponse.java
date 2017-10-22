@@ -17,7 +17,6 @@ import net.iGap.proto.ProtoChannelLeft;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmMember;
-import net.iGap.realm.RealmMemberFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -66,18 +65,7 @@ public class ChannelLeftResponse extends MessageHandler {
                         G.onChannelDeleteInRoomList.onChannelDelete(builder.getRoomId());
                     }
                 } else {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
-                    if (realmRoom != null && realmRoom.getChannelRoom() != null) {
-
-                        try {
-                            RealmMember member = realmRoom.getChannelRoom().getMembers().where().equalTo(RealmMemberFields.PEER_ID, builder.getMemberId()).findFirst();
-                            if (member != null) {
-                                member.deleteFromRealm();
-                            }
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    RealmMember.kickMember(realm, builder.getRoomId(), builder.getMemberId());
                 }
             }
         });

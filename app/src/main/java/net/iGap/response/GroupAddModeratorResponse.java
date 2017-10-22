@@ -42,7 +42,7 @@ public class GroupAddModeratorResponse extends MessageHandler {
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmRoom.updateRole(ProtoGlobal.Room.Type.GROUP, builder.getRoomId(), builder.getMemberId(), GroupChatRole.MODERATOR.toString());
+        RealmRoom.updateMineRole(ProtoGlobal.Room.Type.GROUP, builder.getRoomId(), builder.getMemberId(), GroupChatRole.MODERATOR.toString());
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
 
         if (realmRoom != null) {

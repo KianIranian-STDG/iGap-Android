@@ -314,7 +314,7 @@ public class ContactGroupFragment extends BaseFragment {
     }
 
     private void addMember(long roomId, ProtoGlobal.Room.Type roomType) {
-        RealmRoom.addOwnerToDatabase(roomId, roomType);
+        RealmRoom.addOwnerToDatabase(roomId);
         RealmRoom.updateMemberCount(roomId, roomType, countAddMemberRequest + 1); // plus with 1 , for own account
         if (isAdded()) {
             removeFromBaseFragment(ContactGroupFragment.this);

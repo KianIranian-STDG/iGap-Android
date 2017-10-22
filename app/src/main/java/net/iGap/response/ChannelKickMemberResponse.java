@@ -15,8 +15,6 @@ import net.iGap.G;
 import net.iGap.proto.ProtoChannelKickMember;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmMember;
-import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 
 public class ChannelKickMemberResponse extends MessageHandler {
 
@@ -33,22 +31,17 @@ public class ChannelKickMemberResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
 
         final ProtoChannelKickMember.ChannelKickMemberResponse.Builder builder = (ProtoChannelKickMember.ChannelKickMemberResponse.Builder) message;
 
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
-                for (RealmMember realmMember : realmRoom.getChannelRoom().getMembers()) {
-                    if (realmMember.getPeerId() == builder.getMemberId()) {
-                        realmMember.deleteFromRealm();
-                        isDeleted = true;
-                        break;
-                    }
-                }
+            @Override
+            public void execute(Realm realm) {
+                isDeleted = RealmMember.kickMember(realm, builder.getRoomId(), builder.getMemberId());
             }
         });
         realm.close();
@@ -60,14 +53,16 @@ public class ChannelKickMemberResponse extends MessageHandler {
         }
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
         if (G.onChannelKickMember != null) {
             G.onChannelKickMember.onTimeOut();
         }
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;

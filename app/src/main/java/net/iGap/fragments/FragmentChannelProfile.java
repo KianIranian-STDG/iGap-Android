@@ -865,9 +865,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
     private void addMemberToChannel() {
         List<StructContactInfo> userList = Contacts.retrieve(null);
-
-        RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        RealmList<RealmMember> memberList = realmRoom.getChannelRoom().getMembers();
+        RealmList<RealmMember> memberList = RealmMember.getMembers(getRealm(), roomId);
 
         for (int i = 0; i < memberList.size(); i++) {
             for (int j = 0; j < userList.size(); j++) {

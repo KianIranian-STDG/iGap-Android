@@ -44,7 +44,7 @@ public class GroupKickAdminResponse extends MessageHandler {
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
 
-        RealmRoom.updateRole(ProtoGlobal.Room.Type.GROUP, builder.getRoomId(), builder.getMemberId(), ProtoGlobal.GroupRoom.Role.MEMBER.toString());
+        RealmRoom.updateMineRole(ProtoGlobal.Room.Type.GROUP, builder.getRoomId(), builder.getMemberId(), ProtoGlobal.GroupRoom.Role.MEMBER.toString());
         if (realmRoom != null) {
             RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
             for (final RealmMember member : realmMembers) {

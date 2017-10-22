@@ -17,7 +17,6 @@ import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupLeft;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmMember;
-import net.iGap.realm.RealmMemberFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -67,18 +66,7 @@ public class GroupLeftResponse extends MessageHandler {
                         G.onGroupDeleteInRoomList.onGroupDelete(roomId);
                     }
                 } else {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                    if (realmRoom != null && realmRoom.getGroupRoom() != null) {
-
-                        try {
-                            RealmMember member = realmRoom.getGroupRoom().getMembers().where().equalTo(RealmMemberFields.PEER_ID, builder.getMemberId()).findFirst();
-                            if (member != null) {
-                                member.deleteFromRealm();
-                            }
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    RealmMember.kickMember(realm, builder.getRoomId(), builder.getMemberId());
                 }
             }
         });

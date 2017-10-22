@@ -43,7 +43,7 @@ public class GroupAddAdminResponse extends MessageHandler {
         Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
 
-        RealmRoom.updateRole(ProtoGlobal.Room.Type.GROUP, builder.getRoomId(), builder.getMemberId(), GroupChatRole.ADMIN.toString());
+        RealmRoom.updateMineRole(ProtoGlobal.Room.Type.GROUP, builder.getRoomId(), builder.getMemberId(), GroupChatRole.ADMIN.toString());
 
         if (realmRoom != null) {
             realm.executeTransaction(new Realm.Transaction() {

@@ -85,7 +85,6 @@ import io.fotoapparat.Fotoapparat;
 import io.fotoapparat.view.CameraRenderer;
 import io.fotoapparat.view.CameraView;
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.File;
@@ -239,7 +238,6 @@ import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmGroupRoom;
-import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomDraft;
@@ -2885,14 +2883,7 @@ public class FragmentChat extends BaseFragment
                             rippleDeleteSelected.setVisibility(View.GONE);
                         }
                         final long senderId = G.userId;
-                        ChannelChatRole roleSenderMessage = null;
-                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                        RealmList<RealmMember> realmMembers = realmChannelRoom.getMembers();
-                        for (RealmMember rm : realmMembers) {
-                            if (rm.getPeerId() == messageSender) {
-                                roleSenderMessage = ChannelChatRole.valueOf(rm.getRole());
-                            }
-                        }
+                        ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, messageSender);
                         if (senderId != messageSender) {  // if message dose'nt belong to owner
                             if (channelRole == ChannelChatRole.MEMBER) {
                                 rippleDeleteSelected.setVisibility(View.GONE);
@@ -2911,15 +2902,7 @@ public class FragmentChat extends BaseFragment
                     } else if (chatType == GROUP) {
 
                         final long senderId = G.userId;
-
-                        GroupChatRole roleSenderMessage = null;
-                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                        RealmList<RealmMember> realmMembers = realmGroupRoom.getMembers();
-                        for (RealmMember rm : realmMembers) {
-                            if (rm.getPeerId() == messageSender) {
-                                roleSenderMessage = GroupChatRole.valueOf(rm.getRole());
-                            }
-                        }
+                        GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, messageSender);
                         if (senderId != messageSender) {  // if message dose'nt belong to owner
                             if (groupRole == GroupChatRole.MEMBER) {
                                 rippleDeleteSelected.setVisibility(View.GONE);
@@ -3519,95 +3502,57 @@ public class FragmentChat extends BaseFragment
                 break;
         }
 
-        //if (itemsRes != 0) {
-        // Arrays.asList returns fixed size, doing like this fixes remove object
-        // UnsupportedOperationException exception
-        //List<String> items = new LinkedList<>(Arrays.asList(getResources().getStringArray(itemsRes)));
-
-        //+Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.roomId).findFirst();
         if (realmRoom != null) {
-            // if user clicked on any message which he wasn't its sender, remove edit mList option
+            /**
+             * if user clicked on any message which he wasn't its sender, remove edit mList option
+             */
             if (chatType == CHANNEL) {
                 if (channelRole == ChannelChatRole.MEMBER) {
                     rootEdit.setVisibility(View.GONE);
                     rootReplay.setVisibility(View.GONE);
                     rootDelete.setVisibility(View.GONE);
-
-                    //items.remove(G.fragmentActivity.getResources().getString(R.string.edit_item_dialog));
-                    //items.remove(G.fragmentActivity.getResources().getString(R.string.replay_item_dialog));
-                    //items.remove(G.fragmentActivity.getResources().getString(R.string.delete_item_dialog));
                 }
-                final long senderId = G.userId;
-                ChannelChatRole roleSenderMessage = null;
-                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                RealmList<RealmMember> realmMembers = realmChannelRoom.getMembers();
-                for (RealmMember rm : realmMembers) {
-                    if (rm.getPeerId() == parseLong(message.senderID)) {
-                        roleSenderMessage = ChannelChatRole.valueOf(rm.getRole());
-                    }
-                }
-                if (!G.authorHash.equals(message.authorHash)) {  // if message dose'nt belong to owner
+                ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, parseLong(message.senderID));
+                if (!G.authorHash.equals(message.authorHash)) {
                     if (channelRole == ChannelChatRole.MEMBER) {
-
-                        //items.remove(G.fragmentActivity.getResources().getString(R.string.delete_item_dialog));
                         rootDelete.setVisibility(View.GONE);
                     } else if (channelRole == ChannelChatRole.MODERATOR) {
                         if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
-                            //items.remove(G.fragmentActivity.getResources().getString(R.string.delete_item_dialog));
                             rootDelete.setVisibility(View.GONE);
                         }
                     } else if (channelRole == ChannelChatRole.ADMIN) {
                         if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
-                            //items.remove(G.fragmentActivity.getResources().getString(R.string.delete_item_dialog));
                             rootDelete.setVisibility(View.GONE);
                         }
                     }
-                    //items.remove(G.fragmentActivity.getResources().getString(R.string.edit_item_dialog));
                     rootEdit.setVisibility(View.GONE);
                 }
             } else if (chatType == GROUP) {
 
-                final long senderId = G.userId;
-
-                GroupChatRole roleSenderMessage = null;
-                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
-                RealmList<RealmMember> realmMembers = realmGroupRoom.getMembers();
-                for (RealmMember rm : realmMembers) {
-                    if (rm.getPeerId() == parseLong(message.senderID)) {
-                        roleSenderMessage = GroupChatRole.valueOf(rm.getRole());
-                    }
-                }
-                if (!G.authorHash.equals(message.authorHash)) {  // if message dose'nt belong to owner
+                GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, parseLong(message.senderID));
+                if (!G.authorHash.equals(message.authorHash)) {
                     if (groupRole == GroupChatRole.MEMBER) {
-                        //items.remove(G.fragmentActivity.getResources().getString(R.string.delete_item_dialog));
                         rootDelete.setVisibility(View.GONE);
                     } else if (groupRole == GroupChatRole.MODERATOR) {
                         if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
-                            //items.remove(G.fragmentActivity.getResources().getString(R.string.delete_item_dialog));
                             rootDelete.setVisibility(View.GONE);
                         }
                     } else if (groupRole == GroupChatRole.ADMIN) {
                         if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
-                            //items.remove(G.fragmentActivity.getResources().getString(R.string.delete_item_dialog));
                             rootDelete.setVisibility(View.GONE);
                         }
                     }
-                    //items.remove(G.fragmentActivity.getResources().getString(R.string.edit_item_dialog));
                     rootEdit.setVisibility(View.GONE);
                 }
             } else if (realmRoom.getReadOnly()) {
                 rootReplay.setVisibility(View.GONE);
             } else {
                 if (!message.senderID.equalsIgnoreCase(Long.toString(G.userId))) {
-                    //items.remove(G.fragmentActivity.getResources().getString(R.string.edit_item_dialog));
                     rootEdit.setVisibility(View.GONE);
                 }
             }
-
-            //realm.close();
         }
-        //}
 
         String _savedFolderName = "";
         if (message.messageType.toString().contains("IMAGE") || message.messageType.toString().contains("VIDEO") || message.messageType.toString().contains("GIF")) {

@@ -11,13 +11,10 @@
 package net.iGap.response;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import net.iGap.G;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupKickMember;
 import net.iGap.realm.RealmMember;
-import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 
 public class GroupKickMemberResponse extends MessageHandler {
 
@@ -34,42 +31,28 @@ public class GroupKickMemberResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
-        ProtoGroupKickMember.GroupKickMemberResponse.Builder builder = (ProtoGroupKickMember.GroupKickMemberResponse.Builder) message;
-        final long roomId = builder.getRoomId();
-        final long memberId = builder.getMemberId();
-
+        final ProtoGroupKickMember.GroupKickMemberResponse.Builder builder = (ProtoGroupKickMember.GroupKickMemberResponse.Builder) message;
         Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-
-        if (realmRoom != null) {
-            final RealmList<RealmMember> realmMembers = realmRoom.getGroupRoom().getMembers();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override public void execute(Realm realm) {
-                    for (int i = 0; i < realmMembers.size(); i++) {
-                        RealmMember member = realmMembers.get(i);
-                        if (member.getPeerId() == memberId) {
-                            member.deleteFromRealm();          //delete member from database
-                            //realmRoom.getGroupRoom().setParticipantsCountLabel((Integer.parseInt(realmRoom.getGroupRoom().getParticipantsCountLabel()) - 1) + "");
-                            isDeleted = true;
-                            break;
-                        }
-                    }
-                }
-            });
-        }
-
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                isDeleted = RealmMember.kickMember(realm, builder.getRoomId(), builder.getMemberId());
+            }
+        });
         realm.close();
 
         if (isDeleted) {
             if (G.onGroupKickMember != null) {
-                G.onGroupKickMember.onGroupKickMember(roomId, memberId);
+                G.onGroupKickMember.onGroupKickMember(builder.getRoomId(), builder.getMemberId());
             }
         }
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
@@ -78,7 +61,8 @@ public class GroupKickMemberResponse extends MessageHandler {
         G.onGroupKickMember.onError(majorCode, minorCode);
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
         G.onGroupKickMember.onTimeOut();
     }
