@@ -563,6 +563,20 @@ public class RealmRoom extends RealmObject {
     }
 
     /**
+     * check with this roomId that room is showing in room list or no
+     */
+    public static boolean isMainRoom(long roomId) {
+        boolean isMainRoom = false;
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).equalTo(RealmRoomFields.IS_DELETED, false).findFirst();
+        if (realmRoom != null) {
+            isMainRoom = true;
+        }
+        realm.close();
+        return isMainRoom;
+    }
+
+    /**
      * check updater author for detect that updater is another device for
      * this account and finally update unread count if another account
      * was saw message for this room
