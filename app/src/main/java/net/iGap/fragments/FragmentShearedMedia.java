@@ -76,6 +76,7 @@ import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.transition.fragment.FragmentTransitionLauncher;
 import net.iGap.proto.ProtoClientCountRoomHistory;
 import net.iGap.proto.ProtoClientSearchRoomHistory;
 import net.iGap.proto.ProtoFileDownload;
@@ -1530,10 +1531,10 @@ public class FragmentShearedMedia extends BaseFragment {
 
         @Override
         void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
-            showImage(position);
+            showImage(position, holder.itemView);
         }
 
-        private void showImage(int position) {
+        private void showImage(int position, View itemView) {
             long selectedFileToken = mList.get(position).messageId;
 
             FragmentShowImage fragment = FragmentShowImage.newInstance();
@@ -1542,6 +1543,8 @@ public class FragmentShearedMedia extends BaseFragment {
             bundle.putLong("SelectedImage", selectedFileToken);
             bundle.putString("TYPE", ProtoGlobal.RoomMessageType.IMAGE.toString());
             fragment.setArguments(bundle);
+
+            FragmentTransitionLauncher.with(G.fragmentActivity).from(itemView).prepare(fragment);
 
             fragment.appBarLayout = appBarLayout;
             new HelperFragment(fragment).setReplace(false).load();
@@ -1671,10 +1674,10 @@ public class FragmentShearedMedia extends BaseFragment {
 
         @Override
         void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
-            playVideo(position);
+            playVideo(position, holder.itemView);
         }
 
-        private void playVideo(int position) {
+        private void playVideo(int position, View itemView) {
             long selectedFileToken = mNewList.get(position).messageId;
 
             Fragment fragment = FragmentShowImage.newInstance();
@@ -1683,6 +1686,10 @@ public class FragmentShearedMedia extends BaseFragment {
             bundle.putLong("SelectedImage", selectedFileToken);
             bundle.putString("TYPE", ProtoGlobal.RoomMessageType.VIDEO.toString());
             fragment.setArguments(bundle);
+
+            FragmentTransitionLauncher.with(G.fragmentActivity).from(itemView).prepare(fragment);
+
+
             new HelperFragment(fragment).setReplace(false).load();
         }
     }

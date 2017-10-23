@@ -185,6 +185,9 @@ public class FragmentShowAvatars extends BaseFragment {
 
     private void initComponent(View view) {
 
+        ViewGroup rooShowImage = (ViewGroup) view.findViewById(R.id.rooShowImage);
+        rooShowImage.setBackgroundColor(G.context.getColor(R.color.black));
+
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.asi_btn_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

@@ -223,6 +223,7 @@ import net.iGap.module.structs.StructCompress;
 import net.iGap.module.structs.StructMessageAttachment;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructUploadVideo;
+import net.iGap.module.transition.fragment.FragmentTransitionLauncher;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoClientGetRoomHistory;
 import net.iGap.proto.ProtoClientRoomReport;
@@ -377,7 +378,7 @@ public class FragmentChat extends BaseFragment
 
     public static int forwardMessageCount = 0;
     public static ArrayList<Parcelable> mForwardMessages;
-    public static Realm realmChat; // static for test
+    public static Realm realmChat; // static for FragmentTest
     public static boolean canUpdateAfterDownload = false;
 
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
@@ -4612,7 +4613,11 @@ public class FragmentChat extends BaseFragment
         bundle.putLong("SelectedImage", selectedFileToken);
         fragment.setArguments(bundle);
         fragment.appBarLayout = appBarLayout;
-        new HelperFragment(fragment).setReplace(false).load();
+
+        FragmentTransitionLauncher.with(G.fragmentActivity).from(view).prepare(fragment);
+        //new HelperFragment(fragment).setAnimated(true).setReplace(false).load();
+
+        getActivity().getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fragment).addToBackStack(null).commit();
     }
 
     /**

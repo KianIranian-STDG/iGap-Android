@@ -10,6 +10,10 @@
 
 package net.iGap.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,7 +25,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
@@ -53,6 +60,8 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TouchImageView;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.transition.fragment.ExitFragmentTransition;
+import net.iGap.module.transition.fragment.FragmentTransition;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -96,6 +105,9 @@ public class FragmentShowImage extends BaseFragment {
     public final String ROOM_ID = "roomId";
     public final String SELECTED_IMAGE = "selectedImage";
     public final String TYPE = "type";
+    private ViewGroup rooShowImage;
+    private ViewGroup mainShowImage;
+    private ExitFragmentTransition exitFragmentTransition;
 
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
@@ -105,7 +117,24 @@ public class FragmentShowImage extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         realmShowImage = Realm.getDefaultInstance();
-        return inflater.inflate(R.layout.activity_show_image, container, false);
+
+        View view = inflater.inflate(R.layout.activity_show_image, container, false);
+        exitFragmentTransition = FragmentTransition.with(this).duration(200).interpolator(new LinearOutSlowInInterpolator()).to(view.findViewById(R.id.asi_view_pager)).start(savedInstanceState);
+
+        exitFragmentTransition.exitListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                Log.d("FFFFFFF", "onAnimationStart: ");
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                Log.d("FFFFFFF", "onAnimationEnd: ");
+            }
+        }).interpolator(new FastOutSlowInInterpolator());
+        exitFragmentTransition.startExitListening(view.findViewById(R.id.rooShowImage));
+
+        return view;
     }
 
     @Override
@@ -217,11 +246,13 @@ public class FragmentShowImage extends BaseFragment {
 
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.asi_btn_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
 
+        rippleBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(RippleView rippleView) {
-                G.fragmentActivity.onBackPressed();
+            public void onClick(View v) {
+
+                exitFragmentTransition.startButtonExitListening(rooShowImage);
+
             }
         });
 
@@ -234,6 +265,25 @@ public class FragmentShowImage extends BaseFragment {
                 popUpMenuShowImage();
             }
         });
+
+        rooShowImage = (ViewGroup) view.findViewById(R.id.rooShowImage);
+
+        int colorFrom = getResources().getColor(R.color.transparent);
+        int colorTo = getResources().getColor(R.color.black);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(300); // milliseconds
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                rooShowImage.setBackgroundColor((int) animator.getAnimatedValue());
+            }
+
+        });
+
+        colorAnimation.start();
+
+
         viewPager = (ViewPager) view.findViewById(R.id.asi_view_pager);
 
         txtImageNumber = (TextView) view.findViewById(R.id.asi_txt_image_number);
@@ -1001,6 +1051,8 @@ public class FragmentShowImage extends BaseFragment {
             isLockScreen = true;
         }
     }
+
+
 
     @Override
     public void onResume() {
