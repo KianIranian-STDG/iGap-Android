@@ -17,6 +17,7 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import io.realm.annotations.PrimaryKey;
 import java.util.List;
 import net.iGap.G;
@@ -487,7 +488,7 @@ public class RealmRoom extends RealmObject {
                                  * hint: {@link RealmRoom#deleteRoom(long)} also do following actions but it is in
                                  * transaction and client can't use a transaction inside another
                                  */
-                                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, item.getId()).findAll().deleteAllFromRealm();
+                                RealmRoomMessage.deleteAllMessage(realm, item.getId());
                                 RealmClientCondition.deleteCondition(realm, item.getId());
                                 item.deleteFromRealm();
                             }
@@ -695,7 +696,7 @@ public class RealmRoom extends RealmObject {
 
                 RealmClientCondition.deleteCondition(realm, roomId);
 
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
+                RealmRoomMessage.deleteAllMessage(realm, roomId);
             }
         });
         realm.close();
@@ -825,5 +826,68 @@ public class RealmRoom extends RealmObject {
         }
         realm.close();
         return roomType;
+    }
+
+    public static void setLastMessageWithRoomMessage(Realm realm, long roomId, RealmRoomMessage roomMessage) {
+        if (roomMessage != null) {
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+            if (realmRoom != null) {
+                realmRoom.setLastMessage(roomMessage);
+            }
+        }
+    }
+
+    public static void setLastMessageWithRoomMessage(final long roomId, final RealmRoomMessage roomMessage) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                setLastMessageWithRoomMessage(realm, roomId, roomMessage);
+            }
+        });
+        realm.close();
+    }
+
+    public static void setLastMessage(final long roomId) {
+        //TODO [Saeed Mozaffari] [2017-10-22 5:26 PM] - Write Better Code
+        Realm realm = Realm.getDefaultInstance();
+        final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        if (realmRoomMessages.size() > 0 && realmRoomMessages.first() != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    if (realmRoom != null) {
+                        realmRoom.setLastMessage(realmRoomMessages.first());
+                    }
+                }
+            });
+        }
+        realm.close();
+    }
+
+    public static void setLastMessageAfterLocalDelete(final long roomId, final long messageId) { // FragmentChat, is need this method?
+        //TODO [Saeed Mozaffari] [2017-10-23 9:38 AM] - Write Better Code
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                try {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                    RealmRoomMessage realmRoomMessage = null;
+                    RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.EDITED, false).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThan(RealmRoomMessageFields.MESSAGE_ID, messageId).findAll();
+                    if (realmRoomMessages.size() > 0) {
+                        realmRoomMessage = realmRoomMessages.last();
+                    }
+
+                    if (realmRoom != null && realmRoomMessage != null) {
+                        realmRoom.setLastMessage(realmRoomMessage);
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        realm.close();
     }
 }

@@ -345,29 +345,22 @@ public final class AppUtils {
 
     public static void setImageDrawable(ImageView view, int res) {
         view.setImageDrawable(net.iGap.messageprogress.AndroidUtils.getDrawable(G.currentActivity, res));
-
         // view.setImageResource(res);
     }
 
-    public static long findLastMessageId(long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.ASCENDING);
-        if (!roomMessages.isEmpty()) {
-            return roomMessages.first().getMessageId();
-        }
-        realm.close();
-        return 0;
-    }
-
-    public static String rightLastMessage(long roomId, Resources resources, ProtoGlobal.Room.Type roomType, RealmRoomMessage message, RealmAttachment attachment) {
+    /**
+     * due to the message type and attachment will be returned appropriate text message
+     *
+     * @return appropriate text message for showing in view
+     */
+    public static String rightLastMessage(RealmRoomMessage message) {
         String messageText;
         if (message == null) {
             return null;
         }
 
         if (message.isDeleted()) {
-            return resources.getString(R.string.deleted_message);
-            //return computeLastMessage(roomId, resources, roomType, attachment);
+            return G.fragmentActivity.getString(R.string.deleted_message); //return computeLastMessage(roomId);
         } else if (!TextUtils.isEmpty(message.getMessage())) {
             return message.getMessage();
         } else if (message.getForwardMessage() != null && !TextUtils.isEmpty(message.getForwardMessage().getMessage())) {
@@ -375,13 +368,14 @@ public final class AppUtils {
         } else if (message.getReplyTo() != null && !TextUtils.isEmpty(message.getReplyTo().getMessage())) {
             return message.getReplyTo().getMessage();
         } else {
+            RealmAttachment attachment = message.getAttachment();
             switch (message.getForwardMessage() == null ? message.getMessageType() : message.getForwardMessage().getMessageType()) {
                 case AUDIO_TEXT:
                 case AUDIO:
                     if (attachment == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
+                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
                 case CONTACT:
                     messageText = "contact"; // need to fill messageText with a String because in return check null
@@ -391,41 +385,40 @@ public final class AppUtils {
                     if (attachment == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
+                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
                 case GIF_TEXT:
                 case GIF:
                     if (attachment == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
+                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
                 case IMAGE_TEXT:
                 case IMAGE:
                     if (attachment == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
+                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
                 case LOCATION:
-                    messageText = resources.getString(R.string.last_msg_format_chat, resources.getString(R.string.location_message));
+                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, G.fragmentActivity.getString(R.string.location_message));
                     break;
                 case LOG:
-                    messageText = resources.getString(R.string.last_msg_format_chat, message.getLogMessage());
-                    // resources.getString(R.string.log_message));
+                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, message.getLogMessage());
                     break;
                 case VIDEO_TEXT:
                 case VIDEO:
                     if (attachment == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
+                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
                 case VOICE:
                     if (attachment == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.last_msg_format_chat, attachment.getName());
+                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
                 default:
                     messageText = null;
@@ -443,7 +436,7 @@ public final class AppUtils {
      * @return final message text
      */
     public static String replyTextMessage(RealmRoomMessage realmRoomMessage, Resources resources) {
-        RealmRoomMessage message = realmRoomMessage.getForwardMessage() == null ? realmRoomMessage : realmRoomMessage.getForwardMessage();
+        RealmRoomMessage message = RealmRoomMessage.getFinalMessage(realmRoomMessage);
         String messageText = "";
         if (message != null) {
             switch (message.getMessageType()) {
@@ -507,32 +500,18 @@ public final class AppUtils {
         return messageText;
     }
 
-    private static String computeLastMessage(final long roomId, Resources resources, ProtoGlobal.Room.Type roomType, RealmAttachment attachment) {
+    public static String computeLastMessage(long roomId) {
         Realm realm = Realm.getDefaultInstance();
         String lastMessage = "";
         RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         for (RealmRoomMessage realmRoomMessage : realmList) {
             if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
-                lastMessage = AppUtils.rightLastMessage(roomId, resources, roomType, realmRoomMessage, attachment);
+                lastMessage = AppUtils.rightLastMessage(realmRoomMessage);
                 break;
             }
         }
         realm.close();
         return lastMessage;
-    }
-
-    public static long computeLastMessageTime(final long roomId) {
-        Realm realm = Realm.getDefaultInstance();
-        long lastMessageTime = 0;
-        RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-        for (RealmRoomMessage realmRoomMessage : realmList) {
-            if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
-                lastMessageTime = realmRoomMessage.getUpdateOrCreateTime();
-                break;
-            }
-        }
-        realm.close();
-        return lastMessageTime;
     }
 
     public static MaterialDialog.Builder buildResendDialog(Context context, int failedMessagesCount, final IResendMessage listener) {
@@ -552,11 +531,7 @@ public final class AppUtils {
             newIds[itemsId.indexOf(integer)] = integer;
         }
 
-        return new MaterialDialog.Builder(context).title(R.string.resend_chat_message)
-            .negativeText(context.getString(R.string.cancel))
-            .items(items)
-            .itemsIds(newIds)
-            .itemsCallback(new MaterialDialog.ListCallback() {
+        return new MaterialDialog.Builder(context).title(R.string.resend_chat_message).negativeText(context.getString(R.string.cancel)).items(items).itemsIds(newIds).itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
                 switch (itemView.getId()) {

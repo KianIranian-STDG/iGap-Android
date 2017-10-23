@@ -49,8 +49,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmModel;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,6 +95,7 @@ import net.iGap.module.FileUploadStructure;
 import net.iGap.module.IntentRequests;
 import net.iGap.module.MEditText;
 import net.iGap.module.SUID;
+import net.iGap.module.enums.EnumCustomMessageId;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
@@ -110,7 +109,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestGroupAddAdmin;
 import net.iGap.request.RequestGroupAddMember;
 import net.iGap.request.RequestGroupAddModerator;
@@ -1367,12 +1365,12 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
         Fragment fragment = ShowCustomList.newInstance(userList, new OnSelectedList() {
             @Override
-            public void getSelectedList(boolean result, final String message, final int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
+            public void getSelectedList(boolean result, final String type, final int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
                         for (int i = 0; i < list.size(); i++) {
-                            new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, getMessageId(message, countForShowLastMessage));
+                            new RequestGroupAddMember().groupAddMember(roomId, list.get(i).peerId, RealmRoomMessage.findCustomMessageId(roomId, EnumCustomMessageId.convertType(type), countForShowLastMessage));
                         }
                     }
                 });
@@ -1384,46 +1382,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         bundle.putLong("COUNT_MESSAGE", noLastMessage);
         fragment.setArguments(bundle);
         new HelperFragment(fragment).setReplace(false).load();
-    }
-
-    private Long getMessageId(String type, int count) {
-
-        long messageID;
-
-        if (type.equals("fromBegin")) {
-            messageID = 0;
-        } else if (type.equals("fromNow")) {
-
-            //+Realm realm = Realm.getDefaultInstance();
-            RealmResults<RealmRoomMessage> realmRoomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).
-                    findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-
-            RealmRoomMessage realmRoomMessage = null;
-            if (realmRoomMessages.size() > 0) {
-                realmRoomMessage = realmRoomMessages.first();
-            }
-            if (realmRoomMessage != null) {
-                messageID = realmRoomMessage.getMessageId();
-            } else {
-                messageID = 0;
-            }
-            //realm.close();
-        } else {
-
-            //+Realm realm = Realm.getDefaultInstance();
-            RealmResults<RealmRoomMessage> realmRoomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).
-                    findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
-
-            if (realmRoomMessages.size() <= count) {
-                messageID = 0;
-            } else {
-                messageID = realmRoomMessages.get(count).getMessageId();
-            }
-
-            //realm.close();
-        }
-
-        return messageID;
     }
 
     private void ChangeGroupName(final View view) {

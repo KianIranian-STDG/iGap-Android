@@ -156,43 +156,20 @@ public class FragmentShowImage extends BaseFragment {
                 return false;
             }
 
-            mRealmList = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
-
+            mRealmList = RealmRoomMessage.findSorted(getRealm(), mRoomId, RealmRoomMessageFields.UPDATE_TIME, Sort.ASCENDING);
             if (mRealmList.size() < 1) {
-                // G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-
                 popBackStackFragment();
-
                 return false;
             }
 
-            for (RealmRoomMessage item : mRealmList) {
-
-                boolean isImage = false;
-                if (type == null) {
-                    if (item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) || item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-                        isImage = true;
-                    } else if (item.getForwardMessage() != null) {
-                        if (item.getForwardMessage().getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString()) || item.getForwardMessage().getMessageType().toString().contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-                            isImage = true;
-                        }
-                    }
-                } else if (type.contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-                    if (item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-                        isImage = true;
-                    }
-                } else if (type.contains(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-                    if (item.getMessageType().toString().contains(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-                        isImage = true;
-                    }
+            for (RealmRoomMessage roomMessage : mRealmList) {
+                if (RealmRoomMessage.isImageOrVideo(roomMessage, convertType(type))) {
+                    mFList.add(roomMessage);
                 }
-
-                if (isImage) mFList.add(item);
             }
 
             if (selectedFileToken != null) {
                 for (int i = mFList.size() - 1; i >= 0; i--) {
-
                     if (selectedFileToken == mFList.get(i).getMessageId()) {
                         selectedFile = i;
                         break;
@@ -203,12 +180,21 @@ public class FragmentShowImage extends BaseFragment {
             return true;
         } else {
             if (G.fragmentActivity != null) {
-                // G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
-
                 popBackStackFragment();
             }
             return false;
         }
+    }
+
+    private ProtoGlobal.RoomMessageType convertType(String type) {
+        if (type != null) {
+            if (type.contains(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+                return ProtoGlobal.RoomMessageType.VIDEO;
+            } else if (type.contains(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
+                return ProtoGlobal.RoomMessageType.IMAGE;
+            }
+        }
+        return null;
     }
 
     private void initComponent(View view) {
@@ -291,12 +277,7 @@ public class FragmentShowImage extends BaseFragment {
         if (realmRoomMessage == null || G.authorHash == null) {
             return;
         }
-        RealmRoomMessage realmRoomMessageFinal;
-        if (realmRoomMessage.getForwardMessage() != null) {
-            realmRoomMessageFinal = realmRoomMessage.getForwardMessage();
-        } else {
-            realmRoomMessageFinal = realmRoomMessage;
-        }
+        RealmRoomMessage realmRoomMessageFinal = RealmRoomMessage.getFinalMessage(realmRoomMessage);
 
         if (realmRoomMessageFinal.getMessage() != null && !realmRoomMessageFinal.getMessage().isEmpty()) {
             txtImageDesc.setText(realmRoomMessageFinal.getMessage());
@@ -364,7 +345,7 @@ public class FragmentShowImage extends BaseFragment {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                saveToGalary();
+                saveToGallery();
             }
         });
 
@@ -383,17 +364,17 @@ public class FragmentShowImage extends BaseFragment {
      */
     private void shareImage() {
 
-        RealmRoomMessage rm = mFList.get(viewPager.getCurrentItem());
+        RealmRoomMessage roomMessage = mFList.get(viewPager.getCurrentItem());
 
-        if (rm != null) {
-            if (rm.getForwardMessage() != null) rm = rm.getForwardMessage();
+        if (roomMessage != null) {
+            roomMessage = RealmRoomMessage.getFinalMessage(roomMessage);
             String path = getFilePath(viewPager.getCurrentItem());
             File file = new File(path);
             if (file.exists()) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("image/*");
                 //+Realm realm = Realm.getDefaultInstance();
-                putExtra(intent, StructMessageInfo.convert(getRealm(), rm));
+                putExtra(intent, StructMessageInfo.convert(getRealm(), roomMessage));
                 startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
             }
         }
@@ -413,11 +394,10 @@ public class FragmentShowImage extends BaseFragment {
     /**
      * share Image and video
      */
-    private void saveToGalary() {
+    private void saveToGallery() {
 
         RealmRoomMessage rm = mFList.get(viewPager.getCurrentItem());
         if (rm != null) {
-
             String path = getFilePath(viewPager.getCurrentItem());
             File file = new File(path);
             if (file.exists()) {
@@ -464,18 +444,16 @@ public class FragmentShowImage extends BaseFragment {
 
             final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) layout.findViewById(R.id.ch_progress_loadingContent);
             contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
-            final RealmRoomMessage rm = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage() : mFList.get(position);
+            final RealmRoomMessage rm = RealmRoomMessage.getFinalMessage(mFList.get(position));
 
-            if (HelperDownloadFile.isDownLoading(rm.getAttachment().getCacheId())) {
-                progress.withDrawable(R.drawable.ic_cancel, true);
-                startDownload(position, progress, touchImageView, contentLoading, imgPlay, mTextureView);
-            } else {
-                progress.withDrawable(R.drawable.ic_download, true);
-                contentLoading.setVisibility(View.GONE);
-            }
-
-            //
             if (rm != null) {
+                if (HelperDownloadFile.isDownLoading(rm.getAttachment().getCacheId())) {
+                    progress.withDrawable(R.drawable.ic_cancel, true);
+                    startDownload(position, progress, touchImageView, contentLoading, imgPlay, mTextureView);
+                } else {
+                    progress.withDrawable(R.drawable.ic_download, true);
+                    contentLoading.setVisibility(View.GONE);
+                }
 
                 path = getFilePath(position);
                 File file = new File(path);
@@ -509,7 +487,7 @@ public class FragmentShowImage extends BaseFragment {
                     }
                 } else {
                     imgPlay.setVisibility(View.GONE);
-                    path = getThumpnailPath(rm);
+                    path = getThumbnailPath(rm);
                     touchImageView.setVisibility(View.VISIBLE);
                     file = new File(path);
                     if (file.exists()) {
@@ -674,7 +652,7 @@ public class FragmentShowImage extends BaseFragment {
 
             contentLoading.setVisibility(View.VISIBLE);
 
-            final RealmRoomMessage rm = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage() : mFList.get(position);
+            final RealmRoomMessage rm = RealmRoomMessage.getFinalMessage(mFList.get(position));
 
             String dirPath = AndroidUtils.getFilePathWithCashId(rm.getAttachment().getCacheId(), rm.getAttachment().getName(), rm.getMessageType());
 
@@ -940,7 +918,7 @@ public class FragmentShowImage extends BaseFragment {
         return result;
     }
 
-    public String getThumpnailPath(RealmRoomMessage roomMessage) {
+    public String getThumbnailPath(RealmRoomMessage roomMessage) {
 
         String result = "";
 

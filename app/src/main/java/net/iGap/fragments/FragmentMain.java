@@ -1243,7 +1243,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
             } else {
 
                 if (mInfo.getLastMessage() != null) {
-                    String lastMessage = AppUtils.rightLastMessage(mInfo.getId(), holder.itemView.getResources(), mInfo.getType(), mInfo.getLastMessage(), mInfo.getLastMessage().getForwardMessage() != null ? mInfo.getLastMessage().getForwardMessage().getAttachment() : mInfo.getLastMessage().getAttachment());
+                    String lastMessage = AppUtils.rightLastMessage(RealmRoomMessage.getFinalMessage(mInfo.getLastMessage()));
 
                     if (lastMessage == null) {
                         lastMessage = mInfo.getLastMessage().getMessage();
