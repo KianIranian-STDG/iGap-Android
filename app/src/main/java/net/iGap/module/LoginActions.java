@@ -148,7 +148,7 @@ public class LoginActions extends Application {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmRegisteredInfo.putOrUpdate(user);
+                            RealmRegisteredInfo.putOrUpdate(realm, user);
                         }
                     });
 

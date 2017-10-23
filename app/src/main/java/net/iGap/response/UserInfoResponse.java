@@ -53,25 +53,7 @@ public class UserInfoResponse extends MessageHandler {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-
-                        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, builder.getUser().getId());
-                        if (realmRegisteredInfo == null) {
-                            realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class, builder.getUser().getId());
-                        }
-
-                        realmRegisteredInfo.setAvatarCount(builder.getUser().getAvatarCount());
-                        realmRegisteredInfo.setColor(builder.getUser().getColor());
-                        realmRegisteredInfo.setDisplayName(builder.getUser().getDisplayName());
-                        realmRegisteredInfo.setFirstName(builder.getUser().getFirstName());
-                        realmRegisteredInfo.setInitials(builder.getUser().getInitials());
-                        realmRegisteredInfo.setLastSeen(builder.getUser().getLastSeen());
-                        realmRegisteredInfo.setPhoneNumber(Long.toString(builder.getUser().getPhone()));
-                        realmRegisteredInfo.setStatus(builder.getUser().getStatus().toString());
-                        realmRegisteredInfo.setUsername(builder.getUser().getUsername());
-                        realmRegisteredInfo.setMutual(builder.getUser().getMutual());
-                        realmRegisteredInfo.setCacheId(builder.getUser().getCacheId());
-                        realmRegisteredInfo.setBio(builder.getUser().getBio());
-
+                        RealmRegisteredInfo.putOrUpdate(realm, builder.getUser());
                         RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
                     }
                 });

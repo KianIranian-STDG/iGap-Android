@@ -525,6 +525,10 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     G.onUserContactEdit = new OnUserContactEdit() {
                         @Override
                         public void onContactEdit(final String firstName, final String lastName, final String initials) {
+
+                            RealmRegisteredInfo.updateName(userId, firstName, lastName, initials);
+                            RealmContacts.updateName(userId, firstName, lastName, initials);
+
                             Realm realm1 = Realm.getDefaultInstance();
                             realm1.executeTransaction(new Realm.Transaction() {
                                 @Override
@@ -537,20 +541,10 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                         }
                                     }
 
-                                    RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
-                                    if (registeredInfo != null) {
-                                        registeredInfo.setFirstName(firstName);
-                                        registeredInfo.setLastName(lastName);
-                                        registeredInfo.setDisplayName(displayName.trim());
-                                        registeredInfo.setInitials(initials);
-                                    }
-
                                     setAvatar();
                                 }
                             });
                             realm1.close();
-
-                            RealmContacts.updateName(userId, firstName, lastName);
 
                             G.handler.post(new Runnable() {
                                 @Override
@@ -1200,7 +1194,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
     private void deleteContact() {
         G.onUserContactdelete = new OnUserContactDelete() {
             @Override
-            public void onContactDelete(long userId) {
+            public void onContactDelete() {
                 /**
                  * get user info after delete it for show nickname
                  */

@@ -324,9 +324,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        RealmRoomMessage roomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst();
+        RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
         if (roomMessage != null) {
-            prepareAttachmentIfNeeded(holder, roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
+            prepareAttachmentIfNeeded(holder, roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
         }
 
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
@@ -850,7 +850,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             RealmRegisteredInfo info = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), mMessage.forwardedFrom.getUserId());
             if (info != null) {
 
-                if (HelperInfo.needUpdateUser(info.getId(), info.getCacheId())) {
+                if (RealmRegisteredInfo.needUpdateUser(info.getId(), info.getCacheId())) {
                     if (!updateForwardInfo.containsKey(info.getId())) {
                         updateForwardInfo.put(info.getId(), mMessage.messageID);
                     }
@@ -865,7 +865,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             } else if (mMessage.forwardedFrom.getUserId() != 0) {
 
-                if (HelperInfo.needUpdateUser(mMessage.forwardedFrom.getUserId(), null)) {
+                if (RealmRegisteredInfo.needUpdateUser(mMessage.forwardedFrom.getUserId(), null)) {
                     if (!updateForwardInfo.containsKey(mMessage.forwardedFrom.getUserId())) {
                         updateForwardInfo.put(mMessage.forwardedFrom.getUserId(), mMessage.messageID);
                     }

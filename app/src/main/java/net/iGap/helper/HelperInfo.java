@@ -11,37 +11,11 @@
 package net.iGap.helper;
 
 import io.realm.Realm;
-import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientGetRoom;
-import net.iGap.request.RequestUserInfo;
 
 public class HelperInfo {
-
-    /**
-     * compare user cacheId , if was equal don't do anything
-     * otherwise send request for get user info
-     *
-     * @param userId userId for get old cacheId from RealmRegisteredInfo
-     * @param cacheId new cacheId
-     * @return return true if need update otherwise return false
-     */
-
-    public static boolean needUpdateUser(long userId, String cacheId) {
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
-
-        if (realmRegisteredInfo != null && cacheId != null && realmRegisteredInfo.getCacheId().equals(cacheId)) {
-            realm.close();
-            return false;
-        }
-        new RequestUserInfo().userInfoAvoidDuplicate(userId);
-
-        realm.close();
-        return true;
-    }
 
     /**
      * if room isn't exist get info from server

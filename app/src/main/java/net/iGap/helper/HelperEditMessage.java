@@ -10,7 +10,6 @@
 
 package net.iGap.helper;
 
-import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.module.enums.ClientConditionOffline;
 import net.iGap.module.enums.ClientConditionVersion;
@@ -18,7 +17,6 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 /**
  * manage response for edited message for chat,group or channel
@@ -31,23 +29,11 @@ public class HelperEditMessage {
         if (!response.getId().isEmpty()) {
             RealmClientCondition.deleteOfflineAction(messageId, ClientConditionOffline.EDIT);
         } else {
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                    if (roomMessage != null) {
-                        roomMessage.setMessage(message);
-                        roomMessage.setMessageVersion(messageVersion);
-                        roomMessage.setEdited(true);
-                        roomMessage.setMessageType(messageType);
-                        if (G.onChatEditMessageResponse != null) {
-                            G.onChatEditMessageResponse.onChatEditMessage(roomId, messageId, messageVersion, message, response);
-                        }
-                    }
-                }
-            });
-            realm.close();
+            RealmRoomMessage.editMessageServerResponse(messageId, messageVersion, message, messageType);
+
+            if (G.onChatEditMessageResponse != null) {
+                G.onChatEditMessageResponse.onChatEditMessage(roomId, messageId, messageVersion, message, response);
+            }
         }
     }
 }

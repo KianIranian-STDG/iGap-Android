@@ -24,6 +24,8 @@ import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserInfo;
 
+import static net.iGap.G.userId;
+
 public class RealmRegisteredInfo extends RealmObject {
     @PrimaryKey private long id;
     private String username;
@@ -195,9 +197,7 @@ public class RealmRegisteredInfo extends RealmObject {
     }
 
 
-    public static RealmRegisteredInfo putOrUpdate(ProtoGlobal.RegisteredUser input) {
-        Realm realm = Realm.getDefaultInstance();
-
+    public static RealmRegisteredInfo putOrUpdate(Realm realm, ProtoGlobal.RegisteredUser input) {
         RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, input.getId());
         if (registeredInfo == null) {
             registeredInfo = realm.createObject(RealmRegisteredInfo.class, input.getId());
@@ -217,8 +217,8 @@ public class RealmRegisteredInfo extends RealmObject {
         registeredInfo.setMutual(input.getMutual());
         registeredInfo.setPhoneNumber(Long.toString(input.getPhone()));
         registeredInfo.setUsername(input.getUsername());
+        registeredInfo.setBio(input.getBio());
 
-        realm.close();
         return registeredInfo;
     }
 
@@ -268,6 +268,31 @@ public class RealmRegisteredInfo extends RealmObject {
         info.setMutual(registeredUser.getMutual());
         info.setLastSeen(registeredUser.getLastSeen());
         info.setCacheId(registeredUser.getCacheId());
+        info.setBio(registeredUser.getBio());
+    }
+
+    /**
+     * compare user cacheId , if was equal don't do anything
+     * otherwise send request for get user info
+     *
+     * @param userId userId for get old cacheId from RealmRegisteredInfo
+     * @param cacheId new cacheId
+     * @return return true if need update otherwise return false
+     */
+
+    public static boolean needUpdateUser(long userId, String cacheId) {
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+
+        if (realmRegisteredInfo != null && cacheId != null && realmRegisteredInfo.getCacheId().equals(cacheId)) {
+            realm.close();
+            return false;
+        }
+        new RequestUserInfo().userInfoAvoidDuplicate(userId);
+
+        realm.close();
+        return true;
     }
 
     /**
@@ -317,9 +342,69 @@ public class RealmRegisteredInfo extends RealmObject {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRegisteredInfo.getRegistrationInfo(realm, G.userId).setBio(bio);
+                RealmRegisteredInfo.getRegistrationInfo(realm, userId).setBio(bio);
             }
         });
+        realm.close();
+    }
+
+    public static void updateName(final long userId, final String firstName, final String lastName, final String initials) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+                if (registeredInfo != null) {
+                    registeredInfo.setFirstName(firstName);
+                    registeredInfo.setLastName(lastName);
+                    registeredInfo.setDisplayName((firstName + " " + lastName).trim());
+                    registeredInfo.setInitials(initials);
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static void updateBlock(final long userId, final boolean block) {
+        Realm realm = Realm.getDefaultInstance();
+        final RealmRegisteredInfo registeredInfo = getRegistrationInfo(realm, userId);
+        if (registeredInfo != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    registeredInfo.setBlockUser(block);
+                }
+            });
+        }
+        realm.close();
+    }
+
+    public static void updateMutual(final String phone, final boolean mutual) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.PHONE_NUMBER, phone + "").findFirst();
+                if (realmRegisteredInfo != null) {
+                    realmRegisteredInfo.setMutual(mutual);
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static void updateStatus(long userId, final int lastSeen, final String userStatus) {
+        Realm realm = Realm.getDefaultInstance();
+        final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+        if (realmRegisteredInfo != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realmRegisteredInfo.setStatus(userStatus);
+                    realmRegisteredInfo.setLastSeen(lastSeen);
+                }
+            });
+        }
         realm.close();
     }
 }

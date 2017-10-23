@@ -76,18 +76,7 @@ public class UserContactsGetBlockedListResponse extends MessageHandler {
             RealmRegisteredInfo.getRegistrationInfo(user.getUserId(), user.getCacheId(), new OnInfo() {
                 @Override
                 public void onInfo(final RealmRegisteredInfo registeredInfo) {
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, registeredInfo.getId());
-                            if (realmRegisteredInfo != null) {
-                                realmRegisteredInfo.setBlockUser(true);
-                            }
-                        }
-                    });
-                    realm.close();
-
+                    RealmRegisteredInfo.updateBlock(registeredInfo.getId(), true);
                     RealmContacts.updateBlock(registeredInfo.getId(), true);
                 }
             });

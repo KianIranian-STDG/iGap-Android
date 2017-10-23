@@ -158,7 +158,7 @@ public class RealmUserInfo extends RealmObject {
     public static RealmUserInfo putOrUpdate(Realm realm, ProtoGlobal.RegisteredUser registeredUser) {
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         if (realmUserInfo != null) {
-            realmUserInfo.setUserInfo(RealmRegisteredInfo.putOrUpdate(registeredUser));
+            realmUserInfo.setUserInfo(RealmRegisteredInfo.putOrUpdate(realm, registeredUser));
             realmUserInfo.getUserInfo().setDisplayName(registeredUser.getDisplayName());
             realmUserInfo.getUserInfo().setInitials(registeredUser.getInitials());
             realmUserInfo.getUserInfo().setColor(registeredUser.getColor());

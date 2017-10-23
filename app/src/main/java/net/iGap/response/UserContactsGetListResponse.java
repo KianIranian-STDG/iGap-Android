@@ -18,7 +18,6 @@ import net.iGap.G;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserContactsGetList;
-import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 
@@ -63,27 +62,8 @@ public class UserContactsGetListResponse extends MessageHandler {
                             realm.delete(RealmContacts.class);
 
                             for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
-                                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, registerUser.getId());
-                                if (realmRegisteredInfo == null) {
-                                    realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class, registerUser.getId());
-                                    realmRegisteredInfo.setDoNotshowSpamBar(false);
-                                }
-                                realmRegisteredInfo.fillRegisteredUserInfo(registerUser, realmRegisteredInfo);
-
-                                RealmContacts listResponse = realm.createObject(RealmContacts.class);
-                                listResponse.setId(registerUser.getId());
-                                listResponse.setUsername(registerUser.getUsername());
-                                listResponse.setPhone(registerUser.getPhone());
-                                listResponse.setFirst_name(registerUser.getFirstName());
-                                listResponse.setLast_name(registerUser.getLastName());
-                                listResponse.setDisplay_name(registerUser.getDisplayName());
-                                listResponse.setInitials(registerUser.getInitials());
-                                listResponse.setColor(registerUser.getColor());
-                                listResponse.setStatus(registerUser.getStatus().toString());
-                                listResponse.setLast_seen(registerUser.getLastSeen());
-                                listResponse.setAvatarCount(registerUser.getAvatarCount());
-                                listResponse.setCacheId(registerUser.getCacheId());
-                                listResponse.setAvatar(RealmAvatar.putOrUpdateAndManageDelete(realm, registerUser.getId(), registerUser.getAvatar()));
+                                RealmRegisteredInfo.putOrUpdate(realm, registerUser);
+                                RealmContacts.putOrUpdate(realm, registerUser);
                             }
                         }
                     }, new Realm.Transaction.OnSuccess() {

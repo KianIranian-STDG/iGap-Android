@@ -18,7 +18,6 @@ import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 public class GroupUpdateStatusResponse extends MessageHandler {
 
@@ -55,18 +54,9 @@ public class GroupUpdateStatusResponse extends MessageHandler {
                     /**
                      * find message from database and update its status
                      */
-                    RealmRoomMessage roomMessage;
-                    if (builder.getStatus() != ProtoGlobal.RoomMessageStatus.LISTENED) {
-                        roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, builder.getMessageId()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
-                    } else {
-                        roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, builder.getMessageId()).findFirst();
-                    }
 
+                    RealmRoomMessage roomMessage = RealmRoomMessage.setStatusServerResponse(realm, builder.getMessageId(), builder.getStatusVersion(), builder.getStatus());
                     if (roomMessage != null) {
-                        roomMessage.setStatus(builder.getStatus().toString());
-                        roomMessage.setStatusVersion(builder.getStatusVersion());
-                        realm.copyToRealmOrUpdate(roomMessage);
-
                         if (G.chatUpdateStatusUtil != null) {
                             G.chatUpdateStatusUtil.onChatUpdateStatus(builder.getRoomId(), builder.getMessageId(), builder.getStatus(), builder.getStatusVersion());
                         }

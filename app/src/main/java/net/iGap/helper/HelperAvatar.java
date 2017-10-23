@@ -356,29 +356,10 @@ public class HelperAvatar {
     }
 
     private static void insertRegisteredInfoToDB(final ProtoGlobal.RegisteredUser registeredUser, Realm realm) {
-
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-
-                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, registeredUser.getId());
-                if (realmRegisteredInfo == null) {
-                    realmRegisteredInfo = realm.createObject(RealmRegisteredInfo.class, registeredUser.getId());
-                }
-
-                realmRegisteredInfo.setAvatarCount(registeredUser.getAvatarCount());
-                realmRegisteredInfo.setColor(registeredUser.getColor());
-                realmRegisteredInfo.setDisplayName(registeredUser.getDisplayName());
-                realmRegisteredInfo.setFirstName(registeredUser.getFirstName());
-                realmRegisteredInfo.setInitials(registeredUser.getInitials());
-                realmRegisteredInfo.setLastSeen(registeredUser.getLastSeen());
-                realmRegisteredInfo.setPhoneNumber(Long.toString(registeredUser.getPhone()));
-                realmRegisteredInfo.setStatus(registeredUser.getStatus().toString());
-                realmRegisteredInfo.setUsername(registeredUser.getUsername());
-                realmRegisteredInfo.setMutual(registeredUser.getMutual());
-                realmRegisteredInfo.setCacheId(registeredUser.getCacheId());
-                realmRegisteredInfo.setBio(registeredUser.getBio());
-
+                RealmRegisteredInfo.putOrUpdate(realm, registeredUser);
                 RealmAvatar.putOrUpdateAndManageDelete(realm, registeredUser.getId(), registeredUser.getAvatar());
             }
         });
@@ -523,7 +504,7 @@ public class HelperAvatar {
 
         public void getUserInfo(long userId) {
             G.onUserInfoForAvatar = this;
-            HelperInfo.needUpdateUser(userId, null);
+            RealmRegisteredInfo.needUpdateUser(userId, null);
         }
 
         @Override

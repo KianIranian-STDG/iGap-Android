@@ -17,7 +17,6 @@ import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 public class GroupClearMessageResponse extends MessageHandler {
 
@@ -52,12 +51,11 @@ public class GroupClearMessageResponse extends MessageHandler {
                     realmRoom.setUnreadCount(0);
                     realmRoom.setLastMessage(null);
                 }
-
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).lessThan(RealmRoomMessageFields.MESSAGE_ID, builder.getClearId()).findAll().deleteAllFromRealm();
             }
         });
-
         realm.close();
+
+        RealmRoomMessage.deleteAllMessageLessThan(builder.getRoomId(), builder.getClearId());
     }
 
     @Override
