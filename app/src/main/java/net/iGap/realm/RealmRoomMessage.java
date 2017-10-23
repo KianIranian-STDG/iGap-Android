@@ -474,6 +474,37 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         return realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(fieldName, sortOrder);
     }
 
+    public static RealmResults<RealmRoomMessage> findNotificationMessage(Realm realm) {
+        return realm.where(RealmRoomMessage.class)
+                .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString())
+                .or()
+                .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.DELIVERED.toString())
+                .equalTo(RealmRoomMessageFields.DELETED, false)
+                .notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash)
+                .notEqualTo(RealmRoomMessageFields.USER_ID, G.userId)
+                .notEqualTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.LOG.toString())
+                .findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+    }
+
+    public static RealmResults<RealmRoomMessage> filterMessage(Realm realm, long roomId, ProtoGlobal.RoomMessageType messageType) {
+        RealmResults<RealmRoomMessage> results;
+        if (messageType == ProtoGlobal.RoomMessageType.TEXT) {
+            results = realm.where(RealmRoomMessage.class).
+                    equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+                    equalTo(RealmRoomMessageFields.MESSAGE_TYPE, messageType.toString()).
+                    equalTo(RealmRoomMessageFields.DELETED, false).
+                    equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).
+                    findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+        } else {
+            results = realm.where(RealmRoomMessage.class).
+                    equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+                    equalTo(RealmRoomMessageFields.MESSAGE_TYPE, messageType.toString()).
+                    equalTo(RealmRoomMessageFields.DELETED, false).
+                    findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+        }
+        return results;
+    }
+
     /**
      * @param messageType if set null will be checked both VIDEO and IMAGE type
      */
@@ -529,10 +560,10 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         return messageId;
     }
 
-    // if client get message and before send status lost connection, will be need to this method
-    // and this step is very uncommon so don't need to do this action and get performance,if client
-    // needed this method will be used in ActivityMain later
     public static void fetchNotDeliveredMessages(final OnActivityMainStart callback) {
+        // if client get message and before send status lost connection, will be need to this method
+        // and this step is very uncommon so don't need to do this action and get performance,if client
+        // needed this method will be used in ActivityMain later
         final Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmRoomMessage> sentMessages = realm.where(RealmRoomMessage.class).notEqualTo(RealmRoomMessageFields.USER_ID, G.userId).equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString()).findAllSortedAsync(new String[]{RealmRoomMessageFields.ROOM_ID, RealmRoomMessageFields.MESSAGE_ID}, new Sort[]{Sort.DESCENDING, Sort.ASCENDING});
         sentMessages.addChangeListener(new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
@@ -989,6 +1020,28 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
     }
 
+    public static void deleteAllMessage(final long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                deleteAllMessage(realm, roomId);
+            }
+        });
+        realm.close();
+    }
+
+    public static void deleteAllMessageLessThan(final long roomId, final long lessThan) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThan(RealmRoomMessageFields.MESSAGE_ID, lessThan).findAll().deleteAllFromRealm();
+            }
+        });
+        realm.close();
+    }
+
     public static void deleteSelectedMessages(Realm realm, final long RoomId, final ArrayList<Long> list, final ArrayList<Long> bothDeleteMessageId, final ProtoGlobal.Room.Type roomType) {
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -1075,7 +1128,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         return messageTime;
     }
 
-    public static void editMessage(final long roomId, final long messageId, final String message) {
+    public static void editMessageClient(final long roomId, final long messageId, final String message) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -1091,6 +1144,23 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
                     roomMessage.setEdited(true);
                     RealmRoomMessage.addTimeIfNeed(roomMessage, realm);
                     RealmRoomMessage.isEmojiInText(roomMessage, message);
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static void editMessageServerResponse(final long messageId, final long messageVersion, final String message, final ProtoGlobal.RoomMessageType messageType) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                if (roomMessage != null) {
+                    roomMessage.setMessage(message);
+                    roomMessage.setMessageVersion(messageVersion);
+                    roomMessage.setEdited(true);
+                    roomMessage.setMessageType(messageType);
                 }
             }
         });
@@ -1140,6 +1210,36 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         if (roomMessage != null) {
             roomMessage.setStatus(messageStatus.toString());
         }
+    }
+
+    public static RealmRoomMessage setStatusServerResponse(Realm realm, long messageId, long statusVersion, ProtoGlobal.RoomMessageStatus messageStatus) {
+        RealmRoomMessage roomMessage;
+        if (messageStatus != ProtoGlobal.RoomMessageStatus.LISTENED) {
+            roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
+        } else {
+            roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        }
+
+        if (roomMessage != null) {
+            roomMessage.setStatus(messageStatus.toString());
+            roomMessage.setStatusVersion(statusVersion);
+            realm.copyToRealmOrUpdate(roomMessage);
+        }
+        return roomMessage;
+    }
+
+    public static void setLogMessage(final long messageId, final String logMessage) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                if (roomMessage != null) {
+                    roomMessage.setLogMessage(logMessage);
+                }
+            }
+        });
+        realm.close();
     }
 
     public static RealmRoomMessage makeUnreadMessage(int countNewMessage) {
@@ -1235,6 +1335,17 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         roomMessage.setUserId(G.userId);
         roomMessage.setCreateTime(updateTime);
         return roomMessage;
+    }
+
+    public static void makeVoiceMessage(final long roomId, final long messageId, final long duration, final long updateTime, final String filepath, final String message) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                makeVoiceMessage(realm, roomId, messageId, duration, updateTime, filepath, message);
+            }
+        });
+        realm.close();
     }
 
     public static void makePositionMessage(final long roomId, final long messageId, final long replyMessageId, final Double latitude, final Double longitude, final String imagePath) {

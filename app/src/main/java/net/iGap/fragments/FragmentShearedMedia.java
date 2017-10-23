@@ -46,7 +46,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
-import io.realm.Sort;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -637,7 +636,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
         txtSharedMedia.setText(R.string.shared_image);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.IMAGE;
-        mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.IMAGE.toString());
+        mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.IMAGE);
         adapter = new ImageAdapter(fragmentActivity, mNewList);
         initLayoutRecycleviewForImage();
 
@@ -651,7 +650,7 @@ public class FragmentShearedMedia extends BaseFragment {
         txtSharedMedia.setText(R.string.shared_video);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VIDEO;
 
-        mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.VIDEO.toString());
+        mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.VIDEO);
         adapter = new VideoAdapter(fragmentActivity, mNewList);
         initLayoutRecycleviewForImage();
 
@@ -665,7 +664,7 @@ public class FragmentShearedMedia extends BaseFragment {
         txtSharedMedia.setText(R.string.shared_audio);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO;
 
-        mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.AUDIO.toString());
+        mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.AUDIO);
         adapter = new VoiceAdapter(fragmentActivity, mNewList);
 
         recyclerView.setLayoutManager(new PreCachingLayoutManager(fragmentActivity, 5000));
@@ -681,7 +680,7 @@ public class FragmentShearedMedia extends BaseFragment {
         txtSharedMedia.setText(R.string.shared_voice);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.VOICE;
 
-        mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.VOICE.toString());
+        mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.VOICE);
         adapter = new VoiceAdapter(fragmentActivity, mNewList);
 
         recyclerView.setLayoutManager(new PreCachingLayoutManager(fragmentActivity, 5000));
@@ -697,7 +696,7 @@ public class FragmentShearedMedia extends BaseFragment {
         txtSharedMedia.setText(R.string.shared_gif);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.GIF;
 
-        mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.GIF.toString());
+        mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.GIF);
         adapter = new GifAdapter(fragmentActivity, mNewList);
 
         initLayoutRecycleviewForImage();
@@ -712,7 +711,7 @@ public class FragmentShearedMedia extends BaseFragment {
         txtSharedMedia.setText(R.string.shared_file);
         mFilter = ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.FILE;
 
-        mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.FILE.toString());
+        mNewList = loadLocalData(mFilter, ProtoGlobal.RoomMessageType.FILE);
         adapter = new FileAdapter(fragmentActivity, mNewList);
 
         recyclerView.setLayoutManager(new PreCachingLayoutManager(fragmentActivity, 5000));
@@ -731,11 +730,7 @@ public class FragmentShearedMedia extends BaseFragment {
         if (mRealmList != null) {
             mRealmList.removeAllChangeListeners();
         }
-        //+Realm realm = Realm.getDefaultInstance();
-        mRealmList = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                equalTo(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.TEXT.toString()).
-                equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).
-                findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+        mRealmList = RealmRoomMessage.filterMessage(getRealm(), roomId, ProtoGlobal.RoomMessageType.TEXT);
 
         setListener();
 
@@ -758,33 +753,24 @@ public class FragmentShearedMedia extends BaseFragment {
 
     //********************************************************************************************
 
-    private ArrayList<StructShearedMedia> loadLocalData(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter, String type) {
+    private ArrayList<StructShearedMedia> loadLocalData(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter, ProtoGlobal.RoomMessageType type) {
 
         if (mRealmList != null) {
             mRealmList.removeAllChangeListeners();
         }
 
-        //+Realm realm = Realm.getDefaultInstance();
-
-        mRealmList = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                contains(RealmRoomMessageFields.MESSAGE_TYPE, type).equalTo(RealmRoomMessageFields.DELETED, false).findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
+        mRealmList = RealmRoomMessage.filterMessage(getRealm(), roomId, type);
 
         setListener();
 
         changeSize = mRealmList.size();
-
         isSendRequestForLoading = false;
         isThereAnyMoreItemToLoad = true;
-
 
         getDataFromServer(filter);
         listCount = mRealmList.size();
 
-        ArrayList<StructShearedMedia> list = addTimeToList(mRealmList);
-
-        //realm.close();
-
-        return list;
+        return addTimeToList(mRealmList);
     }
 
     private ArrayList<StructShearedMedia> addTimeToList(RealmResults<RealmRoomMessage> list) {

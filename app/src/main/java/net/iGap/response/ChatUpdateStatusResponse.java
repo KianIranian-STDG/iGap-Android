@@ -18,7 +18,6 @@ import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 public class ChatUpdateStatusResponse extends MessageHandler {
 
@@ -54,18 +53,8 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                     /**
                      * find message from database and update its status
                      */
-                    RealmRoomMessage roomMessage;
-                    if (chatUpdateStatus.getStatus() != ProtoGlobal.RoomMessageStatus.LISTENED) {
-                        roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chatUpdateStatus.getMessageId()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SEEN.toString()).notEqualTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.LISTENED.toString()).findFirst();
-                    } else {
-                        roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, chatUpdateStatus.getMessageId()).findFirst();
-                    }
-
+                    RealmRoomMessage roomMessage = RealmRoomMessage.setStatusServerResponse(realm, chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatusVersion(), chatUpdateStatus.getStatus());
                     if (roomMessage != null) {
-                        roomMessage.setStatus(chatUpdateStatus.getStatus().toString());
-                        roomMessage.setStatusVersion(chatUpdateStatus.getStatusVersion());
-                        realm.copyToRealmOrUpdate(roomMessage);
-
                         if (G.chatUpdateStatusUtil != null) {
                             G.chatUpdateStatusUtil.onChatUpdateStatus(chatUpdateStatus.getRoomId(), chatUpdateStatus.getMessageId(), chatUpdateStatus.getStatus(), chatUpdateStatus.getStatusVersion());
                         }
@@ -81,7 +70,6 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                     }
                 }
             });
-
             realm.close();
         }
     }

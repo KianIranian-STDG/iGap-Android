@@ -2301,7 +2301,7 @@ public class FragmentChat extends BaseFragment
                     if (!message.equals(messageInfo.messageText)) {
                         messageInfo.hasEmojiInText = RealmRoomMessage.isEmojiInText(message);
 
-                        RealmRoomMessage.editMessage(mRoomId, parseLong(messageInfo.messageID), message);
+                        RealmRoomMessage.editMessageClient(mRoomId, parseLong(messageInfo.messageID), message);
                         RealmClientCondition.addOfflineEdit(mRoomId, Long.parseLong(messageInfo.messageID), message);
 
                         /**
