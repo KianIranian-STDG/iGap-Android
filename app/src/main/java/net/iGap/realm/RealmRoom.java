@@ -393,7 +393,7 @@ public class RealmRoom extends RealmObject {
                  * and also update another info
                  */
 
-                RealmRegisteredInfo.putOrUpdate(room.getChatRoomExtra().getPeer());
+                RealmRegisteredInfo.putOrUpdate(realm, room.getChatRoomExtra().getPeer());
                 realmRoom.setAvatar(RealmAvatar.putOrUpdateAndManageDelete(realm, room.getChatRoomExtra().getPeer().getId(), room.getChatRoomExtra().getPeer().getAvatar()));
                 break;
             case GROUP:
