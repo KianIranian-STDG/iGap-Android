@@ -39,7 +39,6 @@ public class GroupClearMessageResponse extends MessageHandler {
 
         if (builder.getResponse().getId().isEmpty()) { // another account cleared message
             RealmClientCondition.setClearId(builder.getRoomId(), builder.getClearId());
-            G.clearMessagesUtil.onChatClearMessage(builder.getRoomId(), builder.getClearId(), builder.getResponse());
         }
 
         Realm realm = Realm.getDefaultInstance();
@@ -50,6 +49,7 @@ public class GroupClearMessageResponse extends MessageHandler {
                 if (realmRoom != null && ((realmRoom.getLastMessage() == null) || (realmRoom.getLastMessage().getMessageId() <= builder.getRoomId()))) {
                     realmRoom.setUnreadCount(0);
                     realmRoom.setLastMessage(null);
+                    G.clearMessagesUtil.onChatClearMessage(builder.getRoomId(), builder.getClearId(), builder.getResponse());
                 }
             }
         });
