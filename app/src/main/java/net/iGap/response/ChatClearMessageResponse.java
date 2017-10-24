@@ -45,7 +45,7 @@ public class ChatClearMessageResponse extends MessageHandler {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                if (realmRoom != null && ((realmRoom.getLastMessage() == null) || (realmRoom.getLastMessage().getMessageId() <= chatClearMessage.getRoomId()))) {
+                if (realmRoom != null && ((realmRoom.getLastMessage() == null) || (realmRoom.getLastMessage().getMessageId() <= chatClearMessage.getClearId()))) {
                     realmRoom.setUnreadCount(0);
                     realmRoom.setLastMessage(null);
                     G.clearMessagesUtil.onChatClearMessage(chatClearMessage.getRoomId(), chatClearMessage.getClearId(), chatClearMessage.getResponse());
