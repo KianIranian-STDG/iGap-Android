@@ -106,6 +106,8 @@ public class FragmentIntroduce extends BaseFragment {
             G.isLandscape = false;
         }
 
+        G.firstEnter = true;
+
         try {
             if (beforeState != G.isLandscape) {
                 G.handler.post(new Runnable() {

@@ -67,6 +67,7 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.Contacts;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.LastSeenTimeUtil;
+import net.iGap.module.LoginActions;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.proto.ProtoGlobal;
@@ -74,7 +75,6 @@ import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestUserContactsDelete;
-import net.iGap.request.RequestUserContactsGetList;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
@@ -352,7 +352,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
          * for insuring that contacts not exist really or not
          */
         if (results.size() == 0) {
-            new RequestUserContactsGetList().userContactGetList();
+            LoginActions.importContact();
         }
     }
 
