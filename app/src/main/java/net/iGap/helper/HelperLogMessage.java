@@ -28,7 +28,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestUserInfo;
@@ -59,26 +58,13 @@ public class HelperLogMessage {
             return;
         }
 
-        Realm realm = Realm.getDefaultInstance();
-        try {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, item.messageID).findFirst();
-                    if (roomMessage != null) {
-                        String LogText = HelperLogMessage.logMessage(item.roomId, item.author, item.messageLog, item.messageID);
-                        roomMessage.setLogMessage(LogText);
-                        G.logMessageUpdatList.remove(item.updateID);
-                        if (FragmentChat.iUpdateLogItem != null) {
-                            FragmentChat.iUpdateLogItem.onUpdate(LogText, item.messageID);
-                        }
-                    }
-                }
-            });
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+        String logMessage = HelperLogMessage.logMessage(item.roomId, item.author, item.messageLog, item.messageID);
+        RealmRoomMessage.setLogMessage(item.messageID, logMessage);
+
+        G.logMessageUpdatList.remove(item.updateID);
+        if (FragmentChat.iUpdateLogItem != null) {
+            FragmentChat.iUpdateLogItem.onUpdate(logMessage, item.messageID);
         }
-        realm.close();
     }
 
     public static String logMessage(long roomId, ProtoGlobal.RoomMessage.Author author, ProtoGlobal.RoomMessageLog messageLog, long messageID) {

@@ -11,7 +11,6 @@
 package net.iGap.response;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 import net.iGap.G;
 import net.iGap.proto.ProtoChannelLeft;
 import net.iGap.proto.ProtoError;
@@ -20,7 +19,6 @@ import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageFields;
 
 public class ChannelLeftResponse extends MessageHandler {
 
@@ -53,8 +51,7 @@ public class ChannelLeftResponse extends MessageHandler {
                         realmRoom.deleteFromRealm();
                     }
 
-                    RealmResults<RealmRoomMessage> realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, builder.getRoomId()).findAll();
-                    realmRoomMessage.deleteAllFromRealm();
+                    RealmRoomMessage.deleteAllMessage(realm, builder.getRoomId());
 
                     RealmClientCondition.deleteCondition(realm, builder.getRoomId());
 

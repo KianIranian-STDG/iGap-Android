@@ -270,7 +270,7 @@ public class FragmentIgapSearch extends BaseFragment {
 
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override public void execute(Realm realm) {
-                                        RealmRegisteredInfo.putOrUpdate(item.getUser());
+                                        RealmRegisteredInfo.putOrUpdate(realm, item.getUser());
                                     }
                                 });
                             } else if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.ROOM) {

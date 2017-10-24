@@ -401,7 +401,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     }
 
     @Override
-    public void onContactDelete(final long userId) {
+    public void onContactDelete() {
         //G.handler.post(new Runnable() {
         //    @Override
         //    public void run() {
