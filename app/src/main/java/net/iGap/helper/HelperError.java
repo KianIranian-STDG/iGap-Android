@@ -358,6 +358,27 @@ public class HelperError {
             case 715:
                 error = G.fragmentActivity.getResources().getString(R.string.E_715);
                 break;
+
+            case 10165:
+
+                error = G.fragmentActivity.getResources().getString(R.string.E_10165);
+
+                break;
+            case 10166:
+
+                error = G.fragmentActivity.getResources().getString(R.string.E_10166);
+
+                break;
+            case 10167:
+
+                error = G.fragmentActivity.getResources().getString(R.string.E_10167);
+
+                break;
+            case 10168:
+
+                error = G.fragmentActivity.getResources().getString(R.string.E_10168);
+
+                break;
             case 99999: // client errors
                 error = "Offset is negative";
             case -1: // client errors

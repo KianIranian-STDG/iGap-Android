@@ -460,6 +460,12 @@
   <string name="E_713_5">"خطایی از سمت کلاینت: آفست اشتباه است."</string>
   <string name="E_714">"خطای درونی سرور"</string>
   <string name="E_715">"چنین فایلی یافت نشد."</string>
+
+  <string name="E_10165">Bad payload: User report</string>
+  <string name="E_10166">ServerError: User report internal</string>
+  <string name="E_10167">User report before</string>
+  <string name="E_10168">User report forbidden</string>
+
   <string name="E_209_1">"خطایی از کلاینت: شناسهٔ روم اشتباه است."</string>
   <string name="E_209_2">"خطایی از سمت کلاینت: شناسهٔ پیام اشتباه است."</string>
   <string name="E_209_3">"خطایی از سمت کلاینت: پیام اشتباه است."</string>
@@ -1100,5 +1106,6 @@
   <string name="st_limit_bio">کاراکترهای استفاده شده بیش از حد مجاز است. تنها 70 کاراکتر در این قسمت قابل استفاده اند</string>
   <string name="st_checkbox_delete">حذف برای</string>
   <string name="st_desc_delete">آیا از حذف این %1$s پیام اطمینان دارید؟</string>
+  <string name="st_send_report">send report is success</string>
 
 </resources>

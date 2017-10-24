@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
+
 public class ClientRoomReportResponse extends MessageHandler {
 
     public int actionId;
@@ -29,6 +31,9 @@ public class ClientRoomReportResponse extends MessageHandler {
         super.handler();
         // ProtoClientRoomReport.ClientRoomReportResponse.Builder builder = (ProtoClientRoomReport.ClientRoomReportResponse.Builder) message;
         // no action need to do here
+        if (G.onReport != null) {
+            G.onReport.success();
+        }
     }
 
     @Override

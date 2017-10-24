@@ -35,6 +35,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -179,6 +180,7 @@ import net.iGap.interfaces.OnHelperSetAction;
 import net.iGap.interfaces.OnLastSeenUpdateTiming;
 import net.iGap.interfaces.OnMessageReceive;
 import net.iGap.interfaces.OnPathAdapterBottomSheet;
+import net.iGap.interfaces.OnReport;
 import net.iGap.interfaces.OnSetAction;
 import net.iGap.interfaces.OnUpdateUserOrRoomInfo;
 import net.iGap.interfaces.OnUpdateUserStatusInChangePage;
@@ -2650,6 +2652,16 @@ public class FragmentChat extends BaseFragment
                 positive.setEnabled(false);
 
                 dialogReport.show();
+
+
+                G.onReport = new OnReport() {
+                    @Override
+                    public void success() {
+
+                        error(G.fragmentActivity.getResources().getString(R.string.st_send_report));
+
+                    }
+                };
 
                 //FragmentReport fragmentReport = new FragmentReport();
                 //Bundle bundle = new Bundle();
@@ -7774,6 +7786,23 @@ public class FragmentChat extends BaseFragment
             try {
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            } catch (IllegalStateException e) {
+                e.getStackTrace();
+            }
+        }
+    }
+
+    private void error(String error) {
+        if (isAdded()) {
+            try {
+                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
+                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        snack.dismiss();
+                    }
+                });
+                snack.show();
             } catch (IllegalStateException e) {
                 e.getStackTrace();
             }

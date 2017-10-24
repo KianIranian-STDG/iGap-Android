@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
+
 public class UserReportResponse extends MessageHandler {
 
     public int actionId;
@@ -22,6 +24,7 @@ public class UserReportResponse extends MessageHandler {
         this.message = protoClass;
         this.actionId = actionId;
         this.identity = identity;
+
     }
 
     @Override
@@ -29,6 +32,10 @@ public class UserReportResponse extends MessageHandler {
         super.handler();
         // ProtoUserReport.UserReportResponse.Builder builder = (ProtoUserReport.UserReportResponse.Builder) message;
         // no action need to do here
+
+        if (G.onReport != null) {
+            G.onReport.success();
+        }
     }
 
     @Override

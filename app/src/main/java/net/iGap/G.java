@@ -157,6 +157,7 @@ import net.iGap.interfaces.OnRecoverySecurityPassword;
 import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.interfaces.OnRegistrationInfo;
 import net.iGap.interfaces.OnRemoveFragment;
+import net.iGap.interfaces.OnReport;
 import net.iGap.interfaces.OnSecuring;
 import net.iGap.interfaces.OnSecurityCheckPassword;
 import net.iGap.interfaces.OnSelectMenu;
@@ -456,6 +457,7 @@ public class G extends MultiDexApplication {
     public static OnClientGetRoomResponseRoomList onClientGetRoomResponseRoomList;
     public static OnMute onMute;
     public static OnClearRoomHistory onClearRoomHistory;
+    public static OnReport onReport;
 
     public static IDispatchTochEvent dispatchTochEventChat;
     public static IOnBackPressed onBackPressedChat;
