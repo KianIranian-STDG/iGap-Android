@@ -27,6 +27,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -141,6 +142,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
     public static final String FRAGMENT_TAG = "FragmentContactsProfile";
     private boolean disableDeleteContact = false;
     private String bio;
+    private String report = "";
 
     public static FragmentContactsProfile newInstance(long roomId, long peerId, String enterFrom) {
         Bundle args = new Bundle();
@@ -434,11 +436,11 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
                     final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.pu_nikname_profileUser))
-                            .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
-                            .customView(layoutNickname, true)
-                            .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
-                            .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                            .build();
+                        .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                        .customView(layoutNickname, true)
+                        .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+                        .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                        .build();
 
                     final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                     positive.setEnabled(false);
@@ -825,7 +827,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         boolean isExist = false;
         Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
         String[] mPhoneNumberProjection = {
-                ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME
+            ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME
         };
         Cursor cur = context.getContentResolver().query(lookupUri, mPhoneNumberProjection, null, null, null);
         try {
@@ -883,12 +885,12 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                             //------------------------------------------------------ Mobile Number
 
                             ops.add(ContentProviderOperation.
-                                    newInsert(ContactsContract.Data.CONTENT_URI)
-                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
-                                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
-                                    .build());
+                                newInsert(ContactsContract.Data.CONTENT_URI)
+                                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
+                                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                                .build());
 
                             try {
                                 G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
@@ -1121,13 +1123,31 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
             public void onClick(View v) {
                 dialog.dismiss();
 
-                FragmentReport fragmentReport = new FragmentReport();
-                Bundle bundle = new Bundle();
-                bundle.putLong("ROOM_ID", userId);
-                bundle.putBoolean("USER_ID", true);
+                final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE).alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        // Do something
+                        report = input.toString();
+                        if (input.length() > 0) {
+                            View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                            positive.setEnabled(true);
+                        } else {
+                            View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                            positive.setEnabled(false);
+                        }
+                    }
+                }).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new RequestUserReport().userReport(roomId, ProtoUserReport.UserReport.Reason.OTHER, report);
+                    }
+                }).negativeText(R.string.cancel).build();
 
-                fragmentReport.setArguments(bundle);
-                new HelperFragment(fragmentReport).setReplace(false).load();
+                final View positive = dialogReport.getActionButton(DialogAction.POSITIVE);
+                positive.setEnabled(false);
+
+                dialogReport.show();
+
             }
         });
 

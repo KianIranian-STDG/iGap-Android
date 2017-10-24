@@ -46,6 +46,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ViewStubCompat;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
@@ -285,6 +286,7 @@ import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_open_document;
 import static net.iGap.module.AttachFile.request_code_pic_file;
 import static net.iGap.module.MessageLoader.getLocalMessage;
+import static net.iGap.module.MusicPlayer.roomId;
 import static net.iGap.module.enums.ProgressState.HIDE;
 import static net.iGap.module.enums.ProgressState.SHOW;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
@@ -301,7 +303,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
+    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
 
     public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
@@ -459,7 +461,7 @@ public class FragmentChat extends BaseFragment
     private boolean isPermissionCamera = false;
     private ArrayList<Long> bothDeleteMessageId;
     private RelativeLayout layoutMute;
-
+    private String report = "";
     private View rootView;
 
     @Nullable
@@ -2610,7 +2612,6 @@ public class FragmentChat extends BaseFragment
                 } else {
                     new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.PORNOGRAPHY, "");
                 }
-
             }
         });
         rootOther.setOnClickListener(new View.OnClickListener() {
@@ -2618,17 +2619,49 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
                 dialog.dismiss();
 
-                FragmentReport fragmentReport = new FragmentReport();
-                Bundle bundle = new Bundle();
-                bundle.putLong("ROOM_ID", mRoomId);
-                if (isMessage) {
-                    bundle.putLong("MESSAGE_ID", messageId);
-                } else {
-                    bundle.putLong("MESSAGE_ID", 0);
-                }
-                bundle.putBoolean("USER_ID", false);
-                fragmentReport.setArguments(bundle);
-                new HelperFragment(fragmentReport).setReplace(false).load();
+                final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE).alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(MaterialDialog dialog, CharSequence input) {
+                        // Do something
+                        if (input.length() > 0) {
+
+                            report = input.toString();
+                            View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                            positive.setEnabled(true);
+
+                        } else {
+                            View positive = dialog.getActionButton(DialogAction.POSITIVE);
+                            positive.setEnabled(false);
+                        }
+                    }
+                }).positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        if (isMessage) {
+                            new RequestClientRoomReport().roomReport(roomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
+                        } else {
+                            new RequestClientRoomReport().roomReport(roomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
+                        }
+                    }
+                }).negativeText(R.string.cancel).build();
+
+                View positive = dialogReport.getActionButton(DialogAction.POSITIVE);
+                positive.setEnabled(false);
+
+                dialogReport.show();
+
+                //FragmentReport fragmentReport = new FragmentReport();
+                //Bundle bundle = new Bundle();
+                //bundle.putLong("ROOM_ID", mRoomId);
+                //if (isMessage) {
+                //    bundle.putLong("MESSAGE_ID", messageId);
+                //} else {
+                //    bundle.putLong("MESSAGE_ID", 0);
+                //}
+                //bundle.putBoolean("USER_ID", false);
+                //fragmentReport.setArguments(bundle);
+                //new HelperFragment(fragmentReport).setReplace(false).load();
             }
         });
 
@@ -3004,14 +3037,14 @@ public class FragmentChat extends BaseFragment
         StructMessageInfo messageInfo;
         if (isReply()) {
             messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
         } else {
             if (isMessageWrote()) {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             } else {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             }
         }
 
@@ -4428,9 +4461,9 @@ public class FragmentChat extends BaseFragment
         fragment.appBarLayout = appBarLayout;
 
         FragmentTransitionLauncher.with(G.fragmentActivity).from(view).prepare(fragment);
-        //new HelperFragment(fragment).setAnimated(true).setReplace(false).load();
+        new HelperFragment(fragment).setAnimated(true).setReplace(false).load();
 
-        getActivity().getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fragment).addToBackStack(null).commit();
+        //getActivity().getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fragment).addToBackStack(null).commit();
     }
 
     /**
@@ -4556,7 +4589,7 @@ public class FragmentChat extends BaseFragment
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-                MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+            MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         };
 
         cursor = activity.getContentResolver().query(uri, projection, null, null, null);
@@ -5409,9 +5442,9 @@ public class FragmentChat extends BaseFragment
                                         public void run() {
 
                                             fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                    .lensPosition(back())       // we want back camera
-                                                    .build();
+                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                .lensPosition(back())       // we want back camera
+                                                .build();
 
                                             fotoapparatSwitcher.start();
                                         }
@@ -5452,9 +5485,9 @@ public class FragmentChat extends BaseFragment
                                         @Override
                                         public void run() {
                                             fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                    .lensPosition(back())       // we want back camera
-                                                    .build();
+                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                .lensPosition(back())       // we want back camera
+                                                .build();
 
                                             fotoapparatSwitcher.stop();
                                         }
@@ -7080,7 +7113,7 @@ public class FragmentChat extends BaseFragment
         long gapMessageId;
         if (direction == DOWN) {
             resultsUp =
-                    getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+                getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
              * if for UP state client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet

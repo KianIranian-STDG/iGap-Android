@@ -77,13 +77,8 @@ public class FragmentBio extends BaseFragment {
             @Override
             public void onClick(View v) {
 
-                if (edtBio.getText().length() > 0) {
                     new RequestUserProfileSetBio().setBio(edtBio.getText().toString());
                     closeKeyboard(v);
-                } else {
-                    error(G.context.getResources().getString(R.string.st_limit_bio));
-                    closeKeyboard(v);
-                }
 
                 G.fragmentActivity.onBackPressed();
             }

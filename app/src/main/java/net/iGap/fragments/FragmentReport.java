@@ -77,7 +77,6 @@ public class FragmentReport extends BaseFragment {
                     } else {
                         new RequestClientRoomReport().roomReport(roomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, edtReport.getText().toString());
                     }
-
                     closeKeyboard(v);
                     G.fragmentActivity.onBackPressed();
                 } else {
