@@ -32,7 +32,6 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperFragment;
@@ -45,7 +44,6 @@ import net.iGap.proto.ProtoChannelCheckUsername;
 import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChannelCheckUsername;
 import net.iGap.request.RequestChannelUpdateUsername;
 import net.iGap.request.RequestClientGetRoom;
@@ -135,16 +133,7 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                Realm realm = Realm.getDefaultInstance();
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                        realmRoom.getChannelRoom().setUsername(username);
-                                        realmRoom.getChannelRoom().setPrivate(false);
-                                    }
-                                });
-                                realm.close();
+                                RealmRoom.updateUsername(roomId, username);
                                 getRoom(roomId, ProtoGlobal.Room.Type.CHANNEL);
                             }
                         });
@@ -194,15 +183,7 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                     showProgressBar();
 
                     if (raPrivate.isChecked()) {
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                realmRoom.getChannelRoom().setPrivate(true);
-                            }
-                        });
-                        realm.close();
+                        RealmRoom.setPrivate(roomId);
                         getRoom(roomId, ProtoGlobal.Room.Type.CHANNEL);
                     } else {
 

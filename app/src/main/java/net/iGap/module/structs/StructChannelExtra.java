@@ -10,11 +10,9 @@
 
 package net.iGap.module.structs;
 
-import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import org.parceler.Parcel;
 
 @Parcel public class StructChannelExtra {
@@ -40,14 +38,11 @@ import org.parceler.Parcel;
         structChannelExtra.thumbsUp = "0";
         structChannelExtra.thumbsDown = "0";
         structChannelExtra.viewsLabel = "1";
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().isSignature()) {
+        if (RealmRoom.showSignature(roomId)) {
             structChannelExtra.signature = G.displayName;
         } else {
             structChannelExtra.signature = "";
         }
-        realm.close();
         return structChannelExtra;
     }
 }

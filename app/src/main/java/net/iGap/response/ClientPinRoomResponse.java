@@ -32,9 +32,9 @@ public class ClientPinRoomResponse extends MessageHandler {
         super.handler();
         ProtoClientPinRoom.ClientPinRoomResponse.Builder builder = (ProtoClientPinRoom.ClientPinRoomResponse.Builder) message;
         if (builder.getPinId() > 0) {
-            RealmRoom.roomPin(builder.getRoomId(), true, builder.getPinId());
+            RealmRoom.updatePin(builder.getRoomId(), true, builder.getPinId());
         } else {
-            RealmRoom.roomPin(builder.getRoomId(), false, builder.getPinId());
+            RealmRoom.updatePin(builder.getRoomId(), false, builder.getPinId());
         }
     }
 

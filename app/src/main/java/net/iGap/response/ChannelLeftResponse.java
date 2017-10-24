@@ -10,15 +10,11 @@
 
 package net.iGap.response;
 
-import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.proto.ProtoChannelLeft;
 import net.iGap.proto.ProtoError;
-import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
-import net.iGap.realm.RealmRoomMessage;
 
 public class ChannelLeftResponse extends MessageHandler {
 
@@ -37,36 +33,20 @@ public class ChannelLeftResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
+        ProtoChannelLeft.ChannelLeftResponse.Builder builder = (ProtoChannelLeft.ChannelLeftResponse.Builder) message;
 
-        final ProtoChannelLeft.ChannelLeftResponse.Builder builder = (ProtoChannelLeft.ChannelLeftResponse.Builder) message;
+        if (G.userId == builder.getMemberId()) {
+            RealmRoom.deleteRoom(builder.getRoomId());
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-                if (G.userId == builder.getMemberId()) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getRoomId()).findFirst();
-                    if (realmRoom != null) {
-                        realmRoom.deleteFromRealm();
-                    }
-
-                    RealmRoomMessage.deleteAllMessage(realm, builder.getRoomId());
-
-                    RealmClientCondition.deleteCondition(realm, builder.getRoomId());
-
-                    if (G.onChannelLeft != null) {
-                        G.onChannelLeft.onChannelLeft(builder.getRoomId(), builder.getMemberId());
-                    }
-                    if (G.onChannelDeleteInRoomList != null) {
-                        G.onChannelDeleteInRoomList.onChannelDelete(builder.getRoomId());
-                    }
-                } else {
-                    RealmMember.kickMember(realm, builder.getRoomId(), builder.getMemberId());
-                }
+            if (G.onChannelLeft != null) {
+                G.onChannelLeft.onChannelLeft(builder.getRoomId(), builder.getMemberId());
             }
-        });
-        realm.close();
+            if (G.onChannelDeleteInRoomList != null) {
+                G.onChannelDeleteInRoomList.onChannelDelete(builder.getRoomId());
+            }
+        } else {
+            RealmMember.kickMember(builder.getRoomId(), builder.getMemberId());
+        }
     }
 
     @Override

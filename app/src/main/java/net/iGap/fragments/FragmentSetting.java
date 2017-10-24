@@ -100,7 +100,6 @@ import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmPrivacy;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserProfileCheckUsername;
@@ -409,22 +408,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                             public void onUserProfileNickNameResponse(final String nickName, String initials) {
                                 setAvatar();
 
-                                /**
-                                 * update RealmRoom for cloud chat if exist
-                                 */
-                                Realm realm = Realm.getDefaultInstance();
-                                realm.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.TYPE, ProtoGlobal.Room.Type.CHAT.toString()).findAll()) {
-                                            if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == userId) {
-                                                realmRoom.setTitle(nickName);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                });
-                                realm.close();
+                                RealmRoom.updateChatTitle(userId, nickName);
 
                                 G.handler.post(new Runnable() {
                                     @Override

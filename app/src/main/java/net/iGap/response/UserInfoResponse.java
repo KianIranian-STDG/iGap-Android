@@ -98,9 +98,6 @@ public class UserInfoResponse extends MessageHandler {
                             G.onUserInfoResponse.onUserInfo(builder.getUser(), identity);
                         }
 
-                        if (G.onUserInfoForAvatar != null) {
-                            G.onUserInfoForAvatar.onUserInfoForAvatar(builder.getUser());
-                        }
                         if (FragmentShowMember.infoUpdateListenerCount != null) {
                             FragmentShowMember.infoUpdateListenerCount.complete(true, "" + builder.getUser().getId(), "OK");
                         }

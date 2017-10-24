@@ -39,7 +39,6 @@ import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetMessageState;
-import net.iGap.helper.HelperInfo;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IChatItemAttachment;
@@ -906,7 +905,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 break;
                         }
 
-                        if (HelperInfo.needUpdateRoomInfo(realmRoom1.getId())) {
+                        if (RealmRoom.needUpdateRoomInfo(realmRoom1.getId())) {
                             if (!updateForwardInfo.containsKey(realmRoom1.getId())) {
                                 updateForwardInfo.put(realmRoom1.getId(), mMessage.messageID);
                             }
@@ -919,7 +918,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             txtForwardFrom.setTextColor(G.context.getResources().getColor(R.color.iGapColor));
                         }
                     } else {
-                        if (HelperInfo.needUpdateRoomInfo(mMessage.forwardedFrom.getAuthorRoomId())) {
+                        if (RealmRoom.needUpdateRoomInfo(mMessage.forwardedFrom.getAuthorRoomId())) {
                             if (!updateForwardInfo.containsKey(mMessage.forwardedFrom.getAuthorRoomId())) {
                                 updateForwardInfo.put(mMessage.forwardedFrom.getAuthorRoomId(), mMessage.messageID);
                             }

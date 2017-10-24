@@ -528,24 +528,9 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
                             RealmRegisteredInfo.updateName(userId, firstName, lastName, initials);
                             RealmContacts.updateName(userId, firstName, lastName, initials);
+                            RealmRoom.updateChatTitle(userId, firstName + " " + lastName);
 
-                            Realm realm1 = Realm.getDefaultInstance();
-                            realm1.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    String displayName = firstName + " " + lastName;
-
-                                    for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.TYPE, ProtoGlobal.Room.Type.CHAT.toString()).findAll()) {
-                                        if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == userId) {
-                                            realmRoom.setTitle(displayName.trim());
-                                        }
-                                    }
-
-                                    setAvatar();
-                                }
-                            });
-                            realm1.close();
-
+                            setAvatar();
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {

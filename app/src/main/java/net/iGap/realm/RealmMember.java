@@ -61,6 +61,9 @@ public class RealmMember extends RealmObject {
         this.role = role;
     }
 
+
+
+
     public static RealmMember put(Realm realm, long userId, String role) {
         RealmMember realmMember = realm.createObject(RealmMember.class, SUID.id().get());
         realmMember.setRole(role);
@@ -85,6 +88,33 @@ public class RealmMember extends RealmObject {
         return realmMember;
     }
 
+    public static void deleteAllMembers(long roomId) {
+        Realm realm = Realm.getDefaultInstance();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            if (realmRoom.getType() == GROUP) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        if (realmRoom.getGroupRoom().getMembers() != null) {
+                            realmRoom.getGroupRoom().getMembers().deleteAllFromRealm();
+                        }
+                    }
+                });
+            } else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        if (realmRoom.getChannelRoom().getMembers() != null) {
+                            realmRoom.getChannelRoom().getMembers().deleteAllFromRealm();
+                        }
+                    }
+                });
+            }
+        }
+        realm.close();
+    }
+
     public static void addMember(final long roomId, final long userId, final String role) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
@@ -107,6 +137,52 @@ public class RealmMember extends RealmObject {
                     }
                     members.add(RealmMember.put(realm, userId, role));
                 }
+            }
+        });
+        realm.close();
+    }
+
+    public static void updateMemberRole(final long roomId, final long memberId, final String role) {
+        //TODO [Saeed Mozaffari] [2017-10-24 6:05 PM] - Can Write Better Code?
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                if (realmRoom != null) {
+                    RealmList<RealmMember> realmMemberRealmList = null;
+                    if (realmRoom.getType() == GROUP) {
+                        RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                        if (realmGroupRoom != null) {
+                            realmMemberRealmList = realmGroupRoom.getMembers();
+                        }
+                    } else {
+                        RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                        if (realmChannelRoom != null) {
+                            realmMemberRealmList = realmChannelRoom.getMembers();
+                        }
+                    }
+
+                    if (realmMemberRealmList != null) {
+                        for (RealmMember member : realmMemberRealmList) {
+                            if (member.getPeerId() == memberId) {
+                                member.setRole(role);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static void kickMember(final long roomId, final long userId) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                kickMember(realm, roomId, userId);
             }
         });
         realm.close();

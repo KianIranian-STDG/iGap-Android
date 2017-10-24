@@ -1135,10 +1135,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
             public void execute(Realm realm) {
                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                 if (roomMessage != null) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                    if (realmRoom != null) {
-                        realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
-                    }
+                    RealmRoom.updateTime(realm, roomId, TimeUtils.currentLocalTime());
 
                     roomMessage.setMessage(message);
                     roomMessage.setEdited(true);
