@@ -122,22 +122,22 @@ public class RealmNotificationSetting extends RealmObject {
                 if (realmRoom != null) {
                     switch (roomType) {
                         case CHAT:
-                            if (realmRoom.getChatRoom() != null) {
-                                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                            if (realmChatRoom != null) {
                                 realmChatRoom.getRealmNotificationSetting().sound(sound);
                                 realmChatRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
                             }
                             break;
                         case GROUP:
-                            if (realmRoom.getGroupRoom() != null) {
-                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                            if (realmGroupRoom != null) {
                                 realmGroupRoom.getRealmNotificationSetting().sound(sound);
                                 realmGroupRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
                             }
                             break;
                         case CHANNEL:
-                            if (realmRoom.getChannelRoom() != null) {
-                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                            RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                            if (realmChannelRoom != null) {
                                 realmChannelRoom.getRealmNotificationSetting().sound(sound);
                                 realmChannelRoom.getRealmNotificationSetting().setIdRadioButtonSound(which);
                             }
@@ -158,22 +158,22 @@ public class RealmNotificationSetting extends RealmObject {
                 if (realmRoom != null) {
                     switch (roomType) {
                         case CHAT: {
-                            if (realmRoom.getChatRoom() != null) {
-                                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                            if (realmChatRoom != null) {
                                 realmChatRoom.getRealmNotificationSetting().setNotification(notification);
                             }
                             break;
                         }
                         case GROUP: {
-                            if (realmRoom.getGroupRoom() != null) {
-                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                            if (realmGroupRoom != null) {
                                 realmGroupRoom.getRealmNotificationSetting().setNotification(notification);
                             }
                             break;
                         }
                         case CHANNEL: {
-                            if (realmRoom.getChannelRoom() != null) {
-                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                            RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                            if (realmChannelRoom != null) {
                                 realmChannelRoom.getRealmNotificationSetting().setNotification(notification);
                             }
                             break;
@@ -194,22 +194,22 @@ public class RealmNotificationSetting extends RealmObject {
                 if (realmRoom != null) {
                     switch (roomType) {
                         case CHAT: {
-                            if (realmRoom.getChatRoom() != null) {
-                                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                            if (realmChatRoom != null) {
                                 realmChatRoom.getRealmNotificationSetting().setVibrate(vibrateLevel);
                             }
                             break;
                         }
                         case GROUP: {
-                            if (realmRoom.getGroupRoom() != null) {
-                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                            if (realmGroupRoom != null) {
                                 realmGroupRoom.getRealmNotificationSetting().setVibrate(vibrateLevel);
                             }
                             break;
                         }
                         case CHANNEL: {
-                            if (realmRoom.getChannelRoom() != null) {
-                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                            RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                            if (realmChannelRoom != null) {
                                 realmChannelRoom.getRealmNotificationSetting().setVibrate(vibrateLevel);
                             }
                             break;
@@ -231,22 +231,22 @@ public class RealmNotificationSetting extends RealmObject {
                 if (realmRoom != null) {
                     switch (roomType) {
                         case CHAT: {
-                            if (realmRoom.getChatRoom() != null) {
-                                RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+                            if (realmChatRoom != null) {
                                 realmChatRoom.getRealmNotificationSetting().setLedColor(ledColor);
                             }
                             break;
                         }
                         case GROUP: {
-                            if (realmRoom.getGroupRoom() != null) {
-                                RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                            RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
+                            if (realmGroupRoom != null) {
                                 realmGroupRoom.getRealmNotificationSetting().setLedColor(ledColor);
                             }
                             break;
                         }
                         case CHANNEL: {
-                            if (realmRoom.getChannelRoom() != null) {
-                                RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                            RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
+                            if (realmChannelRoom != null) {
                                 realmChannelRoom.getRealmNotificationSetting().setLedColor(ledColor);
                             }
                             break;

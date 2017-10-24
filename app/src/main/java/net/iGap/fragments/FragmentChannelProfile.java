@@ -540,17 +540,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         G.onChannelUpdateSignature = new OnChannelUpdateSignature() {
             @Override
             public void onChannelUpdateSignatureResponse(final long roomId, final boolean signature) {
-
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                        realmRoom.getChannelRoom().setSignature(signature);
-                    }
-                });
-
-                realm.close();
+                RealmRoom.updateSignature(roomId, signature);
             }
 
             @Override
@@ -1053,25 +1043,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
     //********** update member count
 
     private void setMemberCount(final long roomId, final boolean plus) {
-        //Realm realm = Realm.getDefaultInstance();
-        getRealm().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null && realmRoom.getChannelRoom() != null) {
-                    if (HelperString.isNumeric(realmRoom.getChannelRoom().getParticipantsCountLabel())) {
-                        int memberCount = Integer.parseInt(realmRoom.getChannelRoom().getParticipantsCountLabel());
-                        if (plus) {
-                            memberCount++;
-                        } else {
-                            memberCount--;
-                        }
-                        realmRoom.getChannelRoom().setParticipantsCountLabel(memberCount + "");
-                    }
-                }
-            }
-        });
-        //realm.close();
+        RealmRoom.updateMemberCount(roomId, plus);
     }
 
     //********** channel Add Member
@@ -1081,12 +1053,10 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
             setMemberCount(roomId, true);
 
-            //+Realm realm = Realm.getDefaultInstance();
             RealmRegisteredInfo realmRegistered = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
             if (realmRegistered == null) {
                 new RequestUserInfo().userInfo(userId, roomId + "");
             }
-            //realm.close();
         }
     }
 
@@ -1583,9 +1553,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                     public void run() {
                         isPrivate = true;
                         setTextChannelLik();
-                        //+Realm realm = Realm.getDefaultInstance();
-                        RealmChannelRoom.removeUsername(roomId);
-                        //realm.close();
+                        RealmRoom.setPrivate(roomId);
                     }
                 });
             }

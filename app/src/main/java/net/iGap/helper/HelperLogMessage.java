@@ -121,7 +121,7 @@ public class HelperLogMessage {
 
                 G.logMessageUpdatList.put(updateID, item);
 
-                HelperInfo.needUpdateRoomInfo(author.getRoom().getRoomId());
+                RealmRoom.needUpdateRoomInfo(author.getRoom().getRoomId());
 
                 new RequestClientGetRoom().clientGetRoom(author.getRoom().getRoomId(), RequestClientGetRoom.CreateRoomMode.justInfo);
             }
@@ -521,16 +521,13 @@ public class HelperLogMessage {
         realm.close();
     }
 
-    private static void goToRoom(Long id) {
-
+    private static void goToRoom(Long roomId) {
         Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom != null) {
-
             new GoToChatActivity(realmRoom.getId()).startActivity();
-
         } else {
-            HelperInfo.needUpdateRoomInfo(id);
+            RealmRoom.needUpdateRoomInfo(roomId);
         }
         realm.close();
     }

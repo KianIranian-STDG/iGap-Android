@@ -24,7 +24,6 @@ import net.iGap.interfaces.OnAvatarDelete;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnDownload;
 import net.iGap.interfaces.OnFileDownloaded;
-import net.iGap.interfaces.OnUserInfoForAvatar;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -407,7 +406,7 @@ public class HelperAvatar {
         return null;
     }
 
-    private static long getRoomId(long ownerId) {
+    private static long getOwnerId(long ownerId) {
         Realm realm = Realm.getDefaultInstance();
         for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
             if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == ownerId) {
@@ -497,36 +496,6 @@ public class HelperAvatar {
                     new RequestFileDownload().download(token, 0, (int) identityFileDownload.size, identityFileDownload.selector, identity);
                 }
             }
-        }
-    }
-
-    public static class UserInfo implements OnUserInfoForAvatar {
-
-        public void getUserInfo(long userId) {
-            G.onUserInfoForAvatar = this;
-            RealmRegisteredInfo.needUpdateUser(userId, null);
-        }
-
-        @Override
-        public void onUserInfoForAvatar(final ProtoGlobal.RegisteredUser user) {
-
-            Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-                        if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == user.getId()) {
-                            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, user.getId());
-                            if (realmRegisteredInfo != null) {
-                                realmRoom.setAvatar(getLastAvatar(realmRegisteredInfo.getId(), realm));
-                            }
-                        }
-                    }
-                }
-            });
-            realm.close();
-
-            G.onUpdateAvatar.onUpdateAvatar(getRoomId(user.getId()));
         }
     }
 

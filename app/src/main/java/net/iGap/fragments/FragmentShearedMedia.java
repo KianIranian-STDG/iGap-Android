@@ -82,7 +82,6 @@ import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestClientCountRoomHistory;
@@ -171,11 +170,7 @@ public class FragmentShearedMedia extends BaseFragment {
         MusicPlayer.setMusicPlayer(mediaLayout);
 
         roomId = getArguments().getLong(ROOM_ID);
-
-        RealmRoom realmRoom = RealmRoom.getRealmRoom(getRealm(), roomId);
-        if (realmRoom != null) {
-            roomType = realmRoom.getType();
-        }
+        roomType = RealmRoom.detectType(roomId);
 
         initComponent(view);
     }
@@ -1000,22 +995,9 @@ public class FragmentShearedMedia extends BaseFragment {
             countOFFILE = proto.getFile();
             countOFLink = proto.getUrl();
 
-            final String result = countOFImage + "\n" + countOFVIDEO + "\n" + countOFAUDIO + "\n" + countOFVOICE + "\n" + countOFGIF + "\n" + countOFFILE + "\n" + countOFLink;
+            String result = countOFImage + "\n" + countOFVIDEO + "\n" + countOFAUDIO + "\n" + countOFVOICE + "\n" + countOFGIF + "\n" + countOFFILE + "\n" + countOFLink;
 
-            Realm realm = Realm.getDefaultInstance();
-
-            final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-            if (room != null) {
-
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        room.setSharedMediaCount(result);
-                    }
-                });
-            }
-
-            realm.close();
+            RealmRoom.setCountShearedMedia(roomId, result);
         }
     }
 

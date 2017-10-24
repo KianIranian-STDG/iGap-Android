@@ -581,17 +581,16 @@ public class FragmentChat extends BaseFragment
                     new RequestClientSubscribeToRoom().clientSubscribeToRoom(mRoomId);
                 }
 
+                RealmRoom.setCount(mRoomId, 0);
                 //+final Realm updateUnreadCountRealm = Realm.getDefaultInstance();
                 getRealmChat().executeTransactionAsync(new Realm.Transaction() {//ASYNC
                     @Override
                     public void execute(Realm realm) {
                         final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (room != null) {
-                            room.setUnreadCount(0);
                             if (G.onClearUnread != null) {
                                 G.onClearUnread.onClearUnread(mRoomId);
                             }
-                            realm.copyToRealmOrUpdate(room);
 
                             if (room.getType() != CHAT) {
                                 /**
@@ -1367,22 +1366,9 @@ public class FragmentChat extends BaseFragment
                                             isChatReadOnly = false;
                                         }
 
-                                        final RealmRoom joinedRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                                        if (joinedRoom != null) {
-                                            getRealmChat().executeTransaction(new Realm.Transaction() {
-                                                @Override
-                                                public void execute(Realm realm) {
-                                                    joinedRoom.setDeleted(false);
-                                                    if (joinedRoom.getType() == GROUP) {
-                                                        joinedRoom.setReadOnly(false);
-                                                    }
-                                                }
-                                            });
-                                        }
+                                        RealmRoom.joinRoom(mRoomId);
                                     }
                                 });
-                                //+Realm realm = Realm.getDefaultInstance();
-                                //realm.close();
                             }
 
                             @Override
@@ -2945,9 +2931,8 @@ public class FragmentChat extends BaseFragment
                                                 /**
                                                  * I'm in the room, so unread messages count is 0. it means, I read all messages
                                                  */
-                                                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                                                RealmRoom room = RealmRoom.setCount(realm, mRoomId, 0);
                                                 if (room != null) {
-                                                    room.setUnreadCount(0);
                                                     if (G.onClearUnread != null) {
                                                         G.onClearUnread.onClearUnread(roomId);
                                                     }
@@ -3081,16 +3066,10 @@ public class FragmentChat extends BaseFragment
         structChannelExtra.thumbsUp = "0";
         structChannelExtra.thumbsDown = "0";
         structChannelExtra.viewsLabel = "1";
-        final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        getRealmChat().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                if (voiceLastMessage != null) {
-                    realmRoom.setLastMessage(voiceLastMessage);
-                }
-            }
-        });
-        if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().isSignature()) {
+
+        RealmRoom.setLastMessageWithRoomMessage(mRoomId, voiceLastMessage);
+
+        if (RealmRoom.showSignature(mRoomId)) {
             structChannelExtra.signature = G.displayName;
         } else {
             structChannelExtra.signature = "";
@@ -3719,52 +3698,43 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onSetAction(final long roomId, final long userIdR, final ProtoGlobal.ClientAction clientAction) {
-        //Realm realm = Realm.getDefaultInstance();
-        getRealmChat().executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                if (mRoomId == roomId && (userId != userIdR || (isCloudRoom))) {
-                    final String action = HelperGetAction.getAction(roomId, chatType, clientAction);
-                    final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                    if (realmRoom != null) {
-                        realmRoom.setActionState(action, userId);
-                    }
+        if (mRoomId == roomId && (userId != userIdR || (isCloudRoom))) {
+            final String action = HelperGetAction.getAction(roomId, chatType, clientAction);
 
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (action != null) {
-                                ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LOCALE);
-                                txtLastSeen.setText(action);
-                            } else if (chatType == CHAT) {
-                                if (isCloudRoom) {
-                                    txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
+            RealmRoom.setAction(roomId, userIdR, action);
+
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (action != null) {
+                        ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LOCALE);
+                        txtLastSeen.setText(action);
+                    } else if (chatType == CHAT) {
+                        if (isCloudRoom) {
+                            txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
+                        } else {
+                            if (userStatus != null) {
+                                if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true, false));
                                 } else {
-                                    if (userStatus != null) {
-                                        if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true, false));
-                                        } else {
-                                            txtLastSeen.setText(userStatus);
-                                        }
-                                    }
-                                }
-                                ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
-                            } else if (chatType == GROUP) {
-                                ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
-                                if (groupParticipantsCountLabel != null && HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
-                                    txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
-                                } else {
-                                    txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
+                                    txtLastSeen.setText(userStatus);
                                 }
                             }
-                            // change english number to persian number
-                            if (HelperCalander.isLanguagePersian) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                         }
-                    });
+                        ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
+                    } else if (chatType == GROUP) {
+                        ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
+                        if (groupParticipantsCountLabel != null && HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
+                            txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
+                        } else {
+                            txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
+                        }
+                    }
+                    // change english number to persian number
+                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
-            }
-        });
-        //realm.close();
+            });
+        }
     }
 
     @Override
@@ -4530,14 +4500,7 @@ public class FragmentChat extends BaseFragment
                     lastScrolledMessageID = parseLong(mAdapter.getItem(lastVisibleItemPosition).mMessage.messageID);
                 }
 
-                //+Realm realm = Realm.getDefaultInstance();
-
-                final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                if (realmRoom != null) {
-                    saveMessageIdPositionState(lastScrolledMessageID);
-                }
-
-                //realm.close();
+                saveMessageIdPositionState(lastScrolledMessageID);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -4572,21 +4535,8 @@ public class FragmentChat extends BaseFragment
     /**
      * save latest messageId position that user saw in chat before close it
      */
-    private void saveMessageIdPositionState(final long position) {
-
-        //+Realm realm = Realm.getDefaultInstance();
-
-        getRealmChat().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                if (realmRoom != null) {
-                    realmRoom.setLastScrollPositionMessageId(position);
-                }
-            }
-        });
-
-        //realm.close();
+    private void saveMessageIdPositionState(final long messageId) {
+        RealmRoom.setLastScrollPosition(mRoomId, messageId);
     }
 
     /**
@@ -4787,10 +4737,7 @@ public class FragmentChat extends BaseFragment
 
     private void setDraft() {
         if (!isNotJoin) {
-            //Realm realm = Realm.getDefaultInstance();
-
-            final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-            if (realmRoom == null) {
+            if (edtChat == null) {
                 return;
             }
 
@@ -4802,39 +4749,25 @@ public class FragmentChat extends BaseFragment
             } else {
                 replyToMessageId = 0;
             }
-            if (edtChat == null) {
-                return;
-            }
 
             String message = edtChat.getText().toString();
-
             if (!message.trim().isEmpty() || ((mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE))) {
-
                 hasDraft = true;
+                RealmRoom.setDraft(mRoomId, message, replyToMessageId);
 
-                final String finalMessage = message;
-                getRealmChat().executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-
-                        realmRoom.setDraft(RealmRoomDraft.put(realm, finalMessage, replyToMessageId));
-
-                        if (chatType == CHAT) {
-                            new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, finalMessage, replyToMessageId);
-                        } else if (chatType == GROUP) {
-                            new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, finalMessage, replyToMessageId);
-                        } else if (chatType == CHANNEL) {
-                            new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, finalMessage, replyToMessageId);
-                        }
-                        if (G.onDraftMessage != null) {
-                            G.onDraftMessage.onDraftMessage(mRoomId, finalMessage);
-                        }
-                    }
-                });
+                if (chatType == CHAT) {
+                    new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, message, replyToMessageId);
+                } else if (chatType == GROUP) {
+                    new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, message, replyToMessageId);
+                } else if (chatType == CHANNEL) {
+                    new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, message, replyToMessageId);
+                }
+                if (G.onDraftMessage != null) {
+                    G.onDraftMessage.onDraftMessage(mRoomId, message);
+                }
             } else {
                 clearDraftRequest();
             }
-            //realm.close();
         }
     }
 
@@ -4853,18 +4786,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void clearLocalDraft() {
-        //+Realm realm = Realm.getDefaultInstance();
-        getRealmChat().executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-                if (realmRoom != null) {
-                    realmRoom.setDraft(null);
-                    realmRoom.setDraftFile(null);
-                }
-            }
-        });
-        //realm.close();
+        RealmRoom.clearDraft(mRoomId);
     }
 
     private void clearDraftRequest() {
@@ -6639,11 +6561,7 @@ public class FragmentChat extends BaseFragment
                     }
                 }
 
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomMessage.getRoomId()).findFirst();
-                if (realmRoom != null) {
-                    realmRoom.setLastMessage(roomMessage);
-                    //realmRoom.setUpdatedTime(roomMessage.getUpdateOrCreateTime());
-                }
+                RealmRoom.setLastMessageWithRoomMessage(realm, roomMessage.getRoomId(), roomMessage);
             }
         });
 

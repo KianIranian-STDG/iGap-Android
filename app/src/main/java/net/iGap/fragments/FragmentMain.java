@@ -182,8 +182,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                 }
                 break;
             case chat:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                        equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
+                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
                 if (results.size() > 0) {
                     viewById.setVisibility(View.GONE);
                 } else {
@@ -191,8 +190,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                 }
                 break;
             case group:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                        equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
+                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
                 if (results.size() > 0) {
                     viewById.setVisibility(View.GONE);
                 } else {
@@ -200,8 +198,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                 }
                 break;
             case channel:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                        equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
+                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
                 if (results.size() > 0) {
                     viewById.setVisibility(View.GONE);
                 } else {
@@ -544,36 +541,17 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     }
 
     private void cleanDeletedRooms() {
-
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                //+final Realm realm = Realm.getDefaultInstance();
                 getRealmFragmentMain().executeTransactionAsync(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-
                         for (int i = 0; i < G.deletedRoomList.size(); i++) {
-
-                            RealmRoom _RealmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).
-                                    equalTo(RealmRoomFields.ID, G.deletedRoomList.get(i)).findFirst();
-
-                            if (_RealmRoom != null) {
-                                RealmRoom.deleteRoom(_RealmRoom.getId());
-                            }
+                            RealmRoom.deleteRoomWithCheck(realm, G.deletedRoomList.get(i));
                         }
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                    //}, new Realm.Transaction.OnSuccess() {
-                    //    @Override
-                    //    public void onSuccess() {
-                    //        realm.close();
-                    //    }
-                    //}, new Realm.Transaction.OnError() {
-                    //    @Override
-                    //    public void onError(Throwable error) {
-                    //        realm.close();
-                    //    }
                 });
             }
         });
@@ -759,23 +737,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                getRealmFragmentMain().executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                        if (realmRoom != null && realmRoom.isValid() && !realmRoom.isDeleted() && realmRoom.getType() != null) {
-                            String action = HelperGetAction.getAction(roomId, realmRoom.getType(), clientAction);
-                            realmRoom.setActionState(action, userId);
-                        }
-                    }
-                    //fastAdapter
-                    //}, new Realm.Transaction.OnSuccess() {
-                    //    @Override
-                    //    public void onSuccess() {
-                    //        adapterHashMap.get(all).updateItem(roomId);
-                    //        getAdapterMain(roomId).updateItem(roomId);
-                    //    }
-                });
+                RealmRoom.setAction(roomId, userId, HelperGetAction.getAction(roomId, RealmRoom.detectType(roomId), clientAction));
             }
         });
     }

@@ -176,7 +176,6 @@ import net.iGap.interfaces.OnUserContactsBlock;
 import net.iGap.interfaces.OnUserContactsUnBlock;
 import net.iGap.interfaces.OnUserDelete;
 import net.iGap.interfaces.OnUserGetDeleteToken;
-import net.iGap.interfaces.OnUserInfoForAvatar;
 import net.iGap.interfaces.OnUserInfoMyClient;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserLogin;
@@ -359,7 +358,6 @@ public class G extends MultiDexApplication {
     public static OnGroupLeft onGroupLeft;
     public static OnFileDownloadResponse onFileDownloadResponse;
     public static OnUserInfoResponse onUserInfoResponse;
-    public static OnUserInfoForAvatar onUserInfoForAvatar;
     public static OnUserAvatarResponse onUserAvatarResponse;
     public static OnGroupAvatarResponse onGroupAvatarResponse;
     public static OnChangeUserPhotoListener onChangeUserPhotoListener;

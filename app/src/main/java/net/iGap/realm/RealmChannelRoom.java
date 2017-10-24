@@ -188,20 +188,6 @@ public class RealmChannelRoom extends RealmObject {
         return role;
     }
 
-    public static boolean isSignature(long roomId) {
-        boolean isSignature = false;
-        Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            if (realmRoom.getChannelRoom() != null) {
-                isSignature = realmRoom.getChannelRoom().isSignature();
-            }
-        }
-        realm.close();
-        return isSignature;
-    }
-
-
     public ChannelChatRole getRole() {
         return (role != null) ? ChannelChatRole.valueOf(role) : null;
     }

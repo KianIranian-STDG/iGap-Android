@@ -95,7 +95,7 @@ import org.parceler.Parcel;
                 realmChannelExtra.setMessageId(messageId);
                 realmChannelExtra.setThumbsUp("0");
                 realmChannelExtra.setThumbsDown("0");
-                if (RealmChannelRoom.isSignature(roomId)) {
+                if (RealmRoom.showSignature(roomId)) {
                     realmChannelExtra.setSignature(G.displayName);
                 } else {
                     realmChannelExtra.setSignature("");

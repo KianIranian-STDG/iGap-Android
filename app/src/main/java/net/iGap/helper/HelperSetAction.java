@@ -273,7 +273,6 @@ public class HelperSetAction {
      */
 
     public static String checkExistAction(long roomId) {
-
         for (StructAction struct : structActions) {
             if (struct.roomId == roomId) {
                 return HelperConvertEnumToString.convertActionEnum(struct.action);
@@ -281,20 +280,5 @@ public class HelperSetAction {
         }
 
         return null;
-    }
-
-    /**
-     * clear all actions from RealmRoom for all rooms
-     */
-    public static void clearAllActions() {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override public void execute(Realm realm) {
-                for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-                    realmRoom.setActionState(null, 0);
-                }
-            }
-        });
-        realm.close();
     }
 }

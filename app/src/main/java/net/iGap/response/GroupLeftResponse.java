@@ -10,15 +10,11 @@
 
 package net.iGap.response;
 
-import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupLeft;
-import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
-import net.iGap.realm.RealmRoomMessage;
 
 public class GroupLeftResponse extends MessageHandler {
 
@@ -37,44 +33,30 @@ public class GroupLeftResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoGroupLeft.GroupLeftResponse.Builder builder = (ProtoGroupLeft.GroupLeftResponse.Builder) message;
-        final long roomId = builder.getRoomId();
-        final long memberId = builder.getMemberId();
+        ProtoGroupLeft.GroupLeftResponse.Builder builder = (ProtoGroupLeft.GroupLeftResponse.Builder) message;
+        long roomId = builder.getRoomId();
+        long memberId = builder.getMemberId();
 
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
+        if (G.userId == memberId) {
+            RealmRoom.deleteRoom(roomId);
 
-                if (G.userId == memberId) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                    if (realmRoom != null) {
-                        realmRoom.deleteFromRealm();
-                    }
-
-                    RealmRoomMessage.deleteAllMessage(realm, roomId);
-
-                    RealmClientCondition.deleteCondition(realm, roomId);
-
-                    if (G.onGroupLeft != null) {
-                        G.onGroupLeft.onGroupLeft(roomId, memberId);
-                    }
-                    if (G.onGroupDeleteInRoomList != null) {
-                        G.onGroupDeleteInRoomList.onGroupDelete(roomId);
-                    }
-                } else {
-                    RealmMember.kickMember(realm, builder.getRoomId(), builder.getMemberId());
-                }
+            if (G.onGroupLeft != null) {
+                G.onGroupLeft.onGroupLeft(roomId, memberId);
             }
-        });
-        realm.close();
+            if (G.onGroupDeleteInRoomList != null) {
+                G.onGroupDeleteInRoomList.onGroupDelete(roomId);
+            }
+        } else {
+            RealmMember.kickMember(builder.getRoomId(), builder.getMemberId());
+        }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-
-        G.onGroupLeft.onTimeOut();
+        if (G.onGroupLeft != null) {
+            G.onGroupLeft.onTimeOut();
+        }
     }
 
     @Override
@@ -84,7 +66,8 @@ public class GroupLeftResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-
-        G.onGroupLeft.onError(majorCode, minorCode);
+        if (G.onGroupLeft != null) {
+            G.onGroupLeft.onError(majorCode, minorCode);
+        }
     }
 }
