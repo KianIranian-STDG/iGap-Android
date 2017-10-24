@@ -14,6 +14,7 @@ import net.iGap.G;
 import net.iGap.proto.ProtoChannelAddMember;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmMember;
+import net.iGap.request.RequestClientGetRoom;
 
 public class ChannelAddMemberResponse extends MessageHandler {
 
@@ -33,7 +34,12 @@ public class ChannelAddMemberResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoChannelAddMember.ChannelAddMemberResponse.Builder builder = (ProtoChannelAddMember.ChannelAddMemberResponse.Builder) message;
-        RealmMember.addMember(builder.getRoomId(), builder.getUserId(), builder.getRole().toString());
+
+        if (builder.getUserId() == G.userId) {
+            new RequestClientGetRoom().clientGetRoom(builder.getRoomId(), null);
+        } else {
+            RealmMember.addMember(builder.getRoomId(), builder.getUserId(), builder.getRole().toString());
+        }
         if (G.onChannelAddMember != null) {
             G.onChannelAddMember.onChannelAddMember(builder.getRoomId(), builder.getUserId(), builder.getRole());
         }
