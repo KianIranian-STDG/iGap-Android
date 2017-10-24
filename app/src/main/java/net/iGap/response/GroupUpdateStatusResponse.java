@@ -50,7 +50,7 @@ public class GroupUpdateStatusResponse extends MessageHandler {
                     /**
                      * clear unread count if another account was saw this message
                      */
-                    RealmRoom.clearUnreadCount(builder.getRoomId(), builder.getUpdaterAuthorHash(), builder.getStatus());
+                    RealmRoom.clearUnreadCount(builder.getRoomId(), builder.getUpdaterAuthorHash(), builder.getStatus(), builder.getMessageId());
 
                     /**
                      * find message from database and update its status

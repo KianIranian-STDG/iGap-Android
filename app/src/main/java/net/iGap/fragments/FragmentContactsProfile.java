@@ -550,7 +550,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                             });
                             realm1.close();
 
-                            RealmContacts.updateName(userId, firstName, lastName);
+                            RealmContacts.updateName(userId, firstName, lastName, initials);
 
                             G.handler.post(new Runnable() {
                                 @Override

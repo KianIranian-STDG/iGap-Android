@@ -49,7 +49,7 @@ public class ChatUpdateStatusResponse extends MessageHandler {
                     /**
                      * clear unread count if another account was saw this message
                      */
-                    RealmRoom.clearUnreadCount(chatUpdateStatus.getRoomId(), chatUpdateStatus.getUpdaterAuthorHash(), chatUpdateStatus.getStatus());
+                    RealmRoom.clearUnreadCount(chatUpdateStatus.getRoomId(), chatUpdateStatus.getUpdaterAuthorHash(), chatUpdateStatus.getStatus(), chatUpdateStatus.getMessageId());
 
                     /**
                      * find message from database and update its status

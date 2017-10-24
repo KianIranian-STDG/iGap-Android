@@ -584,17 +584,14 @@ public class RealmRoom extends RealmObject {
      * @param roomId roomId for room that get update status from that
      * @param authorHash updater author hash
      */
-    public static void clearUnreadCount(long roomId, String authorHash, ProtoGlobal.RoomMessageStatus messageStatus) {
-
+    public static void clearUnreadCount(long roomId, String authorHash, ProtoGlobal.RoomMessageStatus messageStatus, long messageId) {
         if (G.authorHash.equals(authorHash) && messageStatus == ProtoGlobal.RoomMessageStatus.SEEN) {
 
             Realm realm = Realm.getDefaultInstance();
-
             RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-            if (realmRoom != null) {
+            if (realmRoom != null && (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getMessageId() <= messageId)) {
                 realmRoom.setUnreadCount(0);
             }
-
             realm.close();
         }
     }
