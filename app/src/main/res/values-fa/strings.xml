@@ -1106,6 +1106,6 @@
   <string name="st_limit_bio">کاراکترهای استفاده شده بیش از حد مجاز است. تنها 70 کاراکتر در این قسمت قابل استفاده اند</string>
   <string name="st_checkbox_delete">حذف برای</string>
   <string name="st_desc_delete">آیا از حذف این %1$s پیام اطمینان دارید؟</string>
-  <string name="st_send_report">send report is success</string>
+  <string name="st_send_report">گزارش خطا با موفقیت ارسال شد</string>
 
 </resources>
