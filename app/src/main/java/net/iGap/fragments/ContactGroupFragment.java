@@ -153,7 +153,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                     ArrayList<Long> list = getSelectedList();
                     if (list.size() > 0) {
                         for (long peerId : list) {
-                            new RequestChannelAddMember().channelAddMember(roomId, peerId, 0);
+                            new RequestChannelAddMember().channelAddMember(roomId, peerId);
                         }
                     } else {
                         if (isAdded()) {

@@ -699,7 +699,7 @@ public class HelperUrl {
 
             showIndeterminateProgressDialog();
 
-            new RequestClientResolveUsername().channelAddMessageReaction(userName);
+            new RequestClientResolveUsername().clientResolveUsername(userName);
         } else {
             closeDialogWaiting();
             HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));

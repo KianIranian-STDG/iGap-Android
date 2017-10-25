@@ -871,7 +871,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             public void getSelectedList(boolean result, String message, int countForShowLastMessage, final ArrayList<StructContactInfo> list) {
 
                 for (int i = 0; i < list.size(); i++) {
-                    new RequestChannelAddMember().channelAddMember(roomId, list.get(i).peerId, 0);
+                    new RequestChannelAddMember().channelAddMember(roomId, list.get(i).peerId);
                 }
             }
         });

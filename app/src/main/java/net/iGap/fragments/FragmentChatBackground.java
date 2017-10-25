@@ -39,7 +39,6 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoInfoWallpaper;
 import net.iGap.realm.RealmWallpaper;
 import net.iGap.request.RequestInfoWallpaper;
 
@@ -222,12 +221,7 @@ public class FragmentChatBackground extends BaseFragment {
             }
         };
 
-        ProtoInfoWallpaper.InfoWallpaper.Fit fit = ProtoInfoWallpaper.InfoWallpaper.Fit.PHONE;
-        if (G.context.getResources().getBoolean(R.bool.isTablet)) {
-            fit = ProtoInfoWallpaper.InfoWallpaper.Fit.TABLET;
-        }
-
-        new RequestInfoWallpaper().infoWallpaper(fit);
+        new RequestInfoWallpaper().infoWallpaper();
     }
 
     private void fillList(boolean getInfoFromServer) {

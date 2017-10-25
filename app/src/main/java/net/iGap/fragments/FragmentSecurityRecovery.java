@@ -64,7 +64,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
 
         view.findViewById(R.id.stps_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        new RequestUserTwoStepVerificationRequestRecoveryToken().requestRecovertyToken();
+        new RequestUserTwoStepVerificationRequestRecoveryToken().requestRecoveryToken();
 
         Bundle bundle = this.getArguments();
 
@@ -122,7 +122,7 @@ public class FragmentSecurityRecovery extends BaseFragment {
         txtResendConfirmEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new RequestUserTwoStepVerificationRequestRecoveryToken().requestRecovertyToken();
+                new RequestUserTwoStepVerificationRequestRecoveryToken().requestRecoveryToken();
                 closeKeyboard(v);
                 final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), R.string.resend_verify_email_code, Snackbar.LENGTH_LONG);
                 snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
