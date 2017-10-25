@@ -327,7 +327,7 @@ public class HelperError {
                 error = "";// G.fragmentActivity.getResources().getString(R.string.there_is_no_sheared_media);
                 break;
             case 623:
-                if (minorCode == 1) error = G.fragmentActivity.getResources().getString(R.string.E_713_1);
+                if (minorCode == 1) error = G.fragmentActivity.getResources().getString(R.string.E_623);
                 break;
             case 629:
                 if (minorCode == 1) {

@@ -54,7 +54,7 @@ public class ChatClearMessageResponse extends MessageHandler {
         });
         realm.close();
 
-        RealmRoomMessage.deleteAllMessageLessThan(chatClearMessage.getRoomId(), chatClearMessage.getRoomId());
+        RealmRoomMessage.deleteAllMessageLessThan(chatClearMessage.getRoomId(), chatClearMessage.getClearId());
     }
 
     @Override

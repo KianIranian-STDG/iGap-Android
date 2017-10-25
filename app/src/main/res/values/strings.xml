@@ -447,6 +447,7 @@
   <string name="E_615_2">Bad payload: Invalid ID of the first message</string>
   <string name="E_616">Internal Server Error</string>
   <string name="E_617">No Other Messages to be Viewed.</string>
+  <string name="E_623">Client Resolve Username Not Found</string>
   <string name="E_713_1">Bad payload: Invalid token</string>
   <string name="E_713_2">Bad payload: Invalid offset</string>
   <string name="E_713_3">Bad payload: Invalid max limit</string>
