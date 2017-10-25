@@ -10,8 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -254,22 +252,22 @@ public class FragmentShowImage extends BaseFragment {
             }
         });
 
-        rooShowImage = (ViewGroup) view.findViewById(R.id.rooShowImage);
-
-        int colorFrom = getResources().getColor(R.color.transparent);
-        int colorTo = getResources().getColor(R.color.black);
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-        colorAnimation.setDuration(300); // milliseconds
-        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-            @Override
-            public void onAnimationUpdate(ValueAnimator animator) {
-                rooShowImage.setBackgroundColor((int) animator.getAnimatedValue());
-            }
-
-        });
-
-        colorAnimation.start();
+        //rooShowImage = (ViewGroup) view.findViewById(R.id.rooShowImage);
+        //
+        //int colorFrom = getResources().getColor(R.color.transparent);
+        //int colorTo = getResources().getColor(R.color.black);
+        //ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        //colorAnimation.setDuration(300); // milliseconds
+        //colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        //
+        //    @Override
+        //    public void onAnimationUpdate(ValueAnimator animator) {
+        //        rooShowImage.setBackgroundColor((int) animator.getAnimatedValue());
+        //    }
+        //
+        //});
+        //
+        //colorAnimation.start();
 
 
         viewPager = (ViewPager) view.findViewById(R.id.asi_view_pager);
