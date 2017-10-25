@@ -511,19 +511,20 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
     public static boolean isImageOrVideo(RealmRoomMessage roomMessage, @Nullable ProtoGlobal.RoomMessageType messageType) {
         boolean isImageOrVideo = false;
         if (messageType == null) {
-            if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE || roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
+            if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE || roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE_TEXT || roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                 isImageOrVideo = true;
             } else if (roomMessage.getForwardMessage() != null) {
-                if (roomMessage.getForwardMessage().getMessageType() == ProtoGlobal.RoomMessageType.IMAGE || roomMessage.getForwardMessage().getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
+                ProtoGlobal.RoomMessageType messageTypeForward = roomMessage.getForwardMessage().getMessageType();
+                if (messageTypeForward == ProtoGlobal.RoomMessageType.IMAGE || messageTypeForward == ProtoGlobal.RoomMessageType.IMAGE_TEXT || messageTypeForward == ProtoGlobal.RoomMessageType.VIDEO || messageTypeForward == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                     isImageOrVideo = true;
                 }
             }
         } else if (messageType == ProtoGlobal.RoomMessageType.VIDEO) {
-            if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
+            if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO || roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                 isImageOrVideo = true;
             }
         } else if (messageType == ProtoGlobal.RoomMessageType.IMAGE) {
-            if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE) {
+            if (roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE || roomMessage.getMessageType() == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
                 isImageOrVideo = true;
             }
         }
