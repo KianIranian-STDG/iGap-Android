@@ -438,11 +438,11 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
                     final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.pu_nikname_profileUser))
-                        .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
-                        .customView(layoutNickname, true)
-                        .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
-                        .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                        .build();
+                            .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                            .customView(layoutNickname, true)
+                            .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+                            .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                            .build();
 
                     final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                     positive.setEnabled(false);
@@ -814,7 +814,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         boolean isExist = false;
         Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
         String[] mPhoneNumberProjection = {
-            ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME
+                ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.NUMBER, ContactsContract.PhoneLookup.DISPLAY_NAME
         };
         Cursor cur = context.getContentResolver().query(lookupUri, mPhoneNumberProjection, null, null, null);
         try {
@@ -872,12 +872,12 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                             //------------------------------------------------------ Mobile Number
 
                             ops.add(ContentProviderOperation.
-                                newInsert(ContactsContract.Data.CONTENT_URI)
-                                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
-                                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
-                                .build());
+                                    newInsert(ContactsContract.Data.CONTENT_URI)
+                                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone)
+                                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                                    .build());
 
                             try {
                                 G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
@@ -1231,15 +1231,16 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         G.onUserInfoResponse = new OnUserInfoResponse() {
             @Override
             public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        txtNickname.setText(user.getDisplayName());
-                        titleToolbar.setText(user.getDisplayName());
-                        setAvatar();
-                    }
-                });
+                if (userId == user.getId()) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtNickname.setText(user.getDisplayName());
+                            titleToolbar.setText(user.getDisplayName());
+                            setAvatar();
+                        }
+                    });
+                }
             }
 
             @Override

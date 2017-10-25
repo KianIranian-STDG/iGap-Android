@@ -95,26 +95,11 @@ public class Contacts {
                         Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{String.valueOf(id)}, null);
 
                         if (pCur != null) {
-
                             while (pCur.moveToNext()) {
-
                                 StructListOfContact itemContact = new StructListOfContact();
                                 itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
                                 itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
                                 contactList.add(itemContact);
-                                //                        Log.i("BBBBB", "getListOfContact: " + pCur.getString(pCur.getColumnIndex(
-                                //                                ContactsContract.CommonDataKinds.Phone.NUMBER)));
-                                /**
-                                 * this part filter phone contact
-                                 * and get just mobile number
-                                 */
-                                //                        int phoneType = pCur.getInt(
-                                //                                pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE));
-
-                                //                        if (phoneType == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE) { //
-                                //                            itemContact.setPhone(pCur.getString(pCur.getColumnIndex(
-                                //                                    ContactsContract.CommonDataKinds.Phone.NUMBER)));
-                                //                        }
                             }
                             pCur.close();
                         }

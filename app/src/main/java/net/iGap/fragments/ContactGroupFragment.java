@@ -42,17 +42,19 @@ import net.iGap.adapter.StickyHeaderAdapter;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.interfaces.OnChannelAddMember;
+import net.iGap.interfaces.OnContactsGetList;
 import net.iGap.interfaces.OnGroupAddMember;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.ContactChip;
 import net.iGap.module.Contacts;
+import net.iGap.module.LoginActions;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestChannelAddMember;
 import net.iGap.request.RequestGroupAddMember;
 
-public class ContactGroupFragment extends BaseFragment {
+public class ContactGroupFragment extends BaseFragment implements OnContactsGetList {
     private FastAdapter fastAdapter;
     private TextView txtStatus;
     private TextView txtNumberOfMember;
@@ -70,6 +72,7 @@ public class ContactGroupFragment extends BaseFragment {
     private int sizeTextEditText = 0;
     private List<StructContactInfo> contacts;
     private boolean isRemove = true;
+    ItemAdapter itemAdapter;
 
     public static ContactGroupFragment newInstance() {
         return new ContactGroupFragment();
@@ -84,6 +87,8 @@ public class ContactGroupFragment extends BaseFragment {
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        G.onContactsGetList = this;
 
         hideProgressBar(); // some times touch screen remind lock so this method do unlock
 
@@ -202,7 +207,7 @@ public class ContactGroupFragment extends BaseFragment {
         //create our adapters
         final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
         final HeaderAdapter headerAdapter = new HeaderAdapter();
-        final ItemAdapter itemAdapter = new ItemAdapter();
+        itemAdapter = new ItemAdapter();
         itemAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<ContactItemGroup>() {
             @Override
             public boolean filter(ContactItemGroup item, CharSequence constraint) {
@@ -255,30 +260,8 @@ public class ContactGroupFragment extends BaseFragment {
 
         rv.addItemDecoration(decoration);
 
-        List<IItem> items = new ArrayList<>();
-        contacts = Contacts.retrieve(null);
+        addItems();
 
-        for (StructContactInfo contact : contacts) {
-            if (contact != null) {
-                items.add(new ContactItemGroup().setContact(contact).withIdentifier(contact.peerId));
-
-                Uri uri = null;
-                if (contact.avatar != null && contact.avatar.getFile() != null && contact.avatar.getFile().getLocalThumbnailPath() != null) {
-                    uri = Uri.fromFile(new File(contact.avatar.getFile().getLocalThumbnailPath()));
-                }
-                ContactChip contactChip;
-                if (uri == null) {
-                    Drawable d = new BitmapDrawable(getResources(), net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), contact.initials, contact.color));
-                    contactChip = new ContactChip(contact.peerId, d, contact.displayName);
-                } else {
-                    contactChip = new ContactChip(contact.peerId, uri, contact.displayName);
-                }
-
-                mContactList.add(contactChip);
-            }
-        }
-        chipsInput.setFilterableList(mContactList);
-        itemAdapter.add(items);
         chipsInput.addChipsListener(new ChipsInput.ChipsListener() {
             @Override
             public void onChipAdded(ChipInterface chip, int newSize) {
@@ -313,6 +296,36 @@ public class ContactGroupFragment extends BaseFragment {
         fastAdapter.withSavedInstanceState(savedInstanceState);
     }
 
+    private void addItems() {
+        List<IItem> items = new ArrayList<>();
+        contacts = Contacts.retrieve(null);
+        if (contacts.size() == 0) {
+            LoginActions.importContact();
+        } else {
+            for (StructContactInfo contact : contacts) {
+                if (contact != null) {
+                    items.add(new ContactItemGroup().setContact(contact).withIdentifier(contact.peerId));
+
+                    Uri uri = null;
+                    if (contact.avatar != null && contact.avatar.getFile() != null && contact.avatar.getFile().getLocalThumbnailPath() != null) {
+                        uri = Uri.fromFile(new File(contact.avatar.getFile().getLocalThumbnailPath()));
+                    }
+                    ContactChip contactChip;
+                    if (uri == null) {
+                        Drawable d = new BitmapDrawable(getResources(), net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), contact.initials, contact.color));
+                        contactChip = new ContactChip(contact.peerId, d, contact.displayName);
+                    } else {
+                        contactChip = new ContactChip(contact.peerId, uri, contact.displayName);
+                    }
+
+                    mContactList.add(contactChip);
+                }
+            }
+            chipsInput.setFilterableList(mContactList);
+            itemAdapter.add(items);
+        }
+    }
+
     private void addMember(long roomId, ProtoGlobal.Room.Type roomType) {
         RealmRoom.addOwnerToDatabase(roomId);
         RealmRoom.updateMemberCount(roomId, roomType, countAddMemberRequest + 1); // plus with 1 , for own account
@@ -333,7 +346,6 @@ public class ContactGroupFragment extends BaseFragment {
             }
         }, 50);
     }
-
 
     private void refreshView() {
         int selectedNumber = 0;
@@ -397,4 +409,8 @@ public class ContactGroupFragment extends BaseFragment {
         });
     }
 
+    @Override
+    public void onContactsGetList() {
+        addItems();
+    }
 }

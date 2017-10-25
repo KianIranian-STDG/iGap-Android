@@ -57,7 +57,6 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.interfaces.OnContactAdd;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnUserContactDelete;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -80,7 +79,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
 import static net.iGap.R.string.contacts;
 
-public class RegisteredContactsFragment extends BaseFragment implements OnUserContactDelete, OnContactAdd {
+public class RegisteredContactsFragment extends BaseFragment implements OnUserContactDelete {
 
     private TextView menu_txt_titleToolbar;
     private ViewGroup vgAddContact, vgRoot;
@@ -122,9 +121,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     @Override
     public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        //G.onUserContactdelete = this;
-        //G.onContactAdd = this;
 
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
@@ -391,7 +387,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             realm.close();
         }
         G.onUserContactdelete = null;
-        G.onContactAdd = null;
     }
 
     @Override
@@ -415,21 +410,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     public void onError(int majorCode, int minorCode) {
 
     }
-
-    @Override
-    public void onContactAdd() {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                // set text here for call onTextChanged and reset item again
-                edtSearch.setText("");
-            }
-        });
-    }
-
-    /**
-     * ************************************* show iGap contacts *************************************
-     */
 
     /**
      * ***********************************************************************************

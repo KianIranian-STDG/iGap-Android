@@ -70,8 +70,8 @@ public class UserContactsGetListResponse extends MessageHandler {
                         @Override
                         public void onSuccess() {
 
-                            if (G.onContactAdd != null) {
-                                G.onContactAdd.onContactAdd();
+                            if (G.onContactsGetList != null) {
+                                G.onContactsGetList.onContactsGetList();
                             }
 
                             realm.close();

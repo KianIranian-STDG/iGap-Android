@@ -108,7 +108,7 @@ import net.iGap.interfaces.OnClientSearchRoomHistory;
 import net.iGap.interfaces.OnClientSubscribeToRoom;
 import net.iGap.interfaces.OnClientUnsubscribeFromRoom;
 import net.iGap.interfaces.OnConnectionChangeState;
-import net.iGap.interfaces.OnContactAdd;
+import net.iGap.interfaces.OnContactsGetList;
 import net.iGap.interfaces.OnDeleteChatFinishActivity;
 import net.iGap.interfaces.OnDraftMessage;
 import net.iGap.interfaces.OnFileDownloadResponse;
@@ -443,7 +443,7 @@ public class G extends MultiDexApplication {
     public static IMainFinish iMainFinish;
     public static IActivityFinish iActivityFinish;
     public static OnBlockStateChanged onBlockStateChanged;
-    public static OnContactAdd onContactAdd;
+    public static OnContactsGetList onContactsGetList;
     public static OnCallLogClear onCallLogClear;
     public static OnMapUsersGet onMapUsersGet;
     public static OnSelectMenu onSelectMenu;
