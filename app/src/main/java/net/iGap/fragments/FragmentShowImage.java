@@ -10,8 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -25,10 +23,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v4.widget.ContentLoadingProgressBar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
@@ -61,7 +56,6 @@ import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.TouchImageView;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.transition.fragment.ExitFragmentTransition;
-import net.iGap.module.transition.fragment.FragmentTransition;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
@@ -118,23 +112,23 @@ public class FragmentShowImage extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         realmShowImage = Realm.getDefaultInstance();
 
-        View view = inflater.inflate(R.layout.activity_show_image, container, false);
-        exitFragmentTransition = FragmentTransition.with(this).duration(200).interpolator(new LinearOutSlowInInterpolator()).to(view.findViewById(R.id.asi_view_pager)).start(savedInstanceState);
+        //View view = inflater.inflate(R.layout.activity_show_image, container, false);
+        //exitFragmentTransition = FragmentTransition.with(this).duration(200).interpolator(new LinearOutSlowInInterpolator()).to(view.findViewById(R.id.asi_view_pager)).start(savedInstanceState);
+        //
+        //exitFragmentTransition.exitListener(new AnimatorListenerAdapter() {
+        //    @Override
+        //    public void onAnimationStart(Animator animation) {
+        //        Log.d("FFFFFFF", "onAnimationStart: ");
+        //    }
+        //
+        //    @Override
+        //    public void onAnimationEnd(Animator animation) {
+        //        Log.d("FFFFFFF", "onAnimationEnd: ");
+        //    }
+        //}).interpolator(new FastOutSlowInInterpolator());
+        //exitFragmentTransition.startExitListening(view.findViewById(R.id.rooShowImage));
 
-        exitFragmentTransition.exitListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                Log.d("FFFFFFF", "onAnimationStart: ");
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                Log.d("FFFFFFF", "onAnimationEnd: ");
-            }
-        }).interpolator(new FastOutSlowInInterpolator());
-        exitFragmentTransition.startExitListening(view.findViewById(R.id.rooShowImage));
-
-        return view;
+        return inflater.inflate(R.layout.activity_show_image, container, false);
     }
 
     @Override
@@ -233,12 +227,20 @@ public class FragmentShowImage extends BaseFragment {
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.asi_btn_back);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.asi_ripple_back);
 
-        rippleBack.setOnClickListener(new View.OnClickListener() {
+        //rippleBack.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //
+        //        exitFragmentTransition.startButtonExitListening(rooShowImage);
+        //
+        //    }
+        //});
+
+        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+
             @Override
-            public void onClick(View v) {
-
-                exitFragmentTransition.startButtonExitListening(rooShowImage);
-
+            public void onComplete(RippleView rippleView) {
+                G.fragmentActivity.onBackPressed();
             }
         });
 

@@ -226,7 +226,6 @@ import net.iGap.module.structs.StructCompress;
 import net.iGap.module.structs.StructMessageAttachment;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructUploadVideo;
-import net.iGap.module.transition.fragment.FragmentTransitionLauncher;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoClientGetRoomHistory;
 import net.iGap.proto.ProtoClientRoomReport;
@@ -4442,8 +4441,9 @@ public class FragmentChat extends BaseFragment
         fragment.setArguments(bundle);
         fragment.appBarLayout = appBarLayout;
 
-        FragmentTransitionLauncher.with(G.fragmentActivity).from(view).prepare(fragment);
-        new HelperFragment(fragment).setAnimated(true).setReplace(false).load();
+        new HelperFragment(fragment).setReplace(false).load();
+        //FragmentTransitionLauncher.with(G.fragmentActivity).from(view).prepare(fragment);
+        //new HelperFragment(fragment).setAnimated(true).setReplace(false).load();
 
         //getActivity().getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fragment).addToBackStack(null).commit();
     }

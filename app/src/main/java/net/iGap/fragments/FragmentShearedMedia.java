@@ -75,7 +75,6 @@ import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.structs.StructMessageInfo;
-import net.iGap.module.transition.fragment.FragmentTransitionLauncher;
 import net.iGap.proto.ProtoClientCountRoomHistory;
 import net.iGap.proto.ProtoClientSearchRoomHistory;
 import net.iGap.proto.ProtoFileDownload;
@@ -1512,7 +1511,7 @@ public class FragmentShearedMedia extends BaseFragment {
             bundle.putString("TYPE", ProtoGlobal.RoomMessageType.IMAGE.toString());
             fragment.setArguments(bundle);
 
-            FragmentTransitionLauncher.with(G.fragmentActivity).from(itemView).prepare(fragment);
+            //FragmentTransitionLauncher.with(G.fragmentActivity).from(itemView).prepare(fragment);
 
             fragment.appBarLayout = appBarLayout;
             new HelperFragment(fragment).setReplace(false).load();
@@ -1655,7 +1654,7 @@ public class FragmentShearedMedia extends BaseFragment {
             bundle.putString("TYPE", ProtoGlobal.RoomMessageType.VIDEO.toString());
             fragment.setArguments(bundle);
 
-            FragmentTransitionLauncher.with(G.fragmentActivity).from(itemView).prepare(fragment);
+            //FragmentTransitionLauncher.with(G.fragmentActivity).from(itemView).prepare(fragment);
 
 
             new HelperFragment(fragment).setReplace(false).load();
