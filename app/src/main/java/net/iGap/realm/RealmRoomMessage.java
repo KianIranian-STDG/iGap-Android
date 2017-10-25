@@ -499,8 +499,6 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
             results = realm.where(RealmRoomMessage.class).
                     equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                     equalTo(RealmRoomMessageFields.MESSAGE_TYPE, messageType.toString()).
-                    or().
-                    equalTo(RealmRoomMessageFields.MESSAGE_TYPE, messageType.toString() + "_TEXT").
                     equalTo(RealmRoomMessageFields.DELETED, false).
                     findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
         }
