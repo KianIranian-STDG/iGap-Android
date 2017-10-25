@@ -296,6 +296,12 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
         fastAdapter.withSavedInstanceState(savedInstanceState);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        G.onContactsGetList = null;
+    }
+
     private void addItems() {
         List<IItem> items = new ArrayList<>();
         contacts = Contacts.retrieve(null);

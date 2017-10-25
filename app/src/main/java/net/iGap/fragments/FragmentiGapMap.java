@@ -705,11 +705,10 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
     public static void deleteMapFileCash() {
         try {
-
             IConfigurationProvider configurationProvider = Configuration.getInstance();
             FileUtils.deleteRecursive((configurationProvider.getOsmdroidBasePath()));
         } catch (Exception e) {
-            Log.e("debug", "FragmentiGapMap     deleteMapFileCash()    " + e.toString());
+            e.printStackTrace();
         }
     }
 
