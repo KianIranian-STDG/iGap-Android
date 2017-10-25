@@ -811,7 +811,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                             btnStart.setEnabled(false);
                             long time = 0;
                             if (BuildConfig.DEBUG) {
-                                time = 10 * DateUtils.SECOND_IN_MILLIS;
+                                time = 2 * DateUtils.SECOND_IN_MILLIS;
                             } else if (smsPermission) {
                                 time = Config.COUNTER_TIMER;
                             } else {
