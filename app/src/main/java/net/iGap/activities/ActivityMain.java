@@ -847,6 +847,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         } else {
                             index = 0;
                         }
+
+                        navigationTabStrip.setViewPager(mViewPager, index);
                     } else {
 
                         if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
@@ -860,7 +862,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         } else {
                             index = 4;
                         }
-
+                        if (index == 0) {
+                            navigationTabStrip.setViewPager(mViewPager, 3);
+                            final int position = index;
+                            G.handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    navigationTabStrip.setViewPager(mViewPager, position);
+                                }
+                            }, 50);
+                        }
+                        navigationTabStrip.setViewPager(mViewPager, index);
                     }
 
                     G.salectedTabInMainActivity = "";
@@ -870,13 +882,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     if (HelperCalander.isLanguagePersian) {
                         index = 4;
+                        navigationTabStrip.setViewPager(mViewPager, index);
                     } else {
                         index = 0;
+                        navigationTabStrip.setViewPager(mViewPager, 3);
+                        final int position = index;
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                navigationTabStrip.setViewPager(mViewPager, position);
+                            }
+                        }, 50);
                     }
                 }
-
-
-                navigationTabStrip.setViewPager(mViewPager, index);
 
                 //try {
                 //    if (mViewPager.getAdapter().getCount() > 0) {
