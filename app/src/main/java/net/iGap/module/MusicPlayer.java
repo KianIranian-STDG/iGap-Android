@@ -483,12 +483,13 @@ public class MusicPlayer extends Service {
         try {
             String beforeMessageId = MusicPlayer.messageId;
 
-            RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
             selectedMedia++;
             if (selectedMedia < mediaList.size()) {
+                RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
                 startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             } else {
                 selectedMedia = 0;
+                RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
                 startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             }
             if (FragmentChat.onMusicListener != null) {
