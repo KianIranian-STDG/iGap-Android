@@ -304,7 +304,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
-    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
 
     public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
@@ -3034,14 +3034,14 @@ public class FragmentChat extends BaseFragment
         StructMessageInfo messageInfo;
         if (isReply()) {
             messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
         } else {
             if (isMessageWrote()) {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             } else {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             }
         }
 
@@ -4552,7 +4552,7 @@ public class FragmentChat extends BaseFragment
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-            MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+                MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         };
 
         cursor = activity.getContentResolver().query(uri, projection, null, null, null);
@@ -5377,9 +5377,9 @@ public class FragmentChat extends BaseFragment
                                         public void run() {
 
                                             fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                .lensPosition(back())       // we want back camera
-                                                .build();
+                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                    .lensPosition(back())       // we want back camera
+                                                    .build();
 
                                             fotoapparatSwitcher.start();
                                         }
@@ -5420,9 +5420,9 @@ public class FragmentChat extends BaseFragment
                                         @Override
                                         public void run() {
                                             fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                .lensPosition(back())       // we want back camera
-                                                .build();
+                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                    .lensPosition(back())       // we want back camera
+                                                    .build();
 
                                             fotoapparatSwitcher.stop();
                                         }
@@ -6831,7 +6831,9 @@ public class FragmentChat extends BaseFragment
                      * don't allow for add lower messageId to bottom of list
                      */
                     if (parseLong(messageInfo.messageID) > biggestMessageId) {
-                        biggestMessageId = parseLong(messageInfo.messageID);
+                        if (!messageInfo.status.equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                            biggestMessageId = parseLong(messageInfo.messageID);
+                        }
                     } else {
                         continue;
                     }
@@ -7044,7 +7046,7 @@ public class FragmentChat extends BaseFragment
         long gapMessageId;
         if (direction == DOWN) {
             resultsUp =
-                getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+                    getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
              * if for UP state client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
