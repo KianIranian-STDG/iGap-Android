@@ -183,7 +183,7 @@ public class RealmContacts extends RealmObject {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, phone).findFirst();
+                RealmContacts contact = realm.where(RealmContacts.class).equalTo(RealmContactsFields.PHONE, Long.parseLong(phone)).findFirst();
                 if (contact != null) {
                     contact.deleteFromRealm();
                 }
