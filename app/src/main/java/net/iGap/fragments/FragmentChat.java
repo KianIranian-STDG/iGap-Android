@@ -2636,6 +2636,7 @@ public class FragmentChat extends BaseFragment
                 View positive = dialogReport.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
 
+                DialogAnimation.animationDown(dialogReport);
                 dialogReport.show();
 
 

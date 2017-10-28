@@ -143,7 +143,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
     private static final String ENTER_FROM = "enterFrom";
     public static final String FRAGMENT_TAG = "FragmentContactsProfile";
     private boolean disableDeleteContact = false;
-    private String bio;
+    private String bio = "";
     private String report = "";
 
     public static FragmentContactsProfile newInstance(long roomId, long peerId, String enterFrom) {
@@ -351,10 +351,17 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         vgPhoneNumber = (ViewGroup) view.findViewById(R.id.chi_layout_phoneNumber);
         txtClearChat = (TextView) view.findViewById(R.id.chi_txt_clearChat);
         TextView txtBio = (TextView) view.findViewById(R.id.st_txt_bio);
+        ViewGroup vgBio = (ViewGroup) view.findViewById(R.id.st_layout_bio);
 
-        if (txtBio != null) {
-            txtBio.setText(bio);
+        if (bio.length() == 0) {
+            vgBio.setVisibility(View.GONE);
+        } else {
+            if (txtBio != null) {
+                txtBio.setText(bio);
+            }
         }
+
+
 
         if (phone.equals("0")) {
             vgPhoneNumber.setVisibility(View.GONE);
@@ -1132,6 +1139,8 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
                 final View positive = dialogReport.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
+
+                DialogAnimation.animationDown(dialogReport);
 
                 dialogReport.show();
 

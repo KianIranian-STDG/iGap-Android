@@ -228,6 +228,7 @@ public class FragmentAddContact extends BaseFragment {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                         dialog.dismiss();
+                        G.fragmentActivity.onBackPressed();
                     }
                 }).show();
             }
