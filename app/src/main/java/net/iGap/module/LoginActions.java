@@ -174,9 +174,9 @@ public class LoginActions extends Application {
          * just import contact in each enter to app
          * when user login was done
          */
-        if (isSendContact) {
-            return;
-        }
+        //if (isSendContact) {
+        //    return;
+        //}
 
         if (G.userLogin) {
             /**

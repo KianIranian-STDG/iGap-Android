@@ -13,7 +13,6 @@ package net.iGap.response;
 import android.os.Handler;
 import android.os.Looper;
 import io.realm.Realm;
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.proto.ProtoGlobal;
@@ -47,7 +46,7 @@ public class UserContactsGetListResponse extends MessageHandler {
          * (( hint : we have an error for this class and now use from timeout.
          * in next version of app will be checked that any of users get this error again or no ))
          */
-        if (HelperTimeOut.timeoutChecking(0, getListTime, Config.GET_CONTACT_LIST_TIME_OUT)) {
+        if (HelperTimeOut.timeoutChecking(0, getListTime, 0)) {//Config.GET_CONTACT_LIST_TIME_OUT
             getListTime = System.currentTimeMillis();
 
             new Handler(Looper.getMainLooper()).post(new Runnable() {
