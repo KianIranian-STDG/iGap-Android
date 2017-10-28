@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 import io.realm.Realm;
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.HelperLogout;
 import net.iGap.interfaces.OnSecuring;
@@ -78,7 +79,7 @@ public class LoginActions extends Application {
                          * app is background send clientCondition (: .
                          */
                         if (!firstTimeEnterToApp || !isAppInFg) {
-                            new RequestClientGetRoomList().clientGetRoomList(0, 15, "0");
+                            new RequestClientGetRoomList().clientGetRoomList(0, Config.LIMIT_LOAD_ROOM, "0");
                         }
 
                         if (firstEnter) {

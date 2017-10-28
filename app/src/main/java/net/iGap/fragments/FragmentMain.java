@@ -100,7 +100,6 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     private OnComplete mComplete;
 
     private int mOffset = 0;
-    private int mLimit = 50;
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = true;
     private View viewById;
@@ -411,7 +410,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
         boolean cleanAfter = false;
 
-        if (roomList.size() < mLimit) {
+        if (roomList.size() < Config.LIMIT_LOAD_ROOM) {
             isThereAnyMoreItemToLoad = false;
             cleanAfter = true;
         } else {
@@ -467,7 +466,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
         if (isThereAnyMoreItemToLoad) {
             isSendRequestForLoading = true;
-            new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit, tagId + "");
+            new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
 
             G.handler.post(new Runnable() {
                 @Override
@@ -520,7 +519,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                 if (G.isSecure && G.userLogin) {
 
                     mOffset = 0;
-                    new RequestClientGetRoomList().clientGetRoomList(mOffset, mLimit, tagId + "");
+                    new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
                     isSendRequestForLoading = true;
                     progressBar.setVisibility(View.VISIBLE);
                 } else {
