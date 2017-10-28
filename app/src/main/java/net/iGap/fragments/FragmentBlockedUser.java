@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.daimajia.swipe.SwipeLayout;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 import io.realm.Realm;
@@ -168,12 +170,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
 
     private void openDialogToggleBlock(final long userId) {
-        new MaterialDialog.Builder(G.currentActivity).content(R.string.un_block_user).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                new RequestUserContactsUnblock().userContactsUnblock(userId);
-            }
-        }).negativeText(R.string.B_cancel).show();
+
     }
 
 
@@ -294,6 +291,8 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
             protected CustomTextViewMedium title;
             protected CustomTextViewMedium subtitle;
             View bottomLine;
+            private SwipeLayout swipeLayout;
+
 
             public ViewHolder(View view) {
                 super(view);
@@ -305,11 +304,19 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                 bottomLine.setVisibility(View.VISIBLE);
                 view.findViewById(R.id.topLine).setVisibility(View.GONE);
 
-                itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                //itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                //    @Override
+                //    public boolean onLongClick(View v) {
+                //        openDialogToggleBlock(realmRegisteredInfo.getId());
+                //        return true;
+                //    }
+                //});
+                swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipeRevealLayout);
+                swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onLongClick(View v) {
+                    public void onClick(View v) {
+
                         openDialogToggleBlock(realmRegisteredInfo.getId());
-                        return true;
                     }
                 });
             }
@@ -324,7 +331,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
         @Override
         public void onBindViewHolder(final BlockListAdapter.ViewHolder viewHolder, int i) {
 
-            RealmRegisteredInfo registeredInfo = viewHolder.realmRegisteredInfo = getItem(i);
+            final RealmRegisteredInfo registeredInfo = viewHolder.realmRegisteredInfo = getItem(i);
             if (registeredInfo == null) {
                 return;
             }
@@ -354,6 +361,51 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                             viewHolder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) viewHolder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                         }
                     });
+                }
+            });
+
+            viewHolder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+            viewHolder.swipeLayout.addSwipeListener(new SwipeLayout.SwipeListener() {
+                @Override
+                public void onStartOpen(SwipeLayout layout) {
+                }
+
+                @Override
+                public void onOpen(SwipeLayout layout) {
+                    MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).content(R.string.un_block_user).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            new RequestUserContactsUnblock().userContactsUnblock(registeredInfo.getId());
+                        }
+                    }).negativeText(R.string.B_cancel).build();
+
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            viewHolder.swipeLayout.close();
+                        }
+                    });
+                    dialog.show();
+                }
+
+                @Override
+                public void onStartClose(SwipeLayout layout) {
+
+
+                }
+
+                @Override
+                public void onClose(SwipeLayout layout) {
+                }
+
+                @Override
+                public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {
+
+                }
+
+                @Override
+                public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
+
                 }
             });
         }
