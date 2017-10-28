@@ -464,6 +464,7 @@ public class FragmentChat extends BaseFragment
     private RelativeLayout layoutMute;
     private String report = "";
     private View rootView;
+    private boolean isAllSenderId = true;
 
     @Nullable
     @Override
@@ -2779,6 +2780,8 @@ public class FragmentChat extends BaseFragment
 
             //+Realm realm = Realm.getDefaultInstance();
 
+            isAllSenderId = true;
+
             for (AbstractMessage message : selectedItems) {
 
                 RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
@@ -2796,19 +2799,23 @@ public class FragmentChat extends BaseFragment
                         if (channelRole == ChannelChatRole.MEMBER) {
                             rippleReplaySelected.setVisibility(View.INVISIBLE);
                             rippleDeleteSelected.setVisibility(View.GONE);
+                            isAllSenderId = false;
                         }
                         final long senderId = G.userId;
                         ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, messageSender);
                         if (senderId != messageSender) {  // if message dose'nt belong to owner
                             if (channelRole == ChannelChatRole.MEMBER) {
                                 rippleDeleteSelected.setVisibility(View.GONE);
+                                isAllSenderId = false;
                             } else if (channelRole == ChannelChatRole.MODERATOR) {
                                 if (roleSenderMessage == ChannelChatRole.MODERATOR || roleSenderMessage == ChannelChatRole.ADMIN || roleSenderMessage == ChannelChatRole.OWNER) {
                                     rippleDeleteSelected.setVisibility(View.GONE);
+                                    isAllSenderId = false;
                                 }
                             } else if (channelRole == ChannelChatRole.ADMIN) {
                                 if (roleSenderMessage == ChannelChatRole.OWNER || roleSenderMessage == ChannelChatRole.ADMIN) {
                                     rippleDeleteSelected.setVisibility(View.GONE);
+                                    isAllSenderId = false;
                                 }
                             }
                         } else {
@@ -2818,16 +2825,20 @@ public class FragmentChat extends BaseFragment
 
                         final long senderId = G.userId;
                         GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, messageSender);
+
                         if (senderId != messageSender) {  // if message dose'nt belong to owner
                             if (groupRole == GroupChatRole.MEMBER) {
                                 rippleDeleteSelected.setVisibility(View.GONE);
+                                isAllSenderId = false;
                             } else if (groupRole == GroupChatRole.MODERATOR) {
                                 if (roleSenderMessage == GroupChatRole.MODERATOR || roleSenderMessage == GroupChatRole.ADMIN || roleSenderMessage == GroupChatRole.OWNER) {
                                     rippleDeleteSelected.setVisibility(View.GONE);
+                                    isAllSenderId = false;
                                 }
                             } else if (groupRole == GroupChatRole.ADMIN) {
                                 if (roleSenderMessage == GroupChatRole.OWNER || roleSenderMessage == GroupChatRole.ADMIN) {
                                     rippleDeleteSelected.setVisibility(View.GONE);
+                                    isAllSenderId = false;
                                 }
                             }
                         } else {
@@ -2837,6 +2848,10 @@ public class FragmentChat extends BaseFragment
                         rippleReplaySelected.setVisibility(View.INVISIBLE);
                     }
                 }
+            }
+
+            if (!isAllSenderId) {
+                rippleDeleteSelected.setVisibility(View.GONE);
             }
 
             //realm.close();
