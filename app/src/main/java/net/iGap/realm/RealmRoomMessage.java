@@ -496,9 +496,14 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
                     equalTo(RealmRoomMessageFields.HAS_MESSAGE_LINK, true).
                     findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
         } else {
+            //TODO [Saeed Mozaffari] [2017-10-28 9:59 AM] - Can Write Better Code?
             results = realm.where(RealmRoomMessage.class).
                     equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                     equalTo(RealmRoomMessageFields.MESSAGE_TYPE, messageType.toString()).
+                    equalTo(RealmRoomMessageFields.DELETED, false).
+                    or().
+                    equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+                    equalTo(RealmRoomMessageFields.MESSAGE_TYPE, messageType.toString() + "_TEXT").
                     equalTo(RealmRoomMessageFields.DELETED, false).
                     findAllSorted(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
         }
