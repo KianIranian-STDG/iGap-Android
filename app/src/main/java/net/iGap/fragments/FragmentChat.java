@@ -4328,17 +4328,23 @@ public class FragmentChat extends BaseFragment
      * copy text
      */
     public void copySelectedItemTextToClipboard() {
+        String copyText = "";
         for (AbstractMessage _message : mAdapter.getSelectedItems()) {
             String text = _message.mMessage.forwardedFrom != null ? _message.mMessage.forwardedFrom.getMessage() : _message.mMessage.messageText;
-
             if (text == null || text.length() == 0) {
                 continue;
             }
 
-            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
-            android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", text);
-            clipboard.setPrimaryClip(clip);
+            if (copyText.length() > 0) {
+                copyText = copyText + "\n" + text;
+            } else {
+                copyText = text;
+            }
         }
+
+        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+        clipboard.setPrimaryClip(ClipData.newPlainText("Copied Text", copyText));
+
         mAdapter.deselect();
         toolbar.setVisibility(View.VISIBLE);
         ll_AppBarSelected.setVisibility(View.GONE);
