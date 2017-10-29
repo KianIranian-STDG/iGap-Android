@@ -52,7 +52,6 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.gigamole.navigationtabstrip.NavigationTabStrip;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import io.realm.Realm;
@@ -112,6 +111,7 @@ import net.iGap.interfaces.OpenFragment;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.libs.tabBar.NavigationTabStrip;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.EmojiTextViewE;
@@ -820,7 +820,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    private void setmViewPagerSelectedItem() {
+    private void setViewPagerSelectedItem() {
 
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -830,7 +830,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     return;
                 }
 
-                int index = 0;
+                int index;
 
                 if (G.salectedTabInMainActivity.length() > 0) {
 
@@ -848,7 +848,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             index = 0;
                         }
 
-                        navigationTabStrip.setViewPager(mViewPager, index);
                     } else {
 
                         if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
@@ -862,17 +861,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         } else {
                             index = 4;
                         }
-                        if (index == 0) {
-                            navigationTabStrip.setViewPager(mViewPager, 3);
-                            final int position = index;
-                            G.handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    navigationTabStrip.setViewPager(mViewPager, position);
-                                }
-                            }, 50);
-                        }
-                        navigationTabStrip.setViewPager(mViewPager, index);
                     }
 
                     G.salectedTabInMainActivity = "";
@@ -882,29 +870,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     if (HelperCalander.isLanguagePersian) {
                         index = 4;
-                        navigationTabStrip.setViewPager(mViewPager, index);
                     } else {
                         index = 0;
-                        navigationTabStrip.setViewPager(mViewPager, 3);
-                        final int position = index;
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                navigationTabStrip.setViewPager(mViewPager, position);
-                            }
-                        }, 50);
                     }
                 }
 
-                //try {
-                //    if (mViewPager.getAdapter().getCount() > 0) {
-                //        if (navigationTabStrip.getTitles() != null && navigationTabStrip.getTitles().length == 5) {
-                //            navigationTabStrip.setTabIndex(mViewPager.getCurrentItem());
-                //        }
-                //    }
-                //} catch (Exception e) {
-                //    HelperLog.setErrorLog("Activity main     setmViewPagerSelectedItem    " + index + "     " + HelperCalander.isLanguagePersian + "    " + e.toString());
-                //}
+                navigationTabStrip.setViewPager(mViewPager, index);
+                navigationTabStrip.updatePointIndicator();
 
                 navigationTabStrip.setOnTabStripSelectedIndexListener(new NavigationTabStrip.OnTabStripSelectedIndexListener() {
                     @Override
@@ -914,13 +886,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     @Override
                     public void onEndTabSelected(String title, int index) {
-
                         onSelectItem(index);
                     }
                 });
-
-
-
             }
         }, 100);
     }
@@ -964,7 +932,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
 
 
-                    setmViewPagerSelectedItem();
+                    setViewPagerSelectedItem();
 
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
                 }
@@ -997,7 +965,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     mViewPager.getAdapter().notifyDataSetChanged();
 
-                    setmViewPagerSelectedItem();
+                    setViewPagerSelectedItem();
 
                 }
             }, 800);
