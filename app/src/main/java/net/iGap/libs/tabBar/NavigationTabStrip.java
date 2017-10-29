@@ -37,6 +37,7 @@ import android.support.v4.view.ViewPager;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -526,14 +527,37 @@ import net.iGap.R;
         // Set the strip right side coordinate
         mStripRight = (mStartStripX + (mStripType == StripType.LINE ? mTabSize : mStripWeight)) + (mResizeInterpolator.getResizeInterpolation(fraction, !mIsResizeIn) * (mEndStripX - mStartStripX));
 
-        Log.i("PPP", "mStripLeft : " + mStripLeft + "  ||  mStripRight : " + mStripRight);
+
         // Update NTS
         postInvalidate();
     }
 
     public void updatePointIndicator() {
-        mStripLeft = 108.0F;
-        mStripRight = 117.0F;
+
+        int density = getResources().getDisplayMetrics().densityDpi;
+
+        switch (density) {
+            case DisplayMetrics.DENSITY_LOW:
+                mStripLeft = 24.0F;
+                mStripRight = 26.25F;
+                Log.i("DDD", "LDPI");
+                break;
+            case DisplayMetrics.DENSITY_MEDIUM:
+                mStripLeft = 32.0F;
+                mStripRight = 35.0F;
+                Log.i("DDD", "MDPI");
+                break;
+            case DisplayMetrics.DENSITY_HIGH:
+                mStripLeft = 48.0F;
+                mStripRight = 52.5F;
+                Log.i("DDD", "HDPI");
+                break;
+            case DisplayMetrics.DENSITY_XHIGH:
+                mStripLeft = 108.0F;
+                mStripRight = 117.0F;
+                Log.i("DDD", "XHDPI");
+                break;
+        }
         postInvalidate();
     }
 

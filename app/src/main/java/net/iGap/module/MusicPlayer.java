@@ -14,6 +14,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -124,6 +125,7 @@ public class MusicPlayer extends Service {
     public static String STARTFOREGROUND_ACTION = "STARTFOREGROUND_ACTION";
     public static String STOPFOREGROUND_ACTION = "STOPFOREGROUND_ACTION";
     private static HeadsetPluginReciver headsetPluginReciver;
+    private static BluetoothCallbacks bluetoothCallbacks;
 
     private static RemoteControlClient remoteControlClient;
     private static ComponentName remoteComponentName;
@@ -167,11 +169,11 @@ public class MusicPlayer extends Service {
                     if (notification != null) {
                         startForeground(notificationId, notification);
 
-                        initSensore();
+                        initSensor();
                     }
                 } else if (action.equals(STOPFOREGROUND_ACTION)) {
 
-                    removeSensore();
+                    removeSensor();
 
                     stopForeground(true);
                     stopSelf();
@@ -1151,13 +1153,14 @@ public class MusicPlayer extends Service {
 
     //***************************************************************************** sensor *********************************
 
-    private static void initSensore() {
+    private static void initSensor() {
 
         if (!isRegisterSensore) {
 
             registerMediaBottom();
 
             headsetPluginReciver = new HeadsetPluginReciver();
+            //bluetoothCallbacks = new BluetoothCallbacks();
 
             mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
             mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
@@ -1190,13 +1193,17 @@ public class MusicPlayer extends Service {
 
             IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
             context.registerReceiver(headsetPluginReciver, filter);
+
+            //IntentFilter filterBluetooth = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+            //context.registerReceiver(bluetoothCallbacks, filterBluetooth);
+
             registerDistanceSensor();
 
             isRegisterSensore = true;
         }
     }
 
-    private static void removeSensore() {
+    private static void removeSensor() {
 
         if (isRegisterSensore) {
 
@@ -1209,7 +1216,7 @@ public class MusicPlayer extends Service {
                     audioManager.unregisterMediaButtonEventReceiver(remoteComponentName);
                 }
             } catch (Exception e) {
-                Log.e("ddddd", "music plyer  removeSensore   audioManager   " + e.toString());
+                Log.e("ddddd", "music plyer  removeSensor   audioManager   " + e.toString());
             }
 
             try {
@@ -1217,17 +1224,22 @@ public class MusicPlayer extends Service {
                     audioManager.unregisterRemoteControlClient(remoteControlClient);
                 }
             } catch (Exception e) {
-                Log.e("ddddd", "music plyer  removeSensore   remoteControlClient   " + e.toString());
+                Log.e("ddddd", "music plyer  removeSensor   remoteControlClient   " + e.toString());
             }
 
             try {
-
                 context.unregisterReceiver(headsetPluginReciver);
             } catch (Exception e) {
-                Log.e("ddddd", "music plyer  removeSensore    unregisterReceiver " + e.toString());
+                Log.e("ddddd", "music plyer  removeSensor    unregisterReceiver " + e.toString());
             }
 
-            unRegisterDistanceSensore();
+            //try {
+            //    context.unregisterReceiver(bluetoothCallbacks);
+            //} catch (Exception e) {
+            //    Log.e("ddddd", "music plyer  removeSensor    unregisterReceiver " + e.toString());
+            //}
+
+            unRegisterDistanceSensor();
 
             remoteComponentName = null;
             remoteControlClient = null;
@@ -1247,12 +1259,12 @@ public class MusicPlayer extends Service {
         }
     }
 
-    private static void unRegisterDistanceSensore() {
+    private static void unRegisterDistanceSensor() {
 
         try {
             mSensorManager.unregisterListener(sensorEventListener);
         } catch (Exception e) {
-            Log.e("dddd", "music player unRegisterDistanceSensore   " + e.toString());
+            Log.e("dddd", "music player unRegisterDistanceSensor   " + e.toString());
         }
     }
 
@@ -1290,6 +1302,34 @@ public class MusicPlayer extends Service {
                         //default:
                         //    Log.d("dddddd", "I have no idea what the headset state is");
                     }
+                }
+            }
+        }
+    }
+
+
+    static class BluetoothCallbacks extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                switch (state) {
+                    case BluetoothAdapter.STATE_OFF:
+                        if (mp != null) {
+                            if (mp.isPlaying()) {
+                                pauseSound();
+                            }
+                        }
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_OFF:
+                        break;
+                    case BluetoothAdapter.STATE_ON:
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_ON:
+                        break;
                 }
             }
         }

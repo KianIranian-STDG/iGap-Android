@@ -876,7 +876,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
 
                 navigationTabStrip.setViewPager(mViewPager, index);
-                navigationTabStrip.updatePointIndicator();
+                if (!HelperCalander.isLanguagePersian) {
+                    navigationTabStrip.updatePointIndicator();
+                }
 
                 navigationTabStrip.setOnTabStripSelectedIndexListener(new NavigationTabStrip.OnTabStripSelectedIndexListener() {
                     @Override
