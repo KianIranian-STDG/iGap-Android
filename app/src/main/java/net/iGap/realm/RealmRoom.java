@@ -1126,6 +1126,8 @@ public class RealmRoom extends RealmObject {
                     }
                 }
             });
+        } else {
+            new RequestClientGetRoom().clientGetRoom(roomId, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
         }
         realm.close();
     }

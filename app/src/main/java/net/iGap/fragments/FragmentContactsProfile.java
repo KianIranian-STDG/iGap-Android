@@ -353,7 +353,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         TextView txtBio = (TextView) view.findViewById(R.id.st_txt_bio);
         ViewGroup vgBio = (ViewGroup) view.findViewById(R.id.st_layout_bio);
 
-        if (bio.length() == 0) {
+        if (bio == null || bio.length() == 0) {
             vgBio.setVisibility(View.GONE);
         } else {
             if (txtBio != null) {
