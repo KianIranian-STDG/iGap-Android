@@ -532,7 +532,6 @@ import net.iGap.R;
 
     public void updatePointIndicator() {
         float stripStart = mStartStripX;
-        float stripEnd = 0;
 
         if (stripStart < 0) {
             stripStart *= -1;
