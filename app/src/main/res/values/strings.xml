@@ -455,10 +455,14 @@
   <string name="E_713_5">Bad payload: Invalid offset</string>
   <string name="E_714">Internal Server Error</string>
   <string name="E_715">file not found.</string>
+
+  <string name="E_658">You have already sent report.</string>
+  <string name="E_659">You are forbidden to send a report.</string>
+
   <string name="E_10165">Bad payload: User report</string>
   <string name="E_10166">ServerError: User report internal</string>
-  <string name="E_10167">User report before</string>
-  <string name="E_10168">User report forbidden</string>
+  <string name="E_10167">You have already reported this user.</string>
+  <string name="E_10168">You are forbidden to do this action.</string>
 
   <string name="E_209_1">Bad payload: Invalid room ID</string>
   <string name="E_209_2">Bad payload: Invalid message ID</string>
@@ -1098,6 +1102,6 @@
   <string name="st_limit_bio">You have exceeded the allowed number of characters. You can use only 70 characters for Bio.</string>
   <string name="st_checkbox_delete">Delete for</string>
   <string name="st_desc_delete">Are you sure you want to delete %1$s message(s)?</string>
-  <string name="st_send_report">send report is success</string>
+  <string name="st_send_report">Report was successfully sent.</string>
 
 </resources>

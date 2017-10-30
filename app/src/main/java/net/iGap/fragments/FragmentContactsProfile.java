@@ -1144,18 +1144,17 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
                 dialogReport.show();
 
-
-                G.onReport = new OnReport() {
-                    @Override
-                    public void success() {
-
-                        error(G.fragmentActivity.getResources().getString(R.string.st_send_report));
-
-                    }
-                };
-
             }
         });
+
+        G.onReport = new OnReport() {
+            @Override
+            public void success() {
+
+                error(G.fragmentActivity.getResources().getString(R.string.st_send_report));
+
+            }
+        };
 
     }
 

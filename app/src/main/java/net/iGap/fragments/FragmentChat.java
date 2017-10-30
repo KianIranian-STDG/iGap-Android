@@ -287,7 +287,6 @@ import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_open_document;
 import static net.iGap.module.AttachFile.request_code_pic_file;
 import static net.iGap.module.MessageLoader.getLocalMessage;
-import static net.iGap.module.MusicPlayer.roomId;
 import static net.iGap.module.enums.ProgressState.HIDE;
 import static net.iGap.module.enums.ProgressState.SHOW;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
@@ -2627,9 +2626,9 @@ public class FragmentChat extends BaseFragment
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                         if (isMessage) {
-                            new RequestClientRoomReport().roomReport(roomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
+                            new RequestClientRoomReport().roomReport(mRoomId, messageId, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
                         } else {
-                            new RequestClientRoomReport().roomReport(roomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
+                            new RequestClientRoomReport().roomReport(mRoomId, 0, ProtoClientRoomReport.ClientRoomReport.Reason.OTHER, report);
                         }
                     }
                 }).negativeText(R.string.cancel).build();
@@ -2640,29 +2639,15 @@ public class FragmentChat extends BaseFragment
                 DialogAnimation.animationDown(dialogReport);
                 dialogReport.show();
 
-
-                G.onReport = new OnReport() {
-                    @Override
-                    public void success() {
-
-                        error(G.fragmentActivity.getResources().getString(R.string.st_send_report));
-
-                    }
-                };
-
-                //FragmentReport fragmentReport = new FragmentReport();
-                //Bundle bundle = new Bundle();
-                //bundle.putLong("ROOM_ID", mRoomId);
-                //if (isMessage) {
-                //    bundle.putLong("MESSAGE_ID", messageId);
-                //} else {
-                //    bundle.putLong("MESSAGE_ID", 0);
-                //}
-                //bundle.putBoolean("USER_ID", false);
-                //fragmentReport.setArguments(bundle);
-                //new HelperFragment(fragmentReport).setReplace(false).load();
             }
         });
+
+        G.onReport = new OnReport() {
+            @Override
+            public void success() {
+                error(G.fragmentActivity.getResources().getString(R.string.st_send_report));
+            }
+        };
 
 
     }

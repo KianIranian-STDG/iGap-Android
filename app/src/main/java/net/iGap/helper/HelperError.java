@@ -339,6 +339,15 @@ public class HelperError {
             case 638:
                 if (minorCode == 1) error = G.fragmentActivity.getResources().getString(R.string.E_713_1);
                 break;
+
+            case 658:
+                error = G.fragmentActivity.getResources().getString(R.string.E_658);
+                break;
+
+            case 659:
+                error = G.fragmentActivity.getResources().getString(R.string.E_659);
+                break;
+
             case 713:
                 if (minorCode == 1) {
                     error = G.fragmentActivity.getResources().getString(R.string.E_713_1);
