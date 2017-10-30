@@ -167,7 +167,6 @@ import net.iGap.interfaces.OnTwoStepPassword;
 import net.iGap.interfaces.OnUpdateUserStatusInChangePage;
 import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserAvatarDelete;
-import net.iGap.interfaces.OnUserAvatarGetList;
 import net.iGap.interfaces.OnUserAvatarResponse;
 import net.iGap.interfaces.OnUserContactDelete;
 import net.iGap.interfaces.OnUserContactEdit;
@@ -364,7 +363,6 @@ public class G extends MultiDexApplication {
     public static OnDeleteChatFinishActivity onDeleteChatFinishActivity;
     public static OnClientGetRoomHistoryResponse onClientGetRoomHistoryResponse;
     public static OnUserAvatarDelete onUserAvatarDelete;
-    public static OnUserAvatarGetList onUserAvatarGetList;
     public static OnDraftMessage onDraftMessage;
     public static OnUserDelete onUserDelete;
     public static OnUserProfileCheckUsername onUserProfileCheckUsername;
