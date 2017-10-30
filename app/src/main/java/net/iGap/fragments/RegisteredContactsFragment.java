@@ -74,6 +74,7 @@ import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestUserContactsDelete;
+import net.iGap.request.RequestUserContactsGetList;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
@@ -325,11 +326,21 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             HelperPermision.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
+                    /**
+                     * if contacts size is zero send request for get contacts list
+                     * for insuring that contacts not exist really or not
+                     */
+                    if (results.size() == 0) {
+                        LoginActions.importContact();
+                    }
                     new LongOperation().execute();
                 }
 
                 @Override
                 public void deny() {
+                    if (results.size() == 0) {
+                        new RequestUserContactsGetList().userContactGetList();
+                    }
                     prgWaitingLiadList.setVisibility(View.GONE);
                 }
             });
@@ -342,14 +353,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         rcvListContact.setAdapter(fastItemAdapter);
         rcvListContact.setNestedScrollingEnabled(false);
 
-
-        /**
-         * if contacts size is zero send request for get contacts list
-         * for insuring that contacts not exist really or not
-         */
-        if (results.size() == 0) {
-            LoginActions.importContact();
-        }
     }
 
 
