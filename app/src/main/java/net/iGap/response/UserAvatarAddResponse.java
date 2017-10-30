@@ -55,6 +55,10 @@ public class UserAvatarAddResponse extends MessageHandler {
                 if (G.onUserAvatarResponse != null) {
                     G.onUserAvatarResponse.onAvatarAdd(userAvatarAddResponse.getAvatar());
                 }
+
+                if (G.onUserInfoMyClient != null) {
+                    G.onUserInfoMyClient.onUserInfoMyClient();
+                }
             }
         }, 1000);
     }

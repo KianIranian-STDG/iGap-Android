@@ -33,6 +33,7 @@ public class UserAvatarDeleteResponse extends MessageHandler {
         super.handler();
 
         final ProtoUserAvatarDelete.UserAvatarDeleteResponse.Builder userAvatarDeleteResponse = (ProtoUserAvatarDelete.UserAvatarDeleteResponse.Builder) message;
+
         if (G.onUserAvatarDelete != null) {
             G.onUserAvatarDelete.onUserAvatarDelete(userAvatarDeleteResponse.getId(), identity);
         } else {
@@ -45,6 +46,15 @@ public class UserAvatarDeleteResponse extends MessageHandler {
             });
             realm.close();
         }
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (G.onUserInfoMyClient != null) {
+                    G.onUserInfoMyClient.onUserInfoMyClient();
+                }
+            }
+        }, 1000);
     }
 
     @Override

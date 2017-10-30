@@ -164,7 +164,6 @@ import net.iGap.interfaces.OnSelectMenu;
 import net.iGap.interfaces.OnSetAction;
 import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnTwoStepPassword;
-import net.iGap.interfaces.OnUpdateAvatar;
 import net.iGap.interfaces.OnUpdateUserStatusInChangePage;
 import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserAvatarDelete;
@@ -421,7 +420,6 @@ public class G extends MultiDexApplication {
     public static OnClientUnsubscribeFromRoom onClientUnsubscribeFromRoom;
     public static OnGroupRemoveUsername onGroupRemoveUsername;
     public static OnGroupRevokeLink onGroupRevokeLink;
-    public static OnUpdateAvatar onUpdateAvatar;
     public static OnUserContactsBlock onUserContactsBlock;
     public static OnUserContactsUnBlock onUserContactsUnBlock;
     public static OnClientCondition onClientCondition;

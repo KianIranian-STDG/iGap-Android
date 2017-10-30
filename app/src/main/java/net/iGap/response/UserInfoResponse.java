@@ -32,7 +32,6 @@ public class UserInfoResponse extends MessageHandler {
     public int actionId;
     public Object message;
     public String identity;
-    public boolean canGetInfo = false;
 
     public UserInfoResponse(int actionId, Object protoClass, String identity) {
         super(actionId, protoClass, identity);
@@ -74,19 +73,15 @@ public class UserInfoResponse extends MessageHandler {
                     return;
                 }
 
-                if ((builder.getUser().getId() == userId)) {
-                    canGetInfo = true;
-                }
-
                 realm.close();
 
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
 
-                        if (canGetInfo) {
+                        if ((builder.getUser().getId() == userId)) {
                             if (G.onUserInfoMyClient != null) {
-                                G.onUserInfoMyClient.onUserInfoMyClient(builder.getUser(), identity);
+                                G.onUserInfoMyClient.onUserInfoMyClient();
                             }
                         }
 

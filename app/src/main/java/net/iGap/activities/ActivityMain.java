@@ -101,7 +101,6 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnRefreshActivity;
-import net.iGap.interfaces.OnUpdateAvatar;
 import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserInfoMyClient;
 import net.iGap.interfaces.OnUserSessionLogout;
@@ -142,7 +141,7 @@ import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, OnUpdateAvatar, DrawerLayout.DrawerListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -552,7 +551,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         G.helperNotificationAndBadge.cancelNotification();
         G.onGroupAvatarResponse = this;
-        G.onUpdateAvatar = this;
 
         G.onConvertToGroup = new OpenFragment() {
             @Override
@@ -1907,7 +1905,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             if (updateFromServer) {
                 getUserInfo(realmUserInfo);
             }
-            setImage(realmUserInfo.getUserId());
+            setImage();
         }
     }
 
@@ -2068,6 +2066,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.chatSendMessageUtil.setOnChatSendMessageResponseRoomList(this);
         G.onClientCondition = this;
         G.onClientGetRoomListResponse = this;
+        G.onUserInfoMyClient = this;
 
         startService(new Intent(this, ServiceContact.class));
 
@@ -2175,13 +2174,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     }
 
-    @Override
-    public void onUpdateAvatar(final long roomId) {
-
-    }
-
-    public void setImage(long userId) {
-        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
+    public void setImage() {
+        HelperAvatar.getAvatar(G.userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
                 G.handler.post(new Runnable() {
@@ -2234,8 +2228,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onUserInfoMyClient(ProtoGlobal.RegisteredUser user, String identity) {
-        setImage(user.getId());
+    public void onUserInfoMyClient() {
+        setImage();
     }
 
     private void chatGetRoom(final long peerId) {
