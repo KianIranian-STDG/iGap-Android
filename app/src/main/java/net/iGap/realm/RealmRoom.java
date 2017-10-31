@@ -612,7 +612,7 @@ public class RealmRoom extends RealmObject {
         }
     }
 
-    public static void updateMineRole(final ProtoGlobal.Room.Type type, long roomId, long memberId, final String role) {
+    public static void updateMineRole(long roomId, long memberId, final String role) {
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -626,7 +626,7 @@ public class RealmRoom extends RealmObject {
                 @Override
                 public void execute(Realm realm) {
 
-                    if (type == ProtoGlobal.Room.Type.GROUP) {
+                    if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP) {
                         GroupChatRole mRole;
                         if (role.contains(GroupChatRole.ADMIN.toString())) {
                             mRole = GroupChatRole.ADMIN;

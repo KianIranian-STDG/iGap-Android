@@ -11,10 +11,9 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.helper.HelperGC_Member;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupAddMember;
-import net.iGap.realm.RealmMember;
-import net.iGap.request.RequestClientGetRoom;
 
 public class GroupAddMemberResponse extends MessageHandler {
 
@@ -33,13 +32,8 @@ public class GroupAddMemberResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoGroupAddMember.GroupAddMemberResponse.Builder builder = (ProtoGroupAddMember.GroupAddMemberResponse.Builder) message;
-
-        if (builder.getUserId() == G.userId) {
-            new RequestClientGetRoom().clientGetRoom(builder.getRoomId(), null);
-        } else {
-            RealmMember.addMember(builder.getRoomId(), builder.getUserId(), builder.getRole().toString());
-        }
+        ProtoGroupAddMember.GroupAddMemberResponse.Builder builder = (ProtoGroupAddMember.GroupAddMemberResponse.Builder) message;
+        HelperGC_Member.addMember(builder.getRoomId(), builder.getUserId(), builder.getRole().toString());
         if (G.onGroupAddMember != null) {
             G.onGroupAddMember.onGroupAddMember(builder.getRoomId(), builder.getUserId());
         }

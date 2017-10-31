@@ -10,11 +10,10 @@
 
 package net.iGap.response;
 
-import io.realm.Realm;
 import net.iGap.G;
+import net.iGap.helper.HelperGC_Member;
 import net.iGap.proto.ProtoChannelKickMember;
 import net.iGap.proto.ProtoError;
-import net.iGap.realm.RealmMember;
 
 public class ChannelKickMemberResponse extends MessageHandler {
 
@@ -34,22 +33,11 @@ public class ChannelKickMemberResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
+        ProtoChannelKickMember.ChannelKickMemberResponse.Builder builder = (ProtoChannelKickMember.ChannelKickMemberResponse.Builder) message;
+        HelperGC_Member.kickMember(builder.getRoomId(), builder.getMemberId());
 
-        final ProtoChannelKickMember.ChannelKickMemberResponse.Builder builder = (ProtoChannelKickMember.ChannelKickMemberResponse.Builder) message;
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                isDeleted = RealmMember.kickMember(realm, builder.getRoomId(), builder.getMemberId());
-            }
-        });
-        realm.close();
-
-        if (isDeleted) {
-            if (G.onChannelKickMember != null) {
-                G.onChannelKickMember.onChannelKickMember(builder.getRoomId(), builder.getMemberId());
-            }
+        if (G.onChannelKickMember != null) {
+            G.onChannelKickMember.onChannelKickMember(builder.getRoomId(), builder.getMemberId());
         }
     }
 

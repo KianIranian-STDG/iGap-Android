@@ -11,11 +11,10 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.helper.HelperGC_Member;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.proto.ProtoChannelAddModerator;
 import net.iGap.proto.ProtoError;
-import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoom;
 
 public class ChannelAddModeratorResponse extends MessageHandler {
 
@@ -35,9 +34,7 @@ public class ChannelAddModeratorResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoChannelAddModerator.ChannelAddModeratorResponse.Builder builder = (ProtoChannelAddModerator.ChannelAddModeratorResponse.Builder) message;
-
-        RealmRoom.updateMineRole(ProtoGlobal.Room.Type.CHANNEL, builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MODERATOR.toString());
-        RealmRoom.updateMemberRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MODERATOR.toString());
+        HelperGC_Member.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MODERATOR.toString());
         //fastAdapter
         //if (G.onChannelAddModerator != null) {
         //    G.onChannelAddModerator.onChannelAddModerator(builder.getRoomId(), builder.getMemberId());

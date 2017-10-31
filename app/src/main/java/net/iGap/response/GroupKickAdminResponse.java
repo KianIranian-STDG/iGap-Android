@@ -11,11 +11,10 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.helper.HelperGC_Member;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.proto.ProtoError;
-import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupKickAdmin;
-import net.iGap.realm.RealmRoom;
 
 public class GroupKickAdminResponse extends MessageHandler {
 
@@ -35,8 +34,7 @@ public class GroupKickAdminResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoGroupKickAdmin.GroupKickAdminResponse.Builder builder = (ProtoGroupKickAdmin.GroupKickAdminResponse.Builder) message;
-        RealmRoom.updateMineRole(ProtoGlobal.Room.Type.GROUP, builder.getRoomId(), builder.getMemberId(), ProtoGlobal.GroupRoom.Role.MEMBER.toString());
-        RealmRoom.updateMemberRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MEMBER.toString());
+        HelperGC_Member.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MEMBER.toString());
 
         if (G.onGroupKickAdmin != null) {
             G.onGroupKickAdmin.onGroupKickAdmin(builder.getRoomId(), builder.getMemberId());

@@ -10,11 +10,10 @@
 
 package net.iGap.response;
 
-import io.realm.Realm;
 import net.iGap.G;
+import net.iGap.helper.HelperGC_Member;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupKickMember;
-import net.iGap.realm.RealmMember;
 
 public class GroupKickMemberResponse extends MessageHandler {
 
@@ -34,20 +33,11 @@ public class GroupKickMemberResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoGroupKickMember.GroupKickMemberResponse.Builder builder = (ProtoGroupKickMember.GroupKickMemberResponse.Builder) message;
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                isDeleted = RealmMember.kickMember(realm, builder.getRoomId(), builder.getMemberId());
-            }
-        });
-        realm.close();
+        ProtoGroupKickMember.GroupKickMemberResponse.Builder builder = (ProtoGroupKickMember.GroupKickMemberResponse.Builder) message;
+        HelperGC_Member.kickMember(builder.getRoomId(), builder.getMemberId());
 
-        if (isDeleted) {
-            if (G.onGroupKickMember != null) {
-                G.onGroupKickMember.onGroupKickMember(builder.getRoomId(), builder.getMemberId());
-            }
+        if (G.onGroupKickMember != null) {
+            G.onGroupKickMember.onGroupKickMember(builder.getRoomId(), builder.getMemberId());
         }
     }
 
