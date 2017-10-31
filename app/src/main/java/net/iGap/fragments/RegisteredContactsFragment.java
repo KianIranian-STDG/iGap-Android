@@ -58,6 +58,7 @@ import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.interfaces.OnPhoneContact;
 import net.iGap.interfaces.OnUserContactDelete;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
@@ -80,7 +81,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
 import static net.iGap.R.string.contacts;
 
-public class RegisteredContactsFragment extends BaseFragment implements OnUserContactDelete {
+public class RegisteredContactsFragment extends BaseFragment implements OnUserContactDelete, OnPhoneContact {
 
     private TextView menu_txt_titleToolbar;
     private ViewGroup vgAddContact, vgRoot;
@@ -122,6 +123,10 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     @Override
     public void onViewCreated(View view, final @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        G.onPhoneContact = this;
+        Contacts.phoneContactId = 0;
+        Contacts.getContact = true;
 
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
@@ -380,6 +385,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     @Override
     public void onDetach() {
         super.onDetach();
+        Contacts.getContact = false;
         hideProgress();
     }
 
@@ -412,6 +418,11 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     @Override
     public void onError(int majorCode, int minorCode) {
 
+    }
+
+    @Override
+    public void onPhoneContact(final ArrayList<StructListOfContact> contacts, final boolean isEnd) {
+        new AddAsync(contacts, isEnd).execute();
     }
 
     /**
@@ -955,31 +966,43 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
     private class LongOperation extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {
 
-
         @Override
         protected void onPreExecute() {
-
             prgWaitingLiadList.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected ArrayList<StructListOfContact> doInBackground(Void... params) {
+            Contacts.getMobileListContact();
+            return null;
+        }
+    }
 
-            return Contacts.getMobileListContact();
+    private class AddAsync extends AsyncTask<Void, Void, Void> {
+
+        private ArrayList<StructListOfContact> contacts;
+        private boolean isEnd;
+
+        public AddAsync(ArrayList<StructListOfContact> contacts, boolean isEnd) {
+            this.contacts = contacts;
+            this.isEnd = isEnd;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<StructListOfContact> structListOfContacts) {
-
-            //Collections.sort(structListOfContacts);
-
-            for (int i = 0; i < structListOfContacts.size(); i++) {
-                fastItemAdapter.add(new AdapterListContact(structListOfContacts.get(i).getDisplayName(), structListOfContacts.get(i).getPhone()).withIdentifier(100 + i));
-            }
-            prgWaitingLiadList.setVisibility(View.GONE);
-            super.onPostExecute(structListOfContacts);
+        protected Void doInBackground(Void... params) {
+            return null;
         }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            for (int i = 0; i < contacts.size(); i++) {
+                fastItemAdapter.add(new AdapterListContact(contacts.get(i).getDisplayName(), contacts.get(i).getPhone()).withIdentifier(100 + i));
+            }
+            if (isEnd) {
+                prgWaitingLiadList.setVisibility(View.GONE);
+            }
+            super.onPostExecute(aVoid);
+        }
     }
 }
 

@@ -147,6 +147,7 @@ import net.iGap.interfaces.OnMapClose;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnMapUsersGet;
 import net.iGap.interfaces.OnMute;
+import net.iGap.interfaces.OnPhoneContact;
 import net.iGap.interfaces.OnPushLoginToken;
 import net.iGap.interfaces.OnPushTwoStepVerification;
 import net.iGap.interfaces.OnQrCodeNewDevice;
@@ -452,6 +453,7 @@ public class G extends MultiDexApplication {
     public static OnMute onMute;
     public static OnClearRoomHistory onClearRoomHistory;
     public static OnReport onReport;
+    public static OnPhoneContact onPhoneContact;
 
     public static IDispatchTochEvent dispatchTochEventChat;
     public static IOnBackPressed onBackPressedChat;
