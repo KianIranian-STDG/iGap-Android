@@ -125,7 +125,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         super.onViewCreated(view, savedInstanceState);
 
         G.onPhoneContact = this;
-        Contacts.phoneContactId = 0;
+        Contacts.localPhoneContactId = 0;
         Contacts.getContact = true;
 
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -338,7 +338,13 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                     if (results.size() == 0) {
                         LoginActions.importContact();
                     }
-                    new LongOperation().execute();
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            prgWaitingLiadList.setVisibility(View.VISIBLE);
+                        }
+                    });
+                    new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
 
                 @Override
@@ -961,20 +967,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         @Override
         public ViewHolder getViewHolder(View v) {
             return new ViewHolder(v);
-        }
-    }
-
-    private class LongOperation extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {
-
-        @Override
-        protected void onPreExecute() {
-            prgWaitingLiadList.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected ArrayList<StructListOfContact> doInBackground(Void... params) {
-            Contacts.getMobileListContact();
-            return null;
         }
     }
 

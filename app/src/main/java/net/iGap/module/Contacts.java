@@ -30,9 +30,14 @@ import net.iGap.realm.RealmRegisteredInfo;
  */
 public class Contacts {
 
+    private static final int PHONE_CONTACT_FETCH_LIMIT = 100;
+
+    //Online Fetch Contacts Fields
+    public static int onlinePhoneContactId = 0;
+
+    //Local Fetch Contacts Fields
     public static boolean getContact = true;
-    private static final int PHONE_CONTACT_FETCH_LIMIT = 30;
-    public static int phoneContactId = 0;
+    public static int localPhoneContactId = 0;
 
 
     /**
@@ -54,24 +59,25 @@ public class Contacts {
 
         String lastHeader = "";
         for (int i = 0; i < contacts.size(); i++) {
-            if (contacts.get(i) == null) {
+            RealmContacts realmContacts = contacts.get(i);
+            if (realmContacts == null) {
                 continue;
             }
-            String header = contacts.get(i).getDisplay_name();
-            long peerId = contacts.get(i).getId();
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, contacts.get(i).getId());
+            String header = realmContacts.getDisplay_name();
+            long peerId = realmContacts.getId();
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, realmContacts.getId());
 
             // new header exists
             if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
                 StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", true, false, "");
-                structContactInfo.initials = contacts.get(i).getInitials();
-                structContactInfo.color = contacts.get(i).getColor();
+                structContactInfo.initials = realmContacts.getInitials();
+                structContactInfo.color = realmContacts.getColor();
                 structContactInfo.avatar = realmRegisteredInfo.getLastAvatar();
                 items.add(structContactInfo);
             } else {
                 StructContactInfo structContactInfo = new StructContactInfo(peerId, header, "", false, false, "");
-                structContactInfo.initials = contacts.get(i).getInitials();
-                structContactInfo.color = contacts.get(i).getColor();
+                structContactInfo.initials = realmContacts.getInitials();
+                structContactInfo.color = realmContacts.getColor();
                 structContactInfo.avatar = realmRegisteredInfo.getLastAvatar();
                 items.add(structContactInfo);
             }
@@ -82,15 +88,24 @@ public class Contacts {
         return items;
     }
 
-    public static ArrayList<StructListOfContact> getListOfContact() { //get List Of Contact
+    public static void getPhoneContactForServer() { //get List Of Contact
+
+        int fetchCount = 0;
+        boolean isEnd = false;
+
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
         ContentResolver cr = G.context.getContentResolver();
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+
+        String startContactId = ">=" + onlinePhoneContactId;
+        String selection = ContactsContract.Contacts._ID + startContactId;
+
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, selection, null, null);
 
         if (cur != null) {
             if (cur.getCount() > 0) {
                 while (cur.moveToNext()) {
                     int contactId = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                    onlinePhoneContactId = contactId + 1;
                     if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
                         Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{String.valueOf(contactId)}, null);
 
@@ -104,9 +119,14 @@ public class Contacts {
                             pCur.close();
                         }
                     }
+                    fetchCount++;
                 }
             }
             cur.close();
+        }
+
+        if (fetchCount < PHONE_CONTACT_FETCH_LIMIT) {
+            isEnd = true;
         }
 
         ArrayList<StructListOfContact> resultContactList = new ArrayList<>();
@@ -142,10 +162,21 @@ public class Contacts {
             }
         }
 
-        return resultContactList;
+        if (G.onContactFetchForServer != null) {
+            G.onContactFetchForServer.onFetch(resultContactList);
+        }
+
+        if (!isEnd) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new FetchContactForServer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+            }, 100);
+        }
     }
 
-    public static void getMobileListContact() { //get List Of Contact
+    public static void getPhoneContactForClient() { //get List Of Contact
 
         int fetchCount = 0;
         boolean isEnd = false;
@@ -154,7 +185,7 @@ public class Contacts {
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
         ContentResolver cr = G.context.getContentResolver();
 
-        String startContactId = ">=" + phoneContactId;
+        String startContactId = ">=" + localPhoneContactId;
         String selection = ContactsContract.Contacts._ID + startContactId;
 
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, selection, null, null);//ContactsContract.Contacts.DISPLAY_NAME + " ASC"
@@ -167,7 +198,7 @@ public class Contacts {
                     }
 
                     int contactId = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                    phoneContactId = contactId + 1;//plus for fetch next contact in future query
+                    localPhoneContactId = contactId + 1;//plus for fetch next contact in future query
                     if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
                         Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{String.valueOf(contactId)}, null);
                         if (pCur != null) {
@@ -210,16 +241,28 @@ public class Contacts {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    new LongOperation().execute();
+                    new FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
             }, 500);
         }
     }
 
-    private static class LongOperation extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {
+
+    /**
+     * ******************************************** Inner Classes ********************************************
+     */
+    public static class FetchContactForClient extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {
         @Override
         protected ArrayList<StructListOfContact> doInBackground(Void... params) {
-            Contacts.getMobileListContact();
+            Contacts.getPhoneContactForClient();
+            return null;
+        }
+    }
+
+    public static class FetchContactForServer extends AsyncTask<Void, Void, ArrayList<StructListOfContact>> {
+        @Override
+        protected ArrayList<StructListOfContact> doInBackground(Void... params) {
+            Contacts.getPhoneContactForServer();
             return null;
         }
     }
