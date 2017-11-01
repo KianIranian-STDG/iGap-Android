@@ -11,6 +11,7 @@
 package net.iGap.module;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -40,6 +41,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.interfaces.IResendMessage;
+import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.realm.RealmAttachment;
@@ -596,6 +598,22 @@ public final class AppUtils {
         }
 
         return outputUri;
+    }
+
+    public static void shareItem(Intent intent, StructMessageInfo messageInfo) {
+
+        try {
+            String message = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessage() : messageInfo.messageText;
+            if (message != null) {
+                intent.putExtra(Intent.EXTRA_TEXT, message);
+            }
+            String filePath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
+            if (filePath != null) {
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

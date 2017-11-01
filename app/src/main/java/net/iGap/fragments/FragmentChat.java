@@ -304,7 +304,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
+    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
 
     public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
@@ -2655,8 +2655,11 @@ public class FragmentChat extends BaseFragment
 
     private void putExtra(Intent intent, StructMessageInfo messageInfo) {
         try {
+            String message = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getMessage() : messageInfo.messageText;
+            if (message != null) {
+                intent.putExtra(Intent.EXTRA_TEXT, message);
+            }
             String filePath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
-
             if (filePath != null) {
                 intent.putExtra(Intent.EXTRA_STREAM, AppUtils.createtUri(new File(filePath)));
             }
@@ -2858,13 +2861,13 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onMessageUpdate(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, ProtoGlobal.RoomMessage roomMessage) {
+    public void onMessageUpdate(long roomId, final long messageId, final ProtoGlobal.RoomMessageStatus status, final String identity, final ProtoGlobal.RoomMessage roomMessage) {
         // I'm in the room
         if (roomId == mRoomId && mAdapter != null) {
             G.handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.updateMessageIdAndStatus(messageId, identity, status);
+                    mAdapter.updateMessageIdAndStatus(messageId, identity, status, roomMessage);
                 }
             });
         }
@@ -3035,14 +3038,14 @@ public class FragmentChat extends BaseFragment
         StructMessageInfo messageInfo;
         if (isReply()) {
             messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
         } else {
             if (isMessageWrote()) {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             } else {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             }
         }
 
@@ -4559,7 +4562,7 @@ public class FragmentChat extends BaseFragment
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-                MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+            MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         };
 
         cursor = activity.getContentResolver().query(uri, projection, null, null, null);
@@ -4970,19 +4973,19 @@ public class FragmentChat extends BaseFragment
                 case "AUDIO":
                 case "AUDIO_TEXT":
                     intent.setType("audio/*");
-                    putExtra(intent, messageInfo);
+                    AppUtils.shareItem(intent, messageInfo);
                     chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_audio_file);
                     break;
                 case "IMAGE":
                 case "IMAGE_TEXT":
                     intent.setType("image/*");
-                    putExtra(intent, messageInfo);
+                    AppUtils.shareItem(intent, messageInfo);
                     chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_image);
                     break;
                 case "VIDEO":
                 case "VIDEO_TEXT":
-                    intent.setType("video/*");
-                    putExtra(intent, messageInfo);
+                    intent.setType("image/*");
+                    AppUtils.shareItem(intent, messageInfo);
                     chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_video_file);
                     break;
                 case "FILE":
@@ -7054,7 +7057,7 @@ public class FragmentChat extends BaseFragment
         long gapMessageId;
         if (direction == DOWN) {
             resultsUp =
-                    getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+                getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
              * if for UP state client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet

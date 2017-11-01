@@ -424,22 +424,13 @@ public class FragmentShowImage extends BaseFragment {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("image/*");
                 //+Realm realm = Realm.getDefaultInstance();
-                putExtra(intent, StructMessageInfo.convert(getRealm(), roomMessage));
+                AppUtils.shareItem(intent, StructMessageInfo.convert(getRealm(), roomMessage));
+                //putExtra(intent, StructMessageInfo.convert(getRealm(), roomMessage));
                 startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
             }
         }
     }
 
-    private void putExtra(Intent intent, StructMessageInfo messageInfo) {
-        try {
-            String filePath = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getAttachment().getLocalFilePath() : messageInfo.attachment.getLocalFilePath();
-            if (filePath != null) {
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * share Image and video

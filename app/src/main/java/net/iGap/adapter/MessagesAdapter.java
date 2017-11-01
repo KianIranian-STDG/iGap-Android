@@ -28,6 +28,7 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnChatMessageRemove;
 import net.iGap.interfaces.OnChatMessageSelectionChanged;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.structs.StructMessageAttachment;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
@@ -320,12 +321,12 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
 
     /**
      * update message id and status
-     *
-     * @param messageId new message id
+     *  @param messageId new message id
      * @param identity old manually defined as identity id
      * @param status ProtoGlobal.RoomMessageStatus
+     * @param roomMessage
      */
-    public void updateMessageIdAndStatus(long messageId, String identity, ProtoGlobal.RoomMessageStatus status) {
+    public void updateMessageIdAndStatus(long messageId, String identity, ProtoGlobal.RoomMessageStatus status, ProtoGlobal.RoomMessage roomMessage) {
         List<Item> items = getAdapterItems();
         for (int i = items.size() - 1; i >= 0; i--) {
             Item messageInfo = items.get(i);
@@ -334,6 +335,9 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                     if (messageInfo.mMessage.messageID.equals(identity)) {
                         messageInfo.mMessage.status = status.toString();
                         messageInfo.mMessage.messageID = Long.toString(messageId);
+                        if (roomMessage.hasAttachment()) {
+                            messageInfo.mMessage.attachment.localFilePath = AndroidUtils.getFilePathWithCashId(roomMessage.getAttachment().getCacheId(), roomMessage.getAttachment().getName(), roomMessage.getMessageType());
+                        }
                         set(i, messageInfo);
                         break;
                     }
