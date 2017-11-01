@@ -3,6 +3,7 @@ package net.iGap.fragments;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ClipData;
@@ -5644,6 +5645,7 @@ public class FragmentChat extends BaseFragment
         });
     }
 
+    @SuppressLint("RestrictedApi")
     private void inflateReplayLayoutIntoStub(StructMessageInfo chatItem) {
         if (rootView.findViewById(R.id.replayLayoutAboveEditText) == null) {
             ViewStubCompat stubView = (ViewStubCompat) rootView.findViewById(R.id.replayLayoutStub);
