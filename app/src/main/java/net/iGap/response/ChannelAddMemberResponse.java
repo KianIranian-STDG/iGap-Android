@@ -11,7 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.G;
-import net.iGap.helper.HelperGC_Member;
+import net.iGap.helper.HelperMember;
 import net.iGap.proto.ProtoChannelAddMember;
 import net.iGap.proto.ProtoError;
 
@@ -33,7 +33,7 @@ public class ChannelAddMemberResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoChannelAddMember.ChannelAddMemberResponse.Builder builder = (ProtoChannelAddMember.ChannelAddMemberResponse.Builder) message;
-        HelperGC_Member.addMember(builder.getRoomId(), builder.getUserId(), builder.getRole().toString());
+        HelperMember.addMember(builder.getRoomId(), builder.getUserId(), builder.getRole().toString());
         if (G.onChannelAddMember != null) {
             G.onChannelAddMember.onChannelAddMember(builder.getRoomId(), builder.getUserId(), builder.getRole());
         }

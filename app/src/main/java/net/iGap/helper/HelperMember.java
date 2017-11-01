@@ -15,7 +15,7 @@ import net.iGap.realm.RealmMember;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestClientGetRoom;
 
-public class HelperGC_Member {
+public class HelperMember {
 
     public static void addMember(long roomId, long userId, String role) {
         if (userId == G.userId) {

@@ -120,24 +120,6 @@ public class RealmChannelRoom extends RealmObject {
         realm.close();
     }
 
-    public static void updateUsername(final String username) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null) {
-                    RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
-                    if (realmChannelRoom != null) {
-                        realmChannelRoom.setUsername("iGap.net" + username);
-                        realmChannelRoom.setPrivate(false);
-                    }
-                }
-            }
-        });
-        realm.close();
-    }
-
     public static ProtoGlobal.ChannelRoom.Role detectMineRole(long roomId) {
         ProtoGlobal.ChannelRoom.Role role = ProtoGlobal.ChannelRoom.Role.UNRECOGNIZED;
         Realm realm = Realm.getDefaultInstance();

@@ -30,7 +30,7 @@ public class ChatDeleteMessageResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder chatDeleteMessage = (ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder) message;
+        ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder chatDeleteMessage = (ProtoChatDeleteMessage.ChatDeleteMessageResponse.Builder) message;
         RealmRoomMessage.deleteMessageServerResponse(chatDeleteMessage.getRoomId(), chatDeleteMessage.getMessageId(), chatDeleteMessage.getDeleteVersion(), chatDeleteMessage.getResponse());
     }
 

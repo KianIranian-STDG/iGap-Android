@@ -30,7 +30,7 @@ public class GroupDeleteMessageResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder builder = (ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder) message;
+        ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder builder = (ProtoGroupDeleteMessage.GroupDeleteMessageResponse.Builder) message;
         RealmRoomMessage.deleteMessageServerResponse(builder.getRoomId(), builder.getMessageId(), builder.getDeleteVersion(), builder.getResponse());
     }
 

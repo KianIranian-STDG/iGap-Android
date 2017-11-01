@@ -483,25 +483,20 @@ public class HelperLogMessage {
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
-                public void onChatGetRoom(final long roomId) {
+                public void onChatGetRoom(final ProtoGlobal.Room room) {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             FragmentContactsProfile contactsProfile = new FragmentContactsProfile();
                             Bundle bundle = new Bundle();
                             bundle.putLong("peerId", id);
-                            bundle.putLong("RoomId", roomId);
+                            bundle.putLong("RoomId", room.getId());
                             bundle.putString("enterFrom", "GROUP");
                             contactsProfile.setArguments(bundle);
                             new HelperFragment(contactsProfile).setReplace(false).load();
                             G.onChatGetRoom = null;
                         }
                     });
-                }
-
-                @Override
-                public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
-
                 }
 
                 @Override

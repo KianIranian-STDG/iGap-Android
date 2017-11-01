@@ -53,20 +53,15 @@ public class HelperPublicMethod {
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
-                public void onChatGetRoom(final long roomId) {
+                public void onChatGetRoom(final ProtoGlobal.Room room) {
 
                     if (onError != null) {
                         onError.error();
                     }
 
-                    getUserInfo(peerId, roomId, onComplete, onError);
+                    getUserInfo(peerId, room.getId(), onComplete, onError);
 
                     G.onChatGetRoom = null;
-                }
-
-                @Override
-                public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
-
                 }
 
                 @Override

@@ -13,8 +13,10 @@ package net.iGap.realm;
 import io.realm.Realm;
 import io.realm.RealmChannelExtraRealmProxy;
 import io.realm.RealmObject;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.module.structs.StructChannelExtra;
+import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoGlobal;
 import org.parceler.Parcel;
 
@@ -77,7 +79,10 @@ import org.parceler.Parcel;
     }
 
     public static RealmChannelExtra putOrUpdate(Realm realm, long messageId, ProtoGlobal.RoomMessage.ChannelExtra channelExtra) {
-        RealmChannelExtra realmChannelExtra = realm.createObject(RealmChannelExtra.class);
+        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+        if (realmChannelExtra == null) {
+            realmChannelExtra = realm.createObject(RealmChannelExtra.class);
+        }
         realmChannelExtra.setMessageId(messageId);
         realmChannelExtra.setSignature(channelExtra.getSignature());
         realmChannelExtra.setThumbsUp(channelExtra.getThumbsUpLabel());
@@ -117,6 +122,24 @@ import org.parceler.Parcel;
                         realmChannelExtra.setThumbsUp(counterLabel);
                     } else {
                         realmChannelExtra.setThumbsDown(counterLabel);
+                    }
+                }
+            }
+        });
+        realm.close();
+    }
+
+    public static void updateMessageStats(final List<ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats> statsArrayList) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for (ProtoChannelGetMessagesStats.ChannelGetMessagesStatsResponse.Stats stats : statsArrayList) {
+                    RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, stats.getMessageId()).findFirst();
+                    if (realmChannelExtra != null) {
+                        realmChannelExtra.setThumbsUp(stats.getThumbsUpLabel());
+                        realmChannelExtra.setThumbsDown(stats.getThumbsDownLabel());
+                        realmChannelExtra.setViewsLabel(stats.getViewsLabel());
                     }
                 }
             }

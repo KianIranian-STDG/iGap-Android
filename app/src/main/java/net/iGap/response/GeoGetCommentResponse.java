@@ -31,7 +31,7 @@ public class GeoGetCommentResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoGeoGetComment.GeoGetCommentResponse.Builder builder = (ProtoGeoGetComment.GeoGetCommentResponse.Builder) message;
+        ProtoGeoGetComment.GeoGetCommentResponse.Builder builder = (ProtoGeoGetComment.GeoGetCommentResponse.Builder) message;
         RealmGeoNearbyDistance.updateComment(Long.parseLong(identity), builder.getComment());
 
         if (G.onGeoGetComment != null) {

@@ -11,7 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.G;
-import net.iGap.helper.HelperGC_Member;
+import net.iGap.helper.HelperMember;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.proto.ProtoChannelAddAdmin;
 import net.iGap.proto.ProtoError;
@@ -34,7 +34,7 @@ public class ChannelAddAdminResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoChannelAddAdmin.ChannelAddAdminResponse.Builder builder = (ProtoChannelAddAdmin.ChannelAddAdminResponse.Builder) message;
-        HelperGC_Member.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.ADMIN.toString());
+        HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.ADMIN.toString());
         //fastAdapter
         //if (G.onChannelAddAdmin != null) {
         //    G.onChannelAddAdmin.onChannelAddAdmin(builder.getRoomId(), builder.getMemberId());

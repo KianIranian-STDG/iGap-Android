@@ -360,7 +360,9 @@ public class RealmMember extends RealmObject {
                 }
                 query = query.equalTo(RealmMemberFields.PEER_ID, findMember.get(i).getId());
             }
-            searchMember = query.findAll();
+            if (findMember.size() > 0 || (filter == null || filter.length() == 0)) {
+                searchMember = query.findAll();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

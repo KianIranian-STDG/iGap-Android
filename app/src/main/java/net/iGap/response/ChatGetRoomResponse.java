@@ -46,13 +46,9 @@ public class ChatGetRoomResponse extends MessageHandler {
 
         if ((chatGetRoomResponse.getRoom().getType() == ProtoGlobal.Room.Type.CHANNEL) || identity != null) {
             RealmRoom.putOrUpdate(chatGetRoomResponse.getRoom());
-
-            if (G.onChatGetRoom != null) {
-                G.onChatGetRoom.onChatGetRoomCompletely(chatGetRoomResponse.getRoom());
-            }
         } else {
             if (G.onChatGetRoom != null) {
-                G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoom().getId());
+                G.onChatGetRoom.onChatGetRoom(chatGetRoomResponse.getRoom());
             }
         }
     }

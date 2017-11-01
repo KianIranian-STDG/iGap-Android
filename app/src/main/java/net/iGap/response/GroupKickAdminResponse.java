@@ -11,7 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.G;
-import net.iGap.helper.HelperGC_Member;
+import net.iGap.helper.HelperMember;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupKickAdmin;
@@ -34,7 +34,7 @@ public class GroupKickAdminResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoGroupKickAdmin.GroupKickAdminResponse.Builder builder = (ProtoGroupKickAdmin.GroupKickAdminResponse.Builder) message;
-        HelperGC_Member.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MEMBER.toString());
+        HelperMember.updateRole(builder.getRoomId(), builder.getMemberId(), ChannelChatRole.MEMBER.toString());
 
         if (G.onGroupKickAdmin != null) {
             G.onGroupKickAdmin.onGroupKickAdmin(builder.getRoomId(), builder.getMemberId());

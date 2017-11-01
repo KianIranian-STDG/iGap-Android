@@ -244,11 +244,7 @@ public class SearchFragment extends BaseFragment {
 
         int size = list.size();
 
-        for (RealmRoom realmRoom : realm.where(RealmRoom.class)
-            .equalTo(RealmRoomFields.KEEP_ROOM, false)
-            .equalTo(RealmRoomFields.IS_DELETED, false)
-            .contains(RealmRoomFields.TITLE, text, Case.INSENSITIVE)
-            .findAll()) {
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).contains(RealmRoomFields.TITLE, text, Case.INSENSITIVE).findAll()) {
 
             StructSearch item = new StructSearch();
 
@@ -377,22 +373,17 @@ public class SearchFragment extends BaseFragment {
         } else {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
-                public void onChatGetRoom(final long roomId) {
+                public void onChatGetRoom(final ProtoGlobal.Room room) {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
                             if (G.fragmentActivity != null) {
                                 removeFromBaseFragment(SearchFragment.this);
                             }
-                            new GoToChatActivity(roomId).setPeerID(id).startActivity();
+                            new GoToChatActivity(room.getId()).setPeerID(id).startActivity();
                             G.onChatGetRoom = null;
                         }
                     });
-                }
-
-                @Override
-                public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
-
                 }
 
                 @Override

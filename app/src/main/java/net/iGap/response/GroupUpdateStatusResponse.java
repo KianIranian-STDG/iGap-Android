@@ -10,14 +10,9 @@
 
 package net.iGap.response;
 
-import io.realm.Realm;
-import net.iGap.G;
-import net.iGap.proto.ProtoGlobal;
+import net.iGap.helper.HelperUpdateMessageStatue;
 import net.iGap.proto.ProtoGroupUpdateStatus;
 import net.iGap.proto.ProtoResponse;
-import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomMessage;
 
 public class GroupUpdateStatusResponse extends MessageHandler {
 
@@ -36,44 +31,10 @@ public class GroupUpdateStatusResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder builder = (ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder) message;
-        final ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(builder.getResponse());
+        ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder builder = (ProtoGroupUpdateStatus.GroupUpdateStatusResponse.Builder) message;
+        ProtoResponse.Response.Builder response = ProtoResponse.Response.newBuilder().mergeFrom(builder.getResponse());
 
-        if (!response.getId().isEmpty()) { // I'm sender
-            RealmClientCondition.deleteOfflineAction(builder.getMessageId(), builder.getStatus());
-        } else { // I'm recipient
-            final Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    /**
-                     * clear unread count if another account was saw this message
-                     */
-                    RealmRoom.clearUnreadCount(builder.getRoomId(), builder.getUpdaterAuthorHash(), builder.getStatus(), builder.getMessageId());
-
-                    /**
-                     * find message from database and update its status
-                     */
-
-                    RealmRoomMessage roomMessage = RealmRoomMessage.setStatusServerResponse(realm, builder.getMessageId(), builder.getStatusVersion(), builder.getStatus());
-                    if (roomMessage != null) {
-                        if (G.chatUpdateStatusUtil != null) {
-                            G.chatUpdateStatusUtil.onChatUpdateStatus(builder.getRoomId(), builder.getMessageId(), builder.getStatus(), builder.getStatusVersion());
-                        }
-                    } else if (builder.getStatus() == ProtoGlobal.RoomMessageStatus.SEEN) {
-                        /**
-                         * reason : getRoomList will be updated status in Realm and after that when
-                         * client get status here and was in chat will not be updated status in second
-                         * so i use from this block for avoid from this problem
-                         */
-                        if (G.chatUpdateStatusUtil != null) {
-                            G.chatUpdateStatusUtil.onChatUpdateStatus(builder.getRoomId(), builder.getMessageId(), builder.getStatus(), builder.getStatusVersion());
-                        }
-                    }
-                }
-            });
-            realm.close();
-        }
+        HelperUpdateMessageStatue.updateStatus(builder.getRoomId(), builder.getMessageId(), builder.getUpdaterAuthorHash(), builder.getStatus(), builder.getStatusVersion(), response);
     }
 
     @Override

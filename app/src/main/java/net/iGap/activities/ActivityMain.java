@@ -2131,7 +2131,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onChatClearMessage(final long roomId, long clearId, final ProtoResponse.Response response) {
+    public void onChatClearMessage(final long roomId, long clearId) {
         //empty
     }
 
@@ -2244,16 +2244,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
-                public void onChatGetRoom(final long roomId) {
+                public void onChatGetRoom(ProtoGlobal.Room room) {
 
-                    new GoToChatActivity(roomId).setPeerID(peerId).startActivity();
+                    new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity();
 
                     G.onChatGetRoom = null;
-                }
-
-                @Override
-                public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
-
                 }
 
                 @Override

@@ -11,7 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.G;
-import net.iGap.helper.HelperGC_Member;
+import net.iGap.helper.HelperMember;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupAddMember;
 
@@ -33,7 +33,7 @@ public class GroupAddMemberResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoGroupAddMember.GroupAddMemberResponse.Builder builder = (ProtoGroupAddMember.GroupAddMemberResponse.Builder) message;
-        HelperGC_Member.addMember(builder.getRoomId(), builder.getUserId(), builder.getRole().toString());
+        HelperMember.addMember(builder.getRoomId(), builder.getUserId(), builder.getRole().toString());
         if (G.onGroupAddMember != null) {
             G.onGroupAddMember.onGroupAddMember(builder.getRoomId(), builder.getUserId());
         }

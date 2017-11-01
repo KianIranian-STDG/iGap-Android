@@ -970,7 +970,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                     public void run() {
                         isPrivate = true;
                         setTextGroupLik();
-                        RealmRoom.setPrivate(roomId);
                     }
                 });
             }
@@ -1133,8 +1132,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
                         linkUsername = username;
                         setTextGroupLik();
-
-                        RealmRoom.updateUsername(roomId, username);
                     }
                 });
             }
@@ -1813,7 +1810,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     public void onGroupRevokeLink(final long roomId, final String inviteLink, final String inviteToken) {
         hideProgressBar();
 
-        RealmGroupRoom.revokeLink(roomId, inviteLink, inviteToken);
         G.handler.post(new Runnable() {
             @Override
             public void run() {

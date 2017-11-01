@@ -14,13 +14,13 @@ import net.iGap.proto.ProtoUserContactsEdit;
 
 public class RequestUserContactsEdit {
 
-    public void contactsEdit(long phone, String first_name, String last_name) {
+    public void contactsEdit(long userId, long phone, String first_name, String last_name) {
         ProtoUserContactsEdit.UserContactsEdit.Builder builder = ProtoUserContactsEdit.UserContactsEdit.newBuilder();
         builder.setPhone(phone);
         builder.setFirstName(first_name);
         builder.setLastName(last_name);
 
-        RequestWrapper requestWrapper = new RequestWrapper(109, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(109, builder, userId + "");
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

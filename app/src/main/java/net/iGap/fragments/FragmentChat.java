@@ -2702,7 +2702,7 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onChatClearMessage(final long roomId, final long clearId, ProtoResponse.Response response) {
+    public void onChatClearMessage(final long roomId, final long clearId) {
         G.handler.post(new Runnable() {
             @Override
             public void run() {

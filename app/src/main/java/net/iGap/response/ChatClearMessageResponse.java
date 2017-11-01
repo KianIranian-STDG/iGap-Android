@@ -10,13 +10,8 @@
 
 package net.iGap.response;
 
-import io.realm.Realm;
-import net.iGap.G;
+import net.iGap.helper.HelperClearMessage;
 import net.iGap.proto.ProtoChatClearMessage;
-import net.iGap.realm.RealmClientCondition;
-import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomFields;
-import net.iGap.realm.RealmRoomMessage;
 
 public class ChatClearMessageResponse extends MessageHandler {
 
@@ -34,27 +29,8 @@ public class ChatClearMessageResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoChatClearMessage.ChatClearMessageResponse.Builder chatClearMessage = (ProtoChatClearMessage.ChatClearMessageResponse.Builder) message;
-
-        if (chatClearMessage.getResponse().getId().isEmpty()) { // another account cleared message
-            RealmClientCondition.setClearId(chatClearMessage.getRoomId(), chatClearMessage.getClearId());
-        }
-
-        Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, chatClearMessage.getRoomId()).findFirst();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                if (realmRoom != null && ((realmRoom.getLastMessage() == null) || (realmRoom.getLastMessage().getMessageId() <= chatClearMessage.getClearId()))) {
-                    realmRoom.setUnreadCount(0);
-                    realmRoom.setLastMessage(null);
-                    G.clearMessagesUtil.onChatClearMessage(chatClearMessage.getRoomId(), chatClearMessage.getClearId(), chatClearMessage.getResponse());
-                }
-            }
-        });
-        realm.close();
-
-        RealmRoomMessage.deleteAllMessageLessThan(chatClearMessage.getRoomId(), chatClearMessage.getClearId());
+        ProtoChatClearMessage.ChatClearMessageResponse.Builder chatClearMessage = (ProtoChatClearMessage.ChatClearMessageResponse.Builder) message;
+        HelperClearMessage.clearMessage(chatClearMessage.getRoomId(), chatClearMessage.getClearId());
     }
 
     @Override

@@ -540,7 +540,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         G.onChannelUpdateSignature = new OnChannelUpdateSignature() {
             @Override
             public void onChannelUpdateSignatureResponse(final long roomId, final boolean signature) {
-                RealmRoom.updateSignature(roomId, signature);
+                // handle realm to response class
             }
 
             @Override
@@ -1714,8 +1714,6 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
                         linkUsername = username;
                         setTextChannelLik();
-
-                        RealmChannelRoom.updateUsername(edtUserName.getText().toString());
                     }
                 });
             }

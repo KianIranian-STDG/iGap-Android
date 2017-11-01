@@ -80,4 +80,15 @@ public class RealmCallLog extends RealmObject {
         });
         realm.close();
     }
+
+    public static void clearCallLog(final long clearId) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(RealmCallLog.class).lessThanOrEqualTo(RealmCallLogFields.ID, clearId).findAll().deleteAllFromRealm();
+            }
+        });
+        realm.close();
+    }
 }

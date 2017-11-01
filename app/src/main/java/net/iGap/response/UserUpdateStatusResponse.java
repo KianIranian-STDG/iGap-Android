@@ -32,7 +32,7 @@ public class UserUpdateStatusResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        final ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder builder = (ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder) message;
+        ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder builder = (ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder) message;
 
         RealmRegisteredInfo.updateStatus(builder.getUserId(), builder.getResponse().getTimestamp(), builder.getStatus().toString());
 

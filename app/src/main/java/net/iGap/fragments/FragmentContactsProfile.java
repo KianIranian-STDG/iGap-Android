@@ -300,20 +300,15 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     } else {
                         G.onChatGetRoom = new OnChatGetRoom() {
                             @Override
-                            public void onChatGetRoom(final long roomId) {
+                            public void onChatGetRoom(final ProtoGlobal.Room room) {
                                 G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         new HelperFragment().removeAll(true);
-                                        new GoToChatActivity(roomId).setPeerID(userId).startActivity();
+                                        new GoToChatActivity(room.getId()).setPeerID(userId).startActivity();
                                         G.onChatGetRoom = null;
                                     }
                                 });
-                            }
-
-                            @Override
-                            public void onChatGetRoomCompletely(ProtoGlobal.Room room) {
-
                             }
 
                             @Override
@@ -527,7 +522,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                             long po = Long.parseLong(mPhone);
                             String firstName = edtFirstName.getText().toString().trim();
                             String lastName = edtLastName.getText().toString().trim();
-                            new RequestUserContactsEdit().contactsEdit(po, firstName, lastName);
+                            new RequestUserContactsEdit().contactsEdit(userId, po, firstName, lastName);
                             dialog.dismiss();
                         }
                     });
@@ -536,10 +531,6 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                     G.onUserContactEdit = new OnUserContactEdit() {
                         @Override
                         public void onContactEdit(final String firstName, final String lastName, final String initials) {
-
-                            RealmRegisteredInfo.updateName(userId, firstName, lastName, initials);
-                            RealmContacts.updateName(userId, firstName, lastName, initials);
-                            RealmRoom.updateChatTitle(userId, firstName + " " + lastName);
 
                             setAvatar();
                             G.handler.post(new Runnable() {
