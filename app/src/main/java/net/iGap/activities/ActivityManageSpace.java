@@ -28,7 +28,7 @@ import static net.iGap.module.FileUtils.getFolderSize;
 
 public class ActivityManageSpace extends ActivityEnhanced {
     private SharedPreferences sharedPreferences;
-    private boolean isForever;
+    private int isForever;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,9 +50,11 @@ public class ActivityManageSpace extends ActivityEnhanced {
 
         final TextView txtSubKeepMedia = (TextView) findViewById(R.id.st_txt_sub_keepMedia);
         ViewGroup ltKeepMedia = (ViewGroup) findViewById(R.id.st_layout_keepMedia);
-        isForever = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
-        if (!isForever) {
-            txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
+        isForever = sharedPreferences.getInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
+        if (isForever == 30) {
+            txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1month));
+        } else if (isForever == 180) {
+            txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_6month));
         } else {
             txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
         }
@@ -60,11 +62,13 @@ public class ActivityManageSpace extends ActivityEnhanced {
         ltKeepMedia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isForever = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
+                isForever = sharedPreferences.getInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
                 final int position;
-                if (!isForever) {
-                    txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
+                if (isForever == 30) {
+                    txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1month));
                     position = 1;
+                } else if (isForever == 180) {
+                    position = 2;
                 } else {
                     txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
                     position = 0;
@@ -77,16 +81,23 @@ public class ActivityManageSpace extends ActivityEnhanced {
                         switch (which) {
                             case 0: {
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, true);
+                                editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
                                 editor.apply();
                                 txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_forever));
                                 break;
                             }
                             case 1: {
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
+                                editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 30);
                                 editor.apply();
-                                txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1week));
+                                txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_1month));
+                                break;
+                            }
+                            case 2: {
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 180);
+                                editor.apply();
+                                txtSubKeepMedia.setText(getResources().getString(R.string.keep_media_6month));
                                 break;
                             }
                         }

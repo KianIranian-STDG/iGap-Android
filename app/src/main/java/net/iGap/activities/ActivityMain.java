@@ -585,29 +585,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         verifyAccount();
 
-        boolean keepMedia = sharedPreferences.getBoolean(SHP_SETTING.KEY_KEEP_MEDIA, false);
-        if (keepMedia && G.isCalculatKeepMedia) {// if Was selected keep media at 1week
-            G.isCalculatKeepMedia = false;
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    long last;
-                    long currentTime = G.currentTime;
-                    long saveTime = sharedPreferences.getLong(SHP_SETTING.KEY_KEEP_MEDIA_TIME, -1);
-                    if (saveTime == -1) {
-                        last = 7;
-                    } else {
-                        long oneWeeks = (24L * 60L * 60L * 1000L);
+        checkKeepMedia();
 
-                        long b = currentTime - saveTime;
-                        last = b / oneWeeks;
-                    }
-                    if (last >= 7) {
-                        new HelperCalculateKeepMedia().calculateTime();
-                    }
-                }
-            }, 5000);
-        }
 
         G.onVerifyNewDevice = new OnVerifyNewDevice() {
             @Override
@@ -637,6 +616,34 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 });
             }
         };
+    }
+
+    private void checkKeepMedia() {
+
+        final int keepMedia = sharedPreferences.getInt(SHP_SETTING.KEY_KEEP_MEDIA_NEW, 0);
+        if (keepMedia != 0 && G.isCalculatKeepMedia) {// if Was selected keep media at 1week
+            G.isCalculatKeepMedia = false;
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    long last;
+                    long currentTime = G.currentTime;
+                    long saveTime = sharedPreferences.getLong(SHP_SETTING.KEY_KEEP_MEDIA_TIME, -1);
+                    if (saveTime == -1) {
+                        last = keepMedia;
+                    } else {
+                        long days = (long) keepMedia * 1000L * 60 * 60 * 24;
+
+                        long b = currentTime - saveTime;
+                        last = b / days;
+                    }
+
+                    if (last >= keepMedia) {
+                        new HelperCalculateKeepMedia().calculateTime();
+                    }
+                }
+            }, 5000);
+        }
     }
 
     @Override

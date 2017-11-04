@@ -92,6 +92,7 @@ public class SHP_SETTING {
 
     // keep media
     public static final String KEY_KEEP_MEDIA = "KEY_KEEP_MEDIA";
+    public static final String KEY_KEEP_MEDIA_NEW = "KEY_KEEP_MEDIA_NEW";
 
     // default color
     public static final String KEY_APP_BAR_COLOR = "KEY_APP_BAR_COLOR";
