@@ -100,6 +100,7 @@ import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnMapRegisterState;
+import net.iGap.interfaces.OnMapRegisterStateMain;
 import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserInfoMyClient;
@@ -141,7 +142,7 @@ import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -1757,7 +1758,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void stopAnimationLocation() {
         if (iconLocation != null) {
-            // iconLocation.clearAnimation();
             iconLocation.setVisibility(View.GONE);
         }
     }
@@ -1765,12 +1765,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public void startAnimationLocation() {
         if (iconLocation != null) {
             iconLocation.setVisibility(View.VISIBLE);
-            //Animation anim = new AlphaAnimation(0.0f, 1.0f);
-            //anim.setDuration(1000); //You can manage the time
-            //anim.setStartOffset(20);
-            //anim.setRepeatMode(Animation.REVERSE);
-            //anim.setRepeatCount(Animation.INFINITE);
-            //iconLocation.startAnimation(anim);
         }
     }
 
@@ -2067,6 +2061,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.onClientCondition = this;
         G.onClientGetRoomListResponse = this;
         G.onUserInfoMyClient = this;
+        G.onMapRegisterStateMain = this;
 
         startService(new Intent(this, ServiceContact.class));
 
@@ -2146,6 +2141,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //empty
     }
 
+
+    @Override
+    public void onStateMain(boolean state) {
+        if (state) {
+            startAnimationLocation();
+        } else {
+            stopAnimationLocation();
+        }
+    }
     //@Override
     //public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
     //    //+Realm realm = Realm.getDefaultInstance();

@@ -152,8 +152,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(
-            LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
+        getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
 
         super.onCreate(savedInstanceState);
 
@@ -533,13 +532,14 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         btnSpeaker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (btnSpeaker.getText().toString().equals(G.fragmentActivity.getResources().getString(R.string.md_Mute))) {
-                    btnSpeaker.setText(R.string.md_unMuted);
-                    setSpeakerphoneOn(true);
-                } else {
-                    btnSpeaker.setText(R.string.md_Mute);
-                    setSpeakerphoneOn(false);
+                if (btnSpeaker != null && btnSpeaker.getText() != null) {
+                    if (btnSpeaker.getText().toString().equals(G.fragmentActivity.getResources().getString(R.string.md_Mute))) {
+                        btnSpeaker.setText(R.string.md_unMuted);
+                        setSpeakerphoneOn(true);
+                    } else {
+                        btnSpeaker.setText(R.string.md_Mute);
+                        setSpeakerphoneOn(false);
+                    }
                 }
             }
         });
@@ -839,7 +839,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 canPlay = false;
 
                 vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                long[] pattern = { 0, 100, 1000 };
+                long[] pattern = {0, 100, 1000};
                 vibrator.vibrate(pattern, 0);
 
                 break;

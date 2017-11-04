@@ -146,6 +146,7 @@ import net.iGap.interfaces.OnLastSeenUpdateTiming;
 import net.iGap.interfaces.OnLocationChanged;
 import net.iGap.interfaces.OnMapClose;
 import net.iGap.interfaces.OnMapRegisterState;
+import net.iGap.interfaces.OnMapRegisterStateMain;
 import net.iGap.interfaces.OnMapUsersGet;
 import net.iGap.interfaces.OnMute;
 import net.iGap.interfaces.OnPhoneContact;
@@ -468,6 +469,7 @@ public class G extends MultiDexApplication {
     public static OnGetNearbyCoordinate onGetNearbyCoordinate;
     public static OnGeoGetComment onGeoGetComment;
     public static OnMapRegisterState onMapRegisterState;
+    public static OnMapRegisterStateMain onMapRegisterStateMain;
     public static OnMapClose onMapClose;
     public static OnRegistrationInfo onRegistrationInfo;
     public static OnGeoCommentResponse onGeoCommentResponse;

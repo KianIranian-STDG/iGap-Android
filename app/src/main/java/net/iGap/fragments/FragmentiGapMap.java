@@ -1203,19 +1203,14 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
                 if (state) {
                     getCoordinateLoop(0, false);
-                    if (G.fragmentActivity != null) {
-                        ((ActivityMain) G.fragmentActivity).startAnimationLocation();
-                    }
-
                     editor.putBoolean(SHP_SETTING.REGISTER_STATUS, true);
                     editor.apply();
                 } else {
-                    if (G.fragmentActivity != null) {
-                        ((ActivityMain) G.fragmentActivity).stopAnimationLocation();
-                    }
-
                     editor.putBoolean(SHP_SETTING.REGISTER_STATUS, false);
                     editor.apply();
+                }
+                if (G.onMapRegisterStateMain != null) {
+                    G.onMapRegisterStateMain.onStateMain(state);
                 }
                 statusCheck();
                 if (btnMapChangeRegistration != null) {

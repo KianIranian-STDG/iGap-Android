@@ -69,17 +69,15 @@ public class FileUploadResponse extends MessageHandler {
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
-
-                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
-                        if (message != null) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(identity)).findFirst();
+                                if (message != null && message.isValid()) {
                                     G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
                                 }
-                            });
-                        }
-
+                            }
+                        });
                         realm.close();
                     }
                 }, new Realm.Transaction.OnError() {

@@ -493,14 +493,18 @@ import net.iGap.R;
         // This happens if we set index onCreate or something like this
         // You can use force param or call this method in some post()
         if (force) {
-            updateIndicatorPosition(MAX_FRACTION);
-            // Force onPageScrolled listener and refresh VP
-            if (mIsViewPagerMode) {
-                if (!mViewPager.isFakeDragging()) mViewPager.beginFakeDrag();
-                if (mViewPager.isFakeDragging()) {
-                    mViewPager.fakeDragBy(0.0F);
-                    mViewPager.endFakeDrag();
+            try {
+                updateIndicatorPosition(MAX_FRACTION);
+                // Force onPageScrolled listener and refresh VP
+                if (mIsViewPagerMode) {
+                    if (!mViewPager.isFakeDragging()) mViewPager.beginFakeDrag();
+                    if (mViewPager.isFakeDragging()) {
+                        mViewPager.fakeDragBy(0.0F);
+                        mViewPager.endFakeDrag();
+                    }
                 }
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
             }
         } else {
             mAnimator.start();
@@ -713,7 +717,11 @@ import net.iGap.R;
         mScrollState = state;
         if (state == ViewPager.SCROLL_STATE_IDLE) {
             if (mOnPageChangeListener != null) mOnPageChangeListener.onPageSelected(mIndex);
-            if (mIsViewPagerMode && mOnTabStripSelectedIndexListener != null) mOnTabStripSelectedIndexListener.onEndTabSelected(mTitles[mIndex], mIndex);
+            if (mIsViewPagerMode && mOnTabStripSelectedIndexListener != null) {
+                if (mTitles.length > 0 && mIndex >= 0) {
+                    mOnTabStripSelectedIndexListener.onEndTabSelected(mTitles[mIndex], mIndex);
+                }
+            }
         }
 
         if (mOnPageChangeListener != null) mOnPageChangeListener.onPageScrollStateChanged(state);

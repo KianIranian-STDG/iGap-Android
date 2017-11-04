@@ -304,7 +304,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
-    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
 
     public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
@@ -865,20 +865,21 @@ public class FragmentChat extends BaseFragment
     }
 
     public boolean onBackPressed() {
-
         boolean stopSuperPress = true;
-
-        FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
-        if (fragment != null) {
-            removeFromBaseFragment(fragment);
-        } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
-            mAdapter.deselect();
-        } else if (emojiPopup != null && emojiPopup.isShowing()) {
-            emojiPopup.dismiss();
-        } else {
-            return false;
+        try {
+            FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
+            if (fragment != null) {
+                removeFromBaseFragment(fragment);
+            } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
+                mAdapter.deselect();
+            } else if (emojiPopup != null && emojiPopup.isShowing()) {
+                emojiPopup.dismiss();
+            } else {
+                stopSuperPress = false;
+            }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
-
         return stopSuperPress;
     }
 
@@ -1604,7 +1605,9 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = new IUpdateLogItem() {
             @Override
             public void onUpdate(String logText, long messageId) {
-
+                if (mAdapter == null) {
+                    return;
+                }
                 for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
 
                     try {
@@ -1616,7 +1619,7 @@ public class FragmentChat extends BaseFragment
                             break;
                         }
                     } catch (Exception e) {
-                        Log.e("ddddd", "activity chat iUpdateLogItem    " + e.toString());
+                        e.printStackTrace();
                     }
                 }
             }
@@ -3038,14 +3041,14 @@ public class FragmentChat extends BaseFragment
         StructMessageInfo messageInfo;
         if (isReply()) {
             messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
         } else {
             if (isMessageWrote()) {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             } else {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             }
         }
 
@@ -4562,7 +4565,7 @@ public class FragmentChat extends BaseFragment
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-            MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+                MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         };
 
         cursor = activity.getContentResolver().query(uri, projection, null, null, null);
@@ -7057,7 +7060,7 @@ public class FragmentChat extends BaseFragment
         long gapMessageId;
         if (direction == DOWN) {
             resultsUp =
-                getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+                    getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
              * if for UP state client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
