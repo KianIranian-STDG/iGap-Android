@@ -1271,7 +1271,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
                     contentLoading.setVisibility(View.VISIBLE);
                 } else {
-                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                 }
             } else {
                 messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.UPLOADING);

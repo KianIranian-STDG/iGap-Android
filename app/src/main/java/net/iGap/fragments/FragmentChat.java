@@ -36,7 +36,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -132,6 +131,7 @@ import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperGetDataFromOtherApp;
@@ -7730,14 +7730,7 @@ public class FragmentChat extends BaseFragment
     private void error(String error) {
         if (isAdded()) {
             try {
-                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
-                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
-                snack.show();
+                HelperError.showSnackMessage(error, false);
             } catch (IllegalStateException e) {
                 e.getStackTrace();
             }

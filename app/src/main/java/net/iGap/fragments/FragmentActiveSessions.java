@@ -14,7 +14,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +35,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.AdapterActiveSessions;
 import net.iGap.adapter.items.chat.AdapterActiveSessionsHeader;
+import net.iGap.helper.HelperError;
 import net.iGap.interfaces.OnUserSessionGetActiveList;
 import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.interfaces.OnUserSessionTerminate;
@@ -170,14 +170,8 @@ public class FragmentActiveSessions extends BaseFragment {
 
                         G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         prgWaiting.setVisibility(View.GONE);
-                        final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                        snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
+
+                        HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
                     }
                 });
             }
@@ -189,14 +183,7 @@ public class FragmentActiveSessions extends BaseFragment {
                     public void run() {
                         G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         prgWaiting.setVisibility(View.GONE);
-                        final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.error), Snackbar.LENGTH_LONG);
-                        snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
+                        HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
                     }
                 });
             }
@@ -236,14 +223,8 @@ public class FragmentActiveSessions extends BaseFragment {
                                             public void run() {
                                                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                 prgWaiting.setVisibility(View.GONE);
-                                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        snack.dismiss();
-                                                    }
-                                                });
-                                                snack.show();
+
+                                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
                                             }
                                         });
                                     }
@@ -255,14 +236,9 @@ public class FragmentActiveSessions extends BaseFragment {
                                             public void run() {
                                                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                                 prgWaiting.setVisibility(View.GONE);
-                                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        snack.dismiss();
-                                                    }
-                                                });
-                                                snack.show();
+
+                                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
+
                                             }
                                         });
                                     }

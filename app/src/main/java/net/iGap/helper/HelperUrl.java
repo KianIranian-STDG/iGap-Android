@@ -553,7 +553,7 @@ public class HelperUrl {
             new RequestClientCheckInviteLink().clientCheckInviteLink(token);
         } else {
             closeDialogWaiting();
-            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
         }
     }
 
@@ -673,7 +673,7 @@ public class HelperUrl {
             new RequestClientJoinByInviteLink().clientJoinByInviteLink(token);
         } else {
             closeDialogWaiting();
-            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
         }
     }
 
@@ -702,7 +702,7 @@ public class HelperUrl {
             new RequestClientResolveUsername().clientResolveUsername(userName);
         } else {
             closeDialogWaiting();
-            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
         }
     }
 
@@ -763,7 +763,7 @@ public class HelperUrl {
                 addChatToDatabaseAndGoToChat(user, 0, chatEntery);
             } else {
                 closeDialogWaiting();
-                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
             }
         }
     }
@@ -912,7 +912,7 @@ public class HelperUrl {
                 }, 1000);
             } else {
                 closeDialogWaiting();
-                HelperError.showSnackMessage(G.context.getString(R.string.can_not_connent_to_server));
+                HelperError.showSnackMessage(G.context.getString(R.string.can_not_connent_to_server), false);
             }
         }
     }

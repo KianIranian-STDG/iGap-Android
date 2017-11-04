@@ -15,7 +15,6 @@ import android.content.ClipboardManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
@@ -34,6 +33,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnChannelCheckUsername;
@@ -145,15 +145,9 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
-                                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
+                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.normal_error), false);
+
                             }
                         });
                     }
@@ -164,15 +158,7 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
-
-                                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
+                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.time_out), false);
                             }
                         });
                     }
@@ -397,14 +383,9 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
             G.handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
-                    snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
+
+                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.normal_error), false);
+
                 }
             });
         }
@@ -417,15 +398,9 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
             G.handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
-                    snack.setAction(R.string.cancel, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            snack.dismiss();
-                        }
-                    });
-                    snack.show();
+                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.time_out), false);
+
                 }
             });
         }

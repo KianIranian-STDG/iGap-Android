@@ -18,7 +18,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -57,6 +56,7 @@ import net.iGap.activities.ActivityCrop;
 import net.iGap.activities.ActivityManageSpace;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
@@ -962,14 +962,9 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                                             public void run() {
                                                 hideProgressBar();
                                                 if (view != null) {
-                                                    final Snackbar snack = Snackbar.make(view.findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
+
+                                                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
+
                                                 }
                                             }
                                         });
@@ -982,14 +977,9 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                                             public void run() {
                                                 hideProgressBar();
                                                 if (view != null) {
-                                                    final Snackbar snack = Snackbar.make(view.findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                    snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View view) {
-                                                            snack.dismiss();
-                                                        }
-                                                    });
-                                                    snack.show();
+
+                                                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
+
                                                 }
                                             }
                                         });

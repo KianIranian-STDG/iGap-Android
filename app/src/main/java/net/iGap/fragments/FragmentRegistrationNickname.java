@@ -20,7 +20,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -40,6 +39,7 @@ import net.iGap.activities.ActivityCrop;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperUploadFile;
@@ -442,14 +442,8 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                                 e.printStackTrace();
                             }
                         } else {
-                            final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.please_check_your_camera), Snackbar.LENGTH_LONG);
-                            snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    snack.dismiss();
-                                }
-                            });
-                            snack.show();
+
+                            HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.please_check_your_camera), false);
                         }
                         break;
                     }

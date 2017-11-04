@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -76,6 +75,7 @@ import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCalculateKeepMedia;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
@@ -1335,14 +1335,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        snack.dismiss();
-                                                    }
-                                                });
-                                                snack.show();
+
+                                                HelperError.showSnackMessage(getResources().getString(R.string.error), false);
                                             }
                                         });
                                     }
@@ -1352,14 +1346,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                final Snackbar snack = Snackbar.make(findViewById(android.R.id.content), R.string.error, Snackbar.LENGTH_LONG);
-                                                snack.setAction(getString(R.string.cancel), new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
-                                                        snack.dismiss();
-                                                    }
-                                                });
-                                                snack.show();
+
+                                                HelperError.showSnackMessage(getResources().getString(R.string.error), false);
+
                                             }
                                         });
                                     }
