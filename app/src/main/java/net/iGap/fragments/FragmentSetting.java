@@ -957,17 +957,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
                                     @Override
                                     public void onError() {
-                                        G.handler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                hideProgressBar();
-                                                if (view != null) {
 
-                                                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.error), false);
-
-                                                }
-                                            }
-                                        });
                                     }
 
                                     @Override

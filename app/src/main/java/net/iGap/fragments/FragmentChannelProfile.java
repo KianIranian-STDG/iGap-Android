@@ -550,8 +550,6 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                     @Override
                     public void run() {
 
-                        HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.normal_error), false);
-
                         if (toggleEnableSignature.isChecked()) {
                             toggleEnableSignature.setChecked(false);
                         } else {

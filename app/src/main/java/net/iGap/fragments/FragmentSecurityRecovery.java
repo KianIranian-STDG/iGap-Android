@@ -202,7 +202,6 @@ public class FragmentSecurityRecovery extends BaseFragment {
                         @Override
                         public void run() {
                             closeKeyboard(view);
-                            error(G.fragmentActivity.getResources().getString(R.string.invalid_email_token));
                         }
                     });
                 }
@@ -222,7 +221,6 @@ public class FragmentSecurityRecovery extends BaseFragment {
                         @Override
                         public void run() {
                             closeKeyboard(view);
-                            error(G.fragmentActivity.getResources().getString(R.string.invalid_question_token));
 
                         }
                     });

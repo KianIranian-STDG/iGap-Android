@@ -1710,7 +1710,6 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                     prgWaiting.setVisibility(View.GONE);
                 }
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                error(G.fragmentActivity.getResources().getString(R.string.invalid_password));
             }
         });
     }
@@ -1750,7 +1749,6 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 }
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 closeKeyboard(txtOk);
-                error(G.fragmentActivity.getResources().getString(R.string.invalid_email_token));
             }
         });
     }
@@ -1784,7 +1782,6 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 }
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 closeKeyboard(txtOk);
-                error(G.fragmentActivity.getResources().getString(R.string.invalid_question_token));
             }
         });
     }

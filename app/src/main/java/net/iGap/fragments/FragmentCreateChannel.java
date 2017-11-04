@@ -142,14 +142,6 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                     @Override
                     public void onError(int majorCode, int minorCode, int time) {
                         hideProgressBar();
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.normal_error), false);
-
-                            }
-                        });
                     }
 
                     @Override
@@ -378,17 +370,6 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
 
     @Override
     public void onError(int majorCode, int minorCode) {
-
-        if (G.fragmentActivity != null) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-
-                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.normal_error), false);
-
-                }
-            });
-        }
     }
 
     @Override

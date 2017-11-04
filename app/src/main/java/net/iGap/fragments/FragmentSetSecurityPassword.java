@@ -282,12 +282,6 @@ public class FragmentSetSecurityPassword extends BaseFragment {
             @Override
             public void errorInvalidConfirmCode() {
 
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (isAdded()) error(G.fragmentActivity.getResources().getString(R.string.invalid_verify_email_code));
-                    }
-                });
             }
         };
 

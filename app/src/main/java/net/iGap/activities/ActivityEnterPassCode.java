@@ -280,16 +280,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
 
             @Override
             public void onError() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (v != null) {
 
-                            HelperError.showSnackMessage(getResources().getString(R.string.error), false);
-
-                        }
-                    }
-                });
             }
 
             @Override

@@ -114,6 +114,20 @@ public class HelperError {
                 error = G.fragmentActivity.getResources().getString(R.string.E_158);
                 break;
 
+            case 163:
+                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                break;
+
+            case 173:
+                error = G.fragmentActivity.getResources().getString(R.string.error);
+                break;
+            case 174:
+                error = G.fragmentActivity.getResources().getString(R.string.error);
+                break;
+            case 194:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_password);
+                break;
+
             case 200:
                 error = G.fragmentActivity.getResources().getString(R.string.E_200);
                 break;
@@ -199,6 +213,17 @@ public class HelperError {
             case 305:
                 error = G.fragmentActivity.getResources().getString(R.string.E_305);
                 break;
+
+            case 3356:
+                G.fragmentActivity.getResources().getString(R.string.just_owner_can_delete);
+                break;
+            case 357:
+                G.fragmentActivity.getResources().getString(R.string.just_owner_can_delete);
+                break;
+            case 358:
+                G.fragmentActivity.getResources().getString(R.string.just_owner_can_delete);
+                break;
+
             case 318:
                 if (minorCode == 1) {
                     error = G.fragmentActivity.getResources().getString(R.string.E_318_1);
@@ -285,6 +310,48 @@ public class HelperError {
                 if (minorCode == 1) error = G.fragmentActivity.getResources().getString(R.string.E_337);
                 break;
 
+
+            case 373:
+
+                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+
+                break;
+            case 374:
+                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                break;
+            case 375:
+                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                break;
+
+            case 453:
+                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                break;
+            case 455:
+                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                break;
+            case 456:
+                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                break;
+            case 454:
+                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                break;
+            case 457:
+                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                break;
+            case 458:
+                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                break;
+
+            case 467:
+                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                break;
+            case 468:
+                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                break;
+            case 469:
+                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                break;
+
             case 500:
                 if (minorCode == 1) error = G.fragmentActivity.getResources().getString(R.string.Toast_Location_Not_Found);
                 break;
@@ -369,11 +436,90 @@ public class HelperError {
                 error = G.fragmentActivity.getResources().getString(R.string.E_715);
                 break;
 
+            case 10105:
+                if (minorCode == 101) {
+                    error = G.fragmentActivity.getResources().getString(R.string.E_713_1);
+                }
+
+                break;
+
+            case 10108:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_verify_email_code);
+                break;
+
+            case 10109:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_verify_email_code);
+                break;
+
+            case 10110:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_verify_email_code);
+                break;
+
+            case 10111:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_verify_email_code);
+                break;
+
+            case 10113:
+
+                if (minorCode == 2) {
+                    error = G.fragmentActivity.getResources().getString(R.string.invalid_verify_email_code);
+                } else {
+                    error = G.fragmentActivity.getResources().getString(R.string.invalid_verify_email_code);
+                }
+                break;
+
+            case 10114:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_email_token);
+                break;
+
+            case 10115:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_email_token);
+                break;
+            case 10116:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_email_token);
+                break;
+
+            case 10117:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_email_token);
+                break;
+            case 10118:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_email_token);
+                break;
+            case 10119:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_email_token);
+                break;
+
+            case 10129: {
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_email_token);
+                break;
+            }
+
+            case 10134:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_question_token);
+                break;
+
+            case 10136:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_question_token);
+                break;
+            case 10137:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_question_token);
+                break;
+            case 10138:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_question_token);
+                break;
+            case 10139:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_question_token);
+                break;
+            case 10140:
+                error = G.fragmentActivity.getResources().getString(R.string.invalid_question_token);
+                break;
+
             case 10165:
 
                 error = G.fragmentActivity.getResources().getString(R.string.E_10165);
 
                 break;
+
             case 10166:
 
                 error = G.fragmentActivity.getResources().getString(R.string.E_10166);

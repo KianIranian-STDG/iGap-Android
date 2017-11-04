@@ -444,6 +444,11 @@
   <string name="E_300_1">Bad payload: Invalid description</string>
   <string name="E_300_2">"خطایی از سمت کلاینت: توضیحات اشتباه است."</string>
   <string name="E_301">"خطای درونی سرور"</string>
+
+  <string name="E_467">CHANNEL_UPDATE_SIGNATURE_INTERNAL_SERVER_ERROR</string>
+  <string name="E_468">CHANNEL_UPDATE_SIGNATURE_FORBIDDEN</string>
+  <string name="E_469">CHANNEL_GET_MESSAGES_STATS_BAD_PAYLOAD</string>
+
   <string name="E_610">"خطایی از سمت کلاینت"</string>
   <string name="E_611">"خطای درونی سرور"</string>
   <string name="E_612">"خطایی از سمت کلاینت"</string>

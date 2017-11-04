@@ -1332,13 +1332,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                                     @Override
                                     public void onError() {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
 
-                                                HelperError.showSnackMessage(getResources().getString(R.string.error), false);
-                                            }
-                                        });
                                     }
 
                                     @Override

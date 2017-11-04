@@ -1588,14 +1588,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                                 prgWait.setVisibility(View.GONE);
                             }
                         });
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.just_owner_can_delete), false);
-                            }
-                        });
                     }
 
                     @Override
@@ -1809,14 +1801,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     @Override
     public void onError(int majorCode, int minorCode) {
         hideProgressBar();
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-
-                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.normal_error), false);
-
-            }
-        });
     }
 
     @Override

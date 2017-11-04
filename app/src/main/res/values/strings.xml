@@ -431,6 +431,9 @@
   <string name="E_125">Internal Server Error</string>
   <string name="E_122">Bad payload: Invalid phone number</string>
   <string name="E_123">Internal Server Error</string>
+
+  <string name="E_163">USER_PROFILE_CHECK_USERNAME_INTERNAL_SERVER_ERROR</string>
+
   <string name="E_218">Bad payload: Invalid room ID</string>
   <string name="E_219">Internal Server Error</string>
   <string name="E_220">This operation is not permitted.</string>
@@ -438,6 +441,23 @@
   <string name="E_300_1">Bad payload: Invalid description</string>
   <string name="E_300_2">Bad payload: Invalid description</string>
   <string name="E_301">Internal Server Error</string>
+
+  <string name="E_373">GROUP_REVOKE_LINK_BAD_PAYLOAD</string>
+  <string name="E_374">GROUP_REVOKE_LINK_INTERNAL_SERVER_ERROR</string>
+  <string name="E_375">GROUP_REVOKE_LINK_FORBIDDEN</string>
+
+  <string name="E_453">CHANNEL_CHECK_USERNAME_BAD_PAYLOAD</string>
+  <string name="E_454">CHANNEL_CHECK_USERNAME_INTERNAL_SERVER_ERROR</string>
+
+  <string name="E_455">CHANNEL_UPDATE_USERNAME_BAD_PAYLOAD</string>
+  <string name="E_456">CHANNEL_UPDATE_USERNAME_INTERNAL_SERVER_ERROR</string>
+  <string name="E_457">CHANNEL_UPDATE_USERNAME_UPDATE_LOCK</string>
+  <string name="E_458">CHANNEL_UPDATE_USERNAME_FORBIDDEN</string>
+
+  <string name="E_467">CHANNEL_UPDATE_SIGNATURE_INTERNAL_SERVER_ERROR</string>
+  <string name="E_468">CHANNEL_UPDATE_SIGNATURE_FORBIDDEN</string>
+  <string name="E_469">CHANNEL_GET_MESSAGES_STATS_BAD_PAYLOAD</string>
+
   <string name="E_610">Bad payload</string>
   <string name="E_611">Internal Server Error</string>
   <string name="E_612">Bad payload</string>
@@ -458,6 +478,19 @@
 
   <string name="E_658">You have already sent report.</string>
   <string name="E_659">You are forbidden to send a report.</string>
+
+  <string name="E_10108">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_BAD_PAYLOAD</string>
+  <string name="E_10109">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_INTERNAL_SERVER_ERROR</string>
+  <string name="E_10110">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_MAX_TRY_LOCK</string>
+  <string name="E_10111">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_EXPIRED_TOKEN</string>
+  <string name="E_10112">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_NO_PASSWORD</string>
+  <string name="E_10113">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_INVALID_TOKEN</string>
+  <string name="E_10114">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_BAD_PAYLOAD</string>
+  <string name="E_10115">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_INTERNAL_SERVER_ERROR</string>
+  <string name="E_10116">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_MAX_TRY_LOCK</string>
+  <string name="E_10117">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_NO_PASSWORD</string>
+  <string name="E_10118"> USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_INVALID_PASSWORD</string>
+  <string name="E_10119">USER_TWO_STEP_VERIFICATION_CHANGE_RECOVERY_EMAIL_CONFIRMED_BEFORE</string>
 
   <string name="E_10165">Bad payload: User report</string>
   <string name="E_10166">ServerError: User report internal</string>
