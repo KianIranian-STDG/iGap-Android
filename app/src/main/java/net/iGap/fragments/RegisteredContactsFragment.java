@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -98,6 +99,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     private FastItemAdapter fastItemAdapter;
     private ProgressBar prgWaitingLiadList;
     //private ContactListAdapterA mAdapter;
+    private NestedScrollView nestedScrollView;
     private Realm realm;
 
     private Realm getRealm() {
@@ -157,6 +159,8 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         //}
 
         //set interface for get callback here
+
+        nestedScrollView = view.findViewById(R.id.nestedScrollContact);
 
         TextView txtNonUser = (TextView) view.findViewById(R.id.txtNon_User);
         txtNonUser.setTextColor(Color.parseColor(G.appBarColor));
@@ -363,6 +367,18 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         rcvListContact.setItemAnimator(new DefaultItemAnimator());
         rcvListContact.setAdapter(fastItemAdapter);
         rcvListContact.setNestedScrollingEnabled(false);
+
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (Contacts.isEndLocal) {
+                    return;
+                }
+                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                    new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+            }
+        });
 
     }
 

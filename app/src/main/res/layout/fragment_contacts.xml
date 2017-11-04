@@ -208,6 +208,7 @@
     </net.iGap.module.MyAppBarLayout>
 
     <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/nestedScrollContact"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:fillViewport="true"

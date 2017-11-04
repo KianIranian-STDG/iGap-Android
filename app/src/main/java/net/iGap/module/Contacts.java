@@ -14,6 +14,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
+import android.util.Log;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class Contacts {
 
     //Local Fetch Contacts Fields
     public static boolean getContact = true;
+    public static boolean isEndLocal = false;
     public static int localPhoneContactId = 0;
 
 
@@ -111,6 +113,7 @@ public class Contacts {
 
                         if (pCur != null) {
                             while (pCur.moveToNext()) {
+                                Log.i("III", "name : " + cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
                                 StructListOfContact itemContact = new StructListOfContact();
                                 itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
                                 itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
@@ -177,9 +180,8 @@ public class Contacts {
     }
 
     public static void getPhoneContactForClient() { //get List Of Contact
-
         int fetchCount = 0;
-        boolean isEnd = false;
+        isEndLocal = false;
 
         ArrayList<String> tempList = new ArrayList<>();
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
@@ -229,21 +231,21 @@ public class Contacts {
         }
 
         if (fetchCount < PHONE_CONTACT_FETCH_LIMIT) {
-            isEnd = true;
+            isEndLocal = true;
         }
 
 
         if (G.onPhoneContact != null) {
-            G.onPhoneContact.onPhoneContact(contactList, isEnd);
+            G.onPhoneContact.onPhoneContact(contactList, isEndLocal);
         }
 
-        if (!isEnd) {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    new FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                }
-            }, 500);
+        if (!isEndLocal) {
+            //G.handler.postDelayed(new Runnable() {
+            //    @Override
+            //    public void run() {
+            //        new FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            //    }
+            //}, 500);
         }
     }
 
