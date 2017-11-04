@@ -1581,7 +1581,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         if (isPopup) {
             edtUserName.setText("iGap.net/");
         } else {
-            edtUserName.setText("" + linkUsername);
+            edtUserName.setText("iGap.net/" + linkUsername);
         }
 
         edtUserName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
@@ -1662,8 +1662,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (!editable.toString().contains("iGap.net/")) {
-                    edtUserName.setText("iGap.net/");
+                if (editable.toString().contains("iGap.net/")) {
+                    //edtUserName.setText("iGap.net/");
                     Selection.setSelection(edtUserName.getText(), edtUserName.getText().length());
                 }
 

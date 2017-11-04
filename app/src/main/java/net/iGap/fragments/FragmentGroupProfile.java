@@ -1029,7 +1029,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         if (isPopup) {
             edtUserName.setText("iGap.net/");
         } else {
-            edtUserName.setText("" + linkUsername);
+            edtUserName.setText("iGap.net/" + linkUsername);
         }
 
         edtUserName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
@@ -1104,8 +1104,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (!editable.toString().contains("iGap.net/")) {
-                    edtUserName.setText("iGap.net/");
+                if (editable.toString().contains("iGap.net/")) {
+                    //edtUserName.setText("iGap.net/");
                     Selection.setSelection(edtUserName.getText(), edtUserName.getText().length());
                 }
 
