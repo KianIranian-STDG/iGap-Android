@@ -15,7 +15,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
@@ -55,6 +54,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermision;
@@ -550,14 +550,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                     @Override
                     public void run() {
 
-                        final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
-                        snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
+                        HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.normal_error), false);
 
                         if (toggleEnableSignature.isChecked()) {
                             toggleEnableSignature.setChecked(false);
@@ -1473,15 +1466,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
-                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
-                snack.show();
+                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.normal_error), false);
             }
         });
     }
@@ -1492,15 +1478,8 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
-                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
-                snack.show();
+                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.time_out), false);
             }
         });
     }

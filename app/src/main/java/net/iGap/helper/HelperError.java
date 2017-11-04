@@ -14,6 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 
 public class HelperError {
@@ -411,15 +412,17 @@ public class HelperError {
         return error;
     }
 
-    public static void showSnackMessage(final String message) {
+    public static void showSnackMessage(final String message, boolean isVibrate) {
+
+        if (isVibrate) {
+            AppUtils.setVibrator();
+        }
 
         if (message.length() > 0 && G.currentActivity != null) {
-
             G.currentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     final Snackbar snack = Snackbar.make(G.currentActivity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
-
                     snack.setAction(R.string.cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

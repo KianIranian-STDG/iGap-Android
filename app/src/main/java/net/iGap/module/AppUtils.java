@@ -20,6 +20,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -613,6 +614,13 @@ public final class AppUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void setVibrator() {
+        Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (vShort != null) {
+            vShort.vibrate(200);
         }
     }
 

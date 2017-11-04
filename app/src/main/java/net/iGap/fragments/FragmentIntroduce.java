@@ -23,7 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -38,6 +37,7 @@ import android.widget.Toast;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperError;
 import net.iGap.interfaces.OnReceiveInfoLocation;
 import net.iGap.interfaces.OnReceivePageInfoTOS;
 import net.iGap.module.CustomCircleImage;
@@ -445,14 +445,9 @@ public class FragmentIntroduce extends BaseFragment {
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.Toast_waiting_fot_get_info), Snackbar.LENGTH_LONG);
-                                    snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            snack.dismiss();
-                                        }
-                                    });
-                                    snack.show();
+
+                                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.Toast_waiting_fot_get_info), false);
+
                                 }
                             });
                             getInfo();
@@ -461,14 +456,9 @@ public class FragmentIntroduce extends BaseFragment {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.waiting_for_connection), Snackbar.LENGTH_LONG);
-                                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
+
+                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.waiting_for_connection), false);
+
                             }
                         });
                     }

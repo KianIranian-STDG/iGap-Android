@@ -15,7 +15,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
@@ -53,6 +52,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermision;
@@ -1409,15 +1409,9 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        final Snackbar snack = Snackbar.make(view.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
-                        snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                snack.dismiss();
-                            }
-                        });
-                        snack.show();
+                        HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.time_out), false);
+
                     }
                 });
             }
@@ -1598,14 +1592,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), "Just owner can delete", Snackbar.LENGTH_LONG);
-                                snack.setAction("CANCEL", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        snack.dismiss();
-                                    }
-                                });
-                                snack.show();
+
+                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.just_owner_can_delete), false);
                             }
                         });
                     }
@@ -1824,15 +1812,9 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.normal_error), Snackbar.LENGTH_LONG);
 
-                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
-                snack.show();
+                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.normal_error), false);
+
             }
         });
     }
@@ -1844,15 +1826,9 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), G.fragmentActivity.getResources().getString(R.string.time_out), Snackbar.LENGTH_LONG);
 
-                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
-                snack.show();
+                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.time_out), false);
+
             }
         });
     }

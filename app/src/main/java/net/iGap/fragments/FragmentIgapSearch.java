@@ -161,7 +161,7 @@ public class FragmentIgapSearch extends BaseFragment {
                         new RequestClientSearchUsername().clientSearchUsername(edtSearch.getText().toString().substring(1));
                         loadingProgressBar.setVisibility(View.VISIBLE);
                     } else {
-                        HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+                        HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                     }
                 }
             }

@@ -5,9 +5,7 @@ package net.iGap.fragments;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperError;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.request.RequestUserProfileSetBio;
 
@@ -138,16 +137,9 @@ public class FragmentBio extends BaseFragment {
     private void error(String error) {
         if (isAdded()) {
             try {
-                Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                vShort.vibrate(200);
-                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), error, Snackbar.LENGTH_LONG);
-                snack.setAction(G.fragmentActivity.getResources().getString(R.string.cancel), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
-                snack.show();
+
+                HelperError.showSnackMessage(error, true);
+
             } catch (IllegalStateException e) {
                 e.getStackTrace();
             }

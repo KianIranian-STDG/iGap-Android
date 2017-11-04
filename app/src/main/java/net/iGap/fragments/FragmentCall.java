@@ -401,7 +401,7 @@ import net.iGap.request.RequestSignalingGetLog;
                         }
                     }).negativeText(R.string.B_cancel).show();
                 } else {
-                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                 }
             }
         });
@@ -419,7 +419,7 @@ import net.iGap.request.RequestSignalingGetLog;
 
                 if (realmCallConfig == null) {
                     new RequestSignalingGetConfiguration().signalingGetConfiguration();
-                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                 } else {
 
                     if (G.currentActivity != null) {
@@ -448,7 +448,7 @@ import net.iGap.request.RequestSignalingGetLog;
 
         } else {
 
-            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server));
+            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
         }
     }
 

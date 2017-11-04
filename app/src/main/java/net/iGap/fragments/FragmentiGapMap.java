@@ -35,7 +35,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
@@ -63,6 +62,7 @@ import java.util.Random;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnGeoCommentResponse;
@@ -640,15 +640,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         G.currentActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                final Snackbar snack = Snackbar.make(G.fragmentActivity.findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG);
 
-                snack.setAction(R.string.cancel, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        snack.dismiss();
-                    }
-                });
-                snack.show();
+                HelperError.showSnackMessage(message, false);
+
             }
         });
     }

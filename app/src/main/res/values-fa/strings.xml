@@ -1112,5 +1112,6 @@
   <string name="st_checkbox_delete">حذف برای</string>
   <string name="st_desc_delete">آیا از حذف این %1$s پیام اطمینان دارید؟</string>
   <string name="st_send_report">گزارش تخلف با موفقیت ارسال شد.</string>
+  <string name="set_position">Can not set position</string>
 
 </resources>
