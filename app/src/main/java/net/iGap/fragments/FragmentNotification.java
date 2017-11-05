@@ -11,6 +11,7 @@
 package net.iGap.fragments;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
@@ -35,6 +36,7 @@ import com.larswerkman.holocolorpicker.SVBar;
 import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.databinding.FragmentNotificationBinding;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmChannelRoom;
@@ -76,18 +78,25 @@ public class FragmentNotification extends BaseFragment {
     private RealmNotificationSetting realmNotificationSetting;
     private ProtoGlobal.Room.Type roomType;
 
+
+    private FragmentNotificationBinding fragmentNotificationBinding;
+    private FragmentNotificationViewModel fragmentNotificationViewModel;
+
     public FragmentNotification() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return attachToSwipeBack(inflater.inflate(R.layout.fragment_notification, container, false));
+        fragmentNotificationBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_notification, container, false);
+        return attachToSwipeBack(fragmentNotificationBinding.getRoot());
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        initDataBinding();
 
         view.findViewById(R.id.toolbar2).setBackgroundColor(Color.parseColor(G.appBarColor));
 
@@ -179,46 +188,46 @@ public class FragmentNotification extends BaseFragment {
             }
         });
 
-        int popupNotification = realmNotification;
-        switch (popupNotification) {
-            case DEFAULT:
-                txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_Default));
-                break;
-            case ENABLE:
-                txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_enable));
-                break;
-            case DISABLE:
-                txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_Disable));
-                break;
-        }
+        //int popupNotification = realmNotification;
+        //switch (popupNotification) {
+        //    case DEFAULT:
+        //        txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_Default));
+        //        break;
+        //    case ENABLE:
+        //        txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_enable));
+        //        break;
+        //    case DISABLE:
+        //        txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_Disable));
+        //        break;
+        //}
 
-        ltPopupNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_popupNotification)).items(R.array.notifications_notification).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        switch (which) {
-                            case DEFAULT: {
-                                txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_Default));
-                                RealmNotificationSetting.popupNotification(roomId, roomType, DEFAULT);
-                                break;
-                            }
-                            case ENABLE: {
-                                txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_enable));
-                                RealmNotificationSetting.popupNotification(roomId, roomType, ENABLE);
-                                break;
-                            }
-                            case DISABLE: {
-                                txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_Disable));
-                                RealmNotificationSetting.popupNotification(roomId, roomType, DISABLE);
-                                break;
-                            }
-                        }
-                    }
-                }).show();
-            }
-        });
+        //ltPopupNotification.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_popupNotification)).items(R.array.notifications_notification).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+        //            @Override
+        //            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+        //                switch (which) {
+        //                    case DEFAULT: {
+        //                        txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_Default));
+        //                        RealmNotificationSetting.popupNotification(roomId, roomType, DEFAULT);
+        //                        break;
+        //                    }
+        //                    case ENABLE: {
+        //                        txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_enable));
+        //                        RealmNotificationSetting.popupNotification(roomId, roomType, ENABLE);
+        //                        break;
+        //                    }
+        //                    case DISABLE: {
+        //                        txtPopupNotification.setText(G.fragmentActivity.getResources().getString(R.string.array_Disable));
+        //                        RealmNotificationSetting.popupNotification(roomId, roomType, DISABLE);
+        //                        break;
+        //                    }
+        //                }
+        //            }
+        //        }).show();
+        //    }
+        //});
 
         //========================================================sound
         if (realmIdSound == 0 || realmIdSound == -1) {
@@ -478,6 +487,11 @@ public class FragmentNotification extends BaseFragment {
         });
     }
 
+    private void initDataBinding() {
+        fragmentNotificationViewModel = new FragmentNotificationViewModel(roomId);
+        fragmentNotificationBinding.setFragmentNotificationViewModel(fragmentNotificationViewModel);
+    }
+
     private void convertRoomType(String type) {
         switch (type) {
             case "CONTACT":
@@ -543,5 +557,11 @@ public class FragmentNotification extends BaseFragment {
 
         txtSound = (TextView) view.findViewById(R.id.ntg_txt_desc_sound);
         ltSound = (ViewGroup) view.findViewById(R.id.ntg_layout_sound);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        fragmentNotificationViewModel.destroy();
     }
 }

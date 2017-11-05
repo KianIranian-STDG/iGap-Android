@@ -175,7 +175,7 @@ public class Contacts {
                 public void run() {
                     new FetchContactForServer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
-            }, 100);
+            }, 2000);
         }
     }
 
