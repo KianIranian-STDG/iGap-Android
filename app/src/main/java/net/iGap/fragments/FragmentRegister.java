@@ -32,6 +32,7 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -194,6 +195,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.i("GGGGGGGGGGG", "1 onCreateView: ");
         return inflater.inflate(R.layout.activity_register, container, false);
     }
 
@@ -706,6 +708,8 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             }
         });
         // enable scroll text view
+
+        Log.i("GGGGGGGGGGG", "2222 on: ");
 
     }
 
@@ -1375,8 +1379,8 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                                 fragmentSecurityRecovery.setArguments(bundle);
 
                                 G.fragmentActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).
-                                        setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).
-                                        replace(R.id.ar_layout_root, fragmentSecurityRecovery).commit();
+                                    setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).
+                                    replace(R.id.ar_layout_root, fragmentSecurityRecovery).commit();
 
 
 
