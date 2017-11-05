@@ -304,7 +304,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
+    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
 
     public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
@@ -4047,10 +4047,8 @@ public class FragmentChat extends BaseFragment
 
     private ArrayList<Parcelable> getMessageStructFromSelectedItems() {
         ArrayList<Parcelable> messageInfos = new ArrayList<>(mAdapter.getSelectedItems().size());
-        for (AbstractMessage item : mAdapter.getSelectedItems()) {
-            if (item != null && item.mMessage != null) {
-                messageInfos.add(Parcels.wrap(item.mMessage));
-            }
+        for (int item : mAdapter.getSelections()) {
+            messageInfos.add(Parcels.wrap(mAdapter.getItem(item).mMessage));
         }
         return messageInfos;
     }
@@ -7060,7 +7058,7 @@ public class FragmentChat extends BaseFragment
         long gapMessageId;
         if (direction == DOWN) {
             resultsUp =
-                    getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+                getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
              * if for UP state client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
