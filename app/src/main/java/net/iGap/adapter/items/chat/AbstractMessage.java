@@ -1263,13 +1263,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             if (mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                 if (G.userLogin) {
-                    HelperUploadFile.reUpload(mMessage.messageID);
+                    messageClickListener.onFailedMessageClick(progress, mMessage, holder.getAdapterPosition());
 
-                    progress.withDrawable(R.drawable.ic_cancel, false);
-                    holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
-                    final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
-                    contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
-                    contentLoading.setVisibility(View.VISIBLE);
+                    //HelperUploadFile.reUpload(mMessage.messageID);
+                    //progress.withDrawable(R.drawable.ic_cancel, false);
+                    //holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                    //final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
+                    //contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
+                    //contentLoading.setVisibility(View.VISIBLE);
                 } else {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                 }
