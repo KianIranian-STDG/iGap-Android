@@ -279,8 +279,7 @@ public class HelperDownloadFile {
         String primaryKey = cashID + ProtoFileDownload.FileDownload.Selector.FILE;
 
         if (list.size() > 0 && list.containsKey(primaryKey)) {
-
-            removeRequestQueue(list.get(primaryKey).identity);
+            //removeRequestQueue(list.get(primaryKey).identity); // don't need remove this item, remove listener in enough for stop download
 
             StructDownLoad item = list.get(primaryKey);
 
