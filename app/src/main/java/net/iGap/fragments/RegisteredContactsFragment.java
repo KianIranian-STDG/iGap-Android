@@ -92,6 +92,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     private boolean isImportContactList = false;
     StickyRecyclerHeadersDecoration decoration;
     private ProgressBar prgWaiting;
+    private ProgressBar prgWaitingLoadContact;
     RealmResults<RealmContacts> results;
     private EditText edtSearch;
     private boolean isCallAction = false;
@@ -165,6 +166,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         TextView txtNonUser = (TextView) view.findViewById(R.id.txtNon_User);
         txtNonUser.setTextColor(Color.parseColor(G.appBarColor));
         prgWaitingLiadList = (ProgressBar) view.findViewById(R.id.prgWaiting_loadList);
+        prgWaitingLoadContact = (ProgressBar) view.findViewById(R.id.prgWaitingLoadContact);
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
         AppUtils.setProgresColler(prgWaiting);
@@ -288,7 +290,16 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         realmRecyclerView.setNestedScrollingEnabled(false);
 
         results = getRealm().where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
-        realmRecyclerView.setAdapter(new ContactListAdapter(results));
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                realmRecyclerView.setAdapter(new ContactListAdapter(results));
+                prgWaitingLoadContact.setVisibility(View.GONE);
+                realmRecyclerView.setVisibility(View.VISIBLE);
+            }
+        }, 500);
+
 
         //fastAdapter
         //mAdapter = new ContactListAdapterA();
