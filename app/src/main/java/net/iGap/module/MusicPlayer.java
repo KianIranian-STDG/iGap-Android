@@ -186,8 +186,8 @@ public class MusicPlayer extends Service {
 
     public static void setMusicPlayer(LinearLayout layoutTripMusic) {
 
-        remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
-        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (remoteViews == null) remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
+        if (notificationManager == null) notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (layoutTripMusic != null) {
             layoutTripMusic.setVisibility(View.GONE);
