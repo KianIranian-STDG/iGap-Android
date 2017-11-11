@@ -94,12 +94,23 @@ public class VoiceRecord {
                 mediaRecorder.stop();
                 mediaRecorder.release();
                 mediaRecorder = null;
+
+                MusicPlayer.playSound();
+
             } catch (IllegalStateException e) {
             }
         }
     }
 
     private void startRecording() {
+
+        if (MusicPlayer.mp != null) {
+            if (MusicPlayer.mp.isPlaying()) {
+                MusicPlayer.pauseSound();
+                MusicPlayer.pauseSoundFromIGapCall = true;
+            }
+        }
+
 
         if (G.onHelperSetAction != null) {
             G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.RECORDING_VOICE);
