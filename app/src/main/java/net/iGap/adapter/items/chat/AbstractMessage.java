@@ -27,6 +27,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import io.realm.Realm;
 import java.util.List;
@@ -1512,14 +1513,21 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
-                                    progressBar.withProgress(progress);
 
+                                float p = progress;
+                                if ((mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) && FragmentChat.compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
+                                    if (progress < mMessage.uploadProgress) {
+                                        p = mMessage.uploadProgress;
+                                    }
+                                }
+                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
+                                    progressBar.withProgress((int) p);
                                     if (progress == 100) {
                                         progressBar.performProgress();
                                         contentLoading.setVisibility(View.GONE);
                                     }
                                 }
+
                             }
                         });
                     }
@@ -1529,13 +1537,31 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
                             progressBar.withProgress(0);
                             progressBar.withDrawable(R.drawable.upload, true);
-
                             contentLoading.setVisibility(View.GONE);
-
                             mMessage.status = ProtoGlobal.RoomMessageStatus.FAILED.toString();
                         }
                     }
                 });
+
+                if (mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+
+                    MediaController.onPercentCompress = new MediaController.OnPercentCompress() {
+                        @Override
+                        public void compress(final long percent, String path) {
+
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
+                                        int p = (int) (percent / 10);
+                                        progressBar.withProgress(p);
+                                        mMessage.uploadProgress = p;
+                                    }
+                                }
+                            });
+                        }
+                    };
+                }
 
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                 contentLoading.setVisibility(View.VISIBLE);
