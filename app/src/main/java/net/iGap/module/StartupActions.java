@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -190,6 +191,7 @@ public final class StartupActions {
     private void languageDetection(SharedPreferences sharedPreferences) {
 
         String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
+        Log.i("GGGGGGGGGG", "languageDetection: " + language);
 
         switch (language) {
             case "فارسی":
@@ -204,8 +206,8 @@ public final class StartupActions {
                 break;
             case "العربی":
                 selectedLanguage = "ar";
-                HelperCalander.isLanguagePersian = false;
-                G.isAppRtl = false;
+                HelperCalander.isLanguagePersian = true;
+                G.isAppRtl = true;
                 break;
         }
 

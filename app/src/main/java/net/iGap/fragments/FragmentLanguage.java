@@ -67,6 +67,7 @@ public class FragmentLanguage extends BaseFragment {
         TextView iconFa = (TextView) view.findViewById(R.id.st_icon_fatsi);
         TextView txtEn = (TextView) view.findViewById(R.id.txtLanguageEn);
         TextView iconEn = (TextView) view.findViewById(R.id.st_icon_english);
+        TextView iconAr = (TextView) view.findViewById(R.id.st_icon_ar);
 
 
         String textLanguage = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
@@ -76,13 +77,15 @@ public class FragmentLanguage extends BaseFragment {
         } else if (textLanguage.equals("فارسی")) {
             iconFa.setVisibility(View.VISIBLE);
         } else if (textLanguage.equals("العربی")) {
-
+            iconAr.setVisibility(View.VISIBLE);
         } else if (textLanguage.equals("Deutsch")) {
+
         }
 
 
         ViewGroup vgFa = (ViewGroup) view.findViewById(R.id.st_layout_fa);
         ViewGroup vgEn = (ViewGroup) view.findViewById(R.id.st_layout_english);
+        ViewGroup vgAr = (ViewGroup) view.findViewById(R.id.st_layout_arabi);
 
         vgEn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +135,30 @@ public class FragmentLanguage extends BaseFragment {
                 removeFromBaseFragment(FragmentLanguage.this);
             }
         });
+
+        vgAr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (!G.selectedLanguage.equals("ar")) {
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(SHP_SETTING.KEY_LANGUAGE, "العربی");
+                    editor.apply();
+                    G.selectedLanguage = "ar";
+                    setLocale("ar");
+                    HelperCalander.isLanguagePersian = true;
+                    G.isAppRtl = true;
+
+                    if (onRefreshActivity != null) {
+                        G.isRestartActivity = true;
+                        onRefreshActivity.refresh("ar");
+                    }
+                }
+                removeFromBaseFragment(FragmentLanguage.this);
+            }
+        });
+
     }
 
     public void setLocale(String lang) {
