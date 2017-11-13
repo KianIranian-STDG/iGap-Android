@@ -65,7 +65,7 @@ public final class TimeUtils {
             output = context.getString(R.string.yesterday);
         } else {
 
-            if (HelperCalander.isTimeHijri()) {
+            if (HelperCalander.isTimeHijri() == 1) {
 
                 CalendarShamsi shamsi = new CalendarShamsi(date.getTime());
 

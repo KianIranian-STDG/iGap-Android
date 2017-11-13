@@ -98,6 +98,7 @@ public class FragmentLanguage extends BaseFragment {
                     editor.apply();
                     setLocale("en");
                     HelperCalander.isLanguagePersian = false;
+                    HelperCalander.isLanguageArabic = false;
                     G.isAppRtl = false;
 
                     if (onRefreshActivity != null) {
@@ -125,8 +126,8 @@ public class FragmentLanguage extends BaseFragment {
                     G.selectedLanguage = "fa";
                     setLocale("fa");
                     HelperCalander.isLanguagePersian = true;
+                    HelperCalander.isLanguageArabic = false;
                     G.isAppRtl = true;
-
                     if (onRefreshActivity != null) {
                         G.isRestartActivity = true;
                         onRefreshActivity.refresh("fa");
@@ -147,7 +148,8 @@ public class FragmentLanguage extends BaseFragment {
                     editor.apply();
                     G.selectedLanguage = "ar";
                     setLocale("ar");
-                    HelperCalander.isLanguagePersian = true;
+                    HelperCalander.isLanguagePersian = false;
+                    HelperCalander.isLanguageArabic = true;
                     G.isAppRtl = true;
 
                     if (onRefreshActivity != null) {

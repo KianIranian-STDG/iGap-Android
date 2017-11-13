@@ -776,7 +776,7 @@ public class FragmentShearedMedia extends BaseFragment {
         String secondItemTime = "";
         SimpleDateFormat month_date = new SimpleDateFormat("yyyy/MM/dd");
 
-        boolean isTimeHijri = HelperCalander.isTimeHijri();
+        int isTimeHijri = HelperCalander.isTimeHijri();
 
         for (int i = 0; i < list.size(); i++) {
 
@@ -786,8 +786,10 @@ public class FragmentShearedMedia extends BaseFragment {
 
                 StructShearedMedia timeItem = new StructShearedMedia();
 
-                if (isTimeHijri) {
+                if (isTimeHijri == 1) {
                     timeItem.messageTime = HelperCalander.getPersianCalander(time);
+                } else if (isTimeHijri == 2) {
+                    timeItem.messageTime = HelperCalander.getArabicCalander(time);
                 } else {
                     timeItem.messageTime = secondItemTime;
                 }
