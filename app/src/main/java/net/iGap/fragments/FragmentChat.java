@@ -309,7 +309,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
-    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
 
     public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
@@ -380,6 +380,7 @@ public class FragmentChat extends BaseFragment
     public static ArrayMap<Long, HelperUploadFile.StructUpload> compressingFiles = new ArrayMap<>();
     private ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<StructBottomSheet>();
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
+    private static ArrayList<Long> resentedMessageId = new ArrayList<>();
     private RealmRoomMessage firstUnreadMessage;
     private RealmRoomMessage firstUnreadMessageInChat; // when user is in this room received new message
     private RealmRoomMessage voiceLastMessage = null;
@@ -505,11 +506,17 @@ public class FragmentChat extends BaseFragment
                 RealmRoomMessage.fetchMessages(getRealmChat(), mRoomId, new OnActivityChatStart() {
                     @Override
                     public void resendMessage(RealmRoomMessage message) {
+                        if (!allowResendMessage(message.getMessageId())) {
+                            return;
+                        }
                         chatSendMessageUtil.build(chatType, message.getRoomId(), message);
                     }
 
                     @Override
                     public void resendMessageNeedsUpload(final RealmRoomMessage message, final long messageId) {
+                        if (!allowResendMessage(message.getMessageId())) {
+                            return;
+                        }
                         HelperUploadFile.startUploadTaskChat(mRoomId, chatType, message.getAttachment().getLocalFilePath(), message.getMessageId(), message.getMessageType(), message.getMessage(), RealmRoomMessage.getReplyMessageId(message), new HelperUploadFile.UpdateListener() {
                             @Override
                             public void OnProgress(int progress, FileUploadStructure struct) {
@@ -533,6 +540,9 @@ public class FragmentChat extends BaseFragment
 
                     @Override
                     public void sendSeenStatus(RealmRoomMessage message) {
+                        if (!allowResendMessage(message.getMessageId())) {
+                            return;
+                        }
                         if (!isNotJoin) {
                             G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                         }
@@ -623,7 +633,8 @@ public class FragmentChat extends BaseFragment
                                             }
                                             //    avi.setVisibility(View.GONE);
 
-                                            if (HelperCalander.isLanguagePersian) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                                            if (HelperCalander.isLanguagePersian)
+                                                txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                                         }
                                     });
                                 }
@@ -786,7 +797,6 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = null;
 
 
-
         unRegisterListener();
     }
 
@@ -813,7 +823,6 @@ public class FragmentChat extends BaseFragment
         ActivityCall.stripLayoutChat = null;
 
 
-
         super.onStop();
     }
 
@@ -833,59 +842,6 @@ public class FragmentChat extends BaseFragment
             realmChat.close();
         }
 
-    }
-
-
-    private void registerListener() {
-
-        G.dispatchTochEventChat = new IDispatchTochEvent() {
-            @Override
-            public void getToch(MotionEvent event) {
-                if (voiceRecord != null) {
-                    voiceRecord.dispatchTouchEvent(event);
-                }
-            }
-        };
-
-        G.onBackPressedChat = new IOnBackPressed() {
-            @Override
-            public boolean onBack() {
-                return onBackPressed();
-            }
-        };
-
-        G.iSendPositionChat = new ISendPosition() {
-            @Override
-            public void send(Double latitude, Double longitude, String imagePath) {
-                sendPosition(latitude, longitude, imagePath);
-            }
-        };
-    }
-
-    private void unRegisterListener() {
-
-        G.dispatchTochEventChat = null;
-        G.onBackPressedChat = null;
-        G.iSendPositionChat = null;
-    }
-
-    public boolean onBackPressed() {
-        boolean stopSuperPress = true;
-        try {
-            FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
-            if (fragment != null) {
-                removeFromBaseFragment(fragment);
-            } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
-                mAdapter.deselect();
-            } else if (emojiPopup != null && emojiPopup.isShowing()) {
-                emojiPopup.dismiss();
-            } else {
-                stopSuperPress = false;
-            }
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        return stopSuperPress;
     }
 
     @Override
@@ -1467,6 +1423,71 @@ public class FragmentChat extends BaseFragment
         getDraft();
         getUserInfo();
         insertShearedData();
+    }
+
+    private boolean allowResendMessage(long messageId) {
+        if (resentedMessageId == null) {
+            resentedMessageId = new ArrayList<>();
+        }
+
+        if (resentedMessageId.contains(messageId)) {
+            return false;
+        }
+
+        resentedMessageId.add(messageId);
+        return true;
+    }
+
+    private void registerListener() {
+
+        G.dispatchTochEventChat = new IDispatchTochEvent() {
+            @Override
+            public void getToch(MotionEvent event) {
+                if (voiceRecord != null) {
+                    voiceRecord.dispatchTouchEvent(event);
+                }
+            }
+        };
+
+        G.onBackPressedChat = new IOnBackPressed() {
+            @Override
+            public boolean onBack() {
+                return onBackPressed();
+            }
+        };
+
+        G.iSendPositionChat = new ISendPosition() {
+            @Override
+            public void send(Double latitude, Double longitude, String imagePath) {
+                sendPosition(latitude, longitude, imagePath);
+            }
+        };
+    }
+
+    private void unRegisterListener() {
+
+        G.dispatchTochEventChat = null;
+        G.onBackPressedChat = null;
+        G.iSendPositionChat = null;
+    }
+
+    public boolean onBackPressed() {
+        boolean stopSuperPress = true;
+        try {
+            FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
+            if (fragment != null) {
+                removeFromBaseFragment(fragment);
+            } else if (mAdapter != null && mAdapter.getSelections().size() > 0) {
+                mAdapter.deselect();
+            } else if (emojiPopup != null && emojiPopup.isShowing()) {
+                emojiPopup.dismiss();
+            } else {
+                stopSuperPress = false;
+            }
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return stopSuperPress;
     }
 
     /**
@@ -2697,7 +2718,7 @@ public class FragmentChat extends BaseFragment
             HelperSetAction.sendCancel(parseLong(message.messageID));
 
             if (HelperUploadFile.cancelUploading(message.messageID)) {
-                clearItem(parseLong(message.messageID), pos);
+                deleteItem(parseLong(message.messageID), pos);
             }
         } else if (sendingStep == SendingStep.COMPRESSING) {
 
@@ -2709,7 +2730,7 @@ public class FragmentChat extends BaseFragment
                     structUploadVideo.filePath = "";
                 }
             }
-            clearItem(parseLong(message.messageID), pos);
+            deleteItem(parseLong(message.messageID), pos);
         }
     }
 
@@ -3743,7 +3764,8 @@ public class FragmentChat extends BaseFragment
                         }
                     }
                     // change english number to persian number
-                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    if (HelperCalander.isLanguagePersian)
+                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             });
         }
@@ -3771,7 +3793,8 @@ public class FragmentChat extends BaseFragment
                     //}
                     ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                     // change english number to persian number
-                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    if (HelperCalander.isLanguagePersian)
+                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             }
         });
@@ -4062,7 +4085,7 @@ public class FragmentChat extends BaseFragment
      * show current state for user if this room is chat
      *
      * @param status current state
-     * @param time if state is not online set latest online time
+     * @param time   if state is not online set latest online time
      */
     private void setUserStatus(final String status, final long time) {
         G.handler.post(new Runnable() {
@@ -4092,7 +4115,8 @@ public class FragmentChat extends BaseFragment
                         //}
                         ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                         // change english number to persian number
-                        if (HelperCalander.isLanguagePersian) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                        if (HelperCalander.isLanguagePersian)
+                            txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
                         checkAction();
                     }
@@ -4161,7 +4185,8 @@ public class FragmentChat extends BaseFragment
                         }
                     }
                     // change english number to persian number
-                    if (HelperCalander.isLanguagePersian) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    if (HelperCalander.isLanguagePersian)
+                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             });
         }
@@ -4350,7 +4375,7 @@ public class FragmentChat extends BaseFragment
     /**
      * clear tag from edtChat and remove from view and delete from RealmRoomMessage
      */
-    private void clearItem(final long messageId, int position) {
+    private void deleteItem(final long messageId, int position) {
         if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
             if (Long.toString(messageId).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
                 edtChat.setTag(null);
@@ -4824,7 +4849,6 @@ public class FragmentChat extends BaseFragment
     /**
      * *************************** sheared data ***************************
      */
-
 
 
     private void insertShearedData() {
@@ -5741,7 +5765,8 @@ public class FragmentChat extends BaseFragment
                 onSelectRoomMenu("txtMuteNotification", mRoomId);
             }
         });
-        if (txtChannelMute == null) txtChannelMute = (TextView) rootView.findViewById(R.id.chl_txt_mute_channel);
+        if (txtChannelMute == null)
+            txtChannelMute = (TextView) rootView.findViewById(R.id.chl_txt_mute_channel);
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);
         } else {
@@ -7063,7 +7088,7 @@ public class FragmentChat extends BaseFragment
         long gapMessageId;
         if (direction == DOWN) {
             resultsUp =
-                getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+                    getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
              * if for UP state client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
@@ -7521,7 +7546,7 @@ public class FragmentChat extends BaseFragment
      * manage progress state in adapter
      *
      * @param progressState SHOW or HIDE state detect with enum
-     * @param direction define direction for show progress in UP or DOWN
+     * @param direction     define direction for show progress in UP or DOWN
      */
     private void progressItem(final ProgressState progressState, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
         G.handler.post(new Runnable() {

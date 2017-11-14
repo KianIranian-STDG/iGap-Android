@@ -537,7 +537,7 @@ public class MusicPlayer extends Service {
                 FragmentChat.onMusicListener.complete(true, MusicPlayer.messageId, beforeMessageId);
             }
         } catch (Exception e) {
-            Log.e("dddd", "music player        nextRandomMusic   " + e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -569,7 +569,7 @@ public class MusicPlayer extends Service {
         try {
             selectedMedia--;
 
-            String beforMessageID = MusicPlayer.messageId;
+            String beforeMessageId = MusicPlayer.messageId;
 
             if (selectedMedia >= 0) {
 
@@ -586,11 +586,10 @@ public class MusicPlayer extends Service {
             }
 
             if (FragmentChat.onMusicListener != null) {
-                FragmentChat.onMusicListener.complete(true, MusicPlayer.messageId, beforMessageID);
+                FragmentChat.onMusicListener.complete(true, MusicPlayer.messageId, beforeMessageId);
             }
         } catch (Exception e) {
-
-            Log.e("dddd", "music player        previousMusic   " + e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -618,8 +617,8 @@ public class MusicPlayer extends Service {
                 mp.release();
                 mp = null;
             }
-        } catch (Exception E) {
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         // clearWallpaperLockScrean();
@@ -709,6 +708,10 @@ public class MusicPlayer extends Service {
             } catch (Exception e) {
                 HelperLog.setErrorLog(" music plyer   startPlayer   setISVoice    " + messageID + "    " + e.toString());
             }
+        }
+
+        if (isVoice) {
+            closeLayoutMediaPlayer();
         }
 
         MusicPlayer.messageId = messageID;
