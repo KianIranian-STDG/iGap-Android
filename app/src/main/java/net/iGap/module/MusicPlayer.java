@@ -44,13 +44,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -61,8 +55,19 @@ import net.iGap.helper.HelperLog;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 import static net.iGap.G.context;
 
@@ -136,11 +141,10 @@ public class MusicPlayer extends Service {
     public static LinearLayout shearedMediaLayout;
 
     private static Realm mRealm;
-    private static boolean isRegisterSensore = false;
+    private static boolean isRegisterSensor = false;
 
-    private static Realm getmRealm() {
+    private static Realm getRealm() {
         if (mRealm == null || mRealm.isClosed()) {
-
             mRealm = Realm.getDefaultInstance();
         }
 
@@ -186,8 +190,10 @@ public class MusicPlayer extends Service {
 
     public static void setMusicPlayer(LinearLayout layoutTripMusic) {
 
-        if (remoteViews == null) remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
-        if (notificationManager == null) notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (remoteViews == null)
+            remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
+        if (notificationManager == null)
+            notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (layoutTripMusic != null) {
             layoutTripMusic.setVisibility(View.GONE);
@@ -195,10 +201,9 @@ public class MusicPlayer extends Service {
 
         initLayoutTripMusic(layoutTripMusic);
 
-        getAtribuits();
+        getAttribute();
 
-        //  getOrginallWallpaper();
-
+        //getOrginallWallpaper();
     }
 
     //
@@ -254,7 +259,7 @@ public class MusicPlayer extends Service {
         }
     }
 
-    public static void shuffelClick() {
+    public static void shuffleClick() {
 
         isShuffelOn = !isShuffelOn;
         SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", context.MODE_PRIVATE);
@@ -273,11 +278,13 @@ public class MusicPlayer extends Service {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ActivityMain.class);
-                intent.putExtra(ActivityMain.openMediaPlyer, true);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (!isVoice) {
+                    Intent intent = new Intent(context, ActivityMain.class);
+                    intent.putExtra(ActivityMain.openMediaPlyer, true);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                context.startActivity(intent);
+                    context.startActivity(intent);
+                }
             }
         });
 
@@ -346,6 +353,7 @@ public class MusicPlayer extends Service {
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
             notificationManager.notify(notificationId, notification);
         } catch (RuntimeException e) {
+            e.printStackTrace();
         }
 
         try {
@@ -392,6 +400,7 @@ public class MusicPlayer extends Service {
             remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
             notificationManager.notify(notificationId, notification);
         } catch (RuntimeException e) {
+            e.printStackTrace();
         }
 
         try {
@@ -468,6 +477,7 @@ public class MusicPlayer extends Service {
             }
             stopTimer();
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (mp != null) {
@@ -490,6 +500,13 @@ public class MusicPlayer extends Service {
                 RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
                 startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             } else {
+                if (isVoice) { // avoid from return to first voice
+                    if (btnPlayMusic != null) {
+                        btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
+                    }
+                    return;
+                }
+
                 selectedMedia = 0;
                 RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
                 startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
@@ -498,7 +515,7 @@ public class MusicPlayer extends Service {
                 FragmentChat.onMusicListener.complete(true, MusicPlayer.messageId, beforeMessageId);
             }
         } catch (Exception e) {
-            Log.e("dddd", "music player        nextMusic   " + e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -621,6 +638,44 @@ public class MusicPlayer extends Service {
         }
     }
 
+    private static String getMusicName(long messageId, String name) {
+        try {
+
+            if (isVoice) {
+                String voiceName = "";
+                RealmRoomMessage realmRoomMessage = RealmRoomMessage.getFinalMessage(getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst());
+                if (realmRoomMessage != null) {
+                    if (realmRoomMessage.getUserId() != 0) {
+                        if (realmRoomMessage.getUserId() == G.userId) {
+                            voiceName = G.context.getResources().getString(R.string.you);
+                        } else {
+                            voiceName = RealmRegisteredInfo.getNameWithId(realmRoomMessage.getUserId());
+                        }
+
+                    } else if (realmRoomMessage.getAuthorRoomId() != 0) {
+                        voiceName = RealmRoom.detectTitle(realmRoomMessage.getAuthorRoomId());
+                    }
+
+                    return G.context.getResources().getString(R.string.recorded_by) + " " + voiceName;
+                }
+            }
+
+            if (name == null) {
+                name = "";
+            }
+
+            if (name.length() > 0) {
+                return musicName = name;
+            } else if (musicPath != null && musicPath.length() > 0) {
+                return musicPath.substring(musicPath.lastIndexOf("/") + 1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
     public static void startPlayer(String name, String musicPath, String roomName, long roomId, final boolean updateList, String messageID) {
 
         G.handler.postDelayed(new Runnable() {
@@ -636,7 +691,7 @@ public class MusicPlayer extends Service {
         if (messageID != null && messageID.length() > 0) {
 
             try {
-                RealmRoomMessage realmRoomMessage = RealmRoomMessage.getFinalMessage(getmRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst());
+                RealmRoomMessage realmRoomMessage = RealmRoomMessage.getFinalMessage(getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst());
 
                 if (realmRoomMessage != null) {
                     String type = realmRoomMessage.getMessageType().toString();
@@ -660,25 +715,11 @@ public class MusicPlayer extends Service {
             layoutTripMusic.setVisibility(View.VISIBLE);
         }
 
-        try {
-
-            if (name == null) {
-                name = "";
-            }
-
-            if (name.length() > 0) {
-                musicName = name;
-            } else if (musicPath != null && musicPath.length() > 0) {
-                musicName = musicPath.substring(musicPath.lastIndexOf("/") + 1);
-            }
-        } catch (Exception e) {
-
-        }
+        musicName = getMusicName(Long.parseLong(messageID), name);
 
         try {
 
             if (mp != null) {
-
                 mp.setOnCompletionListener(null);
 
                 mp.stop();
@@ -688,7 +729,7 @@ public class MusicPlayer extends Service {
 
             mp = new MediaPlayer();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         try {
@@ -722,6 +763,7 @@ public class MusicPlayer extends Service {
                 onComplete.complete(true, "update", "");
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         updateNotification();
@@ -751,35 +793,56 @@ public class MusicPlayer extends Service {
 
     private static void OnCompleteMusic() {
         try {
-            if (repeatMode.equals(RepeatMode.noRepeat.toString())) {
-                stopSound();
-            } else if (repeatMode.equals(RepeatMode.repeatAll.toString())) {
+            if (isVoice) {
 
-                if (playNextMusic) {
-
-                    fillMediaList(true);
-
-                    nextMusic();
-                    if (FragmentChat.onMusicListener != null) {
-                        FragmentChat.onMusicListener.complete(false, MusicPlayer.messageId, "");
-                    } else {
-                        downloadNextMusic(MusicPlayer.messageId);
-                    }
+                fillMediaList(true);
+                nextMusic();
+                if (FragmentChat.onMusicListener != null) {
+                    FragmentChat.onMusicListener.complete(false, MusicPlayer.messageId, "");
                 } else {
+                    downloadNextMusic(MusicPlayer.messageId);
+                }
 
-                    if (isShuffelOn) {
-                        nextRandomMusic();
-                    } else {
-
-                        nextMusic();
+                String zeroTime = "0:00";
+                if (onCompleteChat != null) {
+                    onCompleteChat.complete(true, "play", "");
+                    onCompleteChat.complete(false, "updateTime", zeroTime);
+                } else {
+                    if (FragmentChat.onMusicListener != null) {
+                        FragmentChat.onMusicListener.complete(true, MusicPlayer.messageId, "");
                     }
                 }
-            } else if (repeatMode.equals(RepeatMode.oneRpeat.toString())) {
-                stopSound();
-                playAndPause();
+            } else {
+                if (repeatMode.equals(RepeatMode.noRepeat.toString())) {
+                    stopSound();
+                } else if (repeatMode.equals(RepeatMode.repeatAll.toString())) {
+
+                    if (playNextMusic) {
+
+                        fillMediaList(true);
+
+                        nextMusic();
+                        if (FragmentChat.onMusicListener != null) {
+                            FragmentChat.onMusicListener.complete(false, MusicPlayer.messageId, "");
+                        } else {
+                            downloadNextMusic(MusicPlayer.messageId);
+                        }
+                    } else {
+
+                        if (isShuffelOn) {
+                            nextRandomMusic();
+                        } else {
+
+                            nextMusic();
+                        }
+                    }
+                } else if (repeatMode.equals(RepeatMode.oneRpeat.toString())) {
+                    stopSound();
+                    playAndPause();
+                }
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -812,7 +875,10 @@ public class MusicPlayer extends Service {
         return finalTimerString;
     }
 
-    public static void updateNotification() {
+    private static void updateNotification() {
+        if (isVoice) { // don't show notification for voice
+            return;
+        }
 
         getMusicInfo();
 
@@ -865,23 +931,36 @@ public class MusicPlayer extends Service {
 
         mediaList = new ArrayList<>();
 
-        RealmResults<RealmRoomMessage> roomMessages = getmRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.MESSAGE_ID);
+        RealmResults<RealmRoomMessage> roomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.MESSAGE_ID);
 
         if (!roomMessages.isEmpty()) {
-            for (RealmRoomMessage realmRoomMessage : roomMessages) {
+            for (RealmRoomMessage realmRoomMessage : roomMessages) { //TODO Saeed Mozaffari; write better code for detect voice and audio instead get all roomMessages
 
-                RealmRoomMessage _rm = RealmRoomMessage.getFinalMessage(realmRoomMessage);
+                RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(realmRoomMessage);
 
-                if (_rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || _rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || _rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
-                    try {
-
-                        if (_rm.getAttachment().getLocalFilePath() != null) {
-                            if (new File(_rm.getAttachment().getLocalFilePath()).exists()) {
-                                mediaList.add(realmRoomMessage);
+                if (isVoice) {
+                    if (roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString())) {
+                        try {
+                            if (roomMessage.getAttachment().getLocalFilePath() != null) {
+                                if (new File(roomMessage.getAttachment().getLocalFilePath()).exists()) {
+                                    mediaList.add(realmRoomMessage);
+                                }
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        Log.e("dddd", "music player   fillMediaList " + e.toString());
+                    }
+                } else {
+                    if (roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
+                        try {
+                            if (roomMessage.getAttachment().getLocalFilePath() != null) {
+                                if (new File(roomMessage.getAttachment().getLocalFilePath()).exists()) {
+                                    mediaList.add(realmRoomMessage);
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -1053,7 +1132,7 @@ public class MusicPlayer extends Service {
         }
     }
 
-    private static void getAtribuits() {
+    private static void getAttribute() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", context.MODE_PRIVATE);
         repeatMode = sharedPreferences.getString("RepeatMode", RepeatMode.noRepeat.toString());
         isShuffelOn = sharedPreferences.getBoolean("Shuffel", false);
@@ -1088,8 +1167,12 @@ public class MusicPlayer extends Service {
 
         boolean result = false;
 
-        RealmResults<RealmRoomMessage> roomMessages = getmRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
+        RealmResults<RealmRoomMessage> roomMessages = getRealm()
+                .where(RealmRoomMessage.class)
+                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
+                .equalTo(RealmRoomMessageFields.DELETED, false)
+                .greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId))
+                .findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage rm : roomMessages) {
@@ -1098,20 +1181,19 @@ public class MusicPlayer extends Service {
                     try {
 
                         if (rm.getAttachment().getLocalFilePath() == null || !new File(rm.getAttachment().getLocalFilePath()).exists()) {
-
                             ProtoGlobal.RoomMessageType _messageType = rm.getForwardMessage() != null ? rm.getForwardMessage().getMessageType() : rm.getMessageType();
-                            String _cashid = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getCacheId() : rm.getAttachment().getCacheId();
+                            String _cacheId = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getCacheId() : rm.getAttachment().getCacheId();
                             String _name = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getName() : rm.getAttachment().getName();
                             String _token = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getToken() : rm.getAttachment().getToken();
                             Long _size = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getSize() : rm.getAttachment().getSize();
 
-                            if (_cashid == null) {
+                            if (_cacheId == null) {
                                 return result;
                             }
 
                             ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
-                            final String _path = AndroidUtils.getFilePathWithCashId(_cashid, _name, _messageType);
+                            final String _path = AndroidUtils.getFilePathWithCashId(_cacheId, _name, _messageType);
 
                             if (_token != null && _token.length() > 0 && _size > 0) {
 
@@ -1119,7 +1201,7 @@ public class MusicPlayer extends Service {
 
                                     result = true;
 
-                                    HelperDownloadFile.startDownload(rm.getMessageId() + "", _token, _cashid, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
+                                    HelperDownloadFile.startDownload(rm.getMessageId() + "", _token, _cacheId, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
                                         @Override
                                         public void OnProgress(String path, int progress) {
                                             if (progress == 100) {
@@ -1142,7 +1224,7 @@ public class MusicPlayer extends Service {
 
                         break;
                     } catch (Exception e) {
-                        Log.e("dddd", "music player   fillMediaList " + e.toString());
+                        e.printStackTrace();
                     }
                 }
             }
@@ -1155,7 +1237,7 @@ public class MusicPlayer extends Service {
 
     private static void initSensor() {
 
-        if (!isRegisterSensore) {
+        if (!isRegisterSensor) {
 
             registerMediaBottom();
 
@@ -1199,38 +1281,38 @@ public class MusicPlayer extends Service {
 
             registerDistanceSensor();
 
-            isRegisterSensore = true;
+            isRegisterSensor = true;
         }
     }
 
     private static void removeSensor() {
 
-        if (isRegisterSensore) {
+        if (isRegisterSensor) {
 
-            isRegisterSensore = false;
+            isRegisterSensor = false;
 
             AudioManager audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
 
             try {
-                if (remoteComponentName != null) {
+                if (remoteComponentName != null && audioManager != null) {
                     audioManager.unregisterMediaButtonEventReceiver(remoteComponentName);
                 }
             } catch (Exception e) {
-                Log.e("ddddd", "music plyer  removeSensor   audioManager   " + e.toString());
+                e.printStackTrace();
             }
 
             try {
-                if (remoteControlClient != null) {
+                if (remoteControlClient != null && audioManager != null) {
                     audioManager.unregisterRemoteControlClient(remoteControlClient);
                 }
             } catch (Exception e) {
-                Log.e("ddddd", "music plyer  removeSensor   remoteControlClient   " + e.toString());
+                e.printStackTrace();
             }
 
             try {
                 context.unregisterReceiver(headsetPluginReciver);
             } catch (Exception e) {
-                Log.e("ddddd", "music plyer  removeSensor    unregisterReceiver " + e.toString());
+                e.printStackTrace();
             }
 
             //try {

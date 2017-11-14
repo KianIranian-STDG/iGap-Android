@@ -13,13 +13,7 @@ package net.iGap.realm;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.format.DateUtils;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import io.realm.annotations.PrimaryKey;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperString;
@@ -29,6 +23,15 @@ import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientGetRoom;
 
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
+import io.realm.Sort;
+import io.realm.annotations.PrimaryKey;
+
 import static net.iGap.G.context;
 import static net.iGap.G.userId;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
@@ -36,7 +39,8 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class RealmRoom extends RealmObject {
-    @PrimaryKey private long id;
+    @PrimaryKey
+    private long id;
     private String type;
     private String title;
     private String initials;
@@ -214,13 +218,20 @@ public class RealmRoom extends RealmObject {
 
             String result = "";
 
-            if (countOFImage > 0) result += "\n" + countOFImage + " " + context.getString(R.string.shared_image);
-            if (countOFVIDEO > 0) result += "\n" + countOFVIDEO + " " + context.getString(R.string.shared_video);
-            if (countOFAUDIO > 0) result += "\n" + countOFAUDIO + " " + context.getString(R.string.shared_audio);
-            if (countOFVOICE > 0) result += "\n" + countOFVOICE + " " + context.getString(R.string.shared_voice);
-            if (countOFGIF > 0) result += "\n" + countOFGIF + " " + context.getString(R.string.shared_gif);
-            if (countOFFILE > 0) result += "\n" + countOFFILE + " " + context.getString(R.string.shared_file);
-            if (countOFLink > 0) result += "\n" + countOFLink + " " + context.getString(R.string.shared_links);
+            if (countOFImage > 0)
+                result += "\n" + countOFImage + " " + context.getString(R.string.shared_image);
+            if (countOFVIDEO > 0)
+                result += "\n" + countOFVIDEO + " " + context.getString(R.string.shared_video);
+            if (countOFAUDIO > 0)
+                result += "\n" + countOFAUDIO + " " + context.getString(R.string.shared_audio);
+            if (countOFVOICE > 0)
+                result += "\n" + countOFVOICE + " " + context.getString(R.string.shared_voice);
+            if (countOFGIF > 0)
+                result += "\n" + countOFGIF + " " + context.getString(R.string.shared_gif);
+            if (countOFFILE > 0)
+                result += "\n" + countOFFILE + " " + context.getString(R.string.shared_file);
+            if (countOFLink > 0)
+                result += "\n" + countOFLink + " " + context.getString(R.string.shared_links);
 
             result = result.trim();
 
@@ -334,9 +345,6 @@ public class RealmRoom extends RealmObject {
                 return id;
         }
     }
-
-
-
 
 
     public static RealmRoom getRealmRoom(Realm realm, long roomId) {
@@ -597,7 +605,7 @@ public class RealmRoom extends RealmObject {
      * this account and finally update unread count if another account
      * was saw message for this room
      *
-     * @param roomId roomId for room that get update status from that
+     * @param roomId     roomId for room that get update status from that
      * @param authorHash updater author hash
      */
     public static void clearUnreadCount(long roomId, String authorHash, ProtoGlobal.RoomMessageStatus messageStatus, long messageId) {
@@ -1174,6 +1182,17 @@ public class RealmRoom extends RealmObject {
         }
         realm.close();
         return roomType;
+    }
+
+    public static String detectTitle(long roomId) {
+        String title = "";
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            title = realmRoom.getTitle();
+        }
+        realm.close();
+        return title;
     }
 
     public static void setLastMessageWithRoomMessage(Realm realm, long roomId, RealmRoomMessage roomMessage) {

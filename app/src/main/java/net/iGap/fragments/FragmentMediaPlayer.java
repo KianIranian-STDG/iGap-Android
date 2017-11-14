@@ -25,9 +25,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
-import java.io.File;
-import java.io.IOException;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -42,6 +42,9 @@ import net.iGap.libs.ripplesoundplayer.util.PaintUtil;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
+
+import java.io.File;
+import java.io.IOException;
 
 public class FragmentMediaPlayer extends BaseFragment {
 
@@ -279,7 +282,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         btnShuffle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MusicPlayer.shuffelClick();
+                MusicPlayer.shuffleClick();
             }
         });
 
