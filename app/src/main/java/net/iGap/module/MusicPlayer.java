@@ -349,11 +349,13 @@ public class MusicPlayer extends Service {
 
     public static void pauseSound() {
 
-        try {
-            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
-            notificationManager.notify(notificationId, notification);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
+        if (!isVoice) {
+            try {
+                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
+                notificationManager.notify(notificationId, notification);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
         }
 
         try {
@@ -396,11 +398,13 @@ public class MusicPlayer extends Service {
             return;
         }
 
-        try {
-            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
-            notificationManager.notify(notificationId, notification);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
+        if (!isVoice) {
+            try {
+                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.pause_button);
+                notificationManager.notify(notificationId, notification);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
         }
 
         try {
@@ -446,11 +450,13 @@ public class MusicPlayer extends Service {
             txt_music_time_counter.setText(zeroTime);
         }
 
-        try {
-            remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
-            notificationManager.notify(notificationId, notification);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
+        if (!isVoice) {
+            try {
+                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
+                notificationManager.notify(notificationId, notification);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
         }
 
         try {
