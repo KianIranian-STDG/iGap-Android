@@ -101,7 +101,11 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
             }
         } else {
             if (mMessage.attachment != null) {
-                holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + mMessage.attachment.compressing));
+                if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) != ProtoGlobal.RoomMessageStatus.SENT) {
+                    AbstractMessage.processVideo(holder.duration, holder.itemView, mMessage);
+                } else {
+                    holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + ""));
+                }
             }
         }
     }

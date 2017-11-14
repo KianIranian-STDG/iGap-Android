@@ -20,6 +20,7 @@ import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -940,6 +941,32 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
+
+    public static void processVideo(final TextView duration, final View holder1, final StructMessageInfo mMessage) {
+
+        MediaController.onPercentCompress = new MediaController.OnPercentCompress() {
+            @Override
+            public void compress(final long percent, String path) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Log.i("HHHHHHHHHHHHHH", "0 run: " + ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status));
+
+
+                        if (percent < 98) {
+                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + mMessage.attachment.compressing + " %" + percent));
+                        } else {
+                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + "Uploading..."));
+                        }
+
+                        //&& ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) != ProtoGlobal.RoomMessageStatus.SEEN
+                    }
+                });
+            }
+        };
+    }
+
     /**
      * does item have progress view
      *
@@ -1514,14 +1541,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             @Override
                             public void run() {
 
-                                float p = progress;
-                                if ((mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) && FragmentChat.compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
-                                    if (progress < mMessage.uploadProgress) {
-                                        p = mMessage.uploadProgress;
-                                    }
-                                }
+                                //float p = progress;
+                                //if ((mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) && FragmentChat.compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
+                                //    if (progress < mMessage.uploadProgress) {
+                                //        p = mMessage.uploadProgress;
+                                //    }
+                                //}
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
-                                    progressBar.withProgress((int) p);
+                                    progressBar.withProgress(progress);
                                     if (progress == 100) {
                                         progressBar.performProgress();
                                         contentLoading.setVisibility(View.GONE);
@@ -1543,25 +1570,25 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 });
 
-                if (mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
-
-                    MediaController.onPercentCompress = new MediaController.OnPercentCompress() {
-                        @Override
-                        public void compress(final long percent, String path) {
-
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
-                                        int p = (int) (percent / 10);
-                                        progressBar.withProgress(p);
-                                        mMessage.uploadProgress = p;
-                                    }
-                                }
-                            });
-                        }
-                    };
-                }
+                //if (mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                //
+                //    MediaController.onPercentCompress = new MediaController.OnPercentCompress() {
+                //        @Override
+                //        public void compress(final long percent, String path) {
+                //
+                //            G.handler.post(new Runnable() {
+                //                @Override
+                //                public void run() {
+                //                    if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
+                //                        int p = (int) (percent / 10);
+                //                        progressBar.withProgress(p);
+                //                        mMessage.uploadProgress = p;
+                //                    }
+                //                }
+                //            });
+                //        }
+                //    };
+                //}
 
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                 contentLoading.setVisibility(View.VISIBLE);
@@ -1635,4 +1662,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         return "";
     }
+
+
+
 }

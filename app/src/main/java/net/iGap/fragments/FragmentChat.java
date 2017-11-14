@@ -6566,7 +6566,7 @@ public class FragmentChat extends BaseFragment
                         }
                         structUploadVideos.add(uploadVideo);
 
-                        //finalMessageInfo.attachment.compressing = G.fragmentActivity.getResources().getString(R.string.compressing);
+                        finalMessageInfo.attachment.compressing = G.fragmentActivity.getResources().getString(R.string.compressing);
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
