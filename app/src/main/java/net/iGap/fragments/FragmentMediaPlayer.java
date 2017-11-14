@@ -74,9 +74,9 @@ public class FragmentMediaPlayer extends BaseFragment {
             return inflater.inflate(R.layout.activity_media_player, container, false);
         } else {
             if (G.context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                return attachToSwipeBack(inflater.inflate(R.layout.activity_media_player_land, container, false));
+                return inflater.inflate(R.layout.activity_media_player_land, container, false);
             } else {
-                return attachToSwipeBack(inflater.inflate(R.layout.activity_media_player, container, false));
+                return inflater.inflate(R.layout.activity_media_player, container, false);
             }
         }
     }
