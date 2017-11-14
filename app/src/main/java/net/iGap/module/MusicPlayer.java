@@ -1185,60 +1185,68 @@ public class MusicPlayer extends Service {
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage rm : roomMessages) {
-
-                if (rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString()) || rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
-                    try {
-
-                        if (rm.getAttachment().getLocalFilePath() == null || !new File(rm.getAttachment().getLocalFilePath()).exists()) {
-                            ProtoGlobal.RoomMessageType _messageType = rm.getForwardMessage() != null ? rm.getForwardMessage().getMessageType() : rm.getMessageType();
-                            String _cacheId = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getCacheId() : rm.getAttachment().getCacheId();
-                            String _name = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getName() : rm.getAttachment().getName();
-                            String _token = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getToken() : rm.getAttachment().getToken();
-                            Long _size = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getSize() : rm.getAttachment().getSize();
-
-                            if (_cacheId == null) {
-                                return result;
-                            }
-
-                            ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
-
-                            final String _path = AndroidUtils.getFilePathWithCashId(_cacheId, _name, _messageType);
-
-                            if (_token != null && _token.length() > 0 && _size > 0) {
-
-                                if (!new File(_path).exists()) {
-
-                                    result = true;
-
-                                    HelperDownloadFile.startDownload(rm.getMessageId() + "", _token, _cacheId, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
-                                        @Override
-                                        public void OnProgress(String path, int progress) {
-                                            if (progress == 100) {
-                                                downloadNewItem = true;
-                                            }
-                                        }
-
-                                        @Override
-                                        public void OnError(String token) {
-
-                                        }
-                                    });
-
-                                    MusicPlayer.playNextMusic = true;
-                                } else {
-                                    MusicPlayer.playNextMusic = false;
-                                }
-                            }
-                        }
-
-                        break;
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                if (isVoice) {
+                    if (rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString())) {
+                        result = startDownload(rm);
+                    }
+                } else {
+                    if (rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
+                        result = startDownload(rm);
                     }
                 }
             }
         }
 
+        return result;
+    }
+
+    private static boolean startDownload(RealmRoomMessage rm) {
+        boolean result = false;
+        try {
+            if (rm.getAttachment().getLocalFilePath() == null || !new File(rm.getAttachment().getLocalFilePath()).exists()) {
+                ProtoGlobal.RoomMessageType _messageType = rm.getForwardMessage() != null ? rm.getForwardMessage().getMessageType() : rm.getMessageType();
+                String _cacheId = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getCacheId() : rm.getAttachment().getCacheId();
+                String _name = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getName() : rm.getAttachment().getName();
+                String _token = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getToken() : rm.getAttachment().getToken();
+                Long _size = rm.getForwardMessage() != null ? rm.getForwardMessage().getAttachment().getSize() : rm.getAttachment().getSize();
+
+                if (_cacheId == null) {
+                    return false;
+                }
+
+                ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
+
+                final String _path = AndroidUtils.getFilePathWithCashId(_cacheId, _name, _messageType);
+
+                if (_token != null && _token.length() > 0 && _size > 0) {
+
+                    if (!new File(_path).exists()) {
+
+                        result = true;
+
+                        HelperDownloadFile.startDownload(rm.getMessageId() + "", _token, _cacheId, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
+                            @Override
+                            public void OnProgress(String path, int progress) {
+                                if (progress == 100) {
+                                    downloadNewItem = true;
+                                }
+                            }
+
+                            @Override
+                            public void OnError(String token) {
+
+                            }
+                        });
+
+                        MusicPlayer.playNextMusic = true;
+                    } else {
+                        MusicPlayer.playNextMusic = false;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return result;
     }
 
