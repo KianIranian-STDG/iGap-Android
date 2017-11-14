@@ -28,7 +28,7 @@ public class Config {
     public static final int LIMIT_GET_HISTORY_LOW = 10;
     public static final int LIMIT_GET_HISTORY_NORMAL = 100;
     public static final int LIMIT_LOAD_ROOM = 50;
-    public static final int FAST_START_PAGE_TIME = (int) 100;
+    public static final int FAST_START_PAGE_TIME = (int) 20;
     public static final int LOW_START_PAGE_TIME = (int) 25;
 
     public static final int TIME_OUT_DELAY_MS = (int) (DateUtils.SECOND_IN_MILLIS);
