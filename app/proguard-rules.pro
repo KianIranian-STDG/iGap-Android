@@ -33,6 +33,9 @@
 #Warning:cat.ereza.customactivityoncrash.config.CaocConfig$Builder: can't find referenced class cat.ereza.customactivityoncrash.config.CaocConfig$BackgroundMode
 ###
 
+###Ghamari Date
+-keep class com.github.msarhan.ummalqura.** { *; }
+-dontwarn com.github.msarhan.ummalqura.**
 #
 
 ###Chips
