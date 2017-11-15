@@ -322,7 +322,7 @@ public class MusicPlayer extends Service {
             }
         }
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
         }
 
@@ -442,7 +442,7 @@ public class MusicPlayer extends Service {
 
         String zeroTime = "0:00";
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             zeroTime = HelperCalander.convertToUnicodeFarsiNumber(zeroTime);
         }
 
@@ -793,7 +793,7 @@ public class MusicPlayer extends Service {
 
         setSpeaker();
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
         }
 
@@ -1042,7 +1042,7 @@ public class MusicPlayer extends Service {
 
         strTimer = MusicPlayer.milliSecondsToTimer(time);
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             strTimer = HelperCalander.convertToUnicodeFarsiNumber(strTimer);
         }
 

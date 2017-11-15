@@ -38,15 +38,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmList;
-import io.realm.RealmModel;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
@@ -120,6 +115,15 @@ import net.iGap.request.RequestGroupRemoveUsername;
 import net.iGap.request.RequestGroupRevokeLink;
 import net.iGap.request.RequestGroupUpdateUsername;
 import net.iGap.request.RequestUserInfo;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmList;
+import io.realm.RealmModel;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
@@ -284,7 +288,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                                     if (txtNumberOfSharedMedia == null) {
                                         txtNumberOfSharedMedia = (TextView) G.fragmentActivity.findViewById(R.id.agp_txt_number_of_shared_media);
                                     }
-                                    if (HelperCalander.isLanguagePersian) {
+                                    if (HelperCalander.isPersianUnicode) {
                                         txtNumberOfSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
                                     } else {
                                         txtNumberOfSharedMedia.setText(countText);
@@ -440,7 +444,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                     @Override
                     public void run() {
                         txtMemberNumber.setText(memberCount + "");
-                        if (HelperCalander.isLanguagePersian) {
+                        if (HelperCalander.isPersianUnicode) {
                             txtMemberNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMemberNumber.getText().toString()));
                         }
                     }
@@ -778,7 +782,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         });
 
         txtMemberNumber.setText(participantsCountLabel);
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             txtMemberNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMemberNumber.getText().toString()));
         }
         txtLinkTitle = (TextView) view.findViewById(R.id.agp_txt_link_title);

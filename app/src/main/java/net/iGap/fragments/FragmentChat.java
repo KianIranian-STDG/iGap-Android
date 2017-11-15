@@ -69,6 +69,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
@@ -82,25 +83,7 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
-import io.fabric.sdk.android.services.concurrency.AsyncTask;
-import io.fotoapparat.Fotoapparat;
-import io.fotoapparat.view.CameraRenderer;
-import io.fotoapparat.view.CameraView;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import me.leolin.shortcutbadger.ShortcutBadger;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -268,7 +251,29 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
+
 import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+
+import io.fabric.sdk.android.services.concurrency.AsyncTask;
+import io.fotoapparat.Fotoapparat;
+import io.fotoapparat.view.CameraRenderer;
+import io.fotoapparat.view.CameraView;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -306,7 +311,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged {
+        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged, OnConnectionChangeStateChat {
 
     public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
@@ -573,6 +578,8 @@ public class FragmentChat extends BaseFragment
     public void onResume() {
         super.onResume();
 
+        setConnectionText(G.connectionState);
+
         if (FragmentShearedMedia.list != null && FragmentShearedMedia.list.size() > 0) {
             deleteSelectedMessageFromAdapter(FragmentShearedMedia.list);
             FragmentShearedMedia.list.clear();
@@ -630,7 +637,7 @@ public class FragmentChat extends BaseFragment
                                             }
                                             //    avi.setVisibility(View.GONE);
 
-                                            if (HelperCalander.isLanguagePersian)
+                                            if (HelperCalander.isPersianUnicode)
                                                 txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                                         }
                                     });
@@ -695,6 +702,7 @@ public class FragmentChat extends BaseFragment
         G.onLastSeenUpdateTiming = this;
         G.onChatDelete = this;
         G.onBackgroundChanged = this;
+        G.onConnectionChangeStateChat = this;
         G.helperNotificationAndBadge.cancelNotification();
 
         finishActivity = new FinishActivity() {
@@ -1177,34 +1185,6 @@ public class FragmentChat extends BaseFragment
             viewGroupLastSeen = (ViewGroup) rootView.findViewById(R.id.chl_txt_viewGroup_seen);
             imvUserPicture = (CircleImageView) rootView.findViewById(R.id.chl_imv_user_picture);
 
-
-            G.onConnectionChangeStateChat = new OnConnectionChangeStateChat() {
-                @Override
-                public void onChangeState(final ConnectionState connectionState) {
-
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            G.connectionState = connectionState;
-                            if (connectionState == ConnectionState.WAITING_FOR_NETWORK) {
-                                checkConnection(G.context.getResources().getString(R.string.waiting_for_network));
-                            } else if (connectionState == ConnectionState.CONNECTING) {
-                                checkConnection(G.context.getResources().getString(R.string.connecting));
-                            } else if (connectionState == ConnectionState.UPDATING) {
-                                checkConnection(null);
-                            } else if (connectionState == ConnectionState.IGAP) {
-                                checkConnection(null);
-
-                            } else {
-                            }
-                        }
-                    });
-
-                }
-            };
-
-
             /**
              * need this info for load avatar
              */
@@ -1268,10 +1248,10 @@ public class FragmentChat extends BaseFragment
             /**
              * change english number to persian number
              */
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtName.setText(txtName.getText().toString());
             }
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
             }
         }
@@ -1325,6 +1305,24 @@ public class FragmentChat extends BaseFragment
 
             }
         }
+    }
+
+    private void setConnectionText(final ConnectionState connectionState) {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                G.connectionState = connectionState;
+                if (connectionState == ConnectionState.WAITING_FOR_NETWORK) {
+                    checkConnection(G.context.getResources().getString(R.string.waiting_for_network));
+                } else if (connectionState == ConnectionState.CONNECTING) {
+                    checkConnection(G.context.getResources().getString(R.string.connecting));
+                } else if (connectionState == ConnectionState.UPDATING) {
+                    checkConnection(null);
+                } else if (connectionState == ConnectionState.IGAP) {
+                    checkConnection(null);
+                }
+            }
+        });
     }
 
     private void initMain() {
@@ -2846,7 +2844,7 @@ public class FragmentChat extends BaseFragment
 
             txtNumberOfSelected.setText(selectedCount + "");
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtNumberOfSelected.setText(convertToUnicodeFarsiNumber(txtNumberOfSelected.getText().toString()));
             }
 
@@ -3573,7 +3571,7 @@ public class FragmentChat extends BaseFragment
 
                     String delete;
                     String textCheckBox = G.context.getResources().getString(R.string.st_checkbox_delete) + " " + title;
-                    if (HelperCalander.isLanguagePersian) {
+                    if (HelperCalander.isPersianUnicode) {
                         delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "1"));
                     } else {
                         delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, "the"));
@@ -3829,7 +3827,7 @@ public class FragmentChat extends BaseFragment
                         }
                     }
                     // change english number to persian number
-                    if (HelperCalander.isLanguagePersian)
+                    if (HelperCalander.isPersianUnicode)
                         txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             });
@@ -3838,7 +3836,7 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onUserUpdateStatus(long userId, final long time, final String status) {
-        if (chatType == CHAT && chatPeerId == userId) {
+        if (chatType == CHAT && chatPeerId == userId && !isCloudRoom) {
             userStatus = AppUtils.getStatsForUser(status);
             setUserStatus(userStatus, time);
         }
@@ -3858,7 +3856,7 @@ public class FragmentChat extends BaseFragment
                     //}
                     ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                     // change english number to persian number
-                    if (HelperCalander.isLanguagePersian)
+                    if (HelperCalander.isPersianUnicode)
                         txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             }
@@ -3951,6 +3949,10 @@ public class FragmentChat extends BaseFragment
 
     }
 
+    @Override
+    public void onChangeState(final ConnectionState connectionState) {
+        setConnectionText(connectionState);
+    }
 
     @Override
     public void onBackgroundChanged(final String backgroundPath) {
@@ -4180,7 +4182,7 @@ public class FragmentChat extends BaseFragment
                         //}
                         ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                         // change english number to persian number
-                        if (HelperCalander.isLanguagePersian)
+                        if (HelperCalander.isPersianUnicode)
                             txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
                         checkAction();
@@ -4250,7 +4252,7 @@ public class FragmentChat extends BaseFragment
                         }
                     }
                     // change english number to persian number
-                    if (HelperCalander.isLanguagePersian)
+                    if (HelperCalander.isPersianUnicode)
                         txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             });
@@ -5926,7 +5928,7 @@ public class FragmentChat extends BaseFragment
 
                             String delete;
                             String textCheckBox = G.context.getResources().getString(R.string.st_checkbox_delete) + " " + title;
-                            if (HelperCalander.isLanguagePersian) {
+                            if (HelperCalander.isPersianUnicode) {
                                 delete = HelperCalander.convertToUnicodeFarsiNumber(G.context.getResources().getString(R.string.st_desc_delete, count));
 
                             } else {
@@ -6839,7 +6841,7 @@ public class FragmentChat extends BaseFragment
                 ImageView imvForwardIcon = (ImageView) rootView.findViewById(R.id.cslhs_imv_forward);
                 imvForwardIcon.setColorFilter(Color.parseColor(G.appBarColor));
 
-                if (HelperCalander.isLanguagePersian) {
+                if (HelperCalander.isPersianUnicode) {
 
                     emMessage.setText(convertToUnicodeFarsiNumber(_count + " " + str));
                 } else {

@@ -27,10 +27,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import io.realm.Realm;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -72,6 +72,10 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChannelAddMessageReaction;
+
+import java.util.List;
+
+import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
@@ -117,7 +121,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 view.setText(HelperUrl.getLinkText(msg, mMessage.linkInfo, mMessage.messageID));
             } else {
 
-                msg = HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
+                msg = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
 
                 view.setText(msg);
             }
@@ -134,7 +138,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (mMessage.hasLinkInMessage) {
                 view.setText(HelperUrl.getLinkText(msg, mMessage.linkInfo, mMessage.messageID));
             } else {
-                msg = HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
+                msg = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
                 view.setText(msg);
             }
 
@@ -319,7 +323,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             txtTime.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
             txtTime.setText(HelperCalander.getClocktime(mMessage.time, false));
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txtTime.getText().toString()));
             }
         }
@@ -401,7 +405,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 txtViewsLabel.setText(mMessage.channelExtra.viewsLabel);
             }
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtViewsLabel.setText(HelperCalander.convertToUnicodeFarsiNumber(txtViewsLabel.getText().toString()));
             }
         }
@@ -571,7 +575,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 holder.itemView.findViewById(R.id.lyt_signature).setVisibility(View.VISIBLE);
             }
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtViewsLabel.setText(HelperCalander.convertToUnicodeFarsiNumber(txtViewsLabel.getText().toString()));
                 txtVoteDown.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVoteDown.getText().toString()));
                 txtVoteUp.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVoteUp.getText().toString()));

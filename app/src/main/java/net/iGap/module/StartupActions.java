@@ -7,16 +7,13 @@ import android.content.res.Configuration;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.one.EmojiOneProvider;
-import io.realm.DynamicRealm;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import java.io.File;
-import java.util.Locale;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -31,6 +28,13 @@ import net.iGap.helper.MyServiceTemporat;
 import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.webrtc.CallObserver;
+
+import java.io.File;
+import java.util.Locale;
+
+import io.realm.DynamicRealm;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -196,17 +200,17 @@ public final class StartupActions {
         switch (language) {
             case "فارسی":
                 selectedLanguage = "fa";
-                HelperCalander.isLanguagePersian = true;
+                HelperCalander.isPersianUnicode = true;
                 G.isAppRtl = true;
                 break;
             case "English":
                 selectedLanguage = "en";
-                HelperCalander.isLanguagePersian = false;
+                HelperCalander.isPersianUnicode = false;
                 G.isAppRtl = false;
                 break;
             case "العربی":
                 selectedLanguage = "ar";
-                HelperCalander.isLanguagePersian = true;
+                HelperCalander.isPersianUnicode = true;
                 G.isAppRtl = true;
                 break;
         }

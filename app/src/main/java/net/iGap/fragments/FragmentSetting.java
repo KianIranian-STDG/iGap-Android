@@ -1418,7 +1418,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         txtMessageTextSize = (TextView) view.findViewById(R.id.st_txt_messageTextSize_number);
         txtMessageTextSize.setText("" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14));
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
         }
 
@@ -1429,7 +1429,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_title_message_textSize))
                     .titleGravity(GravityEnum.START)
                     .titleColor(G.context.getResources().getColor(android.R.color.black))
-                    .items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
+                        .items(HelperCalander.isPersianUnicode ? R.array.message_text_size_persian : R.array.message_text_size)
                     .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
                         @Override
                         public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -1437,7 +1437,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                             if (text != null) {
                                 txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
 
-                                if (HelperCalander.isLanguagePersian) {
+                                if (HelperCalander.isPersianUnicode) {
                                     txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
                                 }
                             }
@@ -1928,7 +1928,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
         TextView txtWebViewHome = (TextView) view.findViewById(R.id.st_txt_iGap_home);
         final String link;
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             link = "https://www.igap.net/fa";
         } else {
             link = "https://www.igap.net/";
@@ -1941,7 +1941,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         });
 
         final String blogLink;
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             blogLink = "https://blog.igap.net/fa";
         } else {
             blogLink = "https://blog.igap.net";
@@ -1957,7 +1957,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
 
         final String supportLink;
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             supportLink = "https://support.igap.net/fa";
         } else {
             supportLink = "https://support.igap.net";
@@ -1974,7 +1974,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
         txtVersionApp.setText(G.fragmentActivity.getResources().getString(R.string.iGap_version) + " " + getAppVersion());
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             txtVersionApp.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVersionApp.getText().toString()));
         }
 
@@ -2099,7 +2099,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
             if (phoneName != null) txtPhoneNumber.setText(phoneName);
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtPhoneNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtPhoneNumber.getText().toString()));
             }
 

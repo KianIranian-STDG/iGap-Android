@@ -30,9 +30,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import java.io.IOException;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
@@ -61,6 +61,10 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserProfileSetNickname;
+
+import java.io.IOException;
+
+import io.realm.Realm;
 
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.G.context;
@@ -110,7 +114,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
 
         txtTitle = (TextView) view.findViewById(R.id.pu_titleToolbar);
 
-        if (!HelperCalander.isLanguagePersian) {
+        if (!HelperCalander.isPersianUnicode) {
             titleTypeface = G.typeface_neuropolitical;
         } else {
             titleTypeface = G.typeface_IRANSansMobile;

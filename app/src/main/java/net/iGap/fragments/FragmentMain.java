@@ -21,13 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import io.realm.OrderedRealmCollection;
-import io.realm.Realm;
-import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import java.util.HashMap;
-import java.util.List;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -80,6 +74,15 @@ import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
+
+import java.util.HashMap;
+import java.util.List;
+
+import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
+import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
@@ -1017,7 +1020,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                     holder.txtPinIcon.setVisibility(View.GONE);
                     holder.txtUnread.setText(mInfo.getUnreadCount() + "");
 
-                    if (HelperCalander.isLanguagePersian) {
+                    if (HelperCalander.isPersianUnicode) {
                         holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red);
                     } else {
                         holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red_left);
@@ -1040,7 +1043,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
             /**
              * for change english number to persian number
              */
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 holder.txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtLastMessage.getText().toString()));
                 holder.txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getText().toString()));
             }
@@ -1241,13 +1244,13 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                                     if (_name.length() > 0) {
 
                                         if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-                                            if (HelperCalander.isLanguagePersian) {
+                                            if (HelperCalander.isPersianUnicode) {
                                                 lastMessageSender = _name + ": ";
                                             } else {
                                                 lastMessageSender = " :" + _name;
                                             }
                                         } else {
-                                            if (HelperCalander.isLanguagePersian) {
+                                            if (HelperCalander.isPersianUnicode) {
                                                 lastMessageSender = " :" + _name;
                                             } else {
                                                 lastMessageSender = _name + ": ";
@@ -1302,7 +1305,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
                             String result = AppUtils.conversionMessageType(_type, holder.txtLastMessage, R.color.room_message_blue);
                             if (result.isEmpty()) {
-                                if (!HelperCalander.isLanguagePersian) {
+                                if (!HelperCalander.isPersianUnicode) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                                         holder.txtLastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
                                     }

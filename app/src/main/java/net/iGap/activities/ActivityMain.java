@@ -48,16 +48,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import io.realm.Realm;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -135,6 +132,13 @@ import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
@@ -597,7 +601,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (HelperCalander.isLanguagePersian) {
+                        if (HelperCalander.isPersianUnicode) {
                             new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.END).content(content).positiveText(R.string.B_ok).show();
                         } else {
                             new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.START).content(content).positiveText(R.string.B_ok).show();
@@ -840,7 +844,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 if (G.salectedTabInMainActivity.length() > 0) {
 
-                    if (HelperCalander.isLanguagePersian) {
+                    if (HelperCalander.isPersianUnicode) {
 
                         if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
                             index = 4;
@@ -874,7 +878,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 } else {
 
-                    if (HelperCalander.isLanguagePersian) {
+                    if (HelperCalander.isPersianUnicode) {
                         index = 4;
                     } else {
                         index = 0;
@@ -882,7 +886,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
 
                 navigationTabStrip.setViewPager(mViewPager, index);
-                if (!HelperCalander.isLanguagePersian) {
+                if (!HelperCalander.isPersianUnicode) {
                     navigationTabStrip.updatePointIndicator();
                 }
 
@@ -906,7 +910,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip = (NavigationTabStrip) findViewById(R.id.nts);
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
         } else {
             navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
@@ -923,7 +927,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
 
             G.handler.postDelayed(new Runnable() {
                 @Override
@@ -992,7 +996,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);
         }
     }
@@ -1739,7 +1743,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        if (!HelperCalander.isLanguagePersian) {
+        if (!HelperCalander.isPersianUnicode) {
             titleTypeface = G.typeface_neuropolitical;
         } else {
             titleTypeface = G.typeface_IRANSansMobile;
@@ -1882,7 +1886,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             txtNavName.setText(username);
             txtNavPhone.setText(phoneNumber);
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtNavPhone.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavPhone.getText().toString()));
                 txtNavName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavName.getText().toString()));
             }

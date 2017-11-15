@@ -17,7 +17,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
-import io.realm.Realm;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -31,6 +31,8 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestUserInfo;
+
+import io.realm.Realm;
 
 /**
  * return correct log message with author and target
@@ -346,7 +348,7 @@ public class HelperLogMessage {
         String tmp;
 
         try {
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 tmp = str[1];
             } else {
                 tmp = str[0];
@@ -371,7 +373,7 @@ public class HelperLogMessage {
         String tmp = null;
 
         try {
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 tmp = str[1];
             } else {
                 tmp = str[0];
@@ -390,7 +392,7 @@ public class HelperLogMessage {
 
         try {
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 linkInfo = str[3];
             } else {
                 linkInfo = str[2];

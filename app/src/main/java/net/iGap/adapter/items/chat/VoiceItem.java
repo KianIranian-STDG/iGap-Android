@@ -20,9 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import io.realm.Realm;
-import java.io.File;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -35,6 +33,11 @@ import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRegisteredInfo;
+
+import java.io.File;
+import java.util.List;
+
+import io.realm.Realm;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
@@ -113,7 +116,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
                                     if (mMessage.messageID.equals(MusicPlayer.messageId)) {
                                         holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
-                                        if (HelperCalander.isLanguagePersian) {
+                                        if (HelperCalander.isPersianUnicode) {
                                             holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
                                         }
                                         holder.musicSeekbar.setProgress(MusicPlayer.musicProgress);
@@ -126,7 +129,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
                                 public void run() {
 
                                     holder.txt_Timer.setText(MessageTow + "/" + holder.mTimeMusic);
-                                    if (HelperCalander.isLanguagePersian) {
+                                    if (HelperCalander.isPersianUnicode) {
                                         holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
                                     }
                                     holder.musicSeekbar.setProgress(0);
@@ -232,7 +235,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         holder.mMessageID = mMessage.messageID;
 
-        if (HelperCalander.isLanguagePersian) holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
+        if (HelperCalander.isPersianUnicode)
+            holder.txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txt_Timer.getText().toString()));
     }
 
     @Override
@@ -316,7 +320,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             //                @Override public void run() {
             //                    txt_Timer.setText(MessageTow + "/" + mTimeMusic);
             //
-            //                    if (HelperCalander.isLanguagePersian) txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
+            //                    if (HelperCalander.isPersianUnicode) txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
             //
             //                    musicSeekbar.setProgress(MusicPlayer.musicProgress);
             //                }

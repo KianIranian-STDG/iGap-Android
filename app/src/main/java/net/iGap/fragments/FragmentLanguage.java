@@ -10,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import java.util.Locale;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
+
+import java.util.Locale;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.onRefreshActivity;
@@ -97,6 +99,7 @@ public class FragmentLanguage extends BaseFragment {
                     editor.putString(SHP_SETTING.KEY_LANGUAGE, "English");
                     editor.apply();
                     setLocale("en");
+                    HelperCalander.isPersianUnicode = false;
                     HelperCalander.isLanguagePersian = false;
                     HelperCalander.isLanguageArabic = false;
                     G.isAppRtl = false;
@@ -125,6 +128,7 @@ public class FragmentLanguage extends BaseFragment {
                     editor.apply();
                     G.selectedLanguage = "fa";
                     setLocale("fa");
+                    HelperCalander.isPersianUnicode = true;
                     HelperCalander.isLanguagePersian = true;
                     HelperCalander.isLanguageArabic = false;
                     G.isAppRtl = true;
@@ -148,6 +152,7 @@ public class FragmentLanguage extends BaseFragment {
                     editor.apply();
                     G.selectedLanguage = "ar";
                     setLocale("ar");
+                    HelperCalander.isPersianUnicode = true;
                     HelperCalander.isLanguagePersian = false;
                     HelperCalander.isLanguageArabic = true;
                     G.isAppRtl = true;

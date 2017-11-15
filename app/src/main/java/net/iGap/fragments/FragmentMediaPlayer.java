@@ -124,7 +124,8 @@ public class FragmentMediaPlayer extends BaseFragment {
                             txt_Timer.setText(MessageTow);
                             musicSeekbar.setProgress(MusicPlayer.musicProgress);
 
-                            if (HelperCalander.isLanguagePersian) txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
+                            if (HelperCalander.isPersianUnicode)
+                                txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
                         }
                     });
                 } else if (messageOne.equals("RepeatMode")) {
@@ -313,7 +314,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
         });
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
             txt_MusicTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_MusicTime.getText().toString()));
         }
@@ -456,7 +457,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             setMusicInfo();
         }
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             txt_MusicTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_MusicTime.getText().toString()));
         }
 

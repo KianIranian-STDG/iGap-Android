@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -155,7 +156,7 @@ public class FragmentIntroduce extends BaseFragment {
         }
 
         Typeface titleTypeface;
-        if (!HelperCalander.isLanguagePersian) {
+        if (!HelperCalander.isPersianUnicode) {
             titleTypeface = G.typeface_neuropolitical;
         } else {
             titleTypeface = G.typeface_IRANSansMobile;

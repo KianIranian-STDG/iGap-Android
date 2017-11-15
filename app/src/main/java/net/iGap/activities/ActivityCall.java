@@ -38,10 +38,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import io.realm.Realm;
-import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -62,6 +59,12 @@ import net.iGap.request.RequestSignalingGetLog;
 import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.webrtc.WebRTC;
+
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import io.realm.Realm;
 
 public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
@@ -705,7 +708,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                             s += secend;
                         }
 
-                        if (HelperCalander.isLanguagePersian) {
+                        if (HelperCalander.isPersianUnicode) {
                             s = HelperCalander.convertToUnicodeFarsiNumber(s);
                         }
 
