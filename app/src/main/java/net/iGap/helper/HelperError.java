@@ -12,6 +12,7 @@ package net.iGap.helper;
 
 import android.support.design.widget.Snackbar;
 import android.view.View;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.AppUtils;
@@ -115,7 +116,7 @@ public class HelperError {
                 break;
 
             case 163:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error);
                 break;
 
             case 173:
@@ -313,43 +314,43 @@ public class HelperError {
 
             case 373:
 
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error);
 
                 break;
             case 374:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error);
                 break;
             case 375:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error);
                 break;
 
             case 453:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error);
                 break;
             case 455:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error);
                 break;
             case 456:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error);
                 break;
             case 454:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error);
                 break;
             case 457:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error);
                 break;
             case 458:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error);
                 break;
 
             case 467:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error);
                 break;
             case 468:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error);
                 break;
             case 469:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error);
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error);
                 break;
 
             case 500:
