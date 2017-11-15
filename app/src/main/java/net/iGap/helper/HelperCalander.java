@@ -12,6 +12,7 @@ package net.iGap.helper;
 
 import android.content.SharedPreferences;
 import android.text.format.DateUtils;
+import android.util.Log;
 import com.github.msarhan.ummalqura.calendar.UmmalquraCalendar;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,16 +44,15 @@ public class HelperCalander {
     public static String getArabicCalender(int year, int mounth, int day) {
 
         GregorianCalendar gCal = new GregorianCalendar(year, mounth, day);
-        Calendar uCal = new UmmalquraCalendar();
         Locale ar = new Locale("ar");
+        Calendar uCal = new UmmalquraCalendar(ar);
         uCal.setTime(gCal.getTime());         // Used to properly format 'yy' pattern
-        Calendar cal = new UmmalquraCalendar(ar);
 
-        cal.get(Calendar.YEAR);                                      // 1435
-        cal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar);       // رجب
-        cal.get(Calendar.DAY_OF_MONTH);
+        uCal.get(Calendar.YEAR);                                      // 1435
+        uCal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar);       // رجب
+        uCal.get(Calendar.DAY_OF_MONTH);
 
-        String time = cal.get(Calendar.YEAR) + "/" + cal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar) + "/" + cal.get(Calendar.DAY_OF_MONTH);
+        String time = uCal.get(Calendar.YEAR) + "/" + uCal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar) + "/" + uCal.get(Calendar.DAY_OF_MONTH);
         return isLanguageArabic ? convertToUnicodeFarsiNumber(time) : time;
     }
 
@@ -280,22 +280,25 @@ public class HelperCalander {
                 } else {
                     output = HelperCalander.getPersianMonthName(shamsi.month) + " " + shamsi.date;
                 }
+
+                Log.i("SSSSSSSSSSSSSS", "0 output: " + output);
+
             } else if (HelperCalander.isTimeHijri() == 2) {
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(time);
 
                 GregorianCalendar gCal = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                Calendar uCal = new UmmalquraCalendar();
                 Locale ar = new Locale("ar");
+                Calendar uCal = new UmmalquraCalendar(ar);
                 uCal.setTime(gCal.getTime());         // Used to properly format 'yy' pattern
-                Calendar cal = new UmmalquraCalendar(ar);
 
                 if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
-                    output = cal.get(Calendar.DAY_OF_MONTH) + " " + cal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar);
+                    output = uCal.get(Calendar.DAY_OF_MONTH) + " " + uCal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar);
                 } else {
-                    output = cal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar) + " " + cal.get(Calendar.DAY_OF_MONTH);
+                    output = uCal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar) + " " + uCal.get(Calendar.DAY_OF_MONTH);
                 }
+                Log.i("SSSSSSSSSSSSSS", "1 output: " + output);
             } else {
 
                 if (HelperCalander.isLanguagePersian) {
@@ -314,6 +317,7 @@ public class HelperCalander {
                 } else {
                     output = TimeUtils.toLocal(date.getTimeInMillis(), "dd MMM");
                 }
+                Log.i("SSSSSSSSSSSSSS", "2 output: " + output);
             }
         }
 
