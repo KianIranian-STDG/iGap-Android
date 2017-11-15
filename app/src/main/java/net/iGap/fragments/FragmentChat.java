@@ -69,7 +69,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
@@ -83,7 +82,25 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
-
+import io.fabric.sdk.android.services.concurrency.AsyncTask;
+import io.fotoapparat.Fotoapparat;
+import io.fotoapparat.view.CameraRenderer;
+import io.fotoapparat.view.CameraView;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import me.leolin.shortcutbadger.ShortcutBadger;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -157,6 +174,7 @@ import net.iGap.interfaces.OnClearChatHistory;
 import net.iGap.interfaces.OnClickCamera;
 import net.iGap.interfaces.OnClientJoinByUsername;
 import net.iGap.interfaces.OnComplete;
+import net.iGap.interfaces.OnConnectionChangeStateChat;
 import net.iGap.interfaces.OnDeleteChatFinishActivity;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
@@ -199,6 +217,7 @@ import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.VoiceRecord;
 import net.iGap.module.enums.ChannelChatRole;
+import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.enums.ProgressState;
@@ -249,29 +268,7 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
-
 import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
-import io.fabric.sdk.android.services.concurrency.AsyncTask;
-import io.fotoapparat.Fotoapparat;
-import io.fotoapparat.view.CameraRenderer;
-import io.fotoapparat.view.CameraView;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -1179,6 +1176,35 @@ public class FragmentChat extends BaseFragment
             txtLastSeen = (TextView) rootView.findViewById(R.id.chl_txt_last_seen);
             viewGroupLastSeen = (ViewGroup) rootView.findViewById(R.id.chl_txt_viewGroup_seen);
             imvUserPicture = (CircleImageView) rootView.findViewById(R.id.chl_imv_user_picture);
+
+
+            G.onConnectionChangeStateChat = new OnConnectionChangeStateChat() {
+                @Override
+                public void onChangeState(final ConnectionState connectionState) {
+
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            G.connectionState = connectionState;
+                            if (connectionState == ConnectionState.WAITING_FOR_NETWORK) {
+                                checkConnection(G.context.getResources().getString(R.string.waiting_for_network));
+                            } else if (connectionState == ConnectionState.CONNECTING) {
+                                checkConnection(G.context.getResources().getString(R.string.connecting));
+                            } else if (connectionState == ConnectionState.UPDATING) {
+                                checkConnection(null);
+                            } else if (connectionState == ConnectionState.IGAP) {
+                                checkConnection(null);
+
+                            } else {
+                            }
+                        }
+                    });
+
+                }
+            };
+
+
             /**
              * need this info for load avatar
              */
@@ -1260,6 +1286,45 @@ public class FragmentChat extends BaseFragment
         }
 
         //+realm.close();
+    }
+
+    private void checkConnection(String action) {
+        if (action != null) {
+            ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LOCALE);
+            txtLastSeen.setText(action);
+        } else {
+
+            if (chatType == CHAT) {
+                if (isCloudRoom) {
+                    txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
+                } else {
+                    if (userStatus != null) {
+                        if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, userTime, true, false));
+                        } else {
+                            txtLastSeen.setText(userStatus);
+                        }
+                    }
+                }
+                ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
+            } else if (chatType == GROUP) {
+                ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
+                if (groupParticipantsCountLabel != null && HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
+                    txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
+                } else {
+                    txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
+                }
+
+            } else if (chatType == CHANNEL) {
+                ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
+                if (groupParticipantsCountLabel != null && HelperString.isNumeric(groupParticipantsCountLabel) && Integer.parseInt(groupParticipantsCountLabel) == 1) {
+                    txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
+                } else {
+                    txtLastSeen.setText(groupParticipantsCountLabel + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
+                }
+
+            }
+        }
     }
 
     private void initMain() {

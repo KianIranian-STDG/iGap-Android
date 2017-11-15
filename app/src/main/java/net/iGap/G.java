@@ -108,6 +108,7 @@ import net.iGap.interfaces.OnClientSearchRoomHistory;
 import net.iGap.interfaces.OnClientSubscribeToRoom;
 import net.iGap.interfaces.OnClientUnsubscribeFromRoom;
 import net.iGap.interfaces.OnConnectionChangeState;
+import net.iGap.interfaces.OnConnectionChangeStateChat;
 import net.iGap.interfaces.OnContactFetchForServer;
 import net.iGap.interfaces.OnContactsGetList;
 import net.iGap.interfaces.OnDeleteChatFinishActivity;
@@ -323,6 +324,7 @@ public class G extends MultiDexApplication {
     public static ConnectionState connectionState;
     public static ConnectionState latestConnectionState;
     public static OnConnectionChangeState onConnectionChangeState;
+    public static OnConnectionChangeStateChat onConnectionChangeStateChat;
     public static OnUpdating onUpdating;
     public static OnReceiveInfoLocation onReceiveInfoLocation;
     public static OnUserRegistration onUserRegistration;
