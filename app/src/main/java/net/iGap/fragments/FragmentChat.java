@@ -578,8 +578,6 @@ public class FragmentChat extends BaseFragment
     public void onResume() {
         super.onResume();
 
-        setConnectionText(G.connectionState);
-
         if (FragmentShearedMedia.list != null && FragmentShearedMedia.list.size() > 0) {
             deleteSelectedMessageFromAdapter(FragmentShearedMedia.list);
             FragmentShearedMedia.list.clear();
@@ -611,42 +609,47 @@ public class FragmentChat extends BaseFragment
                                 G.onClearUnread.onClearUnread(mRoomId);
                             }
 
-                            if (room.getType() != CHAT) {
-                                /**
-                                 * set member count
-                                 * set this code in onResume for update this value when user
-                                 * come back from profile activities
-                                 */
-
-                                String members = null;
-                                if (room.getType() == GROUP && room.getGroupRoom() != null) {
-                                    members = room.getGroupRoom().getParticipantsCountLabel();
-                                } else if (room.getType() == CHANNEL && room.getChannelRoom() != null) {
-                                    members = room.getChannelRoom().getParticipantsCountLabel();
-                                }
-
-                                final String finalMembers = members;
-                                if (finalMembers != null) {
-                                    G.handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (finalMembers != null && HelperString.isNumeric(finalMembers) && Integer.parseInt(finalMembers) == 1) {
-                                                txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
-                                            } else {
-                                                txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
-                                            }
-                                            //    avi.setVisibility(View.GONE);
-
-                                            if (HelperCalander.isPersianUnicode)
-                                                txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
-                                        }
-                                    });
-                                }
+                            if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
+                                setConnectionText(G.connectionState);
                             } else {
-                                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, room.getChatRoom().getPeerId());
-                                if (realmRegisteredInfo != null) {
-                                    setUserStatus(realmRegisteredInfo.getStatus(), realmRegisteredInfo.getLastSeen());
+                                if (room.getType() != CHAT) {
+                                    /**
+                                     * set member count
+                                     * set this code in onResume for update this value when user
+                                     * come back from profile activities
+                                     */
+
+                                    String members = null;
+                                    if (room.getType() == GROUP && room.getGroupRoom() != null) {
+                                        members = room.getGroupRoom().getParticipantsCountLabel();
+                                    } else if (room.getType() == CHANNEL && room.getChannelRoom() != null) {
+                                        members = room.getChannelRoom().getParticipantsCountLabel();
+                                    }
+
+                                    final String finalMembers = members;
+                                    if (finalMembers != null) {
+                                        G.handler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (finalMembers != null && HelperString.isNumeric(finalMembers) && Integer.parseInt(finalMembers) == 1) {
+                                                    txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.one_member_chat));
+                                                } else {
+                                                    txtLastSeen.setText(finalMembers + " " + G.fragmentActivity.getResources().getString(R.string.member_chat));
+                                                }
+                                                //    avi.setVisibility(View.GONE);
+
+                                                if (HelperCalander.isPersianUnicode)
+                                                    txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, room.getChatRoom().getPeerId());
+                                    if (realmRegisteredInfo != null) {
+                                        setUserStatus(realmRegisteredInfo.getStatus(), realmRegisteredInfo.getLastSeen());
+                                    }
                                 }
+
                             }
                         }
                     }
@@ -1782,10 +1785,7 @@ public class FragmentChat extends BaseFragment
             public void updateStatus(long peerId, String status, long lastSeen) {
                 if (chatType == CHAT) {
                     setUserStatus(status, lastSeen);
-
-                    if (chatType == CHAT) {
-                        new RequestUserInfo().userInfo(peerId);
-                    }
+                    new RequestUserInfo().userInfo(peerId);
                 }
             }
         };
@@ -4155,41 +4155,45 @@ public class FragmentChat extends BaseFragment
      * @param time   if state is not online set latest online time
      */
     private void setUserStatus(final String status, final long time) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                userStatus = status;
-                userTime = time;
-                if (isCloudRoom) {
-                    txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
-                    //  avi.setVisibility(View.GONE);
-                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-                    //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
-                    //}
-                    ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
-                } else {
-                    if (status != null) {
-                        if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                            txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time, true, false));
-                        } else {
-                            txtLastSeen.setText(status);
-                        }
-                        // avi.setVisibility(View.GONE);
+        if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
+            setConnectionText(G.connectionState);
+        } else {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    userStatus = status;
+                    userTime = time;
+                    if (isCloudRoom) {
+                        txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
+                        //  avi.setVisibility(View.GONE);
                         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
                         //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
                         //}
                         ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
-                        // change english number to persian number
-                        if (HelperCalander.isPersianUnicode)
-                            txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    } else {
+                        if (status != null) {
+                            if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                                txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time, true, false));
+                            } else {
+                                txtLastSeen.setText(status);
+                            }
+                            // avi.setVisibility(View.GONE);
+                            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            //    viewGroupLastSeen.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                            //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
+                            //}
+                            ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
+                            // change english number to persian number
+                            if (HelperCalander.isPersianUnicode)
+                                txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
-                        checkAction();
+                            checkAction();
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void replay(StructMessageInfo item) {
