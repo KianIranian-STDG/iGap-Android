@@ -2074,5 +2074,7 @@
   <string name="st_send_report">تمّ تسجيل ابلاغ اساءة الاستخدام بنجاح</string>
 
   <string name="set_position">Can not set position</string>
+  <string name="Uploading">Uploading...</string>
+  <string name="date">تاریخ</string>
 
 </resources>

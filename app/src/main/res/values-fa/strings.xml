@@ -1119,4 +1119,5 @@
   <string name="st_send_report">گزارش تخلف با موفقیت ارسال شد.</string>
   <string name="set_position">Can not set position</string>
   <string name="date">تاریخ</string>
+  <string name="Uploading">Uploading...</string>
 </resources>

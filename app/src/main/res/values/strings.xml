@@ -739,6 +739,7 @@
   <string name="five_day">Five days ago</string>
   <string name="six_day">Six days ago</string>
   <string name="at">at</string>
+
   <string name="farvardin">Farvardin</string>
   <string name="ordibehst">Ordibehesht</string>
   <string name="khordad">Khordad</string>
@@ -751,6 +752,7 @@
   <string name="dey">Dey</string>
   <string name="bahman">Bahman</string>
   <string name="esfand">Esfand</string>
+
   <string name="group_link_copy">Copy</string>
   <string name="group_link_revoke">Change Link</string>
   <string name="join">Join</string>
@@ -1139,5 +1141,6 @@
   <string name="st_send_report">Report was successfully sent.</string>
   <string name="set_position">Can not set position</string>
   <string name="date">Date</string>
+  <string name="Uploading">Uploading...</string>
 
 </resources>
