@@ -12,17 +12,24 @@ package net.iGap.helper;
 
 import android.content.SharedPreferences;
 import android.text.format.DateUtils;
-import java.util.Calendar;
-import java.util.Date;
+
+import com.github.msarhan.ummalqura.calendar.UmmalquraCalendar;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.CalendarShamsi;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.TimeUtils;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+
 public class HelperCalander {
 
     public static boolean isLanguagePersian = false;
+    public static boolean isLanguageArabic = false;
 
     public static String getPersianCalander(int year, int mounth, int day) {
 
@@ -36,6 +43,21 @@ public class HelperCalander {
         return isLanguagePersian ? convertToUnicodeFarsiNumber(time) : time;
     }
 
+    public static String getArabicCalender(int year, int mounth, int day) {
+
+        GregorianCalendar gCal = new GregorianCalendar(year, mounth, day);
+        Locale ar = new Locale("ar");
+        Calendar uCal = new UmmalquraCalendar(ar);
+        uCal.setTime(gCal.getTime());         // Used to properly format 'yy' pattern
+
+        uCal.get(Calendar.YEAR);                                      // 1435
+        uCal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar);       // رجب
+        uCal.get(Calendar.DAY_OF_MONTH);
+
+        String time = uCal.get(Calendar.YEAR) + "/" + uCal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar) + "/" + uCal.get(Calendar.DAY_OF_MONTH);
+        return isLanguageArabic ? convertToUnicodeFarsiNumber(time) : time;
+    }
+
     public static String getPersianCalander(long time) {
 
         Calendar calendar = Calendar.getInstance();
@@ -44,22 +66,30 @@ public class HelperCalander {
         return getPersianCalander(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    public static boolean isTimeHijri() {
+    public static String getArabicCalander(long time) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+
+        return getArabicCalender(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+
+    public static int isTimeHijri() {
 
         SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, G.context.MODE_PRIVATE);
-        int result = sharedPreferences.getInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 0);
-
-        if (result == 1) return true;
-
-        return false;
+        return sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 0);
     }
 
     public static String checkHijriAndReturnTime(long time) {
 
         String result = "";
 
-        if (isTimeHijri()) {
+        if (isTimeHijri() == 1) {
             result = getPersianCalander(time * DateUtils.SECOND_IN_MILLIS);
+
+        } else if (isTimeHijri() == 2) {
+            result = getArabicCalander(time * DateUtils.SECOND_IN_MILLIS);
         } else {
 
             if (HelperCalander.isLanguagePersian) {
@@ -67,6 +97,12 @@ public class HelperCalander {
                 String[] _date = result.split(" ");
                 if (_date.length > 2) {
                     result = _date[2] + " " + convertEnglishMonthNameToPersian(Integer.parseInt(_date[1])) + " " + _date[0];
+                }
+            } else if (HelperCalander.isLanguageArabic) {
+                result = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, "dd MM yyyy");
+                String[] _date = result.split(" ");
+                if (_date.length > 2) {
+                    result = _date[2] + " " + convertEnglishMonthNameToArabic(Integer.parseInt(_date[1])) + " " + _date[0];
                 }
             } else {
                 result = TimeUtils.toLocal(time * DateUtils.SECOND_IN_MILLIS, "dd MMM yyyy");
@@ -78,6 +114,16 @@ public class HelperCalander {
 
     public static String milladyDate(long time) {
         return TimeUtils.toLocal(time, "dd_MM_yyyy");
+    }
+
+
+
+    public static String convertEnglishMonthNameToArabic(int month) {
+
+        Calendar cal = new UmmalquraCalendar();
+        return cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, new Locale("ar"));
+
+
     }
 
     public static String convertEnglishMonthNameToPersian(int month) {
@@ -210,28 +256,47 @@ public class HelperCalander {
 
         if (current.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR) && current.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
                 output = "\u200F" + HelperCalander.getClocktime(time, true);
             } else {
                 output = HelperCalander.getClocktime(time, true);
             }
-        } else if (current.get(Calendar.DAY_OF_YEAR) < (date.get(Calendar.DAY_OF_YEAR) + 7)) {
 
-            if (HelperCalander.isLanguagePersian) {
+        } else if (current.get(Calendar.DAY_OF_YEAR) < (date.get(Calendar.DAY_OF_YEAR) + 7)) {// just week name
+
+            if (HelperCalander.isTimeHijri() == 1) {
                 output = getPersianStringDay(date.get(Calendar.DAY_OF_WEEK));
+            } else if (HelperCalander.isTimeHijri() == 2) {
+                output = getArabicStringDay(date.get(Calendar.DAY_OF_WEEK));
             } else {
                 output = TimeUtils.toLocal(date.getTimeInMillis(), "EEE");
             }
         } else {
 
-            if (HelperCalander.isTimeHijri()) {
+            if (HelperCalander.isTimeHijri() == 1) {
 
                 CalendarShamsi shamsi = new CalendarShamsi(date.getTime());
 
-                if (HelperCalander.isLanguagePersian) {
+                if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
                     output = shamsi.date + " " + HelperCalander.getPersianMonthName(shamsi.month);
                 } else {
                     output = HelperCalander.getPersianMonthName(shamsi.month) + " " + shamsi.date;
+                }
+
+            } else if (HelperCalander.isTimeHijri() == 2) {
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(time);
+
+                GregorianCalendar gCal = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                Locale ar = new Locale("ar");
+                Calendar uCal = new UmmalquraCalendar(ar);
+                uCal.setTime(gCal.getTime());         // Used to properly format 'yy' pattern
+
+                if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
+                    output = uCal.get(Calendar.DAY_OF_MONTH) + " " + uCal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar);
+                } else {
+                    output = uCal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar) + " " + uCal.get(Calendar.DAY_OF_MONTH);
                 }
             } else {
 
@@ -240,6 +305,13 @@ public class HelperCalander {
                     String[] _date = output.split(" ");
                     if (_date.length > 1) {
                         output = _date[1] + " " + convertEnglishMonthNameToPersian(Integer.parseInt(_date[0]));
+                    }
+                }
+                if (HelperCalander.isLanguageArabic) {
+                    output = TimeUtils.toLocal(date.getTimeInMillis(), "MM dd");
+                    String[] _date = output.split(" ");
+                    if (_date.length > 1) {
+                        output = _date[1] + " " + convertEnglishMonthNameToArabic(Integer.parseInt(_date[0]));
                     }
                 } else {
                     output = TimeUtils.toLocal(date.getTimeInMillis(), "dd MMM");
@@ -254,7 +326,7 @@ public class HelperCalander {
 
         String result;
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
             result = TimeUtils.toLocal(timeinMili, "h:mm a");
             String[] _date = result.split(" ");
             if (_date.length > 1) {
@@ -301,5 +373,11 @@ public class HelperCalander {
         }
 
         return result;
+    }
+
+    private static String getArabicStringDay(int dayOfWeek) {
+
+        Calendar cal = new UmmalquraCalendar();
+        return cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, new Locale("ar"));
     }
 }

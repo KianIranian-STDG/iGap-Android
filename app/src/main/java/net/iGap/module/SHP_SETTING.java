@@ -21,6 +21,7 @@ public class SHP_SETTING {
     public static final String FILE_NAME = "setting";
     public static final String KEY_MESSAGE_TEXT_SIZE = "message_text_size";
     public static final String KEY_LANGUAGE = "language";
+    public static final String KEY_DATA = "data";
     public static final String KEY_IN_APP_BROWSER = "app_browser";
     public static final String KEY_SEND_BT_ENTER = "send_by_enter";
     public static final String KEY_ENABLE_ANIMATION = "enable_animation";

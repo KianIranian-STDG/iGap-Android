@@ -1138,5 +1138,6 @@
   <string name="st_desc_delete">Are you sure you want to delete %1$s message(s)?</string>
   <string name="st_send_report">Report was successfully sent.</string>
   <string name="set_position">Can not set position</string>
+  <string name="date">Date</string>
 
 </resources>
