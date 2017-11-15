@@ -6232,8 +6232,10 @@ public class FragmentChat extends BaseFragment
             StructCompress structCompress = new StructCompress();
             structCompress.path = params[1];
             structCompress.originalPath = params[0];
+            long endTime = AndroidUtils.getAudioDuration(G.fragmentActivity, params[0]);
             try {
-                structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1]);
+                structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1], endTime);
+
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }

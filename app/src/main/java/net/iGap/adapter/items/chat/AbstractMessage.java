@@ -27,6 +27,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import io.realm.Realm;
 import java.util.List;
@@ -939,6 +940,26 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
+
+    public static void processVideo(final TextView duration, final View holder1, final StructMessageInfo mMessage) {
+
+        MediaController.onPercentCompress = new MediaController.OnPercentCompress() {
+            @Override
+            public void compress(final long percent, String path) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (percent < 98) {
+                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + mMessage.attachment.compressing + " %" + percent));
+                        } else {
+                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + "Uploading..."));
+                        }
+                    }
+                });
+            }
+        };
+    }
+
     /**
      * does item have progress view
      *
@@ -1513,14 +1534,21 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
+
+                                //float p = progress;
+                                //if ((mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) && FragmentChat.compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
+                                //    if (progress < mMessage.uploadProgress) {
+                                //        p = mMessage.uploadProgress;
+                                //    }
+                                //}
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
                                     progressBar.withProgress(progress);
-
                                     if (progress == 100) {
                                         progressBar.performProgress();
                                         contentLoading.setVisibility(View.GONE);
                                     }
                                 }
+
                             }
                         });
                     }
@@ -1530,13 +1558,31 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
                             progressBar.withProgress(0);
                             progressBar.withDrawable(R.drawable.upload, true);
-
                             contentLoading.setVisibility(View.GONE);
-
                             mMessage.status = ProtoGlobal.RoomMessageStatus.FAILED.toString();
                         }
                     }
                 });
+
+                //if (mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                //
+                //    MediaController.onPercentCompress = new MediaController.OnPercentCompress() {
+                //        @Override
+                //        public void compress(final long percent, String path) {
+                //
+                //            G.handler.post(new Runnable() {
+                //                @Override
+                //                public void run() {
+                //                    if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
+                //                        int p = (int) (percent / 10);
+                //                        progressBar.withProgress(p);
+                //                        mMessage.uploadProgress = p;
+                //                    }
+                //                }
+                //            });
+                //        }
+                //    };
+                //}
 
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                 contentLoading.setVisibility(View.VISIBLE);
@@ -1610,4 +1656,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         return "";
     }
+
+
+
 }
