@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.FragmentSetting;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
 
@@ -99,6 +100,13 @@ public class FragmentData extends BaseFragment {
                 editor.apply();
                 removeFromBaseFragment(FragmentData.this);
 
+                if (FragmentSetting.dateType != null) {
+
+                    FragmentSetting.dateType.dataName("Shamsi");
+
+                }
+
+
             }
         });
 
@@ -110,6 +118,11 @@ public class FragmentData extends BaseFragment {
                 editor.putInt(SHP_SETTING.KEY_DATA, MILADI);
                 editor.apply();
                 removeFromBaseFragment(FragmentData.this);
+
+                if (FragmentSetting.dateType != null) {
+                    FragmentSetting.dateType.dataName("Miladi");
+                }
+
             }
         });
 
@@ -121,6 +134,11 @@ public class FragmentData extends BaseFragment {
                 editor.putInt(SHP_SETTING.KEY_DATA, GHAMARY);
                 editor.apply();
                 removeFromBaseFragment(FragmentData.this);
+
+                if (FragmentSetting.dateType != null) {
+                    FragmentSetting.dateType.dataName("Ghamari");
+                }
+
             }
         });
 

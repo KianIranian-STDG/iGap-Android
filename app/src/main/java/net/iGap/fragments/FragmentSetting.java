@@ -178,6 +178,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     private Fragment fragment;
     private ViewGroup ltBio;
     private TextView txtBio;
+    public static DateType dateType;
 
 
     RealmUserInfo realmUserInfo;
@@ -1337,8 +1338,19 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
          /*
           setting toggle DataShams
          */
+
+
+
         final TextView txtTitleData = (TextView) view.findViewById(R.id.st_txt_st_toggle_dataShams);
         final TextView txtData = (TextView) view.findViewById(R.id.st_txt_data);
+
+        dateType = new DateType() {
+            @Override
+            public void dataName(String type) {
+                txtData.setText(type);
+            }
+        };
+
 
         int typeData = sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 0);
 
@@ -2585,5 +2597,10 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 }
             }
         });
+    }
+
+    public interface DateType {
+
+        void dataName(String type);
     }
 }
