@@ -37,18 +37,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmModel;
-import java.io.File;
-import java.io.IOException;
-import java.util.Locale;
+
 import net.iGap.Config;
 import net.iGap.FragmentData;
 import net.iGap.G;
@@ -112,6 +108,14 @@ import net.iGap.request.RequestUserProfileSetGender;
 import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserProfileUpdateUsername;
 import net.iGap.request.RequestUserSessionLogout;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -1338,9 +1342,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
          /*
           setting toggle DataShams
          */
-
-
-
         final TextView txtTitleData = (TextView) view.findViewById(R.id.st_txt_st_toggle_dataShams);
         final TextView txtData = (TextView) view.findViewById(R.id.st_txt_data);
 

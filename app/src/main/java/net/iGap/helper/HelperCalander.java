@@ -12,17 +12,19 @@ package net.iGap.helper;
 
 import android.content.SharedPreferences;
 import android.text.format.DateUtils;
-import android.util.Log;
+
 import com.github.msarhan.ummalqura.calendar.UmmalquraCalendar;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.CalendarShamsi;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.TimeUtils;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class HelperCalander {
 
@@ -281,8 +283,6 @@ public class HelperCalander {
                     output = HelperCalander.getPersianMonthName(shamsi.month) + " " + shamsi.date;
                 }
 
-                Log.i("SSSSSSSSSSSSSS", "0 output: " + output);
-
             } else if (HelperCalander.isTimeHijri() == 2) {
 
                 Calendar calendar = Calendar.getInstance();
@@ -298,7 +298,6 @@ public class HelperCalander {
                 } else {
                     output = uCal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar) + " " + uCal.get(Calendar.DAY_OF_MONTH);
                 }
-                Log.i("SSSSSSSSSSSSSS", "1 output: " + output);
             } else {
 
                 if (HelperCalander.isLanguagePersian) {
@@ -317,7 +316,6 @@ public class HelperCalander {
                 } else {
                     output = TimeUtils.toLocal(date.getTimeInMillis(), "dd MMM");
                 }
-                Log.i("SSSSSSSSSSSSSS", "2 output: " + output);
             }
         }
 

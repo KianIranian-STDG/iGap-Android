@@ -1,7 +1,6 @@
 package net.iGap;
 
 
-
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -101,12 +101,8 @@ public class FragmentData extends BaseFragment {
                 removeFromBaseFragment(FragmentData.this);
 
                 if (FragmentSetting.dateType != null) {
-
                     FragmentSetting.dateType.dataName("Shamsi");
-
                 }
-
-
             }
         });
 
@@ -122,7 +118,6 @@ public class FragmentData extends BaseFragment {
                 if (FragmentSetting.dateType != null) {
                     FragmentSetting.dateType.dataName("Miladi");
                 }
-
             }
         });
 
@@ -138,10 +133,8 @@ public class FragmentData extends BaseFragment {
                 if (FragmentSetting.dateType != null) {
                     FragmentSetting.dateType.dataName("Ghamari");
                 }
-
             }
         });
-
     }
 
 }
