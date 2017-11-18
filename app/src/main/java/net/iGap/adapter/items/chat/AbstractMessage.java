@@ -953,6 +953,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         MediaController.onPercentCompress = new MediaController.OnPercentCompress() {
             @Override
             public void compress(final long percent, String path) {
+
+                if (mMessage.getAttachment().getLocalFilePath() == null || !mMessage.getAttachment().getLocalFilePath().equals(path)) {
+                    return;
+                }
+
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {

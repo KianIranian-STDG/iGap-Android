@@ -231,7 +231,7 @@
 
   <string name="search">"البحث "</string>
 
-  <string name="d_of_d" formatted="false">"%d از %d"</string>
+  <string name="d_of_d" formatted="false">"%d من %d"</string>
 
   <string name="add_to_contact">"الإضافة إلى جهات الاتصال "</string>
 
