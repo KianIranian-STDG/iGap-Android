@@ -1144,18 +1144,18 @@
   <string name="Uploading">Uploading...</string>
 
 
-  <string name="moharam">moharam</string>
-  <string name="safar">safar</string>
-  <string name="rabio_aval">rabio_aval</string>
-  <string name="rabi_sani">rabi_sani</string>
-  <string name="jamado_aval">jamado_aval</string>
-  <string name="jamado_sani">jamado_sani</string>
-  <string name="rajab">rajab</string>
-  <string name="shaban">shaban</string>
-  <string name="ramezan">ramezan</string>
-  <string name="shaval">shaval</string>
-  <string name="zighade">zighade</string>
-  <string name="zihaje">zihaje</string>
+  <string name="moharam">MUHARRAM</string>
+  <string name="safar">SAFAR</string>
+  <string name="rabio_aval">RABI_AWWAL</string>
+  <string name="rabi_sani">RABI_THANI</string>
+  <string name="jamado_aval">JUMADA_AWWAL</string>
+  <string name="jamado_sani">JUMADA_THANI</string>
+  <string name="rajab">RAJAB</string>
+  <string name="shaban">SHAABAN</string>
+  <string name="ramezan">RAMADHAN</string>
+  <string name="shaval">SHAWWAL</string>
+  <string name="zighade">THUL_QIDAH</string>
+  <string name="zihaje">THUL_HIJJAH</string>
 
 
 </resources>
