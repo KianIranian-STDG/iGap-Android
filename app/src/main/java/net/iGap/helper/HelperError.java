@@ -116,7 +116,7 @@ public class HelperError {
                 break;
 
             case 163:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 163;
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 163;
                 break;
 
             case 173:
@@ -322,43 +322,43 @@ public class HelperError {
 
             case 373:
 
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 373;
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 373;
 
                 break;
             case 374:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 374;
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 374;
                 break;
             case 375:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 375;
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 375;
                 break;
 
             case 453:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 453;
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 453;
                 break;
             case 455:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 455;
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 455;
                 break;
             case 456:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 456;
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 456;
                 break;
             case 454:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 454;
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 454;
                 break;
             case 457:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 457;
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 457;
                 break;
             case 458:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 458;
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 458;
                 break;
 
             case 467:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 467;
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 467;
                 break;
             case 468:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 468;
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 468;
                 break;
             case 469:
-                error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 469;
+                //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 469 + " minor : " + minorCode;
                 break;
 
             case 500:
