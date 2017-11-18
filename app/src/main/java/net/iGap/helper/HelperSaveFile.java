@@ -13,8 +13,11 @@ package net.iGap.helper;
 import android.content.ContentValues;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 import java.io.File;
 import java.io.FileInputStream;
@@ -177,25 +180,35 @@ public class HelperSaveFile {
     }
 
     public static void saveToMusicFolder(String path, String name) {
+        if (path == null) return;
+        File mPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+        File file = new File(mPath, name);
         try {
-            if (path == null) return;
+            // Make sure the Pictures directory exists.
+            mPath.mkdirs();
 
             InputStream is = new FileInputStream(path);
-            File mSavePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
-            File file = new File(mSavePath + "/" + name);
             OutputStream os = new FileOutputStream(file);
-
-            byte[] buff = new byte[1024];
-            int len;
-            while ((len = is.read(buff)) > 0) {
-                os.write(buff, 0, len);
-            }
+            byte[] data = new byte[is.available()];
+            is.read(data);
+            os.write(data);
             is.close();
             os.close();
 
-            Toast.makeText(G.context, R.string.save_to_music_folder, Toast.LENGTH_SHORT).show();
-        } catch (FileNotFoundException e) {
+            // Tell the media scanner about the new file so that it is
+            // immediately available to the user.
+            MediaScannerConnection.scanFile(G.context, new String[]{file.toString()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                public void onScanCompleted(String mPath, Uri uri) {
+                    Log.i("ExternalStorage", "Scanned " + mPath + ":");
+                    Log.i("ExternalStorage", "-> uri=" + uri);
+                }
+            });
+
+            Toast.makeText(G.context, G.context.getResources().getString(R.string.save_to_music_folder), Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
+            // Unable to create file, likely because external storage is
+            // not currently mounted.
+            Log.w("ExternalStorage", "Error writing " + file, e);
         }
     }
 }
