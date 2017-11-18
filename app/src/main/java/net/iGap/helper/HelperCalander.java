@@ -12,19 +12,16 @@ package net.iGap.helper;
 
 import android.content.SharedPreferences;
 import android.text.format.DateUtils;
-
 import com.github.msarhan.ummalqura.calendar.UmmalquraCalendar;
-
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.CalendarShamsi;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.TimeUtils;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
 
 public class HelperCalander {
 
@@ -122,8 +119,6 @@ public class HelperCalander {
 
         Calendar cal = new UmmalquraCalendar();
         return cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, new Locale("ar"));
-
-
     }
 
     public static String convertEnglishMonthNameToPersian(int month) {
@@ -218,6 +213,54 @@ public class HelperCalander {
         return result;
     }
 
+    public static String getArabicMonthName(int month) {
+
+        String result = "";
+
+        switch (month) {
+
+            case 0:
+                result = G.context.getString(R.string.moharam);
+                break;
+            case 1:
+                result = G.context.getString(R.string.safar);
+                break;
+            case 2:
+                result = G.context.getString(R.string.rabio_aval);
+                break;
+            case 3:
+                result = G.context.getString(R.string.rabi_sani);
+                break;
+            case 4:
+                result = G.context.getString(R.string.jamado_aval);
+                break;
+            case 5:
+                result = G.context.getString(R.string.jamado_sani);
+                break;
+            case 6:
+                result = G.context.getString(R.string.rajab);
+                break;
+            case 7:
+                result = G.context.getString(R.string.shaban);
+                break;
+            case 8:
+                result = G.context.getString(R.string.ramezan);
+                break;
+            case 9:
+                result = G.context.getString(R.string.shaval);
+                break;
+            case 10:
+                result = G.context.getString(R.string.zighade);
+                break;
+            case 11:
+                result = G.context.getString(R.string.zihaje);
+                break;
+        }
+
+        return result;
+    }
+
+
     public static String convertToUnicodeFarsiNumber(String text) {
 
         String[] persianNumbers = new String[]{"۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"};
@@ -291,12 +334,13 @@ public class HelperCalander {
                 GregorianCalendar gCal = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 Locale ar = new Locale("ar");
                 Calendar uCal = new UmmalquraCalendar(ar);
-                uCal.setTime(gCal.getTime());         // Used to properly format 'yy' pattern
+                uCal.setTime(gCal.getTime());// Used to properly format 'yy' pattern
 
                 if (HelperCalander.isPersianUnicode) {
-                    output = uCal.get(Calendar.DAY_OF_MONTH) + " " + uCal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar);
+                    output = uCal.get(Calendar.DAY_OF_MONTH) + " " + getArabicMonthName(uCal.get(Calendar.MONTH));
                 } else {
-                    output = uCal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar) + " " + uCal.get(Calendar.DAY_OF_MONTH);
+
+                    output = getArabicMonthName(uCal.get(Calendar.MONTH)) + " " + uCal.get(Calendar.DAY_OF_MONTH);
                 }
             } else {
 

@@ -11,17 +11,14 @@
 package net.iGap.module;
 
 import android.content.Context;
-
 import com.github.msarhan.ummalqura.calendar.UmmalquraCalendar;
-
-import net.iGap.R;
-import net.iGap.helper.HelperCalander;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 
 public final class TimeUtils {
     private TimeUtils() throws InstantiationException {
@@ -87,9 +84,9 @@ public final class TimeUtils {
                 uCal.setTime(gCal.getTime());         // Used to properly format 'yy' pattern
 
                 if (HelperCalander.isPersianUnicode) {
-                    output = uCal.get(Calendar.DAY_OF_MONTH) + " " + uCal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar) + " " + uCal.get(Calendar.YEAR);
+                    output = uCal.get(Calendar.DAY_OF_MONTH) + " " + HelperCalander.getArabicMonthName(uCal.get(Calendar.MONTH)) + " " + uCal.get(Calendar.YEAR);
                 } else {
-                    output = uCal.get(Calendar.YEAR) + " " + uCal.getDisplayName(Calendar.MONTH, Calendar.LONG, ar) + " " + uCal.get(Calendar.DAY_OF_MONTH);
+                    output = uCal.get(Calendar.YEAR) + " " + HelperCalander.getArabicMonthName(uCal.get(Calendar.MONTH)) + " " + uCal.get(Calendar.DAY_OF_MONTH);
                 }
 
             } else {

@@ -2077,4 +2077,17 @@
   <string name="Uploading">Uploading...</string>
   <string name="date">تاریخ</string>
 
+  <string name="moharam">محرم</string>
+  <string name="safar">صفر</string>
+  <string name="rabio_aval">ربیع‌الاول</string>
+  <string name="rabi_sani">ربیع‌الثانی</string>
+  <string name="jamado_aval">جمادی‌الاول</string>
+  <string name="jamado_sani">جمادی‌الثانی</string>
+  <string name="rajab">رجب</string>
+  <string name="shaban">شعبان</string>
+  <string name="ramezan">رمضان</string>
+  <string name="shaval">شوال</string>
+  <string name="zighade">ذیقعده</string>
+  <string name="zihaje">ذیحجه</string>
+
 </resources>
