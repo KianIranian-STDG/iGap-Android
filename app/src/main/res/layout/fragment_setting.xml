@@ -151,6 +151,7 @@
 
         <net.iGap.module.EmojiTextViewE
             android:id="@+id/ac_txt_nickname_title"
+            fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -159,13 +160,11 @@
             android:maxLength="24"
             android:padding="@dimen/dp4"
             android:singleLine="true"
-            android:text="AM"
+            android:text="Your iGap Name"
             android:textColor="@android:color/white"
             android:textSize="@dimen/dp15"
             android:textStyle="bold"
-            app:emojiSize="@dimen/dp14"
-            fontPath="fonts/IRANSansMobile.ttf"
-            />
+            app:emojiSize="@dimen/dp14" />
 
       </LinearLayout>
 
@@ -247,6 +246,7 @@
 
             <net.iGap.module.EmojiTextViewE
                 android:id="@+id/st_txt_nikName"
+                fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp28"
                 android:gravity="center_vertical"
@@ -256,13 +256,11 @@
                 android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:singleLine="true"
-                android:text="Alexander Smith"
+                android:text="Your Name"
                 android:textColor="@color/gray_5c"
                 android:textSize="@dimen/dp14"
                 android:theme="@style/Setting_editText"
-                app:emojiSize="@dimen/dp14"
-                fontPath="fonts/IRANSansMobile.ttf"
-                />
+                app:emojiSize="@dimen/dp14" />
 
           </LinearLayout>
 
@@ -341,6 +339,7 @@
 
             <TextView
                 android:id="@+id/st_txt_userName"
+                fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp28"
                 android:gravity="center_vertical"
@@ -348,12 +347,10 @@
                 android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:singleLine="true"
-                android:text="Alexander Smith:"
+                android:text="Your Username"
                 android:textColor="@color/gray_5c"
                 android:textSize="@dimen/dp14"
-                android:theme="@style/Setting_editText"
-                fontPath="fonts/IRANSansMobile.ttf"
-                />
+                android:theme="@style/Setting_editText" />
           </LinearLayout>
 
           <LinearLayout
@@ -461,6 +458,7 @@
 
           <TextView
               android:id="@+id/st_txt_bio"
+              fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center_vertical"
@@ -469,9 +467,7 @@
               android:text="@string/st_bio"
               android:textColor="@color/gray_5c"
               android:textSize="@dimen/dp14"
-              android:theme="@style/Setting_editText"
-              fontPath="fonts/IRANSansMobile.ttf"
-              />
+              android:theme="@style/Setting_editText" />
         </LinearLayout>
 
       </LinearLayout>

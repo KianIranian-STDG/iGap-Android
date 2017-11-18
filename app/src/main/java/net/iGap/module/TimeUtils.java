@@ -11,14 +11,17 @@
 package net.iGap.module;
 
 import android.content.Context;
+
 import com.github.msarhan.ummalqura.calendar.UmmalquraCalendar;
+
+import net.iGap.R;
+import net.iGap.helper.HelperCalander;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import net.iGap.R;
-import net.iGap.helper.HelperCalander;
 
 public final class TimeUtils {
     private TimeUtils() throws InstantiationException {
@@ -34,7 +37,7 @@ public final class TimeUtils {
      * @param format   String format
      * @return String formatted time in local
      */
-    public static String toLocal(long unixTime, String format) {
+    public static String toLocal(long unixTime, String format) throws IllegalArgumentException {
         return new SimpleDateFormat(format, Locale.US).format(unixTime);
     }
 

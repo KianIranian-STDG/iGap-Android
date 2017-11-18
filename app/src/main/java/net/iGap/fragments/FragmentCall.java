@@ -63,7 +63,8 @@ import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN) public class FragmentCall extends BaseFragment implements OnCallLogClear {
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+public class FragmentCall extends BaseFragment implements OnCallLogClear {
 
     public static final String OPEN_IN_FRAGMENT_MAIN = "OPEN_IN_FRAGMENT_MAIN";
     boolean openInMain = false;
@@ -771,7 +772,7 @@ import io.realm.Sort;
             //}
 
             if (HelperCalander.isPersianUnicode) {
-                viewHolder.timeAndInfo.setText(TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME + " " + HelperCalander.checkHijriAndReturnTime(item.getOfferTime())));
+                viewHolder.timeAndInfo.setText(HelperCalander.checkHijriAndReturnTime(item.getOfferTime()) + " " + TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME)); //+ " " + HelperCalander.checkHijriAndReturnTime(item.getOfferTime())
             } else {
                 viewHolder.timeAndInfo.setText(HelperCalander.checkHijriAndReturnTime(item.getOfferTime()) + " " + TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME));
             }
