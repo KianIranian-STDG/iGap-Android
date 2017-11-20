@@ -12,7 +12,6 @@ package net.iGap.helper;
 
 import android.support.design.widget.Snackbar;
 import android.view.View;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.AppUtils;
@@ -576,7 +575,7 @@ public class HelperError {
     public static void showSnackMessage(final String message, boolean isVibrate) {
 
         if (isVibrate) {
-            AppUtils.setVibrator();
+            AppUtils.setVibrator(200);
         }
 
         if (message.length() > 0 && G.currentActivity != null) {

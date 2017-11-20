@@ -617,10 +617,10 @@ public final class AppUtils {
         }
     }
 
-    public static void setVibrator() {
+    public static void setVibrator(long time) {
         Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
         if (vShort != null) {
-            vShort.vibrate(200);
+            vShort.vibrate(time);
         }
     }
 

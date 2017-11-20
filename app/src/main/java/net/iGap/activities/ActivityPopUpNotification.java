@@ -51,6 +51,7 @@ import net.iGap.R;
 import net.iGap.interfaces.IPopUpListener;
 import net.iGap.interfaces.OnVoiceRecord;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.AppUtils;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.LastSeenTimeUtil;
@@ -511,8 +512,15 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                     voiceRecord.setItemTag("ivVoice");
                     viewAttachFile.setVisibility(View.GONE);
                     viewMicRecorder.setVisibility(View.VISIBLE);
-                    voiceRecord.startVoiceRecord();
 
+
+                    AppUtils.setVibrator(50);
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            voiceRecord.startVoiceRecord();
+                        }
+                    }, 60);
                     return true;
                 }
             });
