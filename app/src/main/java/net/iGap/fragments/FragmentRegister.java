@@ -52,12 +52,16 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.protobuf.ByteString;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-
+import io.realm.Realm;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.G;
@@ -104,14 +108,6 @@ import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyPassword;
 import net.iGap.request.RequestWrapper;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import io.realm.Realm;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static net.iGap.G.context;
@@ -442,6 +438,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
             @Override
             public void afterTextChanged(Editable editable) {
+
+
+
                 if (editable.toString().equals("0")) {
                     Toast.makeText(G.fragmentActivity, G.fragmentActivity.getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT).show();
                     edtPhoneNumber.setText("");
