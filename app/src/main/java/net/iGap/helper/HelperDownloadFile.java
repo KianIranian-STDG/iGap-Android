@@ -11,13 +11,7 @@
 package net.iGap.helper;
 
 import android.support.v4.util.ArrayMap;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+
 import net.iGap.G;
 import net.iGap.interfaces.OnFileDownloadResponse;
 import net.iGap.module.AndroidUtils;
@@ -27,14 +21,23 @@ import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.request.RequestFileDownload;
 import net.iGap.request.RequestWrapper;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class HelperDownloadFile {
 
     private static ArrayMap<String, StructDownLoad> list = new ArrayMap<>();
-    private OnFileDownloadResponse onFileDownloadResponse;
-
-    private static int maxDownloadSize = 4;
-
     private static ArrayList<StructQueue> mQueue = new ArrayList<>();
+    public static ArrayList<String> manuallyStoppedDownload = new ArrayList<>();
+
+    private OnFileDownloadResponse onFileDownloadResponse;
+    private static int maxDownloadSize = 4;
 
     public HelperDownloadFile() {
 
@@ -274,9 +277,10 @@ public class HelperDownloadFile {
         requestDownloadFile(item);
     }
 
-    public static void stopDownLoad(String cashID) {
+    public static void stopDownLoad(String cacheId) {
+        manuallyStoppedDownload.add(cacheId);
 
-        String primaryKey = cashID + ProtoFileDownload.FileDownload.Selector.FILE;
+        String primaryKey = cacheId + ProtoFileDownload.FileDownload.Selector.FILE;
 
         if (list.size() > 0 && list.containsKey(primaryKey)) {
             //removeRequestQueue(list.get(primaryKey).identity); // don't need remove this item, remove listener in enough for stop download
@@ -315,6 +319,8 @@ public class HelperDownloadFile {
     }
 
     private static void requestDownloadFile(final StructDownLoad item) {
+
+        manuallyStoppedDownload.remove(item.cashId);
 
         if (item.progress == 100 || item.offset >= item.size) {
             moveTmpFileToOrginFolder(item.Token, item.selector, item.cashId);
