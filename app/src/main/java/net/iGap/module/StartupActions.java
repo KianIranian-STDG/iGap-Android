@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -30,6 +29,7 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.webrtc.CallObserver;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 
 import io.realm.DynamicRealm;
@@ -116,7 +116,6 @@ public final class StartupActions {
     }
 
 
-
     /**
      * start connecting to the sever
      */
@@ -195,7 +194,6 @@ public final class StartupActions {
     private void languageDetection(SharedPreferences sharedPreferences) {
 
         String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
-        Log.i("GGGGGGGGGG", "languageDetection: " + language);
 
         switch (language) {
             case "فارسی":
@@ -222,32 +220,37 @@ public final class StartupActions {
      * create app folders if not created or removed from phone storage
      */
     public static void makeFolder() {
-        //new Thread(new Runnable() {
-        //    @Override
-        //    public void run() {
-        new File(DIR_APP).mkdirs();
-        new File(DIR_IMAGES).mkdirs();
-        new File(DIR_VIDEOS).mkdirs();
-        new File(DIR_AUDIOS).mkdirs();
-        new File(DIR_DOCUMENT).mkdirs();
-        new File(DIR_CHAT_BACKGROUND).mkdirs();
-        new File(DIR_IMAGE_USER).mkdirs();
-        new File(DIR_TEMP).mkdirs();
+        try {
+            //new Thread(new Runnable() {
+            //    @Override
+            //    public void run() {
+            new File(DIR_APP).mkdirs();
+            new File(DIR_IMAGES).mkdirs();
+            new File(DIR_VIDEOS).mkdirs();
+            new File(DIR_AUDIOS).mkdirs();
+            new File(DIR_DOCUMENT).mkdirs();
+            new File(DIR_CHAT_BACKGROUND).mkdirs();
+            new File(DIR_IMAGE_USER).mkdirs();
+            new File(DIR_TEMP).mkdirs();
 
-        String file = ".nomedia";
-        new File(DIR_IMAGES + "/" + file).mkdirs();
-        new File(DIR_VIDEOS + "/" + file).mkdirs();
-        new File(DIR_AUDIOS + "/" + file).mkdirs();
-        new File(DIR_DOCUMENT + "/" + file).mkdirs();
-        new File(DIR_CHAT_BACKGROUND + "/" + file).mkdirs();
-        new File(DIR_IMAGE_USER + "/" + file).mkdirs();
-        new File(DIR_TEMP + "/" + file).mkdirs();
-        //    }
-        //}).start();
+            String file = ".nomedia";
+            new File(DIR_IMAGES + "/" + file).createNewFile();
+            new File(DIR_VIDEOS + "/" + file).createNewFile();
+            new File(DIR_AUDIOS + "/" + file).createNewFile();
+            new File(DIR_DOCUMENT + "/" + file).createNewFile();
+            new File(DIR_CHAT_BACKGROUND + "/" + file).createNewFile();
+            new File(DIR_IMAGE_USER + "/" + file).createNewFile();
+            new File(DIR_TEMP + "/" + file).createNewFile();
+            //    }
+            //}).start();
 
-        IMAGE_NEW_GROUP = new File(G.DIR_IMAGE_USER, "image_new_group.jpg");
-        IMAGE_NEW_CHANEL = new File(G.DIR_IMAGE_USER, "image_new_chanel.jpg");
-        imageFile = new File(DIR_IMAGE_USER, "image_user");
+            IMAGE_NEW_GROUP = new File(G.DIR_IMAGE_USER, "image_new_group.jpg");
+            IMAGE_NEW_CHANEL = new File(G.DIR_IMAGE_USER, "image_new_chanel.jpg");
+            imageFile = new File(DIR_IMAGE_USER, "image_user");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initializeGlobalVariables() {
