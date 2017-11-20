@@ -357,7 +357,8 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (dialogQrCode != null && dialogQrCode.isShowing()) dialogQrCode.dismiss();
+                        if (dialogQrCode != null && dialogQrCode.isShowing())
+                            dialogQrCode.dismiss();
 
                         userLogin(token);
                     }
@@ -377,7 +378,8 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (dialogQrCode != null && dialogQrCode.isShowing()) dialogQrCode.dismiss();
+                        if (dialogQrCode != null && dialogQrCode.isShowing())
+                            dialogQrCode.dismiss();
                     }
                 });
                 checkPassword("", true);
@@ -697,7 +699,13 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                     assert view != null;
                     TextView phone = (TextView) view.findViewById(R.id.rg_dialog_txt_number);
                     phone.setText(edtCodeNumber.getText().toString() + "" + edtPhoneNumber.getText().toString());
-                    dialogRegistration.show();
+
+                    try {
+                        dialogRegistration.show();
+                    } catch (WindowManager.BadTokenException e) {
+                        e.printStackTrace();
+                    }
+
                 } else {
 
                     if (regex.equals("")) {
@@ -712,9 +720,6 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             }
         });
         // enable scroll text view
-
-        Log.i("GGGGGGGGGGG", "2222 on: ");
-
     }
 
     @Override
@@ -824,7 +829,6 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                             } else {
                                 time = 5 * DateUtils.SECOND_IN_MILLIS;
                             }
-
 
 
                             txtTimer = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_timer);
@@ -965,13 +969,17 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
 
-        if (!mActivity.isFinishing() && !mActivity.isRestricted()) {
-            if (isAdded()) {
-                dialog.show();
-                if (dialog.isShowing()) {
-                    countDownTimer.cancel();
+        try {
+            if (!mActivity.isFinishing() && !mActivity.isRestricted()) {
+                if (isAdded()) {
+                    dialog.show();
+                    if (dialog.isShowing()) {
+                        countDownTimer.cancel();
+                    }
                 }
             }
+        } catch (WindowManager.BadTokenException e) {
+            e.printStackTrace();
         }
     }
 
@@ -1383,9 +1391,8 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                                 fragmentSecurityRecovery.setArguments(bundle);
 
                                 G.fragmentActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).
-                                    setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).
-                                    replace(R.id.ar_layout_root, fragmentSecurityRecovery).commit();
-
+                                        setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).
+                                        replace(R.id.ar_layout_root, fragmentSecurityRecovery).commit();
 
 
                             }
@@ -1432,8 +1439,10 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                             }
                         });
 
-                        if (rg_prg_verify_register != null) rg_prg_verify_register.setVisibility(View.GONE);
-                        if (rg_img_verify_register != null) rg_img_verify_register.setVisibility(View.VISIBLE);
+                        if (rg_prg_verify_register != null)
+                            rg_prg_verify_register.setVisibility(View.GONE);
+                        if (rg_img_verify_register != null)
+                            rg_img_verify_register.setVisibility(View.VISIBLE);
                         if (rg_txt_verify_register != null) {
                             rg_txt_verify_register.setTextColor(G.context.getResources().getColor(R.color.rg_text_verify));
                             if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {

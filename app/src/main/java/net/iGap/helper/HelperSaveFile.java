@@ -19,6 +19,11 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
+
+import net.iGap.G;
+import net.iGap.R;
+import net.iGap.module.AndroidUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,9 +33,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import net.iGap.G;
-import net.iGap.R;
-import net.iGap.module.AndroidUtils;
 
 public class HelperSaveFile {
 
@@ -103,6 +105,10 @@ public class HelperSaveFile {
 
                     break;
                 case video:
+
+                    if (!Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).exists()) {
+                        new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getPath()).mkdirs();
+                    }
 
                     if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).exists()) {
                         destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath() + "/" + fileName;

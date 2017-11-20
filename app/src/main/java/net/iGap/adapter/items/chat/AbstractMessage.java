@@ -745,7 +745,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mContainer.removeView(holder.itemView.findViewById(R.id.cslr_replay_layout));
         }
 
-        if (mMessage.replayTo != null) {
+        if (mMessage.replayTo != null && mMessage.replayTo.isValid()) {
 
             final View replayView = ViewMaker.getViewReplay();
 

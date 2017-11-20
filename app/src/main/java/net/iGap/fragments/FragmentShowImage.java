@@ -447,7 +447,8 @@ public class FragmentShowImage extends BaseFragment {
             File file = new File(path);
             if (file.exists()) {
                 if (rm.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
-                    HelperSaveFile.saveVideoToGallary(path, true);
+                    //HelperSaveFile.saveVideoToGallary(path, true);
+                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + ".mp4", HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
                 } else {
                     HelperSaveFile.savePicToGallary(path, true);
                 }
@@ -1024,7 +1025,6 @@ public class FragmentShowImage extends BaseFragment {
             isLockScreen = true;
         }
     }
-
 
 
     @Override
