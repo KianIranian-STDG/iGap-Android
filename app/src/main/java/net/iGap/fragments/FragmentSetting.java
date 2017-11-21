@@ -1358,13 +1358,13 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
         switch (typeData) {
             case 0:
-                txtData.setText("Miladi");
+                txtData.setText(G.fragmentActivity.getResources().getString(R.string.miladi));
                 break;
             case 1:
-                txtData.setText("Shamsi");
+                txtData.setText(G.fragmentActivity.getResources().getString(R.string.shamsi));
                 break;
             case 2:
-                txtData.setText("Ghamari");
+                txtData.setText(G.fragmentActivity.getResources().getString(R.string.ghamari));
                 break;
         }
         vgTitleData.setOnClickListener(new View.OnClickListener() {
@@ -2371,23 +2371,12 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals(G.fragmentActivity.getResources().getString(R.string.array_From_Camera))) { // camera
-
                     try {
-                        HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                        HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                             @Override
-                            public void Allow() throws IOException {
-                                HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                                    @Override
-                                    public void Allow() {
-                                        dialog.dismiss();
-                                        useCamera();
-                                    }
-
-                                    @Override
-                                    public void deny() {
-
-                                    }
-                                });
+                            public void Allow() {
+                                dialog.dismiss();
+                                useCamera();
                             }
 
                             @Override
@@ -2400,11 +2389,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     }
                 } else {
                     try {
-                        //new AttachFile(G.fragmentActivity).requestOpenGalleryForImageSingleSelect();
-
-                        // this part should transform to attach file
-
-                        HelperPermision.getStoragePermision(context, new OnGetPermission() {
+                        HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                             @Override
                             public void Allow() {
                                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

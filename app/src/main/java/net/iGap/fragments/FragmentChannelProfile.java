@@ -977,23 +977,12 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                     if (G.fragmentActivity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
                         try {
-
-                            HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                            HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                                 @Override
-                                public void Allow() throws IOException {
-                                    HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                                        @Override
-                                        public void Allow() {
-                                            // this dialog show 2 way for choose image : gallery and camera
-                                            dialog.dismiss();
-                                            useCamera();
-                                        }
-
-                                        @Override
-                                        public void deny() {
-
-                                        }
-                                    });
+                                public void Allow() {
+                                    // this dialog show 2 way for choose image : gallery and camera
+                                    dialog.dismiss();
+                                    useCamera();
                                 }
 
                                 @Override
