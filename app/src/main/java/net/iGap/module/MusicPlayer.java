@@ -44,13 +44,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -65,6 +59,15 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 import static net.iGap.G.context;
 
@@ -641,7 +644,6 @@ public class MusicPlayer extends Service {
 
     private static String getMusicName(long messageId, String name) {
         try {
-
             if (isVoice) {
                 String voiceName = "";
                 RealmRoomMessage realmRoomMessage = RealmRoomMessage.getFinalMessage(getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst());

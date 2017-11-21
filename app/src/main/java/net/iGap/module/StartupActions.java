@@ -136,6 +136,7 @@ public final class StartupActions {
         attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
         headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
         G.progressColor = preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor);
+        G.multiTab = preferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
 
         /**
          * start background app service

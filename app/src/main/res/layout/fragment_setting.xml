@@ -700,7 +700,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/background_editText"
-            android:visibility="gone"
+            android:visibility="visible"
             />
         <LinearLayout
 
@@ -711,7 +711,7 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:paddingStart="@dimen/dp16"
-            android:visibility="gone"
+            android:visibility="visible"
             >
 
           <TextView

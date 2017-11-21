@@ -37,18 +37,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmModel;
-import java.io.File;
-import java.io.IOException;
-import java.util.Locale;
+
 import net.iGap.Config;
 import net.iGap.FragmentData;
 import net.iGap.G;
@@ -113,9 +109,18 @@ import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserProfileUpdateUsername;
 import net.iGap.request.RequestUserSessionLogout;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
+
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
+import static net.iGap.G.onRefreshActivity;
 import static net.iGap.R.string.log_out;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
@@ -325,11 +330,11 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
                 final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_nickname))
-                    .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
-                    .customView(layoutNickname, true)
-                    .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
-                    .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                    .build();
+                        .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                        .customView(layoutNickname, true)
+                        .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+                        .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                        .build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
@@ -567,7 +572,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 layoutEmail.addView(inputEmail, layoutParams);
 
                 final MaterialDialog dialog =
-                    new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_email)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutEmail, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_email)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutEmail, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
@@ -692,11 +697,11 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 layoutUserName.addView(inputUserName, layoutParams);
 
                 final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username))
-                    .positiveText(G.fragmentActivity.getResources().getString(R.string.save))
-                    .customView(layoutUserName, true)
-                    .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
-                    .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                    .build();
+                        .positiveText(G.fragmentActivity.getResources().getString(R.string.save))
+                        .customView(layoutUserName, true)
+                        .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+                        .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                        .build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
@@ -907,7 +912,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
                 txtLogOut.setText(G.fragmentActivity.getResources().getString(log_out));
                 txtDeleteAccount.setText(G.fragmentActivity.getResources().getString(R.string.delete_account));
-
 
 
                 root1.setOnClickListener(new View.OnClickListener() {
@@ -1408,41 +1412,45 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         });
 
 
-        final TextView txtemultiTab = (TextView) view.findViewById(R.id.st_txt_st_toggle_multi_tab);
-        final ToggleButton toggleEnablemultiTab = (ToggleButton) view.findViewById(R.id.st_toggle_multi_tab);
+        final TextView txtMultiTab = view.findViewById(R.id.st_txt_st_toggle_multi_tab);
+        final ToggleButton toggleEnableMultiTab = view.findViewById(R.id.st_toggle_multi_tab);
 
-
-        boolean checkedEnableMultiTab = sharedPreferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, true);
+        boolean checkedEnableMultiTab = sharedPreferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
         if (checkedEnableMultiTab) {
-            toggleEnablemultiTab.setChecked(true);
+            toggleEnableMultiTab.setChecked(true);
         } else {
-            toggleEnablemultiTab.setChecked(false);
+            toggleEnableMultiTab.setChecked(false);
         }
 
-        toggleEnablemultiTab.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        toggleEnableMultiTab.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (isChecked) {
+                    G.multiTab = true;
                     editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, true);
                     editor.apply();
-
                 } else {
+                    G.multiTab = false;
                     editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
                     editor.apply();
                 }
+
+                if (onRefreshActivity != null) {
+                    G.isRestartActivity = true;
+                    onRefreshActivity.refresh("ar");
+                }
+                removeFromBaseFragment(FragmentSetting.this);
             }
         });
 
-        txtemultiTab.setOnClickListener(new View.OnClickListener() {
+        txtMultiTab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleEnablemultiTab.setChecked(!toggleEnablemultiTab.isChecked());
+                toggleEnableMultiTab.setChecked(!toggleEnableMultiTab.isChecked());
             }
         });
-
-
 
          /*
           setting text size for chat room
@@ -1460,33 +1468,33 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onClick(View view) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_title_message_textSize))
-                    .titleGravity(GravityEnum.START)
-                    .titleColor(G.context.getResources().getColor(android.R.color.black))
+                        .titleGravity(GravityEnum.START)
+                        .titleColor(G.context.getResources().getColor(android.R.color.black))
                         .items(HelperCalander.isPersianUnicode ? R.array.message_text_size_persian : R.array.message_text_size)
-                    .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
-                        @Override
-                        public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                            if (text != null) {
-                                txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
+                                if (text != null) {
+                                    txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
 
-                                if (HelperCalander.isPersianUnicode) {
-                                    txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
+                                    if (HelperCalander.isPersianUnicode) {
+                                        txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
+                                    }
                                 }
+                                poRbDialogTextSize = which;
+                                int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
+                                editor.apply();
+
+                                StartupActions.textSizeDetection(sharedPreferences);
+
+                                return false;
                             }
-                            poRbDialogTextSize = which;
-                            int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
-                            editor.apply();
-
-                            StartupActions.textSizeDetection(sharedPreferences);
-
-                            return false;
-                        }
-                    })
-                    .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
-                    .show();
+                        })
+                        .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
+                        .show();
             }
         });
 
@@ -1722,7 +1730,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 KEY_AD_DATA_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_DATA_GIF, 5);
 
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.title_auto_download_data).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
-                    KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
+                        KEY_AD_DATA_PHOTO, KEY_AD_DATA_VOICE_MESSAGE, KEY_AD_DATA_VIDEO, KEY_AD_DATA_FILE, KEY_AD_DATA_MUSIC, KEY_AD_DATA_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -1773,7 +1781,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 KEY_AD_WIFI_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_WIFI_GIF, 5);
 
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.title_auto_download_wifi).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
-                    KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
+                        KEY_AD_WIFI_PHOTO, KEY_AD_WIFI_VOICE_MESSAGE, KEY_AD_WIFI_VIDEO, KEY_AD_WIFI_FILE, KEY_AD_WIFI_MUSIC, KEY_AD_WIFI_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -1827,7 +1835,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 KEY_AD_ROAMINGN_GIF = sharedPreferences.getInt(SHP_SETTING.KEY_AD_ROAMING_GIF, -1);
 
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.title_auto_download_roaming).items(R.array.auto_download_data).itemsCallbackMultiChoice(new Integer[]{
-                    KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
+                        KEY_AD_ROAMING_PHOTO, KEY_AD_ROAMING_VOICE_MESSAGE, KEY_AD_ROAMING_VIDEO, KEY_AD_ROAMING_FILE, KEY_AD_ROAMING_MUSIC, KEY_AD_ROAMINGN_GIF
                 }, new MaterialDialog.ListCallbackMultiChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
@@ -2012,7 +2020,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         }
 
         setAvatar();
-
 
 
     }
