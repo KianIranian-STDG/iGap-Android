@@ -711,12 +711,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
                 } else {
 
-                    if (regex.equals("")) {
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content("regex.equals(\"\")").positiveText(R.string.B_ok).show();
-                    } else if (edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content("matches(regex)").positiveText(R.string.B_ok).show();
+                    if (regex.equals("") || edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
+                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.Toast_Minimum_Characters).positiveText(R.string.B_ok).show();
                     } else {
-
                         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.Toast_Enter_Phone_Number).positiveText(R.string.B_ok).show();
                     }
                 }
