@@ -63,6 +63,7 @@
   <string name="Toast_Location_Not_Found">Location not found.</string>
   <string name="Toast_First_0">Don\'t need 0 at the beginning</string>
   <string name="Toast_Enter_Phone_Number">Please enter your phone number without the first zero/0</string>
+  <string name="Toast_Minimum_Characters">The number of characters is less than the limit</string>
   <string name="Toast_Enter_Code">Please enter the verification code</string>
   <string name="Toast_Number_Block">This number is blocked</string>
   <string name="Toast_time_wait">please wait until:</string>
@@ -1141,6 +1142,9 @@
   <string name="st_send_report">Report was successfully sent.</string>
   <string name="set_position">Can not set position</string>
   <string name="date">Date</string>
+  <string name="miladi">AD</string>
+  <string name="shamsi">Hijri Shamsi date</string>
+  <string name="ghamari">Hijri Lunar date</string>
   <string name="Uploading">Uploading...</string>
 
 

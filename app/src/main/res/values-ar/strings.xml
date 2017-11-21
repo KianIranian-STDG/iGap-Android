@@ -117,6 +117,8 @@
 
   <string name="Toast_First_0">"ليست الحاجة إلى وضع 0 في بداية الرقم"</string>
 
+  <string name="Toast_Minimum_Characters">عدد الأحرف أقل من الحد</string>
+
   <string name="Toast_Enter_Phone_Number">"من فضلك أدخل رقم الهاتف دون صفر البداية"</string>
 
   <string name="Toast_Enter_Code">"من فضلك أدخل رمز التأكيد"</string>
@@ -2074,8 +2076,12 @@
   <string name="st_send_report">تمّ تسجيل ابلاغ اساءة الاستخدام بنجاح</string>
 
   <string name="set_position">Can not set position</string>
-  <string name="Uploading">Uploading...</string>
   <string name="date">تاریخ</string>
+  <string name="miladi">الميلادية</string>
+  <string name="shamsi">هجري الشامسي</string>
+  <string name="ghamari">القمري الهجري</string>
+  <string name="Uploading">تحميل...</string>
+
 
   <string name="moharam">محرم</string>
   <string name="safar">صفر</string>
@@ -2090,7 +2096,5 @@
   <string name="zighade">ذیقعده</string>
   <string name="zihaje">ذیحجه</string>
 
-  <string name="st_multi_tab">Multi Tab</string>
-
-
+  <string name="st_multi_tab">تبويب متعدد</string>
 </resources>
