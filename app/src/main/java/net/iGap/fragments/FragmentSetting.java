@@ -1408,6 +1408,42 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         });
 
 
+        final TextView txtemultiTab = (TextView) view.findViewById(R.id.st_txt_st_toggle_multi_tab);
+        final ToggleButton toggleEnablemultiTab = (ToggleButton) view.findViewById(R.id.st_toggle_multi_tab);
+
+
+        boolean checkedEnableMultiTab = sharedPreferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, true);
+        if (checkedEnableMultiTab) {
+            toggleEnablemultiTab.setChecked(true);
+        } else {
+            toggleEnablemultiTab.setChecked(false);
+        }
+
+        toggleEnablemultiTab.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (isChecked) {
+                    editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, true);
+                    editor.apply();
+
+                } else {
+                    editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
+                    editor.apply();
+                }
+            }
+        });
+
+        txtemultiTab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleEnablemultiTab.setChecked(!toggleEnablemultiTab.isChecked());
+            }
+        });
+
+
+
          /*
           setting text size for chat room
          */

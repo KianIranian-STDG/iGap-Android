@@ -27,6 +27,7 @@ public class SHP_SETTING {
     public static final String KEY_ENABLE_ANIMATION = "enable_animation";
     public static final String KEY_ENABLE_DATA_SHAMS = "enable_dataShams";
     public static final String KEY_AUTO_ROTATE = "KEY_AUTO_ROTATE";
+    public static final String KEY_MULTI_TAB = "KEY_MULTI_TAB";
     public static final String KEY_AUTOPLAY_GIFS = "autoplay_gif";
     public static final String KEY_SAVE_TO_GALLERY = "save_to_gallery";
     public static final String KEY_CROP = "KEY_CROP";
