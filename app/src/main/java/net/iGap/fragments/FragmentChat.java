@@ -303,6 +303,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOG;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.VOICE;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
@@ -3423,7 +3424,12 @@ public class FragmentChat extends BaseFragment
                 rootShare.setVisibility(View.VISIBLE);
                 rootForward.setVisibility(View.VISIBLE);
                 rootDelete.setVisibility(View.VISIBLE);
-                rootSaveToDownload.setVisibility(View.VISIBLE);
+
+                if (message.messageType == VOICE) {
+                    rootSaveToDownload.setVisibility(View.GONE);
+                } else {
+                    rootSaveToDownload.setVisibility(View.VISIBLE);
+                }
 
                 //itemsRes = R.array.fileMessageDialogItems;
                 break;
