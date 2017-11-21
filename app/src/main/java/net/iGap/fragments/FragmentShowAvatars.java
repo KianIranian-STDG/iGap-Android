@@ -484,7 +484,7 @@ public class FragmentShowAvatars extends BaseFragment {
             if (media != null) {
                 File file = new File(media);
                 if (file.exists()) {
-                    HelperSaveFile.savePicToGallary(media, true);
+                    HelperSaveFile.savePicToGallery(media, true);
                 }
             }
         }

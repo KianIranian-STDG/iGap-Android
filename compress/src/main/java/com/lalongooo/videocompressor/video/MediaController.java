@@ -11,6 +11,7 @@ import android.media.MediaFormat;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.util.Log;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -165,7 +166,6 @@ import java.nio.ByteBuffer;
 
 
             while (!inputDone) {
-                Log.i("HHHHHHHHHHHHHHHHHH", "00000e: ");
                 boolean eof = false;
                 int index = extractor.getSampleTrackIndex();
                 if (index == trackIndex) {
@@ -173,7 +173,6 @@ import java.nio.ByteBuffer;
                     if (Build.VERSION.SDK_INT < 21) {
                         buffer.position(0);
                         buffer.limit(info.size);
-                        Log.i("TTTTTTTTTTTTTTTTT", "offset: " + info.flags);
                     }
                     if (!isAudio) {
                         byte[] array = buffer.array();

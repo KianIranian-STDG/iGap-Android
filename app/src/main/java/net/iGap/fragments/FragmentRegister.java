@@ -52,16 +52,12 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.protobuf.ByteString;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-import io.realm.Realm;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
 import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.G;
@@ -108,6 +104,14 @@ import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyPassword;
 import net.iGap.request.RequestWrapper;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import io.realm.Realm;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static net.iGap.G.context;
@@ -281,7 +285,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         }
                         File file = new File(_resultQrCode);
                         if (file.exists()) {
-                            HelperSaveFile.savePicToGallary(_resultQrCode, true);
+                            HelperSaveFile.savePicToGallery(_resultQrCode, true);
                         }
                     }
                 }).neutralText(R.string.cancel).onNeutral(new MaterialDialog.SingleButtonCallback() {

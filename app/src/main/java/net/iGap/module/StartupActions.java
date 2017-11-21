@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
@@ -22,6 +23,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFillLookUpClass;
 import net.iGap.helper.HelperNotificationAndBadge;
+import net.iGap.helper.HelperPermision;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.MyServiceTemporat;
 import net.iGap.realm.RealmMigration;
@@ -221,28 +223,33 @@ public final class StartupActions {
      */
     public static void makeFolder() {
         try {
+            manageAppDirectories();
+            //before used from thread; isn't good idea
             //new Thread(new Runnable() {
             //    @Override
             //    public void run() {
+            //    }
+            //}).start();
+
             new File(DIR_APP).mkdirs();
             new File(DIR_IMAGES).mkdirs();
             new File(DIR_VIDEOS).mkdirs();
             new File(DIR_AUDIOS).mkdirs();
             new File(DIR_DOCUMENT).mkdirs();
-            new File(DIR_CHAT_BACKGROUND).mkdirs();
-            new File(DIR_IMAGE_USER).mkdirs();
-            new File(DIR_TEMP).mkdirs();
 
             String file = ".nomedia";
             new File(DIR_IMAGES + "/" + file).createNewFile();
             new File(DIR_VIDEOS + "/" + file).createNewFile();
             new File(DIR_AUDIOS + "/" + file).createNewFile();
             new File(DIR_DOCUMENT + "/" + file).createNewFile();
+
+
+            new File(DIR_CHAT_BACKGROUND).mkdirs();
+            new File(DIR_IMAGE_USER).mkdirs();
+            new File(DIR_TEMP).mkdirs();
             new File(DIR_CHAT_BACKGROUND + "/" + file).createNewFile();
             new File(DIR_IMAGE_USER + "/" + file).createNewFile();
             new File(DIR_TEMP + "/" + file).createNewFile();
-            //    }
-            //}).start();
 
             IMAGE_NEW_GROUP = new File(G.DIR_IMAGE_USER, "image_new_group.jpg");
             IMAGE_NEW_CHANEL = new File(G.DIR_IMAGE_USER, "image_new_chanel.jpg");
@@ -251,6 +258,49 @@ public final class StartupActions {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void manageAppDirectories() {
+        String rootPath = getCacheDir().getPath();
+
+        if (!HelperPermision.grantedUseStorage()) {
+            DIR_IMAGES = rootPath + G.IMAGES;
+            DIR_VIDEOS = rootPath + G.VIDEOS;
+            DIR_AUDIOS = rootPath + G.AUDIOS;
+            DIR_DOCUMENT = rootPath + G.DOCUMENT;
+        }
+
+        DIR_TEMP = rootPath + G.TEMP;
+        DIR_CHAT_BACKGROUND = rootPath + G.CHAT_BACKGROUND;
+        DIR_IMAGE_USER = rootPath + G.IMAGE_USER;
+    }
+
+    public static File getCacheDir() {
+        String state = null;
+        try {
+            state = Environment.getExternalStorageState();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (state == null || state.startsWith(Environment.MEDIA_MOUNTED)) {
+            try {
+                File file = G.context.getExternalCacheDir();
+                if (file != null) {
+                    return file;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            File file = G.context.getCacheDir();
+            if (file != null) {
+                return file;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new File(G.DIR_APP);
     }
 
     private void initializeGlobalVariables() {

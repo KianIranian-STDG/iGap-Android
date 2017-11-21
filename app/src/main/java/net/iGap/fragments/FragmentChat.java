@@ -69,6 +69,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
@@ -82,25 +83,7 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
-import io.fabric.sdk.android.services.concurrency.AsyncTask;
-import io.fotoapparat.Fotoapparat;
-import io.fotoapparat.view.CameraRenderer;
-import io.fotoapparat.view.CameraView;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import me.leolin.shortcutbadger.ShortcutBadger;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -268,7 +251,29 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
+
 import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+
+import io.fabric.sdk.android.services.concurrency.AsyncTask;
+import io.fotoapparat.Fotoapparat;
+import io.fotoapparat.view.CameraRenderer;
+import io.fotoapparat.view.CameraView;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -290,6 +295,7 @@ import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_open_document;
 import static net.iGap.module.AttachFile.request_code_pic_file;
 import static net.iGap.module.MessageLoader.getLocalMessage;
+import static net.iGap.module.StartupActions.getCacheDir;
 import static net.iGap.module.enums.ProgressState.HIDE;
 import static net.iGap.module.enums.ProgressState.SHOW;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
@@ -851,7 +857,18 @@ public class FragmentChat extends BaseFragment
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_CANCELED) {
+        boolean resultCancel = false;
+        if (requestCode == AttachFile.request_code_pic_audi ||
+                requestCode == AttachFile.request_code_pic_file ||
+                requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect ||
+                requestCode == AttachFile.request_code_image_from_gallery_single_select ||
+                requestCode == AttachFile.requestOpenGalleryForVideoMultipleSelect ||
+                requestCode == AttachFile.request_code_open_document) {
+
+            resultCancel = true;
+        }
+
+        if (resultCode == RESULT_CANCELED || resultCancel) {
             HelperSetAction.sendCancel(messageId);
 
             if (prgWaiting != null) {
@@ -937,9 +954,10 @@ public class FragmentChat extends BaseFragment
                         listPathString = new ArrayList<>();
 
                         Uri uri = Uri.fromFile(new File(AttachFile.videoPath));
-                        File tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile(HelperString.getRandomFileName(5), G.fragmentActivity, uri);
+                        File tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile(getCacheDir().getPath(), HelperString.getRandomFileName(5), G.fragmentActivity, uri);
                         mainVideoPath = tempFile.getPath();
-                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+//                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                        String savePathVideoCompress = getCacheDir() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
 
                         listPathString.add(savePathVideoCompress);
 
@@ -961,7 +979,8 @@ public class FragmentChat extends BaseFragment
                         File mediaStorageDir = new File(G.DIR_VIDEOS);
                         listPathString = new ArrayList<>();
 
-                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+//                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                        String savePathVideoCompress = getCacheDir() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
 
                         listPathString.add(savePathVideoCompress);
                         mainVideoPath = data.getData().getPath();
@@ -2479,25 +2498,17 @@ public class FragmentChat extends BaseFragment
                         e.printStackTrace();
                     }
                 } else {
-                    if (ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        try {
-                            HelperPermision.getStoragePermision(G.fragmentActivity, null);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        voiceRecord.setItemTag("ivVoice");
-                        // viewAttachFile.setVisibility(View.GONE);
-                        viewMicRecorder.setVisibility(View.VISIBLE);
+                    voiceRecord.setItemTag("ivVoice");
+                    // viewAttachFile.setVisibility(View.GONE);
+                    viewMicRecorder.setVisibility(View.VISIBLE);
 
-                        AppUtils.setVibrator(50);
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                voiceRecord.startVoiceRecord();
-                            }
-                        }, 60);
-                    }
+                    AppUtils.setVibrator(50);
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            voiceRecord.startVoiceRecord();
+                        }
+                    }, 60);
                 }
 
                 return true;
@@ -4658,10 +4669,16 @@ public class FragmentChat extends BaseFragment
      * get images for show in bottom sheet
      */
     public static ArrayList<StructBottomSheet> getAllShownImagesPath(Activity activity) {
+
+        ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
+
+        if (!HelperPermision.grantedUseStorage()) {
+            return listOfAllImages;
+        }
+
         Uri uri;
         Cursor cursor;
         int column_index_data = 0, column_index_folder_name;
-        ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<StructBottomSheet>();
         String absolutePathOfImage = null;
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 

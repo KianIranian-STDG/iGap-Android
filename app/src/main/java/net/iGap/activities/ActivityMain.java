@@ -29,7 +29,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -229,7 +228,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -291,12 +289,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             openActivityPassCode();
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            isNeedToRegister = true;
-            isOnGetPermission = true;
-        }
+        //if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        //isNeedToRegister = true; // continue app even don't have storage permission
+        //isOnGetPermission = true;
+        //}
         super.onCreate(savedInstanceState);
-
 
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -318,8 +315,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             finish();
             return;
         }
-
-
 
 
         G.fragmentManager = getSupportFragmentManager();
@@ -349,7 +344,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
 
-
         if (G.firstTimeEnterToApp) {
             /**
              * set true mFirstRun for get room history after logout and login again
@@ -368,7 +362,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 editor.apply();
             }
         }
-
 
 
         setContentView(R.layout.activity_main);
@@ -420,7 +413,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             ViewGroup.LayoutParams lp = frameFragmentContainer.getLayoutParams();
             lp.width = size;
             lp.height = size;
-
 
 
             desighnLayout(chatLayoutMode.none);
@@ -920,7 +912,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip.setStripColor(Color.WHITE);
 
 
-
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setOffscreenPageLimit(5);
 
@@ -1274,20 +1265,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
-                        @Override
-                        public void Allow() {
-                            new HelperFragment(new FragmentSetting()).load();
-                        }
-
-                        @Override
-                        public void deny() {
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                new HelperFragment(new FragmentSetting()).load();
                 closeDrawer();
                 lockNavigation();
             }
@@ -1939,7 +1917,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
-
 
 
         if (G.onBackPressedExplorer != null) {
