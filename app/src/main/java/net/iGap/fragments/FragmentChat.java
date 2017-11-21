@@ -857,18 +857,7 @@ public class FragmentChat extends BaseFragment
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        boolean resultCancel = false;
-        if (requestCode == AttachFile.request_code_pic_audi ||
-                requestCode == AttachFile.request_code_pic_file ||
-                requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect ||
-                requestCode == AttachFile.request_code_image_from_gallery_single_select ||
-                requestCode == AttachFile.requestOpenGalleryForVideoMultipleSelect ||
-                requestCode == AttachFile.request_code_open_document) {
-
-            resultCancel = true;
-        }
-
-        if (resultCode == RESULT_CANCELED || resultCancel) {
+        if (resultCode == RESULT_CANCELED) {
             HelperSetAction.sendCancel(messageId);
 
             if (prgWaiting != null) {
