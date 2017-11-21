@@ -101,7 +101,7 @@ public class FragmentData extends BaseFragment {
                 removeFromBaseFragment(FragmentData.this);
 
                 if (FragmentSetting.dateType != null) {
-                    FragmentSetting.dateType.dataName("Shamsi");
+                    FragmentSetting.dateType.dataName(G.fragmentActivity.getResources().getString(R.string.shamsi));
                 }
             }
         });
@@ -116,7 +116,7 @@ public class FragmentData extends BaseFragment {
                 removeFromBaseFragment(FragmentData.this);
 
                 if (FragmentSetting.dateType != null) {
-                    FragmentSetting.dateType.dataName("Miladi");
+                    FragmentSetting.dateType.dataName(G.fragmentActivity.getResources().getString(R.string.miladi));
                 }
             }
         });
@@ -131,7 +131,7 @@ public class FragmentData extends BaseFragment {
                 removeFromBaseFragment(FragmentData.this);
 
                 if (FragmentSetting.dateType != null) {
-                    FragmentSetting.dateType.dataName("Ghamari");
+                    FragmentSetting.dateType.dataName(G.fragmentActivity.getResources().getString(R.string.ghamari));
                 }
             }
         });
