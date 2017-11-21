@@ -44,7 +44,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
-
+import io.realm.Realm;
+import io.realm.RealmResults;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -59,15 +65,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 import static net.iGap.G.context;
 
@@ -142,6 +139,7 @@ public class MusicPlayer extends Service {
 
     private static Realm mRealm;
     private static boolean isRegisterSensor = false;
+    public static UpdateName updateName;
 
     private static Realm getRealm() {
         if (mRealm == null || mRealm.isClosed()) {
@@ -190,10 +188,8 @@ public class MusicPlayer extends Service {
 
     public static void setMusicPlayer(LinearLayout layoutTripMusic) {
 
-        if (remoteViews == null)
-            remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
-        if (notificationManager == null)
-            notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (remoteViews == null) remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
+        if (notificationManager == null) notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (layoutTripMusic != null) {
             layoutTripMusic.setVisibility(View.GONE);
@@ -660,8 +656,7 @@ public class MusicPlayer extends Service {
                     } else if (realmRoomMessage.getAuthorRoomId() != 0) {
                         voiceName = RealmRoom.detectTitle(realmRoomMessage.getAuthorRoomId());
                     }
-
-                    return G.context.getResources().getString(R.string.recorded_by) + " " + voiceName;
+                    return G.fragmentActivity.getResources().getString(R.string.recorded_by) + " " + voiceName;
                 }
             }
 
@@ -681,7 +676,7 @@ public class MusicPlayer extends Service {
         return "";
     }
 
-    public static void startPlayer(String name, String musicPath, String roomName, long roomId, final boolean updateList, String messageID) {
+    public static void startPlayer(final String name, String musicPath, String roomName, long roomId, final boolean updateList, final String messageID) {
 
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -758,6 +753,12 @@ public class MusicPlayer extends Service {
             txt_music_time.setText(musicTime);
             btnPlayMusic.setText(context.getString(R.string.md_pause_button));
             txt_music_name.setText(musicName);
+            updateName = new UpdateName() {
+                @Override
+                public void rename() {
+                    musicName = getMusicName(Long.parseLong(messageID), name);
+                }
+            };
 
             updateProgress();
 
@@ -1450,7 +1451,7 @@ public class MusicPlayer extends Service {
 
                     PlaybackStateCompat state = new PlaybackStateCompat.Builder().setActions(PlaybackStateCompat.ACTION_STOP | PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
 
-                            .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1, SystemClock.elapsedRealtime()).build();
+                        .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1, SystemClock.elapsedRealtime()).build();
                     mSession.setPlaybackState(state);
                 } catch (Exception e) {
 
@@ -1598,6 +1599,10 @@ public class MusicPlayer extends Service {
         }
 
         isSpeakerON = am.isSpeakerphoneOn();
+    }
+
+    public interface UpdateName {
+        void rename();
     }
 }
 

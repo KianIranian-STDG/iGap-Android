@@ -10,14 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import java.util.Locale;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
-
-import java.util.Locale;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.onRefreshActivity;
@@ -112,6 +111,10 @@ public class FragmentLanguage extends BaseFragment {
                     G.selectedLanguage = "en";
                 }
 
+                if (MusicPlayer.updateName != null) {
+                    MusicPlayer.updateName.rename();
+                }
+
                 removeFromBaseFragment(FragmentLanguage.this);
 
             }
@@ -137,6 +140,11 @@ public class FragmentLanguage extends BaseFragment {
                         onRefreshActivity.refresh("fa");
                     }
                 }
+
+                if (MusicPlayer.updateName != null) {
+                    MusicPlayer.updateName.rename();
+                }
+
                 removeFromBaseFragment(FragmentLanguage.this);
             }
         });
