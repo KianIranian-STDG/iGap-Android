@@ -170,6 +170,11 @@ public class FragmentLanguage extends BaseFragment {
                         onRefreshActivity.refresh("ar");
                     }
                 }
+
+                if (MusicPlayer.updateName != null) {
+                    MusicPlayer.updateName.rename();
+                }
+
                 removeFromBaseFragment(FragmentLanguage.this);
             }
         });
