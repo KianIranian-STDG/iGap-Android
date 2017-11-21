@@ -335,12 +335,12 @@ public class HelperDownloadFile {
 
             // save downloaded file to gallery
 
-            if (G.isSaveToGallery && item.selector == ProtoFileDownload.FileDownload.Selector.FILE && item.moveToDirectoryPAth != null) {
+            if (G.isSaveToGallery && HelperPermision.grantedUseStorage() && item.selector == ProtoFileDownload.FileDownload.Selector.FILE && item.moveToDirectoryPAth != null) {
                 File file = new File(item.moveToDirectoryPAth);
                 if (file.exists()) {
 
                     if (HelperMimeType.isFileImage(item.moveToDirectoryPAth) || HelperMimeType.isFileVideo(item.moveToDirectoryPAth)) {
-                        HelperSaveFile.savePicToGallary(item.moveToDirectoryPAth, false);
+                        HelperSaveFile.savePicToGallery(item.moveToDirectoryPAth, false);
                     }
                 }
             }

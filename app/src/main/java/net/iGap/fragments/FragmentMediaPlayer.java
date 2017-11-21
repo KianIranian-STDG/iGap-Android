@@ -411,7 +411,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                shareMusuic();
+                shareMusic();
             }
         });
     }
@@ -421,7 +421,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         HelperSaveFile.saveToMusicFolder(MusicPlayer.musicPath, MusicPlayer.musicName);
     }
 
-    private void shareMusuic() {
+    private void shareMusic() {
 
         String sharePath = MusicPlayer.musicPath;
 

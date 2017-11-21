@@ -29,7 +29,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -289,10 +288,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             openActivityPassCode();
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            isNeedToRegister = true;
-            isOnGetPermission = true;
-        }
+        //if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        //isNeedToRegister = true; // continue app even don't have storage permission
+        //isOnGetPermission = true;
+        //}
         super.onCreate(savedInstanceState);
 
 
@@ -1274,20 +1273,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
-                        @Override
-                        public void Allow() {
-                            new HelperFragment(new FragmentSetting()).load();
-                        }
-
-                        @Override
-                        public void deny() {
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                new HelperFragment(new FragmentSetting()).load();
                 closeDrawer();
                 lockNavigation();
             }
