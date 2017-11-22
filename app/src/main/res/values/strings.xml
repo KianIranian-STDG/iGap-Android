@@ -115,7 +115,7 @@
 
   <!-- Public String -->
   <string name="search">Search</string>
-  <string formatted="false" name="d_of_d">%d of %d</string>
+  <string name="d_of_d" formatted="false">%d of %d</string>
   <string name="add_to_contact">Add to Contact</string>
   <string name="app_name">iGap</string>
   <string name="call_name">iGap Voice Call</string>
@@ -154,7 +154,7 @@
   <string name="cannot_load_data_en">Unable to load data.</string>
   <string name="do_you_want_exit">Do you want to exit?</string>
   <string name="slide_to_cancel_en">Slide to Cancel</string>
-  <string formatted="false" name="video_duration">%s (%s)</string>
+  <string name="video_duration" formatted="false">%s (%s)</string>
 
   <!-- setting -->
   <string name="st_Info">Account Info</string>
@@ -378,7 +378,7 @@
   <string name="private_channel">Private Channel</string>
   <string name="desc_private_channel">Not anyone can join. They can only be added as members by the admin(s). </string>
   <string name="desc_public_channel">Anyone can join public channels via searching or receiving the invitation link.</string>
-  <string formatted="false" name="last_msg_format_chat">%s</string>
+  <string name="last_msg_format_chat" formatted="false">%s</string>
 
   <!-- Error -->
   <string name="USER_VERIFY_BLOCKED_USER">User is blocked, no possibility to verify</string>
@@ -506,8 +506,8 @@
   <string name="E_212_1">Bad payload: Invalid room ID</string>
   <string name="E_213">Internal Server Error</string>
   <string name="E_214">This operation is not permitted.</string>
-  <string formatted="false" name="resend_all_messages">Resend %d messages</string>
-  <string formatted="false" name="resend_chat_message">Resend messages</string>
+  <string name="resend_all_messages" formatted="false">Resend %d messages</string>
+  <string name="resend_chat_message" formatted="false">Resend messages</string>
   <string name="if_you_are_away_for">Away for</string>
   <string name="st_Gander">Gender:</string>
   <string name="st_email">Email:</string>
@@ -1073,7 +1073,7 @@
   <string name="map_registration">Disable "Nearby" Visibility</string>
   <string name="comment_waiting">Receiving notes...</string>
   <string name="comment_no">No Status</string>
-  <string formatted="false" name="distance">about %d m</string>
+  <string name="distance" formatted="false">about %d m</string>
   <string name="hint_gps">Your Status</string>
   <string name="Clear_Status">Clear Status</string>
   <string name="Clear_Status_desc">You will be visible to others with no status. Are you sure to continue?</string>
@@ -1142,9 +1142,9 @@
   <string name="st_send_report">Report was successfully sent.</string>
   <string name="set_position">Can not set position</string>
   <string name="date">Date</string>
-  <string name="miladi">AD</string>
-  <string name="shamsi">Hijri Shamsi date</string>
-  <string name="ghamari">Hijri Lunar date</string>
+  <string name="miladi">Gregorian</string>
+  <string name="shamsi">Hijri Shamsi Date</string>
+  <string name="ghamari">Hijri Lunar Date</string>
   <string name="Uploading">Uploading...</string>
 
 
