@@ -380,11 +380,8 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
     }
 
     public void useGallery() {
-        //        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        //        startActivityForResult(intent, IntentRequests.REQ_GALLERY);
-
         try {
-            HelperPermision.getStoragePermision(context, new OnGetPermission() {
+            HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() {
                     try {
@@ -418,23 +415,12 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                     case 1: {
                         if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                             try {
-
-                                HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                                HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                                     @Override
-                                    public void Allow() throws IOException {
-                                        HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                                            @Override
-                                            public void Allow() {
-                                                // this dialog show 2 way for choose image : gallery and camera
-                                                dialog.dismiss();
-                                                useCamera();
-                                            }
-
-                                            @Override
-                                            public void deny() {
-
-                                            }
-                                        });
+                                    public void Allow() {
+                                        // this dialog show 2 way for choose image : gallery and camera
+                                        dialog.dismiss();
+                                        useCamera();
                                     }
 
                                     @Override

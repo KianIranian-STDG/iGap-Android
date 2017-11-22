@@ -295,6 +295,7 @@ import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_open_document;
 import static net.iGap.module.AttachFile.request_code_pic_file;
 import static net.iGap.module.MessageLoader.getLocalMessage;
+import static net.iGap.module.StartupActions.getCacheDir;
 import static net.iGap.module.enums.ProgressState.HIDE;
 import static net.iGap.module.enums.ProgressState.SHOW;
 import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
@@ -942,9 +943,10 @@ public class FragmentChat extends BaseFragment
                         listPathString = new ArrayList<>();
 
                         Uri uri = Uri.fromFile(new File(AttachFile.videoPath));
-                        File tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile(HelperString.getRandomFileName(5), G.fragmentActivity, uri);
+                        File tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile(getCacheDir().getPath(), HelperString.getRandomFileName(5), G.fragmentActivity, uri);
                         mainVideoPath = tempFile.getPath();
-                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+//                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                        String savePathVideoCompress = getCacheDir() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
 
                         listPathString.add(savePathVideoCompress);
 
@@ -966,7 +968,8 @@ public class FragmentChat extends BaseFragment
                         File mediaStorageDir = new File(G.DIR_VIDEOS);
                         listPathString = new ArrayList<>();
 
-                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+//                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                        String savePathVideoCompress = getCacheDir() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
 
                         listPathString.add(savePathVideoCompress);
                         mainVideoPath = data.getData().getPath();
@@ -2484,25 +2487,17 @@ public class FragmentChat extends BaseFragment
                         e.printStackTrace();
                     }
                 } else {
-                    if (ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        try {
-                            HelperPermision.getStoragePermision(G.fragmentActivity, null);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        voiceRecord.setItemTag("ivVoice");
-                        // viewAttachFile.setVisibility(View.GONE);
-                        viewMicRecorder.setVisibility(View.VISIBLE);
+                    voiceRecord.setItemTag("ivVoice");
+                    // viewAttachFile.setVisibility(View.GONE);
+                    viewMicRecorder.setVisibility(View.VISIBLE);
 
-                        AppUtils.setVibrator(50);
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                voiceRecord.startVoiceRecord();
-                            }
-                        }, 60);
-                    }
+                    AppUtils.setVibrator(50);
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            voiceRecord.startVoiceRecord();
+                        }
+                    }, 60);
                 }
 
                 return true;
@@ -4680,10 +4675,16 @@ public class FragmentChat extends BaseFragment
      * get images for show in bottom sheet
      */
     public static ArrayList<StructBottomSheet> getAllShownImagesPath(Activity activity) {
+
+        ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
+
+        if (!HelperPermision.grantedUseStorage()) {
+            return listOfAllImages;
+        }
+
         Uri uri;
         Cursor cursor;
         int column_index_data = 0, column_index_folder_name;
-        ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<StructBottomSheet>();
         String absolutePathOfImage = null;
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
@@ -5603,6 +5604,12 @@ public class FragmentChat extends BaseFragment
                 }
             }
         });
+
+        if (HelperPermision.grantedUseStorage()) {
+            rcvBottomSheet.setVisibility(View.VISIBLE);
+        } else {
+            rcvBottomSheet.setVisibility(View.GONE);
+        }
 
         bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override

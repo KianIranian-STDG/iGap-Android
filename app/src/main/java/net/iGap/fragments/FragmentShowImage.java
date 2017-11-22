@@ -450,7 +450,7 @@ public class FragmentShowImage extends BaseFragment {
                     //HelperSaveFile.saveVideoToGallary(path, true);
                     HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + ".mp4", HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
                 } else {
-                    HelperSaveFile.savePicToGallary(path, true);
+                    HelperSaveFile.savePicToGallery(path, true);
                 }
 
             }

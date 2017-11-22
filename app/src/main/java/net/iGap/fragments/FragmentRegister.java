@@ -285,7 +285,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         }
                         File file = new File(_resultQrCode);
                         if (file.exists()) {
-                            HelperSaveFile.savePicToGallary(_resultQrCode, true);
+                            HelperSaveFile.savePicToGallery(_resultQrCode, true);
                         }
                     }
                 }).neutralText(R.string.cancel).onNeutral(new MaterialDialog.SingleButtonCallback() {

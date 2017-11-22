@@ -95,16 +95,25 @@ public class G extends MultiDexApplication {
     public static File IMAGE_NEW_CHANEL;
     public static File imageFile;
 
+    public static final String IGAP = "/iGap";
+    public static final String IMAGES = "/iGap Images";
+    public static final String VIDEOS = "/iGap Videos";
+    public static final String AUDIOS = "/iGap Audios";
+    public static final String DOCUMENT = "/iGap Document";
+    public static final String TEMP = "/.temp";
+    public static final String CHAT_BACKGROUND = "/.chat_background";
+    public static final String IMAGE_USER = "/.image_user";
+
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
-    public static final String DIR_APP = DIR_SDCARD + "/iGap";
-    public static final String DIR_IMAGES = DIR_APP + "/iGap Images";
-    public static final String DIR_VIDEOS = DIR_APP + "/iGap Videos";
-    public static final String DIR_AUDIOS = DIR_APP + "/iGap Audios";
-    public static final String DIR_DOCUMENT = DIR_APP + "/iGap Document";
-    public static final String DIR_TEMP = DIR_APP + "/.temp";
-    public static final String DIR_CHAT_BACKGROUND = DIR_APP + "/.chat_background";
-    public static final String DIR_IMAGE_USER = DIR_APP + "/.image_user";
-    public static final String CHAT_MESSAGE_TIME = "H:mm";
+    public static String DIR_APP = DIR_SDCARD + IGAP;
+    public static String DIR_IMAGES = DIR_APP + IMAGES;
+    public static String DIR_VIDEOS = DIR_APP + VIDEOS;
+    public static String DIR_AUDIOS = DIR_APP + AUDIOS;
+    public static String DIR_DOCUMENT = DIR_APP + DOCUMENT;
+    public static String DIR_TEMP = DIR_APP + TEMP;
+    public static String DIR_CHAT_BACKGROUND = DIR_APP + CHAT_BACKGROUND;
+    public static String DIR_IMAGE_USER = DIR_APP + IMAGE_USER;
+    public static String CHAT_MESSAGE_TIME = "H:mm";
 
     public static String selectedLanguage = "en";
     public static String symmetricMethod;

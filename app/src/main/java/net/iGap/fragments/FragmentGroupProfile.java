@@ -1250,21 +1250,11 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                     if (G.fragmentActivity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) { // camera
 
                         try {
-                            HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                            HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                                 @Override
-                                public void Allow() throws IOException {
-                                    HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                                        @Override
-                                        public void Allow() {
-                                            dialog.dismiss();
-                                            useCamera();
-                                        }
-
-                                        @Override
-                                        public void deny() {
-
-                                        }
-                                    });
+                                public void Allow() {
+                                    dialog.dismiss();
+                                    useCamera();
                                 }
 
                                 @Override
