@@ -5588,6 +5588,12 @@ public class FragmentChat extends BaseFragment
             }
         });
 
+        if (HelperPermision.grantedUseStorage()) {
+            rcvBottomSheet.setVisibility(View.VISIBLE);
+        } else {
+            rcvBottomSheet.setVisibility(View.GONE);
+        }
+
         bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
