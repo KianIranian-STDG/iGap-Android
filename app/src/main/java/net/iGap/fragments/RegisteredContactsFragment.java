@@ -94,6 +94,8 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     private RecyclerView realmRecyclerView;
     private SharedPreferences sharedPreferences;
     private boolean isImportContactList = false;
+    private static boolean getPermission = true;
+    private Realm realm;
     StickyRecyclerHeadersDecoration decoration;
     private ProgressBar prgWaiting;
     private ProgressBar prgWaitingLoadContact;
@@ -105,7 +107,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     private ProgressBar prgWaitingLiadList;
     //private ContactListAdapterA mAdapter;
     private NestedScrollView nestedScrollView;
-    private Realm realm;
 
     private Realm getRealm() {
         if (realm == null || realm.isClosed()) {
@@ -347,33 +348,41 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         fastItemAdapter = new FastItemAdapter();
 
         try {
-            HelperPermision.getContactPermision(G.fragmentActivity, new OnGetPermission() {
-                @Override
-                public void Allow() throws IOException {
-                    /**
-                     * if contacts size is zero send request for get contacts list
-                     * for insuring that contacts not exist really or not
-                     */
-                    if (results.size() == 0) {
-                        LoginActions.importContact();
-                    }
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            prgWaitingLiadList.setVisibility(View.VISIBLE);
+            if (getPermission) {
+                getPermission = false;
+                HelperPermision.getContactPermision(G.fragmentActivity, new OnGetPermission() {
+                    @Override
+                    public void Allow() throws IOException {
+                        /**
+                         * if contacts size is zero send request for get contacts list
+                         * for insuring that contacts not exist really or not
+                         */
+                        if (results.size() == 0) {
+                            LoginActions.importContact();
                         }
-                    });
-                    new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                }
-
-                @Override
-                public void deny() {
-                    if (results.size() == 0) {
-                        new RequestUserContactsGetList().userContactGetList();
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                prgWaitingLiadList.setVisibility(View.VISIBLE);
+                            }
+                        });
+                        new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
-                    prgWaitingLiadList.setVisibility(View.GONE);
+
+                    @Override
+                    public void deny() {
+                        if (results.size() == 0) {
+                            new RequestUserContactsGetList().userContactGetList();
+                        }
+                        prgWaitingLiadList.setVisibility(View.GONE);
+                    }
+                });
+            } else {
+                if (results.size() == 0) {
+                    new RequestUserContactsGetList().userContactGetList();
                 }
-            });
+                prgWaitingLiadList.setVisibility(View.GONE);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

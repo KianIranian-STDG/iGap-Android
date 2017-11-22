@@ -18,12 +18,16 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import java.io.IOException;
-import java.util.ArrayList;
+
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnGetPermission;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class HelperPermision {
 
@@ -143,6 +147,10 @@ public class HelperPermision {
         } else {
             if (onGetPermission != null) onGetPermission.Allow();
         }
+    }
+
+    public static boolean grantedContactPermission() {
+        return ContextCompat.checkSelfPermission(G.context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
     }
 
     //************************************************************************************************************
