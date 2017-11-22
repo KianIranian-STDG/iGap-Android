@@ -535,7 +535,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         btnSpeaker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (btnSpeaker != null && btnSpeaker.getText() != null) {
+                if (btnSpeaker != null && btnSpeaker.getText() != null && G.fragmentActivity != null) {
                     if (btnSpeaker.getText().toString().equals(G.fragmentActivity.getResources().getString(R.string.md_Mute))) {
                         btnSpeaker.setText(R.string.md_unMuted);
                         setSpeakerphoneOn(true);
@@ -587,7 +587,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
      * *************** common methods ***************
      */
 
-    /** Sets the speaker phone mode. */
+    /**
+     * Sets the speaker phone mode.
+     */
     private void setSpeakerphoneOn(boolean on) {
 
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -605,7 +607,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         new WebRTC().leaveCall();
         isSendLeave = true;
-
 
 
         isConnected = false;
@@ -1069,8 +1070,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         }
 
 
-
-
     }
 
     //*****************************  distance sensor  **********************************************************
@@ -1129,8 +1128,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
      * Enables/Disables all child views in a view group.
      *
      * @param viewGroup the view group
-     * @param enabled <code>true</code> to enable, <code>false</code> to disable
-     * the views.
+     * @param enabled   <code>true</code> to enable, <code>false</code> to disable
+     *                  the views.
      */
     public static void enableDisableViewGroup(ViewGroup viewGroup, boolean enabled) {
         if (viewGroup != null) {

@@ -1197,6 +1197,10 @@ public class FragmentShearedMedia extends BaseFragment {
 
         private void setSelectedItem(final int position) {
 
+            if (mList == null || mList.size() == 0) {
+                return;
+            }
+
             Long messageId = mList.get(position).messageId;
 
             int index = SelectedList.indexOf(messageId);
