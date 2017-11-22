@@ -153,6 +153,10 @@ public class HelperPermision {
         }
     }
 
+    public static boolean grantedContactPermission() {
+        return ContextCompat.checkSelfPermission(G.context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED;
+    }
+
     //************************************************************************************************************
     public static void getCalendarPermision(Context context, OnGetPermission onGetPermission) throws IOException {
 
