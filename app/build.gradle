@@ -121,4 +121,5 @@ dependencies {
   annotationProcessor 'org.parceler:parceler:1.1.6'
   provided 'com.android.support:support-annotations:26.0.2'
   compile group: 'com.github.msarhan', name: 'ummalqura-calendar', version: '1.1.7'
+  compile 'com.sothree.slidinguppanel:library:3.4.0'
 }

@@ -44,7 +44,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
-
+import io.realm.Realm;
+import io.realm.RealmResults;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -59,15 +65,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 import static net.iGap.G.context;
 
@@ -108,7 +105,7 @@ public class MusicPlayer extends Service {
     private static NotificationManager notificationManager;
     private static Notification notification;
     public static boolean isPause = false;
-    private static ArrayList<RealmRoomMessage> mediaList;
+    public static ArrayList<RealmRoomMessage> mediaList;
     private static int selectedMedia = 0;
     private static Timer mTimer, mTimeSecend;
     private static long time = 0;
@@ -392,6 +389,8 @@ public class MusicPlayer extends Service {
         if (mp == null) {
             return;
         }
+
+
 
         if (mp.isPlaying()) {
             return;
@@ -801,6 +800,15 @@ public class MusicPlayer extends Service {
         }
 
         isMusicPlyerEnable = true;
+
+        //G.handler.postDelayed(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //
+        //        Log.i("FFFFFFFFFFFF", "run: " + mediaList.size());
+        //        FragmentMediaPlayer.adapterListMusicPlayer.updateAdapter(mediaList);
+        //    }
+        //},2000);
     }
 
     private static void OnCompleteMusic() {
@@ -939,7 +947,7 @@ public class MusicPlayer extends Service {
         context.startService(intent);
     }
 
-    public static void fillMediaList(boolean setSelectedItem) {
+    public static ArrayList<RealmRoomMessage> fillMediaList(boolean setSelectedItem) {
 
         mediaList = new ArrayList<>();
 
@@ -967,6 +975,7 @@ public class MusicPlayer extends Service {
                         try {
                             if (roomMessage.getAttachment().getLocalFilePath() != null) {
                                 if (new File(roomMessage.getAttachment().getLocalFilePath()).exists()) {
+                                    Log.i("FFFFFFFFFFFF", "8888onB: " + realmRoomMessage.getAttachment().getLocalFilePath());
                                     mediaList.add(realmRoomMessage);
                                 }
                             }
@@ -991,6 +1000,9 @@ public class MusicPlayer extends Service {
                 }
             }
         }
+
+
+        return mediaList;
     }
 
     private static void updateProgress() {

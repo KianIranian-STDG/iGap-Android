@@ -12,10 +12,15 @@ package net.iGap.fragments;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,9 +30,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
-
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -42,9 +52,9 @@ import net.iGap.libs.ripplesoundplayer.util.PaintUtil;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
+import net.iGap.realm.RealmRoomMessage;
 
-import java.io.File;
-import java.io.IOException;
+import static net.iGap.G.context;
 
 public class FragmentMediaPlayer extends BaseFragment {
 
@@ -61,6 +71,8 @@ public class FragmentMediaPlayer extends BaseFragment {
     private ImageView img_RepeatOne;
     private ImageView img_MusicImage_default_icon;
     private TextView btnPlay;
+    private RecyclerView rcvListMusicPlayer;
+    public static AdapterListMusicPlayer adapterListMusicPlayer;
 
 
     private RippleVisualizerView rippleVisualizerView;
@@ -124,8 +136,7 @@ public class FragmentMediaPlayer extends BaseFragment {
                             txt_Timer.setText(MessageTow);
                             musicSeekbar.setProgress(MusicPlayer.musicProgress);
 
-                            if (HelperCalander.isPersianUnicode)
-                                txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
+                            if (HelperCalander.isPersianUnicode) txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
                         }
                     });
                 } else if (messageOne.equals("RepeatMode")) {
@@ -318,6 +329,20 @@ public class FragmentMediaPlayer extends BaseFragment {
             txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
             txt_MusicTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_MusicTime.getText().toString()));
         }
+
+
+        rcvListMusicPlayer = (RecyclerView) view.findViewById(R.id.rcvListMusicPlayer);
+        adapterListMusicPlayer = new AdapterListMusicPlayer(MusicPlayer.mediaList, new AdapterListMusicPlayer.OnClickAdapterListMusic() {
+            @Override
+            public void onClick(String name) {
+                Toast.makeText(_mActivity, "" + name, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        rcvListMusicPlayer.setAdapter(adapterListMusicPlayer);
+        rcvListMusicPlayer.setLayoutManager(new LinearLayoutManager(_mActivity));
+        //adapterListMusicPlayer.updateAdapter(MusicPlayer.mediaList);
+
     }
 
     //private void setRenderer() {
@@ -485,4 +510,100 @@ public class FragmentMediaPlayer extends BaseFragment {
         super.onDestroy();
         MusicPlayer.onComplete = null;
     }
+
+    public static class AdapterListMusicPlayer extends RecyclerView.Adapter<AdapterListMusicPlayer.ViewHolder> {
+
+        private List<RealmRoomMessage> realmRoomMessagesList;
+        private OnClickAdapterListMusic adapterOnclick;
+        private DisplayImageOptions options;
+
+        public AdapterListMusicPlayer(List<RealmRoomMessage> realmRoomMessages, OnClickAdapterListMusic adapterOnclick) {
+            realmRoomMessagesList = realmRoomMessages;
+            this.adapterOnclick = adapterOnclick;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_list_music_player, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+
+            RealmRoomMessage realmRoomMessage = getItem(position);
+            holder.txtNameMusic.setText(realmRoomMessage.getAttachment().getName());
+            MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
+
+            Uri uri = null;
+
+            Log.i("FFFFFFFFFFFF", "99999onB: " + realmRoomMessage.getAttachment().getLocalFilePath());
+
+            if (realmRoomMessage.getAttachment().getLocalFilePath() != null) {
+                uri = (Uri) Uri.fromFile(new File(realmRoomMessage.getAttachment().getLocalFilePath()));
+            }
+
+
+
+            if (uri != null) {
+                mediaMetadataRetriever.setDataSource(context, uri);
+                byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
+                if (data != null) {
+                    Bitmap mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    G.imageLoader.displayImage(String.valueOf(mediaThumpnail), holder.imgMusicItem);
+                    Log.i("FFFFFFFFFFFF", "111onBindViewHolder: " + String.valueOf(mediaThumpnail));
+                }
+
+                ImageLoader.getInstance().displayImage("SSSS", holder.imgMusicItem, options);
+            }
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return realmRoomMessagesList.size();
+        }
+
+
+        private RealmRoomMessage getItem(int po) {
+            return RealmRoomMessage.getFinalMessage(realmRoomMessagesList.get(po));
+        }
+
+        public void updateAdapter(ArrayList<RealmRoomMessage> realmRoomMessages) {
+            realmRoomMessagesList = realmRoomMessages;
+            notifyDataSetChanged();
+
+        }
+
+
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+            private TextView txtNameMusic;
+            private ImageView imgMusicItem;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+
+                txtNameMusic = itemView.findViewById(R.id.txtListMusicPlayer);
+                imgMusicItem = itemView.findViewById(R.id.imgListMusicPlayer);
+                itemView.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+
+                RealmRoomMessage realmRoomMessage = realmRoomMessagesList.get(getAdapterPosition());
+                adapterOnclick.onClick(realmRoomMessage.getAttachment().getName());
+            }
+
+        }
+
+        public interface OnClickAdapterListMusic {
+            void onClick(String name);
+
+        }
+    }
+
 }
