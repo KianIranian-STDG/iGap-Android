@@ -30,13 +30,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
@@ -53,8 +50,6 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.realm.RealmRoomMessage;
-
-import static net.iGap.G.context;
 
 public class FragmentMediaPlayer extends BaseFragment {
 
@@ -335,7 +330,6 @@ public class FragmentMediaPlayer extends BaseFragment {
         adapterListMusicPlayer = new AdapterListMusicPlayer(MusicPlayer.mediaList, new AdapterListMusicPlayer.OnClickAdapterListMusic() {
             @Override
             public void onClick(String name) {
-                Toast.makeText(_mActivity, "" + name, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -533,32 +527,36 @@ public class FragmentMediaPlayer extends BaseFragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
 
             RealmRoomMessage realmRoomMessage = getItem(position);
+
+
+
             holder.txtNameMusic.setText(realmRoomMessage.getAttachment().getName());
             MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
 
             Uri uri = null;
 
-            Log.i("FFFFFFFFFFFF", "99999onB: " + realmRoomMessage.getAttachment().getLocalFilePath());
-
             if (realmRoomMessage.getAttachment().getLocalFilePath() != null) {
                 uri = (Uri) Uri.fromFile(new File(realmRoomMessage.getAttachment().getLocalFilePath()));
             }
 
-
-
             if (uri != null) {
-                mediaMetadataRetriever.setDataSource(context, uri);
+                mediaMetadataRetriever.setDataSource(G.context, uri);
                 byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
                 if (data != null) {
                     Bitmap mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    G.imageLoader.displayImage(String.valueOf(mediaThumpnail), holder.imgMusicItem);
-                    Log.i("FFFFFFFFFFFF", "111onBindViewHolder: " + String.valueOf(mediaThumpnail));
-                }
+                    holder.imgMusicItem.setImageBitmap(mediaThumpnail);
+                } else {
 
-                ImageLoader.getInstance().displayImage("SSSS", holder.imgMusicItem, options);
+                    holder.imgMusicItem.setImageResource(R.mipmap.music_icon_green);
+                }
             }
 
-
+            String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+            if (artist != null) {
+                holder.txtMusicplace.setText(artist);
+            } else {
+                holder.txtMusicplace.setText(G.context.getString(R.string.unknown_artist));
+            }
         }
 
         @Override
@@ -571,22 +569,22 @@ public class FragmentMediaPlayer extends BaseFragment {
             return RealmRoomMessage.getFinalMessage(realmRoomMessagesList.get(po));
         }
 
-        public void updateAdapter(ArrayList<RealmRoomMessage> realmRoomMessages) {
-            realmRoomMessagesList = realmRoomMessages;
-            notifyDataSetChanged();
-
-        }
+        //public void updateAdapter(ArrayList<RealmRoomMessage> realmRoomMessages) {
+        //    realmRoomMessagesList = realmRoomMessages;
+        //    notifyDataSetChanged();
+        //}
 
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-            private TextView txtNameMusic;
+            private TextView txtNameMusic, txtMusicplace;
             private ImageView imgMusicItem;
 
             public ViewHolder(View itemView) {
                 super(itemView);
 
                 txtNameMusic = itemView.findViewById(R.id.txtListMusicPlayer);
+                txtMusicplace = itemView.findViewById(R.id.ml_txt_music_place);
                 imgMusicItem = itemView.findViewById(R.id.imgListMusicPlayer);
                 itemView.setOnClickListener(this);
             }
@@ -596,6 +594,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
                 RealmRoomMessage realmRoomMessage = realmRoomMessagesList.get(getAdapterPosition());
                 adapterOnclick.onClick(realmRoomMessage.getAttachment().getName());
+                MusicPlayer.startPlayer(realmRoomMessage.getAttachment().getName(), realmRoomMessage.getAttachment().getLocalFilePath(), FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, false, realmRoomMessage.getMessageId() + "");
             }
 
         }
