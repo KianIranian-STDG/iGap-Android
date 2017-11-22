@@ -81,6 +81,10 @@ public class HelperSaveFile {
 
                         break;
                     case music:
+
+                        if (!Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).exists()) {
+                            new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getPath()).mkdirs();
+                        }
                         if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).exists()) {
                             destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath() + "/" + fileName;
                         }
@@ -89,6 +93,9 @@ public class HelperSaveFile {
 
                     case gif:
 
+                        if (!Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).exists()) {
+                            new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath()).mkdirs();
+                        }
                         if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).exists()) {
                             destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + fileName;
                         }
@@ -111,8 +118,16 @@ public class HelperSaveFile {
 
                     case image:
 
-                        if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).exists()) {
-                            destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + fileName;
+                        File file = getAlbumDir();
+                        if (file != null) {
+                            destinationPath = getAlbumDir().getAbsolutePath() + "/" + fileName;
+                        } else {
+                            if (!Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).exists()) {
+                                new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getPath()).mkdirs();
+                            }
+                            if (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).exists()) {
+                                destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + fileName;
+                            }
                         }
 
                         //savePicToGallery(filePath, false);
@@ -131,7 +146,20 @@ public class HelperSaveFile {
     }
 
     public static void savePicToGallery(final String filePath, final boolean showToast) {
-        saveFileToDownLoadFolder(filePath, "IMAGE_" + System.currentTimeMillis(), FolderType.image, R.string.file_save_to_picture_folder);
+        saveFileToDownLoadFolder(filePath, "IMAGE_" + System.currentTimeMillis() + ".png", FolderType.image, R.string.file_save_to_picture_folder);
+    }
+
+    private static File getAlbumDir() {
+        File storageDir = null;
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "iGap");
+            if (!storageDir.mkdirs()) {
+                if (!storageDir.exists()) {
+                    return null;
+                }
+            }
+        }
+        return storageDir;
     }
 
 //    public static void savePicToGallery(final String filePath, final boolean showToast) {
