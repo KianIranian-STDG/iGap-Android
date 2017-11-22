@@ -2080,7 +2080,7 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-                        dialogReport(false);
+                        dialogReport(false, 0);
                     }
                 });
             }
@@ -2598,7 +2598,7 @@ public class FragmentChat extends BaseFragment
         //realm.close();
     }
 
-    private void dialogReport(final boolean isMessage) {
+    private void dialogReport(final boolean isMessage, final long messageId) {
 
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
 
@@ -3311,6 +3311,17 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onContainerClick(View view, final StructMessageInfo message, int pos) {
 
+        if (message == null) {
+            return;
+        }
+
+        ProtoGlobal.RoomMessageType roomMessageType;
+        if (message.forwardedFrom != null) {
+            roomMessageType = message.forwardedFrom.getMessageType();
+        } else {
+            roomMessageType = message.messageType;
+        }
+
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
 
         View v = dialog.getCustomView();
@@ -3370,7 +3381,7 @@ public class FragmentChat extends BaseFragment
         }
 
         @ArrayRes int itemsRes = 0;
-        switch (message.messageType) {
+        switch (roomMessageType) {
             case TEXT:
                 //itemsRes = R.array.textMessageDialogItems;
 
@@ -3503,9 +3514,9 @@ public class FragmentChat extends BaseFragment
         }
 
         String _savedFolderName = "";
-        if (message.messageType.toString().contains("IMAGE") || message.messageType.toString().contains("VIDEO") || message.messageType.toString().contains("GIF")) {
+        if (roomMessageType.toString().contains("IMAGE") || roomMessageType.toString().contains("VIDEO") || roomMessageType.toString().contains("GIF")) {
             _savedFolderName = G.fragmentActivity.getResources().getString(R.string.save_to_gallery);
-        } else if (message.messageType.toString().contains("AUDIO") || message.messageType.toString().contains("VOICE")) {
+        } else if (roomMessageType.toString().contains("AUDIO") || roomMessageType.toString().contains("VOICE")) {
             _savedFolderName = G.fragmentActivity.getResources().getString(R.string.save_to_Music);
         } else {
             _savedFolderName = G.fragmentActivity.getResources().getString(R.string.saveToDownload_item_dialog);
@@ -3643,7 +3654,7 @@ public class FragmentChat extends BaseFragment
                             HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
                         } else if (message.messageType.toString().contains("GIF")) {
                             HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
-                        } else {
+                        } else if (message.messageType.toString().contains("IMAGE")) {
                             HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
                         }
                     }
@@ -3709,7 +3720,13 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                dialogReport(true);
+                long messageId;
+                if (message.forwardedFrom != null) {
+                    messageId = message.forwardedFrom.getMessageId();
+                } else {
+                    messageId = Long.parseLong(message.messageID);
+                }
+                dialogReport(true, messageId);
             }
         });
     }
