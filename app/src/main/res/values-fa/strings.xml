@@ -1118,7 +1118,7 @@
   <string name="st_checkbox_delete">حذف برای</string>
   <string name="st_desc_delete">آیا از حذف این %1$s پیام اطمینان دارید؟</string>
   <string name="st_send_report">گزارش تخلف با موفقیت ارسال شد.</string>
-  <string name="set_position">Can not set position</string>
+  <string name="set_position">عدم توانایی تنظیم موقعیت مکانی</string>
   <string name="date">تاریخ</string>
   <string name="miladi">میلادی</string>
   <string name="shamsi">هجری شمسی</string>
@@ -1138,6 +1138,6 @@
   <string name="zighade">ذیقعده</string>
   <string name="zihaje">ذیحجه</string>
 
-  <string name="st_multi_tab">چند نوار</string>
+  <string name="st_multi_tab">چند نواری</string>
 
 </resources>
