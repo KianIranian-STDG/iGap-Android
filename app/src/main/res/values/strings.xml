@@ -1135,7 +1135,7 @@
   <string name="st_Pornography">Pornography</string>
   <string name="st_Other">Other</string>
   <string name="st_Abuse">Abuse</string>
-  <string name="st_FakeAccount">FakeAccount</string>
+  <string name="st_FakeAccount">Fake Account</string>
   <string name="st_limit_bio">You have exceeded the allowed number of characters. You can use only 70 characters for Bio.</string>
   <string name="st_checkbox_delete">Delete for</string>
   <string name="st_desc_delete">Are you sure you want to delete %1$s message(s)?</string>
@@ -1143,10 +1143,9 @@
   <string name="set_position">Can not set position</string>
   <string name="date">Date</string>
   <string name="miladi">Gregorian</string>
-  <string name="shamsi">Hijri Shamsi Date</string>
-  <string name="ghamari">Hijri Lunar Date</string>
+  <string name="shamsi">Hijri Shamsi</string>
+  <string name="ghamari">Hijri Lunar</string>
   <string name="Uploading">Uploading...</string>
-
 
   <string name="moharam">Muharram</string>
   <string name="safar">Safar</string>
