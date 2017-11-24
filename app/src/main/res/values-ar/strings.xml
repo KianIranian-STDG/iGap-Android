@@ -2075,7 +2075,7 @@
 
   <string name="st_send_report">تمّ تسجيل ابلاغ اساءة الاستخدام بنجاح</string>
 
-  <string name="set_position">Can not set position</string>
+  <string name="set_position">لا يمكن تعيين الموضع</string>
   <string name="date">تاریخ</string>
   <string name="miladi">الميلادية</string>
   <string name="shamsi">هجري الشامسي</string>
