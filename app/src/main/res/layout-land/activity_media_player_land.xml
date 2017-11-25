@@ -10,7 +10,7 @@
     sothree:umanoOverlay="true"
     sothree:umanoPanelHeight="@dimen/dp110"
     sothree:umanoParallaxOffset="@dimen/dp10"
-    sothree:umanoScrollableView="@+id/ml_img_repead_one"
+    sothree:umanoScrollableView="@+id/rcvListMusicPlayer"
     sothree:umanoShadowHeight="4dp"
     >
 
