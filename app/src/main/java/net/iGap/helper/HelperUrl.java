@@ -29,15 +29,10 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -57,7 +52,17 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientCheckInviteLink;
 import net.iGap.request.RequestClientJoinByInviteLink;
 import net.iGap.request.RequestClientResolveUsername;
+
 import org.chromium.customtabsclient.CustomTabsActivityHelper;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import io.realm.Realm;
+import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
@@ -588,7 +593,7 @@ public class HelperUrl {
         switch (room.getType()) {
             case CHANNEL:
 
-                if (HelperCalander.isLanguagePersian) {
+                if (HelperCalander.isPersianUnicode) {
                     title += G.context.getString(R.string.channel) + " " + "عضو شوید؟";
                 } else {
                     title += G.context.getString(R.string.channel) + "?";
@@ -598,7 +603,7 @@ public class HelperUrl {
                 break;
             case GROUP:
 
-                if (HelperCalander.isLanguagePersian) {
+                if (HelperCalander.isPersianUnicode) {
                     title += G.context.getString(R.string.group) + " " + "عضو شوید؟";
                 } else {
                     title += G.context.getString(R.string.group) + "?";

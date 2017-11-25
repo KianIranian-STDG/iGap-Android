@@ -9,6 +9,7 @@ import io.realm.Realm;
 import java.util.ArrayList;
 import net.iGap.Config;
 import net.iGap.G;
+import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperLogout;
 import net.iGap.interfaces.OnContactFetchForServer;
 import net.iGap.interfaces.OnSecuring;
@@ -100,6 +101,8 @@ public class LoginActions extends Application {
 
                         new RequestGeoGetRegisterStatus().getRegisterStatus();
                         //sendWaitingRequestWrappers();
+
+                        HelperCheckInternetConnection.detectConnectionTypeForDownload();
                     }
                 });
 

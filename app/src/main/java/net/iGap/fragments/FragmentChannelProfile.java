@@ -39,16 +39,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmList;
-import io.realm.RealmModel;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
@@ -127,6 +121,16 @@ import net.iGap.request.RequestChannelRevokeLink;
 import net.iGap.request.RequestChannelUpdateSignature;
 import net.iGap.request.RequestChannelUpdateUsername;
 import net.iGap.request.RequestUserInfo;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmList;
+import io.realm.RealmModel;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
@@ -602,7 +606,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                             public void run() {
                                 if (((RealmRoom) element).isValid()) {
                                     String countText = ((RealmRoom) element).getSharedMediaCount();
-                                    if (HelperCalander.isLanguagePersian) {
+                                    if (HelperCalander.isPersianUnicode) {
                                         txtSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
                                     } else {
                                         txtSharedMedia.setText(countText);
@@ -973,23 +977,12 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                     if (G.fragmentActivity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
                         try {
-
-                            HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                            HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                                 @Override
-                                public void Allow() throws IOException {
-                                    HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                                        @Override
-                                        public void Allow() {
-                                            // this dialog show 2 way for choose image : gallery and camera
-                                            dialog.dismiss();
-                                            useCamera();
-                                        }
-
-                                        @Override
-                                        public void deny() {
-
-                                        }
-                                    });
+                                public void Allow() {
+                                    // this dialog show 2 way for choose image : gallery and camera
+                                    dialog.dismiss();
+                                    useCamera();
                                 }
 
                                 @Override

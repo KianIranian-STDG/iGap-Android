@@ -21,16 +21,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.swipe.SwipeLayout;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Realm;
-import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
-import java.util.ArrayList;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperAvatar;
@@ -50,6 +47,13 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
 
 import static net.iGap.G.inflater;
 
@@ -209,7 +213,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
     //
     //        viewHolder.title.setText(registeredInfo.getDisplayName());
     //        viewHolder.subtitle.setText(registeredInfo.getPhoneNumber());
-    //        if (HelperCalander.isLanguagePersian) {
+    //        if (HelperCalander.isPersianUnicode) {
     //            viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
     //        }
     //
@@ -338,7 +342,7 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
             viewHolder.title.setText(registeredInfo.getDisplayName());
             viewHolder.subtitle.setText(LastSeenTimeUtil.computeTime(registeredInfo.getId(), registeredInfo.getLastSeen(), false));
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
             }
 

@@ -9,9 +9,6 @@
 */
 package net.iGap.helper;
 
-import io.realm.Realm;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.proto.ProtoGlobal;
@@ -19,6 +16,11 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChatSetAction;
 import net.iGap.request.RequestGroupSetAction;
+
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+
+import io.realm.Realm;
 
 public class HelperSetAction {
 
@@ -79,9 +81,9 @@ public class HelperSetAction {
     /**
      * set action for showing audience action.
      *
-     * @param roomId roomId that send action from that
+     * @param roomId    roomId that send action from that
      * @param messageId unique number that we have in start upload and end of that
-     * @param action action that doing
+     * @param action    action that doing
      */
 
     public static void setActionFiles(long roomId, long messageId, ProtoGlobal.ClientAction action, ProtoGlobal.Room.Type chatType) {
@@ -137,7 +139,8 @@ public class HelperSetAction {
 
     private static void timeOutChecking(final StructAction structAction) {
         G.handler.postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 /**
                  * check that this action exist in structAction or not.
                  * if not exist don't try for cancel that ,because this
@@ -168,7 +171,7 @@ public class HelperSetAction {
      * @param messageId unique number that we have in start upload and end of that
      */
 
-    public static void sendCancel(long messageId) {
+    public static void sendCancel(final long messageId) {
         try {
             for (StructAction struct : structActions) {
                 if (struct.messageId == messageId) {
@@ -183,6 +186,12 @@ public class HelperSetAction {
                 }
             }
         } catch (ConcurrentModificationException e) {
+            G.handler.postDelayed(new Runnable() { // resend after one second
+                @Override
+                public void run() {
+                    sendCancel(messageId);
+                }
+            }, 1000);
             e.printStackTrace();
         }
     }

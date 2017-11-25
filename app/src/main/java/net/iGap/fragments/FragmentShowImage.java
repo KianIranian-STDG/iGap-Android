@@ -32,13 +32,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -60,6 +56,14 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static net.iGap.module.AndroidUtils.suitablePath;
 
@@ -293,7 +297,7 @@ public class FragmentShowImage extends BaseFragment {
         viewPager.setCurrentItem(selectedFile);
 
         txtImageNumber.setText(selectedFile + 1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + mFList.size());
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
         }
         if (selectedFile >= mFList.size()) {
@@ -355,7 +359,7 @@ public class FragmentShowImage extends BaseFragment {
             txtImageDate.setText(HelperCalander.checkHijriAndReturnTime(realmRoomMessageFinal.getUpdateTime() / 1000));
         }
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             txtImageName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageName.getText().toString()));
             txtImageTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageTime.getText().toString()));
             txtImageDate.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageDate.getText().toString()));
@@ -443,9 +447,10 @@ public class FragmentShowImage extends BaseFragment {
             File file = new File(path);
             if (file.exists()) {
                 if (rm.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
-                    HelperSaveFile.saveVideoToGallary(path, true);
+                    //HelperSaveFile.saveVideoToGallary(path, true);
+                    HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + ".mp4", HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
                 } else {
-                    HelperSaveFile.savePicToGallary(path, true);
+                    HelperSaveFile.savePicToGallery(path, true);
                 }
 
             }
@@ -649,7 +654,7 @@ public class FragmentShowImage extends BaseFragment {
                 public void onPageSelected(final int position) {
 
                     txtImageNumber.setText(position + 1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + mFList.size());
-                    if (HelperCalander.isLanguagePersian) {
+                    if (HelperCalander.isPersianUnicode) {
                         txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
                     }
                     showImageInfo(mFList.get(position));
@@ -1020,7 +1025,6 @@ public class FragmentShowImage extends BaseFragment {
             isLockScreen = true;
         }
     }
-
 
 
     @Override

@@ -32,6 +32,7 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,16 +52,12 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.protobuf.ByteString;
 import com.vicmikhailau.maskededittext.MaskedEditText;
-import io.realm.Realm;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
 import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.G;
@@ -107,6 +104,14 @@ import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyPassword;
 import net.iGap.request.RequestWrapper;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import io.realm.Realm;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static net.iGap.G.context;
@@ -194,6 +199,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.i("GGGGGGGGGGG", "1 onCreateView: ");
         return inflater.inflate(R.layout.activity_register, container, false);
     }
 
@@ -279,7 +285,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                         }
                         File file = new File(_resultQrCode);
                         if (file.exists()) {
-                            HelperSaveFile.savePicToGallary(_resultQrCode, true);
+                            HelperSaveFile.savePicToGallery(_resultQrCode, true);
                         }
                     }
                 }).neutralText(R.string.cancel).onNeutral(new MaterialDialog.SingleButtonCallback() {
@@ -351,7 +357,8 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (dialogQrCode != null && dialogQrCode.isShowing()) dialogQrCode.dismiss();
+                        if (dialogQrCode != null && dialogQrCode.isShowing())
+                            dialogQrCode.dismiss();
 
                         userLogin(token);
                     }
@@ -371,7 +378,8 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (dialogQrCode != null && dialogQrCode.isShowing()) dialogQrCode.dismiss();
+                        if (dialogQrCode != null && dialogQrCode.isShowing())
+                            dialogQrCode.dismiss();
                     }
                 });
                 checkPassword("", true);
@@ -414,7 +422,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
         txtTitleToolbar = (TextView) view.findViewById(R.id.rg_txt_titleToolbar);
 
-        if (!HelperCalander.isLanguagePersian) {
+        if (!HelperCalander.isPersianUnicode) {
             titleTypeface = G.typeface_neuropolitical;
         } else {
             titleTypeface = G.typeface_IRANSansMobile;
@@ -434,6 +442,9 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
             @Override
             public void afterTextChanged(Editable editable) {
+
+
+
                 if (editable.toString().equals("0")) {
                     Toast.makeText(G.fragmentActivity, G.fragmentActivity.getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT).show();
                     edtPhoneNumber.setText("");
@@ -691,22 +702,24 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                     assert view != null;
                     TextView phone = (TextView) view.findViewById(R.id.rg_dialog_txt_number);
                     phone.setText(edtCodeNumber.getText().toString() + "" + edtPhoneNumber.getText().toString());
-                    dialogRegistration.show();
+
+                    try {
+                        dialogRegistration.show();
+                    } catch (WindowManager.BadTokenException e) {
+                        e.printStackTrace();
+                    }
+
                 } else {
 
-                    if (regex.equals("")) {
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content("regex.equals(\"\")").positiveText(R.string.B_ok).show();
-                    } else if (edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
-                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content("matches(regex)").positiveText(R.string.B_ok).show();
+                    if (regex.equals("") || edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
+                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.Toast_Minimum_Characters).positiveText(R.string.B_ok).show();
                     } else {
-
                         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.Toast_Enter_Phone_Number).positiveText(R.string.B_ok).show();
                     }
                 }
             }
         });
         // enable scroll text view
-
     }
 
     @Override
@@ -816,7 +829,6 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                             } else {
                                 time = 5 * DateUtils.SECOND_IN_MILLIS;
                             }
-
 
 
                             txtTimer = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_timer);
@@ -957,13 +969,17 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
 
-        if (!mActivity.isFinishing() && !mActivity.isRestricted()) {
-            if (isAdded()) {
-                dialog.show();
-                if (dialog.isShowing()) {
-                    countDownTimer.cancel();
+        try {
+            if (!mActivity.isFinishing() && !mActivity.isRestricted()) {
+                if (isAdded()) {
+                    dialog.show();
+                    if (dialog.isShowing()) {
+                        countDownTimer.cancel();
+                    }
                 }
             }
+        } catch (WindowManager.BadTokenException e) {
+            e.printStackTrace();
         }
     }
 
@@ -1379,7 +1395,6 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                                         replace(R.id.ar_layout_root, fragmentSecurityRecovery).commit();
 
 
-
                             }
                         }).show();
                     }
@@ -1424,8 +1439,10 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                             }
                         });
 
-                        if (rg_prg_verify_register != null) rg_prg_verify_register.setVisibility(View.GONE);
-                        if (rg_img_verify_register != null) rg_img_verify_register.setVisibility(View.VISIBLE);
+                        if (rg_prg_verify_register != null)
+                            rg_prg_verify_register.setVisibility(View.GONE);
+                        if (rg_img_verify_register != null)
+                            rg_img_verify_register.setVisibility(View.VISIBLE);
                         if (rg_txt_verify_register != null) {
                             rg_txt_verify_register.setTextColor(G.context.getResources().getColor(R.color.rg_text_verify));
                             if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {

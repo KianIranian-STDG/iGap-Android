@@ -39,15 +39,10 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmList;
-import io.realm.RealmModel;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.GoToChatActivity;
@@ -95,6 +90,15 @@ import net.iGap.request.RequestUserContactsEdit;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserReport;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmList;
+import io.realm.RealmModel;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
@@ -563,7 +567,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
 
         txtPhoneNumber.setText(mPhone);
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             txtPhoneNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtPhoneNumber.getText().toString()));
         }
 
@@ -716,7 +720,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                                 }
                                 String countText = ((RealmRoom) element).getSharedMediaCount();
 
-                                if (HelperCalander.isLanguagePersian) {
+                                if (HelperCalander.isPersianUnicode) {
                                     txtCountOfShearedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
                                 } else {
                                     txtCountOfShearedMedia.setText(countText);
@@ -801,7 +805,7 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
                 txtLastSeen.setText(userStatus);
             }
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtLastSeen.setText(HelperCalander.convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
             }
         }

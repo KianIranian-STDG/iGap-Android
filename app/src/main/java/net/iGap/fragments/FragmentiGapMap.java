@@ -1199,6 +1199,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                     getCoordinateLoop(0, false);
                     editor.putBoolean(SHP_SETTING.REGISTER_STATUS, true);
                     editor.apply();
+                    new RequestGeoGetComment().getComment(userId);
                 } else {
                     editor.putBoolean(SHP_SETTING.REGISTER_STATUS, false);
                     editor.apply();

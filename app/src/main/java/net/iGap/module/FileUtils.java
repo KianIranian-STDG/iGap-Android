@@ -25,14 +25,16 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+
+import net.iGap.G;
+import net.iGap.R;
+import net.iGap.helper.HelperCalander;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.text.DecimalFormat;
 import java.util.Comparator;
-import net.iGap.G;
-import net.iGap.R;
-import net.iGap.helper.HelperCalander;
 
 
 public class FileUtils {
@@ -519,7 +521,7 @@ public class FileUtils {
             hrSize = dec.format(b).concat(" " + G.context.getResources().getString(R.string.c_byte));
         }
 
-        return HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(hrSize) : hrSize;
+        return HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(hrSize) : hrSize;
     }
 
     public static long getFolderSize(File dir) throws RuntimeException {

@@ -11,12 +11,7 @@
 package net.iGap.realm;
 
 import android.support.annotation.Nullable;
-import io.realm.Realm;
-import io.realm.RealmAttachmentRealmProxy;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-import java.io.File;
-import java.io.IOException;
+
 import net.iGap.G;
 import net.iGap.helper.HelperString;
 import net.iGap.module.AndroidUtils;
@@ -24,11 +19,22 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoGlobal;
+
 import org.parceler.Parcel;
 
-@Parcel(implementations = {RealmAttachmentRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmAttachment.class}) public class RealmAttachment extends RealmObject {
+import java.io.File;
+import java.io.IOException;
+
+import io.realm.Realm;
+import io.realm.RealmAttachmentRealmProxy;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+@Parcel(implementations = {RealmAttachmentRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmAttachment.class})
+public class RealmAttachment extends RealmObject {
     // should be message id for message attachment and user id for avatar
-    @PrimaryKey private long id;
+    @PrimaryKey
+    private long id;
     private String token;
     private String name;
     private long size;
@@ -38,8 +44,10 @@ import org.parceler.Parcel;
     private String cacheId;
     private RealmThumbnail largeThumbnail;
     private RealmThumbnail smallThumbnail;
-    @Nullable private String localThumbnailPath;
-    @Nullable private String localFilePath;
+    @Nullable
+    private String localThumbnailPath;
+    @Nullable
+    private String localFilePath;
 
     public static void updateToken(long fakeId, String token) {
         Realm realm = Realm.getDefaultInstance();
@@ -285,8 +293,11 @@ import org.parceler.Parcel;
         this.cacheId = cacheId;
     }
 
+    /**
+     * check file exist and also user can read this file (permission granted)
+     */
     public boolean isFileExistsOnLocal() {
-        return localFilePath != null && new File(localFilePath).exists();
+        return localFilePath != null && new File(localFilePath).exists() && new File(localFilePath).canRead();
     }
 
     public boolean isFileExistsOnLocalAndIsThumbnail() {
@@ -294,8 +305,11 @@ import org.parceler.Parcel;
         return isFileExistsOnLocal() && isFileImage();
     }
 
+    /**
+     * check file thumbnail exist and also user can read this file (permission granted)
+     */
     public boolean isThumbnailExistsOnLocal() {
-        return localThumbnailPath != null && new File(localThumbnailPath).exists();
+        return localThumbnailPath != null && new File(localThumbnailPath).exists() && new File(localThumbnailPath).canRead();
     }
 
     private boolean isFileImage() {

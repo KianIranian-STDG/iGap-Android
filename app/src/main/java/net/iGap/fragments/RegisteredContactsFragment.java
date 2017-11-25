@@ -34,6 +34,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.swipe.SwipeLayout;
@@ -41,14 +42,7 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Case;
-import io.realm.Realm;
-import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -78,6 +72,16 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsGetList;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import io.realm.Case;
+import io.realm.Realm;
+import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
+
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
 import static net.iGap.R.string.contacts;
@@ -90,8 +94,11 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     private RecyclerView realmRecyclerView;
     private SharedPreferences sharedPreferences;
     private boolean isImportContactList = false;
+    private static boolean getPermission = true;
+    private Realm realm;
     StickyRecyclerHeadersDecoration decoration;
     private ProgressBar prgWaiting;
+    private ProgressBar prgWaitingLoadContact;
     RealmResults<RealmContacts> results;
     private EditText edtSearch;
     private boolean isCallAction = false;
@@ -100,7 +107,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     private ProgressBar prgWaitingLiadList;
     //private ContactListAdapterA mAdapter;
     private NestedScrollView nestedScrollView;
-    private Realm realm;
 
     private Realm getRealm() {
         if (realm == null || realm.isClosed()) {
@@ -165,6 +171,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         TextView txtNonUser = (TextView) view.findViewById(R.id.txtNon_User);
         txtNonUser.setTextColor(Color.parseColor(G.appBarColor));
         prgWaitingLiadList = (ProgressBar) view.findViewById(R.id.prgWaiting_loadList);
+        prgWaitingLoadContact = (ProgressBar) view.findViewById(R.id.prgWaitingLoadContact);
 
         prgWaiting = (ProgressBar) view.findViewById(R.id.prgWaiting_addContact);
         AppUtils.setProgresColler(prgWaiting);
@@ -288,7 +295,16 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         realmRecyclerView.setNestedScrollingEnabled(false);
 
         results = getRealm().where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
-        realmRecyclerView.setAdapter(new ContactListAdapter(results));
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                realmRecyclerView.setAdapter(new ContactListAdapter(results));
+                prgWaitingLoadContact.setVisibility(View.GONE);
+                realmRecyclerView.setVisibility(View.VISIBLE);
+            }
+        }, 500);
+
 
         //fastAdapter
         //mAdapter = new ContactListAdapterA();
@@ -332,33 +348,41 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         fastItemAdapter = new FastItemAdapter();
 
         try {
-            HelperPermision.getContactPermision(G.fragmentActivity, new OnGetPermission() {
-                @Override
-                public void Allow() throws IOException {
-                    /**
-                     * if contacts size is zero send request for get contacts list
-                     * for insuring that contacts not exist really or not
-                     */
-                    if (results.size() == 0) {
-                        LoginActions.importContact();
-                    }
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            prgWaitingLiadList.setVisibility(View.VISIBLE);
+            if (getPermission) {
+                getPermission = false;
+                HelperPermision.getContactPermision(G.fragmentActivity, new OnGetPermission() {
+                    @Override
+                    public void Allow() throws IOException {
+                        /**
+                         * if contacts size is zero send request for get contacts list
+                         * for insuring that contacts not exist really or not
+                         */
+                        if (results.size() == 0) {
+                            LoginActions.importContact();
                         }
-                    });
-                    new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                }
-
-                @Override
-                public void deny() {
-                    if (results.size() == 0) {
-                        new RequestUserContactsGetList().userContactGetList();
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                prgWaitingLiadList.setVisibility(View.VISIBLE);
+                            }
+                        });
+                        new Contacts.FetchContactForClient().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
-                    prgWaitingLiadList.setVisibility(View.GONE);
+
+                    @Override
+                    public void deny() {
+                        if (results.size() == 0) {
+                            new RequestUserContactsGetList().userContactGetList();
+                        }
+                        prgWaitingLiadList.setVisibility(View.GONE);
+                    }
+                });
+            } else {
+                if (results.size() == 0) {
+                    new RequestUserContactsGetList().userContactGetList();
                 }
-            });
+                prgWaitingLiadList.setVisibility(View.GONE);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -512,7 +536,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     //                }
     //            }
     //
-    //            if (HelperCalander.isLanguagePersian) {
+    //            if (HelperCalander.isPersianUnicode) {
     //                viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
     //            }
     //        }
@@ -766,7 +790,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                     }
                 }
 
-                if (HelperCalander.isLanguagePersian) {
+                if (HelperCalander.isPersianUnicode) {
                     viewHolder.subtitle.setText(viewHolder.subtitle.getText().toString());
                 }
             }

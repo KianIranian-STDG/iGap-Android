@@ -10,17 +10,21 @@
 
 package net.iGap.realm;
 
-import io.realm.Realm;
-import io.realm.RealmChannelExtraRealmProxy;
-import io.realm.RealmObject;
-import java.util.List;
 import net.iGap.G;
 import net.iGap.module.structs.StructChannelExtra;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoGlobal;
+
 import org.parceler.Parcel;
 
-@Parcel(implementations = {RealmChannelExtraRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmChannelExtra.class}) public class RealmChannelExtra extends RealmObject {
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmChannelExtraRealmProxy;
+import io.realm.RealmObject;
+
+@Parcel(implementations = {RealmChannelExtraRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmChannelExtra.class})
+public class RealmChannelExtra extends RealmObject {
 
     private long messageId;
     private String signature;
@@ -145,5 +149,17 @@ import org.parceler.Parcel;
             }
         });
         realm.close();
+    }
+
+    public static boolean hasChannelExtra(long messageId) {
+        boolean hasChannelExtra = false;
+        Realm realm = Realm.getDefaultInstance();
+        RealmChannelExtra realmChannelExtra = realm.where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+        if (realmChannelExtra != null) {
+            hasChannelExtra = true;
+        }
+        realm.close();
+
+        return hasChannelExtra;
     }
 }

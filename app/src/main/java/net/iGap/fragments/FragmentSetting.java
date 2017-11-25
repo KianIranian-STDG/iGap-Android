@@ -37,19 +37,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmModel;
-import java.io.File;
-import java.io.IOException;
-import java.util.Locale;
+
 import net.iGap.Config;
+import net.iGap.FragmentData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
@@ -112,9 +109,18 @@ import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserProfileUpdateUsername;
 import net.iGap.request.RequestUserSessionLogout;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
+
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
+import static net.iGap.G.onRefreshActivity;
 import static net.iGap.R.string.log_out;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
@@ -177,6 +183,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     private Fragment fragment;
     private ViewGroup ltBio;
     private TextView txtBio;
+    public static DateType dateType;
 
 
     RealmUserInfo realmUserInfo;
@@ -564,12 +571,8 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
                 layoutEmail.addView(inputEmail, layoutParams);
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_email))
-                        .positiveText(G.fragmentActivity.getResources().getString(R.string.save))
-                        .customView(layoutEmail, true)
-                        .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
-                        .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                        .build();
+                final MaterialDialog dialog =
+                        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_email)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutEmail, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
                 final View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 positive.setEnabled(false);
@@ -909,7 +912,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
                 txtLogOut.setText(G.fragmentActivity.getResources().getString(log_out));
                 txtDeleteAccount.setText(G.fragmentActivity.getResources().getString(R.string.delete_account));
-
 
 
                 root1.setOnClickListener(new View.OnClickListener() {
@@ -1340,45 +1342,35 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
          /*
           setting toggle DataShams
          */
-        final TextView txtDataShams = (TextView) view.findViewById(R.id.st_txt_st_toggle_dataShams);
-        final ToggleButton toggleEnableDataShams = (ToggleButton) view.findViewById(R.id.st_toggle_dataShams);
+        final TextView txtTitleData = (TextView) view.findViewById(R.id.st_txt_st_toggle_dataShams);
+        final ViewGroup vgTitleData = (ViewGroup) view.findViewById(R.id.vg_toggle_dataShams);
+        final TextView txtData = (TextView) view.findViewById(R.id.st_txt_data);
 
-        int checkedEnableDataShams = sharedPreferences.getInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 0);
-        if (checkedEnableDataShams == 1) {
-            toggleEnableDataShams.setChecked(true);
-        } else {
-            toggleEnableDataShams.setChecked(false);
-        }
-
-        toggleEnableDataShams.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        dateType = new DateType() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                if (isChecked) {
-                    editor.putInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 1);
-                    editor.apply();
-                } else {
-                    editor.putInt(SHP_SETTING.KEY_ENABLE_DATA_SHAMS, 0);
-                    editor.apply();
-                }
-
-                G.isUpdateNotificaionColorMain = true;
-                G.isUpdateNotificaionColorChannel = true;
-                G.isUpdateNotificaionColorGroup = true;
-                G.isUpdateNotificaionColorChat = true;
-                G.isUpdateNotificaionCall = true;
-
-                //if (G.onRefreshActivity != null) {
-                //    G.onRefreshActivity.refresh("");
-                //}
+            public void dataName(String type) {
+                txtData.setText(type);
             }
-        });
+        };
 
-        txtDataShams.setOnClickListener(new View.OnClickListener() {
+
+        int typeData = sharedPreferences.getInt(SHP_SETTING.KEY_DATA, 0);
+
+        switch (typeData) {
+            case 0:
+                txtData.setText(G.fragmentActivity.getResources().getString(R.string.miladi));
+                break;
+            case 1:
+                txtData.setText(G.fragmentActivity.getResources().getString(R.string.shamsi));
+                break;
+            case 2:
+                txtData.setText(G.fragmentActivity.getResources().getString(R.string.ghamari));
+                break;
+        }
+        vgTitleData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toggleEnableDataShams.setChecked(!toggleEnableDataShams.isChecked());
+                new HelperFragment(new FragmentData()).setReplace(false).load();
             }
         });
 
@@ -1420,6 +1412,47 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         });
 
 
+        final TextView txtMultiTab = view.findViewById(R.id.st_txt_st_toggle_multi_tab);
+        final ToggleButton toggleEnableMultiTab = view.findViewById(R.id.st_toggle_multi_tab);
+
+        boolean checkedEnableMultiTab = sharedPreferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
+        if (checkedEnableMultiTab) {
+            toggleEnableMultiTab.setChecked(true);
+        } else {
+            toggleEnableMultiTab.setChecked(false);
+        }
+
+        toggleEnableMultiTab.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (isChecked) {
+                    G.multiTab = true;
+                    editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, true);
+                    editor.apply();
+                } else {
+                    G.multiTab = false;
+                    editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
+                    editor.apply();
+                }
+                FragmentMain.roomAdapterHashMap = null;
+
+                if (onRefreshActivity != null) {
+                    G.isRestartActivity = true;
+                    onRefreshActivity.refresh("ar");
+                }
+                removeFromBaseFragment(FragmentSetting.this);
+            }
+        });
+
+        txtMultiTab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleEnableMultiTab.setChecked(!toggleEnableMultiTab.isChecked());
+            }
+        });
+
          /*
           setting text size for chat room
          */
@@ -1427,7 +1460,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         txtMessageTextSize = (TextView) view.findViewById(R.id.st_txt_messageTextSize_number);
         txtMessageTextSize.setText("" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14));
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
         }
 
@@ -1438,7 +1471,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_title_message_textSize))
                         .titleGravity(GravityEnum.START)
                         .titleColor(G.context.getResources().getColor(android.R.color.black))
-                        .items(HelperCalander.isLanguagePersian ? R.array.message_text_size_persian : R.array.message_text_size)
+                        .items(HelperCalander.isPersianUnicode ? R.array.message_text_size_persian : R.array.message_text_size)
                         .itemsCallbackSingleChoice(poRbDialogTextSize, new MaterialDialog.ListCallbackSingleChoice() {
                             @Override
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -1446,7 +1479,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                                 if (text != null) {
                                     txtMessageTextSize.setText(text.toString().replace("(Hello)", "").trim());
 
-                                    if (HelperCalander.isLanguagePersian) {
+                                    if (HelperCalander.isPersianUnicode) {
                                         txtMessageTextSize.setText(HelperCalander.convertToUnicodeFarsiNumber(txtMessageTextSize.getText().toString()));
                                     }
                                 }
@@ -1937,7 +1970,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
         TextView txtWebViewHome = (TextView) view.findViewById(R.id.st_txt_iGap_home);
         final String link;
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             link = "https://www.igap.net/fa";
         } else {
             link = "https://www.igap.net/";
@@ -1950,7 +1983,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         });
 
         final String blogLink;
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             blogLink = "https://blog.igap.net/fa";
         } else {
             blogLink = "https://blog.igap.net";
@@ -1966,7 +1999,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
 
         final String supportLink;
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             supportLink = "https://support.igap.net/fa";
         } else {
             supportLink = "https://support.igap.net";
@@ -1983,12 +2016,11 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
         txtVersionApp.setText(G.fragmentActivity.getResources().getString(R.string.iGap_version) + " " + getAppVersion());
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             txtVersionApp.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVersionApp.getText().toString()));
         }
 
         setAvatar();
-
 
 
     }
@@ -2108,7 +2140,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
             if (phoneName != null) txtPhoneNumber.setText(phoneName);
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtPhoneNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtPhoneNumber.getText().toString()));
             }
 
@@ -2340,23 +2372,12 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals(G.fragmentActivity.getResources().getString(R.string.array_From_Camera))) { // camera
-
                     try {
-                        HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                        HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                             @Override
-                            public void Allow() throws IOException {
-                                HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                                    @Override
-                                    public void Allow() {
-                                        dialog.dismiss();
-                                        useCamera();
-                                    }
-
-                                    @Override
-                                    public void deny() {
-
-                                    }
-                                });
+                            public void Allow() {
+                                dialog.dismiss();
+                                useCamera();
                             }
 
                             @Override
@@ -2369,11 +2390,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     }
                 } else {
                     try {
-                        //new AttachFile(G.fragmentActivity).requestOpenGalleryForImageSingleSelect();
-
-                        // this part should transform to attach file
-
-                        HelperPermision.getStoragePermision(context, new OnGetPermission() {
+                        HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                             @Override
                             public void Allow() {
                                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -2607,5 +2624,10 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 }
             }
         });
+    }
+
+    public interface DateType {
+
+        void dataName(String type);
     }
 }

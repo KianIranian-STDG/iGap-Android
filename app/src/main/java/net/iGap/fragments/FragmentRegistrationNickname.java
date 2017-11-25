@@ -30,9 +30,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import java.io.IOException;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
@@ -61,6 +61,10 @@ import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserProfileSetNickname;
+
+import java.io.IOException;
+
+import io.realm.Realm;
 
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.G.context;
@@ -110,7 +114,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
 
         txtTitle = (TextView) view.findViewById(R.id.pu_titleToolbar);
 
-        if (!HelperCalander.isLanguagePersian) {
+        if (!HelperCalander.isPersianUnicode) {
             titleTypeface = G.typeface_neuropolitical;
         } else {
             titleTypeface = G.typeface_IRANSansMobile;
@@ -376,11 +380,8 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
     }
 
     public void useGallery() {
-        //        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        //        startActivityForResult(intent, IntentRequests.REQ_GALLERY);
-
         try {
-            HelperPermision.getStoragePermision(context, new OnGetPermission() {
+            HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() {
                     try {
@@ -414,23 +415,12 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                     case 1: {
                         if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                             try {
-
-                                HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                                HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                                     @Override
-                                    public void Allow() throws IOException {
-                                        HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                                            @Override
-                                            public void Allow() {
-                                                // this dialog show 2 way for choose image : gallery and camera
-                                                dialog.dismiss();
-                                                useCamera();
-                                            }
-
-                                            @Override
-                                            public void deny() {
-
-                                            }
-                                        });
+                                    public void Allow() {
+                                        // this dialog show 2 way for choose image : gallery and camera
+                                        dialog.dismiss();
+                                        useCamera();
                                     }
 
                                     @Override

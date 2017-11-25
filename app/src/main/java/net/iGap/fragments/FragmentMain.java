@@ -21,13 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import io.realm.OrderedRealmCollection;
-import io.realm.Realm;
-import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import java.util.HashMap;
-import java.util.List;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -48,6 +42,7 @@ import net.iGap.interfaces.OnClearRoomHistory;
 import net.iGap.interfaces.OnClearUnread;
 import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
+import net.iGap.interfaces.OnDateChanged;
 import net.iGap.interfaces.OnDraftMessage;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
 import net.iGap.interfaces.OnMute;
@@ -81,6 +76,16 @@ import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
+import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
+import io.realm.Sort;
+
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
 import static net.iGap.G.firstTimeEnterToApp;
@@ -91,7 +96,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnDraftMessage, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClearUnread, OnClientGetRoomResponseRoomList, OnMute, OnClearRoomHistory {
+public class FragmentMain extends BaseFragment implements OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnDraftMessage, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClearUnread, OnClientGetRoomResponseRoomList, OnMute, OnClearRoomHistory, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static boolean isMenuButtonAddShown = false;
@@ -109,6 +114,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     private long tagId;
     private Realm realmFragmentMain;
     public static HashMap<MainType, RoomAdapter> adapterHashMap = new HashMap<>();
+    public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
 
     public enum MainType {
         all, chat, group, channel
@@ -209,6 +215,11 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
         final RoomAdapter roomsAdapter = new RoomAdapter(results, this);
         mRecyclerView.setAdapter(roomsAdapter);
+
+        if (roomAdapterHashMap == null) {
+            roomAdapterHashMap = new HashMap<>();
+        }
+        roomAdapterHashMap.put(mainType, roomsAdapter);
 
         //fastAdapter
         //final RoomsAdapter roomsAdapter = new RoomsAdapter(getRealmFragmentMain());
@@ -480,7 +491,6 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
         //}
 
 
-
     }
 
     //***************************************************************************************************************************
@@ -731,6 +741,14 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     /**
      * ************************************ Callbacks ************************************
      */
+    @Override
+    public void onChange() {
+        for (Map.Entry<MainType, RoomAdapter> entry : roomAdapterHashMap.entrySet()) {
+            RoomAdapter requestWrapper = entry.getValue();
+            requestWrapper.notifyDataSetChanged();
+        }
+    }
+
     @Override
     public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
         G.handler.post(new Runnable() {
@@ -1017,7 +1035,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                     holder.txtPinIcon.setVisibility(View.GONE);
                     holder.txtUnread.setText(mInfo.getUnreadCount() + "");
 
-                    if (HelperCalander.isLanguagePersian) {
+                    if (HelperCalander.isPersianUnicode) {
                         holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red);
                     } else {
                         holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red_left);
@@ -1040,7 +1058,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
             /**
              * for change english number to persian number
              */
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 holder.txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtLastMessage.getText().toString()));
                 holder.txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getText().toString()));
             }
@@ -1241,13 +1259,13 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                                     if (_name.length() > 0) {
 
                                         if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-                                            if (HelperCalander.isLanguagePersian) {
+                                            if (HelperCalander.isPersianUnicode) {
                                                 lastMessageSender = _name + ": ";
                                             } else {
                                                 lastMessageSender = " :" + _name;
                                             }
                                         } else {
-                                            if (HelperCalander.isLanguagePersian) {
+                                            if (HelperCalander.isPersianUnicode) {
                                                 lastMessageSender = " :" + _name;
                                             } else {
                                                 lastMessageSender = _name + ": ";
@@ -1302,7 +1320,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
                             String result = AppUtils.conversionMessageType(_type, holder.txtLastMessage, R.color.room_message_blue);
                             if (result.isEmpty()) {
-                                if (!HelperCalander.isLanguagePersian) {
+                                if (!HelperCalander.isPersianUnicode) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                                         holder.txtLastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
                                     }
@@ -1427,6 +1445,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
         super.onResume();
 
         G.onSetActionInRoom = this;
+        G.onDateChanged = this;
         //G.onSelectMenu = this;
         //G.onRemoveFragment = this;
         //G.onDraftMessage = this;

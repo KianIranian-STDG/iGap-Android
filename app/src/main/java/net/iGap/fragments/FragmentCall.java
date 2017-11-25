@@ -22,14 +22,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import java.util.HashMap;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
@@ -59,7 +55,16 @@ import net.iGap.request.RequestSignalingClearLog;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestSignalingGetLog;
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN) public class FragmentCall extends BaseFragment implements OnCallLogClear {
+import java.util.HashMap;
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
+import io.realm.Sort;
+
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+public class FragmentCall extends BaseFragment implements OnCallLogClear {
 
     public static final String OPEN_IN_FRAGMENT_MAIN = "OPEN_IN_FRAGMENT_MAIN";
     boolean openInMain = false;
@@ -535,7 +540,7 @@ import net.iGap.request.RequestSignalingGetLog;
     //                break;
     //        }
     //
-    //        if (HelperCalander.isLanguagePersian) {
+    //        if (HelperCalander.isPersianUnicode) {
     //            viewHolder.timeAndInfo.setText(TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME + " " + HelperCalander.checkHijriAndReturnTime(item.getOfferTime())));
     //        } else {
     //            viewHolder.timeAndInfo.setText(HelperCalander.checkHijriAndReturnTime(item.getOfferTime()) + " " + TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME));
@@ -545,7 +550,7 @@ import net.iGap.request.RequestSignalingGetLog;
     //            viewHolder.timeDuration.setText(DateUtils.formatElapsedTime(item.getDuration()));
     //        }
     //
-    //        if (HelperCalander.isLanguagePersian) {
+    //        if (HelperCalander.isPersianUnicode) {
     //            viewHolder.timeAndInfo.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeAndInfo.getText().toString()));
     //            viewHolder.timeDuration.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeDuration.getText().toString()));
     //        }
@@ -766,8 +771,8 @@ import net.iGap.request.RequestSignalingGetLog;
             //        break;
             //}
 
-            if (HelperCalander.isLanguagePersian) {
-                viewHolder.timeAndInfo.setText(TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME + " " + HelperCalander.checkHijriAndReturnTime(item.getOfferTime())));
+            if (HelperCalander.isPersianUnicode) {
+                viewHolder.timeAndInfo.setText(HelperCalander.checkHijriAndReturnTime(item.getOfferTime()) + " " + TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME)); //+ " " + HelperCalander.checkHijriAndReturnTime(item.getOfferTime())
             } else {
                 viewHolder.timeAndInfo.setText(HelperCalander.checkHijriAndReturnTime(item.getOfferTime()) + " " + TimeUtils.toLocal(item.getOfferTime() * DateUtils.SECOND_IN_MILLIS, G.CHAT_MESSAGE_TIME));
             }
@@ -776,7 +781,7 @@ import net.iGap.request.RequestSignalingGetLog;
                 viewHolder.timeDuration.setText(DateUtils.formatElapsedTime(item.getDuration()));
             }
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 viewHolder.timeAndInfo.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeAndInfo.getText().toString()));
                 viewHolder.timeDuration.setText(HelperCalander.convertToUnicodeFarsiNumber(viewHolder.timeDuration.getText().toString()));
             }

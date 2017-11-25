@@ -14,21 +14,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
+
 import com.vanniktech.emoji.EmojiUtils;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmObject;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
-import io.realm.RealmRoomMessageRealmProxy;
-import io.realm.Sort;
-import io.realm.annotations.Index;
-import io.realm.annotations.PrimaryKey;
-import java.util.ArrayList;
-import java.util.Calendar;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperTimeOut;
@@ -48,16 +40,33 @@ import net.iGap.proto.ProtoResponse;
 import net.iGap.request.RequestChannelDeleteMessage;
 import net.iGap.request.RequestChatDeleteMessage;
 import net.iGap.request.RequestGroupDeleteMessage;
+
 import org.parceler.Parcel;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmObject;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+import io.realm.RealmRoomMessageRealmProxy;
+import io.realm.Sort;
+import io.realm.annotations.Index;
+import io.realm.annotations.PrimaryKey;
 
 import static net.iGap.fragments.FragmentChat.getRealmChat;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
-@Parcel(implementations = {RealmRoomMessageRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessage.class}) public class RealmRoomMessage extends RealmObject {
-    @PrimaryKey private long messageId;
-    @Index private long roomId;
+@Parcel(implementations = {RealmRoomMessageRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessage.class})
+public class RealmRoomMessage extends RealmObject {
+    @PrimaryKey
+    private long messageId;
+    @Index
+    private long roomId;
     private long messageVersion;
     private String status;
     private long statusVersion;
@@ -433,9 +442,6 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         }
         realm.close();
     }
-
-
-
 
 
     /**
@@ -1042,7 +1048,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThan(RealmRoomMessageFields.MESSAGE_ID, lessThan).findAll().deleteAllFromRealm();
+                realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, lessThan).findAll().deleteAllFromRealm();
             }
         });
         realm.close();
@@ -1059,8 +1065,14 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
                 for (final Long messageId : list) {
                     RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+
                     if (roomMessage != null) {
                         roomMessage.setDeleted(true);
+
+                        // stop download
+                        if (roomMessage.getAttachment() != null) {
+                            HelperDownloadFile.stopDownLoad(roomMessage.getAttachment().getCacheId());
+                        }
                     }
 
                     boolean bothDelete = false;

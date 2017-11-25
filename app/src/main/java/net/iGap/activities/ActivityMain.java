@@ -29,7 +29,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -37,7 +36,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -48,16 +46,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import io.realm.Realm;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -135,6 +130,13 @@ import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
@@ -225,7 +227,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -248,10 +249,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         isOpenChatBeforeSheare = true;
-        chechIntent(intent);
+        checkIntent(intent);
     }
 
-    private void chechIntent(Intent intent) {
+    private void checkIntent(Intent intent) {
 
         new HelperGetDataFromOtherApp(intent);
 
@@ -287,12 +288,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             openActivityPassCode();
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            isNeedToRegister = true;
-            isOnGetPermission = true;
-        }
+        //if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        //isNeedToRegister = true; // continue app even don't have storage permission
+        //isOnGetPermission = true;
+        //}
         super.onCreate(savedInstanceState);
-
 
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -314,8 +314,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             finish();
             return;
         }
-
-
 
 
         G.fragmentManager = getSupportFragmentManager();
@@ -345,7 +343,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
 
-
         if (G.firstTimeEnterToApp) {
             /**
              * set true mFirstRun for get room history after logout and login again
@@ -364,7 +361,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 editor.apply();
             }
         }
-
 
 
         setContentView(R.layout.activity_main);
@@ -418,7 +414,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             lp.height = size;
 
 
-
             desighnLayout(chatLayoutMode.none);
 
             frameFragmentBack.setOnClickListener(new View.OnClickListener() {
@@ -462,7 +457,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         isOpenChatBeforeSheare = false;
-        chechIntent(getIntent());
+        checkIntent(getIntent());
 
 
         initTabStrip();
@@ -597,7 +592,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (HelperCalander.isLanguagePersian) {
+                        if (HelperCalander.isPersianUnicode) {
                             new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.END).content(content).positiveText(R.string.B_ok).show();
                         } else {
                             new MaterialDialog.Builder(ActivityMain.this).title(R.string.Input_device_specification).contentGravity(GravityEnum.START).content(content).positiveText(R.string.B_ok).show();
@@ -827,6 +822,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void setViewPagerSelectedItem() {
+        if (!G.multiTab) {
+            return;
+        }
 
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -838,17 +836,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 int index;
 
-                if (G.salectedTabInMainActivity.length() > 0) {
+                if (G.selectedTabInMainActivity.length() > 0) {
 
-                    if (HelperCalander.isLanguagePersian) {
+                    if (HelperCalander.isPersianUnicode) {
 
-                        if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
+                        if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
                             index = 4;
-                        } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
+                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
                             index = 3;
-                        } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
+                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
                             index = 2;
-                        } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
+                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
                             index = 1;
                         } else {
                             index = 0;
@@ -856,25 +854,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     } else {
 
-                        if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
+                        if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
                             index = 0;
-                        } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
+                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
                             index = 1;
-                        } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
+                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
                             index = 2;
-                        } else if (G.salectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
+                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
                             index = 3;
                         } else {
                             index = 4;
                         }
                     }
 
-                    G.salectedTabInMainActivity = "";
+                    G.selectedTabInMainActivity = "";
 
 
                 } else {
 
-                    if (HelperCalander.isLanguagePersian) {
+                    if (HelperCalander.isPersianUnicode) {
                         index = 4;
                     } else {
                         index = 0;
@@ -882,7 +880,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
 
                 navigationTabStrip.setViewPager(mViewPager, index);
-                if (!HelperCalander.isLanguagePersian) {
+                if (!HelperCalander.isPersianUnicode) {
                     navigationTabStrip.updatePointIndicator();
                 }
 
@@ -906,7 +904,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip = (NavigationTabStrip) findViewById(R.id.nts);
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
         } else {
             navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
@@ -915,33 +913,36 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
         navigationTabStrip.setStripColor(Color.WHITE);
 
+        mViewPager = findViewById(R.id.viewpager);
 
-
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        mViewPager.setOffscreenPageLimit(5);
-
+        if (G.multiTab) {
+            navigationTabStrip.setVisibility(View.VISIBLE);
+            mViewPager.setOffscreenPageLimit(5);
+        } else {
+            navigationTabStrip.setVisibility(View.GONE);
+            mViewPager.setOffscreenPageLimit(1);
+        }
 
         findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
 
-        if (HelperCalander.isLanguagePersian) {
-
+        if (HelperCalander.isPersianUnicode) {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    fragmentCall = FragmentCall.newInstance(true);
-                    pages.add(fragmentCall);
 
-                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
-                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
-                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
+                    if (G.multiTab) {
+                        fragmentCall = FragmentCall.newInstance(true);
+                        pages.add(fragmentCall);
+
+                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
+                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
+                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
+                    }
+
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
-
                     sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
-
-
                     setViewPagerSelectedItem();
-
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
                 }
             }, 400);
@@ -960,23 +961,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }, 400);
 
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+            if (G.multiTab) {
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
 
-                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
-                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
-                    pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
+                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
+                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
+                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
 
-                    fragmentCall = FragmentCall.newInstance(true);
-                    pages.add(fragmentCall);
+                        fragmentCall = FragmentCall.newInstance(true);
+                        pages.add(fragmentCall);
 
-                    mViewPager.getAdapter().notifyDataSetChanged();
+                        mViewPager.getAdapter().notifyDataSetChanged();
 
-                    setViewPagerSelectedItem();
+                        setViewPagerSelectedItem();
 
-                }
-            }, 800);
+                    }
+                }, 800);
+            }
         }
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);
@@ -992,7 +995,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        if (HelperCalander.isLanguagePersian) {
+        if (HelperCalander.isPersianUnicode) {
             ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);
         }
     }
@@ -1270,20 +1273,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    HelperPermision.getStoragePermision(ActivityMain.this, new OnGetPermission() {
-                        @Override
-                        public void Allow() {
-                            new HelperFragment(new FragmentSetting()).load();
-                        }
-
-                        @Override
-                        public void deny() {
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                new HelperFragment(new FragmentSetting()).load();
                 closeDrawer();
                 lockNavigation();
             }
@@ -1739,7 +1729,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        if (!HelperCalander.isLanguagePersian) {
+        if (!HelperCalander.isPersianUnicode) {
             titleTypeface = G.typeface_neuropolitical;
         } else {
             titleTypeface = G.typeface_IRANSansMobile;
@@ -1882,7 +1872,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             txtNavName.setText(username);
             txtNavPhone.setText(phoneNumber);
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtNavPhone.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavPhone.getText().toString()));
                 txtNavName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavName.getText().toString()));
             }
@@ -1935,7 +1925,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
-
 
 
         if (G.onBackPressedExplorer != null) {
@@ -2104,13 +2093,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
 
                     FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
-                    G.salectedTabInMainActivity = fm.mainType.toString();
+                    G.selectedTabInMainActivity = fm.mainType.toString();
                 } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
 
-                    G.salectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
+                    G.selectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
                 }
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
     }
@@ -2496,15 +2485,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             }
                         }
                     }
-
-
                 }
-
-
             }
         });
-
-
     }
 
     public static void setMediaLayout() {
@@ -2553,7 +2536,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                     }
                 } catch (Exception e) {
-                    Log.e("dddddd", "activity main  setMediaLayout " + e.toString());
+                    e.printStackTrace();
                 }
             }
         });

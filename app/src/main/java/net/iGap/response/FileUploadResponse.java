@@ -12,7 +12,7 @@ package net.iGap.response;
 
 import android.os.Handler;
 import android.os.Looper;
-import io.realm.Realm;
+
 import net.iGap.G;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperUploadFile;
@@ -20,6 +20,8 @@ import net.iGap.proto.ProtoFileUpload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+
+import io.realm.Realm;
 
 public class FileUploadResponse extends MessageHandler {
 
@@ -76,9 +78,9 @@ public class FileUploadResponse extends MessageHandler {
                                 if (message != null && message.isValid()) {
                                     G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
                                 }
+                                realm.close();
                             }
                         });
-                        realm.close();
                     }
                 }, new Realm.Transaction.OnError() {
                     @Override

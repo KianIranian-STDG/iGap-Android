@@ -27,9 +27,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import io.realm.Realm;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -72,8 +73,13 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChannelAddMessageReaction;
 
+import java.util.List;
+
+import io.realm.Realm;
+
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
+import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
 public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
     public IMessageItem messageClickListener;
@@ -116,7 +122,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 view.setText(HelperUrl.getLinkText(msg, mMessage.linkInfo, mMessage.messageID));
             } else {
 
-                msg = HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
+                msg = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
 
                 view.setText(msg);
             }
@@ -133,7 +139,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (mMessage.hasLinkInMessage) {
                 view.setText(HelperUrl.getLinkText(msg, mMessage.linkInfo, mMessage.messageID));
             } else {
-                msg = HelperCalander.isLanguagePersian ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
+                msg = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
                 view.setText(msg);
             }
 
@@ -318,7 +324,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             txtTime.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
             txtTime.setText(HelperCalander.getClocktime(mMessage.time, false));
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txtTime.getText().toString()));
             }
         }
@@ -354,12 +360,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 showVote(holder, getRealmChat());
             } else if ((type == ProtoGlobal.Room.Type.CHAT)) {
                 if (mMessage.forwardedFrom != null) {
-                    RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-                    if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                        showVote(holder, getRealmChat());
+                    if (mMessage.forwardedFrom.getAuthorRoomId() > 0) {
+                        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+                        if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                            showVote(holder, getRealmChat());
 
-                        if (mMessage.isSenderMe()) {
-                            holder.itemView.findViewById(R.id.cslm_view_left_dis).setVisibility(View.VISIBLE);
+                            if (mMessage.isSenderMe()) {
+                                holder.itemView.findViewById(R.id.cslm_view_left_dis).setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 }
@@ -400,7 +408,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 txtViewsLabel.setText(mMessage.channelExtra.viewsLabel);
             }
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtViewsLabel.setText(HelperCalander.convertToUnicodeFarsiNumber(txtViewsLabel.getText().toString()));
             }
         }
@@ -570,7 +578,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 holder.itemView.findViewById(R.id.lyt_signature).setVisibility(View.VISIBLE);
             }
 
-            if (HelperCalander.isLanguagePersian) {
+            if (HelperCalander.isPersianUnicode) {
                 txtViewsLabel.setText(HelperCalander.convertToUnicodeFarsiNumber(txtViewsLabel.getText().toString()));
                 txtVoteDown.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVoteDown.getText().toString()));
                 txtVoteUp.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVoteUp.getText().toString()));
@@ -737,7 +745,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mContainer.removeView(holder.itemView.findViewById(R.id.cslr_replay_layout));
         }
 
-        if (mMessage.replayTo != null) {
+        if (mMessage.replayTo != null && mMessage.replayTo.isValid()) {
 
             final View replayView = ViewMaker.getViewReplay();
 
@@ -939,6 +947,37 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
+
+    public static void processVideo(final TextView duration, final View holder1, final StructMessageInfo mMessage) {
+
+        MediaController.onPercentCompress = new MediaController.OnPercentCompress() {
+            @Override
+            public void compress(final long percent, String path) {
+
+                if (mMessage.getAttachment().getLocalFilePath() == null || !mMessage.getAttachment().getLocalFilePath().equals(path)) {
+                    return;
+                }
+
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (percent < 98) {
+
+                            String p = percent + "";
+
+                            if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
+                                p = convertToUnicodeFarsiNumber(p);
+                            }
+                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + mMessage.attachment.compressing + " %" + p));
+                        } else {
+                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + G.context.getResources().getString(R.string.Uploading)));
+                        }
+                    }
+                });
+            }
+        };
+    }
+
     /**
      * does item have progress view
      *
@@ -981,6 +1020,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     private void checkAutoDownload(final VH holder, final RealmAttachment attachment, Context context, HelperCheckInternetConnection.ConnectivityType connectionMode) {
+
+        if (HelperDownloadFile.manuallyStoppedDownload.contains(attachment.getCacheId())) { // for avoid from reDownload in autoDownload state , after that user manually stopped download.
+            return;
+        }
+
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         ProtoGlobal.RoomMessageType messageType;
         if (mMessage.forwardedFrom != null) {
@@ -1263,13 +1307,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             if (mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                 if (G.userLogin) {
-                    HelperUploadFile.reUpload(mMessage.messageID);
+                    messageClickListener.onFailedMessageClick(progress, mMessage, holder.getAdapterPosition());
 
-                    progress.withDrawable(R.drawable.ic_cancel, false);
-                    holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
-                    final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
-                    contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
-                    contentLoading.setVisibility(View.VISIBLE);
+                    //HelperUploadFile.reUpload(mMessage.messageID);
+                    //progress.withDrawable(R.drawable.ic_cancel, false);
+                    //holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                    //final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
+                    //contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
+                    //contentLoading.setVisibility(View.VISIBLE);
                 } else {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                 }
@@ -1442,7 +1487,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
 
 
-
                 }
 
                 @Override
@@ -1461,7 +1505,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             }
                         });
                     }
-
 
 
                 }
@@ -1512,14 +1555,21 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
+
+                                //float p = progress;
+                                //if ((mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) && FragmentChat.compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
+                                //    if (progress < mMessage.uploadProgress) {
+                                //        p = mMessage.uploadProgress;
+                                //    }
+                                //}
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
                                     progressBar.withProgress(progress);
-
                                     if (progress == 100) {
                                         progressBar.performProgress();
                                         contentLoading.setVisibility(View.GONE);
                                     }
                                 }
+
                             }
                         });
                     }
@@ -1529,13 +1579,31 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
                             progressBar.withProgress(0);
                             progressBar.withDrawable(R.drawable.upload, true);
-
                             contentLoading.setVisibility(View.GONE);
-
                             mMessage.status = ProtoGlobal.RoomMessageStatus.FAILED.toString();
                         }
                     }
                 });
+
+                //if (mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO || mMessage.messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                //
+                //    MediaController.onPercentCompress = new MediaController.OnPercentCompress() {
+                //        @Override
+                //        public void compress(final long percent, String path) {
+                //
+                //            G.handler.post(new Runnable() {
+                //                @Override
+                //                public void run() {
+                //                    if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
+                //                        int p = (int) (percent / 10);
+                //                        progressBar.withProgress(p);
+                //                        mMessage.uploadProgress = p;
+                //                    }
+                //                }
+                //            });
+                //        }
+                //    };
+                //}
 
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
                 contentLoading.setVisibility(View.VISIBLE);
@@ -1609,4 +1677,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         return "";
     }
+
+
 }

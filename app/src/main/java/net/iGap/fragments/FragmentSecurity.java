@@ -15,9 +15,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import java.util.regex.Pattern;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
@@ -33,6 +34,8 @@ import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestUserTwoStepVerificationResendVerifyEmail;
 import net.iGap.request.RequestUserTwoStepVerificationUnsetPassword;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyRecoveryEmail;
+
+import java.util.regex.Pattern;
 
 import static net.iGap.R.id.tsv_setConfirmedEmail;
 import static net.iGap.R.id.tsv_setRecoveryEmail;
@@ -267,7 +270,7 @@ public class FragmentSecurity extends BaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("OLD_PASSWORD", password);
                 fragmentSetSecurityPassword.setArguments(bundle);
-                new HelperFragment(fragmentSetSecurityPassword).load();
+                new HelperFragment(fragmentSetSecurityPassword).setReplace(false).load();
             }
         });
 

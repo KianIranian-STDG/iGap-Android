@@ -11,11 +11,7 @@
 package net.iGap.realm;
 
 import android.support.annotation.Nullable;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.Sort;
-import io.realm.annotations.PrimaryKey;
+
 import net.iGap.G;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnInfo;
@@ -24,10 +20,17 @@ import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserInfo;
 
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.Sort;
+import io.realm.annotations.PrimaryKey;
+
 import static net.iGap.G.userId;
 
 public class RealmRegisteredInfo extends RealmObject {
-    @PrimaryKey private long id;
+    @PrimaryKey
+    private long id;
     private String username;
     private String phoneNumber;
     private String firstName;
@@ -251,7 +254,7 @@ public class RealmRegisteredInfo extends RealmObject {
      * fill object from proto to realm
      *
      * @param registeredUser proto that get from server
-     * @param info object from RealmRegisteredInfo
+     * @param info           object from RealmRegisteredInfo
      */
 
     public void fillRegisteredUserInfo(ProtoGlobal.RegisteredUser registeredUser, RealmRegisteredInfo info) {
@@ -275,7 +278,7 @@ public class RealmRegisteredInfo extends RealmObject {
      * compare user cacheId , if was equal don't do anything
      * otherwise send request for get user info
      *
-     * @param userId userId for get old cacheId from RealmRegisteredInfo
+     * @param userId  userId for get old cacheId from RealmRegisteredInfo
      * @param cacheId new cacheId
      * @return return true if need update otherwise return false
      */
@@ -335,6 +338,18 @@ public class RealmRegisteredInfo extends RealmObject {
 
     public static RealmRegisteredInfo getRegistrationInfo(Realm realm, long userId) {
         return realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+    }
+
+    public static String getNameWithId(long userId) {
+        String displayName = "";
+        Realm realm = Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirst();
+        if (realmRegisteredInfo != null) {
+            displayName = realmRegisteredInfo.getDisplayName();
+        }
+        realm.close();
+
+        return displayName;
     }
 
     public static void updateBio(final String bio) {
