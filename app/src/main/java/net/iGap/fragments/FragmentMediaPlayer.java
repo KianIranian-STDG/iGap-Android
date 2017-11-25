@@ -529,6 +529,19 @@ public class FragmentMediaPlayer extends BaseFragment {
             RealmRoomMessage realmRoomMessage = getItem(position);
 
 
+            if (MusicPlayer.mp != null && MusicPlayer.musicName.equals(realmRoomMessage.getAttachment().getName())) {
+
+                holder.iconPlay.setVisibility(View.VISIBLE);
+                if (MusicPlayer.mp.isPlaying()) {
+                    holder.iconPlay.setText(R.string.md_round_pause_button);
+                } else {
+                    holder.iconPlay.setText(R.string.md_play_rounded_button);
+                }
+
+            } else {
+                holder.iconPlay.setVisibility(View.GONE);
+            }
+
 
             holder.txtNameMusic.setText(realmRoomMessage.getAttachment().getName());
             MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
@@ -569,15 +582,9 @@ public class FragmentMediaPlayer extends BaseFragment {
             return RealmRoomMessage.getFinalMessage(realmRoomMessagesList.get(po));
         }
 
-        //public void updateAdapter(ArrayList<RealmRoomMessage> realmRoomMessages) {
-        //    realmRoomMessagesList = realmRoomMessages;
-        //    notifyDataSetChanged();
-        //}
-
-
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-            private TextView txtNameMusic, txtMusicplace;
+            private TextView txtNameMusic, txtMusicplace, iconPlay;
             private ImageView imgMusicItem;
 
             public ViewHolder(View itemView) {
@@ -586,17 +593,23 @@ public class FragmentMediaPlayer extends BaseFragment {
                 txtNameMusic = itemView.findViewById(R.id.txtListMusicPlayer);
                 txtMusicplace = itemView.findViewById(R.id.ml_txt_music_place);
                 imgMusicItem = itemView.findViewById(R.id.imgListMusicPlayer);
+                iconPlay = itemView.findViewById(R.id.ml_btn_play_music);
                 itemView.setOnClickListener(this);
+
+                iconPlay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MusicPlayer.playAndPause();
+                    }
+                });
             }
 
             @Override
             public void onClick(View v) {
-
                 RealmRoomMessage realmRoomMessage = realmRoomMessagesList.get(getAdapterPosition());
                 adapterOnclick.onClick(realmRoomMessage.getAttachment().getName());
                 MusicPlayer.startPlayer(realmRoomMessage.getAttachment().getName(), realmRoomMessage.getAttachment().getLocalFilePath(), FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, false, realmRoomMessage.getMessageId() + "");
             }
-
         }
 
         public interface OnClickAdapterListMusic {

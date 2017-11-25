@@ -55,6 +55,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
@@ -332,6 +333,8 @@ public class MusicPlayer extends Service {
 
     public static void playAndPause() {
 
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
+
         if (mp != null) {
             if (mp.isPlaying()) {
                 pauseSound();
@@ -344,6 +347,8 @@ public class MusicPlayer extends Service {
     }
 
     public static void pauseSound() {
+
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
         if (!isVoice) {
             try {
@@ -385,6 +390,8 @@ public class MusicPlayer extends Service {
     //**************************************************************************
 
     public static void playSound() {
+
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
         if (mp == null) {
             return;
@@ -437,6 +444,7 @@ public class MusicPlayer extends Service {
     }
 
     public static void stopSound() {
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
         String zeroTime = "0:00";
 
@@ -491,6 +499,8 @@ public class MusicPlayer extends Service {
 
     public static void nextMusic() {
 
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
+
         if (!canDoAction) {
             return;
         }
@@ -540,6 +550,7 @@ public class MusicPlayer extends Service {
     }
 
     public static void previousMusic() {
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
         try {
             if (MusicPlayer.mp != null) {
