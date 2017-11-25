@@ -1191,10 +1191,12 @@ public class MusicPlayer extends Service {
                 if (isVoice) {
                     if (rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.VOICE.toString())) {
                         result = startDownload(rm);
+                        break;
                     }
                 } else {
                     if (rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || rm.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
                         result = startDownload(rm);
+                        break;
                     }
                 }
             }
