@@ -94,6 +94,9 @@ public class FragmentData extends BaseFragment {
         vgShamsi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (G.onDateChanged != null) {
+                    G.onDateChanged.onChange();
+                }
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt(SHP_SETTING.KEY_DATA, SHAMSI);
@@ -109,6 +112,9 @@ public class FragmentData extends BaseFragment {
         vgMiladi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (G.onDateChanged != null) {
+                    G.onDateChanged.onChange();
+                }
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt(SHP_SETTING.KEY_DATA, MILADI);
@@ -124,6 +130,9 @@ public class FragmentData extends BaseFragment {
         vgGhamari.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (G.onDateChanged != null) {
+                    G.onDateChanged.onChange();
+                }
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt(SHP_SETTING.KEY_DATA, GHAMARY);

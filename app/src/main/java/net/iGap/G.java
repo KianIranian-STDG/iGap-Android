@@ -320,6 +320,7 @@ public class G extends MultiDexApplication {
     public static IOnBackPressed onBackPressedChat;
     public static ISendPosition iSendPositionChat;
     public static ITowPanModDesinLayout iTowPanModDesinLayout;
+    public static OnDateChanged onDateChanged;
 
     public static IOnBackPressed onBackPressedExplorer;
 

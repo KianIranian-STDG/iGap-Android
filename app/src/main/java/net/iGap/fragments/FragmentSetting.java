@@ -1436,6 +1436,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
                     editor.apply();
                 }
+                FragmentMain.roomAdapterHashMap = null;
 
                 if (onRefreshActivity != null) {
                     G.isRestartActivity = true;

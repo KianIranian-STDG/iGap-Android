@@ -42,6 +42,7 @@ import net.iGap.interfaces.OnClearRoomHistory;
 import net.iGap.interfaces.OnClearUnread;
 import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
+import net.iGap.interfaces.OnDateChanged;
 import net.iGap.interfaces.OnDraftMessage;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
 import net.iGap.interfaces.OnMute;
@@ -77,6 +78,7 @@ import net.iGap.request.RequestGroupLeft;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
@@ -94,7 +96,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnDraftMessage, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClearUnread, OnClientGetRoomResponseRoomList, OnMute, OnClearRoomHistory {
+public class FragmentMain extends BaseFragment implements OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnDraftMessage, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClearUnread, OnClientGetRoomResponseRoomList, OnMute, OnClearRoomHistory, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static boolean isMenuButtonAddShown = false;
@@ -112,6 +114,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     private long tagId;
     private Realm realmFragmentMain;
     public static HashMap<MainType, RoomAdapter> adapterHashMap = new HashMap<>();
+    public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
 
     public enum MainType {
         all, chat, group, channel
@@ -212,6 +215,11 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
         final RoomAdapter roomsAdapter = new RoomAdapter(results, this);
         mRecyclerView.setAdapter(roomsAdapter);
+
+        if (roomAdapterHashMap == null) {
+            roomAdapterHashMap = new HashMap<>();
+        }
+        roomAdapterHashMap.put(mainType, roomsAdapter);
 
         //fastAdapter
         //final RoomsAdapter roomsAdapter = new RoomsAdapter(getRealmFragmentMain());
@@ -483,7 +491,6 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
         //}
 
 
-
     }
 
     //***************************************************************************************************************************
@@ -734,6 +741,14 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     /**
      * ************************************ Callbacks ************************************
      */
+    @Override
+    public void onChange() {
+        for (Map.Entry<MainType, RoomAdapter> entry : roomAdapterHashMap.entrySet()) {
+            RoomAdapter requestWrapper = entry.getValue();
+            requestWrapper.notifyDataSetChanged();
+        }
+    }
+
     @Override
     public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
         G.handler.post(new Runnable() {
@@ -1430,6 +1445,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
         super.onResume();
 
         G.onSetActionInRoom = this;
+        G.onDateChanged = this;
         //G.onSelectMenu = this;
         //G.onRemoveFragment = this;
         //G.onDraftMessage = this;
