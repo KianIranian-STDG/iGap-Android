@@ -15,11 +15,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
-import com.mikepenz.fastadapter.FastAdapter;
+
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-import java.util.ArrayList;
-import java.util.List;
+import com.mikepenz.fastadapter.listeners.OnClickListener;
+import com.mikepenz.fastadapter.listeners.OnLongClickListener;
+
 import net.iGap.R;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.LogItem;
@@ -34,7 +35,10 @@ import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 
-public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements FastAdapter.OnLongClickListener<Item> {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements OnLongClickListener<Item> {
     // contain sender id
     public static List<String> avatarsRequested = new ArrayList<>();
     public static List<String> usersInfoRequested = new ArrayList<>();

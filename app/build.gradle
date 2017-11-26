@@ -56,7 +56,7 @@ android {
 
 dependencies {
   compile fileTree(include: ['*.jar'], dir: 'libs')
-  compile('com.mikepenz:fastadapter:2.6.3@aar') {
+  compile('com.mikepenz:fastadapter:3.0.4@aar') {
     transitive = true
   }
   compile project(':messageprogress')
@@ -78,8 +78,8 @@ dependencies {
     exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
   }
 
-  compile 'com.mikepenz:fastadapter-commons:2.6.3@aar'
-  compile 'com.mikepenz:fastadapter-extensions:2.6.3@aar'
+  compile 'com.mikepenz:fastadapter-commons:3.0.3@aar'
+  compile 'com.mikepenz:fastadapter-extensions:3.0.3@aar'
   compile 'com.mikepenz:materialize:1.0.3@aar'
   compile 'com.android.support:multidex:1.0.1'
   compile 'com.android.support:appcompat-v7:26.0.2'
