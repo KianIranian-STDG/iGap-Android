@@ -40,7 +40,8 @@ public class FileUtils {
         try {
             in = resolver.openInputStream(uri);
 
-            mFile = new File(rootPath + File.separator + Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + Config.VIDEO_COMPRESSOR_TEMP_DIR, fileName);
+//            mFile = new File(rootPath + File.separator + Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + Config.VIDEO_COMPRESSOR_TEMP_DIR, fileName);
+            mFile = new File(rootPath, fileName);
             out = new FileOutputStream(mFile, false);
             byte[] buffer = new byte[1024];
             int read;
