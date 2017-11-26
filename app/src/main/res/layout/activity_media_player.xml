@@ -312,7 +312,7 @@
                 android:text="@string/md_synchronization_arrows"
                 android:textAppearance="@style/TextIconAppearance.all"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/dp28"
+                android:textSize="@dimen/dp20"
                 />
 
             <ImageView

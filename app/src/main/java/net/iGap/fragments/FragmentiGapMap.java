@@ -35,17 +35,21 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -53,18 +57,25 @@ import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import io.realm.Realm;
+import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
 import io.realm.Sort;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.helper.HelperAvatar;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
+import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnGeoCommentResponse;
 import net.iGap.interfaces.OnGeoGetComment;
 import net.iGap.interfaces.OnGetNearbyCoordinate;
@@ -73,17 +84,23 @@ import net.iGap.interfaces.OnLocationChanged;
 import net.iGap.interfaces.OnMapClose;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.AndroidUtils;
+import net.iGap.module.CircleImageView;
+import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.FileUtils;
 import net.iGap.module.GPSTracker;
+import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MyInfoWindow;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
+import net.iGap.realm.RealmGeoNearbyDistance;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestGeoGetComment;
 import net.iGap.request.RequestGeoGetNearbyCoordinate;
+import net.iGap.request.RequestGeoGetNearbyDistance;
 import net.iGap.request.RequestGeoRegister;
 import net.iGap.request.RequestGeoUpdateComment;
 import net.iGap.request.RequestGeoUpdatePosition;
@@ -113,6 +130,7 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.URL_MAP;
 import static net.iGap.G.context;
+import static net.iGap.G.inflater;
 import static net.iGap.G.userId;
 import static net.iGap.R.id.st_fab_gps;
 
@@ -173,6 +191,13 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     long firstTap = 0;
     private boolean isEndLine = true;
     private String txtComment = "";
+    private Realm realmMapUsers;
+    private RecyclerView mRecyclerView;
+    private MapUserAdapter mAdapter;
+    private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
+    private SlidingUpPanelLayout slidingUpPanelLayout;
+    private View vgSlideUp;
+    private TextView iconSlide;
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -185,6 +210,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        realmMapUsers = Realm.getDefaultInstance();
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
         return inflater.inflate(R.layout.fragment_igap_map, container, false);
     }
@@ -199,6 +225,10 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         G.onGeoGetComment = this;
         startMap(view);
         //clickDrawMarkActive();
+
+        if (FragmentiGapMap.location != null) {
+            getDistanceLoop(0, false);
+        }
 
         page = 1;
         new RequestGeoGetComment().getComment(userId);
@@ -272,6 +302,22 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
             }
         });
+
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.rcy_map_user);
+        mRecyclerView.setItemAnimator(null);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(G.fragmentActivity));
+        getRealmMapUsers().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(RealmGeoNearbyDistance.class).findAll().deleteAllFromRealm();
+            }
+        });
+
+        mAdapter = new MapUserAdapter(getRealmMapUsers().where(RealmGeoNearbyDistance.class).findAll(), true);
+
+        //fastAdapter
+        //mAdapter = new MapUserAdapterA();
+        mRecyclerView.setAdapter(mAdapter);
 
         rootTurnOnGps = (ScrollView) view.findViewById(R.id.scrollView);
         rootTurnOnGps.setOnClickListener(new View.OnClickListener() {
@@ -418,6 +464,27 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 //edtMessageGps.setText("");
             }
         });
+        slidingUpPanelLayout = view.findViewById(R.id.sliding_layout);
+        vgSlideUp = view.findViewById(R.id.vgSlideUp);
+        iconSlide = view.findViewById(R.id.ml_user_on_map);
+
+        slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                vgSlideUp.setAlpha(slideOffset);
+                if (slideOffset == 1) {
+                    iconSlide.setRotation(180);
+                } else if (slideOffset == 0) {
+                    iconSlide.setRotation(0);
+                }
+            }
+
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+
+            }
+        });
+
 
         final String beforChangeComment = edtMessageGps.getText().toString();
 
@@ -525,7 +592,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
                 ViewGroup root3 = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
 
-                root1.setVisibility(View.VISIBLE);
+                root1.setVisibility(View.GONE);
                 root2.setVisibility(View.VISIBLE);
                 root3.setVisibility(View.VISIBLE);
 
@@ -1298,5 +1365,145 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     public void onStop() {
         super.onStop();
         G.isFragmentMapActive = false;
+    }
+
+    private Realm getRealmMapUsers() {
+        if (realmMapUsers == null || realmMapUsers.isClosed()) {
+            realmMapUsers = Realm.getDefaultInstance();
+        }
+        return realmMapUsers;
+    }
+
+    private void getDistanceLoop(final int delay, boolean loop) {
+        if (loop && FragmentiGapMap.page == pageUserList) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
+                    getDistanceLoop(DEFAULT_LOOP_TIME, true);
+                }
+            }, delay);
+        } else {
+            new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
+        }
+    }
+
+    private class MapUserAdapter extends RealmRecyclerViewAdapter<RealmGeoNearbyDistance, MapUserAdapter.ViewHolder> {
+        MapUserAdapter(RealmResults<RealmGeoNearbyDistance> data, boolean autoUpdate) {
+            super(data, autoUpdate);
+        }
+
+        @Override
+        public MapUserAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new MapUserAdapter.ViewHolder(inflater.inflate(R.layout.map_user_item, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(final MapUserAdapter.ViewHolder holder, int i) {
+            final RealmGeoNearbyDistance item = getItem(i);
+            if (item == null) {
+                return;
+            }
+            Realm realm = Realm.getDefaultInstance();
+            RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, item.getUserId());
+            if (registeredInfo == null) {
+                realm.close();
+                return;
+            }
+
+            if (G.selectedLanguage.equals("en")) {
+                holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_right_arrow));
+            } else {
+                holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow));
+            }
+
+            holder.arrow.setTextColor(Color.parseColor(G.appBarColor));
+
+            holder.layoutMap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    new HelperFragment(FragmentContactsProfile.newInstance(0, item.getUserId(), "Others")).setReplace(false).load();
+                }
+            });
+
+            if (HelperCalander.isPersianUnicode) {
+                holder.username.setGravity(Gravity.RIGHT);
+            } else {
+                holder.username.setGravity(Gravity.LEFT);
+            }
+
+            holder.username.setText(registeredInfo.getDisplayName());
+            if (item.isHasComment()) {
+                if (item.getComment() == null || item.getComment().isEmpty()) {
+                    holder.comment.setText(context.getResources().getString(R.string.comment_waiting));
+                    new RequestGeoGetComment().getComment(item.getUserId());
+                } else {
+                    holder.comment.setText(item.getComment());
+                }
+            } else {
+                holder.comment.setText(context.getResources().getString(R.string.comment_no));
+            }
+
+            holder.distance.setText(String.format(G.context.getString(R.string.distance), item.getDistance()));
+            if (HelperCalander.isPersianUnicode) {
+                holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
+            }
+
+            hashMapAvatar.put(item.getUserId(), holder.avatar);
+            HelperAvatar.getAvatar(item.getUserId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
+                @Override
+                public void onAvatarGet(final String avatarPath, final long ownerId) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(ownerId));
+                        }
+                    });
+                }
+
+                @Override
+                public void onShowInitials(final String initials, final String color) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        }
+                    });
+                }
+            });
+
+            realm.close();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            public LinearLayout layoutMap;
+            public CircleImageView avatar;
+            public TextView username;
+            public TextView comment;
+            public MaterialDesignTextView arrow;
+            public CustomTextViewMedium distance;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+
+                layoutMap = (LinearLayout) itemView.findViewById(R.id.lyt_map_user);
+                avatar = (CircleImageView) itemView.findViewById(R.id.img_user_avatar_map);
+                username = (TextView) itemView.findViewById(R.id.txt_user_name_map);
+                comment = (TextView) itemView.findViewById(R.id.txt_user_comment_map);
+                arrow = (MaterialDesignTextView) itemView.findViewById(R.id.txt_arrow_list_map);
+                distance = (CustomTextViewMedium) itemView.findViewById(R.id.txt_user_distance_map);
+
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (realmMapUsers != null && !realmMapUsers.isClosed()) {
+            realmMapUsers.close();
+        }
     }
 }

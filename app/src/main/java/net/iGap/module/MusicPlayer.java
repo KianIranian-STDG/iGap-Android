@@ -690,6 +690,8 @@ public class MusicPlayer extends Service {
 
     public static void startPlayer(final String name, String musicPath, String roomName, long roomId, final boolean updateList, final String messageID) {
 
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
+
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
