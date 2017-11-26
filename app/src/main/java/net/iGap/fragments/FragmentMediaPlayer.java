@@ -12,10 +12,15 @@ package net.iGap.fragments;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,9 +30,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
-
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -42,9 +49,7 @@ import net.iGap.libs.ripplesoundplayer.util.PaintUtil;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
-
-import java.io.File;
-import java.io.IOException;
+import net.iGap.realm.RealmRoomMessage;
 
 public class FragmentMediaPlayer extends BaseFragment {
 
@@ -61,6 +66,8 @@ public class FragmentMediaPlayer extends BaseFragment {
     private ImageView img_RepeatOne;
     private ImageView img_MusicImage_default_icon;
     private TextView btnPlay;
+    private RecyclerView rcvListMusicPlayer;
+    public static AdapterListMusicPlayer adapterListMusicPlayer;
 
 
     private RippleVisualizerView rippleVisualizerView;
@@ -124,8 +131,7 @@ public class FragmentMediaPlayer extends BaseFragment {
                             txt_Timer.setText(MessageTow);
                             musicSeekbar.setProgress(MusicPlayer.musicProgress);
 
-                            if (HelperCalander.isPersianUnicode)
-                                txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
+                            if (HelperCalander.isPersianUnicode) txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
                         }
                     });
                 } else if (messageOne.equals("RepeatMode")) {
@@ -318,6 +324,19 @@ public class FragmentMediaPlayer extends BaseFragment {
             txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
             txt_MusicTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_MusicTime.getText().toString()));
         }
+
+
+        rcvListMusicPlayer = (RecyclerView) view.findViewById(R.id.rcvListMusicPlayer);
+        adapterListMusicPlayer = new AdapterListMusicPlayer(MusicPlayer.mediaList, new AdapterListMusicPlayer.OnClickAdapterListMusic() {
+            @Override
+            public void onClick(String name) {
+            }
+        });
+
+        rcvListMusicPlayer.setAdapter(adapterListMusicPlayer);
+        rcvListMusicPlayer.setLayoutManager(new LinearLayoutManager(_mActivity));
+        //adapterListMusicPlayer.updateAdapter(MusicPlayer.mediaList);
+
     }
 
     //private void setRenderer() {
@@ -485,4 +504,118 @@ public class FragmentMediaPlayer extends BaseFragment {
         super.onDestroy();
         MusicPlayer.onComplete = null;
     }
+
+    public static class AdapterListMusicPlayer extends RecyclerView.Adapter<AdapterListMusicPlayer.ViewHolder> {
+
+        private List<RealmRoomMessage> realmRoomMessagesList;
+        private OnClickAdapterListMusic adapterOnclick;
+        private DisplayImageOptions options;
+
+        public AdapterListMusicPlayer(List<RealmRoomMessage> realmRoomMessages, OnClickAdapterListMusic adapterOnclick) {
+            realmRoomMessagesList = realmRoomMessages;
+            this.adapterOnclick = adapterOnclick;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_list_music_player, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+
+            RealmRoomMessage realmRoomMessage = getItem(position);
+
+
+            if (MusicPlayer.mp != null && MusicPlayer.musicName.equals(realmRoomMessage.getAttachment().getName())) {
+
+                holder.iconPlay.setVisibility(View.VISIBLE);
+                if (MusicPlayer.mp.isPlaying()) {
+                    holder.iconPlay.setText(R.string.md_round_pause_button);
+                } else {
+                    holder.iconPlay.setText(R.string.md_play_rounded_button);
+                }
+
+            } else {
+                holder.iconPlay.setVisibility(View.GONE);
+            }
+
+
+            holder.txtNameMusic.setText(realmRoomMessage.getAttachment().getName());
+            MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
+
+            Uri uri = null;
+
+            if (realmRoomMessage.getAttachment().getLocalFilePath() != null) {
+                uri = (Uri) Uri.fromFile(new File(realmRoomMessage.getAttachment().getLocalFilePath()));
+            }
+
+            if (uri != null) {
+                mediaMetadataRetriever.setDataSource(G.context, uri);
+                byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
+                if (data != null) {
+                    Bitmap mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    holder.imgMusicItem.setImageBitmap(mediaThumpnail);
+                } else {
+
+                    holder.imgMusicItem.setImageResource(R.mipmap.music_icon_green);
+                }
+            }
+
+            String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+            if (artist != null) {
+                holder.txtMusicplace.setText(artist);
+            } else {
+                holder.txtMusicplace.setText(G.context.getString(R.string.unknown_artist));
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return realmRoomMessagesList.size();
+        }
+
+
+        private RealmRoomMessage getItem(int po) {
+            return RealmRoomMessage.getFinalMessage(realmRoomMessagesList.get(po));
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+            private TextView txtNameMusic, txtMusicplace, iconPlay;
+            private ImageView imgMusicItem;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+
+                txtNameMusic = itemView.findViewById(R.id.txtListMusicPlayer);
+                txtMusicplace = itemView.findViewById(R.id.ml_txt_music_place);
+                imgMusicItem = itemView.findViewById(R.id.imgListMusicPlayer);
+                iconPlay = itemView.findViewById(R.id.ml_btn_play_music);
+                itemView.setOnClickListener(this);
+
+                iconPlay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MusicPlayer.playAndPause();
+                    }
+                });
+            }
+
+            @Override
+            public void onClick(View v) {
+                RealmRoomMessage realmRoomMessage = realmRoomMessagesList.get(getAdapterPosition());
+                adapterOnclick.onClick(realmRoomMessage.getAttachment().getName());
+                MusicPlayer.startPlayer(realmRoomMessage.getAttachment().getName(), realmRoomMessage.getAttachment().getLocalFilePath(), FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, false, realmRoomMessage.getMessageId() + "");
+            }
+        }
+
+        public interface OnClickAdapterListMusic {
+            void onClick(String name);
+
+        }
+    }
+
 }

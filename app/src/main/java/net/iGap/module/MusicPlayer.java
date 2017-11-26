@@ -44,11 +44,18 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
-
+import io.realm.Realm;
+import io.realm.RealmResults;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
@@ -59,15 +66,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 import static net.iGap.G.context;
 
@@ -108,7 +106,7 @@ public class MusicPlayer extends Service {
     private static NotificationManager notificationManager;
     private static Notification notification;
     public static boolean isPause = false;
-    private static ArrayList<RealmRoomMessage> mediaList;
+    public static ArrayList<RealmRoomMessage> mediaList;
     private static int selectedMedia = 0;
     private static Timer mTimer, mTimeSecend;
     private static long time = 0;
@@ -335,6 +333,8 @@ public class MusicPlayer extends Service {
 
     public static void playAndPause() {
 
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
+
         if (mp != null) {
             if (mp.isPlaying()) {
                 pauseSound();
@@ -347,6 +347,8 @@ public class MusicPlayer extends Service {
     }
 
     public static void pauseSound() {
+
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
         if (!isVoice) {
             try {
@@ -389,9 +391,13 @@ public class MusicPlayer extends Service {
 
     public static void playSound() {
 
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
+
         if (mp == null) {
             return;
         }
+
+
 
         if (mp.isPlaying()) {
             return;
@@ -438,6 +444,7 @@ public class MusicPlayer extends Service {
     }
 
     public static void stopSound() {
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
         String zeroTime = "0:00";
 
@@ -492,6 +499,8 @@ public class MusicPlayer extends Service {
 
     public static void nextMusic() {
 
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
+
         if (!canDoAction) {
             return;
         }
@@ -541,6 +550,7 @@ public class MusicPlayer extends Service {
     }
 
     public static void previousMusic() {
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
         try {
             if (MusicPlayer.mp != null) {
@@ -680,6 +690,8 @@ public class MusicPlayer extends Service {
 
     public static void startPlayer(final String name, String musicPath, String roomName, long roomId, final boolean updateList, final String messageID) {
 
+        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
+
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -801,6 +813,15 @@ public class MusicPlayer extends Service {
         }
 
         isMusicPlyerEnable = true;
+
+        //G.handler.postDelayed(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //
+        //        Log.i("FFFFFFFFFFFF", "run: " + mediaList.size());
+        //        FragmentMediaPlayer.adapterListMusicPlayer.updateAdapter(mediaList);
+        //    }
+        //},2000);
     }
 
     private static void OnCompleteMusic() {
@@ -939,7 +960,7 @@ public class MusicPlayer extends Service {
         context.startService(intent);
     }
 
-    public static void fillMediaList(boolean setSelectedItem) {
+    public static ArrayList<RealmRoomMessage> fillMediaList(boolean setSelectedItem) {
 
         mediaList = new ArrayList<>();
 
@@ -967,6 +988,7 @@ public class MusicPlayer extends Service {
                         try {
                             if (roomMessage.getAttachment().getLocalFilePath() != null) {
                                 if (new File(roomMessage.getAttachment().getLocalFilePath()).exists()) {
+                                    Log.i("FFFFFFFFFFFF", "8888onB: " + realmRoomMessage.getAttachment().getLocalFilePath());
                                     mediaList.add(realmRoomMessage);
                                 }
                             }
@@ -991,6 +1013,9 @@ public class MusicPlayer extends Service {
                 }
             }
         }
+
+
+        return mediaList;
     }
 
     private static void updateProgress() {
