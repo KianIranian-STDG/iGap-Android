@@ -2797,6 +2797,8 @@ public class FragmentChat extends BaseFragment
                 }
             }
             deleteItem(parseLong(message.messageID), pos);
+        } else if (sendingStep == SendingStep.CORRUPTED_FILE) {
+            deleteItem(parseLong(message.messageID), pos);
         }
     }
 
