@@ -226,9 +226,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         startMap(view);
         //clickDrawMarkActive();
 
-        if (FragmentiGapMap.location != null) {
-            getDistanceLoop(0, false);
-        }
+        //if (FragmentiGapMap.location != null) {
+        //    getDistanceLoop(0, false);
+        //}
 
         page = 1;
         new RequestGeoGetComment().getComment(userId);
@@ -1135,6 +1135,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         this.location = location;
 
         if (firstEnter) {
+            getDistanceLoop(0, false);
             lastLatitude = location.getLatitude();
             lastLongitude = location.getLongitude();
             firstEnter = false;
