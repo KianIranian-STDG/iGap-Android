@@ -1303,7 +1303,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         //    }
         //}
 
-        if (HelperUploadFile.isUploading(mMessage.messageID)) {
+
+        if (attachment.getSize() == 0) {
+            messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
+        } else if (HelperUploadFile.isUploading(mMessage.messageID)) {
 
             if (mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                 if (G.userLogin) {
