@@ -54,19 +54,12 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import io.realm.Realm;
-import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -104,6 +97,7 @@ import net.iGap.request.RequestGeoGetNearbyDistance;
 import net.iGap.request.RequestGeoRegister;
 import net.iGap.request.RequestGeoUpdateComment;
 import net.iGap.request.RequestGeoUpdatePosition;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.config.IConfigurationProvider;
@@ -126,6 +120,17 @@ import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
+import io.realm.Realm;
+import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.URL_MAP;
@@ -481,7 +486,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
             @Override
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-
+                if (newState == SlidingUpPanelLayout.PanelState.DRAGGING && mAdapter != null && mAdapter.getItemCount() == 0) {
+                    getDistanceLoop(0, false);
+                }
             }
         });
 
@@ -658,43 +665,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
                             }
                         }).show();
-
-
-                        //final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.dialog_map_registration, true).build();
-                        //View v = dialog.getCustomView();
-                        //if (v == null) {
-                        //    return;
-                        //}
-                        //DialogAnimation.animationUp(dialog);
-                        //dialog.show();
-                        //btnMapChangeRegistration = (ToggleButton) v.findViewById(R.id.btnMapChangeRegistration);
-                        //TextView txtMapRegister = (TextView) v.findViewById(R.id.txtMapRegister);
-                        //TextView txtIconTurnOnOrOff = (TextView) v.findViewById(R.id.txtIconTurnOnOrOff);
-                        //
-                        //if (mapRegisterState) {
-                        //    txtMapRegister.setText(G.fragmentActivity.getResources().getString(R.string.turn_off_map));
-                        //    txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_gap_eye_off));
-                        //} else {
-                        //    txtMapRegister.setText(G.fragmentActivity.getResources().getString(R.string.turn_on_map));
-                        //    txtIconTurnOnOrOff.setText(getResources().getString(R.string.md_visibility));
-                        //}
-                        //btnMapChangeRegistration.setChecked(mapRegisterState);
-                        //
-                        //btnMapChangeRegistration.setOnClickListener(new View.OnClickListener() {
-                        //    @Override
-                        //    public void onClick(View v) {
-                        //
-                        //        if (mapRegisterState) {
-                        //            new RequestGeoRegister().register(false);
-                        //        } else {
-                        //            new RequestGeoRegister().register(true);
-                        //        }
-                        //        dialog.dismiss();
-                        //    }
-                        //});
                     }
                 });
-
             }
         });
 
@@ -1135,12 +1107,12 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         this.location = location;
 
         if (firstEnter) {
-            getDistanceLoop(0, false);
             lastLatitude = location.getLatitude();
             lastLongitude = location.getLongitude();
             firstEnter = false;
             currentLocation(location, true);
             getCoordinateLoop(0, false);
+            getDistanceLoop(0, false);
         }
         mapBounding(location);
         GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
