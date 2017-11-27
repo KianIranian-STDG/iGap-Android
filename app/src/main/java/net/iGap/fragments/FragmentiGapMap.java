@@ -1201,6 +1201,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 vgMessageGps.setVisibility(View.VISIBLE);
                 rippleMoreMap.setVisibility(View.VISIBLE);
                 GPSTracker.getGpsTrackerInstance().detectLocation();
+                iconSlide.setVisibility(View.VISIBLE);
+                slidingUpPanelLayout.setTouchEnabled(true);
+                mAdapter.updateData(getRealmMapUsers().where(RealmGeoNearbyDistance.class).findAll());
             } else {
                 visibleViewAttention(G.fragmentActivity.getResources().getString(R.string.Visible_Status_text), false);
             }
@@ -1221,6 +1224,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         } else {
             txtDescriptionMap.setVisibility(View.VISIBLE);
         }
+        slidingUpPanelLayout.setTouchEnabled(false);
+        iconSlide.setVisibility(View.GONE);
     }
 
     @Override
