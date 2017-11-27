@@ -2983,7 +2983,7 @@ public class FragmentChat extends BaseFragment
                 //final Realm realm = Realm.getDefaultInstance();
                 final RealmRoomMessage realmRoomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
-                if (realmRoomMessage != null && realmRoomMessage.isValid()) {
+                if (realmRoomMessage != null && realmRoomMessage.isValid() && !realmRoomMessage.isDeleted()) {
                     if (roomMessage.getAuthor().getUser() != null) {
                         if (roomMessage.getAuthor().getUser().getUserId() != G.userId) {
                             // I'm in the room
