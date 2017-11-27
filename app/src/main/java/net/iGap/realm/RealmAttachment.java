@@ -58,6 +58,20 @@ public class RealmAttachment extends RealmObject {
         realm.close();
     }
 
+    public static void updateFileSize(final long messageId, final long fileSize) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmAttachment attachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
+                if (attachment != null) {
+                    attachment.setSize(fileSize);
+                }
+            }
+        });
+        realm.close();
+    }
+
     public static RealmAttachment putOrUpdate(Realm realm, long messageId, RealmAttachment realmAttachment, ProtoGlobal.File attachment) {
         if (realmAttachment == null) {
             realmAttachment = realm.createObject(RealmAttachment.class, messageId);

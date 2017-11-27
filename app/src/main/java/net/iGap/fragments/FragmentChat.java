@@ -6368,6 +6368,7 @@ public class FragmentChat extends BaseFragment
                             structUploadVideo.filePath = structCompress.originalPath;
                             mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, structCompress.originalSize);
                         } else {
+                            RealmAttachment.updateFileSize(structUploadVideo.messageId, fileSize);
                             mAdapter.updateVideoInfo(structUploadVideo.messageId, duration, fileSize);
                         }
 
