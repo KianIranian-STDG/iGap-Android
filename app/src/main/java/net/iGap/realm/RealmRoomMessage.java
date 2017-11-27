@@ -56,6 +56,7 @@ import io.realm.Sort;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 
+import static net.iGap.fragments.FragmentChat.compressingFiles;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
@@ -633,6 +634,9 @@ public class RealmRoomMessage extends RealmObject {
                                     } else {
                                         if (G.userLogin) {
                                             if (ProtoGlobal.RoomMessageStatus.valueOf(roomMessage.getStatus()) == ProtoGlobal.RoomMessageStatus.SENDING) {
+                                                if (compressingFiles != null && compressingFiles.containsKey(roomMessage.messageId)) {
+                                                    return;
+                                                }
                                                 /**
                                                  * check timeout, because when forward message to room ,message state is sending
                                                  * and add forward message to Realm from here and finally client have duplicated message
