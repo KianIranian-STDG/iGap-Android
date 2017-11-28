@@ -63,8 +63,8 @@ public class FragmentNotificationViewModel extends BaseObservable {
 
     private long roomId;
 
-    public ObservableField<String> notificationState = new ObservableField<>();
-    public ObservableField<String> vibrate = new ObservableField<>();
+    public ObservableField<String> notificationState = new ObservableField<>(G.fragmentActivity.getResources().getString(array_Default));
+    public ObservableField<String> vibrate = new ObservableField<>(G.fragmentActivity.getResources().getString(array_Default));
     public ObservableField<String> sound = new ObservableField<>();
 
     public FragmentNotificationViewModel(FragmentNotificationBinding fragmentNotificationBinding, long roomId) {
@@ -82,7 +82,7 @@ public class FragmentNotificationViewModel extends BaseObservable {
     }
 
     //===============================================================================
-    //===================================Observers===================================
+    //=====================================Starts====================================
     //===============================================================================
 
     private void startNotificationState() {
@@ -98,14 +98,6 @@ public class FragmentNotificationViewModel extends BaseObservable {
                 break;
         }
     }
-
-    private void setNotificationState(String notificationStateString, int notificationType) {
-        notificationState.set(notificationStateString);
-
-        RealmNotificationSetting.popupNotification(roomId, roomType, notificationType);
-        realmNotification = notificationType;
-    }
-
 
     private void startVibrate() {
         switch (realmVibrate) {
@@ -127,6 +119,30 @@ public class FragmentNotificationViewModel extends BaseObservable {
         }
     }
 
+    private void startSound() {
+        if (realmIdSound == 0 || realmIdSound == -1) {
+            sound.set(G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
+        } else {
+            sound.set(realmSound);
+        }
+    }
+
+    private void startLedColor() {
+        GradientDrawable bgShape = (GradientDrawable) fragmentNotificationBinding.ntgImgLedColorMessage.getBackground();
+        bgShape.setColor(realmLedColor);
+    }
+
+    //===============================================================================
+    //================================Getters/Setters================================
+    //===============================================================================
+
+    private void setNotificationState(String notificationStateString, int notificationType) {
+        notificationState.set(notificationStateString);
+
+        RealmNotificationSetting.popupNotification(roomId, roomType, notificationType);
+        realmNotification = notificationType;
+    }
+
     private void setVibrate(String vibrateString, int vibrateLevel) {
         vibrate.set(vibrateString);
 
@@ -136,23 +152,8 @@ public class FragmentNotificationViewModel extends BaseObservable {
         }
     }
 
-
-    private void startSound() {
-        if (realmIdSound == 0 || realmIdSound == -1) {
-            sound.set(G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
-        } else {
-            sound.set(realmSound);
-        }
-    }
-
     private void setSound(String soundString) {
         sound.set(soundString);
-    }
-
-
-    private void startLedColor() {
-        GradientDrawable bgShape = (GradientDrawable) fragmentNotificationBinding.ntgImgLedColorMessage.getBackground();
-        bgShape.setColor(realmLedColor);
     }
 
     //===============================================================================
