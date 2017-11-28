@@ -23,14 +23,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-import java.util.ArrayList;
-import java.util.List;
+import com.mikepenz.fastadapter.listeners.OnClickListener;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.AdapterActiveSessions;
@@ -47,6 +48,9 @@ import net.iGap.proto.ProtoUserSessionGetActiveList;
 import net.iGap.request.RequestUserSessionGetActiveList;
 import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.request.RequestUserSessionTerminate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -190,7 +194,7 @@ public class FragmentActiveSessions extends BaseFragment {
         };
 
         fastItemAdapter.withSelectable(true);
-        fastItemAdapter.withOnClickListener(new FastAdapter.OnClickListener() {
+        fastItemAdapter.withOnClickListener(new OnClickListener() {
             @Override
             public boolean onClick(final View v, IAdapter adapter, final IItem item, final int position) {
 

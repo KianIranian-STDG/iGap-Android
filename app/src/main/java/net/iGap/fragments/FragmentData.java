@@ -1,4 +1,4 @@
-package net.iGap;
+package net.iGap.fragments;
 
 
 import android.content.SharedPreferences;
@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.FragmentSetting;
+import net.iGap.G;
+import net.iGap.R;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
 

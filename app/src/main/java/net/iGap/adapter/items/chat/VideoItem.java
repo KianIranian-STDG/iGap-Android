@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.listeners.OnClickListener;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -76,7 +76,7 @@ public class VideoItem extends AbstractMessage<VideoItem, VideoItem.ViewHolder> 
     }
 
     @Override
-    public FastAdapter.OnClickListener<VideoItem> getOnItemClickListener() {
+    public OnClickListener<VideoItem> getOnItemClickListener() {
         return super.getOnItemClickListener();
     }
 

@@ -1631,7 +1631,7 @@
 
   <string name="st_compress">تضغيط الفيديو </string>
 
-  <string name="compressing"> التضغيط</string>
+  <string name="compressing">التضغيط </string>
 
   <string name="selected_color_can_not_set_on_yout_device">لا يمكن إظهار اللون المختار في جهازك </string>
 
@@ -2080,7 +2080,7 @@
   <string name="miladi">الميلادية</string>
   <string name="shamsi">هجري الشامسي</string>
   <string name="ghamari">القمري الهجري</string>
-  <string name="Uploading">تحميل...</string>
+  <string name="Uploading">تحميل </string>
 
 
   <string name="moharam">محرم</string>

@@ -46,7 +46,6 @@ import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
 
 import net.iGap.Config;
-import net.iGap.FragmentData;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;

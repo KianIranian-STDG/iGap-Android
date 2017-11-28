@@ -28,13 +28,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
-import io.realm.Realm;
-import java.util.ArrayList;
-import java.util.List;
+import com.mikepenz.fastadapter.listeners.OnClickListener;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.SearchItamIGap;
@@ -49,6 +49,11 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientSearchUsername;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
 
 public class FragmentIgapSearch extends BaseFragment {
 
@@ -209,10 +214,10 @@ public class FragmentIgapSearch extends BaseFragment {
 
     private void initRecycleView() {
 
-        fastAdapter = new FastAdapter();
         itemAdapter = new ItemAdapter();
+        fastAdapter = FastAdapter.with(itemAdapter);
 
-        fastAdapter.withOnClickListener(new FastAdapter.OnClickListener<IItem>() {
+        fastAdapter.withOnClickListener(new OnClickListener<IItem>() {
             @Override public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
 
                 ProtoClientSearchUsername.ClientSearchUsernameResponse.Result item = ((SearchItamIGap) currentItem).getItem();
@@ -239,7 +244,7 @@ public class FragmentIgapSearch extends BaseFragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(itemAdapter.wrap(fastAdapter));
+        recyclerView.setAdapter(fastAdapter);
 
         G.onClientSearchUserName = new IClientSearchUserName() {
             @Override public void OnGetList(final ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder builderList) {

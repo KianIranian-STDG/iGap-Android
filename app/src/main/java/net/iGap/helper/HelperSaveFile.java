@@ -136,7 +136,9 @@ public class HelperSaveFile {
                 }
 
                 if (shouldCopy) {
-                    AndroidUtils.copyFile(src, new File(destinationPath));
+                    File file = new File(destinationPath);
+                    AndroidUtils.copyFile(src, file);
+                    MediaScannerConnection.scanFile(G.context, new String[]{file.toString()}, null, null);
                     Toast.makeText(G.currentActivity, successMessage, Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
