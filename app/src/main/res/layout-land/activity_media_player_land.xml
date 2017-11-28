@@ -8,7 +8,7 @@
     android:gravity="bottom"
     sothree:umanoDragView="@+id/dragView"
     sothree:umanoOverlay="true"
-    sothree:umanoPanelHeight="@dimen/dp110"
+    sothree:umanoPanelHeight="@dimen/dp100"
     sothree:umanoParallaxOffset="@dimen/dp10"
     sothree:umanoScrollableView="@+id/rcvListMusicPlayer"
     sothree:umanoShadowHeight="4dp"
