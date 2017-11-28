@@ -12,8 +12,6 @@ package net.iGap.fragments;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
@@ -31,7 +29,11 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.mikepenz.fastadapter.IAdapter;
+import com.mikepenz.fastadapter.IItem;
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.items.AbstractItem;
+import com.mikepenz.fastadapter.listeners.OnClickListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -68,7 +70,7 @@ public class FragmentMediaPlayer extends BaseFragment {
     private TextView btnPlay;
     private RecyclerView rcvListMusicPlayer;
     public static AdapterListMusicPlayer adapterListMusicPlayer;
-
+    public static FastItemAdapter fastItemAdapter;
 
     private RippleVisualizerView rippleVisualizerView;
 
@@ -327,34 +329,31 @@ public class FragmentMediaPlayer extends BaseFragment {
 
 
         rcvListMusicPlayer = (RecyclerView) view.findViewById(R.id.rcvListMusicPlayer);
-        adapterListMusicPlayer = new AdapterListMusicPlayer(MusicPlayer.mediaList, new AdapterListMusicPlayer.OnClickAdapterListMusic() {
+        fastItemAdapter = new FastItemAdapter();
+
+        for (RealmRoomMessage r : MusicPlayer.mediaList) {
+            fastItemAdapter.add(new AdapterListMusicPlayer().setItem(r).withIdentifier(r.getMessageId()));
+        }
+        rcvListMusicPlayer.setAdapter(fastItemAdapter);
+        rcvListMusicPlayer.setLayoutManager(new LinearLayoutManager(_mActivity));
+        rcvListMusicPlayer.setHasFixedSize(true);
+
+        fastItemAdapter.withSelectable(true);
+        fastItemAdapter.withOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(String name) {
+            public boolean onClick(View v, IAdapter adapter, IItem item, int position) {
+
+                if (MusicPlayer.musicName.equals(MusicPlayer.mediaList.get(position).getAttachment().getName())) {
+                    MusicPlayer.playAndPause();
+                } else {
+                    MusicPlayer.startPlayer(MusicPlayer.mediaList.get(position).getAttachment().getName(), MusicPlayer.mediaList.get(position).getAttachment().getLocalFilePath(), FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, false, MusicPlayer.mediaList.get(position).getMessageId() + "");
+                }
+
+                return false;
             }
         });
 
-        rcvListMusicPlayer.setAdapter(adapterListMusicPlayer);
-        rcvListMusicPlayer.setLayoutManager(new LinearLayoutManager(_mActivity));
-        //adapterListMusicPlayer.updateAdapter(MusicPlayer.mediaList);
-
     }
-
-    //private void setRenderer() {
-    //    switch (currentRenderMode) {
-    //        case LINE:
-    //            renderDemoView.setCurrentRenderer(new LineRenderer(PaintUtil.getLinePaint(Color.YELLOW)));
-    //            break;
-    //        case BAR_GRAPH:
-    //            renderDemoView.setCurrentRenderer(new BarRenderer(16, PaintUtil.getBarGraphPaint(Color.WHITE)));
-    //            break;
-    //        case COLORFUL_BAR_GRAPH:
-    //            renderDemoView.setCurrentRenderer(new ColorfulBarRenderer(8, PaintUtil.getBarGraphPaint(Color.BLUE)
-    //                , Color.parseColor("#FF0033")
-    //                , Color.parseColor("#ffebef"))
-    //            );
-    //            break;
-    //    }
-    //}
 
     private void initVisualizer(final View view) {
 
@@ -505,64 +504,44 @@ public class FragmentMediaPlayer extends BaseFragment {
         MusicPlayer.onComplete = null;
     }
 
-    public static class AdapterListMusicPlayer extends RecyclerView.Adapter<AdapterListMusicPlayer.ViewHolder> {
+    public class AdapterListMusicPlayer extends AbstractItem<AdapterListMusicPlayer, AdapterListMusicPlayer.ViewHolder> {
 
-        private List<RealmRoomMessage> realmRoomMessagesList;
-        private OnClickAdapterListMusic adapterOnclick;
-        private DisplayImageOptions options;
+        private RealmRoomMessage realmRoomMessagesList;
 
-        public AdapterListMusicPlayer(List<RealmRoomMessage> realmRoomMessages, OnClickAdapterListMusic adapterOnclick) {
+        public AdapterListMusicPlayer() {
+
+        }
+
+        public AdapterListMusicPlayer setItem(RealmRoomMessage realmRoomMessages) {
             realmRoomMessagesList = realmRoomMessages;
-            this.adapterOnclick = adapterOnclick;
+            return this;
         }
 
+        //The unique ID for this type of item
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_list_music_player, parent, false);
-            return new ViewHolder(view);
+        public int getType() {
+            return R.id.rootListMusicPlayer;
         }
 
+        //The layout to be used for this type of item
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public int getLayoutRes() {
+            return R.layout.adapter_list_music_player;
+        }
 
-            RealmRoomMessage realmRoomMessage = getItem(position);
+        //The logic to bind your data to the view
 
+        @Override
+        public void bindView(ViewHolder holder, List payloads) {
+            super.bindView(holder, payloads);
 
-            if (MusicPlayer.mp != null && MusicPlayer.musicName.equals(realmRoomMessage.getAttachment().getName())) {
-
-                holder.iconPlay.setVisibility(View.VISIBLE);
-                if (MusicPlayer.mp.isPlaying()) {
-                    holder.iconPlay.setText(R.string.md_round_pause_button);
-                } else {
-                    holder.iconPlay.setText(R.string.md_play_rounded_button);
-                }
-
+            if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying() && Long.parseLong(MusicPlayer.messageId) == (realmRoomMessagesList.getMessageId())) {
+                holder.iconPlay.setText(R.string.md_round_pause_button);
             } else {
-                holder.iconPlay.setVisibility(View.GONE);
+                holder.iconPlay.setText(R.string.md_play_rounded_button);
             }
-
-
-            holder.txtNameMusic.setText(realmRoomMessage.getAttachment().getName());
+            holder.txtNameMusic.setText(realmRoomMessagesList.getAttachment().getName());
             MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
-
-            Uri uri = null;
-
-            if (realmRoomMessage.getAttachment().getLocalFilePath() != null) {
-                uri = (Uri) Uri.fromFile(new File(realmRoomMessage.getAttachment().getLocalFilePath()));
-            }
-
-            if (uri != null) {
-                mediaMetadataRetriever.setDataSource(G.context, uri);
-                byte[] data = mediaMetadataRetriever.getEmbeddedPicture();
-                if (data != null) {
-                    Bitmap mediaThumpnail = BitmapFactory.decodeByteArray(data, 0, data.length);
-                    holder.imgMusicItem.setImageBitmap(mediaThumpnail);
-                } else {
-
-                    holder.imgMusicItem.setImageResource(R.mipmap.music_icon_green);
-                }
-            }
 
             String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
             if (artist != null) {
@@ -570,52 +549,40 @@ public class FragmentMediaPlayer extends BaseFragment {
             } else {
                 holder.txtMusicplace.setText(G.context.getString(R.string.unknown_artist));
             }
+
         }
 
-        @Override
-        public int getItemCount() {
-            return realmRoomMessagesList.size();
-        }
-
-
-        private RealmRoomMessage getItem(int po) {
-            return RealmRoomMessage.getFinalMessage(realmRoomMessagesList.get(po));
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        //The viewHolder used for this item. This viewHolder is always reused by the RecyclerView so scrolling is blazing fast
+        protected class ViewHolder extends RecyclerView.ViewHolder {
 
             private TextView txtNameMusic, txtMusicplace, iconPlay;
-            private ImageView imgMusicItem;
 
-            public ViewHolder(View itemView) {
-                super(itemView);
-
+            public ViewHolder(View view) {
+                super(view);
                 txtNameMusic = itemView.findViewById(R.id.txtListMusicPlayer);
                 txtMusicplace = itemView.findViewById(R.id.ml_txt_music_place);
-                imgMusicItem = itemView.findViewById(R.id.imgListMusicPlayer);
                 iconPlay = itemView.findViewById(R.id.ml_btn_play_music);
-                itemView.setOnClickListener(this);
 
                 iconPlay.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MusicPlayer.playAndPause();
+                        if (MusicPlayer.musicName.equals(MusicPlayer.mediaList.get(getAdapterPosition()).getAttachment().getName())) {
+                            MusicPlayer.playAndPause();
+                        } else {
+                            MusicPlayer.startPlayer(MusicPlayer.mediaList.get(getAdapterPosition()).getAttachment().getName(), MusicPlayer.mediaList.get(getAdapterPosition()).getAttachment().getLocalFilePath(), FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, false, MusicPlayer.mediaList.get(getAdapterPosition()).getMessageId() + "");
+                        }
+
                     }
                 });
             }
-
-            @Override
-            public void onClick(View v) {
-                RealmRoomMessage realmRoomMessage = realmRoomMessagesList.get(getAdapterPosition());
-                adapterOnclick.onClick(realmRoomMessage.getAttachment().getName());
-                MusicPlayer.startPlayer(realmRoomMessage.getAttachment().getName(), realmRoomMessage.getAttachment().getLocalFilePath(), FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, false, realmRoomMessage.getMessageId() + "");
-            }
         }
 
-        public interface OnClickAdapterListMusic {
-            void onClick(String name);
-
+        @Override
+        public ViewHolder getViewHolder(View v) {
+            return new ViewHolder(v);
         }
+
     }
+
 
 }
