@@ -32,7 +32,6 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -199,7 +198,6 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i("GGGGGGGGGGG", "1 onCreateView: ");
         return inflater.inflate(R.layout.activity_register, container, false);
     }
 
@@ -444,7 +442,6 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             public void afterTextChanged(Editable editable) {
 
 
-
                 if (editable.toString().equals("0")) {
                     Toast.makeText(G.fragmentActivity, G.fragmentActivity.getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT).show();
                     edtPhoneNumber.setText("");
@@ -661,7 +658,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
                     return;
                 }
 
-                if (edtPhoneNumber.getText().length() > 0 && !regex.equals("") && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
+                if (edtPhoneNumber.getText().length() > 0 && (regex.equals("") || (!regex.equals("") && edtPhoneNumber.getText().toString().replace("-", "").matches(regex)))) {
 
                     phoneNumber = edtPhoneNumber.getText().toString();
 
@@ -711,7 +708,7 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
 
                 } else {
 
-                    if (regex.equals("") || edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
+                    if (edtPhoneNumber.getText().toString().replace("-", "").matches(regex)) {
                         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.Toast_Minimum_Characters).positiveText(R.string.B_ok).show();
                     } else {
                         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.Toast_Enter_Phone_Number).positiveText(R.string.B_ok).show();
