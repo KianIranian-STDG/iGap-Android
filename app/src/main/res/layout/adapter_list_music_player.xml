@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:id="@+id/rootListMusicPlayer"
 
     >
 
@@ -13,10 +14,17 @@
       android:padding="@dimen/dp10"
       >
 
-    <ImageView
-        android:id="@+id/imgListMusicPlayer"
-        android:layout_width="@dimen/dp52"
-        android:layout_height="@dimen/dp52"
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/ml_btn_play_music"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:gravity="center"
+        android:text="@string/md_play_rounded_button"
+        android:textAppearance="@style/TextIconAppearance.all"
+        android:textColor="@color/green"
+        android:textSize="@dimen/dp36"
+        android:visibility="visible"
         />
 
     <LinearLayout
@@ -52,20 +60,6 @@
           />
 
     </LinearLayout>
-
-    <net.iGap.module.MaterialDesignTextView
-        android:id="@+id/ml_btn_play_music"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="@null"
-        android:gravity="center"
-        android:text="@string/md_play_rounded_button"
-        android:textAppearance="@style/TextIconAppearance.all"
-        android:textColor="@color/green"
-        android:textSize="@dimen/dp36"
-        android:visibility="visible"
-        />
-
 
   </LinearLayout>
   <View

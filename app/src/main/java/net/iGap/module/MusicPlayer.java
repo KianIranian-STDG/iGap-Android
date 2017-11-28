@@ -333,8 +333,6 @@ public class MusicPlayer extends Service {
 
     public static void playAndPause() {
 
-        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
-
         if (mp != null) {
             if (mp.isPlaying()) {
                 pauseSound();
@@ -348,7 +346,6 @@ public class MusicPlayer extends Service {
 
     public static void pauseSound() {
 
-        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
         if (!isVoice) {
             try {
@@ -385,13 +382,18 @@ public class MusicPlayer extends Service {
         } catch (Exception e) {
             HelperLog.setErrorLog("music player   pauseSound   bbb    " + e.toString());
         }
+        updateFastAdapter(MusicPlayer.messageId);
+    }
+
+    private static void updateFastAdapter(String messageId) {
+
+        if (FragmentMediaPlayer.fastItemAdapter != null) FragmentMediaPlayer.fastItemAdapter.notifyAdapterItemChanged(FragmentMediaPlayer.fastItemAdapter.getPosition(Long.parseLong(messageId)));
+
     }
 
     //**************************************************************************
 
     public static void playSound() {
-
-        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
         if (mp == null) {
             return;
@@ -441,10 +443,10 @@ public class MusicPlayer extends Service {
         } catch (Exception e) {
             HelperLog.setErrorLog("music player   playSound  bbb " + e.toString());
         }
+        updateFastAdapter(MusicPlayer.messageId);
     }
 
     public static void stopSound() {
-        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
         String zeroTime = "0:00";
 
@@ -494,12 +496,12 @@ public class MusicPlayer extends Service {
 
         if (mp != null) {
             mp.stop();
+            updateFastAdapter(MusicPlayer.messageId);
         }
     }
 
     public static void nextMusic() {
 
-        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
         if (!canDoAction) {
             return;
@@ -508,6 +510,8 @@ public class MusicPlayer extends Service {
 
         try {
             String beforeMessageId = MusicPlayer.messageId;
+
+            selectedMedia = FragmentMediaPlayer.fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId));
 
             selectedMedia++;
             if (selectedMedia < mediaList.size()) {
@@ -550,7 +554,7 @@ public class MusicPlayer extends Service {
     }
 
     public static void previousMusic() {
-        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
+        //if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
         try {
             if (MusicPlayer.mp != null) {
@@ -576,6 +580,9 @@ public class MusicPlayer extends Service {
         canDoAction = false;
 
         try {
+
+            selectedMedia = FragmentMediaPlayer.fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId));
+
             selectedMedia--;
 
             String beforeMessageId = MusicPlayer.messageId;
@@ -690,8 +697,6 @@ public class MusicPlayer extends Service {
 
     public static void startPlayer(final String name, String musicPath, String roomName, long roomId, final boolean updateList, final String messageID) {
 
-        if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
-
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -723,18 +728,6 @@ public class MusicPlayer extends Service {
             closeLayoutMediaPlayer();
         }
 
-        MusicPlayer.messageId = messageID;
-        MusicPlayer.musicPath = musicPath;
-        MusicPlayer.roomName = roomName;
-        mediaThumpnail = null;
-        MusicPlayer.roomId = roomId;
-
-        if (layoutTripMusic != null) {
-            layoutTripMusic.setVisibility(View.VISIBLE);
-        }
-
-        musicName = getMusicName(Long.parseLong(messageID), name);
-
         try {
 
             if (mp != null) {
@@ -744,6 +737,18 @@ public class MusicPlayer extends Service {
                 mp.reset();
                 mp.release();
             }
+            updateFastAdapter(MusicPlayer.messageId);
+            MusicPlayer.messageId = messageID;
+            MusicPlayer.musicPath = musicPath;
+            MusicPlayer.roomName = roomName;
+            mediaThumpnail = null;
+            MusicPlayer.roomId = roomId;
+
+            if (layoutTripMusic != null) {
+                layoutTripMusic.setVisibility(View.VISIBLE);
+            }
+
+            musicName = getMusicName(Long.parseLong(messageID), name);
 
             mp = new MediaPlayer();
         } catch (Exception e) {
@@ -763,6 +768,7 @@ public class MusicPlayer extends Service {
 
             mp.start();
 
+            updateFastAdapter(MusicPlayer.messageId);
             musicTime = milliSecondsToTimer((long) mp.getDuration());
             txt_music_time.setText(musicTime);
             btnPlayMusic.setText(context.getString(R.string.md_pause_button));
@@ -952,8 +958,8 @@ public class MusicPlayer extends Service {
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
         notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName)
-                //  .setContentText(place)
-                .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
+            //  .setContentText(place)
+            .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
 
         Intent intent = new Intent(context, MusicPlayer.class);
         intent.putExtra("ACTION", STARTFOREGROUND_ACTION);
@@ -989,7 +995,7 @@ public class MusicPlayer extends Service {
                             if (roomMessage.getAttachment().getLocalFilePath() != null) {
                                 if (new File(roomMessage.getAttachment().getLocalFilePath()).exists()) {
                                     Log.i("FFFFFFFFFFFF", "8888onB: " + realmRoomMessage.getAttachment().getLocalFilePath());
-                                    mediaList.add(realmRoomMessage);
+                                    mediaList.add(0, realmRoomMessage);
                                 }
                             }
                         } catch (Exception e) {
@@ -1204,12 +1210,7 @@ public class MusicPlayer extends Service {
 
         boolean result = false;
 
-        RealmResults<RealmRoomMessage> roomMessages = getRealm()
-                .where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                .equalTo(RealmRoomMessageFields.DELETED, false)
-                .greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId))
-                .findAllSorted(RealmRoomMessageFields.CREATE_TIME);
+        RealmResults<RealmRoomMessage> roomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage rm : roomMessages) {
