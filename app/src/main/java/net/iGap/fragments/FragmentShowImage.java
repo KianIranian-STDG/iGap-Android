@@ -32,13 +32,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -61,6 +57,14 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static net.iGap.module.AndroidUtils.suitablePath;
 
@@ -437,19 +441,22 @@ public class FragmentShowImage extends BaseFragment {
      * share Image and video
      */
     private void saveToGallery() {
-
         RealmRoomMessage rm = mFList.get(viewPager.getCurrentItem());
         if (rm != null) {
             String path = getFilePath(viewPager.getCurrentItem());
+            ProtoGlobal.RoomMessageType messageType;
+            if (rm.getForwardMessage() != null) {
+                messageType = rm.getForwardMessage().getMessageType();
+            } else {
+                messageType = rm.getMessageType();
+            }
             File file = new File(path);
             if (file.exists()) {
-                if (rm.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
-                    //HelperSaveFile.saveVideoToGallary(path, true);
+                if (messageType == ProtoGlobal.RoomMessageType.VIDEO) {
                     HelperSaveFile.saveFileToDownLoadFolder(path, "VIDEO_" + System.currentTimeMillis() + ".mp4", HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
-                } else {
+                } else if (messageType == ProtoGlobal.RoomMessageType.IMAGE) {
                     HelperSaveFile.savePicToGallery(path, true);
                 }
-
             }
         }
     }
