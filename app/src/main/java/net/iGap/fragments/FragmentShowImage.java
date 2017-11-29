@@ -32,9 +32,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
-
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -47,6 +51,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.TouchImageView;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.transition.fragment.ExitFragmentTransition;
@@ -56,14 +61,6 @@ import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
 
 import static net.iGap.module.AndroidUtils.suitablePath;
 
@@ -840,6 +837,7 @@ public class FragmentShowImage extends BaseFragment {
                     getRealSize(mp, mTextureView);
                     imgPlay.setVisibility(View.GONE);
                     mp.start();
+                    MusicPlayer.pauseSound();
                     mTextureView.setVisibility(View.VISIBLE);
                     touchImageView.animate().setDuration(700).alpha(0F).start();
 
@@ -886,6 +884,7 @@ public class FragmentShowImage extends BaseFragment {
         @Override
         public void start() {
             if (mMediaPlayer != null) mMediaPlayer.start();
+            MusicPlayer.pauseSound();
         }
 
         @Override

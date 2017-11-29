@@ -44,11 +44,18 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
-
+import io.realm.Realm;
+import io.realm.RealmResults;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
@@ -59,15 +66,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 import static net.iGap.G.context;
 
@@ -108,7 +106,7 @@ public class MusicPlayer extends Service {
     private static NotificationManager notificationManager;
     private static Notification notification;
     public static boolean isPause = false;
-    private static ArrayList<RealmRoomMessage> mediaList;
+    public static ArrayList<RealmRoomMessage> mediaList;
     private static int selectedMedia = 0;
     private static Timer mTimer, mTimeSecend;
     private static long time = 0;
@@ -348,6 +346,7 @@ public class MusicPlayer extends Service {
 
     public static void pauseSound() {
 
+
         if (!isVoice) {
             try {
                 remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
@@ -383,6 +382,13 @@ public class MusicPlayer extends Service {
         } catch (Exception e) {
             HelperLog.setErrorLog("music player   pauseSound   bbb    " + e.toString());
         }
+        updateFastAdapter(MusicPlayer.messageId);
+    }
+
+    private static void updateFastAdapter(String messageId) {
+
+        if (FragmentMediaPlayer.fastItemAdapter != null) FragmentMediaPlayer.fastItemAdapter.notifyAdapterItemChanged(FragmentMediaPlayer.fastItemAdapter.getPosition(Long.parseLong(messageId)));
+
     }
 
     //**************************************************************************
@@ -392,6 +398,8 @@ public class MusicPlayer extends Service {
         if (mp == null) {
             return;
         }
+
+
 
         if (mp.isPlaying()) {
             return;
@@ -435,6 +443,7 @@ public class MusicPlayer extends Service {
         } catch (Exception e) {
             HelperLog.setErrorLog("music player   playSound  bbb " + e.toString());
         }
+        updateFastAdapter(MusicPlayer.messageId);
     }
 
     public static void stopSound() {
@@ -487,10 +496,12 @@ public class MusicPlayer extends Service {
 
         if (mp != null) {
             mp.stop();
+            updateFastAdapter(MusicPlayer.messageId);
         }
     }
 
     public static void nextMusic() {
+
 
         if (!canDoAction) {
             return;
@@ -499,6 +510,8 @@ public class MusicPlayer extends Service {
 
         try {
             String beforeMessageId = MusicPlayer.messageId;
+
+            selectedMedia = FragmentMediaPlayer.fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId));
 
             selectedMedia++;
             if (selectedMedia < mediaList.size()) {
@@ -541,6 +554,7 @@ public class MusicPlayer extends Service {
     }
 
     public static void previousMusic() {
+        //if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
         try {
             if (MusicPlayer.mp != null) {
@@ -566,6 +580,9 @@ public class MusicPlayer extends Service {
         canDoAction = false;
 
         try {
+
+            selectedMedia = FragmentMediaPlayer.fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId));
+
             selectedMedia--;
 
             String beforeMessageId = MusicPlayer.messageId;
@@ -711,18 +728,6 @@ public class MusicPlayer extends Service {
             closeLayoutMediaPlayer();
         }
 
-        MusicPlayer.messageId = messageID;
-        MusicPlayer.musicPath = musicPath;
-        MusicPlayer.roomName = roomName;
-        mediaThumpnail = null;
-        MusicPlayer.roomId = roomId;
-
-        if (layoutTripMusic != null) {
-            layoutTripMusic.setVisibility(View.VISIBLE);
-        }
-
-        musicName = getMusicName(Long.parseLong(messageID), name);
-
         try {
 
             if (mp != null) {
@@ -732,6 +737,18 @@ public class MusicPlayer extends Service {
                 mp.reset();
                 mp.release();
             }
+            updateFastAdapter(MusicPlayer.messageId);
+            MusicPlayer.messageId = messageID;
+            MusicPlayer.musicPath = musicPath;
+            MusicPlayer.roomName = roomName;
+            mediaThumpnail = null;
+            MusicPlayer.roomId = roomId;
+
+            if (layoutTripMusic != null) {
+                layoutTripMusic.setVisibility(View.VISIBLE);
+            }
+
+            musicName = getMusicName(Long.parseLong(messageID), name);
 
             mp = new MediaPlayer();
         } catch (Exception e) {
@@ -751,6 +768,7 @@ public class MusicPlayer extends Service {
 
             mp.start();
 
+            updateFastAdapter(MusicPlayer.messageId);
             musicTime = milliSecondsToTimer((long) mp.getDuration());
             txt_music_time.setText(musicTime);
             btnPlayMusic.setText(context.getString(R.string.md_pause_button));
@@ -801,6 +819,15 @@ public class MusicPlayer extends Service {
         }
 
         isMusicPlyerEnable = true;
+
+        //G.handler.postDelayed(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //
+        //        Log.i("FFFFFFFFFFFF", "run: " + mediaList.size());
+        //        FragmentMediaPlayer.adapterListMusicPlayer.updateAdapter(mediaList);
+        //    }
+        //},2000);
     }
 
     private static void OnCompleteMusic() {
@@ -931,15 +958,15 @@ public class MusicPlayer extends Service {
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
         notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName)
-                //  .setContentText(place)
-                .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
+            //  .setContentText(place)
+            .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
 
         Intent intent = new Intent(context, MusicPlayer.class);
         intent.putExtra("ACTION", STARTFOREGROUND_ACTION);
         context.startService(intent);
     }
 
-    public static void fillMediaList(boolean setSelectedItem) {
+    public static ArrayList<RealmRoomMessage> fillMediaList(boolean setSelectedItem) {
 
         mediaList = new ArrayList<>();
 
@@ -967,7 +994,8 @@ public class MusicPlayer extends Service {
                         try {
                             if (roomMessage.getAttachment().getLocalFilePath() != null) {
                                 if (new File(roomMessage.getAttachment().getLocalFilePath()).exists()) {
-                                    mediaList.add(realmRoomMessage);
+                                    Log.i("FFFFFFFFFFFF", "8888onB: " + realmRoomMessage.getAttachment().getLocalFilePath());
+                                    mediaList.add(0, realmRoomMessage);
                                 }
                             }
                         } catch (Exception e) {
@@ -991,6 +1019,9 @@ public class MusicPlayer extends Service {
                 }
             }
         }
+
+
+        return mediaList;
     }
 
     private static void updateProgress() {
@@ -1179,12 +1210,7 @@ public class MusicPlayer extends Service {
 
         boolean result = false;
 
-        RealmResults<RealmRoomMessage> roomMessages = getRealm()
-                .where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId)
-                .equalTo(RealmRoomMessageFields.DELETED, false)
-                .greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId))
-                .findAllSorted(RealmRoomMessageFields.CREATE_TIME);
+        RealmResults<RealmRoomMessage> roomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).equalTo(RealmRoomMessageFields.DELETED, false).greaterThan(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageId)).findAllSorted(RealmRoomMessageFields.CREATE_TIME);
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage rm : roomMessages) {
