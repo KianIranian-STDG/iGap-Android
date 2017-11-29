@@ -77,7 +77,12 @@ public class FragmentChatBackground extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        new File(DIR_CHAT_BACKGROUND).mkdirs();
+        try {
+            new File(DIR_CHAT_BACKGROUND).mkdirs();
+            new File(DIR_CHAT_BACKGROUND + "/.nomedia").createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         fragment = this;
         view.findViewById(R.id.stcb_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
