@@ -23,11 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import io.realm.Realm;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterChatBackground;
@@ -42,8 +38,16 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmWallpaper;
 import net.iGap.request.RequestInfoWallpaper;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
+
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.G.DIR_CHAT_BACKGROUND;
 
 public class FragmentChatBackground extends BaseFragment {
 
@@ -72,6 +76,9 @@ public class FragmentChatBackground extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        new File(DIR_CHAT_BACKGROUND).mkdirs();
+
         fragment = this;
         view.findViewById(R.id.stcb_backgroundToolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
