@@ -940,15 +940,18 @@ public class FragmentRegister extends BaseFragment implements OnSecurityCheckPas
             @Override
             public void onClick(View v) {
 
-                txtTimer.setVisibility(View.INVISIBLE);
+                try {
+                    txtTimer.setVisibility(View.INVISIBLE);
 
-                if (!edtEnterCodeVerify.getText().toString().equals("")) {
-                    verifyCode = edtEnterCodeVerify.getText().toString();
-                    userVerify(userName, verifyCode);
-                    dialog.dismiss();
-                } else {
-
-                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Enter_Code).content(R.string.Toast_Enter_Code).positiveText(R.string.B_ok).show();
+                    if (!edtEnterCodeVerify.getText().toString().equals("")) {
+                        verifyCode = edtEnterCodeVerify.getText().toString();
+                        userVerify(userName, verifyCode);
+                        dialog.dismiss();
+                    } else {
+                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Enter_Code).content(R.string.Toast_Enter_Code).positiveText(R.string.B_ok).show();
+                    }
+                } catch (WindowManager.BadTokenException e) {
+                    e.printStackTrace();
                 }
             }
         });
