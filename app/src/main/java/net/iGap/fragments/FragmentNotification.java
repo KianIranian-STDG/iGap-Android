@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationBinding;
+import net.iGap.viewmodel.FragmentNotificationViewModel;
 
 /**
  * A simple {@link Fragment} subclass.

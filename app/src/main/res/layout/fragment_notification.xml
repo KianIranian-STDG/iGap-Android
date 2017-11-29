@@ -6,7 +6,7 @@
 
     <variable
       name="fragmentNotificationViewModel"
-      type="net.iGap.fragments.FragmentNotificationViewModel" />
+      type="net.iGap.viewmodel.FragmentNotificationViewModel" />
   </data>
 
   <LinearLayout

@@ -8,10 +8,9 @@
 * All rights reserved.
 */
 
-package net.iGap.fragments;
+package net.iGap.viewmodel;
 
 import android.content.Context;
-import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
 import android.graphics.drawable.GradientDrawable;
 import android.media.AudioManager;
@@ -44,7 +43,7 @@ import static net.iGap.R.string.DISCARD;
 import static net.iGap.R.string.array_Default;
 import static net.iGap.R.string.array_Disable;
 
-public class FragmentNotificationViewModel extends BaseObservable {
+public class FragmentNotificationViewModel {
 
     private Realm realm;
     private RealmNotificationSetting realmNotificationSetting;
@@ -102,19 +101,19 @@ public class FragmentNotificationViewModel extends BaseObservable {
     private void startVibrate() {
         switch (realmVibrate) {
             case 0:
-                vibrate.set(G.fragmentActivity.getResources().getString(array_Disable));
-                break;
-            case 1:
                 vibrate.set(G.fragmentActivity.getResources().getString(array_Default));
                 break;
-            case 2:
+            case 1:
                 vibrate.set(G.fragmentActivity.getResources().getString(R.string.array_Short));
                 break;
-            case 3:
+            case 2:
                 vibrate.set(G.fragmentActivity.getResources().getString(R.string.array_Long));
                 break;
-            case 4:
+            case 3:
                 vibrate.set(G.fragmentActivity.getResources().getString(R.string.array_Only_if_silent));
+                break;
+            case 4:
+                vibrate.set(G.fragmentActivity.getResources().getString(array_Disable));
                 break;
         }
     }
@@ -174,7 +173,7 @@ public class FragmentNotificationViewModel extends BaseObservable {
                         break;
                     }
                     case DISABLE: {
-                        setNotificationState(G.context.getString(R.string.array_Disable), ENABLE);
+                        setNotificationState(G.context.getString(R.string.array_Disable), DISABLE);
                         break;
                     }
                 }
