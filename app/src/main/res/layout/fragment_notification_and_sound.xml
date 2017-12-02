@@ -125,7 +125,7 @@
           <LinearLayout
               android:layout_width="match_parent"
               android:layout_height="@dimen/dp48"
-              android:onClick="@{FragmentNotificationAndSoundViewModel::onClickAlert}"
+              android:onClick="@{FragmentNotificationAndSoundViewModel::onClickAlertMessage}"
               android:orientation="horizontal"
               android:paddingEnd="@dimen/dp16"
               android:paddingLeft="@dimen/dp16"
@@ -153,12 +153,13 @@
                 android:layout_height="@dimen/dp40"
                 android:background="@drawable/st_switch_button"
                 android:gravity="start"
+                android:checked="@{FragmentNotificationAndSoundViewModel.isAlertMassage}"
+                android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedAlertMessage(checked)}"
                 android:textOff=""
                 android:textOn=""
-                android:checked="@{FragmentNotificationAndSoundViewModel::isAlertCompleteChanged}"
-                android:onCheckedChanged="@{FragmentNotificationAndSoundViewModel::alertCompleteChanged}"
+
                 />
-            <!--android:onCheckedChanged="@{(cb, isChecked) -> FragmentNotificationAndSoundViewModel.alertCompleteChanged(task, isChecked)}"-->
+
 
           </LinearLayout>
 
@@ -202,8 +203,9 @@
                 android:background="@drawable/st_switch_button"
                 android:textOff=""
                 android:textOn=""
-                android:checked="@{FragmentNotificationAndSoundViewModel::isMessageCompleteChanged}"
-                android:onCheckedChanged="@{FragmentNotificationAndSoundViewModel::messageCompleteChanged}"
+                android:checked="@{FragmentNotificationAndSoundViewModel.isMassagePreview}"
+                android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedMassagePreview(checked)}"
+
                 />
 
           </LinearLayout>
@@ -287,7 +289,7 @@
                 android:layout_height="0dp"
                 android:layout_weight=".4"
                 android:gravity="center_vertical|top"
-                android:text="@{FragmentNotificationAndSoundViewModel.vibrateMessage , default=@string/st_sound}"
+                android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateMessage , default=@string/array_Default}"
                 android:textColor="@color/cardview_dark_background"
                 android:textSize="@dimen/dp13"
                 android:textStyle="normal"
@@ -306,7 +308,7 @@
               android:id="@+id/stns_layout_popupNotification_message"
               android:layout_width="match_parent"
               android:layout_height="@dimen/dp48"
-              android:onClick="@{FragmentNotificationAndSoundViewModel::onClickPopUpNotiFicationMessage}"
+              android:onClick="@{FragmentNotificationAndSoundViewModel::onClickPopUpNotificationMessage}"
               android:orientation="vertical"
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
@@ -330,7 +332,7 @@
                 android:layout_height="0dp"
                 android:layout_weight=".4"
                 android:gravity="center_vertical|top"
-                android:text="@{FragmentNotificationAndSoundViewModel.PopUpNotificationMessage , default=@string/st_sound}"
+                android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationMessage , default=@string/st_sound}"
                 android:textColor="@color/cardview_dark_background"
                 android:textSize="@dimen/dp13"
                 android:textStyle="normal"
@@ -373,7 +375,7 @@
                 android:layout_height="0dp"
                 android:layout_weight=".4"
                 android:gravity="center_vertical|top"
-                android:text="@{FragmentNotificationAndSoundViewModel.SoundMessage , default = @string/st_sound}"
+                android:text="@{FragmentNotificationAndSoundViewModel.callbackSoundMessage , default = @string/st_sound}"
                 android:textColor="@color/cardview_dark_background"
                 android:textSize="@dimen/dp13"
                 android:textStyle="normal"
@@ -442,8 +444,8 @@
                 android:background="@drawable/st_switch_button"
                 android:textOff=""
                 android:textOn=""
-                android:checked="@{FragmentNotificationAndSoundViewModel::isAlertGroupCompleteChanged}"
-                android:onCheckedChanged="@{FragmentNotificationAndSoundViewModel::AlertGroupCompleteChanged}"
+                android:checked="@{FragmentNotificationAndSoundViewModel.isAlertGroup}"
+                android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedAlertGroup(checked)}"
                 />
 
 
@@ -488,8 +490,8 @@
                 android:background="@drawable/st_switch_button"
                 android:textOff=""
                 android:textOn=""
-                android:checked="@{FragmentNotificationAndSoundViewModel::isMessageGroupCompleteChanged}"
-                android:onCheckedChanged="@{FragmentNotificationAndSoundViewModel::messageGroupCompleteChanged}"
+                android:checked="@{FragmentNotificationAndSoundViewModel.isMessagePreViewGroup}"
+                android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedMessagePreViewGroup(checked)}"
                 />
 
           </LinearLayout>
@@ -571,7 +573,7 @@
                 android:layout_height="0dp"
                 android:layout_weight=".4"
                 android:gravity="center_vertical|top"
-                android:text="@{FragmentNotificationAndSoundViewModel.vibrateGroup , default=@string/st_sound}"
+                android:text="@{FragmentNotificationAndSoundViewModel.callbackVibrateGroup , default=@string/array_Default}"
                 android:textColor="@color/cardview_dark_background"
                 android:textSize="@dimen/dp13"
                 android:textStyle="normal"
@@ -614,7 +616,7 @@
                 android:layout_height="0dp"
                 android:layout_weight=".4"
                 android:gravity="center_vertical|top"
-                android:text="@{FragmentNotificationAndSoundViewModel.popUpNotificationGroup,default = @string/st_sound}"
+                android:text="@{FragmentNotificationAndSoundViewModel.callbackPopUpNotificationGroup,default = @string/st_sound}"
                 android:textColor="@color/cardview_dark_background"
                 android:textSize="@dimen/dp13"
                 android:textStyle="normal"
@@ -657,7 +659,7 @@
                 android:layout_height="0dp"
                 android:layout_weight=".4"
                 android:gravity="center_vertical|top"
-                android:text="@{FragmentNotificationAndSoundViewModel.soundGroup , default =@string/st_sound}"
+                android:text="@{FragmentNotificationAndSoundViewModel.callBackSoundGroup , default =@string/st_sound}"
 
                 android:textColor="@color/cardview_dark_background"
                 android:textSize="@dimen/dp13"
@@ -728,8 +730,9 @@
                 android:background="@drawable/st_switch_button"
                 android:textOff=""
                 android:textOn=""
-                android:checked="@{FragmentNotificationAndSoundViewModel::isInAppSoundCompleteChanged}"
-                android:onCheckedChanged="@{FragmentNotificationAndSoundViewModel::inAppSoundCompleteChanged}"
+                android:checked="@{FragmentNotificationAndSoundViewModel.isAppSound}"
+                android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedAppSound(checked)}"
+
                 />
 
 
@@ -775,8 +778,9 @@
                 android:background="@drawable/st_switch_button"
                 android:textOff=""
                 android:textOn=""
-                android:checked="@{FragmentNotificationAndSoundViewModel::isInAppVibrateCompleteChanged}"
-                android:onCheckedChanged="@{FragmentNotificationAndSoundViewModel::inAppVibrateCompleteChanged}"
+                android:checked="@{FragmentNotificationAndSoundViewModel.isInAppVibration}"
+                android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedInAppVibration(checked)}"
+
                 />
 
 
@@ -823,8 +827,9 @@
                 android:background="@drawable/st_switch_button"
                 android:textOff=""
                 android:textOn=""
-                android:checked="@{FragmentNotificationAndSoundViewModel::isInAppVibrateCompleteChanged}"
-                android:onCheckedChanged="@{FragmentNotificationAndSoundViewModel::inAppVibrateCompleteChanged}"
+                android:checked="@{FragmentNotificationAndSoundViewModel.isInAppPreView}"
+                android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedInAppPreView(checked)}"
+
                 />
 
 
@@ -869,8 +874,9 @@
                 android:background="@drawable/st_switch_button"
                 android:textOff=""
                 android:textOn=""
-                android:checked="@{FragmentNotificationAndSoundViewModel::isSoundInChatCompleteChanged}"
-                android:onCheckedChanged="@{FragmentNotificationAndSoundViewModel::soundInChatVCompleteChanged}"
+                android:checked="@{FragmentNotificationAndSoundViewModel.isSoundInChat}"
+                android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedSoundInChat(checked)}"
+
                 />
 
 
@@ -1064,8 +1070,8 @@
                 android:background="@drawable/st_switch_button"
                 android:textOff=""
                 android:textOn=""
-                android:checked="@{FragmentNotificationAndSoundViewModel::isKeepServiceCompleteChanged}"
-                android:onCheckedChanged="@{FragmentNotificationAndSoundViewModel::keepServiceCompleteChanged}"
+                android:checked="@{FragmentNotificationAndSoundViewModel.isKeepService}"
+                android:onCheckedChanged="@{(switch, checked) -> FragmentNotificationAndSoundViewModel.onCheckedChangedKeepService(checked)}"
                 />
 
 
