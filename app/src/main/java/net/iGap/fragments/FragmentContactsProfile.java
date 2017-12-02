@@ -361,7 +361,6 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         }
 
 
-
         if (phone.equals("0")) {
             vgPhoneNumber.setVisibility(View.GONE);
         }
@@ -754,6 +753,9 @@ public class FragmentContactsProfile extends BaseFragment implements OnUserUpdat
         super.onStop();
         if (rrg != null) {
             rrg.removeAllChangeListeners();
+        }
+        if (mRoom != null) {
+            mRoom.removeAllChangeListeners();
         }
     }
 
