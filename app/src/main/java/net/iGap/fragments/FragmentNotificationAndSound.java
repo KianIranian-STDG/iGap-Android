@@ -4,6 +4,8 @@ package net.iGap.fragments;
 
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
+import java.io.IOException;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationAndSoundBinding;
@@ -19,8 +21,6 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentNotificationAndSoundViewModel;
-
-import java.io.IOException;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -54,7 +54,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initDataBinding();
 
-        //fragmentNotificationAndSoundBinding.asnToolbar.setBackgroundColor(Color.parseColor(G.appBarColor)); // TODO-XML
+        fragmentNotificationAndSoundBinding.asnToolbar.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         fragmentNotificationAndSoundBinding.stnsRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -62,6 +62,13 @@ public class FragmentNotificationAndSound extends BaseFragment {
                 popBackStackFragment();
             }
         });
+
+        GradientDrawable bgShapeAlert = (GradientDrawable) fragmentNotificationAndSoundBinding.stnsImgLedColorMessage.getBackground();
+        bgShapeAlert.setColor(fragmentNotificationAndSoundViewModel.ledColorMessage);
+
+        GradientDrawable bgShapeGroup = (GradientDrawable) fragmentNotificationAndSoundBinding.stnsImgLedColorGroup.getBackground();
+        bgShapeGroup.setColor(fragmentNotificationAndSoundViewModel.ledColorGroup);
+
 
         fragmentNotificationAndSoundBinding.stLayoutResetAllNotification.setOnClickListener(new View.OnClickListener() {
             @Override

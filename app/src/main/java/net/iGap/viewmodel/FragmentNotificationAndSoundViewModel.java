@@ -19,14 +19,12 @@ import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.view.View;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationAndSoundBinding;
@@ -39,28 +37,16 @@ public class FragmentNotificationAndSoundViewModel {
     public FragmentNotificationAndSoundBinding fragmentNotificationAndSoundBinding;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private int alert_message;
-    private int preview_message;
-    private int ledColorMessage;
+    public int ledColorMessage;
     private int vibrateMessage;
     private int mode;
     private int poRbDialogSoundMessage;
     private String soundMessage;
-
-    private int alert_messageGroup;
-    private int preview_messageGroup;
-    private int ledColorGroup;
+    public int ledColorGroup;
     private int vibrateGroup;
     private int modeGroup;
     private int poRbDialogSoundMessageGroup;
     private String soundMessageGroup;
-
-    private int appSound;
-    private int appVibrate;
-    private int appPreview;
-    private int chat_Sound;
-    private int keepService;
-
 
     public ObservableField<Boolean> isAlertMassage = new ObservableField<>();
     public ObservableField<Boolean> isMassagePreview = new ObservableField<>();
@@ -86,25 +72,13 @@ public class FragmentNotificationAndSoundViewModel {
     public FragmentNotificationAndSoundViewModel(FragmentNotificationAndSoundBinding fragmentNotificationAndSoundBinding) {
         this.fragmentNotificationAndSoundBinding = fragmentNotificationAndSoundBinding;
         getInfo();
-        //startAlertMessage();
-        startMessagePreView();
         startLedColorMessage();
         startVibrateMessage();
         startPopupNotification();
         poRbDialogSoundMessage();
-
-        startAlertGroup();
-        startMessagePreViewGroup();
-        startLedColorGroup();
         startVibrateGroup();
         startPopupNotificationGroup();
         poRbDialogSoundGroup();
-
-        startAppSound();
-        startInAppVibration();
-        startAppPreview();
-        startChatSound();
-        startKeepService();
 
     }
 
@@ -112,34 +86,9 @@ public class FragmentNotificationAndSoundViewModel {
     //=====================================Starts====================================
     //===============================================================================
 
-    private void startAlertMessage() { //TODO-XML
-
-        switch (alert_message) {
-            case 0:
-                isAlertMassage.set(false);
-                break;
-            case 1:
-                isAlertMassage.set(true);
-                break;
-        }
-    }
-
-    private void startMessagePreView() { //TODO-XML
-
-        switch (preview_message) {
-            case 0:
-                isMassagePreview.set(false);
-                break;
-            case 1:
-                isMassagePreview.set(true);
-                break;
-        }
-    }
-
     private void startLedColorMessage() {
 
-        GradientDrawable bgShape = (GradientDrawable) fragmentNotificationAndSoundBinding.stnsImgLedColorMessage.getBackground();
-        bgShape.setColor(ledColorMessage);
+
     }
 
     public void startVibrateMessage() {
@@ -190,35 +139,6 @@ public class FragmentNotificationAndSoundViewModel {
         }
     }
 
-    private void startAlertGroup() {
-
-        switch (alert_messageGroup) {
-            case 0:
-                isAlertGroup.set(false);
-                break;
-            case 1:
-                isAlertGroup.set(true);
-                break;
-        }
-    }
-
-    private void startMessagePreViewGroup() {
-
-        switch (preview_messageGroup) {
-            case 0:
-                isMessagePreViewGroup.set(false);
-                break;
-            case 1:
-                isMessagePreViewGroup.set(true);
-                break;
-        }
-    }
-
-    private void startLedColorGroup() { //TODO - remove fragmentNotificationAndSoundBinding
-
-        GradientDrawable bgShape = (GradientDrawable) fragmentNotificationAndSoundBinding.stnsImgLedColorGroup.getBackground();
-        bgShape.setColor(ledColorGroup);
-    }
 
     private void startVibrateGroup() {
 
@@ -265,67 +185,6 @@ public class FragmentNotificationAndSoundViewModel {
 
         } else {
             callBackSoundGroup.set(soundMessageGroup);
-        }
-    }
-
-    private void startAppSound() {
-
-        switch (appSound) {
-            case 0:
-                isAppSound.set(false);
-                break;
-            case 1:
-                isAppSound.set(true);
-                break;
-        }
-    }
-
-    private void startInAppVibration() {
-
-        switch (appVibrate) {
-            case 0:
-                isInAppVibration.set(false);
-                break;
-            case 1:
-                isInAppVibration.set(true);
-                break;
-        }
-    }
-
-    private void startAppPreview() {
-
-        switch (appPreview) {
-            case 0:
-                isInAppPreView.set(false);
-                break;
-            case 1:
-                isInAppPreView.set(true);
-                break;
-        }
-    }
-
-    private void startChatSound() {
-
-        switch (chat_Sound) {
-            case 0:
-                isSoundInChat.set(false);
-                break;
-            case 1:
-                isSoundInChat.set(true);
-                break;
-        }
-    }
-
-
-    private void startKeepService() {
-
-        switch (keepService) {
-            case 0:
-                isKeepService.set(false);
-                break;
-            case 1:
-                isKeepService.set(true);
-                break;
         }
     }
 
@@ -915,32 +774,30 @@ public class FragmentNotificationAndSoundViewModel {
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-        //alert_message = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
         isAlertMassage.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1)));
+        isMassagePreview.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1)));
 
-        preview_message = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
         ledColorMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
         vibrateMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 0);
         mode = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_MESSAGE, 0);
         poRbDialogSoundMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
         soundMessage = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
 
+        isAlertGroup.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1)));
+        isMessagePreViewGroup.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1)));
 
-        alert_messageGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
-        preview_messageGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
         ledColorGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_GROUP, -8257792);
         vibrateGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 0);
         modeGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
         poRbDialogSoundMessageGroup = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
         soundMessageGroup = sharedPreferences.getString(SHP_SETTING.KEY_STNS_SOUND_GROUP, G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
 
-        appSound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_SOUND, 0);
-        appVibrate = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 0);
-        appPreview = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 0);
-        chat_Sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 0);
+        isAppSound.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_SOUND, 0)));
+        isInAppVibration.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 0)));
+        isInAppPreView.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 0)));
 
-        keepService = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
-
+        isSoundInChat.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 0)));
+        isKeepService.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1)));
 
     }
 

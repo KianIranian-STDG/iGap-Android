@@ -6,6 +6,8 @@
 
   <data>
 
+    <import type="android.graphics.Color" />
+    <import type="net.iGap.G" />
     <variable
       name="FragmentNotificationAndSoundViewModel"
       type="net.iGap.viewmodel.FragmentNotificationAndSoundViewModel" />
