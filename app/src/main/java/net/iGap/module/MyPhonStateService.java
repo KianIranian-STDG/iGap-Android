@@ -13,7 +13,6 @@ public class MyPhonStateService extends BroadcastReceiver {
         MyPhoneStateListener phoneListener = new MyPhoneStateListener();
         telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         telephony.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
-        MusicPlayer.playAndPause();
     }
 
     public void onDestroy() {
