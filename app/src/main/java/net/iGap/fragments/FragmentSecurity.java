@@ -140,15 +140,6 @@ public class FragmentSecurity extends BaseFragment {
             }
         }
 
-
-        view.findViewById(R.id.rootFragmentSecurity).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-
         btnBack = (RippleView) view.findViewById(R.id.tsv_ripple_back);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,7 +183,8 @@ public class FragmentSecurity extends BaseFragment {
             public void onClick(View v) {
 
                 isFirstArrive = false;
-                new HelperFragment(new FragmentSetSecurityPassword()).load();
+                popBackStackFragment();
+                new HelperFragment(new FragmentSetSecurityPassword()).setReplace(false).load();
             }
         });
 
@@ -226,7 +218,8 @@ public class FragmentSecurity extends BaseFragment {
                         bundle.putBoolean("IS_CONFIRM_EMAIL", isConfirmedRecoveryEmail);
 
                         fragmentSecurityRecovery.setArguments(bundle);
-                        new HelperFragment(fragmentSecurityRecovery).load();
+                        popBackStackFragment();
+                        new HelperFragment(fragmentSecurityRecovery).setReplace(false).load();
                     }
                 }).show();
             }
@@ -372,7 +365,6 @@ public class FragmentSecurity extends BaseFragment {
             }
 
 
-
             @Override
             public void errorGetPasswordDetail(final int majorCode, final int minorCode) {
 
@@ -516,7 +508,6 @@ public class FragmentSecurity extends BaseFragment {
 
             }
         };
-
 
 
         // check password for enter on page
@@ -780,7 +771,6 @@ public class FragmentSecurity extends BaseFragment {
     private Pattern patternEmail() {
         return Pattern.compile("[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{2,256}" + "\\@" + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,64}" + "(" + "\\." + "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,25}" + ")+");
     }
-
 
 
     @Override
