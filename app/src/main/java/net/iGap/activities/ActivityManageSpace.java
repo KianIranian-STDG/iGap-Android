@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import java.io.File;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentiGapMap;
@@ -21,8 +21,13 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.FileUtils;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmRoomMessage;
+
 import org.osmdroid.config.Configuration;
 import org.osmdroid.config.IConfigurationProvider;
+
+import java.io.File;
+
+import io.realm.Realm;
 
 import static net.iGap.module.FileUtils.getFolderSize;
 
@@ -235,23 +240,31 @@ public class ActivityManageSpace extends ActivityEnhanced {
                     public void onClick(View view) {
 
                         if (checkBoxPhoto.isChecked()) {
-                            for (File file : filePhoto.listFiles()) {
-                                if (!file.isDirectory()) file.delete();
+                            if (filePhoto.listFiles() != null) {
+                                for (File file : filePhoto.listFiles()) {
+                                    if (!file.isDirectory()) file.delete();
+                                }
                             }
                         }
                         if (checkBoxVideo.isChecked()) {
-                            for (File file : fileVideo.listFiles()) {
-                                if (!file.isDirectory()) file.delete();
+                            if (fileVideo.listFiles() != null) {
+                                for (File file : fileVideo.listFiles()) {
+                                    if (!file.isDirectory()) file.delete();
+                                }
                             }
                         }
                         if (checkBoxDocument.isChecked()) {
-                            for (File file : fileDocument.listFiles()) {
-                                if (!file.isDirectory()) file.delete();
+                            if (fileDocument.listFiles() != null) {
+                                for (File file : fileDocument.listFiles()) {
+                                    if (!file.isDirectory()) file.delete();
+                                }
                             }
                         }
                         if (checkBoxAudio.isChecked()) {
-                            for (File file : fileAudio.listFiles()) {
-                                if (!file.isDirectory()) file.delete();
+                            if (fileAudio.listFiles() != null) {
+                                for (File file : fileAudio.listFiles()) {
+                                    if (!file.isDirectory()) file.delete();
+                                }
                             }
                         }
                         if (checkBoxMap.isChecked()) {

@@ -302,7 +302,9 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.CONTACT;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.GIF;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.GIF_TEXT;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.LOG;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO;
@@ -3637,63 +3639,70 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
                 dialog.dismiss();
 
-                final String _dPath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
+                String filename;
+                String filepath;
+                ProtoGlobal.RoomMessageType fileType;
 
-                if (new File(_dPath).exists()) {
+                if (message.forwardedFrom != null) {
+                    fileType = message.forwardedFrom.getMessageType();
+                    filename = message.forwardedFrom.getAttachment().getName();
+                    filepath = message.forwardedFrom.getAttachment().getLocalFilePath() != null ? message.forwardedFrom.getAttachment().getLocalFilePath() : AndroidUtils.getFilePathWithCashId(message.forwardedFrom.getAttachment().getCacheId(), filename, fileType);
+                } else {
+                    fileType = message.messageType;
+                    filename = message.getAttachment().name;
+                    filepath = message.getAttachment().localFilePath != null ? message.getAttachment().localFilePath : AndroidUtils.getFilePathWithCashId(message.getAttachment().cashID, message.getAttachment().name, message.messageType);
+                }
 
+                if (new File(filepath).exists()) {
                     if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(G.fragmentActivity.getResources().getString(R.string.saveToDownload_item_dialog))) {
-
-                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
+                        HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
                     } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(G.fragmentActivity.getResources().getString(R.string.save_to_Music))) {
-                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
+                        HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
                     } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(G.fragmentActivity.getResources().getString(R.string.save_to_gallery))) {
 
-                        if (message.messageType.toString().contains("VIDEO")) {
-                            HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
-                        } else if (message.messageType.toString().contains("GIF")) {
-                            HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
-                        } else if (message.messageType.toString().contains("IMAGE")) {
-                            HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
+                        if (fileType.toString().contains(VIDEO.toString())) {
+                            HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
+                        } else if (fileType.toString().contains(GIF.toString())) {
+                            HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
+                        } else if (fileType.toString().contains(IMAGE.toString())) {
+                            HelperSaveFile.saveFileToDownLoadFolder(filepath, filename, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
                         }
                     }
                 } else {
 
-                    ProtoGlobal.RoomMessageType _messageType = message.forwardedFrom != null ? message.forwardedFrom.getMessageType() : message.messageType;
-                    String _cashid = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getCacheId() : message.getAttachment().cashID;
-                    String _name = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getName() : message.getAttachment().name;
-                    String _token = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.getAttachment().token;
-                    Long _size = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getSize() : message.getAttachment().size;
+                    final ProtoGlobal.RoomMessageType _messageType = message.forwardedFrom != null ? message.forwardedFrom.getMessageType() : message.messageType;
+                    String cacheId = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getCacheId() : message.getAttachment().cashID;
+                    final String name = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getName() : message.getAttachment().name;
+                    String fileToken = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.getAttachment().token;
+                    Long size = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getSize() : message.getAttachment().size;
 
-                    if (_cashid == null) {
+                    if (cacheId == null) {
                         return;
                     }
                     ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
 
-                    final String _path = AndroidUtils.getFilePathWithCashId(_cashid, _name, _messageType);
-                    if (_token != null && _token.length() > 0 && _size > 0) {
-                        HelperDownloadFile.startDownload(message.messageID, _token, _cashid, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
+                    final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
+                    if (fileToken != null && fileToken.length() > 0 && size > 0) {
+                        HelperDownloadFile.startDownload(message.messageID, fileToken, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(String path, int progress) {
 
                                 if (progress == 100) {
-
                                     if (canUpdateAfterDownload) {
                                         G.handler.post(new Runnable() {
                                             @Override
                                             public void run() {
                                                 if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(G.fragmentActivity.getResources().getString(R.string.saveToDownload_item_dialog))) {
-
-                                                    HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
+                                                    HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.download, R.string.file_save_to_download_folder);
                                                 } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(G.fragmentActivity.getResources().getString(R.string.save_to_Music))) {
-                                                    HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
+                                                    HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.music, R.string.save_to_music_folder);
                                                 } else if (txtItemSaveToDownload.getText().toString().equalsIgnoreCase(G.fragmentActivity.getResources().getString(R.string.save_to_gallery))) {
-
-                                                    if (message.messageType.toString().contains("VIDEO")) {
-                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
-                                                    } else if (message.messageType.toString().contains("GIF")) {
-                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
-                                                    } else {
-                                                        HelperSaveFile.saveFileToDownLoadFolder(_dPath, message.getAttachment().name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
+                                                    if (_messageType.toString().contains(VIDEO.toString())) {
+                                                        HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.video, R.string.file_save_to_video_folder);
+                                                    } else if (_messageType.toString().contains(GIF.toString())) {
+                                                        HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.gif, R.string.file_save_to_picture_folder);
+                                                    } else if (_messageType.toString().contains(IMAGE.toString())) {
+                                                        HelperSaveFile.saveFileToDownLoadFolder(_path, name, HelperSaveFile.FolderType.image, R.string.picture_save_to_galary);
                                                     }
                                                 }
                                             }
@@ -3709,7 +3718,7 @@ public class FragmentChat extends BaseFragment
                         });
                     }
 
-                    onDownloadAllEqualCashId(_cashid, message.messageID);
+                    onDownloadAllEqualCashId(cacheId, message.messageID);
                 }
             }
         });

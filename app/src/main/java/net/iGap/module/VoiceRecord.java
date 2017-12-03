@@ -20,14 +20,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnVoiceRecord;
 import net.iGap.proto.ProtoGlobal;
+
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class VoiceRecord {
 
@@ -57,6 +59,7 @@ public class VoiceRecord {
     private TextView txtMilisecend;
     private int milisecend = 0;
     private MaterialDesignTextView btnMicLayout;
+    private boolean continuePlay;
 
     private Context context;
 
@@ -94,9 +97,13 @@ public class VoiceRecord {
                 mediaRecorder.release();
                 mediaRecorder = null;
 
-                MusicPlayer.playSound();
+                if (continuePlay) {
+                    continuePlay = false;
+                    MusicPlayer.playSound();
+                }
 
             } catch (IllegalStateException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -107,6 +114,7 @@ public class VoiceRecord {
             if (MusicPlayer.mp.isPlaying()) {
                 MusicPlayer.pauseSound();
                 MusicPlayer.pauseSoundFromIGapCall = true;
+                continuePlay = true;
             }
         }
 
