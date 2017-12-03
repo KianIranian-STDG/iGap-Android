@@ -19,12 +19,14 @@ import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.view.View;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationAndSoundBinding;
@@ -81,11 +83,10 @@ public class FragmentNotificationAndSoundViewModel {
     public ObservableField<Boolean> isKeepService = new ObservableField<>();
 
 
-
     public FragmentNotificationAndSoundViewModel(FragmentNotificationAndSoundBinding fragmentNotificationAndSoundBinding) {
         this.fragmentNotificationAndSoundBinding = fragmentNotificationAndSoundBinding;
         getInfo();
-        startAlertMessage();
+        //startAlertMessage();
         startMessagePreView();
         startLedColorMessage();
         startVibrateMessage();
@@ -111,7 +112,7 @@ public class FragmentNotificationAndSoundViewModel {
     //=====================================Starts====================================
     //===============================================================================
 
-    private void startAlertMessage() {
+    private void startAlertMessage() { //TODO-XML
 
         switch (alert_message) {
             case 0:
@@ -123,7 +124,7 @@ public class FragmentNotificationAndSoundViewModel {
         }
     }
 
-    private void startMessagePreView() {
+    private void startMessagePreView() { //TODO-XML
 
         switch (preview_message) {
             case 0:
@@ -141,7 +142,7 @@ public class FragmentNotificationAndSoundViewModel {
         bgShape.setColor(ledColorMessage);
     }
 
-    private void startVibrateMessage() {
+    public void startVibrateMessage() {
 
         switch (vibrateMessage) {
             case 0:
@@ -213,7 +214,7 @@ public class FragmentNotificationAndSoundViewModel {
         }
     }
 
-    private void startLedColorGroup() {
+    private void startLedColorGroup() { //TODO - remove fragmentNotificationAndSoundBinding
 
         GradientDrawable bgShape = (GradientDrawable) fragmentNotificationAndSoundBinding.stnsImgLedColorGroup.getBackground();
         bgShape.setColor(ledColorGroup);
@@ -332,7 +333,7 @@ public class FragmentNotificationAndSoundViewModel {
     //================================Getters/Setters================================
     //===============================================================================
 
-    private void setAlertMassage(Boolean isChecked) {
+    public void setAlertMassage(Boolean isChecked) {
 
         if (isChecked) {
             editor.putInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
@@ -451,9 +452,9 @@ public class FragmentNotificationAndSoundViewModel {
         setAlertMassage(isAlertMassage.get());
     }
 
-    public void onCheckedChangedAlertMessage(boolean isChecked) {
-        setAlertMassage(isChecked);
-    }
+//    public void onCheckedChangedAlertMessage(boolean isChecked) { //TODO - Call setAlertMassage from xml
+//        setAlertMassage(isChecked);
+//    }
 
 
     public void onClickMessagePreView(View view) {
@@ -475,17 +476,17 @@ public class FragmentNotificationAndSoundViewModel {
 
         boolean wrapInScrollView = true;
         final MaterialDialog dialog =
-            new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            }).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    }
+                }).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            }).build();
+                    }
+                }).build();
 
         View view1 = dialog.getCustomView();
         assert view1 != null;
@@ -508,7 +509,6 @@ public class FragmentNotificationAndSoundViewModel {
         });
 
         dialog.show();
-
 
 
     }
@@ -670,17 +670,17 @@ public class FragmentNotificationAndSoundViewModel {
 
         boolean wrapInScrollView = true;
         final MaterialDialog dialog =
-            new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            }).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    }
+                }).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            }).build();
+                    }
+                }).build();
 
         View view1 = dialog.getCustomView();
         assert view1 != null;
@@ -904,10 +904,20 @@ public class FragmentNotificationAndSoundViewModel {
     //====================================Methods====================================
     //===============================================================================
 
+    private boolean getBoolean(int num) {
+        if (num == 0) {
+            return false;
+        }
+        return true;
+    }
+
     private void getInfo() {
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        alert_message = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
+
+        //alert_message = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
+        isAlertMassage.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1)));
+
         preview_message = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
         ledColorMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_LED_COLOR_MESSAGE, -8257792);
         vibrateMessage = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 0);
@@ -930,8 +940,6 @@ public class FragmentNotificationAndSoundViewModel {
         chat_Sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 0);
 
         keepService = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
-
-
 
 
     }
