@@ -53,7 +53,7 @@ import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
-import net.iGap.interfaces.OnAudioFocusChangeRegister;
+import net.iGap.interfaces.OnAudioFocusChangeListener;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -73,7 +73,7 @@ import io.realm.RealmResults;
 
 import static net.iGap.G.context;
 
-public class MusicPlayer extends Service implements AudioManager.OnAudioFocusChangeListener, OnAudioFocusChangeRegister {
+public class MusicPlayer extends Service implements AudioManager.OnAudioFocusChangeListener, OnAudioFocusChangeListener {
 
     private static SensorManager mSensorManager;
     private static Sensor mProximity;
@@ -164,7 +164,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        G.onAudioFocusChangeRegister = this;
+        G.onAudioFocusChangeListener = this;
 
         if (intent == null || intent.getExtras() == null) {
             stopForeground(true);
@@ -178,7 +178,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                     if (notification != null) {
                         startForeground(notificationId, notification);
-                        registerAudioFocus();
+                        registerAudioFocus(AudioManager.AUDIOFOCUS_GAIN);
                         initSensor();
                     }
                 } else if (action.equals(STOPFOREGROUND_ACTION)) {
@@ -194,10 +194,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         return START_STICKY;
     }
 
-    private void registerAudioFocus() {
+    private void registerAudioFocus(int audioState) {
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if (audioManager != null) {
-            audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+            audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, audioState);
         }
     }
 
@@ -420,8 +420,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             return;
         }
 
-        if (G.onAudioFocusChangeRegister != null) {
-            G.onAudioFocusChangeRegister.onAudioFocusChangeRegister();
+        if (G.onAudioFocusChangeListener != null) {
+            G.onAudioFocusChangeListener.onAudioFocusChangeListener(AudioManager.AUDIOFOCUS_GAIN);
         }
 
         if (!isVoice) {
@@ -1216,8 +1216,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     }
 
     @Override
-    public void onAudioFocusChangeRegister() {
-        registerAudioFocus();
+    public void onAudioFocusChangeListener(int audioState) {
+        registerAudioFocus(audioState);
     }
 
     public enum RepeatMode {

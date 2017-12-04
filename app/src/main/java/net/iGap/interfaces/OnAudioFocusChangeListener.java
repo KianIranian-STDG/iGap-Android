@@ -13,6 +13,6 @@ package net.iGap.interfaces;
 /**
  * call this interface after read from RealmAvatar
  */
-public interface OnAudioFocusChangeRegister {
-    void onAudioFocusChangeRegister();
+public interface OnAudioFocusChangeListener {
+    void onAudioFocusChangeListener(int audioState);
 }
