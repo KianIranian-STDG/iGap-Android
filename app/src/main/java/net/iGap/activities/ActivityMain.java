@@ -20,6 +20,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -235,6 +236,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
         if (G.imageLoader != null) {
             G.imageLoader.clearMemoryCache();
+        }
+        RealmRoom.clearAllActions();
+        if (G.onAudioFocusChangeListener != null) {
+            G.onAudioFocusChangeListener.onAudioFocusChangeListener(AudioManager.AUDIOFOCUS_LOSS);
         }
     }
 
