@@ -102,9 +102,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         new RequestUserProfileGetEmail().userProfileGetEmail();
         new RequestUserProfileGetBio().getBio();
 
-        //fragmentSettingBinding.stCollapsingLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
-        //fragmentSettingBinding.stCollapsingLayout.setContentScrimColor(Color.parseColor(G.appBarColor));
-
         final TextView titleToolbar = fragmentSettingBinding.stTxtTitleToolbar;
         final ViewGroup viewGroup = fragmentSettingBinding.stParentLayoutCircleImage;
         fragmentSettingBinding.stAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -134,15 +131,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 });
             }
         });
-        // button back in toolbar
-        //fragmentSettingBinding.stRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-        //
-        //    @Override
-        //    public void onComplete(RippleView rippleView) {
-        //        //finish();
-        //        G.fragmentActivity.onBackPressed();
-        //    }
-        //});
 
         onClickBack = new onClickBack() {
             @Override
