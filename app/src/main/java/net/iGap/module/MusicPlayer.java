@@ -1210,7 +1210,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
             if (pauseOnAudioFocusChange) {
                 pauseOnAudioFocusChange = false;
-                playSound();
+                //playSound(); // commented this line because after receive incoming call and end call, this listener will be called and sound will be played!!!
             }
         }
     }
