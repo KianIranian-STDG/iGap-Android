@@ -121,7 +121,6 @@ public class FragmentPrivacyAndSecurityViewModel {
             @Override
             public void onChange(RealmModel element) {
 
-                Log.i("CCCCCCCCCCCCC", "0 onChange: ");
                 if (((RealmUserInfo) element).isValid()) {
                     selfRemove = ((RealmUserInfo) element).getSelfRemove();
                     setTextSelfDestructs();
@@ -132,7 +131,6 @@ public class FragmentPrivacyAndSecurityViewModel {
         privacyListener = new RealmChangeListener<RealmModel>() {
             @Override
             public void onChange(RealmModel element) {
-                Log.i("CCCCCCCCCCCCC", "1 onChange: ");
                 updatePrivacyUI((RealmPrivacy) element);
             }
         };

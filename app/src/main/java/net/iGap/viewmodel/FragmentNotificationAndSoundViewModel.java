@@ -194,6 +194,7 @@ public class FragmentNotificationAndSoundViewModel {
 
     public void setAlertMassage(Boolean isChecked) {
 
+        isAlertMassage.set(isChecked);
         if (isChecked) {
             editor.putInt(SHP_SETTING.KEY_STNS_ALERT_MESSAGE, 1);
             editor.apply();
@@ -206,6 +207,9 @@ public class FragmentNotificationAndSoundViewModel {
 
     private void setMessagePreview(Boolean isChecked) {
 
+
+        isMassagePreview.set(isChecked);
+
         if (isChecked) {
             editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_MESSAGE, 1);
             editor.apply();
@@ -217,6 +221,7 @@ public class FragmentNotificationAndSoundViewModel {
 
     private void setAlertGroup(Boolean isChecked) {
 
+        isAlertGroup.set(isChecked);
         if (isChecked) {
             editor.putInt(SHP_SETTING.KEY_STNS_ALERT_GROUP, 1);
             editor.apply();
@@ -229,6 +234,7 @@ public class FragmentNotificationAndSoundViewModel {
 
     private void setMessagePreviewGroup(Boolean isChecked) {
 
+        isMessagePreViewGroup.set(isChecked);
         if (isChecked) {
             editor.putInt(SHP_SETTING.KEY_STNS_MESSAGE_PREVIEW_GROUP, 1);
             editor.apply();
@@ -240,6 +246,7 @@ public class FragmentNotificationAndSoundViewModel {
 
     private void setAppSound(Boolean isChecked) {
 
+        isAppSound.set(isChecked);
         if (isChecked) {
             editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND, 1);
             editor.apply();
@@ -251,6 +258,7 @@ public class FragmentNotificationAndSoundViewModel {
     }
 
     private void setInAppVibrate(Boolean isChecked) {
+        isInAppVibration.set(isChecked);
 
         if (isChecked) {
             editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 1);
@@ -264,6 +272,8 @@ public class FragmentNotificationAndSoundViewModel {
 
     private void setInAppPreView(Boolean isChecked) {
 
+        isInAppPreView.set(isChecked);
+
         if (isChecked) {
             editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 1);
             editor.apply();
@@ -275,6 +285,7 @@ public class FragmentNotificationAndSoundViewModel {
     }
 
     private void setInSoundChat(Boolean isChecked) {
+        isSoundInChat.set(isChecked);
 
         if (isChecked) {
             editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 1);
@@ -288,6 +299,7 @@ public class FragmentNotificationAndSoundViewModel {
 
     private void setKeepService(Boolean isChecked) {
 
+        isKeepService.set(isChecked);
         if (isChecked) {
             editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
             editor.apply();
@@ -303,28 +315,18 @@ public class FragmentNotificationAndSoundViewModel {
     //===============================================================================
 
     public void onClickAlertMessage(View view) {
-        if (isAlertMassage.get()) {
-            isAlertMassage.set(false);
-        } else {
-            isAlertMassage.set(true);
-        }
-        setAlertMassage(isAlertMassage.get());
+
+        isAlertMassage.set(!isAlertMassage.get());
     }
 
-//    public void onCheckedChangedAlertMessage(boolean isChecked) { //TODO - Call setAlertMassage from xml
-//        setAlertMassage(isChecked);
-//    }
+    public void onCheckedChangedAlertMessage(boolean isChecked) {
+        setAlertMassage(isChecked);
+    }
 
 
     public void onClickMessagePreView(View view) {
 
-        if (isMassagePreview.get()) {
-            isMassagePreview.set(false);
-        } else {
-            isMassagePreview.set(true);
-        }
-        setMessagePreview(isMassagePreview.get());
-
+        isMassagePreview.set(!isMassagePreview.get());
     }
 
     public void onCheckedChangedMassagePreview(boolean isChecked) {
@@ -498,26 +500,16 @@ public class FragmentNotificationAndSoundViewModel {
     }
 
     public void onClickAlertGroup(View view) {
-        if (isAlertGroup.get()) {
-            isAlertGroup.set(false);
-        } else {
-            isAlertGroup.set(true);
-        }
-        setAlertGroup(isAlertMassage.get());
+        isAlertGroup.set(!isAlertGroup.get());
     }
 
     public void onCheckedChangedAlertGroup(boolean isChecked) {
-        setAlertMassage(isChecked);
+        setAlertGroup(isChecked);
     }
 
     public void onClickMessagePreViewGroup(View view) {
 
-        if (isMassagePreview.get()) {
-            isMessagePreViewGroup.set(false);
-        } else {
-            isMessagePreViewGroup.set(true);
-        }
-        setMessagePreviewGroup(isMessagePreViewGroup.get());
+        isMessagePreViewGroup.set(!isMessagePreViewGroup.get());
 
     }
 
@@ -685,12 +677,7 @@ public class FragmentNotificationAndSoundViewModel {
     }
 
     public void onClickInAppSound(View view) {
-        if (isAppSound.get()) {
-            isAppSound.set(false);
-        } else {
-            isAppSound.set(true);
-        }
-        setAppSound(isAppSound.get());
+        isAppSound.set(!isAppSound.get());
     }
 
     public void onCheckedChangedAppSound(boolean isChecked) {
@@ -698,12 +685,7 @@ public class FragmentNotificationAndSoundViewModel {
     }
 
     public void onClickInAppVibration(View view) {
-        if (isInAppVibration.get()) {
-            isInAppVibration.set(false);
-        } else {
-            isInAppVibration.set(true);
-        }
-        setInAppVibrate(isInAppVibration.get());
+        isInAppVibration.set(!isInAppVibration.get());
     }
 
     public void onCheckedChangedInAppVibration(boolean isChecked) {
@@ -711,25 +693,17 @@ public class FragmentNotificationAndSoundViewModel {
     }
 
     public void onClickInAppPreView(View view) {
-        if (isInAppPreView.get()) {
-            isInAppPreView.set(false);
-        } else {
-            isInAppPreView.set(true);
-        }
-        setInAppPreView(isInAppPreView.get());
+        isInAppPreView.set(!isInAppPreView.get());
     }
 
     public void onCheckedChangedInAppPreView(boolean isChecked) {
+
         setInAppPreView(isChecked);
     }
 
     public void onClickSoundInChat(View view) {
-        if (isSoundInChat.get()) {
-            isSoundInChat.set(false);
-        } else {
-            isSoundInChat.set(true);
-        }
-        setInSoundChat(isSoundInChat.get());
+
+        isSoundInChat.set(!isSoundInChat.get());
     }
 
     public void onCheckedChangedSoundInChat(boolean isChecked) {
@@ -737,12 +711,8 @@ public class FragmentNotificationAndSoundViewModel {
     }
 
     public void onClickKeepService(View view) {
-        if (isKeepService.get()) {
-            isKeepService.set(false);
-        } else {
-            isKeepService.set(true);
-        }
-        setKeepService(isKeepService.get());
+
+        isKeepService.set(!isKeepService.get());
     }
 
     public void onCheckedChangedKeepService(boolean isChecked) {
