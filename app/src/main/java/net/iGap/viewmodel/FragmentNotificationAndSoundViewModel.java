@@ -311,9 +311,9 @@ public class FragmentNotificationAndSoundViewModel {
         setAlertMassage(isAlertMassage.get());
     }
 
-    //    public void onCheckedChangedAlertMessage(boolean isChecked) { //TODO - Call setAlertMassage from xml
-    //        setAlertMassage(isChecked);
-    //    }
+//    public void onCheckedChangedAlertMessage(boolean isChecked) { //TODO - Call setAlertMassage from xml
+//        setAlertMassage(isChecked);
+//    }
 
 
     public void onClickMessagePreView(View view) {
@@ -335,17 +335,17 @@ public class FragmentNotificationAndSoundViewModel {
 
         boolean wrapInScrollView = true;
         final MaterialDialog dialog =
-            new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            }).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    }
+                }).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            }).build();
+                    }
+                }).build();
 
         View view1 = dialog.getCustomView();
         assert view1 != null;
@@ -529,17 +529,17 @@ public class FragmentNotificationAndSoundViewModel {
 
         boolean wrapInScrollView = true;
         final MaterialDialog dialog =
-            new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(G.fragmentActivity.getResources().getString(R.string.st_led_color)).onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            }).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    }
+                }).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }
-            }).build();
+                    }
+                }).build();
 
         View view1 = dialog.getCustomView();
         assert view1 != null;
