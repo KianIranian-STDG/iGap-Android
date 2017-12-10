@@ -25,7 +25,7 @@
         android:id="@+id/st_appbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp140"
-        android:background="@color/toolbar_background"
+        android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         >
@@ -34,7 +34,7 @@
           android:id="@+id/st_collapsing_layout"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          app:contentScrim="@color/toolbar_background"
+          android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
           app:expandedTitleMarginBottom="32dp"
           app:expandedTitleMarginEnd="64dp"
           app:expandedTitleMarginStart="48dp"

@@ -102,8 +102,8 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         new RequestUserProfileGetEmail().userProfileGetEmail();
         new RequestUserProfileGetBio().getBio();
 
-        fragmentSettingBinding.stCollapsingLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
-        fragmentSettingBinding.stCollapsingLayout.setContentScrimColor(Color.parseColor(G.appBarColor));
+        //fragmentSettingBinding.stCollapsingLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
+        //fragmentSettingBinding.stCollapsingLayout.setContentScrimColor(Color.parseColor(G.appBarColor));
 
         final TextView titleToolbar = fragmentSettingBinding.stTxtTitleToolbar;
         final ViewGroup viewGroup = fragmentSettingBinding.stParentLayoutCircleImage;
