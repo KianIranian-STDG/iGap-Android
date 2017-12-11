@@ -1013,15 +1013,9 @@ public class FragmentSettingViewModel {
     public void onClickMultiTab(View view) {
 
         isMultiTab.set(!isMultiTab.get());
-
-    }
-
-    public void onCheckedChangedMultiTab(boolean isChecked) {
-
-        isMultiTab.set(isChecked);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        if (isChecked) {
+        if (isMultiTab.get()) {
             G.multiTab = true;
             editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, true);
             editor.apply();
@@ -1037,6 +1031,12 @@ public class FragmentSettingViewModel {
             onRefreshActivity.refresh("ar");
         }
         if (FragmentSetting.onRemoveFragmentSetting != null) FragmentSetting.onRemoveFragmentSetting.removeFragment();
+
+    }
+
+    public void onCheckedChangedMultiTab(boolean isChecked) {
+
+
     }
 
 
