@@ -781,7 +781,7 @@
                 android:layout_height="@dimen/dp40"
                 android:background="@drawable/st_switch_button"
                 android:checked="@{fragmentSettingViewModel.isMultiTab}"
-                android:onCheckedChanged="@{(switch, checked) -> fragmentSettingViewModel.onCheckedChangedMultiTab(checked)}"
+                android:onClick="@{fragmentSettingViewModel::onClickMultiTab}"
                 android:textOff=""
                 android:textOn=""
                 />
