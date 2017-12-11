@@ -15,7 +15,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.helper.HelperPermision;
@@ -122,7 +121,6 @@ public class Contacts {
 
                             if (pCur != null) {
                                 while (pCur.moveToNext()) {
-                                    Log.i("III", "name : " + cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
                                     StructListOfContact itemContact = new StructListOfContact();
                                     itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
                                     itemContact.setPhone(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
