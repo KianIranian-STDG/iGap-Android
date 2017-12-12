@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import net.iGap.R;
 import net.iGap.databinding.FragmentFragmentSecurityBinding;
 import net.iGap.viewmodel.FragmentSecurityViewModel;
@@ -49,10 +50,7 @@ public class FragmentSecurity extends BaseFragment {
         };
     }
 
-
-
     private void initDataBinding() {
-
         fragmentSecurityViewModel = new FragmentSecurityViewModel();
         fragmentSecurityBinding.setFragmentSecurityViewModel(fragmentSecurityViewModel);
     }
@@ -71,18 +69,14 @@ public class FragmentSecurity extends BaseFragment {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
                     fragmentSecurityViewModel.rippleBack(v);
-
                     return true;
                 }
                 return false;
             }
         });
-
     }
 
     public interface OnPopBackStackFragment {
-
         void onBack();
-
     }
 }
