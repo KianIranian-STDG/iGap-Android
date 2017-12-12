@@ -7846,6 +7846,11 @@ public class FragmentChat extends BaseFragment
         G.fragmentActivity = (FragmentActivity) activity;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //super.onSaveInstanceState(outState); //No call for super(). Bug on API Level > 11.
+    }
+
     public void finishChat() {
         G.handler.post(new Runnable() {
             @Override

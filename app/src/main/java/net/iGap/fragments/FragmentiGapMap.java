@@ -231,10 +231,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         startMap(view);
         //clickDrawMarkActive();
 
-        //if (FragmentiGapMap.location != null) {
-        //    getDistanceLoop(0, false);
-        //}
-
         page = 1;
         new RequestGeoGetComment().getComment(userId);
     }
@@ -487,7 +483,11 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             @Override
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
                 if (newState == SlidingUpPanelLayout.PanelState.DRAGGING && mAdapter != null && mAdapter.getItemCount() == 0) {
-                    getDistanceLoop(0, false);
+                    if (location != null) {
+                        getDistanceLoop(0, false);
+                    } else {
+                        GPSTracker.getGpsTrackerInstance().detectLocation();
+                    }
                 }
             }
         });

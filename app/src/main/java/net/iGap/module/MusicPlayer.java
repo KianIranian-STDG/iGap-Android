@@ -53,6 +53,7 @@ import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
+import net.iGap.interfaces.OnAudioFocusChangeListener;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -72,7 +73,7 @@ import io.realm.RealmResults;
 
 import static net.iGap.G.context;
 
-public class MusicPlayer extends Service {
+public class MusicPlayer extends Service implements AudioManager.OnAudioFocusChangeListener, OnAudioFocusChangeListener {
 
     private static SensorManager mSensorManager;
     private static Sensor mProximity;
@@ -127,6 +128,7 @@ public class MusicPlayer extends Service {
     private static int stateHedset = 0;
 
     public static boolean playNextMusic = false;
+    private static boolean pauseOnAudioFocusChange;
 
     public static String STARTFOREGROUND_ACTION = "STARTFOREGROUND_ACTION";
     public static String STOPFOREGROUND_ACTION = "STOPFOREGROUND_ACTION";
@@ -162,6 +164,8 @@ public class MusicPlayer extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        G.onAudioFocusChangeListener = this;
+
         if (intent == null || intent.getExtras() == null) {
             stopForeground(true);
             stopSelf();
@@ -174,7 +178,7 @@ public class MusicPlayer extends Service {
 
                     if (notification != null) {
                         startForeground(notificationId, notification);
-
+                        registerAudioFocus(AudioManager.AUDIOFOCUS_GAIN);
                         initSensor();
                     }
                 } else if (action.equals(STOPFOREGROUND_ACTION)) {
@@ -190,10 +194,19 @@ public class MusicPlayer extends Service {
         return START_STICKY;
     }
 
+    private void registerAudioFocus(int audioState) {
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager != null) {
+            audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, audioState);
+        }
+    }
+
     public static void setMusicPlayer(LinearLayout layoutTripMusic) {
 
-        if (remoteViews == null) remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
-        if (notificationManager == null) notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (remoteViews == null)
+            remoteViews = new RemoteViews(context.getPackageName(), R.layout.music_layout_notification);
+        if (notificationManager == null)
+            notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (layoutTripMusic != null) {
             layoutTripMusic.setVisibility(View.GONE);
@@ -390,7 +403,8 @@ public class MusicPlayer extends Service {
 
     private static void updateFastAdapter(String messageId) {
 
-        if (FragmentMediaPlayer.fastItemAdapter != null) FragmentMediaPlayer.fastItemAdapter.notifyAdapterItemChanged(FragmentMediaPlayer.fastItemAdapter.getPosition(Long.parseLong(messageId)));
+        if (FragmentMediaPlayer.fastItemAdapter != null)
+            FragmentMediaPlayer.fastItemAdapter.notifyAdapterItemChanged(FragmentMediaPlayer.fastItemAdapter.getPosition(Long.parseLong(messageId)));
 
     }
 
@@ -402,10 +416,12 @@ public class MusicPlayer extends Service {
             return;
         }
 
-
-
         if (mp.isPlaying()) {
             return;
+        }
+
+        if (G.onAudioFocusChangeListener != null) {
+            G.onAudioFocusChangeListener.onAudioFocusChangeListener(AudioManager.AUDIOFOCUS_GAIN);
         }
 
         if (!isVoice) {
@@ -963,8 +979,8 @@ public class MusicPlayer extends Service {
         remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
         notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName)
-            //  .setContentText(place)
-            .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
+                //  .setContentText(place)
+                .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
 
         Intent intent = new Intent(context, MusicPlayer.class);
         intent.putExtra("ACTION", STARTFOREGROUND_ACTION);
@@ -1184,6 +1200,24 @@ public class MusicPlayer extends Service {
         SharedPreferences sharedPreferences = context.getSharedPreferences("MusicSetting", context.MODE_PRIVATE);
         repeatMode = sharedPreferences.getString("RepeatMode", RepeatMode.noRepeat.toString());
         isShuffelOn = sharedPreferences.getBoolean("Shuffel", false);
+    }
+
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+        if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+            pauseOnAudioFocusChange = true;
+            pauseSound();
+        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+            if (pauseOnAudioFocusChange) {
+                pauseOnAudioFocusChange = false;
+                //playSound(); // commented this line because after receive incoming call and end call, this listener will be called and sound will be played!!!
+            }
+        }
+    }
+
+    @Override
+    public void onAudioFocusChangeListener(int audioState) {
+        registerAudioFocus(audioState);
     }
 
     public enum RepeatMode {
@@ -1486,7 +1520,7 @@ public class MusicPlayer extends Service {
 
                     PlaybackStateCompat state = new PlaybackStateCompat.Builder().setActions(PlaybackStateCompat.ACTION_STOP | PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
 
-                        .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1, SystemClock.elapsedRealtime()).build();
+                            .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1, SystemClock.elapsedRealtime()).build();
                     mSession.setPlaybackState(state);
                 } catch (Exception e) {
 
