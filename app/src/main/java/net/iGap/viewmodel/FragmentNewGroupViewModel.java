@@ -74,7 +74,7 @@ public class FragmentNewGroupViewModel {
     public ObservableField<Integer> edtDescriptionMaxLines = new ObservableField<>(4);
     public ObservableField<Integer> edtDescriptionImeOptions = new ObservableField<>(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
     public ObservableField<Integer> edtDescriptionInputType = new ObservableField<>(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-    public ObservableField<Boolean> nextStepEnable = new ObservableField<>(false);
+    public ObservableField<Boolean> nextStepEnable = new ObservableField<>(true);
 
 
     public FragmentNewGroupViewModel(Bundle arguments) {
