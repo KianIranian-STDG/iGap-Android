@@ -21,9 +21,10 @@ import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -32,6 +33,8 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmUserInfo;
+
+import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
@@ -480,39 +483,29 @@ public class FragmentPassCodeViewModel {
     private void checkFingerPrint() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            //Fingerprint API only available on from Android 6.0 (M)
             FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
             if (ActivityCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            if (!fingerprintManager.isHardwareDetected()) {
-                // Device doesn't support fingerprint authentication
-                deviceHasFingerPrint = false;
-            } else if (!fingerprintManager.hasEnrolledFingerprints()) {
-                // User hasn't enrolled any fingerprints to authenticate with
-                deviceHasFingerPrint = false;
-            } else {
-                deviceHasFingerPrint = true;
+            if (fingerprintManager != null) {
+                if (!fingerprintManager.isHardwareDetected()) {
+                    deviceHasFingerPrint = false;
+                } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+                    deviceHasFingerPrint = false;
+                } else {
+                    deviceHasFingerPrint = true;
+                }
             }
-            // Everything is ready for fingerprint authentication
         }
     }
 
-    private void maxLengthEditText(int numberOfLenth) {
-        edtSetPasswordMaxLength.set(numberOfLenth);
+    private void maxLengthEditText(int numberOfLength) {
+        edtSetPasswordMaxLength.set(numberOfLength);
     }
 
     public void onDestroy() {
         realm.close();
     }
-
 
     public void buttonOk() {
 
@@ -590,8 +583,4 @@ public class FragmentPassCodeViewModel {
             edtSetPasswordText.set("");
         }
     }
-
-
-
-
 }

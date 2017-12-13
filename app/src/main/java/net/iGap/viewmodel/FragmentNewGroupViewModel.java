@@ -20,7 +20,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.MaterialDialog;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.ContactGroupFragment;
@@ -46,15 +48,9 @@ import static net.iGap.module.MusicPlayer.roomId;
 
 public class FragmentNewGroupViewModel {
 
-
     public Uri uriIntent;
     public static String prefix = "NewGroup";
     private long groomId = 0;
-    //  private String path;
-
-
-    private int lastSpecialRequestsCursorPosition = 0;
-    private String specialRequests;
 
     public static long avatarId = 0;
     public static ProtoGlobal.Room.Type type;
@@ -63,7 +59,6 @@ public class FragmentNewGroupViewModel {
     public String mInviteLink;
     public boolean isChannel = false;
     public static String mCurrentPhotoPath;
-
 
     public ObservableField<String> titleToolbar = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.new_group));
     public ObservableField<String> txtInputName = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.group_name) + " " + G.fragmentActivity.getResources().getString(R.string.mandatory));
@@ -80,7 +75,6 @@ public class FragmentNewGroupViewModel {
     public FragmentNewGroupViewModel(Bundle arguments) {
         getInfo(arguments);
     }
-
 
     public void onClickNextStep(View view) {
 
@@ -113,7 +107,6 @@ public class FragmentNewGroupViewModel {
 
     }
 
-
     public void onClickCancel(View view) {
         AppUtils.closeKeyboard(view);
         if (G.IMAGE_NEW_GROUP.exists()) {
@@ -127,7 +120,6 @@ public class FragmentNewGroupViewModel {
             e.getStackTrace();
         }
     }
-
 
     private void getInfo(Bundle bundle) {
         if (bundle != null) { // get a list of image
@@ -164,7 +156,6 @@ public class FragmentNewGroupViewModel {
 
     }
 
-
     private void createChannel() {
 
         G.onChannelCreate = new OnChannelCreate() {
@@ -188,7 +179,8 @@ public class FragmentNewGroupViewModel {
                             fragmentCreateChannel.setArguments(bundle);
 
 
-                            if (FragmentNewGroup.onRemoveFragmentNewGroup != null) FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
+                            if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                                FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
 
                             new HelperFragment(fragmentCreateChannel).load();
                         }
@@ -333,7 +325,8 @@ public class FragmentNewGroupViewModel {
                                 bundle.putBoolean("NewRoom", true);
                                 fragment.setArguments(bundle);
 
-                                if (FragmentNewGroup.onRemoveFragmentNewGroup != null) FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
+                                if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                                    FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
                                 new HelperFragment(fragment).load();
                             }
                         }
@@ -361,14 +354,14 @@ public class FragmentNewGroupViewModel {
 
     //=======================result for picture
 
-    //***Show And Hide ProgressBar
     public void showProgressBar() {
         G.handler.post(new Runnable() {
             @Override
             public void run() {
                 nextStepEnable.set(false);
                 prgWaiting.set(View.VISIBLE);
-                if (G.fragmentActivity != null) G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (G.fragmentActivity != null)
+                    G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
     }
@@ -379,9 +372,9 @@ public class FragmentNewGroupViewModel {
             public void run() {
                 nextStepEnable.set(true);
                 prgWaiting.set(View.GONE);
-                if (G.fragmentActivity != null) G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                if (G.fragmentActivity != null)
+                    G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
     }
-
 }

@@ -18,9 +18,10 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import java.util.regex.Pattern;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentSecurity;
@@ -39,15 +40,14 @@ import net.iGap.request.RequestUserTwoStepVerificationResendVerifyEmail;
 import net.iGap.request.RequestUserTwoStepVerificationUnsetPassword;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyRecoveryEmail;
 
+import java.util.regex.Pattern;
+
 public class FragmentSecurityViewModel {
 
-
-
     private static String password;
-    private boolean isChabgePassword = false;
     private String txtQuestionOne = "";
     private String txtQuestionTwo = "";
-    private String txtPaternEmail = "";
+    private String txtPatternEmail = "";
     private boolean isRecoveryByEmail = false;
     private int page;
     private static final int CHANGE_HINT = 1;
@@ -95,10 +95,7 @@ public class FragmentSecurityViewModel {
     //===============================================================================
 
     public void onClickRippleBack(View v) {
-
         rippleBack(v);
-
-
     }
 
     public void onClickRippleOk(View v) {
@@ -117,7 +114,6 @@ public class FragmentSecurityViewModel {
         }
 
         //change Question
-
         if (rootQuestionPassword.get() == View.VISIBLE) {
             if (edtSetQuestionPassOne.get().length() > 0 && edtSetAnswerPassOne.get().length() > 0 && edtSetQuestionPassTwo.get().length() > 0 && edtSetAnswerPassTwo.get().length() > 0) {
                 new RequestUserTwoStepVerificationChangeRecoveryQuestion().changeRecoveryQuestion(password, edtSetQuestionPassOne.get(), edtSetAnswerPassOne.get(), edtSetQuestionPassTwo.get(), edtSetAnswerPassTwo.get());
@@ -178,7 +174,7 @@ public class FragmentSecurityViewModel {
         if (rootConfirmedEmail.get() == View.VISIBLE) {
             if (edtConfirmedEmailText.get().length() > 0) {
                 new RequestUserTwoStepVerificationVerifyRecoveryEmail().recoveryEmail(edtConfirmedEmailText.get());
-                txtPaternEmail = edtConfirmedEmailText.get();
+                txtPatternEmail = edtConfirmedEmailText.get();
                 edtConfirmedEmailText.set("");
                 closeKeyboard(v);
             } else {
@@ -186,31 +182,21 @@ public class FragmentSecurityViewModel {
                 error(G.fragmentActivity.getResources().getString(R.string.please_enter_code));
             }
         }
-
-
     }
 
-
     public void onClickSetAdditionPassword(View view) {
-
         isFirstArrive = false;
         new HelperFragment(new FragmentSetSecurityPassword()).load();
     }
 
-
-
     public void onClickChangePassword(View view) {
-
         isFirstArrive = false;
         FragmentSetSecurityPassword fragmentSetSecurityPassword = new FragmentSetSecurityPassword();
         Bundle bundle = new Bundle();
         bundle.putString("OLD_PASSWORD", password);
         fragmentSetSecurityPassword.setArguments(bundle);
         new HelperFragment(fragmentSetSecurityPassword).setReplace(false).load();
-
     }
-
-
 
     public void onClickChangeHint(View view) {
         page = CHANGE_HINT;
@@ -220,7 +206,6 @@ public class FragmentSecurityViewModel {
         titleToolbar.set(G.fragmentActivity.getString(R.string.password_hint));
         rippleOkVisibility.set(View.VISIBLE);
     }
-
 
     public void onClickTurnPasswordOff(View view) {
 
@@ -237,7 +222,6 @@ public class FragmentSecurityViewModel {
                 dialog.dismiss();
             }
         }).show();
-
     }
 
 
@@ -298,7 +282,7 @@ public class FragmentSecurityViewModel {
                 bundle.putSerializable("PAGE", Security.SETTING);
                 bundle.putString("QUESTION_ONE", txtQuestionOne);
                 bundle.putString("QUESTION_TWO", txtQuestionTwo);
-                bundle.putString("PATERN_EMAIL", txtPaternEmail);
+                bundle.putString("PATERN_EMAIL", txtPatternEmail);
                 bundle.putBoolean("IS_EMAIL", isRecoveryByEmail);
                 bundle.putBoolean("IS_CONFIRM_EMAIL", isConfirmedRecoveryEmail);
 
@@ -341,7 +325,7 @@ public class FragmentSecurityViewModel {
 
                 txtQuestionOne = questionOne;
                 txtQuestionTwo = questionTwo;
-                txtPaternEmail = unconfirmedEmailPattern;
+                txtPatternEmail = unconfirmedEmailPattern;
                 isConfirmedRecoveryEmail = hasConfirmedRecoveryEmail;
                 mUnconfirmedEmailPattern = unconfirmedEmailPattern;
 

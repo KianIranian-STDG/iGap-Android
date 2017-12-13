@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import net.iGap.R;
 import net.iGap.databinding.FragmentPassCodeBinding;
 import net.iGap.module.AppUtils;
@@ -29,6 +30,7 @@ public class FragmentPassCode extends BaseFragment {
     public void onStart() {
         super.onStart();
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
