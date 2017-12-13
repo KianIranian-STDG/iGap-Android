@@ -7480,13 +7480,10 @@ public class FragmentChat extends BaseFragment
                     realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, sort);
                     MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN, getRealmChat());
 
-                    if (realmRoomMessages.size() > 0) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                            }
-                        });
-                    }
+//                    if (realmRoomMessages.size() == 0) { // Hint : link browsable ; Commented Now!!!
+//                        getOnlineMessage(oldMessageId, direction);
+//                        return;
+//                    }
 
                     /**
                      * I do this for set addToView true
