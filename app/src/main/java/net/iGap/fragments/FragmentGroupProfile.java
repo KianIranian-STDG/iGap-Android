@@ -14,6 +14,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,43 +132,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         super.onResume();
 
         fragmentGroupProfileViewModel.onResume();
-        //
-        //        mRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        //        if (mRoom != null) {
-        //
-        //            if (changeListener == null) {
-        //
-        //                changeListener = new RealmChangeListener<RealmModel>() {
-        //                    @Override
-        //                    public void onChange(final RealmModel element) {
-        //                        G.handler.post(new Runnable() {
-        //                            @Override
-        //                            public void run() {
-        //                                if (((RealmRoom) element).isValid()) {
-        //                                    String countText = ((RealmRoom) element).getSharedMediaCount();
-        //                                    if (txtNumberOfSharedMedia == null) {
-        //                                        txtNumberOfSharedMedia = (TextView) G.fragmentActivity.findViewById(R.id.agp_txt_number_of_shared_media);
-        //                                    }
-        //                                    if (HelperCalander.isPersianUnicode) {
-        //                                        txtNumberOfSharedMedia.setText(HelperCalander.convertToUnicodeFarsiNumber(countText));
-        //                                    } else {
-        //                                        txtNumberOfSharedMedia.setText(countText);
-        //                                    }
-        //                                }
-        //                            }
-        //                        });
-        //                    }
-        //                };
-        //            }
-        //
-        //            mRoom.addChangeListener(changeListener);
-        //            changeListener.onChange(mRoom);
-        //        } else {
-        //            if (txtNumberOfSharedMedia == null) {
-        //                txtNumberOfSharedMedia = (TextView) G.fragmentActivity.findViewById(R.id.agp_txt_number_of_shared_media);
-        //            }
-        //            txtNumberOfSharedMedia.setText(context.getString(R.string.there_is_no_sheared_media));
-        //        }
 
     }
 
@@ -258,7 +222,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         AppUtils.setProgresColler(prgWait);
 
         //        txtGroupDescription.setText(HelperUrl.setUrlLink(description, true, false, null, true));
-        //        txtGroupDescription.setMovementMethod(LinkMovementMethod.getInstance());
+        fragmentGroupProfileBinding.agpTxtGroupDescription.setMovementMethod(LinkMovementMethod.getInstance());
         appBarLayout = (fragmentGroupProfileBinding.agpAppbar);
         imvGroupAvatar = fragmentGroupProfileBinding.agpImvGroupAvatar;
 
