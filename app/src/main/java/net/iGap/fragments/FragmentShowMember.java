@@ -83,6 +83,7 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChannelGetMemberList;
 import net.iGap.request.RequestGroupGetMemberList;
 import net.iGap.request.RequestUserInfo;
+import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
 import static net.iGap.G.inflater;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
@@ -1159,8 +1160,8 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
                             FragmentChannelProfile.onMenuClick.clicked(v, mContact);
                         }
                     } else if (roomType == GROUP) {
-                        if (FragmentGroupProfile.onMenuClick != null) {
-                            FragmentGroupProfile.onMenuClick.clicked(v, mContact);
+                        if (FragmentGroupProfileViewModel.onMenuClick != null) {
+                            FragmentGroupProfileViewModel.onMenuClick.clicked(v, mContact);
                         }
                     }
                 }

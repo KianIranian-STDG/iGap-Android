@@ -20,6 +20,7 @@ import android.security.keystore.KeyProperties;
 import android.support.annotation.NonNull;
 import android.text.InputType;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -104,14 +105,14 @@ public class ActivityEnterPassCodeViewModel {
                 G.currentActivity.finish();
 
                 //G.isPassCode = false;
-                AppUtils.closeKeyboard(v);
+                closeKeyboard(v);
             } else {
-                AppUtils.closeKeyboard(v);
+                closeKeyboard(v);
                 AppUtils.error(G.context.getResources().getString(R.string.invalid_password));
                 edtSetPassword.set("");
             }
         } else {
-            AppUtils.closeKeyboard(v);
+            closeKeyboard(v);
             AppUtils.error(G.context.getResources().getString(R.string.enter_a_password));
             edtSetPassword.set("");
         }
@@ -338,6 +339,17 @@ public class ActivityEnterPassCodeViewModel {
                     helper.startAuth(fingerprintManager, cryptoObject);
                 }
             }
+        }
+    }
+
+    public static void closeKeyboard(View v) {
+        try {
+            InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+        } catch (IllegalStateException e) {
+            e.getStackTrace();
         }
     }
 }
