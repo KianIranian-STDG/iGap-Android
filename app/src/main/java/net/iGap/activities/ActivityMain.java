@@ -47,13 +47,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-
+import io.realm.Realm;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -131,13 +134,7 @@ import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import io.realm.Realm;
+import net.iGap.viewmodel.ActivityCallViewModel;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
@@ -2006,7 +2003,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (G.isInCall) {
             findViewById(R.id.am_ll_strip_call).setVisibility(View.VISIBLE);
 
-            ActivityCall.txtTimerMain = (TextView) findViewById(R.id.cslcs_txt_timer);
+            ActivityCallViewModel.txtTimerMain = (TextView) findViewById(R.id.cslcs_txt_timer);
 
             TextView txtCallActivityBack = (TextView) findViewById(R.id.cslcs_btn_call_strip);
             txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
