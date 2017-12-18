@@ -3,6 +3,7 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -32,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -43,6 +45,7 @@ import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
@@ -725,6 +728,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             @Override
             public void onClick(View view) {
                 new RequestChannelRevokeLink().channelRevokeLink(roomId);
+                dialog.dismiss();
             }
         });
         dialog.show();
@@ -1259,7 +1263,6 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         }).show();
 
 
-
     }
 
     public void kickModerator(final Long peerId) {
@@ -1281,8 +1284,6 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                 new RequestChannelKickAdmin().channelKickAdmin(roomId, peerId);
             }
         }).show();
-
-
 
 
     }
@@ -1435,20 +1436,13 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
 
     @Override
     public void onChannelRevokeLink(final long roomId, final String inviteLink, final String inviteToken) {
-
         hideProgressBar();
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                edtRevoke.setText("" + inviteLink);
-                txtChannelLink.setText("" + inviteLink);
-
-                //+Realm realm = Realm.getDefaultInstance();
-                //channel info
-                RealmChannelRoom.revokeLink(inviteLink, inviteToken);
+                txtChannelLink.setText(inviteLink);
             }
         });
-        //realm.close();
     }
 
     @Override
@@ -1522,7 +1516,11 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
                     @Override
                     public void run() {
                         isPrivate = true;
-                        setTextChannelLik();
+                        if (inviteLink == null || inviteLink.isEmpty() || inviteLink.equals("https://")) {
+                            new RequestChannelRevokeLink().channelRevokeLink(roomId);
+                        } else {
+                            setTextChannelLik();
+                        }
                         RealmRoom.setPrivate(roomId);
                     }
                 });
@@ -1572,9 +1570,9 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
 
         if (isPopup) {
-            edtUserName.setText("iGap.net/");
+            edtUserName.setText(Config.IGAP_LINK_PREFIX);
         } else {
-            edtUserName.setText("iGap.net/" + linkUsername);
+            edtUserName.setText(Config.IGAP_LINK_PREFIX + linkUsername);
         }
 
         edtUserName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
@@ -1642,6 +1640,18 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             }
         };
 
+        edtUserName.setSelection((edtUserName.getText().toString().length()));
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                edtUserName.requestFocus();
+                InputMethodManager inputMethodManager = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputMethodManager != null) {
+                    inputMethodManager.showSoftInput(edtUserName, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }
+        }, 100);
+
         edtUserName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -1655,13 +1665,12 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (editable.toString().contains("iGap.net/")) {
-                    //edtUserName.setText("iGap.net/");
+                if (editable.toString().contains(Config.IGAP_LINK_PREFIX)) {
                     Selection.setSelection(edtUserName.getText(), edtUserName.getText().length());
                 }
 
-                if (HelperString.regexCheckUsername(editable.toString().replace("iGap.net/", ""))) {
-                    String userName = edtUserName.getText().toString().replace("iGap.net/", "");
+                if (HelperString.regexCheckUsername(editable.toString().replace(Config.IGAP_LINK_PREFIX, ""))) {
+                    String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
                     new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
                 } else {
                     positive.setEnabled(false);
@@ -1714,7 +1723,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAdd
             @Override
             public void onClick(View view) {
 
-                String userName = edtUserName.getText().toString().replace("iGap.net/", "");
+                String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
                 new RequestChannelUpdateUsername().channelUpdateUsername(roomId, userName);
             }
         });

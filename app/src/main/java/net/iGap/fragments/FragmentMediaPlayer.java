@@ -28,15 +28,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
@@ -52,6 +51,10 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.realm.RealmRoomMessage;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 public class FragmentMediaPlayer extends BaseFragment {
 
@@ -335,7 +338,10 @@ public class FragmentMediaPlayer extends BaseFragment {
             fastItemAdapter.add(new AdapterListMusicPlayer().setItem(r).withIdentifier(r.getMessageId()));
         }
         rcvListMusicPlayer.setAdapter(fastItemAdapter);
-        rcvListMusicPlayer.setLayoutManager(new LinearLayoutManager(_mActivity));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        rcvListMusicPlayer.setLayoutManager(linearLayoutManager);
         rcvListMusicPlayer.setHasFixedSize(true);
 
         fastItemAdapter.withSelectable(true);

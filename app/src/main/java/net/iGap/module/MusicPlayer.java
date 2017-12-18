@@ -1015,8 +1015,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                         try {
                             if (roomMessage.getAttachment().getLocalFilePath() != null) {
                                 if (new File(roomMessage.getAttachment().getLocalFilePath()).exists()) {
-                                    Log.i("FFFFFFFFFFFF", "8888onB: " + realmRoomMessage.getAttachment().getLocalFilePath());
-                                    mediaList.add(0, realmRoomMessage);
+                                    mediaList.add(realmRoomMessage);
                                 }
                             }
                         } catch (Exception e) {

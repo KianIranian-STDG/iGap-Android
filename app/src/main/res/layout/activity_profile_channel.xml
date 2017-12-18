@@ -150,7 +150,7 @@
               android:lineSpacingMultiplier=".8"
               android:maxLength="24"
               android:padding="@dimen/dp4"
-              android:text="svsavhispfauhvipushvfiuhvihvsvs"
+            android:text="channel title"
               android:textColor="@android:color/white"
               android:textSize="@dimen/dp16"
               android:textStyle="normal"

@@ -31,6 +31,8 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
@@ -84,7 +86,7 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
 
         if (getArguments() != null) {
             roomId = getArguments().getLong("ROOMID");
-            inviteLink = getArguments().getString("INVITE_LINK");
+            inviteLink = "https://" + getArguments().getString("INVITE_LINK");
             token = getArguments().getString("TOKEN");
         }
 
@@ -165,7 +167,7 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
                         getRoom(roomId, ProtoGlobal.Room.Type.CHANNEL);
                     } else {
 
-                        String userName = edtLink.getText().toString().replace("iGap.net/", "");
+                        String userName = edtLink.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
                         new RequestChannelUpdateUsername().channelUpdateUsername(roomId, userName);
                     }
                 }
@@ -203,7 +205,7 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
             }
         });
         edtLink = (EditText) view.findViewById(R.id.fch_edt_link);
-        edtLink.setText("iGap.net/");
+        edtLink.setText(Config.IGAP_LINK_PREFIX);
         Selection.setSelection(edtLink.getText(), edtLink.getText().length());
         edtLink.addTextChangedListener(new TextWatcher() {
             @Override
@@ -221,12 +223,12 @@ public class FragmentCreateChannel extends BaseFragment implements OnChannelChec
 
                 if (!raPrivate.isChecked()) {
 
-                    if (!editable.toString().contains("iGap.net/")) {
-                        edtLink.setText("iGap.net/");
+                    if (!editable.toString().contains(Config.IGAP_LINK_PREFIX)) {
+                        edtLink.setText(Config.IGAP_LINK_PREFIX);
                         Selection.setSelection(edtLink.getText(), edtLink.getText().length());
                     }
-                    if (HelperString.regexCheckUsername(editable.toString().replace("iGap.net/", ""))) {
-                        String userName = edtLink.getText().toString().replace("iGap.net/", "");
+                    if (HelperString.regexCheckUsername(editable.toString().replace(Config.IGAP_LINK_PREFIX, ""))) {
+                        String userName = edtLink.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
                         new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
                     } else {
                         txtFinish.setEnabled(false);

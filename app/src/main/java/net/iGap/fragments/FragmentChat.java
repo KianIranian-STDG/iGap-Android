@@ -7571,9 +7571,9 @@ public class FragmentChat extends BaseFragment
                      */
                     if (majorCode == 5) {
                         if (direction == UP) {
-                            getOnlineMessage(messageIdGetHistory, UP);
+                            //getOnlineMessage(messageIdGetHistory, UP);
                         } else {
-                            getOnlineMessage(messageIdGetHistory, DOWN);
+                            //getOnlineMessage(messageIdGetHistory, DOWN);
                         }
                     }
                 }

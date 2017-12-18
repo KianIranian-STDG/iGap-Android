@@ -62,6 +62,7 @@ public class Config {
 
     public static final String URL_WEBSOCKET = "wss://secure.igap.net/hybrid/";
     public static final String URL_MAP = "https://c.tile.openstreetmap.org/";
+    public static final String IGAP_LINK_PREFIX = "https://iGap.net/";
 
     public static final String PUBLIC_KEY_CLIENT = "-----BEGIN PUBLIC KEY-----\n"
             + "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo+inlAfd8Qior8IMKaJ+\n"
