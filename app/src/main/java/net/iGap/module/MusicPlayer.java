@@ -81,6 +81,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     private static final int SENSOR_SENSITIVITY = 4;
     public static boolean canDoAction = true;
     private static MediaSessionCompat mSession;
+    private static int latestAudioFocusState;
     //    private static Bitmap orginalWallPaper = null;
     //    private static boolean isGetOrginalWallpaper=false;
 
@@ -178,7 +179,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                     if (notification != null) {
                         startForeground(notificationId, notification);
-                        registerAudioFocus(AudioManager.AUDIOFOCUS_GAIN);
+                        if (latestAudioFocusState != AudioManager.AUDIOFOCUS_GAIN) { // if do double "AUDIOFOCUS_GAIN", "AUDIOFOCUS_LOSS" will be called
+                            latestAudioFocusState = AudioManager.AUDIOFOCUS_GAIN;
+                            registerAudioFocus(AudioManager.AUDIOFOCUS_GAIN);
+                        }
                         initSensor();
                     }
                 } else if (action.equals(STOPFOREGROUND_ACTION)) {
@@ -1203,6 +1207,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
     @Override
     public void onAudioFocusChange(int focusChange) {
+        latestAudioFocusState = focusChange;
         if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS) {
             pauseOnAudioFocusChange = true;
             pauseSound();
@@ -1216,7 +1221,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
     @Override
     public void onAudioFocusChangeListener(int audioState) {
-        registerAudioFocus(audioState);
+        if (latestAudioFocusState != audioState) {
+            latestAudioFocusState = audioState;
+            registerAudioFocus(audioState);
+        }
     }
 
     public enum RepeatMode {
