@@ -21,10 +21,9 @@ import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-
+import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -33,8 +32,6 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmUserInfo;
-
-import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
@@ -384,6 +381,7 @@ public class FragmentPassCodeViewModel {
                         maxLengthEditText(4);
                         kindPassword = PIN;
                         edtSetPasswordHint.set(G.context.getString(R.string.PIN));
+                        txtModePassCode.set(G.context.getString(R.string.PIN));
                         break;
                     case 1:
                         // Whatever you want to happen when the second item gets selected
@@ -391,6 +389,7 @@ public class FragmentPassCodeViewModel {
                         maxLengthEditText(20);
                         kindPassword = PASSWORD;
                         edtSetPasswordHint.set(G.context.getString(R.string.password));
+                        txtModePassCode.set(G.context.getString(R.string.password));
                         break;
                 }
 
