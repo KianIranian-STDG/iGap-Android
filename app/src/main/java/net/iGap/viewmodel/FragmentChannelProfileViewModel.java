@@ -11,6 +11,7 @@ package net.iGap.viewmodel;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
@@ -33,16 +34,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmList;
-import io.realm.RealmModel;
-import java.util.ArrayList;
-import java.util.List;
+
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChannelProfile;
@@ -103,6 +102,14 @@ import net.iGap.request.RequestChannelRevokeLink;
 import net.iGap.request.RequestChannelUpdateSignature;
 import net.iGap.request.RequestChannelUpdateUsername;
 import net.iGap.request.RequestUserInfo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmList;
+import io.realm.RealmModel;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
@@ -165,7 +172,8 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
 
 
     public void onClickRippleBack(View v) {
-        if (FragmentChannelProfile.onBackFragment != null) FragmentChannelProfile.onBackFragment.onBack();
+        if (FragmentChannelProfile.onBackFragment != null)
+            FragmentChannelProfile.onBackFragment.onBack();
     }
 
     public void onClickRippleMenuPopup(View v) {
@@ -246,9 +254,6 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
     }
 
 
-
-
-
     private void getInfo(Bundle arguments) {
 
         G.onChannelAddMember = this;
@@ -270,7 +275,8 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
 
         RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getChannelRoom() == null) {
-            if (FragmentChannelProfile.onBackFragment != null) FragmentChannelProfile.onBackFragment.onBack();
+            if (FragmentChannelProfile.onBackFragment != null)
+                FragmentChannelProfile.onBackFragment.onBack();
             return;
         }
         RealmChannelRoom realmChannelRoom = realmRoom.getChannelRoom();
@@ -490,28 +496,29 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
         layoutRevoke.addView(inputRevoke, layoutParams);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.channel_link_title_revoke))
-            .positiveText(G.fragmentActivity.getResources().getString(R.string.revoke))
-            .customView(layoutRevoke, true)
-            .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
-            .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-            .neutralText(R.string.array_Copy)
-            .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    String copy;
-                    copy = callbackChannelLink.get();
-                    ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                    clipboard.setPrimaryClip(clip);
-                }
-            })
-            .build();
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.revoke))
+                .customView(layoutRevoke, true)
+                .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .neutralText(R.string.array_Copy)
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String copy;
+                        copy = callbackChannelLink.get();
+                        ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                })
+                .build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new RequestChannelRevokeLink().channelRevokeLink(roomId);
+                dialog.dismiss();
             }
         });
         dialog.show();
@@ -542,7 +549,7 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
         inputChannelLink.addView(viewRevoke, viewParams);
 
         TextView txtLink = new TextView(G.fragmentActivity);
-        txtLink.setText("iGap.net/" + link);
+        txtLink.setText(Config.IGAP_LINK_PREFIX + link);
         txtLink.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
 
         viewRevoke.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
@@ -555,21 +562,21 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
         layoutChannelLink.addView(txtLink, layoutParams);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.channel_link))
-            .positiveText(G.fragmentActivity.getResources().getString(R.string.array_Copy))
-            .customView(layoutChannelLink, true)
-            .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
-            .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    String copy;
-                    copy = "iGap.net/" + callbackChannelLink.get();
-                    ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                    clipboard.setPrimaryClip(clip);
-                }
-            })
-            .build();
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.array_Copy))
+                .customView(layoutChannelLink, true)
+                .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String copy;
+                        copy = Config.IGAP_LINK_PREFIX + callbackChannelLink.get();
+                        ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                })
+                .build();
 
         dialog.show();
     }
@@ -816,7 +823,7 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
         layoutUserName.addView(inputUserName, layoutParams);
 
         final MaterialDialog dialog =
-            new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.channel_name)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.channel_name)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
 
@@ -941,8 +948,6 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
     }
 
 
-
-
     //************************************************** interfaces
 
     //***On Add Avatar Response From Server
@@ -1035,15 +1040,10 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                edtRevoke.setText("" + inviteLink);
                 callbackChannelLink.set("" + inviteLink);
-
-                //+Realm realm = Realm.getDefaultInstance();
-                //channel info
-                RealmChannelRoom.revokeLink(inviteLink, inviteToken);
+                RealmChannelRoom.revokeLink(roomId, inviteLink, inviteToken);
             }
         });
-        //realm.close();
     }
 
     @Override
@@ -1117,7 +1117,11 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
                     @Override
                     public void run() {
                         isPrivate = true;
-                        setTextChannelLik();
+                        if (inviteLink == null || inviteLink.isEmpty() || inviteLink.equals("https://")) {
+                            new RequestChannelRevokeLink().channelRevokeLink(roomId);
+                        } else {
+                            setTextChannelLik();
+                        }
                         RealmRoom.setPrivate(roomId);
                     }
                 });
@@ -1167,9 +1171,9 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
         edtUserName.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
 
         if (isPopup) {
-            edtUserName.setText("iGap.net/");
+            edtUserName.setText(Config.IGAP_LINK_PREFIX);
         } else {
-            edtUserName.setText("iGap.net/" + linkUsername);
+            edtUserName.setText(Config.IGAP_LINK_PREFIX + linkUsername);
         }
 
         edtUserName.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
@@ -1188,7 +1192,7 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
         layoutUserName.addView(inputUserName, layoutParams);
 
         final MaterialDialog dialog =
-            new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -1233,6 +1237,17 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
             }
         };
 
+        edtUserName.setSelection((edtUserName.getText().toString().length()));
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                edtUserName.requestFocus();
+                InputMethodManager inputMethodManager = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputMethodManager != null) {
+                    inputMethodManager.showSoftInput(edtUserName, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }
+        }, 100);
         edtUserName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -1246,13 +1261,12 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (editable.toString().contains("iGap.net/")) {
-                    //edtUserName.setText("iGap.net/");
+                if (editable.toString().contains(Config.IGAP_LINK_PREFIX)) {
                     Selection.setSelection(edtUserName.getText(), edtUserName.getText().length());
                 }
 
-                if (HelperString.regexCheckUsername(editable.toString().replace("iGap.net/", ""))) {
-                    String userName = edtUserName.getText().toString().replace("iGap.net/", "");
+                if (HelperString.regexCheckUsername(editable.toString().replace(Config.IGAP_LINK_PREFIX, ""))) {
+                    String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
                     new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
                 } else {
                     positive.setEnabled(false);
@@ -1305,7 +1319,7 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
             @Override
             public void onClick(View view) {
 
-                String userName = edtUserName.getText().toString().replace("iGap.net/", "");
+                String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
                 new RequestChannelUpdateUsername().channelUpdateUsername(roomId, userName);
             }
         });
@@ -1429,7 +1443,6 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
         };
         countWaitTimer.start();
     }
-
 
 
 }

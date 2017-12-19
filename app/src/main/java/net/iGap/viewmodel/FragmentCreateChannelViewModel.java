@@ -22,6 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RadioGroup;
+
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentCreateChannelBinding;
@@ -55,7 +57,7 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
     private FragmentCreateChannelBinding fragmentCreateChannelBinding;
     public Spannable wordtoSpan;
 
-    public ObservableField<String> edtSetLink = new ObservableField<>("iGap.net/");
+    public ObservableField<String> edtSetLink = new ObservableField<>(Config.IGAP_LINK_PREFIX);
     public ObservableField<Integer> prgWaiting = new ObservableField<>(View.GONE);
     public ObservableField<Integer> txtFinishColor = new ObservableField<>(G.context.getResources().getColor(R.color.toolbar_background));
     public ObservableField<Boolean> txtInputLinkEnable = new ObservableField<>(false);
@@ -77,11 +79,11 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
 
         if (arguments != null) {
             roomId = arguments.getLong("ROOMID");
-            inviteLink = arguments.getString("INVITE_LINK");
+            inviteLink = "https://" + arguments.getString("INVITE_LINK");
             token = arguments.getString("TOKEN");
         }
 
-        edtSetLink.set("iGap.net/");
+        edtSetLink.set(Config.IGAP_LINK_PREFIX);
         wordtoSpan = new SpannableString(edtSetLink.get());
         Selection.setSelection(wordtoSpan, edtSetLink.get().length());
 
@@ -179,7 +181,7 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
                 getRoom(roomId, ProtoGlobal.Room.Type.CHANNEL);
             } else {
 
-                String userName = edtSetLink.get().replace("iGap.net/", "");
+                String userName = edtSetLink.get().replace(Config.IGAP_LINK_PREFIX, "");
                 new RequestChannelUpdateUsername().channelUpdateUsername(roomId, userName);
             }
         }
@@ -194,12 +196,12 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (!isRadioButtonPrivate.get()) {
 
-            if (!s.toString().contains("iGap.net/")) {
-                edtSetLink.set("iGap.net/");
+            if (!s.toString().contains(Config.IGAP_LINK_PREFIX)) {
+                edtSetLink.set(Config.IGAP_LINK_PREFIX);
                 Selection.setSelection(wordtoSpan, edtSetLink.get().length());
             }
-            if (HelperString.regexCheckUsername(s.toString().replace("iGap.net/", ""))) {
-                String userName = edtSetLink.get().replace("iGap.net/", "");
+            if (HelperString.regexCheckUsername(s.toString().replace(Config.IGAP_LINK_PREFIX, ""))) {
+                String userName = edtSetLink.get().replace(Config.IGAP_LINK_PREFIX, "");
                 new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
             } else {
                 txtFinishEnable.set(false);
@@ -298,7 +300,7 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
             fragmentCreateChannelBinding.fchTxtInputNikeName.setError("");
         } else if (isRadioButtonPublic.get()) {
             edtSetLinkEnable.set(true);
-            edtSetLink.set("");
+            edtSetLink.set(Config.IGAP_LINK_PREFIX);
         }
     }
 
