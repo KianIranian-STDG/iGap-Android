@@ -190,6 +190,7 @@ public class ActivityEnhanced extends AppCompatActivity {
     }
 
     private void makeDirectoriesIfNotExist() {
+        StartupActions.makeFolder();
 
 //        if (isOnGetPermission) {
 //            return;

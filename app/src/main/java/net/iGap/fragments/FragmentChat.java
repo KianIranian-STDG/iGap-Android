@@ -5214,7 +5214,7 @@ public class FragmentChat extends BaseFragment
 
                 mAdapter.toggleSelection(searchHash.lastMessageId, false, null);
 
-                if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER) {
+                if (chatType == CHANNEL && channelRole == ChannelChatRole.MEMBER && !isNotJoin) {
                     layoutMute.setVisibility(View.VISIBLE);
                 } else {
                     viewAttachFile.setVisibility(View.VISIBLE);
@@ -5867,7 +5867,7 @@ public class FragmentChat extends BaseFragment
 
 
         layoutAttach.setVisibility(View.GONE);
-        layoutMute.setVisibility(View.VISIBLE);
+        if (!isNotJoin) layoutMute.setVisibility(View.VISIBLE);
 
 
         layoutMute.setOnClickListener(new View.OnClickListener() {
@@ -7476,13 +7476,10 @@ public class FragmentChat extends BaseFragment
                     realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, sort);
                     MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN, getRealmChat());
 
-                    if (realmRoomMessages.size() > 0) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                            }
-                        });
-                    }
+//                    if (realmRoomMessages.size() == 0) { // Hint : link browsable ; Commented Now!!!
+//                        getOnlineMessage(oldMessageId, direction);
+//                        return;
+//                    }
 
                     /**
                      * I do this for set addToView true
@@ -7570,9 +7567,9 @@ public class FragmentChat extends BaseFragment
                      */
                     if (majorCode == 5) {
                         if (direction == UP) {
-                            getOnlineMessage(messageIdGetHistory, UP);
+                            //getOnlineMessage(messageIdGetHistory, UP);
                         } else {
-                            getOnlineMessage(messageIdGetHistory, DOWN);
+                            //getOnlineMessage(messageIdGetHistory, DOWN);
                         }
                     }
                 }

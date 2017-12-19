@@ -250,6 +250,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        setIntent(intent);
         isOpenChatBeforeSheare = true;
         checkIntent(intent);
     }
