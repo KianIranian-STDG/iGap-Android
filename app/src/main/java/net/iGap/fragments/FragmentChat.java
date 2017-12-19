@@ -1254,8 +1254,6 @@ public class FragmentChat extends BaseFragment
              */
             if (HelperCalander.isPersianUnicode) {
                 txtName.setText(txtName.getText().toString());
-            }
-            if (HelperCalander.isPersianUnicode) {
                 txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
             }
         }
@@ -1309,6 +1307,11 @@ public class FragmentChat extends BaseFragment
 
             }
         }
+
+        if (HelperCalander.isPersianUnicode) {
+            txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+        }
+
     }
 
     private void setConnectionText(final ConnectionState connectionState) {
