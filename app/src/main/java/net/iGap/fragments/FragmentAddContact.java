@@ -227,7 +227,7 @@ public class FragmentAddContact extends BaseFragment {
                 }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
+                        addContactToServer();
                         dialog.dismiss();
                         G.fragmentActivity.onBackPressed();
                     }
