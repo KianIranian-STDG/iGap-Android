@@ -719,16 +719,6 @@ public class FragmentNotificationAndSoundViewModel {
         setKeepService(isChecked);
     }
 
-    public void onClickReset(View view) {
-        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.st_title_reset).content(R.string.st_dialog_reset_all_notification).positiveText(R.string.st_dialog_reset_all_notification_yes).negativeText(R.string.st_dialog_reset_all_notification_no).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-
-            }
-        }).show();
-    }
-
     //===============================================================================
     //====================================Methods====================================
     //===============================================================================

@@ -1154,7 +1154,6 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:background="@color/white"
-          android:onClick="@{FragmentNotificationAndSoundViewModel::onClickReset}"
           android:orientation="vertical"
           android:paddingBottom="@dimen/dp16"
           android:paddingTop="@dimen/dp8"
