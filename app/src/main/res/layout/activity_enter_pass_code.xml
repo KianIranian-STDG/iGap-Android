@@ -91,7 +91,7 @@
                 />
           </net.iGap.libs.rippleeffect.RippleView>
 
-          <EditText
+          <net.iGap.module.MEditText
               android:id="@+id/enterPassword_edtSetPassword"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
