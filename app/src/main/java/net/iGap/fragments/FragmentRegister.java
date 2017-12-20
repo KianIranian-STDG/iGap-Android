@@ -141,17 +141,17 @@ public class FragmentRegister extends BaseFragment {
 
         if (G.selectedLanguage.equals("fa") || G.selectedLanguage.equals("ar")) {
 
-            TextView rg_txt_verify_connect = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_connect);
+            TextView rg_txt_verify_connect = fragmentRegisterBinding.rgTxtVerifyConnect;
             rg_txt_verify_connect.setTypeface(titleTypeface);
 
 
-            TextView rg_txt_verify_sms = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_sms);
+            TextView rg_txt_verify_sms = fragmentRegisterBinding.rgTxtVerifySms;
             rg_txt_verify_sms.setTypeface(titleTypeface);
 
-            TextView rg_txt_verify_generate = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_key);
+            TextView rg_txt_verify_generate = fragmentRegisterBinding.rgTxtVerifyKey;
             rg_txt_verify_generate.setTypeface(titleTypeface);
 
-            TextView rg_txt_verify_register = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_server);
+            TextView rg_txt_verify_register = fragmentRegisterBinding.rgTxtVerifyServer;
             rg_txt_verify_register.setTypeface(titleTypeface);
 
         }
@@ -170,7 +170,7 @@ public class FragmentRegister extends BaseFragment {
         ProgressBar rg_prg_verify_register = fragmentRegisterBinding.rgPrgVerifyServer;
         AppUtils.setProgresColler(rg_prg_verify_register);
 
-        ProgressBar prgWaiting = (ProgressBar) G.fragmentActivity.findViewById(R.id.prgWaiting);
+        ProgressBar prgWaiting = (ProgressBar) fragmentRegisterBinding.prgWaiting;
         AppUtils.setProgresColler(prgWaiting);
 
 

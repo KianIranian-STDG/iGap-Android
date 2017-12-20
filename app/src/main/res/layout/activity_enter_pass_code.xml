@@ -104,7 +104,7 @@
               android:inputType="@{activityEnterPassCodeViewModel.edtSetPasswordInput}"
               android:maxLength="@{activityEnterPassCodeViewModel.onTextChangedMaxLine}"
               android:maxLines="1"
-              android:onTextChanged="@{activityEnterPassCodeViewModel.onTextChanged}"
+              android:afterTextChanged="@{activityEnterPassCodeViewModel.afterTextChanged}"
               android:padding="@dimen/dp10"
               android:singleLine="true"
               android:text="@={activityEnterPassCodeViewModel.edtSetPassword}"
