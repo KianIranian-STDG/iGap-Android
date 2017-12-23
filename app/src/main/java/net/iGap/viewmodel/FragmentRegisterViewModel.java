@@ -475,7 +475,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                     //txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
                     //txtAgreement_register.startAnimation(trans_x_out);
 
-                    //if (FragmentRegister.onStartAnimationRegister != null) FragmentRegister.onStartAnimationRegister.start();
+                    if (FragmentRegister.onStartAnimationRegister != null) FragmentRegister.onStartAnimationRegister.start();
 
                     G.handler.postDelayed(new Runnable() {
                         @Override
@@ -490,7 +490,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                             edtCodeNumberEnable.set(false);
                             edtCodeNumberColor.set(G.context.getResources().getColor(R.color.rg_border_editText));
                             txtAgreementVisibility.set(View.GONE);
-                            layoutVerifyAgreement.set(View.VISIBLE);
+                            //layoutVerifyAgreement.set(View.VISIBLE);
                             //layout_verify.startAnimation(trans_x_in);
                             isVerify = true;
                             checkVerify();

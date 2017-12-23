@@ -188,16 +188,24 @@ public class FragmentRegister extends BaseFragment {
         onStartAnimationRegister = new OnStartAnimationRegister() {
             @Override
             public void start() {
-                final Animation trans_x_in = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_in);
-                final Animation trans_x_out = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
-                txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
-                txtAgreement_register.startAnimation(trans_x_out);
-                G.handler.postDelayed(new Runnable() {
+
+                G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        layout_verify.startAnimation(trans_x_in);
+                        final Animation trans_x_in = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_in);
+                        final Animation trans_x_out = AnimationUtils.loadAnimation(G.context, R.anim.rg_tansiton_y_out);
+                        txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
+                        txtAgreement_register.startAnimation(trans_x_out);
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                fragmentRegisterBinding.rgLayoutVerifyAndAgreement.setVisibility(View.VISIBLE);
+                                layout_verify.startAnimation(trans_x_in);
+                            }
+                        }, 500);
                     }
-                }, 600);
+                });
+
             }
         };
 

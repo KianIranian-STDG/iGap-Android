@@ -283,7 +283,7 @@
                   android:textAllCaps="false"
                   android:textSize="@dimen/dp14"
                   android:textColor="@{fragmentRegisterViewModel.btnStartColor , default = @color/rg_whit_background}"
-                  android:enabled="@{fragmentRegisterViewModel.btnStartEnable}"
+                  android:enabled="@{fragmentRegisterViewModel.btnStartEnable }"
                   />
 
             </LinearLayout>
@@ -347,7 +347,7 @@
                       android:textAppearance="@style/TextIconAppearance_toolbar"
                       android:textSize="@dimen/dp16"
                       android:gravity="center"
-                      android:visibility="@{fragmentRegisterViewModel.txtIconVerifyConnectVisibility}"
+                      android:visibility="@{fragmentRegisterViewModel.txtIconVerifyConnectVisibility , default = gone}"
                       />
 
 
