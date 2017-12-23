@@ -4,13 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
@@ -22,7 +20,6 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import java.io.IOException;
@@ -217,8 +214,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
     private void initComponent(final View view) {
 
-        nestedScrollView = (NestedScrollView) view.findViewById(R.id.group_nestedScroll);
-        prgWait = (ProgressBar) view.findViewById(R.id.agp_prgWaiting_addContact);
+        nestedScrollView = fragmentGroupProfileBinding.groupNestedScroll;
+        prgWait = fragmentGroupProfileBinding.agpPrgWaitingAddContact;
         AppUtils.setProgresColler(prgWait);
 
         //        txtGroupDescription.setText(HelperUrl.setUrlLink(description, true, false, null, true));
@@ -226,26 +223,24 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         appBarLayout = (fragmentGroupProfileBinding.agpAppbar);
         imvGroupAvatar = fragmentGroupProfileBinding.agpImvGroupAvatar;
 
-        CollapsingToolbarLayout collapsingToolbarLayout = fragmentGroupProfileBinding.agpColapsingToolbar;
-        collapsingToolbarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
-        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(G.appBarColor));
+        //CollapsingToolbarLayout collapsingToolbarLayout = fragmentGroupProfileBinding.agpColapsingToolbar;
+        //collapsingToolbarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
+        //collapsingToolbarLayout.setContentScrimColor(Color.parseColor(G.appBarColor));
 
         //
 
-        final TextView titleToolbar = (TextView) view.findViewById(R.id.agp_txt_titleToolbar);
-        final ViewGroup viewGroup = (ViewGroup) view.findViewById(R.id.apg_parentLayoutCircleImage);
+        final TextView titleToolbar = fragmentGroupProfileBinding.agpTxtTitleToolbar;
+        final ViewGroup viewGroup = fragmentGroupProfileBinding.apgParentLayoutCircleImage;
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
                 if (verticalOffset < -5) {
-
                     viewGroup.setVisibility(View.GONE);
                     titleToolbar.setVisibility(View.VISIBLE);
                     viewGroup.animate().alpha(0).setDuration(500);
                     titleToolbar.animate().alpha(1).setDuration(250);
                 } else {
-
                     titleToolbar.setVisibility(View.GONE);
                     viewGroup.setVisibility(View.VISIBLE);
                     titleToolbar.animate().alpha(0).setDuration(250);
@@ -270,17 +265,17 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         }
         //
 
-        final ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.agp_toggle_member_can_add_member);
-        toggleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (toggleButton.isChecked()) {
-
-                } else {
-
-                }
-            }
-        });
+        //final ToggleButton toggleButton = (ToggleButton) view.findViewById(R.id.agp_toggle_member_can_add_member);
+        //toggleButton.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        if (toggleButton.isChecked()) {
+        //
+        //        } else {
+        //
+        //        }
+        //    }
+        //});
 
         //
         FragmentShowAvatars.onComplete = new OnComplete() {

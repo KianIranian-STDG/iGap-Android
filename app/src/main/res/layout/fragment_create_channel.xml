@@ -234,8 +234,9 @@
                   android:textColorHint="@color/default_shadow_color"
                   android:textDirection="ltr"
                   android:textSize="@dimen/dp15"
-                  android:onTextChanged="@{fragmentCreateChannelViewModel.onTextChanged}"
+                  android:afterTextChanged="@{fragmentCreateChannelViewModel.afterTextChanged}"
                   android:enabled="@{fragmentCreateChannelViewModel.edtSetLinkEnable}"
+                  android:layoutDirection="ltr"
                   />
 
             </android.support.design.widget.TextInputLayout>

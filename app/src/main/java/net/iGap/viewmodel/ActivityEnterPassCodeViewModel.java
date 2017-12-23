@@ -18,6 +18,7 @@ import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.support.annotation.NonNull;
+import android.text.Editable;
 import android.text.InputType;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -74,9 +75,10 @@ public class ActivityEnterPassCodeViewModel {
     private Context context;
     private TextView iconFingerPrint;
     private TextView textFingerPrint;
+    private View view;
 
-    public ActivityEnterPassCodeViewModel(Context context) {
-
+    public ActivityEnterPassCodeViewModel(Context context, View view) {
+        this.view = view;
         this.context = context;
         getInfo();
     }
@@ -86,11 +88,10 @@ public class ActivityEnterPassCodeViewModel {
     public ObservableField<Integer> edtSetPasswordInput = new ObservableField<>(TYPE_TEXT_VARIATION_PASSWORD);
     public ObservableField<Integer> onTextChangedMaxLine = new ObservableField<>(4);
 
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+    public void afterTextChanged(Editable s) {
         if (kindPassCode == PIN) {
             if (s.length() == 4) {
-                //rippleOk(v);
+                rippleOk(view);
             }
         }
     }

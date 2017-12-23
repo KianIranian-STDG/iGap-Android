@@ -4,13 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.method.LinkMovementMethod;
@@ -113,20 +111,13 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         };
 
         AppBarLayout appBarLayout = fragmentProfileChannelBinding.pchAppbar;
-        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        CollapsingToolbarLayout collapsingToolbarLayout = fragmentProfileChannelBinding.acpLlCollapsingToolbarLayout;
-        collapsingToolbarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
-        collapsingToolbarLayout.setContentScrimColor(Color.parseColor(G.appBarColor));
-
-        titleToolbar = (TextView) view.findViewById(R.id.pch_txt_titleToolbar);
         titleToolbar = fragmentProfileChannelBinding.pchTxtTitleToolbar;
-        //titleToolbar.setText("" + title);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 
-                ViewGroup viewGroup = (ViewGroup) G.fragmentActivity.findViewById(R.id.pch_root_circleImage);
+                ViewGroup viewGroup = fragmentProfileChannelBinding.pchRootCircleImage;
                 if (verticalOffset < -5) {
                     viewGroup.animate().alpha(0).setDuration(700);
                     viewGroup.setVisibility(View.GONE);

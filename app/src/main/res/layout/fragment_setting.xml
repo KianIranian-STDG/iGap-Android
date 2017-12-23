@@ -37,6 +37,7 @@
           android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
           app:expandedTitleMarginBottom="32dp"
           app:expandedTitleMarginEnd="64dp"
+          app:contentScrim="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
           app:expandedTitleMarginStart="48dp"
           app:expandedTitleTextAppearance="@android:color/transparent"
           app:layout_scrollFlags="scroll|exitUntilCollapsed"

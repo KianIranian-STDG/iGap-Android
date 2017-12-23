@@ -456,7 +456,7 @@
                       android:layout_height="match_parent"
                       android:gravity="center_vertical"
                       android:text="@{fragmentRegisterViewModel.callBackTxtVerifyKey}"
-                      android:textAppearance="@{fragmentRegisterViewModel.txtVerifyKeColor}"
+                      android:textAppearance="@{fragmentRegisterViewModel.txtVerifyKeyAppearance}"
                       android:textColor="@{fragmentRegisterViewModel.txtVerifyKeColor}"
                       android:textSize="@dimen/dp13"
                       />

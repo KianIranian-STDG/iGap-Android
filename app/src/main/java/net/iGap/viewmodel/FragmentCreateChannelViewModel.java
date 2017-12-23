@@ -15,6 +15,7 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
+import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -193,7 +194,8 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
         }
     }
 
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    public void afterTextChanged(Editable s) {
+
         if (!isRadioButtonPrivate.get()) {
 
             if (!s.toString().contains(Config.IGAP_LINK_PREFIX)) {
@@ -242,7 +244,6 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
                                 bundle.putBoolean("NewRoom", true);
                                 fragment.setArguments(bundle);
 
-                                //popBackStackFragment();
                                 if (FragmentCreateChannel.onRemoveFragment != null) {
                                     FragmentCreateChannel.onRemoveFragment.remove();
                                 }

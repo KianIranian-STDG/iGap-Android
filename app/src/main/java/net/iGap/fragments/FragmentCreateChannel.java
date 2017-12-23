@@ -47,6 +47,13 @@ public class FragmentCreateChannel extends BaseFragment {
         initDataBinding();
         ProgressBar prgWaiting = fragmentCreateChannelBinding.fchPrgWaitingAddContact;
         AppUtils.setProgresColler(prgWaiting);
+
+        onRemoveFragment = new OnRemoveFragment() {
+            @Override
+            public void remove() {
+                popBackStackFragment();
+            }
+        };
     }
 
     private void initDataBinding() {
@@ -65,4 +72,5 @@ public class FragmentCreateChannel extends BaseFragment {
     public interface OnRemoveFragment {
         void remove();
     }
+
 }

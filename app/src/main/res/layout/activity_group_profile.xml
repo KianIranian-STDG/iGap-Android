@@ -58,10 +58,11 @@
                     android:id="@+id/agp_colapsing_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:contentScrim="@color/toolbar_background"
+                    app:contentScrim="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                     app:expandedTitleMarginBottom="32dp"
                     app:expandedTitleMarginEnd="64dp"
                     app:expandedTitleMarginStart="48dp"
+                    android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                     app:expandedTitleTextAppearance="@android:color/transparent"
                     app:layout_scrollFlags="scroll|exitUntilCollapsed"
                     >

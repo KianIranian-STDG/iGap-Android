@@ -44,8 +44,9 @@
             android:id="@+id/acp_ll_collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="@color/toolbar_background"
+            app:contentScrim="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
             app:expandedTitleMarginBottom="32dp"
+            android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleTextAppearance="@android:color/transparent"
@@ -74,12 +75,12 @@
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_alignParentLeft="true"
+                  android:onClick="@{fragmentChannelProfileViewModel::onClickRippleBack}"
                   app:rv_alpha="200"
                   app:rv_centered="true"
                   app:rv_rippleDuration="0"
                   app:rv_ripplePadding="5dp"
                   rv_centered="true"
-                  android:onClick="@{fragmentChannelProfileViewModel::onClickRippleBack}"
                   >
 
                 <net.iGap.module.MaterialDesignTextView
@@ -120,12 +121,12 @@
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:layout_alignParentRight="true"
+                  android:onClick="@{fragmentChannelProfileViewModel::onClickRippleMenuPopup}"
                   app:rv_alpha="200"
                   app:rv_centered="true"
                   app:rv_rippleDuration="100"
                   app:rv_ripplePadding="5dp"
                   rv_centered="true"
-                  android:onClick="@{fragmentChannelProfileViewModel::onClickRippleMenuPopup}"
                   >
 
                 <net.iGap.module.MaterialDesignTextView
@@ -134,9 +135,9 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/md_show_more_button"
-                    android:visibility="@{fragmentChannelProfileViewModel.menuPopupVisibility}"
                     android:textAppearance="@style/TextIconAppearance_toolbar"
                     android:textColor="@color/whit_background"
+                    android:visibility="@{fragmentChannelProfileViewModel.menuPopupVisibility}"
                     />
               </net.iGap.libs.rippleeffect.RippleView>
             </LinearLayout>
@@ -148,10 +149,10 @@
               android:layout_height="wrap_content"
               android:layout_gravity="center"
               android:gravity="center"
+              android:onClick="@{fragmentChannelProfileViewModel::onClickCircleImage}"
               android:orientation="vertical"
               android:paddingTop="@dimen/dp8"
               app:layout_collapseMode="parallax"
-              android:onClick="@{fragmentChannelProfileViewModel::onClickCircleImage}"
               >
 
             <net.iGap.module.CircleImageView
@@ -170,11 +171,11 @@
                 android:lineSpacingMultiplier=".8"
                 android:maxLength="24"
                 android:padding="@dimen/dp4"
+                android:text="@{fragmentChannelProfileViewModel.callbackChannelName , default=name}"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/dp16"
                 android:textStyle="normal"
                 app:emojiSize="@dimen/dp14"
-                android:text="@{fragmentChannelProfileViewModel.callbackChannelName , default=name}"
                 />
 
           </LinearLayout>
@@ -244,21 +245,23 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:enabled="@{fragmentChannelProfileViewModel.channelNameEnable}"
+                    android:onClick="@{fragmentChannelProfileViewModel::onClickChannelName}"
                     android:paddingEnd="@dimen/dp4"
                     android:paddingStart="@dimen/dp4"
                     android:singleLine="true"
                     android:text="@string/channel_name"
                     android:textColor="@color/black_register"
                     android:textSize="@dimen/dp15"
-                    android:enabled="@{fragmentChannelProfileViewModel.channelNameEnable}"
-                    android:onClick="@{fragmentChannelProfileViewModel::onClickChannelName}"
                     />
 
                 <net.iGap.module.EmojiTextViewE
                     android:id="@+id/txt_channel_name_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:enabled="@{fragmentChannelProfileViewModel.channelNameEnable}"
                     android:lineSpacingMultiplier=".8"
+                    android:onClick="@{fragmentChannelProfileViewModel::onClickChannelName}"
                     android:padding="@dimen/dp4"
                     android:paddingBottom="@dimen/dp12"
                     android:paddingEnd="@dimen/dp4"
@@ -269,8 +272,6 @@
                     android:textColor="@color/gray_5c"
                     android:textSize="@dimen/dp13"
                     app:emojiSize="@dimen/dp14"
-                    android:enabled="@{fragmentChannelProfileViewModel.channelNameEnable}"
-                    android:onClick="@{fragmentChannelProfileViewModel::onClickChannelName}"
                     />
               </LinearLayout>
             </LinearLayout>
@@ -279,11 +280,11 @@
                 android:id="@+id/layout_channel_link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelLink}"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/dp12"
                 android:paddingRight="@dimen/dp12"
                 android:visibility="@{fragmentChannelProfileViewModel.channelLinkVisibility}"
-                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelLink}"
                 >
 
               <TextView
@@ -328,20 +329,22 @@
               <TextView
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:enabled="@{fragmentChannelProfileViewModel.channelDescriptionEnable}"
+                  android:onClick="@{fragmentChannelProfileViewModel::onClickChannelDescription}"
                   android:paddingEnd="@dimen/dp4"
                   android:paddingStart="@dimen/dp4"
                   android:singleLine="true"
                   android:text="@string/channel_description"
                   android:textColor="@color/black_register"
                   android:textSize="@dimen/dp15"
-                  android:enabled="@{fragmentChannelProfileViewModel.channelDescriptionEnable}"
-                  android:onClick="@{fragmentChannelProfileViewModel::onClickChannelDescription}"
                   />
 
               <net.iGap.module.EmojiTextViewE
                   android:id="@+id/txt_description"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                  android:enabled="@{fragmentChannelProfileViewModel.channelDescriptionEnable}"
+                  android:onClick="@{fragmentChannelProfileViewModel::onClickChannelDescription}"
                   android:padding="@dimen/dp4"
                   android:paddingBottom="@dimen/dp12"
                   android:paddingEnd="@dimen/dp4"
@@ -351,8 +354,6 @@
                   android:textColor="@color/gray_5c"
                   android:textSize="@dimen/dp13"
                   app:emojiSize="@dimen/dp14"
-                  android:enabled="@{fragmentChannelProfileViewModel.channelDescriptionEnable}"
-                  android:onClick="@{fragmentChannelProfileViewModel::onClickChannelDescription}"
 
                   />
 
@@ -361,10 +362,10 @@
                 android:id="@+id/lyt_shared_media"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelSharedMedia}"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/dp12"
                 android:paddingRight="@dimen/dp12"
-                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelSharedMedia}"
                 >
 
               <TextView
@@ -386,9 +387,9 @@
                   android:paddingEnd="@dimen/dp4"
                   android:paddingStart="@dimen/dp4"
                   android:paddingTop="@dimen/dp4"
+                  android:text="@{fragmentChannelProfileViewModel.callbackChannelSharedMedia , default=SharedMedia}"
                   android:textColor="@color/gray_5c"
                   android:textSize="@dimen/dp13"
-                  android:text="@{fragmentChannelProfileViewModel.callbackChannelSharedMedia , default=SharedMedia}"
                   />
             </LinearLayout>
 
@@ -426,13 +427,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left|center"
+                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelAddMember}"
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/dp8"
                 android:paddingEnd="@dimen/dp8"
                 android:paddingLeft="@dimen/dp8"
                 android:paddingRight="@dimen/dp8"
                 android:paddingStart="@dimen/dp8"
-                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelAddMember}"
                 >
 
               <ImageView
@@ -469,13 +470,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left|center"
+                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelShowMember}"
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/dp8"
                 android:paddingEnd="@dimen/dp8"
                 android:paddingLeft="@dimen/dp8"
                 android:paddingRight="@dimen/dp8"
                 android:paddingStart="@dimen/dp8"
-                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelShowMember}"
 
                 >
 
@@ -536,9 +537,9 @@
                 android:id="@+id/lyt_list_admin"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
+                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelListAdmin}"
                 android:orientation="vertical"
                 android:visibility="@{fragmentChannelProfileViewModel.listAdminVisibility}"
-                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelListAdmin}"
                 >
 
               <TextView
@@ -570,9 +571,9 @@
                 android:id="@+id/lyt_list_moderator"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
+                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelListModerator}"
                 android:orientation="vertical"
                 android:visibility="@{fragmentChannelProfileViewModel.moderatorVisibility}"
-                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelListModerator}"
                 >
 
               <TextView
@@ -653,8 +654,8 @@
                 android:id="@+id/lyt_notification"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
-                android:orientation="vertical"
                 android:onClick="@{fragmentChannelProfileViewModel::onClickChannelNotification}"
+                android:orientation="vertical"
                 >
 
               <TextView
@@ -684,8 +685,8 @@
                 android:id="@+id/lyt_delete_channel"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
-                android:orientation="vertical"
                 android:onClick="@{fragmentChannelProfileViewModel::onClickChannelDeleteChannel}"
+                android:orientation="vertical"
                 >
 
               <TextView
@@ -714,13 +715,13 @@
                 android:id="@+id/agp_layout_signature"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp48"
+                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelSignature}"
                 android:orientation="horizontal"
                 android:paddingEnd="@dimen/dp16"
                 android:paddingLeft="@dimen/dp16"
                 android:paddingRight="@dimen/dp16"
                 android:paddingStart="@dimen/dp16"
                 android:visibility="@{fragmentChannelProfileViewModel.signatureVisibility}"
-                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelSignature}"
                 >
 
               <TextView
@@ -742,10 +743,10 @@
                   android:layout_width="@dimen/dp44"
                   android:layout_height="@dimen/dp40"
                   android:background="@drawable/st_switch_button"
-                  android:textOff=""
-                  android:textOn=""
                   android:checked="@{fragmentChannelProfileViewModel.isCheckedSignature}"
                   android:onClick="@{fragmentChannelProfileViewModel::onClickChannelSignature}"
+                  android:textOff=""
+                  android:textOn=""
                   />
 
             </LinearLayout>
@@ -775,10 +776,10 @@
           android:src="@mipmap/pu_camera"
           android:theme="@style/FabButton"
           android:tint="@color/gray"
+          android:visibility="@{fragmentChannelProfileViewModel.fabVisibility}"
           app:fabSize="normal"
           app:layout_anchor="@+id/pch_appbar"
           app:layout_anchorGravity="bottom|right|end"
-          android:visibility="@{fragmentChannelProfileViewModel.fabVisibility}"
 
           />
 

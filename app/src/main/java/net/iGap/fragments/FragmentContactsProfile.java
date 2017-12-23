@@ -36,10 +36,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-
+import io.realm.Realm;
+import java.io.IOException;
+import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentContactsProfileBinding;
@@ -69,11 +70,6 @@ import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserReport;
 import net.iGap.viewmodel.FragmentContactsProfileViewModel;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import io.realm.Realm;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
@@ -351,7 +347,7 @@ public class FragmentContactsProfile extends BaseFragment {
         fragmentContactsProfileBinding.chiAppbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                ViewGroup viewGroup = (ViewGroup) view.findViewById(R.id.chi_root_circleImage);
+                ViewGroup viewGroup = fragmentContactsProfileBinding.chiRootCircleImage;
                 if (verticalOffset < -5) {
                     viewGroup.animate().alpha(0).setDuration(700);
                     viewGroup.setVisibility(View.GONE);

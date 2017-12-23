@@ -285,57 +285,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
          * *********************************************
          */
 
-        //btnChat = (MaterialDesignTextView) findViewById(R.id.fcr_btn_chat);
-        //btnChat.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //
-        //
-        //        if (!isConnected && isIncomingCall) {
-        //            endCall();
-        //
-        //        }
-        //
-        //        HelperPublicMethod.goToChatRoom(userId, null, null);
-        //
-        //    }
-        //});
-
-        //btnSpeaker = (MaterialDesignTextView) findViewById(R.id.fcr_btn_speaker);
-        //btnSpeaker.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //
-        //    }
-        //});
-
-        //btnMic = (MaterialDesignTextView) findViewById(R.id.fcr_btn_mic);
-        //btnMic.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //
-        //    }
-        //});
-
-        //if (isIncomingCall) {
-        //    playRingtone();
-        //    //layoutOption.setVisibility(View.GONE);
-        //} else {
-        //
-        //    playSound(R.raw.igap_signaling);
-        //
-        //    //layoutAnswer.setVisibility(View.GONE);
-        //    //layoutChat.setVisibility(View.GONE);
-        //
-        //}
-
-        //muteMusic();
-
         setAnimation();
 
-        //setPicture();
-
-        //  setSpeakerphoneOn(false);
     }
 
     /**

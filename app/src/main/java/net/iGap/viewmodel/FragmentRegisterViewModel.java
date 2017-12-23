@@ -184,9 +184,10 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     public ObservableInt txtVerifyServerColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_text_verify));
     public ObservableInt btnStartColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_whit_background));
     public ObservableInt btnStartBackgroundColor = new ObservableInt(Color.parseColor(G.appBarColor));
-    public ObservableInt txtVerifyConnectAppearance = new ObservableInt(R.style.RedHUGEText);
-    public ObservableInt txtVerifyServerAppearance = new ObservableInt(R.style.RedHUGEText);
-    public ObservableInt txtVerifySmsAppearance = new ObservableInt(R.style.RedHUGEText);
+    public ObservableInt txtVerifyConnectAppearance = new ObservableInt();
+    public ObservableInt txtVerifyServerAppearance = new ObservableInt();
+    public ObservableInt txtVerifyKeyAppearance = new ObservableInt();
+    public ObservableInt txtVerifySmsAppearance = new ObservableInt();
     public ObservableBoolean edtCodeNumberEnable = new ObservableBoolean(false);
     public ObservableBoolean btnChoseCountryEnable = new ObservableBoolean(true);
     public ObservableBoolean edtPhoneNumberEnable = new ObservableBoolean(true);
@@ -939,7 +940,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
 
         boolean wrapInScrollView = true;
-        dialogWait = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+        dialogWait = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).cancelable(false).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -1010,16 +1011,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     private void userVerify(final String userName, final String verificationCode) {
         if (G.socketConnection) {
 
-            //rg_prg_verify_generate = (ProgressBar) G.fragmentActivity.findViewById(R.id.rg_prg_verify_key);
-            //AppUtils.setProgresColler(rg_prg_verify_generate);
-
-            //rg_txt_verify_generate = (TextView) G.fragmentActivity.findViewById(R.id.rg_txt_verify_key);
-            //rg_img_verify_generate = (ImageView) G.fragmentActivity.findViewById(R.id.rg_img_verify_key);
-
-
             prgVerifyKeyVisibility.set(View.VISIBLE);
-
-            //rg_txt_verify_generate.setTextAppearance(G.context, R.style.RedHUGEText);
+            txtVerifyKeyAppearance.set(R.style.RedHUGEText);
 
 
             userVerifyResponse(verificationCode);
@@ -1187,7 +1180,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
     private void userLogin(final String token) {
         prgVerifyServerVisibility.set(View.VISIBLE);
-
         txtVerifyServerAppearance.set(R.style.RedHUGEText);
 
         G.onUserLogin = new OnUserLogin() {

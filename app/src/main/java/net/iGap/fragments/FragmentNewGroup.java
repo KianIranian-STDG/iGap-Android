@@ -297,7 +297,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         });
 
         //=======================description group
-        edtDescription = (LinedEditText) view.findViewById(R.id.ng_edt_description);
+        edtDescription = fragmentNewGroupBinding.ngEdtDescription;
         edtDescription.setPadding(0, 8, 0, 8);
 
         edtDescription.addTextChangedListener(new TextWatcher() {
