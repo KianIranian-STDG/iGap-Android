@@ -86,12 +86,14 @@ public class FragmentPassCodeViewModel {
         if (realmUserInfo != null) isPassCode = realmUserInfo.isPassCode();
 
         if (!isPassCode) {
+            page = 0;
             vgTogglePassCodeVisibility.set(View.GONE);
             rootEnterPassword.set(View.VISIBLE);
             rootSettingPassword.set(View.GONE);
             rippleOkVisibility.set(View.VISIBLE);
             //txtSetPassword.setText(G.fragmentActivity.getResources().getString(R.string.enter_a_password));
             //titlePassCode.set("PIN");
+            txtSetPassword.set(G.fragmentActivity.getResources().getString(R.string.enter_a_password));
             titlePassCodeVisibility.set(View.GONE);
             layoutModePassCode.set(View.VISIBLE);
             if (kindPassword == PIN) {
@@ -217,6 +219,8 @@ public class FragmentPassCodeViewModel {
                         }
                     }
                 });
+
+                isTogglePassCode.set(true);
                 edtSetPasswordText.set("");
             } else {
                 AppUtils.closeKeyboard(v);
