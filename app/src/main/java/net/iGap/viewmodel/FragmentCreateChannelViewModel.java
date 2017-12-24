@@ -23,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RadioGroup;
-
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -198,10 +197,13 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
 
         if (!isRadioButtonPrivate.get()) {
 
-            if (!s.toString().contains(Config.IGAP_LINK_PREFIX)) {
+            if (!s.toString().startsWith(Config.IGAP_LINK_PREFIX)) {
                 edtSetLink.set(Config.IGAP_LINK_PREFIX);
                 Selection.setSelection(wordtoSpan, edtSetLink.get().length());
+            } else {
+                Selection.setSelection(wordtoSpan, edtSetLink.get().length());
             }
+
             if (HelperString.regexCheckUsername(s.toString().replace(Config.IGAP_LINK_PREFIX, ""))) {
                 String userName = edtSetLink.get().replace(Config.IGAP_LINK_PREFIX, "");
                 new RequestChannelCheckUsername().channelCheckUsername(roomId, userName);
@@ -212,7 +214,6 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
                 fragmentCreateChannelBinding.fchTxtInputNikeName.setError("" + G.fragmentActivity.getResources().getString(R.string.INVALID));
             }
         }
-
     }
 
 

@@ -30,10 +30,14 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmList;
+import io.realm.RealmModel;
+import java.util.ArrayList;
+import java.util.List;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -91,14 +95,6 @@ import net.iGap.request.RequestGroupRemoveUsername;
 import net.iGap.request.RequestGroupRevokeLink;
 import net.iGap.request.RequestGroupUpdateUsername;
 import net.iGap.request.RequestUserInfo;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmList;
-import io.realm.RealmModel;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
@@ -595,9 +591,14 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (editable.toString().contains(Config.IGAP_LINK_PREFIX)) {
+                if (!editable.toString().startsWith(Config.IGAP_LINK_PREFIX)) {
+                    edtUserName.setText(Config.IGAP_LINK_PREFIX);
+                    Selection.setSelection(edtUserName.getText(), edtUserName.getText().length());
+                } else {
                     Selection.setSelection(edtUserName.getText(), edtUserName.getText().length());
                 }
+
+
 
                 if (HelperString.regexCheckUsername(editable.toString().replace(Config.IGAP_LINK_PREFIX, ""))) {
                     String userName = edtUserName.getText().toString().replace(Config.IGAP_LINK_PREFIX, "");
