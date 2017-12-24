@@ -864,10 +864,10 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         prgVerifyConnectVisibility.set(View.GONE);
                         txtIconVerifyConnectVisibility.set(View.VISIBLE);
                         imgVerifySmsVisibility.set(View.GONE);
-                        txtVerifyConnectAppearance.set(R.style.RedHUGEText);
+                        //txtVerifyConnectAppearance.set(R.style.RedHUGEText);
                         txtVerifyConnectColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
                         prgVerifySmsVisibility.set(View.VISIBLE);
-                        txtVerifySmsAppearance.set(R.style.RedHUGEText);
+                        //txtVerifySmsAppearance.set(R.style.RedHUGEText);
 
                     }
                 });
@@ -1012,7 +1012,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         if (G.socketConnection) {
 
             prgVerifyKeyVisibility.set(View.VISIBLE);
-            txtVerifyKeyAppearance.set(R.style.RedHUGEText);
+            //txtVerifyKeyAppearance.set(R.style.RedHUGEText);
 
 
             userVerifyResponse(verificationCode);
@@ -1180,7 +1180,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
     private void userLogin(final String token) {
         prgVerifyServerVisibility.set(View.VISIBLE);
-        txtVerifyServerAppearance.set(R.style.RedHUGEText);
+        //txtVerifyServerAppearance.set(R.style.RedHUGEText);
 
         G.onUserLogin = new OnUserLogin() {
             @Override

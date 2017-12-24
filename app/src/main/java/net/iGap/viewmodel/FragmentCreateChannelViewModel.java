@@ -199,9 +199,11 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
 
             if (!s.toString().startsWith(Config.IGAP_LINK_PREFIX)) {
                 edtSetLink.set(Config.IGAP_LINK_PREFIX);
-                Selection.setSelection(wordtoSpan, edtSetLink.get().length());
-            } else {
-                Selection.setSelection(wordtoSpan, edtSetLink.get().length());
+
+                //Selection.setSelection(new SpannableString(edtSetLink.get()), edtSetLink.get().length());
+                //} else {
+                //Selection.setSelection(new SpannableString(edtSetLink.get()), edtSetLink.get().length());
+                //}
             }
 
             if (HelperString.regexCheckUsername(s.toString().replace(Config.IGAP_LINK_PREFIX, ""))) {
