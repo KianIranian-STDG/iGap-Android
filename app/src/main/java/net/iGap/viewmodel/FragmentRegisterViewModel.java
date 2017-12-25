@@ -172,7 +172,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     public ObservableInt prgWaitingVisibility = new ObservableInt(View.GONE);
     public ObservableInt rootCheckPasswordVisibility = new ObservableInt(View.GONE);
     public ObservableInt txtAgreementVisibility = new ObservableInt(View.VISIBLE);
-    public ObservableInt txtIconVerifyConnectColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_text_verify));
+    public ObservableInt txtIconVerifyConnectColor = new ObservableInt(G.context.getResources().getColor(R.color.grayNew));
     public ObservableInt txtVerifyConnectColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_text_dark_verify));
     public ObservableInt txtVerifyTimerColor = new ObservableInt(G.context.getResources().getColor(R.color.black));
     public ObservableInt edtCodeNumberColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_black_register));
@@ -757,17 +757,12 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         thread.start();
     }
 
-    private void setItem() { //invoke object
-
-
-
-    }
 
     // error verify sms and open rg_dialog for enter sms code
     private void errorVerifySms(FragmentRegister.Reason reason) { //when don't receive sms and open rg_dialog for enter code
 
         prgVerifySmsVisibility.set(View.GONE);
-        imgVerifySmsColor.set(R.mipmap.alert);
+        //imgVerifySmsColor.set(R.mipmap.alert);
         imgVerifySmsVisibility.set(View.VISIBLE);
         imgVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_error_red));
         callBackTxtVerifySms.set(G.context.getResources().getString(R.string.errore_verification_sms));
@@ -1056,7 +1051,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         callBackTxtVerifySms.set(G.fragmentActivity.getResources().getString(R.string.rg_verify_register2));
                         prgVerifySmsVisibility.set(View.GONE);
                         imgVerifySmsVisibility.set(View.VISIBLE);
-                        imgVerifySmsColor.set(R.mipmap.check);
+                        //imgVerifySmsColor.set(R.mipmap.check);
                         imgVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
                         txtVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
 
@@ -1155,7 +1150,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                     callBackTxtVerifySms.set((G.fragmentActivity.getResources().getString(R.string.rg_verify_register2)));
                     prgVerifySmsVisibility.set(View.GONE);
                     imgVerifySmsVisibility.set(View.VISIBLE);
-                    imgVerifySmsColor.set(R.mipmap.check);
+                    //imgVerifySmsColor.set(R.mipmap.check);
                     imgVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
                     txtVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
 
