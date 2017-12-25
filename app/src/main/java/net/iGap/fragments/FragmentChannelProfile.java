@@ -30,7 +30,7 @@ import net.iGap.databinding.ActivityProfileChannelBinding;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetDataFromOtherApp;
-import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
@@ -252,7 +252,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                     if (G.fragmentActivity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
 
                         try {
-                            HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                            HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                                 @Override
                                 public void Allow() {
                                     // this dialog show 2 way for choose image : gallery and camera

@@ -9,6 +9,11 @@ import android.telephony.TelephonyManager;
 public class MyPhonStateService extends BroadcastReceiver {
     TelephonyManager telephony;
 
+
+    /**
+     * use when start or finish ringing
+     */
+
     public void onReceive(Context context, Intent intent) {
         MyPhoneStateListener phoneListener = new MyPhoneStateListener();
         telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);

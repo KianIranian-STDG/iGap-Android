@@ -42,7 +42,7 @@ import net.iGap.R;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperImageBackColor;
-import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChannelAddAdmin;
 import net.iGap.interfaces.OnChannelAddModerator;
@@ -997,7 +997,7 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
                 @Override
                 public void onClick(View v) {
                     try {
-                        HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                        HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                             @Override
                             public void Allow() {
                                 if (mContact.peerId == userID) {

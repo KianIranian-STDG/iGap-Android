@@ -35,7 +35,7 @@ import java.io.IOException;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityCallBinding;
-import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.MaterialDesignTextView;
@@ -123,7 +123,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
 
         try {
-            HelperPermision.getMicroPhonePermission(this, new OnGetPermission() {
+            HelperPermission.getMicroPhonePermission(this, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
 

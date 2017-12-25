@@ -28,18 +28,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
-
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGetPermission;
@@ -51,10 +52,6 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.realm.RealmRoomMessage;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 public class FragmentMediaPlayer extends BaseFragment {
 
@@ -365,7 +362,7 @@ public class FragmentMediaPlayer extends BaseFragment {
 
         if (G.context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             try {
-                HelperPermision.getMicroPhonePermission(G.currentActivity, new OnGetPermission() {
+                HelperPermission.getMicroPhonePermission(G.currentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
 

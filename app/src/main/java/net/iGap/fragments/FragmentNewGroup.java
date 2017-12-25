@@ -45,7 +45,7 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
-import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
@@ -132,7 +132,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                     case 0: {
 
                         try {
-                            HelperPermision.getStoragePermision(context, new OnGetPermission() {
+                            HelperPermission.getStoragePermision(context, new OnGetPermission() {
                                 @Override
                                 public void Allow() {
 
@@ -159,10 +159,10 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                             try {
 
-                                HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                                     @Override
                                     public void Allow() throws IOException {
-                                        HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                                        HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                                             @Override
                                             public void Allow() {
                                                 // this dialog show 2 way for choose image : gallery and camera
@@ -266,7 +266,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             @Override
             public void onComplete(RippleView rippleView) throws IOException {
 
-                HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() {
                         showDialogSelectGallery();

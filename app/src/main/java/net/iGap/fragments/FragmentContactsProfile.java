@@ -46,7 +46,7 @@ import net.iGap.R;
 import net.iGap.databinding.FragmentContactsProfileBinding;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnReport;
@@ -377,7 +377,7 @@ public class FragmentContactsProfile extends BaseFragment {
             @Override
             public void onClick(View v) {
                 try {
-                    HelperPermision.getContactPermision(G.fragmentActivity, new OnGetPermission() {
+                    HelperPermission.getContactPermision(G.fragmentActivity, new OnGetPermission() {
                         @Override
                         public void Allow() throws IOException {
                             showPopupPhoneNumber(fragmentContactsProfileBinding.chiLayoutPhoneNumber, fragmentContactsProfileViewModel.phone.get());

@@ -37,7 +37,7 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetDataFromOtherApp;
-import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
@@ -228,7 +228,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
 
     public void useGallery() {
         try {
-            HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+            HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() {
                     try {
@@ -262,7 +262,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                     case 1: {
                         if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
                             try {
-                                HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                                HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                                     @Override
                                     public void Allow() {
                                         // this dialog show 2 way for choose image : gallery and camera

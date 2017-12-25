@@ -30,7 +30,7 @@ import net.iGap.databinding.ActivityGroupProfileBinding;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetDataFromOtherApp;
-import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
@@ -346,7 +346,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                     if (G.fragmentActivity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) { // camera
 
                         try {
-                            HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                            HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                                 @Override
                                 public void Allow() {
                                     dialog.dismiss();

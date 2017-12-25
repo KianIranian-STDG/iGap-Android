@@ -12,6 +12,10 @@ package net.iGap.module;
 
 public class SHP_SETTING {
 
+    /**
+     * it's key for sharedPreferences
+     */
+
     public static final String CHECK_10 = "CHECK_10";
     public static final String CHECK_11 = "CHECK_11";
     public static final String KEY_REALM_DELETE_ALL = "KEY_REALM_DELETE_ALL";

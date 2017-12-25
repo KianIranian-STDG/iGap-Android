@@ -32,7 +32,7 @@ import net.iGap.databinding.FragmentSettingBinding;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
-import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
@@ -387,7 +387,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
                 if (text.toString().equals(G.fragmentActivity.getResources().getString(R.string.array_From_Camera))) { // camera
                     try {
-                        HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                        HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                             @Override
                             public void Allow() {
                                 dialog.dismiss();
@@ -404,7 +404,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     }
                 } else {
                     try {
-                        HelperPermision.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                        HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                             @Override
                             public void Allow() {
                                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

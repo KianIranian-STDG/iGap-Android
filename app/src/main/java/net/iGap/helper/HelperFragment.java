@@ -4,7 +4,7 @@ import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-
+import java.util.ArrayList;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -12,9 +12,11 @@ import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMain;
 
-import java.util.ArrayList;
-
 import static net.iGap.fragments.FragmentCall.OPEN_IN_FRAGMENT_MAIN;
+
+/**
+ * this is helper class for open new fragment
+ */
 
 public class HelperFragment {
 

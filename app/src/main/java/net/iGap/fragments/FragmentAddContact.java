@@ -37,7 +37,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperAddContact;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnCountryCallBack;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.MaterialDesignTextView;
@@ -216,7 +216,7 @@ public class FragmentAddContact extends BaseFragment {
                         final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
                         if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
                             try {
-                                HelperPermision.getContactPermision(G.fragmentActivity, null);
+                                HelperPermission.getContactPermision(G.fragmentActivity, null);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

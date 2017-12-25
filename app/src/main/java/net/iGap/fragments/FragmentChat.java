@@ -138,7 +138,7 @@ import net.iGap.helper.HelperGetMessageState;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperNotificationAndBadge;
-import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
@@ -2484,7 +2484,7 @@ public class FragmentChat extends BaseFragment
 
                 if (ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     try {
-                        HelperPermision.getMicroPhonePermission(G.fragmentActivity, null);
+                        HelperPermission.getMicroPhonePermission(G.fragmentActivity, null);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -4689,7 +4689,7 @@ public class FragmentChat extends BaseFragment
 
         ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
 
-        if (!HelperPermision.grantedUseStorage()) {
+        if (!HelperPermission.grantedUseStorage()) {
             return listOfAllImages;
         }
 
@@ -5618,7 +5618,7 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        if (HelperPermision.grantedUseStorage()) {
+        if (HelperPermission.grantedUseStorage()) {
             rcvBottomSheet.setVisibility(View.VISIBLE);
         } else {
             rcvBottomSheet.setVisibility(View.GONE);
@@ -6176,7 +6176,7 @@ public class FragmentChat extends BaseFragment
         fastItemAdapter.clear();
         itemGalleryList = getAllShownImagesPath(G.fragmentActivity);
         try {
-            HelperPermision.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+            HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
 

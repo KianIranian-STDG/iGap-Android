@@ -81,7 +81,7 @@ import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperNotificationAndBadge;
-import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.interfaces.FinishActivity;
@@ -324,7 +324,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //checkAppAccount();
 
         try {
-            HelperPermision.getPhonePermision(this, null);
+            HelperPermission.getPhonePermision(this, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -514,7 +514,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
          */
         if (!isGetContactList) {
             try {
-                HelperPermision.getContactPermision(ActivityMain.this, new OnGetPermission() {
+                HelperPermission.getContactPermision(ActivityMain.this, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
                         /**
@@ -1286,7 +1286,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void onClick(View v) {
                 try {
-                    HelperPermision.getCameraPermission(ActivityMain.this, new OnGetPermission() {
+                    HelperPermission.getCameraPermission(ActivityMain.this, new OnGetPermission() {
                         @Override
                         public void Allow() throws IOException, IllegalStateException {
                             new HelperFragment(FragmentQrCodeNewDevice.newInstance()).setStateLoss(true).load();
@@ -1587,7 +1587,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void openMapFragment() {
         try {
-            HelperPermision.getLocationPermission(ActivityMain.this, new OnGetPermission() {
+            HelperPermission.getLocationPermission(ActivityMain.this, new OnGetPermission() {
                 @Override
                 public void Allow() throws IOException {
                     try {

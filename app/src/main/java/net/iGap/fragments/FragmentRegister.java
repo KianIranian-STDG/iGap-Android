@@ -37,7 +37,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityRegisterBinding;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperPermision;
+import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnSmsReceive;
 import net.iGap.module.AppUtils;
@@ -112,7 +112,7 @@ public class FragmentRegister extends BaseFragment {
         });
 
         try {
-            HelperPermision.getSmsPermision(G.fragmentActivity, new OnGetPermission() {
+            HelperPermission.getSmsPermision(G.fragmentActivity, new OnGetPermission() {
                 @Override
                 public void Allow() {
                     smsPermission = true;
