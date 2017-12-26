@@ -30,6 +30,7 @@ import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
@@ -159,7 +160,7 @@ public class FragmentMediaPlayer extends BaseFragment {
     //*****************************************************************************************
 
 
-    private void initComponent(View view) {
+    private void initComponent(final View view) {
 
         final ImageView img_MusicImage = (ImageView) view.findViewById(R.id.ml_img_music_picture);
         onSetImage = new OnSetImage() {
@@ -192,6 +193,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         };
 
         rcvListMusicPlayer = (RecyclerView) view.findViewById(R.id.rcvListMusicPlayer);
+        final SlidingUpPanelLayout slidingUpPanelLayout = (SlidingUpPanelLayout) view.findViewById(R.id.sliding_layout);
         fastItemAdapter = new FastItemAdapter();
 
         for (RealmRoomMessage r : MusicPlayer.mediaList) {
@@ -204,6 +206,17 @@ public class FragmentMediaPlayer extends BaseFragment {
         rcvListMusicPlayer.setLayoutManager(linearLayoutManager);
         rcvListMusicPlayer.setHasFixedSize(true);
 
+        rcvListMusicPlayer.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (rcvListMusicPlayer.computeVerticalScrollOffset() > 0) {
+                    slidingUpPanelLayout.setEnabled(false);
+                } else {
+                    slidingUpPanelLayout.setEnabled(true);
+                }
+            }
+        });
         fastItemAdapter.withSelectable(true);
         fastItemAdapter.withOnClickListener(new OnClickListener() {
             @Override
