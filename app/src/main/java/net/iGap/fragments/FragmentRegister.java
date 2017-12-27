@@ -60,9 +60,8 @@ public class FragmentRegister extends BaseFragment {
     private TextView txtAgreement_register;
     private ViewGroup layout_verify;
     //Array List for Store List of StructCountry Object
-    private String regex;
     private IncomingSms smsReceiver;
-    private boolean smsPermission = true;
+    public static boolean smsPermission = true;
     private FragmentActivity mActivity;
     private ScrollView scrollView;
     private int headerLayoutHeight;
