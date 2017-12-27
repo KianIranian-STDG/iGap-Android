@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import net.iGap.R;
 import net.iGap.databinding.FragmentLanguageBinding;
 import net.iGap.viewmodel.FragmentLanguageViewModel;
@@ -19,7 +20,7 @@ public class FragmentLanguage extends BaseFragment {
 
     private FragmentLanguageViewModel fragmentLanguageViewModel;
     private FragmentLanguageBinding fragmentLanguageBinding;
-
+    public static boolean languageChanged = false;
 
 
     public FragmentLanguage() {

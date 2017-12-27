@@ -12,12 +12,14 @@ package net.iGap.viewmodel;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.view.View;
-import java.util.Locale;
+
 import net.iGap.G;
 import net.iGap.fragments.FragmentLanguage;
 import net.iGap.helper.HelperCalander;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
+
+import java.util.Locale;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.onRefreshActivity;
@@ -51,6 +53,7 @@ public class FragmentLanguageViewModel {
             G.isAppRtl = false;
 
             if (onRefreshActivity != null) {
+                FragmentLanguage.languageChanged = true;
                 G.isRestartActivity = true;
                 onRefreshActivity.refresh("en");
             }
@@ -78,6 +81,7 @@ public class FragmentLanguageViewModel {
             HelperCalander.isLanguageArabic = false;
             G.isAppRtl = true;
             if (onRefreshActivity != null) {
+                FragmentLanguage.languageChanged = true;
                 G.isRestartActivity = true;
                 onRefreshActivity.refresh("fa");
             }
@@ -105,6 +109,7 @@ public class FragmentLanguageViewModel {
             G.isAppRtl = true;
 
             if (onRefreshActivity != null) {
+                FragmentLanguage.languageChanged = true;
                 G.isRestartActivity = true;
                 onRefreshActivity.refresh("ar");
             }

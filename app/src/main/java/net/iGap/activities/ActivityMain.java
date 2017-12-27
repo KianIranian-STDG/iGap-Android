@@ -47,21 +47,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import io.realm.Realm;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentIgapSearch;
+import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
@@ -135,6 +133,13 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.viewmodel.ActivityCallViewModel;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
@@ -262,21 +267,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         Bundle extras = intent.getExtras();
         if (extras != null) {
 
-            long _roomid = extras.getLong(ActivityMain.openChat);
-            if (_roomid > 0) {
-                GoToChatActivity goToChatActivity = new GoToChatActivity(_roomid);
-                long _peerID = extras.getLong("PeerID");
-                if (_peerID > 0) {
-                    goToChatActivity.setPeerID(_peerID);
+            long roomId = extras.getLong(ActivityMain.openChat);
+            if (!FragmentLanguage.languageChanged && roomId > 0) { // if language changed not need check enter to chat
+                GoToChatActivity goToChatActivity = new GoToChatActivity(roomId);
+                long peerId = extras.getLong("PeerID");
+                if (peerId > 0) {
+                    goToChatActivity.setPeerID(peerId);
                 }
                 goToChatActivity.startActivity();
             }
+            FragmentLanguage.languageChanged = false;
 
-            boolean openMediaPlyer = extras.getBoolean(ActivityMain.openMediaPlyer);
-            if (openMediaPlyer) {
+            boolean openMediaPlayer = extras.getBoolean(ActivityMain.openMediaPlyer);
+            if (openMediaPlayer) {
                 if (getSupportFragmentManager().findFragmentByTag(FragmentMediaPlayer.class.getName()) == null) {
-                    FragmentMediaPlayer fragmant = new FragmentMediaPlayer();
-                    new HelperFragment(fragmant).setReplace(false).load();
+                    FragmentMediaPlayer fragment = new FragmentMediaPlayer();
+                    new HelperFragment(fragment).setReplace(false).load();
                 }
             }
         }
