@@ -454,7 +454,7 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
             callbackChannelLink.set(inviteLink);
             callbackChannelLinkTitle.set(G.fragmentActivity.getResources().getString(R.string.channel_link));
         } else {
-            callbackChannelLink.set("iGap.net/" + linkUsername);
+            callbackChannelLink.set("" + linkUsername);
             callbackChannelLinkTitle.set(G.fragmentActivity.getResources().getString(R.string.st_username));
         }
     }

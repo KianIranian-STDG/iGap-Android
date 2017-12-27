@@ -486,7 +486,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
             callbackGroupLink.set("" + inviteLink);
             callbackGroupLinkTitle.set(G.fragmentActivity.getResources().getString(R.string.group_link));
         } else {
-            callbackGroupLink.set("iGap.net/" + linkUsername);
+            callbackGroupLink.set("" + linkUsername);
             callbackGroupLinkTitle.set(G.fragmentActivity.getResources().getString(R.string.st_username));
         }
     }
