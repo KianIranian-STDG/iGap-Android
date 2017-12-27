@@ -25,13 +25,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityMediaPlayerBinding;
@@ -40,6 +41,8 @@ import net.iGap.interfaces.OnComplete;
 import net.iGap.module.MusicPlayer;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.viewmodel.FragmentMediaPlayerViewModel;
+
+import java.util.List;
 
 public class FragmentMediaPlayer extends BaseFragment {
 
@@ -201,11 +204,11 @@ public class FragmentMediaPlayer extends BaseFragment {
         }
         rcvListMusicPlayer.setAdapter(fastItemAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
         rcvListMusicPlayer.setLayoutManager(linearLayoutManager);
         rcvListMusicPlayer.setHasFixedSize(true);
 
+        /*linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
         rcvListMusicPlayer.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -216,7 +219,8 @@ public class FragmentMediaPlayer extends BaseFragment {
                     slidingUpPanelLayout.setEnabled(true);
                 }
             }
-        });
+        });*/
+
         fastItemAdapter.withSelectable(true);
         fastItemAdapter.withOnClickListener(new OnClickListener() {
             @Override
@@ -232,6 +236,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
         });
 
+        rcvListMusicPlayer.scrollToPosition(fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId)));
     }
 
     public class AdapterListMusicPlayer extends AbstractItem<AdapterListMusicPlayer, AdapterListMusicPlayer.ViewHolder> {
