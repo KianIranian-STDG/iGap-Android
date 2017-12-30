@@ -184,7 +184,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     @Override
     public void onLeaveView(String type) {
-        activityCallViewModel.onLeaveView();
+        activityCallViewModel.onLeaveView(type);
     }
 
     private void initComponent() {

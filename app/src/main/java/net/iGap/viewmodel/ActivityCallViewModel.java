@@ -49,22 +49,20 @@ import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.webrtc.WebRTC;
 
-import static net.iGap.viewmodel.FragmentNewGroupViewModel.type;
-
 public class ActivityCallViewModel {
 
-    boolean isIncomingCall = false;
-    long userId;
-    boolean isSendLeave = false;
+    private boolean isIncomingCall = false;
+    private long userId;
+    private boolean isSendLeave = false;
     public static boolean isConnected = false;
     public Vibrator vibrator;
-    int musicVolum = 0;
-    boolean isMuteAllMusic = false;
+    private int musicVolum = 0;
+    private boolean isMuteAllMusic = false;
     private Timer secendTimer;
     private int secend = 0;
     private int minute = 0;
-    MediaPlayer player;
-    MediaPlayer ringtonePlayer;
+    private MediaPlayer player;
+    private MediaPlayer ringtonePlayer;
     public static TextView txtTimeChat, txtTimerMain;
     private Context context;
     private ActivityCallBinding activityCallBinding;
@@ -752,7 +750,7 @@ public class ActivityCallViewModel {
         }
     }
 
-    public void onLeaveView() {
+    public void onLeaveView(String type) {
         isConnected = false;
 
         if (type.equals("error")) {

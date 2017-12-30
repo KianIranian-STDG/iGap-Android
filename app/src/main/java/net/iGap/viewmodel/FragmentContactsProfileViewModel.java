@@ -4,7 +4,11 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.view.View;
-
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmList;
+import io.realm.RealmModel;
+import java.io.File;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentContactsProfileBinding;
@@ -30,13 +34,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestSignalingGetConfiguration;
-
-import java.io.File;
-
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmList;
-import io.realm.RealmModel;
 
 import static net.iGap.G.context;
 
@@ -74,7 +71,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     public ObservableField<String> username = new ObservableField<>();
     public ObservableField<String> contactName = new ObservableField<>();
     public ObservableField<String> lastSeen = new ObservableField<>();
-    public ObservableField<String> phone = new ObservableField<>();
+    public ObservableField<String> phone = new ObservableField<>("0");
     public ObservableField<String> bio = new ObservableField<>();
     public ObservableField<String> sharedMedia = new ObservableField<>();
 
