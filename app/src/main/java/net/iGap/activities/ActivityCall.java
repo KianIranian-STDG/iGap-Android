@@ -31,7 +31,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import java.io.IOException;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityCallBinding;
@@ -41,6 +41,8 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.viewmodel.ActivityCallViewModel;
 import net.iGap.webrtc.WebRTC;
+
+import java.io.IOException;
 
 public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
@@ -84,8 +86,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     protected void onDestroy() {
         super.onDestroy();
 
-        activityCallViewModel.onDestroy();
-
+        if (activityCallViewModel != null) {
+            activityCallViewModel.onDestroy();
+        }
     }
 
     @Override
@@ -184,7 +187,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     @Override
     public void onLeaveView(String type) {
-        activityCallViewModel.onLeaveView();
+        if (activityCallViewModel != null) {
+            activityCallViewModel.onLeaveView();
+        }
     }
 
     private void initComponent() {
@@ -329,7 +334,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 ringtonePlayer = null;
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         try {
@@ -339,7 +344,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 activityCallViewModel.vibrator = null;
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         try {
@@ -352,12 +357,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
                 player = null;
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         stopRingAnimation();
     }
-
 
 
     private void stopRingAnimation() {
@@ -389,14 +393,15 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         sensorEventListener = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
-
-                if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
-                    if (event.values[0] >= -SENSOR_SENSITIVITY && event.values[0] <= SENSOR_SENSITIVITY) {
-                        // near
-                        screenOff();
-                    } else {
-                        //far
-                        screenOn();
+                if (activityCallBinding != null) {
+                    if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+                        if (event.values[0] >= -SENSOR_SENSITIVITY && event.values[0] <= SENSOR_SENSITIVITY) {
+                            // near
+                            screenOff();
+                        } else {
+                            //far
+                            screenOn();
+                        }
                     }
                 }
             }
@@ -435,8 +440,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
      * Enables/Disables all child views in a view group.
      *
      * @param viewGroup the view group
-     * @param enabled <code>true</code> to enable, <code>false</code> to disable
-     * the views.
+     * @param enabled   <code>true</code> to enable, <code>false</code> to disable
+     *                  the views.
      */
     public static void enableDisableViewGroup(ViewGroup viewGroup, boolean enabled) {
         if (viewGroup != null) {

@@ -10,7 +10,6 @@ package net.iGap.viewmodel;
 */
 
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,9 +26,7 @@ import android.view.animation.Animation;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
-import io.realm.Realm;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
@@ -48,6 +45,11 @@ import net.iGap.request.RequestSignalingGetLog;
 import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.webrtc.WebRTC;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import io.realm.Realm;
 
 import static net.iGap.viewmodel.FragmentNewGroupViewModel.type;
 
@@ -209,7 +211,9 @@ public class ActivityCallViewModel {
                                 endVoiceAndFinish();
                             }
                         }, 1000);
-                        new RequestSignalingLeave().signalingLeave();
+                        if (!isSendLeave) {
+                            new RequestSignalingLeave().signalingLeave();
+                        }
                         isConnected = false;
                         break;
                     case BUSY:
@@ -631,7 +635,7 @@ public class ActivityCallViewModel {
                 ringtonePlayer = null;
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         try {
@@ -641,7 +645,7 @@ public class ActivityCallViewModel {
                 vibrator = null;
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         try {
@@ -654,7 +658,7 @@ public class ActivityCallViewModel {
                 player = null;
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         stopRingAnimation();

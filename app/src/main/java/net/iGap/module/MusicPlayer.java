@@ -1007,7 +1007,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                         try {
                             if (roomMessage.getAttachment().getLocalFilePath() != null) {
                                 if (new File(roomMessage.getAttachment().getLocalFilePath()).exists()) {
-                                    mediaList.add(realmRoomMessage);
+                                    mediaList.add(roomMessage);
                                 }
                             }
                         } catch (Exception e) {
@@ -1019,7 +1019,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                         try {
                             if (roomMessage.getAttachment().getLocalFilePath() != null) {
                                 if (new File(roomMessage.getAttachment().getLocalFilePath()).exists()) {
-                                    mediaList.add(realmRoomMessage);
+                                    mediaList.add(roomMessage);
                                 }
                             }
                         } catch (Exception e) {
