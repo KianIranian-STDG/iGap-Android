@@ -712,7 +712,13 @@ public class HelperUrl {
     }
 
     public static void closeDialogWaiting() {
-        if (dialogWaiting != null) if (dialogWaiting.isShowing()) dialogWaiting.dismiss();
+        try {
+            if (dialogWaiting != null && dialogWaiting.isShowing()) {
+                dialogWaiting.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void openChat(String username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room, ChatEntry chatEntery) {

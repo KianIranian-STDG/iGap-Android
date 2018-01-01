@@ -249,7 +249,10 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
     }
 
     private void startDialog() {
-        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+        MaterialDialog.Builder imageDialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture))
+            .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+            .items(R.array.profile)
+            .itemsCallback(new MaterialDialog.ListCallback() {
             @Override
             public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
 
@@ -286,7 +289,10 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                     }
                 }
             }
-        }).show();
+            });
+        if (!(G.fragmentActivity).isFinishing()) {
+            imageDialog.show();
+        }
     }
 
     private void setImage(String path) {

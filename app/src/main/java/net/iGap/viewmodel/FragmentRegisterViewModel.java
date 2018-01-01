@@ -264,7 +264,9 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         imgQrCodeNewDevice = (ImageView) dialogQrCode.findViewById(R.id.imgQrCodeNewDevice);
         prgQrCodeNewDevice = (ProgressBar) dialogQrCode.findViewById(R.id.prgWaitQrCode);
         prgQrCodeNewDevice.setVisibility(View.VISIBLE);
-        dialogQrCode.show();
+        if (!mActivity.isFinishing()) {
+            dialogQrCode.show();
+        }
 
         dialogQrCode.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -452,7 +454,9 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             }
         });
 
-        dialogChooseCountry.show();
+        if (!mActivity.isFinishing()) {
+            dialogChooseCountry.show();
+        }
 
     }
 
@@ -510,9 +514,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             } catch (WindowManager.BadTokenException e) {
                 e.printStackTrace();
             }
-
-        } else {
-
+        } else if (!mActivity.isFinishing()) {
             if (callBackEdtPhoneNumber.get().replace("-", "").matches(regex)) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.Toast_Minimum_Characters).positiveText(R.string.B_ok).show();
             } else {
@@ -1530,8 +1532,12 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
     public void onStop() {
 
-        if (dialogRegistration != null) {
-            dialogRegistration.dismiss();
+        try {
+            if (dialogRegistration != null && dialogRegistration.isShowing()) {
+                dialogRegistration.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
