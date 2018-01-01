@@ -143,6 +143,8 @@ public class SHP_SETTING {
     public static final String KEY_KEEP_MEDIA_TIME = "KEY_KEEP_MEDIA_TIME";
     public static final String KEY_TIME_LOCK = "KEY_TIME_LOCK";
     public static final String KEY_SCREEN_SHOT_LOCK = "KEY_SCREEN_SHOT_LOCK";
+    public static final String KEY_MAP_ATTENTION_DIALOG = "MAP_ATTENTION_DIALOG";
+
 }
 
 
