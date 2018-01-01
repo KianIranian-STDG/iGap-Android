@@ -125,7 +125,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
 
     public static OnMenuClick onMenuClick;
 
-    private boolean isPrivate;
+    public boolean isPrivate;
     private boolean isPopup = false;
 
     private long startMessageId = 0;
@@ -164,7 +164,6 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     public ObservableField<Integer> lineAdminVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> setModereatorVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> layoutMemberCanAddMember = new ObservableField<>(View.GONE);
-    public ObservableField<Integer> groupLinkVisibility = new ObservableField<>(View.VISIBLE);
 
 
     //===============================================================================
@@ -223,7 +222,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
             root2.setVisibility(View.GONE);
         }
 
-        if (role == GroupChatRole.OWNER) {
+        if (role == GroupChatRole.MODERATOR) {
             root2.setVisibility(View.VISIBLE);
         }
         root1.setOnClickListener(new View.OnClickListener() {
@@ -397,7 +396,6 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                 groupDescriptionVisibility.set(View.GONE);
             }
         }
-        groupLinkVisibility.set(View.VISIBLE);
         if (role != GroupChatRole.OWNER) {
             if (description.equals("")) {
                 groupDescriptionVisibility.set(View.GONE);

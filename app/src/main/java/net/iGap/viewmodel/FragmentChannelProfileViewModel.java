@@ -118,13 +118,13 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
     private String participantsCountLabel;
     private String description;
     private String inviteLink;
-    private ChannelChatRole role;
+    public ChannelChatRole role;
     private long noLastMessage;
     private MEditText edtRevoke;
     private RealmList<RealmMember> members;
     private AttachFile attachFile;
     public long roomId;
-    private boolean isPrivate;
+    public boolean isPrivate;
     private String linkUsername;
     private boolean isSignature;
     private boolean isPopup = false;
@@ -154,7 +154,6 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
     public ObservableField<Integer> prgWaitingVisibility = new ObservableField<>(View.GONE);
     public ObservableField<Integer> settingVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> descriptionVisibility = new ObservableField<>(View.VISIBLE);
-    public ObservableField<Integer> channelLinkVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> signatureVisibility = new ObservableField<>(View.GONE);
     public ObservableField<Integer> fabVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> menuPopupVisibility = new ObservableField<>(View.VISIBLE);
@@ -310,12 +309,6 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
         } else {
             channelNameEnable.set(false);
             channelDescriptionEnable.set(false);
-        }
-
-        channelLinkVisibility.set(View.VISIBLE);
-
-        if (!isPrivate) {
-            channelLinkVisibility.set(View.VISIBLE);
         }
 
         if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {

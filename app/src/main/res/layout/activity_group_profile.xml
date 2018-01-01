@@ -5,8 +5,9 @@
     >
 
     <data>
-
+        <import type="android.view.View" />
         <import type="android.graphics.Color" />
+        <import type="net.iGap.module.enums.GroupChatRole" />
 
         <import type="net.iGap.G" />
 
@@ -347,7 +348,7 @@
                             android:onClick="@{fragmentGroupProfileViewModel::onClickGroupLink}"
                             android:orientation="vertical"
                             android:paddingLeft="@dimen/dp12"
-                            android:visibility="@{fragmentGroupProfileViewModel.groupLinkVisibility}"
+                            android:visibility="@{(fragmentGroupProfileViewModel.isPrivate &amp;&amp; ((fragmentGroupProfileViewModel.role == GroupChatRole.MEMBER) || (fragmentGroupProfileViewModel.role == GroupChatRole.MODERATOR))) ?  View.GONE : View.VISIBLE  , default = visible }"
                             android:paddingRight="@dimen/dp12"
                             >
 

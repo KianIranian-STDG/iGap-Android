@@ -7,7 +7,9 @@
 
   <data>
 
+    <import type="android.view.View" />
     <import type="android.graphics.Color" />
+    <import type="net.iGap.module.enums.ChannelChatRole" />
 
     <import type="net.iGap.G" />
 
@@ -284,7 +286,7 @@
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/dp12"
                 android:paddingRight="@dimen/dp12"
-                android:visibility="@{fragmentChannelProfileViewModel.channelLinkVisibility}"
+                android:visibility="@{(fragmentChannelProfileViewModel.isPrivate &amp;&amp; ((fragmentChannelProfileViewModel.role == ChannelChatRole.MEMBER) || (fragmentChannelProfileViewModel.role == ChannelChatRole.MODERATOR))) ?  View.GONE : View.VISIBLE  , default = visible }"
                 >
 
               <TextView
