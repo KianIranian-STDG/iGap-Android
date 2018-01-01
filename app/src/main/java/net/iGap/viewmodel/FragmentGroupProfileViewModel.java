@@ -397,13 +397,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                 groupDescriptionVisibility.set(View.GONE);
             }
         }
-
-        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
-            groupLinkVisibility.set(View.VISIBLE);
-        } else {
-            groupLinkVisibility.set(View.GONE);
-        }
-
+        groupLinkVisibility.set(View.VISIBLE);
         if (role != GroupChatRole.OWNER) {
             if (description.equals("")) {
                 groupDescriptionVisibility.set(View.GONE);
