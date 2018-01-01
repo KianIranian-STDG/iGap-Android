@@ -36,7 +36,6 @@ import net.iGap.interfaces.OnGroupCreate;
 import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmChannelRoom;
 import net.iGap.request.RequestChannelAvatarAdd;
 import net.iGap.request.RequestChannelCreate;
 import net.iGap.request.RequestChatConvertToGroup;
@@ -161,32 +160,7 @@ public class FragmentNewGroupViewModel {
         G.onChannelCreate = new OnChannelCreate() {
             @Override
             public void onChannelCreate(final long roomIdR, final String inviteLink, final String channelName) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        RealmChannelRoom.createChannelRoom(roomIdR, inviteLink, channelName);
-                        mInviteLink = inviteLink;
-                        if (existAvatar) {
-                            mInviteLink = inviteLink;
-                            new RequestChannelAvatarAdd().channelAvatarAdd(roomIdR, token);
-                        } else {
-                            hideProgressBar();
-                            FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
-                            Bundle bundle = new Bundle();
-                            bundle.putLong("ROOMID", roomIdR);
-                            bundle.putString("INVITE_LINK", inviteLink);
-                            bundle.putString("TOKEN", token);
-                            fragmentCreateChannel.setArguments(bundle);
-
-
-                            if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
-                                FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
-
-                            new HelperFragment(fragmentCreateChannel).load();
-                        }
-                    }
-                });
-
+                getChannelRoom(roomIdR);
                 G.onChannelCreate = null;
             }
 
@@ -211,6 +185,53 @@ public class FragmentNewGroupViewModel {
         };
 
         new RequestChannelCreate().channelCreate(edtSetNewGroup.get(), edtDescription.get());
+    }
+
+    private void getChannelRoom(final long roomId) {
+        G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
+            @Override
+            public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, RequestClientGetRoom.IdentityClientGetRoom identity) {
+                if (identity.createRoomMode != RequestClientGetRoom.CreateRoomMode.requestFromOwner) {
+                    return;
+                }
+                G.onClientGetRoomResponse = null;
+
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mInviteLink = room.getChannelRoomExtra().getPrivateExtra().getInviteLink();
+                        if (existAvatar) {
+                            new RequestChannelAvatarAdd().channelAvatarAdd(room.getId(), token);
+                        } else {
+                            hideProgressBar();
+                            FragmentCreateChannel fragmentCreateChannel = new FragmentCreateChannel();
+                            Bundle bundle = new Bundle();
+                            bundle.putLong("ROOMID", room.getId());
+                            bundle.putString("INVITE_LINK", mInviteLink);
+                            bundle.putString("TOKEN", token);
+                            fragmentCreateChannel.setArguments(bundle);
+
+
+                            if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
+                                FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
+
+                            new HelperFragment(fragmentCreateChannel).load();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                G.onClientGetRoomResponse = null;
+            }
+
+            @Override
+            public void onTimeOut() {
+                G.onClientGetRoomResponse = null;
+            }
+        };
+        new RequestClientGetRoom().clientGetRoom(roomId, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
     }
 
     private void ShowDialogLimitCreate() {

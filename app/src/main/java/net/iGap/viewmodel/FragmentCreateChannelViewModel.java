@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RadioGroup;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -34,14 +35,11 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnChannelCheckUsername;
 import net.iGap.interfaces.OnChannelUpdateUsername;
-import net.iGap.interfaces.OnClientGetRoomResponse;
 import net.iGap.proto.ProtoChannelCheckUsername;
-import net.iGap.proto.ProtoClientGetRoom;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestChannelCheckUsername;
 import net.iGap.request.RequestChannelUpdateUsername;
-import net.iGap.request.RequestClientGetRoom;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
@@ -67,7 +65,6 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
     public ObservableField<Boolean> isRadioButtonPublic = new ObservableField<>(false);
 
 
-
     public FragmentCreateChannelViewModel(Bundle arguments, FragmentCreateChannelBinding fragmentCreateChannelBinding) {
         this.fragmentCreateChannelBinding = fragmentCreateChannelBinding;
         getInfo(arguments);
@@ -88,9 +85,6 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
         Selection.setSelection(wordtoSpan, edtSetLink.get().length());
 
         setInviteLink();
-
-
-
     }
 
     public void isRadioGroup(RadioGroup radioGroup, int id) {
@@ -150,7 +144,7 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
                     @Override
                     public void run() {
                         RealmRoom.updateUsername(roomId, username);
-                        getRoom(roomId, ProtoGlobal.Room.Type.CHANNEL);
+                        getRoom(roomId);
                     }
                 });
             }
@@ -178,7 +172,7 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
 
             if (isRadioButtonPrivate.get()) {
                 RealmRoom.setPrivate(roomId);
-                getRoom(roomId, ProtoGlobal.Room.Type.CHANNEL);
+                getRoom(roomId);
             } else {
 
                 String userName = edtSetLink.get().replace(Config.IGAP_LINK_PREFIX, "");
@@ -223,60 +217,30 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
         hideProgressBar();
     }
 
-    private void getRoom(final Long roomId, final ProtoGlobal.Room.Type type) {
-        G.onClientGetRoomResponse = new OnClientGetRoomResponse() {
-            @Override
-            public void onClientGetRoomResponse(final ProtoGlobal.Room room, ProtoClientGetRoom.ClientGetRoomResponse.Builder builder, RequestClientGetRoom.IdentityClientGetRoom identity) {
-
-                if (identity.createRoomMode != RequestClientGetRoom.CreateRoomMode.requestFromOwner) {
-                    return;
-                }
-
-                try {
-                    if (G.fragmentActivity != null) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                hideProgressBar();
-                                Fragment fragment = ContactGroupFragment.newInstance();
-                                Bundle bundle = new Bundle();
-                                bundle.putLong("RoomId", roomId);
-                                bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
-                                bundle.putString("TYPE", type.toString());
-                                bundle.putBoolean("NewRoom", true);
-                                fragment.setArguments(bundle);
-
-                                if (FragmentCreateChannel.onRemoveFragment != null) {
-                                    FragmentCreateChannel.onRemoveFragment.remove();
-                                }
-                                new HelperFragment(fragment).load();
-                            }
-                        });
-                    }
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                hideProgressBar();
-            }
-
-            @Override
-            public void onTimeOut() {
-
+    private void getRoom(final long roomId) {
+        try {
+            if (G.fragmentActivity != null) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
                         hideProgressBar();
+                        Fragment fragment = ContactGroupFragment.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("RoomId", roomId);
+                        bundle.putString("TYPE", ProtoGlobal.Room.Type.CHANNEL.toString());
+                        bundle.putBoolean("NewRoom", true);
+                        fragment.setArguments(bundle);
+
+                        if (FragmentCreateChannel.onRemoveFragment != null) {
+                            FragmentCreateChannel.onRemoveFragment.remove();
+                        }
+                        new HelperFragment(fragment).load();
                     }
                 });
             }
-        };
-
-        new RequestClientGetRoom().clientGetRoom(roomId, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
     }
 
     private void hideProgressBar() {
@@ -375,8 +339,4 @@ public class FragmentCreateChannelViewModel implements OnChannelCheckUsername {
             });
         }
     }
-
-
-
-
 }
