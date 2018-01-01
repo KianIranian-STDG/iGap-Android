@@ -23,6 +23,8 @@ public class HelperError {
      * show all error in app
      */
 
+    private static final int needTime = 5000;
+    private static long currentTime;
     public static String getErrorFromCode(int majorCode, int minorCode) {
 
         String error = "";
@@ -327,6 +329,16 @@ public class HelperError {
                 //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 375;
                 break;
 
+            case 379:
+                if (currentTime + needTime < System.currentTimeMillis()) { // show error each 5 secend
+                    error = G.fragmentActivity.getResources().getString(R.string.E_379);
+                }
+                currentTime = System.currentTimeMillis();
+
+
+                break;
+
+
             case 453:
                 //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 453;
                 break;
@@ -354,6 +366,22 @@ public class HelperError {
                 break;
             case 469:
                 //error = G.fragmentActivity.getResources().getString(R.string.normal_error) + 469 + " minor : " + minorCode;
+                break;
+            case 405:
+                if (currentTime + needTime < System.currentTimeMillis()) { // show error each 5 secend
+                    error = G.fragmentActivity.getResources().getString(R.string.E_478);
+                }
+                currentTime = System.currentTimeMillis();
+
+                break;
+
+            case 478:
+                if (currentTime + needTime < System.currentTimeMillis()) { // show error each 5 secend
+                    error = G.fragmentActivity.getResources().getString(R.string.E_478);
+                }
+                currentTime = System.currentTimeMillis();
+
+
                 break;
 
             case 500:
