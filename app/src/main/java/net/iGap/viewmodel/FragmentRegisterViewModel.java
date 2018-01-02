@@ -264,7 +264,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         imgQrCodeNewDevice = (ImageView) dialogQrCode.findViewById(R.id.imgQrCodeNewDevice);
         prgQrCodeNewDevice = (ProgressBar) dialogQrCode.findViewById(R.id.prgWaitQrCode);
         prgQrCodeNewDevice.setVisibility(View.VISIBLE);
-        if (!mActivity.isFinishing()) {
+        if (!(G.fragmentActivity).isFinishing()) {
             dialogQrCode.show();
         }
 
@@ -454,7 +454,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             }
         });
 
-        if (!mActivity.isFinishing()) {
+        if (!(G.fragmentActivity).isFinishing()) {
             dialogChooseCountry.show();
         }
 
@@ -462,8 +462,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
     public void onClicksStart(View v) {
 
-
-        if (mActivity.isFinishing()) {
+        if ((G.fragmentActivity).isFinishing()) {
             return;
         }
 
@@ -514,7 +513,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             } catch (WindowManager.BadTokenException e) {
                 e.printStackTrace();
             }
-        } else if (!mActivity.isFinishing()) {
+        } else {
             if (callBackEdtPhoneNumber.get().replace("-", "").matches(regex)) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.Toast_Minimum_Characters).positiveText(R.string.B_ok).show();
             } else {
@@ -819,7 +818,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         dialog.setCanceledOnTouchOutside(false);
 
         try {
-            if (!mActivity.isFinishing() && !mActivity.isRestricted()) {
+            if (!(G.fragmentActivity).isFinishing()) {
                 dialog.show();
                 if (dialog.isShowing()) {
                     countDownTimer.cancel();
