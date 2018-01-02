@@ -11,7 +11,6 @@ package net.iGap.viewmodel;
 
 import android.content.SharedPreferences;
 import android.databinding.ObservableField;
-import android.util.Log;
 import android.view.View;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -43,6 +42,17 @@ public class FragmentPrivacyAndSecurityViewModel {
     private RealmChangeListener<RealmModel> userInfoListener;
     private RealmChangeListener<RealmModel> privacyListener;
     private int poWhoCan;
+    private int poSeeMyAvatar;
+    private int poInviteChannel;
+    private int poInviteGroup;
+    private int poSeeLastSeen;
+    private int poVoiceCall;
+
+    private final int SEE_MY_AVATAR = 0;
+    private final int INVITE_CHANNEL = 1;
+    private final int INVITE_GROUP = 2;
+    private final int LAST_SEEN = 3;
+    private final int VOICE_CALL = 4;
 
     int poSelfRemove;
     private SharedPreferences sharedPreferences;
@@ -69,23 +79,23 @@ public class FragmentPrivacyAndSecurityViewModel {
     }
 
     public void onClickSeeMyAvatar(View view) {
-        openDialogWhoCan(ProtoGlobal.PrivacyType.AVATAR, poWhoCan, R.string.title_who_can_see_my_avatar);
+        openDialogWhoCan(ProtoGlobal.PrivacyType.AVATAR, poSeeMyAvatar, R.string.title_who_can_see_my_avatar, SEE_MY_AVATAR);
     }
 
     public void onClickInviteChannel(View view) {
-        openDialogWhoCan(ProtoGlobal.PrivacyType.CHANNEL_INVITE, poWhoCan, R.string.title_who_can_invite_you_to_channel_s);
+        openDialogWhoCan(ProtoGlobal.PrivacyType.CHANNEL_INVITE, poInviteChannel, R.string.title_who_can_invite_you_to_channel_s, INVITE_CHANNEL);
     }
 
     public void onClickInviteGroup(View view) {
-        openDialogWhoCan(ProtoGlobal.PrivacyType.GROUP_INVITE, poWhoCan, R.string.title_who_can_invite_you_to_group_s);
+        openDialogWhoCan(ProtoGlobal.PrivacyType.GROUP_INVITE, poInviteGroup, R.string.title_who_can_invite_you_to_group_s, INVITE_GROUP);
     }
 
     public void onClickVoiceCall(View view) {
-        openDialogWhoCan(ProtoGlobal.PrivacyType.VOICE_CALLING, poWhoCan, R.string.title_who_is_allowed_to_call);
+        openDialogWhoCan(ProtoGlobal.PrivacyType.VOICE_CALLING, poVoiceCall, R.string.title_who_is_allowed_to_call, VOICE_CALL);
     }
 
     public void onClickSeeLastSeen(View view) {
-        openDialogWhoCan(ProtoGlobal.PrivacyType.USER_STATUS, poWhoCan, R.string.title_Last_Seen);
+        openDialogWhoCan(ProtoGlobal.PrivacyType.USER_STATUS, poSeeLastSeen, R.string.title_Last_Seen, LAST_SEEN);
     }
 
     public void onClickPassCode(View view) {
@@ -136,7 +146,7 @@ public class FragmentPrivacyAndSecurityViewModel {
         };
     }
 
-    private void openDialogWhoCan(final ProtoGlobal.PrivacyType privacyType, int position, int title) {
+    private void openDialogWhoCan(final ProtoGlobal.PrivacyType privacyType, final int position, int title, final int type) {
 
         new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(title)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.privacy_setting_array).itemsCallbackSingleChoice(position, new MaterialDialog.ListCallbackSingleChoice() {
             @Override
@@ -145,7 +155,6 @@ public class FragmentPrivacyAndSecurityViewModel {
                 switch (which) {
                     case 0: {
                         RealmPrivacy.sendUpdatePrivacyToServer(privacyType, ProtoGlobal.PrivacyLevel.ALLOW_ALL);
-
                         break;
                     }
                     case 1: {
@@ -157,12 +166,13 @@ public class FragmentPrivacyAndSecurityViewModel {
                         break;
                     }
                 }
+                positionDialog(type, which);
                 return false;
             }
         }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).show();
     }
 
-    private String getStringFromEnumString(String str) {
+    private String getStringFromEnumString(String str, int type) {
 
         if (str == null || str.length() == 0) {
             poWhoCan = 0;
@@ -182,17 +192,39 @@ public class FragmentPrivacyAndSecurityViewModel {
             resString = R.string.no_body;
         }
 
+        positionDialog(type, poWhoCan);
         return G.fragmentActivity.getResources().getString(resString);
+    }
+
+    private void positionDialog(int type, int poWhoCan) {
+
+        switch (type) {
+            case 0:
+                poSeeMyAvatar = poWhoCan;
+                break;
+            case 1:
+                poInviteChannel = poWhoCan;
+                break;
+            case 2:
+                poInviteGroup = poWhoCan;
+                break;
+            case 3:
+                poSeeLastSeen = poWhoCan;
+                break;
+            case 4:
+                poVoiceCall = poWhoCan;
+                break;
+        }
     }
 
     private void updatePrivacyUI(RealmPrivacy realmPrivacy) {
         if (realmPrivacy.isValid()) {
 
-            callbackSeeMyAvatar.set(getStringFromEnumString(realmPrivacy.getWhoCanSeeMyAvatar()));
-            callbackInviteChannel.set(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToChannel()));
-            callbackInviteGroup.set(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToGroup()));
-            callbackSeeLastSeen.set(getStringFromEnumString(realmPrivacy.getWhoCanSeeMyLastSeen()));
-            callbackVoiceCall.set(getStringFromEnumString(realmPrivacy.getWhoCanVoiceCallToMe()));
+            callbackSeeMyAvatar.set(getStringFromEnumString(realmPrivacy.getWhoCanSeeMyAvatar(), SEE_MY_AVATAR));
+            callbackInviteChannel.set(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToChannel(), INVITE_CHANNEL));
+            callbackInviteGroup.set(getStringFromEnumString(realmPrivacy.getWhoCanInviteMeToGroup(), INVITE_GROUP));
+            callbackSeeLastSeen.set(getStringFromEnumString(realmPrivacy.getWhoCanSeeMyLastSeen(), LAST_SEEN));
+            callbackVoiceCall.set(getStringFromEnumString(realmPrivacy.getWhoCanVoiceCallToMe(), VOICE_CALL));
         }
     }
 
@@ -274,7 +306,6 @@ public class FragmentPrivacyAndSecurityViewModel {
 
         if (realmUserInfo != null) {
             if (userInfoListener != null) {
-                Log.i("CCCCCCCCCCCCC", "2 onChange: ");
                 realmUserInfo.addChangeListener(userInfoListener);
             }
             selfRemove = realmUserInfo.getSelfRemove();
