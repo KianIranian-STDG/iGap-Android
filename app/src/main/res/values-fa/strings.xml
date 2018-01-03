@@ -1146,6 +1146,6 @@
   <string name="dont_ask_again">فهمیدم</string>
   <string name="attention">توجه</string>
   <string name="content_attention_dialog">نکته : قابل ذکر است افراد بر روی نقشه با خطای 500 متر نمایش داده خواهند شد. پس جای نگرانی نیست</string>
-  <string name="st_cameraBottomSheet">غرفعال کردن دوربین</string>
+  <string name="st_cameraBottomSheet">دوربین کوچک در پیوست ها</string>
 
 </resources>
