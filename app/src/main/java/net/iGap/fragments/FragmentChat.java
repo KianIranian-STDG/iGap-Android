@@ -6176,56 +6176,71 @@ public class FragmentChat extends BaseFragment
         listPathString.clear();
         fastItemAdapter.clear();
         itemGalleryList = getAllShownImagesPath(G.fragmentActivity);
-        try {
-            HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                @Override
-                public void Allow() throws IOException {
 
-                    for (int i = 0; i < itemGalleryList.size(); i++) {
-                        if (i == 0) {
-                            fastItemAdapter.add(new AdapterCamera("").withIdentifier(99 + i));
-                            fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
-                        } else {
-                            fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
-                        }
-                        isPermissionCamera = true;
-                    }
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isAdded()) {
-                                bottomSheetDialog.show();
-                            }
-                        }
-                    }, 100);
-                }
+        boolean isCameraButtonSheet = sharedPreferences.getBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true);
 
-                @Override
-                public void deny() {
+        if (isCameraButtonSheet) {
+            try {
+                HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                    @Override
+                    public void Allow() throws IOException {
 
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (int i = 0; i < itemGalleryList.size(); i++) {
+                        for (int i = 0; i < itemGalleryList.size(); i++) {
+                            if (i == 0) {
+                                fastItemAdapter.add(new AdapterCamera("").withIdentifier(99 + i));
+                                fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
+                            } else {
                                 fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
                             }
+                            isPermissionCamera = true;
                         }
-                    });
-
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isAdded()) {
-                                bottomSheetDialog.show();
-                                fastItemAdapter.notifyDataSetChanged();
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (isAdded()) {
+                                    bottomSheetDialog.show();
+                                }
                             }
-                        }
-                    }, 100);
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+                        }, 100);
+                    }
+
+                    @Override
+                    public void deny() {
+
+                        loadImageGallery();
+
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            loadImageGallery();
         }
+
+    }
+
+    private void loadImageGallery() {
+
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < itemGalleryList.size(); i++) {
+                    fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
+                }
+            }
+        });
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isAdded()) {
+                    bottomSheetDialog.show();
+                    fastItemAdapter.notifyDataSetChanged();
+                }
+            }
+        }, 100);
+
     }
 
     /**
