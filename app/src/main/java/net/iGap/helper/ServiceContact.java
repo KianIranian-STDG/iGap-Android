@@ -41,15 +41,16 @@ public class ServiceContact extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        contentObserver = new MyContentObserver();
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        if (contentObserver == null) {
+            contentObserver = new MyContentObserver();
+            new Handler().postDelayed(new Runnable() {
 
-            @Override
-            public void run() {
-                getApplicationContext().getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, contentObserver);
-            }
-        }, 10000);
+                @Override
+                public void run() {
+                    getApplicationContext().getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, contentObserver);
+                }
+            }, 10000);
+        }
         return Service.START_NOT_STICKY;
     }
 
@@ -75,8 +76,6 @@ public class ServiceContact extends Service {
         }
 
         private void fetchContacts() {
-            new Thread(new Runnable() {
-                @Override public void run() {
                     try {
                         ArrayList<StructListOfContact> contactList = new ArrayList<>();
                         ContentResolver cr = G.context.getContentResolver();
@@ -144,9 +143,15 @@ public class ServiceContact extends Service {
                         RealmPhoneContacts.sendContactList(resultContactList, false);
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
+                    } catch (RuntimeException e1) {
+                        e1.printStackTrace();
                     }
-                }
-            }).start();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getApplicationContext().getContentResolver().unregisterContentObserver(contentObserver);
     }
 }
