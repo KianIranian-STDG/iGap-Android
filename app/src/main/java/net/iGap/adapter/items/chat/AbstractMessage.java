@@ -27,10 +27,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
-
+import io.realm.Realm;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -72,10 +72,6 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChannelAddMessageReaction;
-
-import java.util.List;
-
-import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
@@ -1303,10 +1299,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         //    }
         //}
 
-
-        if (attachment.getSize() == 0) {
-            messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
-        } else if (HelperUploadFile.isUploading(mMessage.messageID)) {
+        if (HelperUploadFile.isUploading(mMessage.messageID)) {
 
             if (mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                 if (G.userLogin) {
