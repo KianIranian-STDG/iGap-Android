@@ -1800,7 +1800,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/st_crop"
+                android:text="@string/st_cameraBottomSheet"
                 android:textColor="@color/black_register"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal"
