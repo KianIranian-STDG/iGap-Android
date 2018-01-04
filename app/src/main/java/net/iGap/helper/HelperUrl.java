@@ -713,11 +713,13 @@ public class HelperUrl {
 
     public static void closeDialogWaiting() {
         try {
-            if (dialogWaiting != null && dialogWaiting.isShowing()) {
+            if (dialogWaiting != null && dialogWaiting.isShowing() && !(G.currentActivity).isFinishing()) {
                 dialogWaiting.dismiss();
             }
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
+        } catch (Exception e1) {
+            e1.printStackTrace();
         }
     }
 
@@ -788,14 +790,16 @@ public class HelperUrl {
                     public void run() {
                         if (dialogWaiting != null && dialogWaiting.isShowing()) {
 
-                        } else {
+                        } else if (!(G.currentActivity).isFinishing()) {
                             dialogWaiting = new MaterialDialog.Builder(G.currentActivity).title("").content(R.string.please_wait).progress(true, 0).cancelable(false).progressIndeterminateStyle(false).show();
                         }
                     }
                 });
             }
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
+        } catch (Exception e1) {
+            e1.printStackTrace();
         }
     }
 
