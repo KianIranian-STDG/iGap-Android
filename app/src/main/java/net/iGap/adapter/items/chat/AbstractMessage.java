@@ -732,6 +732,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         mContainer.setMinimumWidth(0);
+        mContainer.setMinimumHeight(0);
 
         /**
          * set replay container visible if message was replayed, otherwise, gone it

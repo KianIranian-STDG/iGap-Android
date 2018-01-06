@@ -584,9 +584,9 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             public void pushLoginToken(final String tokenQrCode, String userNameR, long userIdR, String authorHashR) {
 
                 token = tokenQrCode;
-                userName = userNameR;
-                userId = userIdR;
-                authorHash = authorHashR;
+                G.displayName = userName = userNameR;
+                G.userId = userId = userIdR;
+                G.authorHash = authorHash = authorHashR;
 
                 G.handler.post(new Runnable() {
                     @Override
