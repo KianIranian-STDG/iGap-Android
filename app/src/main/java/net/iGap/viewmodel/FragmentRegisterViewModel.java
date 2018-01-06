@@ -142,6 +142,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     private ProgressBar prgQrCodeNewDevice;
     private FragmentRegister fragmentRegister;
     private View view;
+    private int sendRequestRegister = 0;
 
     public ObservableField<String> callbackTxtAgreement = new ObservableField<>(G.context.getResources().getString(R.string.rg_agreement_text_register));
     public ObservableField<String> callbackBtnChoseCountry = new ObservableField<>("Iran");
@@ -874,7 +875,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         @Override
                         public void run() {
                             //Invalid countryCode
-                            requestRegister();
                         }
                     });
                 } else if (majorCode == 100 && minorCode == 2) {
@@ -882,7 +882,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         @Override
                         public void run() {
                             //Invalid phoneNumber
-                            requestRegister();
                         }
                     });
                 } else if (majorCode == 101) {
@@ -890,7 +889,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         @Override
                         public void run() {
                             //Invalid phoneNumber
-                            requestRegister();
                         }
                     });
                 } else if (majorCode == 135) {
@@ -917,7 +915,11 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         }
                     });
                 } else if (majorCode == 5 && minorCode == 1) { // timeout
-                    requestRegister();
+                    if (sendRequestRegister <= 2) {
+                        requestRegister();
+                        sendRequestRegister++;
+                    }
+
                 }
             }
         };
