@@ -14,10 +14,10 @@ import android.Manifest;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
-import android.os.Handler;
 import android.os.IBinder;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -25,6 +25,7 @@ import android.support.v4.content.ContextCompat;
 import java.util.ArrayList;
 import net.iGap.Config;
 import net.iGap.G;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmPhoneContacts;
 
@@ -40,16 +41,22 @@ public class ServiceContact extends Service {
     }
 
     @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        getApplicationContext().getContentResolver().unregisterContentObserver(contentObserver);
+        contentObserver = null;
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (contentObserver == null) {
             contentObserver = new MyContentObserver();
-            new Handler().postDelayed(new Runnable() {
+            getApplicationContext().getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, contentObserver);
+        }
 
-                @Override
-                public void run() {
-                    getApplicationContext().getContentResolver().registerContentObserver(ContactsContract.Contacts.CONTENT_URI, true, contentObserver);
-                }
-            }, 10000);
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        if (preferences.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1) == 1) {
+            return Service.START_STICKY;
         }
         return Service.START_NOT_STICKY;
     }
@@ -149,9 +156,4 @@ public class ServiceContact extends Service {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        getApplicationContext().getContentResolver().unregisterContentObserver(contentObserver);
-    }
 }

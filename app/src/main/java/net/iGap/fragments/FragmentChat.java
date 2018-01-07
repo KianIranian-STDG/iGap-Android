@@ -2811,27 +2811,17 @@ public class FragmentChat extends BaseFragment
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                ArrayList<AbstractMessage> list = new ArrayList<>();
-                for (int i = 0; i < mAdapter.getAdapterItemCount(); i++) {
+
+                for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
                     try {
-                        if (Long.parseLong(mAdapter.getAdapterItem(i).mMessage.messageID) > clearId) {
-                            list.add(mAdapter.getAdapterItem(i));
+                        if (Long.parseLong(mAdapter.getAdapterItem(i).mMessage.messageID) <= clearId) {
+                            mAdapter.remove(i);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
 
-                mAdapter.clear();
-
-                if (list.size() == 1 && list.get(0) instanceof TimeItem) {
-                    // time remove from list
-                } else {
-                    for (AbstractMessage item : list) {
-                        mAdapter.add(item);
-                    }
-                }
-                mAdapter.notifyDataSetChanged();
 
                 /**
                  * remove tag from edtChat if the message has deleted
