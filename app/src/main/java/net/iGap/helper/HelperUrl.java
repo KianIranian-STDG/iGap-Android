@@ -73,9 +73,12 @@ public class HelperUrl {
     }
 
     public static int LinkColor = Color.BLUE;
-    public static String igapSite2 = "igap.net/";
     public static MaterialDialog dialogWaiting;
     public static String igapResolve = "igap://resolve?";
+
+    private static boolean isIgapLink(String text) {
+        return text.matches("(https?\\:\\/\\/)?igap.net/(.*)");
+    }
 
     public static SpannableStringBuilder setUrlLink(String text, boolean withClickable, boolean withHash, String messageID, boolean withAtSign) {
 
@@ -99,7 +102,7 @@ public class HelperUrl {
 
             String str = list[i];
 
-            if (str.contains(igapSite2)) {
+            if (isIgapLink(str)) {
                 insertIgapLink(strBuilder, count, count + str.length());
             } else if (str.contains(igapResolve)) {
                 insertIgapResolveLink(strBuilder, count, count + str.length());
@@ -491,7 +494,7 @@ public class HelperUrl {
 
             String str = list[i];
 
-            if (str.contains(igapSite2)) {
+            if (isIgapLink(str)) {
                 linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapLink.toString() + "@";
             } else if (str.contains(igapResolve)) {
                 linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapResolve.toString() + "@";
@@ -935,7 +938,7 @@ public class HelperUrl {
     private static void getToRoom(Uri path) {
 
         if (path != null) {
-            if (path.toString().toLowerCase().contains(igapSite2)) {
+            if (isIgapLink(path.toString().toLowerCase())) {
 
                 String url = path.toString();
                 int index = url.lastIndexOf("/");
