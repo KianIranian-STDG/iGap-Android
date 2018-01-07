@@ -518,13 +518,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         LinearLayout lytContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
         lytContainer.setMinimumWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
-        lytContainer.setMinimumHeight((int) G.context.getResources().getDimension(R.dimen.dp100));
+        lytContainer.setMinimumHeight((int) G.context.getResources().getDimension(R.dimen.dp130));
 
         LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
         if (lytVote != null) {
 
             LinearLayout lytVoteUp = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote_up);
             LinearLayout lytVoteDown = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote_down);
+            TextView txtVoteForward = (TextView) holder.itemView.findViewById(R.id.img_vote_forward);
             TextView txtVoteUp = (TextView) holder.itemView.findViewById(R.id.txt_vote_up);
             TextView txtVoteDown = (TextView) holder.itemView.findViewById(R.id.txt_vote_down);
             TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
@@ -591,6 +592,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 @Override
                 public void onClick(View view) {
                     voteSend(ProtoGlobal.RoomMessageReaction.THUMBS_DOWN);
+                }
+            });
+
+            txtVoteForward.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    messageClickListener.onForwardClick(mMessage);
                 }
             });
         }

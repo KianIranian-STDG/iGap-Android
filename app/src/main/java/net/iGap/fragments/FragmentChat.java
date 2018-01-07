@@ -3840,6 +3840,12 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
+    public void onForwardClick(StructMessageInfo message) {
+        finishChat();
+        mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
+    }
+
+    @Override
     public void onSetAction(final long roomId, final long userIdR, final ProtoGlobal.ClientAction clientAction) {
         if (mRoomId == roomId && (userId != userIdR || (isCloudRoom))) {
             final String action = HelperGetAction.getAction(roomId, chatType, clientAction);
