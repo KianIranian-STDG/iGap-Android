@@ -215,9 +215,15 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
     public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-        if (s.toString().equals("0")) {
+        if (s.toString().startsWith("0")) {
             Toast.makeText(G.fragmentActivity, G.fragmentActivity.getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT).show();
-            callBackEdtPhoneNumber.set("");
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    callBackEdtPhoneNumber.set("");
+                }
+            }, 30);
+
         }
 
     }
@@ -515,10 +521,10 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                 e.printStackTrace();
             }
         } else {
-            if (callBackEdtPhoneNumber.get().replace("-", "").matches(regex)) {
+            if (!callBackEdtPhoneNumber.get().replace("-", "").matches(regex)) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.Toast_Minimum_Characters).positiveText(R.string.B_ok).show();
             } else {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.Toast_Enter_Phone_Number).positiveText(R.string.B_ok).show();
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.please_enter_phone_number).positiveText(R.string.B_ok).show();
             }
         }
     }
