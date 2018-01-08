@@ -192,7 +192,9 @@ public class ActivityEnterPassCodeViewModel {
             iconFingerPrint = (TextView) viewDialog.findViewById(R.id.iconDialogTitle);
             textFingerPrint = (TextView) viewDialog.findViewById(R.id.txtDialogTitle);
 
-            dialog.show();
+            if (!(G.currentActivity).isFinishing()) {
+                dialog.show();
+            }
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 generateKey();
                 if (cipherInit()) {

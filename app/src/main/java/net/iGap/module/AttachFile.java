@@ -377,7 +377,9 @@ public class AttachFile {
                 intent.setType("image/*");
 
                 if (fragment != null) {
-                    fragment.startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                    if (fragment.isAdded()) {
+                        fragment.startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
+                    }
                 } else {
                     ((Activity) context).startActivityForResult(Intent.createChooser(intent, context.getString(R.string.select_picture_en)), request_code_image_from_gallery_single_select);
                 }

@@ -55,10 +55,10 @@ public class FragmentQrCodeNewDevice extends BaseFragment implements QRCodeReade
         myDecoderView.setAutofocusInterval(2000L);
 
         // Use this function to enable/disable Torch
-        myDecoderView.setTorchEnabled(true);
+        //myDecoderView.setTorchEnabled(true);
 
         // Use this function to set front camera preview
-        myDecoderView.setFrontCamera();
+        //myDecoderView.setFrontCamera();
 
         // Use this function to set back camera preview
         myDecoderView.setBackCamera();

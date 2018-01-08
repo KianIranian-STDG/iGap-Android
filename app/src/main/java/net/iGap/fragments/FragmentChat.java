@@ -2811,17 +2811,17 @@ public class FragmentChat extends BaseFragment
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-
-                for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-                    try {
-                        if (Long.parseLong(mAdapter.getAdapterItem(i).mMessage.messageID) <= clearId) {
-                            mAdapter.remove(i);
+                if (mAdapter != null) {
+                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+                        try {
+                            if (Long.parseLong(mAdapter.getAdapterItem(i).mMessage.messageID) <= clearId) {
+                                mAdapter.remove(i);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
-
 
                 /**
                  * remove tag from edtChat if the message has deleted

@@ -48,6 +48,11 @@ public class ActivityTrimVideo extends ActivityEnhanced implements OnTrimVideoLi
         if (bundle != null) {
 
             path = bundle.getString("PATH");
+
+            if (path == null) {
+                finish();
+                return;
+            }
         }
 
         getResolutionVideo(path);

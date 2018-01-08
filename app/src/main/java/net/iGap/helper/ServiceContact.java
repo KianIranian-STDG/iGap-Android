@@ -43,8 +43,15 @@ public class ServiceContact extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-        getApplicationContext().getContentResolver().unregisterContentObserver(contentObserver);
-        contentObserver = null;
+
+        try {
+            if (contentObserver != null) {
+                getApplicationContext().getContentResolver().unregisterContentObserver(contentObserver);
+                contentObserver = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

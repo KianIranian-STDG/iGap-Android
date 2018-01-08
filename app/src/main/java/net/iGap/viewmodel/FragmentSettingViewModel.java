@@ -140,6 +140,7 @@ public class FragmentSettingViewModel {
     private RealmRegisteredInfo mRealmRegisteredInfo;
     private FragmentSetting fragmentSetting;
     private FragmentSettingBinding fragmentSettingBinding;
+    private int[] fontSizeArray = { 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 };
 
 
     public ObservableField<String> callbackSetName = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.first_name));
@@ -975,9 +976,8 @@ public class FragmentSettingViewModel {
                         }
                     }
                     poRbDialogTextSize = which;
-                    int size = Integer.parseInt(text.toString().replace("(Hello)", "").trim());
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, size);
+                    editor.putInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, fontSizeArray[which]);
                     editor.apply();
 
                     StartupActions.textSizeDetection(sharedPreferences);
