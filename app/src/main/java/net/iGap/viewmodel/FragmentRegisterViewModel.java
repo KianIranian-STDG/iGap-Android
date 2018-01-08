@@ -39,14 +39,11 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.protobuf.ByteString;
-import io.realm.Realm;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
 import net.iGap.BuildConfig;
 import net.iGap.Config;
 import net.iGap.G;
@@ -89,6 +86,13 @@ import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestUserTwoStepVerificationGetPasswordDetail;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyPassword;
 import net.iGap.request.RequestWrapper;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import io.realm.Realm;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static net.iGap.G.context;
@@ -524,7 +528,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             if (!callBackEdtPhoneNumber.get().replace("-", "").matches(regex)) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.Toast_Minimum_Characters).positiveText(R.string.B_ok).show();
             } else {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.please_enter_phone_number).positiveText(R.string.B_ok).show();
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.please_enter_correct_phone_number).positiveText(R.string.B_ok).show();
             }
         }
     }
@@ -842,6 +846,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
             @Override
             public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, final String authorHashR) {
+                G.onUserRegistration = null;
                 digitCount = verifyCodeDigitCount;
                 countDownTimer.start();
                 regexFetchCodeVerification = regex;

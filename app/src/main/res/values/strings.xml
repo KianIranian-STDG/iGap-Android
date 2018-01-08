@@ -350,6 +350,7 @@
   <string name="save_ok">Saved</string>
   <string name="exception">Exception:</string>
   <string name="please_enter_phone_number">Please enter your phone number</string>
+  <string name="please_enter_correct_phone_number">Please enter correct phone number</string>
   <string name="please_enter_firstname_or_lastname">Please enter your first name or last name</string>
   <string name="new_chanel">New Channel</string>
   <string name="can_not_save_picture_pleas_try_again">Can\'t save picture, please try again</string>

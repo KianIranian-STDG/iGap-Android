@@ -354,6 +354,7 @@
   <string name="one_member_chat">عضو</string>
   <string name="exception">"خطا:"</string>
   <string name="please_enter_phone_number">"لطفاً شماره تماس را وارد کنید."</string>
+  <string name="please_enter_correct_phone_number">لطفا شماره تلفن صحیح وارد کنید</string>
   <string name="please_enter_firstname_or_lastname">"لطفاً نام یا نام خانوادگی را وارد کنید."</string>
   <string name="confirm_email_title">کد تأیید</string>
   <string name="confirm_email_text">به منظور تشخیص و تأیید پست الکترونیکی، کد تأییدی برای ایمیل شما ارسال شده است.</string>

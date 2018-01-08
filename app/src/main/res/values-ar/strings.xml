@@ -670,6 +670,8 @@
 
   <string name="please_enter_phone_number">"من فضلك أدخل رقم الاتصال"</string>
 
+  <string name="please_enter_correct_phone_number">"الرجاء إدخال رقم الهاتف الصحيح"</string>
+
   <string name="please_enter_firstname_or_lastname">"من فضلك أدخل الاسم و الاسم العائلي."</string>
 
   <string name="confirm_email_title">رمز التأكيد</string>
