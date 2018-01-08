@@ -5,8 +5,7 @@ import android.app.Application;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
-import io.realm.Realm;
-import java.util.ArrayList;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -31,6 +30,10 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestUserUpdateStatus;
 import net.iGap.request.RequestWrapper;
+
+import java.util.ArrayList;
+
+import io.realm.Realm;
 
 import static net.iGap.G.firstEnter;
 import static net.iGap.G.firstTimeEnterToApp;
@@ -107,7 +110,6 @@ public class LoginActions extends Application {
                 });
 
 
-
             }
 
             @Override
@@ -132,7 +134,6 @@ public class LoginActions extends Application {
             }
         }, 500);
     }
-
 
 
     private static void getUserInfo() {
@@ -186,8 +187,8 @@ public class LoginActions extends Application {
         Contacts.onlinePhoneContactId = 0;
         G.onContactFetchForServer = new OnContactFetchForServer() {
             @Override
-            public void onFetch(ArrayList<StructListOfContact> contacts) {
-                RealmPhoneContacts.sendContactList(contacts, false);
+            public void onFetch(ArrayList<StructListOfContact> contacts, boolean getContactList) {
+                RealmPhoneContacts.sendContactList(contacts, false, getContactList);
             }
         };
 

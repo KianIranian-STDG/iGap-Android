@@ -177,7 +177,7 @@ public class Contacts {
             }
 
             if (G.onContactFetchForServer != null) {
-                G.onContactFetchForServer.onFetch(resultContactList);
+                G.onContactFetchForServer.onFetch(resultContactList, isEnd);
             }
 
             if (!isEnd) {
