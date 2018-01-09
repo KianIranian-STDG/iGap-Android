@@ -40,6 +40,10 @@ public class MaterialDesignTextView extends AppCompatTextView {
     }
 
     @Override public void setText(CharSequence text, BufferType type) {
-        super.setText(Emojione.shortnameToUnicode(text.toString(), false), type);
+        try {
+            super.setText(Emojione.shortnameToUnicode(text.toString(), false), type);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 }
