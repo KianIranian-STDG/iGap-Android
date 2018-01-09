@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
+import java.io.IOException;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentIntroduce;
@@ -14,8 +14,6 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.StartupActions;
-
-import java.io.IOException;
 
 public class ActivityRegisteration extends ActivityEnhanced {
 
@@ -52,7 +50,7 @@ public class ActivityRegisteration extends ActivityEnhanced {
 
         boolean showPro = false;
         try {
-            if (getParent() != null && getIntent().getExtras() != null) {
+            if (getIntent() != null && getIntent().getExtras() != null) {
                 showPro = getIntent().getExtras().getBoolean(showProfile);
             }
 

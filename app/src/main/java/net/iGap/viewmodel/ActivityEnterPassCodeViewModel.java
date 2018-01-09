@@ -127,10 +127,13 @@ public class ActivityEnterPassCodeViewModel {
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                 G.isPassCode = false;
-                logout(v);
 
+                if (ActivityMain.finishActivity != null) {
+                    ActivityMain.finishActivity.finishActivity();
+                }
                 G.currentActivity.finish();
 
+                logout(v);
 
             }
         }).negativeText(R.string.cancel).onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -245,7 +248,7 @@ public class ActivityEnterPassCodeViewModel {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        HelperLogout.logout();
+
                     }
                 });
             }
@@ -269,6 +272,7 @@ public class ActivityEnterPassCodeViewModel {
         };
 
         new RequestUserSessionLogout().userSessionLogout();
+        HelperLogout.logout();
     }
 
 
