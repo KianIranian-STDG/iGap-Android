@@ -198,13 +198,9 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     public ObservableBoolean btnStartEnable = new ObservableBoolean(true);
 
 
-
     public enum Reason {
         SOCKET, TIME_OUT, INVALID_CODE
     }
-
-
-
 
 
     public FragmentRegisterViewModel(FragmentRegister fragmentRegister, View root, FragmentActivity mActivity) {
@@ -214,7 +210,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
         getInfo();
     }
-
 
 
     public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -488,7 +483,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                     //txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
                     //txtAgreement_register.startAnimation(trans_x_out);
 
-                    if (FragmentRegister.onStartAnimationRegister != null) FragmentRegister.onStartAnimationRegister.start();
+                    if (FragmentRegister.onStartAnimationRegister != null)
+                        FragmentRegister.onStartAnimationRegister.start();
 
                     G.handler.postDelayed(new Runnable() {
                         @Override
@@ -563,8 +559,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                 fragmentSecurityRecovery.setArguments(bundle);
 
                 G.fragmentActivity.getSupportFragmentManager().beginTransaction().addToBackStack(null).
-                    setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).
-                    replace(R.id.ar_layout_root, fragmentSecurityRecovery).commit();
+                        setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_right, R.anim.slide_out_left).
+                        replace(R.id.ar_layout_root, fragmentSecurityRecovery).commit();
 
 
             }
@@ -601,7 +597,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (dialogQrCode != null && dialogQrCode.isShowing()) dialogQrCode.dismiss();
+                        if (dialogQrCode != null && dialogQrCode.isShowing())
+                            dialogQrCode.dismiss();
 
                         userLogin(token);
                     }
@@ -621,7 +618,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (dialogQrCode != null && dialogQrCode.isShowing()) dialogQrCode.dismiss();
+                        if (dialogQrCode != null && dialogQrCode.isShowing())
+                            dialogQrCode.dismiss();
                     }
                 });
                 checkPassword("", true);
@@ -697,7 +695,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     }
 
 
-
     //======= process verify : check internet and sms
     private void checkVerify() {
 
@@ -769,6 +766,9 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
     // error verify sms and open rg_dialog for enter sms code
     private void errorVerifySms(FragmentRegister.Reason reason) { //when don't receive sms and open rg_dialog for enter code
+        if (G.userLogin || G.currentActivity != null && G.currentActivity instanceof ActivityMain) {
+            return;
+        }
 
         prgVerifySmsVisibility.set(View.GONE);
         //imgVerifySmsColor.set(R.mipmap.alert);
@@ -822,7 +822,9 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                 userRegister();
                 dialog.dismiss();
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
             }
         });
         dialog.setCancelable(false);
@@ -1130,14 +1132,14 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                             public void run() {
                                 // Verification code is expired
                                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.USER_VERIFY_EXPIRED)
-                                    .content(R.string.Toast_Number_Block)
-                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                        @Override
-                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        }
-                                    })
-                                    .positiveText(R.string.B_ok)
-                                    .show();
+                                        .content(R.string.Toast_Number_Block)
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                            }
+                                        })
+                                        .positiveText(R.string.B_ok)
+                                        .show();
                             }
                         });
                     } else if (majorCode == 108) {
@@ -1218,7 +1220,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         txtVerifyServerColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
 
 
-
                         if (newUser) {
                             G.handler.post(new Runnable() {
                                 @Override
@@ -1255,7 +1256,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            requestLogin();
+                            //requestLogin();
                         }
                     });
                 } else if (majorCode == 5 && minorCode == 1) {
@@ -1378,10 +1379,11 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             @Override
             public void run() {
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
             }
         });
-
     }
 
     private void dialogWaitTimeVerifyPassword(long time) {
