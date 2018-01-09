@@ -288,7 +288,7 @@ public class WebSocketClient {
         G.canRunReceiver = true;
         G.symmetricKey = null;
 
-        if (webSocketClient != null) { //  && webSocketClient.isOpen()
+        if (webSocketClient != null && webSocketClient.isOpen()) {
             webSocketClient.disconnect();
         }
         webSocketClient = null;
