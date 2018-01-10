@@ -11,24 +11,20 @@
 package net.iGap.realm;
 
 import android.support.annotation.Nullable;
-
-import net.iGap.G;
-import net.iGap.helper.HelperString;
-import net.iGap.module.AndroidUtils;
-import net.iGap.module.AppUtils;
-import net.iGap.module.SUID;
-import net.iGap.module.enums.AttachmentFor;
-import net.iGap.proto.ProtoGlobal;
-
-import org.parceler.Parcel;
-
-import java.io.File;
-import java.io.IOException;
-
 import io.realm.Realm;
 import io.realm.RealmAttachmentRealmProxy;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import java.io.File;
+import java.io.IOException;
+import net.iGap.G;
+import net.iGap.helper.HelperMimeType;
+import net.iGap.helper.HelperString;
+import net.iGap.module.AndroidUtils;
+import net.iGap.module.SUID;
+import net.iGap.module.enums.AttachmentFor;
+import net.iGap.proto.ProtoGlobal;
+import org.parceler.Parcel;
 
 @Parcel(implementations = {RealmAttachmentRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmAttachment.class})
 public class RealmAttachment extends RealmObject {
@@ -316,7 +312,7 @@ public class RealmAttachment extends RealmObject {
 
     public boolean isFileExistsOnLocalAndIsThumbnail() {
         assert localFilePath != null;
-        return isFileExistsOnLocal() && isFileImage();
+        return isFileExistsOnLocal() && HelperMimeType.isFileImage(localFilePath.toLowerCase());
     }
 
     /**
@@ -324,15 +320,5 @@ public class RealmAttachment extends RealmObject {
      */
     public boolean isThumbnailExistsOnLocal() {
         return localThumbnailPath != null && new File(localThumbnailPath).exists() && new File(localThumbnailPath).canRead();
-    }
-
-    private boolean isFileImage() {
-        for (String ext : AppUtils.exts) {
-            if (localFilePath.endsWith(ext)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

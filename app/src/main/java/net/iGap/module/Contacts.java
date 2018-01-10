@@ -15,7 +15,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
-
+import io.realm.Realm;
+import io.realm.RealmResults;
+import java.util.ArrayList;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.helper.HelperPermission;
 import net.iGap.module.structs.StructContactInfo;
@@ -23,12 +26,6 @@ import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * work with saved contacts in database
@@ -226,13 +223,15 @@ public class Contacts {
                         if (pCur != null) {
                             while (pCur.moveToNext()) {
                                 String number = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                                String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                                if (!tempList.contains(number.replace("[\\s\\-()]", "").replace(" ", ""))) {
-                                    StructListOfContact itemContact = new StructListOfContact();
-                                    itemContact.setDisplayName(name);
-                                    itemContact.setPhone(number);
-                                    contactList.add(itemContact);
-                                    tempList.add(number.replace("[\\s\\-()]", "").replace(" ", ""));
+                                if (number != null) {
+                                    String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                                    if (!tempList.contains(number.replace("[\\s\\-()]", "").replace(" ", ""))) {
+                                        StructListOfContact itemContact = new StructListOfContact();
+                                        itemContact.setDisplayName(name);
+                                        itemContact.setPhone(number);
+                                        contactList.add(itemContact);
+                                        tempList.add(number.replace("[\\s\\-()]", "").replace(" ", ""));
+                                    }
                                 }
                             }
                             pCur.close();

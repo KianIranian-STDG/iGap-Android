@@ -132,6 +132,9 @@
                 <data
                     android:host="resolve"
                     android:scheme="igap" />
+                <data
+                    android:host="join"
+                    android:scheme="igap" />
             </intent-filter>
 
             <!-- this part add app logo to list of share -->

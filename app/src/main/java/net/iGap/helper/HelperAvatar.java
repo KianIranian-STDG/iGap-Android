@@ -444,23 +444,27 @@ public class HelperAvatar {
 
         private void avatarDownload(RealmAttachment realmAttachment, ProtoFileDownload.FileDownload.Selector selector, OnDownload onDownload) {
 
-            this.onDownload = onDownload;
-            long fileSize = 0;
-            String filePath = "";
+            try {
+                this.onDownload = onDownload;
+                long fileSize = 0;
+                String filePath = "";
 
-            G.onFileDownloaded = this;
-            if (selector == ProtoFileDownload.FileDownload.Selector.FILE) {
-                filePath = AndroidUtils.getFilePathWithCashId(realmAttachment.getCacheId(), realmAttachment.getName(), G.DIR_TEMP, false);
-                fileSize = realmAttachment.getSize();
-            } else if (selector == ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL) {
-                filePath = AndroidUtils.getFilePathWithCashId(realmAttachment.getCacheId(), realmAttachment.getName(), G.DIR_TEMP, true);
-                fileSize = realmAttachment.getLargeThumbnail().getSize();
-            } else if (selector == ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL) {
-                filePath = AndroidUtils.getFilePathWithCashId(realmAttachment.getCacheId(), realmAttachment.getName(), G.DIR_TEMP, true);
-                fileSize = realmAttachment.getSmallThumbnail().getSize();
+                G.onFileDownloaded = this;
+                if (selector == ProtoFileDownload.FileDownload.Selector.FILE) {
+                    filePath = AndroidUtils.getFilePathWithCashId(realmAttachment.getCacheId(), realmAttachment.getName(), G.DIR_TEMP, false);
+                    fileSize = realmAttachment.getSize();
+                } else if (selector == ProtoFileDownload.FileDownload.Selector.LARGE_THUMBNAIL) {
+                    filePath = AndroidUtils.getFilePathWithCashId(realmAttachment.getCacheId(), realmAttachment.getName(), G.DIR_TEMP, true);
+                    fileSize = realmAttachment.getLargeThumbnail().getSize();
+                } else if (selector == ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL) {
+                    filePath = AndroidUtils.getFilePathWithCashId(realmAttachment.getCacheId(), realmAttachment.getName(), G.DIR_TEMP, true);
+                    fileSize = realmAttachment.getSmallThumbnail().getSize();
+                }
+                new RequestFileDownload().download(realmAttachment.getToken(), 0, (int) fileSize, selector,
+                    new RequestFileDownload.IdentityFileDownload(realmAttachment.getToken(), filePath, selector, fileSize, 0, false));
+            } catch (RuntimeException e) {
+                e.printStackTrace();
             }
-
-            new RequestFileDownload().download(realmAttachment.getToken(), 0, (int) fileSize, selector, new RequestFileDownload.IdentityFileDownload(realmAttachment.getToken(), filePath, selector, fileSize, 0, false));
         }
 
         @Override

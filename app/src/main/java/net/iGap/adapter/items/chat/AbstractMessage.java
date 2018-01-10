@@ -190,7 +190,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 maxsize = G.maxChatBox;
             }
 
-            messageView = ViewMaker.makeTextViewMessage(maxsize, mMessage.hasEmojiInText);
+            messageView = ViewMaker.makeTextViewMessage(maxsize, mMessage.hasEmojiInText, mMessage.hasLinkInMessage);
             layoutMessageContainer.addView(messageView);
         }
 

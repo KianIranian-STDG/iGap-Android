@@ -43,6 +43,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperMimeType;
 import net.iGap.interfaces.IResendMessage;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
@@ -58,18 +59,9 @@ public final class AppUtils {
         throw new InstantiationException("This class is not for instantiation.");
     }
 
-    public static String[] exts = {".jpg", ".jpeg", ".gif", ".png", ".tif"};
 
     public static String suitableThumbFileName(String name) {
-        boolean isImage = false;
-        for (String ext : exts) {
-            if (name != null && name.endsWith(ext)) {
-                isImage = true;
-                break;
-            }
-        }
-
-        if (isImage) {
+        if (HelperMimeType.isFileImage(name.toLowerCase())) {
             return name;
         } else {
             return name.replaceFirst("([\\w\\W]+)(\\.(\\w+))$", "$1.jpg");

@@ -30,7 +30,7 @@ public class HelperMimeType {
 
     public static boolean isFileImage(String path) {
 
-        if (path.endsWith(".jpg") || path.endsWith(".bmp") || path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".tiff")) {
+        if (path.endsWith(".jpg") || path.endsWith(".bmp") || path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".tiff") || path.endsWith(".tif")) {
             return true;
         }
         return false;

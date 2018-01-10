@@ -1241,7 +1241,7 @@ public class ViewMaker {
         return mainContainer;
     }
 
-    static View makeTextViewMessage(int maxsize, boolean hasEmoji) {
+    static View makeTextViewMessage(int maxsize, boolean hasEmoji, boolean hasLink) {
 
         if (hasEmoji) {
             EmojiTextViewE emojiTextViewE = new EmojiTextViewE(context);
@@ -1256,7 +1256,9 @@ public class ViewMaker {
                 emojiTextViewE.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
             }
             setLayoutDirection(emojiTextViewE, View.LAYOUT_DIRECTION_LOCALE);
-            emojiTextViewE.setMovementMethod(LinkMovementMethod.getInstance());
+            if (hasLink) {
+                emojiTextViewE.setMovementMethod(LinkMovementMethod.getInstance());
+            }
 
             if (maxsize > 0) {
                 emojiTextViewE.setMaxWidth(maxsize);
@@ -1275,7 +1277,9 @@ public class ViewMaker {
                 textView.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
             }
             setLayoutDirection(textView, View.LAYOUT_DIRECTION_LOCALE);
-            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            if (hasLink) {
+                textView.setMovementMethod(LinkMovementMethod.getInstance());
+            }
             if (maxsize > 0) {
                 textView.setMaxWidth(maxsize);
             }
