@@ -93,7 +93,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
             }
         });
 
-        if (!mMessage.hasLinkInMessage) {
+
             messageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -105,6 +105,10 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
             messageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (G.isLinkClicked) {
+                        G.isLinkClicked = false;
+                        return;
+                    }
                     if (!isSelected()) {
                         if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             return;
@@ -117,7 +121,6 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
                     }
                 }
             });
-        }
     }
 
     @Override

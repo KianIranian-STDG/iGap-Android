@@ -74,16 +74,7 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
             setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
         }
 
-        if (mMessage.hasLinkInMessage) {
-
-            holder.itemView.findViewById(R.id.csl_ll_time).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-        } else {
-            messageView.setOnLongClickListener(new View.OnLongClickListener() {
+        messageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     holder.itemView.performLongClick();
@@ -94,6 +85,10 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
             messageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (G.isLinkClicked) {
+                        G.isLinkClicked = false;
+                        return;
+                    }
                     if (!isSelected()) {
                         if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             return;
@@ -106,7 +101,6 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
                     }
                 }
             });
-        }
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {

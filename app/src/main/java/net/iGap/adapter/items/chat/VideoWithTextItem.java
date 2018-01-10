@@ -14,7 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import io.realm.Realm;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperRadius;
@@ -26,10 +27,6 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
-
-import java.util.List;
-
-import io.realm.Realm;
 
 import static net.iGap.module.AndroidUtils.suitablePath;
 
@@ -90,7 +87,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
         }
 
-        if (!mMessage.hasLinkInMessage) {
+
             messageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -102,6 +99,10 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             messageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (G.isLinkClicked) {
+                        G.isLinkClicked = false;
+                        return;
+                    }
                     if (!isSelected()) {
                         if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             return;
@@ -114,7 +115,6 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
                     }
                 }
             });
-        }
     }
 
     @Override

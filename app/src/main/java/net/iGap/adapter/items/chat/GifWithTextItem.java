@@ -19,6 +19,7 @@ import android.widget.TextView;
 import io.realm.Realm;
 import java.io.File;
 import java.util.List;
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
@@ -163,7 +164,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             }
         });
 
-        if (!mMessage.hasLinkInMessage) {
+
             messageView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -175,6 +176,10 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             messageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (G.isLinkClicked) {
+                        G.isLinkClicked = false;
+                        return;
+                    }
                     if (!isSelected()) {
                         if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             return;
@@ -187,7 +192,6 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
                     }
                 }
             });
-        }
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {

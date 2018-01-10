@@ -160,6 +160,7 @@ public class HelperUrl {
             public void onClick(View view) {
                 if (withclickable) {
 
+                    G.isLinkClicked = true;
                     boolean openLocalWebPage;
                     SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, G.context.MODE_PRIVATE);
 
@@ -229,6 +230,7 @@ public class HelperUrl {
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
 
+                G.isLinkClicked = true;
                 String url = strBuilder.toString().substring(start, end);
 
                 int index = url.lastIndexOf("/");
@@ -259,6 +261,7 @@ public class HelperUrl {
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
 
+                G.isLinkClicked = true;
                 try {
                     String url = strBuilder.toString().substring(start, end);
 
@@ -336,7 +339,9 @@ public class HelperUrl {
 
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
-            public void onClick(View widget) {
+            public void onClick(View view) {
+                G.isLinkClicked = true;
+                ;
                 if (FragmentChat.hashListener != null) {
                     FragmentChat.hashListener.complete(true, "#" + text, messageID);
                 }
@@ -409,8 +414,8 @@ public class HelperUrl {
 
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
-            public void onClick(View widget) {
-
+            public void onClick(View view) {
+                G.isLinkClicked = true;
                 checkUsernameAndGoToRoom(text, ChatEntry.profile);
             }
 
