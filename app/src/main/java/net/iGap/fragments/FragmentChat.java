@@ -2812,13 +2812,33 @@ public class FragmentChat extends BaseFragment
             @Override
             public void run() {
                 if (mAdapter != null) {
-                    for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+                    boolean cleared = false;
+                    if (mAdapter.getAdapterItemCount() > 1) {
                         try {
-                            if (Long.parseLong(mAdapter.getAdapterItem(i).mMessage.messageID) <= clearId) {
-                                mAdapter.remove(i);
+                            if (Long.parseLong(mAdapter.getAdapterItem(mAdapter.getAdapterItemCount() - 1).mMessage.messageID) == clearId) {
+                                cleared = true;
+                                mAdapter.clear();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                        }
+                    }
+                    if (!cleared) {
+                        int selectedPosition = -1;
+                        for (int i = (mAdapter.getAdapterItemCount() - 1); i >= 0; i--) {
+                            try {
+                                if (Long.parseLong(mAdapter.getAdapterItem(i).mMessage.messageID) == clearId) {
+                                    selectedPosition = i;
+                                    break;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (selectedPosition != -1) {
+                            for (int i = selectedPosition; i >= 0; i--) {
+                                mAdapter.remove(i);
+                            }
                         }
                     }
                 }
@@ -3548,7 +3568,14 @@ public class FragmentChat extends BaseFragment
             public void onClick(View v) {
 
                 dialog.dismiss();
-                replay(message);
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        replay(message);
+                    }
+                }, 200);
+
             }
         });
         rootCopy.setOnClickListener(new View.OnClickListener() {
@@ -4260,6 +4287,13 @@ public class FragmentChat extends BaseFragment
             toolbar.setVisibility(View.VISIBLE);
 
             mAdapter.deselect();
+
+            edtChat.requestFocus();
+            InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.showSoftInput(edtChat, InputMethodManager.SHOW_IMPLICIT);
+            }
+
         }
     }
 
