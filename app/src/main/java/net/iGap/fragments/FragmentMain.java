@@ -21,7 +21,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
+import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
+import io.realm.Sort;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -75,16 +82,6 @@ import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import io.realm.OrderedRealmCollection;
-import io.realm.Realm;
-import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
-import io.realm.Sort;
 
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
@@ -560,12 +557,11 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                             RealmRoom.deleteRoomWithCheck(realm, G.deletedRoomList.get(i));
                         }
                         swipeRefreshLayout.setRefreshing(false);
+                        G.deletedRoomList.clear();
                     }
                 });
             }
         });
-
-        G.deletedRoomList.clear();
     }
 
     private void onSelectRoomMenu(String message, RealmRoom item) {
