@@ -19,6 +19,11 @@
     <item name="android:windowBackground">@drawable/theme</item>
   </style>
 
+  <style name="RatingBar" parent="Theme.AppCompat">
+    <item name="colorControlNormal">@color/gray</item>
+    <item name="colorControlActivated">@color/green</item>
+  </style>
+
   <style name="AppTheme.Widget" />
 
     <style name="AppTheme.Widget.TextView" parent="android:Widget.Holo.Light.TextView">

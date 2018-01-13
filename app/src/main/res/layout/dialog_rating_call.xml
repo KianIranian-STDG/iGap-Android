@@ -8,7 +8,7 @@
 
   <LinearLayout
       android:id="@+id/arb_layout_rate"
-      android:layout_width="@dimen/dp280"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:orientation="vertical"
 
@@ -19,8 +19,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp12"
+        android:theme="@style/RatingBar"
         android:numStars="5"
-        android:rating="0"
+        android:rating="3"
         android:stepSize="1"
         />
     <net.iGap.module.MEditText
