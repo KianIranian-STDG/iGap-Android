@@ -68,7 +68,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
@@ -82,7 +81,25 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
-
+import io.fabric.sdk.android.services.concurrency.AsyncTask;
+import io.fotoapparat.Fotoapparat;
+import io.fotoapparat.view.CameraRenderer;
+import io.fotoapparat.view.CameraView;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import me.leolin.shortcutbadger.ShortcutBadger;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -205,7 +222,6 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.enums.ProgressState;
-import net.iGap.module.enums.RoomType;
 import net.iGap.module.enums.SendingStep;
 import net.iGap.module.structs.StructBackGroundSeen;
 import net.iGap.module.structs.StructBottomSheet;
@@ -254,29 +270,7 @@ import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.viewmodel.ActivityCallViewModel;
-
 import org.parceler.Parcels;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
-import io.fabric.sdk.android.services.concurrency.AsyncTask;
-import io.fotoapparat.Fotoapparat;
-import io.fotoapparat.view.CameraRenderer;
-import io.fotoapparat.view.CameraView;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -316,8 +310,8 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged,
-        OnConnectionChangeStateChat {
+    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged,
+    OnConnectionChangeStateChat {
 
     public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
@@ -649,8 +643,7 @@ public class FragmentChat extends BaseFragment
                                                 }
                                                 //    avi.setVisibility(View.GONE);
 
-                                                if (HelperCalander.isPersianUnicode)
-                                                    txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                                                if (HelperCalander.isPersianUnicode) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                                             }
                                         });
                                     }
@@ -3169,14 +3162,14 @@ public class FragmentChat extends BaseFragment
         StructMessageInfo messageInfo;
         if (isReply()) {
             messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
         } else {
             if (isMessageWrote()) {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             } else {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             }
         }
 
@@ -3900,8 +3893,7 @@ public class FragmentChat extends BaseFragment
                         }
                     }
                     // change english number to persian number
-                    if (HelperCalander.isPersianUnicode)
-                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    if (HelperCalander.isPersianUnicode) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             });
         }
@@ -3929,8 +3921,7 @@ public class FragmentChat extends BaseFragment
                     //}
                     ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                     // change english number to persian number
-                    if (HelperCalander.isPersianUnicode)
-                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    if (HelperCalander.isPersianUnicode) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             }
         });
@@ -4225,7 +4216,7 @@ public class FragmentChat extends BaseFragment
      * show current state for user if this room is chat
      *
      * @param status current state
-     * @param time   if state is not online set latest online time
+     * @param time if state is not online set latest online time
      */
     private void setUserStatus(final String status, final long time) {
         if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
@@ -4258,8 +4249,7 @@ public class FragmentChat extends BaseFragment
                             //}
                             ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                             // change english number to persian number
-                            if (HelperCalander.isPersianUnicode)
-                                txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                            if (HelperCalander.isPersianUnicode) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
                             checkAction();
                         }
@@ -4329,8 +4319,7 @@ public class FragmentChat extends BaseFragment
                         }
                     }
                     // change english number to persian number
-                    if (HelperCalander.isPersianUnicode)
-                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    if (HelperCalander.isPersianUnicode) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             });
         }
@@ -4751,7 +4740,7 @@ public class FragmentChat extends BaseFragment
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-                MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+            MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         };
 
         cursor = activity.getContentResolver().query(uri, projection, null, null, null);
@@ -5666,9 +5655,9 @@ public class FragmentChat extends BaseFragment
                                         public void run() {
 
                                             fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                    .lensPosition(back())       // we want back camera
-                                                    .build();
+                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                .lensPosition(back())       // we want back camera
+                                                .build();
 
                                             fotoapparatSwitcher.start();
                                         }
@@ -5709,9 +5698,9 @@ public class FragmentChat extends BaseFragment
                                         @Override
                                         public void run() {
                                             fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                    .lensPosition(back())       // we want back camera
-                                                    .build();
+                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                .lensPosition(back())       // we want back camera
+                                                .build();
 
                                             fotoapparatSwitcher.stop();
                                         }
@@ -6020,8 +6009,7 @@ public class FragmentChat extends BaseFragment
                 onSelectRoomMenu("txtMuteNotification", mRoomId);
             }
         });
-        if (txtChannelMute == null)
-            txtChannelMute = (TextView) rootView.findViewById(R.id.chl_txt_mute_channel);
+        if (txtChannelMute == null) txtChannelMute = (TextView) rootView.findViewById(R.id.chl_txt_mute_channel);
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);
         } else {
@@ -6320,11 +6308,11 @@ public class FragmentChat extends BaseFragment
         RealmResults<RealmRoom> results = null;
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
         Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
-        results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
-
+        results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
 
         for (int i = 0; i < results.size(); i++) {
-            fastItemAdapterForward.add(new AdapterBottomSheetForward(results.get(i)).withIdentifier(99 + i));
+
+            if (results.get(i) != null && !results.get(i).getReadOnly()) fastItemAdapterForward.add(new AdapterBottomSheetForward(results.get(i)).withIdentifier(99 + i));
         }
 
         G.handler.postDelayed(new Runnable() {
@@ -6986,13 +6974,14 @@ public class FragmentChat extends BaseFragment
      * do forward actions if any message forward to this room
      */
     private void manageForwardedMessage() {
-        if (mForwardMessages != null && !isChatReadOnly) {
+        if ((mForwardMessages != null && !isChatReadOnly) || multiForwardList.size() > 0) {
 
             final LinearLayout ll_Forward = (LinearLayout) rootView.findViewById(R.id.ac_ll_forward);
 
             int multiForwardSize = multiForwardList.size();
-            if (hasForward || multiForwardSize > 0) {
 
+            if (hasForward || multiForwardSize > 0) {
+                ArrayList<Long> mForwarded = multiForwardList;
                 final ArrayList<Parcelable> mg = mForwardMessages;
 
                 for (int i = 0; i < mg.size(); i++) {
@@ -7002,9 +6991,12 @@ public class FragmentChat extends BaseFragment
                     final int j = i;
 
                     if (multiForwardSize > 0) {
-                        for (int k = 0; k < multiForwardList.size(); k++) {
-                            sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mg.get(j)), multiForwardList.get(k), false);
+                        for (int k = 0; k < mForwarded.size(); k++) {
+                            sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mg.get(j)), mForwarded.get(k), false);
+                            multiForwardList.remove(multiForwardList.get(k));
                         }
+                        hasForward = false;
+                        mForwardMessages = null;
                     } else {
                         G.handler.postDelayed(new Runnable() {
                             @Override
@@ -7012,13 +7004,11 @@ public class FragmentChat extends BaseFragment
                                 sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mg.get(j)), mRoomId, true);
                             }
                         }, 1000 * j);
+                        imvCancelForward.performClick();
                     }
                 }
 
-                if (multiForwardList.size() == 0) imvCancelForward.performClick();
             } else {
-
-                Log.i("CCCCCCCCCCCCCC", "22 path: " + multiForwardList.size());
                 imvCancelForward = (TextView) rootView.findViewById(R.id.cslhf_imv_cansel);
                 imvCancelForward.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -7412,7 +7402,7 @@ public class FragmentChat extends BaseFragment
         long gapMessageId;
         if (direction == DOWN) {
             resultsUp =
-                    getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+                getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
              * if for UP state client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
@@ -7868,7 +7858,7 @@ public class FragmentChat extends BaseFragment
      * manage progress state in adapter
      *
      * @param progressState SHOW or HIDE state detect with enum
-     * @param direction     define direction for show progress in UP or DOWN
+     * @param direction define direction for show progress in UP or DOWN
      */
     private void progressItem(final ProgressState progressState, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
         G.handler.post(new Runnable() {
