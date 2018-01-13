@@ -54,19 +54,12 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import io.realm.Realm;
-import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -104,6 +97,7 @@ import net.iGap.request.RequestGeoGetNearbyDistance;
 import net.iGap.request.RequestGeoRegister;
 import net.iGap.request.RequestGeoUpdateComment;
 import net.iGap.request.RequestGeoUpdatePosition;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.config.IConfigurationProvider;
@@ -126,6 +120,17 @@ import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
+import io.realm.Realm;
+import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.URL_MAP;
@@ -198,6 +203,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private View vgSlideUp;
     private TextView iconSlide;
+    private final int GET_NEARBY_DELAY = (int) (DateUtils.SECOND_IN_MILLIS);
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -1013,20 +1019,25 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     /**
      * hint : call this method after fill location
      */
-    private void getCoordinateLoop(final int delay, boolean loop) {
-        if (location != null) {
-            if (loop && page == pageiGapMap) {
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+    private void getCoordinateLoop(final int delay, final boolean loop) {
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (location != null) {
+                    if (loop && page == pageiGapMap) {
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                                getCoordinateLoop(DEFAULT_LOOP_TIME, true);
+                            }
+                        }, delay);
+                    } else {
                         new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
-                        getCoordinateLoop(DEFAULT_LOOP_TIME, true);
                     }
-                }, delay);
-            } else {
-                new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                }
             }
-        }
+        }, GET_NEARBY_DELAY);
     }
 
     private void initMapListener() {
@@ -1370,18 +1381,23 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         return realmMapUsers;
     }
 
-    private void getDistanceLoop(final int delay, boolean loop) {
-        if (loop && FragmentiGapMap.page == pageUserList) {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+    private void getDistanceLoop(final int delay, final boolean loop) {
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (loop && FragmentiGapMap.page == pageUserList) {
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
+                            getDistanceLoop(DEFAULT_LOOP_TIME, true);
+                        }
+                    }, delay);
+                } else {
                     new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
-                    getDistanceLoop(DEFAULT_LOOP_TIME, true);
                 }
-            }, delay);
-        } else {
-            new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
-        }
+            }
+        }, GET_NEARBY_DELAY);
     }
 
     private class MapUserAdapter extends RealmRecyclerViewAdapter<RealmGeoNearbyDistance, MapUserAdapter.ViewHolder> {
