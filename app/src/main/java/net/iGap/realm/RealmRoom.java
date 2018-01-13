@@ -734,13 +734,6 @@ public class RealmRoom extends RealmObject {
         realm.close();
     }
 
-    public static void deleteRoomWithCheck(Realm realm, long roomId) {
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
-            realmRoom.deleteFromRealm();
-        }
-    }
-
     public static void addOwnerToDatabase(long roomId) {
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();

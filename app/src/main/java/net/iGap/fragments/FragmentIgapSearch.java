@@ -28,13 +28,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
-
+import io.realm.Realm;
+import java.util.ArrayList;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.SearchItamIGap;
@@ -49,11 +50,6 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientSearchUsername;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.realm.Realm;
 
 public class FragmentIgapSearch extends BaseFragment {
 
@@ -287,7 +283,6 @@ public class FragmentIgapSearch extends BaseFragment {
                                         @Override public void execute(Realm realm) {
                                             realmRoom[0] = RealmRoom.putOrUpdate(item.getRoom(), realm);
                                             realmRoom[0].setDeleted(true);
-                                            G.deletedRoomList.add(realmRoom[0].getId());
                                         }
                                     });
                                 }

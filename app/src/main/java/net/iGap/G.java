@@ -231,7 +231,6 @@ public class G extends MultiDexApplication {
     public static ProtoClientCondition.ClientCondition.Builder clientConditionGlobal;
     public static HelperCheckInternetConnection.ConnectivityType latestConnectivityType;
     public static ImageLoader imageLoader;
-    public static ArrayList<Long> deletedRoomList = new ArrayList<>();
 
     public static ArrayList<String> unSecure = new ArrayList<>();
     public static ArrayList<String> unSecureResponseActionId = new ArrayList<>();

@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -539,29 +538,8 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     private void getChatsList() {
         if (firstTimeEnterToApp) {
             testIsSecure();
+            swipeRefreshLayout.setRefreshing(false);
         }
-
-        if (G.deletedRoomList.size() > 0) {
-            cleanDeletedRooms();
-        }
-    }
-
-    private void cleanDeletedRooms() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                getRealmFragmentMain().executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        for (int i = 0; i < G.deletedRoomList.size(); i++) {
-                            RealmRoom.deleteRoomWithCheck(realm, G.deletedRoomList.get(i));
-                        }
-                        swipeRefreshLayout.setRefreshing(false);
-                        G.deletedRoomList.clear();
-                    }
-                });
-            }
-        });
     }
 
     private void onSelectRoomMenu(String message, RealmRoom item) {
