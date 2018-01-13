@@ -13,13 +13,7 @@ package net.iGap.realm;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.format.DateUtils;
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import io.realm.annotations.PrimaryKey;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperString;
@@ -28,6 +22,15 @@ import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientGetRoom;
+
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
+import io.realm.Sort;
+import io.realm.annotations.PrimaryKey;
 
 import static net.iGap.G.context;
 import static net.iGap.G.userId;
@@ -404,6 +407,8 @@ public class RealmRoom extends RealmObject {
                 realmRoom.getChannelRoom().setUsername(room.getChannelRoomExtra().getPublicExtra().getUsername());
                 realmRoom.getChannelRoom().setSeenId(room.getChannelRoomExtra().getSeenId());
                 realmRoom.getChannelRoom().setPrivate(room.getChannelRoomExtra().hasPrivateExtra());
+                realmRoom.getChannelRoom().setVerified(room.getChannelRoomExtra().getVerified());
+                realmRoom.getChannelRoom().setReactionStatus(room.getChannelRoomExtra().getReactionStatus());
                 break;
             case CHAT:
                 realmRoom.setType(RoomType.CHAT);
