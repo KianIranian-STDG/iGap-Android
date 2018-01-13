@@ -12,12 +12,14 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -26,6 +28,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.GridLayoutManager;
@@ -41,10 +44,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -63,6 +77,7 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.PreCachingLayoutManager;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoClientCountRoomHistory;
 import net.iGap.proto.ProtoClientSearchRoomHistory;
@@ -74,26 +89,11 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestClientCountRoomHistory;
 import net.iGap.request.RequestClientSearchRoomHistory;
-
 import org.parceler.Parcels;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmResults;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
+import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.fragmentActivity;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
@@ -1650,25 +1650,59 @@ public class FragmentShearedMedia extends BaseFragment {
             }
         }
 
+        void openVideoByDefaultApp(int position) {
+
+            try {
+                RealmRoomMessage rm = mNewList.get(position).item;
+                if (rm.getAttachment().isFileExistsOnLocal()) {
+                    File file = new File(rm.getAttachment().getLocalFilePath());
+                    Intent intent = new Intent();
+                    intent.setAction(android.content.Intent.ACTION_VIEW);
+                    Uri uri;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        uri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", file);
+                    } else {
+                        uri = Uri.fromFile(file);
+                    }
+
+                    intent.setDataAndType(uri, "video/*");
+
+                    try {
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        // to prevent from 'No Activity found to handle Intent'
+                        e.printStackTrace();
+                    }
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         @Override
         void openSelectedItem(int position, RecyclerView.ViewHolder holder) {
             playVideo(position, holder.itemView);
         }
 
         private void playVideo(int position, View itemView) {
-            long selectedFileToken = mNewList.get(position).messageId;
+            SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+            if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 0) == 1) {
+                openVideoByDefaultApp(position);
+            } else {
+                long selectedFileToken = mNewList.get(position).messageId;
+                Fragment fragment = FragmentShowImage.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putLong("RoomId", roomId);
+                bundle.putLong("SelectedImage", selectedFileToken);
+                bundle.putString("TYPE", ProtoGlobal.RoomMessageType.VIDEO.toString());
+                fragment.setArguments(bundle);
 
-            Fragment fragment = FragmentShowImage.newInstance();
-            Bundle bundle = new Bundle();
-            bundle.putLong("RoomId", roomId);
-            bundle.putLong("SelectedImage", selectedFileToken);
-            bundle.putString("TYPE", ProtoGlobal.RoomMessageType.VIDEO.toString());
-            fragment.setArguments(bundle);
-
-            //FragmentTransitionLauncher.with(G.fragmentActivity).from(itemView).prepare(fragment);
-
-
-            new HelperFragment(fragment).setReplace(false).load();
+                //FragmentTransitionLauncher.with(G.fragmentActivity).from(itemView).prepare(fragment);
+                new HelperFragment(fragment).setReplace(false).load();
+            }
         }
     }
 

@@ -163,6 +163,7 @@ public class FragmentSettingViewModel {
     public ObservableField<Boolean> isAutoGif = new ObservableField<>();
     public ObservableField<Boolean> isCompress = new ObservableField<>();
     public ObservableField<Boolean> isTrim = new ObservableField<>();
+    public ObservableField<Boolean> isDefaultPlayer = new ObservableField<>();
     public ObservableField<Boolean> isCrop = new ObservableField<>();
     public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
 
@@ -1334,6 +1335,22 @@ public class FragmentSettingViewModel {
 
     }
 
+    public void onClickDefaultVideo(View view) {
+        isDefaultPlayer.set(!isDefaultPlayer.get());
+    }
+
+    public void onCheckedDefaultVideo(boolean isChecked) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        isDefaultPlayer.set(isChecked);
+        if (isChecked) {
+            editor.putInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1);
+            editor.apply();
+        } else {
+            editor.putInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 0);
+            editor.apply();
+        }
+    }
+
     public void onClickCrop(View view) {
         isCrop.set(!isCrop.get());
     }
@@ -1492,6 +1509,8 @@ public class FragmentSettingViewModel {
         int checkedEnableTrim = sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1);
         isTrim.set(getBoolean(checkedEnableTrim));
 
+        int checkedEnableDefaultPlayer = sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 0);
+        isDefaultPlayer.set(getBoolean(checkedEnableDefaultPlayer));
 
         callbackVersionApp.set(G.fragmentActivity.getResources().getString(R.string.iGap_version) + " " + getAppVersion());
 

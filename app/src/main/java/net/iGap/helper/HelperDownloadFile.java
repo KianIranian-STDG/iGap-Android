@@ -336,7 +336,7 @@ public class HelperDownloadFile {
                 File file = new File(item.moveToDirectoryPAth);
                 if (file.exists()) {
 
-                    if (HelperMimeType.isFileImage(item.moveToDirectoryPAth) || HelperMimeType.isFileVideo(item.moveToDirectoryPAth)) {
+                    if (HelperMimeType.isFileImage(item.moveToDirectoryPAth.toLowerCase()) || HelperMimeType.isFileVideo(item.moveToDirectoryPAth.toLowerCase())) {
                         HelperSaveFile.savePicToGallery(item.moveToDirectoryPAth, false);
                     }
                 }

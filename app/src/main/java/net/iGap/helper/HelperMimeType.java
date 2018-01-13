@@ -29,60 +29,36 @@ import static net.iGap.G.context;
 public class HelperMimeType {
 
     public static boolean isFileImage(String path) {
-
-        if (path.endsWith(".jpg") || path.endsWith(".bmp") || path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".tiff") || path.endsWith(".tif")) {
-            return true;
-        }
-        return false;
+        return path.endsWith(".jpg") || path.endsWith(".bmp") || path.endsWith(".png") || path.endsWith(".gif") || path.endsWith(".jpeg") || path.endsWith(".tiff") || path.endsWith(".tif");
     }
 
     public static boolean isFileVideo(String path) {
-
-        if (path.endsWith(".mp4")
+        return path.endsWith(".mp4")
             || path.endsWith(".3gp")
             || path.endsWith(".avi")
             || path.endsWith(".mpg")
             || path.endsWith(".mpeg")
             || path.endsWith(".flv")
             || path.endsWith(".wmv")
-            || path.endsWith(".m4v")
-            || path.endsWith(".mov")) {
-            return true;
-        }
-        return false;
+            || path.endsWith(".m4v") || path.endsWith(".mov");
     }
 
-    public static boolean isFileAudio(String path) {
-
-        if (path.endsWith(".mp3")
+    private static boolean isFileAudio(String path) {
+        return path.endsWith(".mp3")
             || path.endsWith(".ogg")
             || path.endsWith(".wma")
             || path.endsWith(".m4a")
             || path.endsWith(".amr")
             || path.endsWith(".wav")
-            || path.endsWith(".mid")
-            || path.endsWith(".midi")) {
-            return true;
-        }
-        return false;
+            || path.endsWith(".mid") || path.endsWith(".midi");
     }
 
-    public static boolean isFileText(String path) {
-
-        if (path.endsWith(".txt") || path.endsWith(".csv") || path.endsWith(".xml") || path.endsWith(".html")) {
-
-            return true;
-        }
-        return false;
+    private static boolean isFileText(String path) {
+        return path.endsWith(".txt") || path.endsWith(".csv") || path.endsWith(".xml") || path.endsWith(".html");
     }
 
-    public static boolean isFilePakage(String path) {
-
-        if (path.endsWith(".gz") || path.endsWith(".gz") || path.endsWith(".zip")) {
-
-            return true;
-        }
-        return false;
+    private static boolean isFilePakage(String path) {
+        return path.endsWith(".gz") || path.endsWith(".gz") || path.endsWith(".zip");
     }
 
     /**

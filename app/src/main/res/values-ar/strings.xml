@@ -2104,5 +2104,6 @@
   <string name="attention">اهتمام</string>
   <string name="content_attention_dialog">ملاحظة: تجدر الإشارة إلى أن الأفراد على الخريطة سيتم عرض مع وجود خطأ من 500 متر. لذلك لا تقلق</string>
   <string name="st_cameraBottomSheet">كاميرا صغيرة في المرفقات</string>
+  <string name="open_default_player">Open video with default player</string>
 
 </resources>

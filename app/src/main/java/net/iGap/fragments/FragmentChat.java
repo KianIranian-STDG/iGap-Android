@@ -3252,36 +3252,44 @@ public class FragmentChat extends BaseFragment
     public void onOpenClick(View view, StructMessageInfo message, int pos) {
         ProtoGlobal.RoomMessageType messageType = message.forwardedFrom != null ? message.forwardedFrom.getMessageType() : message.messageType;
         //+Realm realm = Realm.getDefaultInstance();
-        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT || messageType == VIDEO || messageType == VIDEO_TEXT) {
+        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT) {
             showImage(message, view);
+        } else if (messageType == VIDEO || messageType == VIDEO_TEXT) {
+            if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 0) == 1) {
+                openMessage(message);
+            } else {
+                showImage(message, view);
+            }
         } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
+            openMessage(message);
+        }
+    }
 
-            String _filePath = null;
-            String _token = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token;
-            RealmAttachment _Attachment = getRealmChat().where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, _token).findFirst();
+    private void openMessage(StructMessageInfo message) {
+        String _filePath = null;
+        String _token = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.attachment.token;
+        RealmAttachment _Attachment = getRealmChat().where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, _token).findFirst();
 
-            if (_Attachment != null) {
-                _filePath = _Attachment.getLocalFilePath();
-            } else if (message.attachment != null) {
-                _filePath = message.attachment.getLocalFilePath();
-            }
+        if (_Attachment != null) {
+            _filePath = _Attachment.getLocalFilePath();
+        } else if (message.attachment != null) {
+            _filePath = message.attachment.getLocalFilePath();
+        }
 
-            if (_filePath == null || _filePath.length() == 0) {
-                return;
-            }
+        if (_filePath == null || _filePath.length() == 0) {
+            return;
+        }
 
-            Intent intent = HelperMimeType.appropriateProgram(_filePath);
-            if (intent != null) {
-                try {
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    // to prevent from 'No Activity found to handle Intent'
-                    e.printStackTrace();
-                }
+        Intent intent = HelperMimeType.appropriateProgram(_filePath);
+        if (intent != null) {
+            try {
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(intent);
+            } catch (Exception e) {
+                // to prevent from 'No Activity found to handle Intent'
+                e.printStackTrace();
             }
         }
-        //realm.close();
     }
 
     @Override

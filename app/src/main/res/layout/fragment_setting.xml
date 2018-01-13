@@ -1694,7 +1694,6 @@
               android:background="@color/background_editText"
               />
 
-
           <LinearLayout
               android:layout_width="match_parent"
               android:layout_height="@dimen/dp48"
@@ -1734,6 +1733,49 @@
                 />
 
 
+          </LinearLayout>
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/background_editText"
+              />
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp48"
+              android:onClick="@{fragmentSettingViewModel::onClickDefaultVideo}"
+              android:orientation="horizontal"
+              android:paddingEnd="@dimen/dp16"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
+              android:paddingStart="@dimen/dp16"
+              >
+
+            <TextView
+                android:id="@+id/stsp_txt_open_default_player"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:paddingTop="@dimen/dp4"
+                android:text="@string/open_default_player"
+                android:textColor="@color/black_register"
+                android:textSize="@dimen/dp15"
+                android:textStyle="normal"
+                fontPath="fonts/IRANSansMobile.ttf"
+                />
+
+            <ToggleButton
+                android:id="@+id/stsp_toggle_open_default_player"
+                android:layout_width="@dimen/dp44"
+                android:layout_height="@dimen/dp40"
+                android:background="@drawable/st_switch_button"
+                android:checked="@{fragmentSettingViewModel.isDefaultPlayer}"
+                android:onCheckedChanged="@{(switch, checked) -> fragmentSettingViewModel.onCheckedDefaultVideo(checked)}"
+                android:textOff=""
+                android:textOn=""
+                />
           </LinearLayout>
 
           <View

@@ -1148,5 +1148,6 @@
   <string name="attention">توجه</string>
   <string name="content_attention_dialog">نکته : قابل ذکر است افراد بر روی نقشه با خطای 500 متر نمایش داده خواهند شد. پس جای نگرانی نیست</string>
   <string name="st_cameraBottomSheet">دوربین کوچک در پیوست ها</string>
+  <string name="open_default_player">Open video with default player</string>
 
 </resources>
