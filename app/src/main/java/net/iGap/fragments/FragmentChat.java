@@ -3589,9 +3589,7 @@ public class FragmentChat extends BaseFragment
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null) {
                     //finish();
-                    initAttachForward();
-                    itemAdapterBottomSheetForward();
-                    //finishChat();
+                    finishChat();
                     mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
 
 
@@ -3854,7 +3852,9 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onForwardClick(StructMessageInfo message) {
-        finishChat();
+        //finishChat();
+        initAttachForward();
+        itemAdapterBottomSheetForward();
         mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
     }
 
