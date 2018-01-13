@@ -3606,9 +3606,7 @@ public class FragmentChat extends BaseFragment
                 dialog.dismiss();
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null) {
-                    //finish();
-                    finishChat();
-                    mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
+                    onForwardClick(message);
                 }
             }
         });
@@ -3868,8 +3866,8 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onForwardClick(StructMessageInfo message) {
-        finishChat();
         mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
+        new HelperFragment().removeAll(true);
     }
 
     @Override
@@ -6000,12 +5998,8 @@ public class FragmentChat extends BaseFragment
             public void onComplete(RippleView rippleView) {
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
-
                     mForwardMessages = getMessageStructFromSelectedItems();
-
-                    //finish();
-
-                    finishChat();
+                    new HelperFragment().removeAll(true);
                 }
             }
         });
