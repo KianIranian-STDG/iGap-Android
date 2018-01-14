@@ -2410,6 +2410,7 @@ public class FragmentChat extends BaseFragment
                         /**
                          * should be null after requesting
                          */
+                        imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
                         edtChat.setTag(null);
                         clearReplyView();
                         isEditMessage = false;
@@ -2549,7 +2550,7 @@ public class FragmentChat extends BaseFragment
                 if (text.toString().endsWith(System.getProperty("line.separator"))) {
                     if (sendByEnter) imvSendButton.performClick();
                 }
-                if (text.toString().equals(messageEdit)) {
+                if (text.toString().equals(messageEdit) && isEditMessage) {
                     imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
                 } else {
                     imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
@@ -2607,6 +2608,7 @@ public class FragmentChat extends BaseFragment
                                 }
                             }).start();
                         } else {
+                            Log.i("JJJJJJJJJJJJJJJJJ", "afterTextChanged: ");
                             imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
                         }
                     }
