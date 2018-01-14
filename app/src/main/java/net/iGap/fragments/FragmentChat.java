@@ -439,6 +439,7 @@ public class FragmentChat extends BaseFragment
     private boolean sendByEnter = false;
     private boolean isShowLayoutUnreadMessage = false;
     private boolean isCloudRoom;
+    private boolean isEditMessage = false;
 
 
     private long biggestMessageId = 0;
@@ -470,6 +471,7 @@ public class FragmentChat extends BaseFragment
     private String report = "";
     private View rootView;
     private boolean isAllSenderId = true;
+    private String messageEdit = "";
 
     @Nullable
     @Override
@@ -2389,7 +2391,7 @@ public class FragmentChat extends BaseFragment
                 if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
                     final StructMessageInfo messageInfo = (StructMessageInfo) edtChat.getTag();
                     final String message = getWrittenMessage();
-                    if (!message.equals(messageInfo.messageText)) {
+                    if (!message.equals(messageInfo.messageText) && edtChat.getText().length() > 0) {
                         messageInfo.hasEmojiInText = RealmRoomMessage.isEmojiInText(message);
 
                         RealmRoomMessage.editMessageClient(mRoomId, parseLong(messageInfo.messageID), message);
@@ -2410,6 +2412,7 @@ public class FragmentChat extends BaseFragment
                          */
                         edtChat.setTag(null);
                         clearReplyView();
+                        isEditMessage = false;
                         edtChat.setText("");
 
                         /**
@@ -2422,6 +2425,11 @@ public class FragmentChat extends BaseFragment
                         } else if (chatType == CHANNEL) {
                             new RequestChannelEditMessage().channelEditMessage(mRoomId, parseLong(messageInfo.messageID), message);
                         }
+                    } else {
+                        edtChat.setTag(null);
+                        clearReplyView();
+                        isEditMessage = false;
+                        edtChat.setText("");
                     }
                 } else { // new message has written
 
@@ -2540,6 +2548,12 @@ public class FragmentChat extends BaseFragment
                 if (text.toString().endsWith(System.getProperty("line.separator"))) {
                     if (sendByEnter) imvSendButton.performClick();
                 }
+                if (text.toString().equals(messageEdit)) {
+                    imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
+                } else {
+                    imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
+                }
+
             }
 
             @Override
@@ -2569,27 +2583,31 @@ public class FragmentChat extends BaseFragment
                             }
                         }).start();
                     } else {
-                        layoutAttachBottom.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
+                        if (!isEditMessage) {
+                            layoutAttachBottom.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
 
-                                layoutAttachBottom.setVisibility(View.VISIBLE);
-                            }
-                        }).start();
-                        imvSendButton.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        imvSendButton.clearAnimation();
-                                        imvSendButton.setVisibility(View.GONE);
-                                    }
-                                });
-                            }
-                        }).start();
+                                    layoutAttachBottom.setVisibility(View.VISIBLE);
+                                }
+                            }).start();
+                            imvSendButton.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    G.handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            imvSendButton.clearAnimation();
+                                            imvSendButton.setVisibility(View.GONE);
+                                        }
+                                    });
+                                }
+                            }).start();
+                        } else {
+                            imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
+                        }
                     }
                 }
             }
@@ -3679,6 +3697,10 @@ public class FragmentChat extends BaseFragment
                     edtChat.setSelection(0, edtChat.getText().length());
                     // put message object to edtChat's tag to obtain it later and
                     // found is user trying to edit a message
+
+                    imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
+                    isEditMessage = true;
+                    messageEdit = message.messageText;
                     edtChat.setTag(message);
                 }
             }
