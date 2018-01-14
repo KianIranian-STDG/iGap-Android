@@ -2426,6 +2426,7 @@ public class FragmentChat extends BaseFragment
                             new RequestChannelEditMessage().channelEditMessage(mRoomId, parseLong(messageInfo.messageID), message);
                         }
                     } else {
+                        imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
                         edtChat.setTag(null);
                         clearReplyView();
                         isEditMessage = false;
@@ -5816,12 +5817,20 @@ public class FragmentChat extends BaseFragment
                                 @Override
                                 public void run() {
                                     ArrayList<String> pathStrings = listPathString;
-                                    for (String path : pathStrings) {
-                                        //if (!path.toLowerCase().endsWith(".gif")) {
-                                        String localPathNew = attachFile.saveGalleryPicToLocal(path);
-                                        sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localPathNew);
-                                        //}
+                                    if (pathStrings.size() == 1) {
+                                        showDraftLayout();
+                                        setDraftMessage(AttachFile.requestOpenGalleryForImageMultipleSelect);
+                                        latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
+                                        //sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, pathStrings.get(0));
+                                    } else {
+                                        for (String path : pathStrings) {
+                                            //if (!path.toLowerCase().endsWith(".gif")) {
+                                            String localPathNew = attachFile.saveGalleryPicToLocal(path);
+                                            sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localPathNew);
+                                            //}
+                                        }
                                     }
+
                                 }
                             });
                         }
