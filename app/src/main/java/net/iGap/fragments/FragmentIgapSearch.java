@@ -125,6 +125,7 @@ public class FragmentIgapSearch extends BaseFragment {
         //    }
         //});
 
+
         edtSearch.setText("@");
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -143,17 +144,6 @@ public class FragmentIgapSearch extends BaseFragment {
                         edtSearch.setText(edtSearch.getText().subSequence(0, strSize - 1));
                         edtSearch.setSelection(edtSearch.getText().length());
                     }
-                }
-
-                if (strSize > 1) {
-                    txtEmptyListComment.setVisibility(View.GONE);
-                    imvNothingFound.setVisibility(View.GONE);
-                    //txtNothing.setVisibility(View.GONE);
-                } else {
-                    txtEmptyListComment.setText(R.string.empty_message);
-                    txtEmptyListComment.setVisibility(View.VISIBLE);
-                    imvNothingFound.setVisibility(View.VISIBLE);
-                    //txtNothing.setVisibility(View.VISIBLE);
                 }
 
                 if (strSize > 5) {
@@ -212,6 +202,35 @@ public class FragmentIgapSearch extends BaseFragment {
 
         itemAdapter = new ItemAdapter();
         fastAdapter = FastAdapter.with(itemAdapter);
+
+        fastAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                if (fastAdapter.getItemCount() > 0) {
+                    txtEmptyListComment.setVisibility(View.GONE);
+                    imvNothingFound.setVisibility(View.GONE);
+                } else {
+                    txtEmptyListComment.setText(R.string.empty_message);
+                    txtEmptyListComment.setVisibility(View.VISIBLE);
+                    imvNothingFound.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                if (fastAdapter.getItemCount() > 0) {
+                    txtEmptyListComment.setVisibility(View.GONE);
+                    imvNothingFound.setVisibility(View.GONE);
+                } else {
+                    txtEmptyListComment.setText(R.string.empty_message);
+                    txtEmptyListComment.setVisibility(View.VISIBLE);
+                    imvNothingFound.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         fastAdapter.withOnClickListener(new OnClickListener<IItem>() {
             @Override public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {

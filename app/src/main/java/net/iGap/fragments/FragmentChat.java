@@ -2608,7 +2608,6 @@ public class FragmentChat extends BaseFragment
                                 }
                             }).start();
                         } else {
-                            Log.i("JJJJJJJJJJJJJJJJJ", "afterTextChanged: ");
                             imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
                         }
                     }
