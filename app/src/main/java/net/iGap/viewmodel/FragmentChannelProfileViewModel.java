@@ -37,10 +37,14 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmList;
+import io.realm.RealmModel;
+import java.util.ArrayList;
+import java.util.List;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -68,6 +72,7 @@ import net.iGap.interfaces.OnChannelKickModerator;
 import net.iGap.interfaces.OnChannelLeft;
 import net.iGap.interfaces.OnChannelRemoveUsername;
 import net.iGap.interfaces.OnChannelRevokeLink;
+import net.iGap.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.interfaces.OnChannelUpdateSignature;
 import net.iGap.interfaces.OnChannelUpdateUsername;
 import net.iGap.interfaces.OnMenuClick;
@@ -99,22 +104,17 @@ import net.iGap.request.RequestChannelEdit;
 import net.iGap.request.RequestChannelLeft;
 import net.iGap.request.RequestChannelRemoveUsername;
 import net.iGap.request.RequestChannelRevokeLink;
+import net.iGap.request.RequestChannelUpdateReactionStatus;
 import net.iGap.request.RequestChannelUpdateSignature;
 import net.iGap.request.RequestChannelUpdateUsername;
 import net.iGap.request.RequestUserInfo;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmList;
-import io.realm.RealmModel;
-
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
 
-public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelDelete, OnChannelLeft, OnChannelEdit, OnChannelRevokeLink {
+public class FragmentChannelProfileViewModel
+    implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelUpdateReactionStatus, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelDelete,
+    OnChannelLeft, OnChannelEdit, OnChannelRevokeLink {
 
     private String title;
     private String initials;
@@ -146,6 +146,8 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
 
 
     public ObservableBoolean isCheckedSignature = new ObservableBoolean(false);
+    public ObservableBoolean isReactionStatus = new ObservableBoolean(true);
+    public ObservableField<Integer> showLayoutReactStatus = new ObservableField<>(View.GONE);
     public ObservableBoolean channelNameEnable = new ObservableBoolean(true);
     public ObservableBoolean channelDescriptionEnable = new ObservableBoolean(true);
     public ObservableField<String> callbackChannelName = new ObservableField<>("");
@@ -252,6 +254,14 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
         }
     }
 
+    public void onClickChannelReactionStatus(View v) {
+        if (isReactionStatus.get()) {
+            new RequestChannelUpdateReactionStatus().channelUpdateReactionStatus(roomId, false);
+        } else {
+            new RequestChannelUpdateReactionStatus().channelUpdateReactionStatus(roomId, true);
+        }
+        showProgressBar();
+    }
 
     private void getInfo(Bundle arguments) {
 
@@ -287,6 +297,20 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
         isPrivate = realmChannelRoom.isPrivate();
         linkUsername = realmChannelRoom.getUsername();
         isSignature = realmChannelRoom.isSignature();
+
+        if (realmChannelRoom.isReactionStatus()) {
+            isReactionStatus.set(true);
+        } else {
+            isReactionStatus.set(false);
+        }
+
+        if (role == ChannelChatRole.OWNER) {
+            showLayoutReactStatus.set(View.VISIBLE);
+            G.onChannelUpdateReactionStatus = this;
+        } else {
+            showLayoutReactStatus.set(View.GONE);
+            G.onChannelUpdateReactionStatus = null;
+        }
 
         try {
             if (realmRoom.getLastMessage() != null) {
@@ -425,6 +449,7 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
         if (mRoom != null) {
             mRoom.removeAllChangeListeners();
         }
+        hideProgressBar();
     }
 
 
@@ -632,6 +657,19 @@ public class FragmentChannelProfileViewModel implements OnChannelAddMember, OnCh
         fragment.setArguments(bundle);
 
         new HelperFragment(fragment).setReplace(false).load();
+    }
+
+    @Override
+    public void OnChannelUpdateReactionStatusResponse(long roomId, boolean status) {
+        if (roomId == this.roomId) {
+            isReactionStatus.set(status);
+        }
+        hideProgressBar();
+    }
+
+    @Override
+    public void OnChannelUpdateReactionStatusError() {
+        hideProgressBar();
     }
 
     //****** create popup

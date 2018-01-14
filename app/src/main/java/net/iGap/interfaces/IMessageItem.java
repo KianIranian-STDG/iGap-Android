@@ -40,4 +40,6 @@ public interface IMessageItem {
     //void onVoteClick(StructMessageInfo message, String vote, ProtoGlobal.RoomMessageReaction reaction);
 
     void onPlayMusic(String messageId);
+
+    boolean getShowVoteChannel();
 }

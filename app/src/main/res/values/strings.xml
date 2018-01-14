@@ -1170,6 +1170,7 @@
   <string name="content_attention_dialog">Note: People on the map will be displayed with a 500-meter error. So no worries</string>
   <string name="st_cameraBottomSheet">Small camera in attachments</string>
   <string name="open_default_player">Open video with default player</string>
+  <string name="show_channel_vote">Show channel vote</string>
 
 
 </resources>

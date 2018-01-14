@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoChannelUpdateReactionStatus;
 import net.iGap.realm.RealmChannelRoom;
 
@@ -32,16 +33,30 @@ public class ChannelUpdateReactionStatusResponse extends MessageHandler {
         super.handler();
         ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatusResponse.Builder builder = (ProtoChannelUpdateReactionStatus.ChannelUpdateReactionStatusResponse.Builder) message;
         RealmChannelRoom.updateReactionStatus(builder.getRoomId(), builder.getReactionStatus());
+
+        if (G.onChannelUpdateReactionStatus != null) {
+            G.onChannelUpdateReactionStatus.OnChannelUpdateReactionStatusResponse(builder.getRoomId(), builder.getReactionStatus());
+        }
+
+        if (G.onChannelUpdateReactionStatusChat != null) {
+            G.onChannelUpdateReactionStatusChat.OnChannelUpdateReactionStatusResponse(builder.getRoomId(), builder.getReactionStatus());
+        }
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        if (G.onChannelUpdateReactionStatus != null) {
+            G.onChannelUpdateReactionStatus.OnChannelUpdateReactionStatusError();
+        }
     }
 
     @Override
     public void error() {
         super.error();
+        if (G.onChannelUpdateReactionStatus != null) {
+            G.onChannelUpdateReactionStatus.OnChannelUpdateReactionStatusError();
+        }
     }
 }
 

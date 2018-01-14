@@ -86,6 +86,7 @@ import net.iGap.interfaces.OnChannelKickModerator;
 import net.iGap.interfaces.OnChannelLeft;
 import net.iGap.interfaces.OnChannelRemoveUsername;
 import net.iGap.interfaces.OnChannelRevokeLink;
+import net.iGap.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.interfaces.OnChannelUpdateSignature;
 import net.iGap.interfaces.OnChannelUpdateUsername;
 import net.iGap.interfaces.OnChatConvertToGroup;
@@ -428,6 +429,8 @@ public class G extends MultiDexApplication {
     public static OnChannelRemoveUsername onChannelRemoveUsername;
     public static OnChannelRevokeLink onChannelRevokeLink;
     public static OnChannelUpdateSignature onChannelUpdateSignature;
+    public static OnChannelUpdateReactionStatus onChannelUpdateReactionStatus;
+    public static OnChannelUpdateReactionStatus onChannelUpdateReactionStatusChat;
     public static OnClientCheckInviteLink onClientCheckInviteLink;
     public static OnClientGetRoomMessage onClientGetRoomMessage;
     public static OnClientJoinByInviteLink onClientJoinByInviteLink;

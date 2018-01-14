@@ -350,64 +350,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             holder.itemView.findViewById(R.id.lyt_see).setVisibility(View.GONE);
         }
 
-        if (G.showVoteChannelLayout) {
+        if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
+            showVote(holder, getRealmChat());
+        } else if ((type == ProtoGlobal.Room.Type.CHAT)) {
+            if (mMessage.forwardedFrom != null) {
+                if (mMessage.forwardedFrom.getAuthorRoomId() > 0) {
+                    RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+                    if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                        showVote(holder, getRealmChat());
 
-            if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
-                showVote(holder, getRealmChat());
-            } else if ((type == ProtoGlobal.Room.Type.CHAT)) {
-                if (mMessage.forwardedFrom != null) {
-                    if (mMessage.forwardedFrom.getAuthorRoomId() > 0) {
-                        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-                        if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                            showVote(holder, getRealmChat());
-
-                            if (mMessage.isSenderMe()) {
-                                holder.itemView.findViewById(R.id.cslm_view_left_dis).setVisibility(View.VISIBLE);
-                            }
+                        if (mMessage.isSenderMe()) {
+                            holder.itemView.findViewById(R.id.cslm_view_left_dis).setVisibility(View.VISIBLE);
                         }
                     }
                 }
             }
-        } else if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
-
-            getChannelMessageState();
-
-            // add layout seen in channel
-            if (holder.itemView.findViewById(R.id.lyt_see) == null) {
-                LinearLayout ll_time_layout = (LinearLayout) holder.itemView.findViewById(R.id.csl_ll_time);
-                ll_time_layout.addView(ViewMaker.getViewSeen(), 0);
-            }
-
-            TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
-
-            if ((mMessage.forwardedFrom != null)) {
-
-                ProtoGlobal.Room.Type roomType = null;
-                RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-                if (realmRoom != null) {
-                    roomType = realmRoom.getType();
-                }
-
-                if (roomType != null && roomType == ProtoGlobal.Room.Type.CHANNEL) {
-                    long messageId = mMessage.forwardedFrom.getMessageId();
-                    if (mMessage.forwardedFrom.getMessageId() < 0) {
-                        messageId = messageId * (-1);
-                    }
-                    RealmChannelExtra realmChannelExtra = getRealmChat().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
-                    if (realmChannelExtra != null) {
-                        txtViewsLabel.setText(realmChannelExtra.getViewsLabel());
-                    }
-                } else {
-                    txtViewsLabel.setText(mMessage.channelExtra.viewsLabel);
-                }
-            } else {
-                txtViewsLabel.setText(mMessage.channelExtra.viewsLabel);
-            }
-
-            if (HelperCalander.isPersianUnicode) {
-                txtViewsLabel.setText(HelperCalander.convertToUnicodeFarsiNumber(txtViewsLabel.getText().toString()));
-            }
         }
+
     }
 
     /**
@@ -509,7 +468,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (holder.itemView.findViewById(R.id.lyt_vote) == null) {
             //   View voteView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_messages_vote, null);
-
             View voteView = ViewMaker.getViewVote();
 
             mainContainer.addView(voteView, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -519,6 +477,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         LinearLayout lytContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
         lytContainer.setMinimumWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
         lytContainer.setMinimumHeight((int) G.context.getResources().getDimension(R.dimen.dp130));
+
+        boolean showThump = G.showVoteChannelLayout && messageClickListener.getShowVoteChannel();
 
         LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
         if (lytVote != null) {
@@ -530,6 +490,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             TextView txtVoteDown = (TextView) holder.itemView.findViewById(R.id.txt_vote_down);
             TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
             TextView txtSignature = (TextView) holder.itemView.findViewById(R.id.txt_signature);
+
+            if (showThump) {
+                holder.itemView.findViewById(R.id.lyt_vote_sub).setVisibility(View.VISIBLE);
+            } else {
+                holder.itemView.findViewById(R.id.lyt_vote_sub).setVisibility(View.INVISIBLE);
+            }
 
             lytVote.setVisibility(View.VISIBLE);
 
@@ -666,7 +632,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         ((LinearLayout.LayoutParams) holder.itemView.findViewById(R.id.contentContainer).getLayoutParams()).gravity = Gravity.LEFT;
 
-        (holder.itemView.findViewById(R.id.contentContainer)).setBackgroundResource(R.drawable.rectangel_white_round);
+        ((View) (holder.itemView.findViewById(R.id.contentContainer)).getParent()).setBackgroundResource(R.drawable.rectangel_white_round);
+
 
         /**
          * add main layout margin to prevent getting match parent completely
@@ -718,8 +685,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         } else {
             setTextColor(imgTick, R.color.colorOldBlack);
         }
+        ((View) (holder.itemView.findViewById(R.id.contentContainer)).getParent()).setBackgroundResource(R.drawable.rectangle_send_round_color);
 
-        (holder.itemView.findViewById(R.id.contentContainer)).setBackgroundResource(R.drawable.rectangle_send_round_color);
         /**
          * add main layout margin to prevent getting match parent completely
          * set to mainContainer not itemView because of selecting item foreground

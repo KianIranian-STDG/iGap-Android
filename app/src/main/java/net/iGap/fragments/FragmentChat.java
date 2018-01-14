@@ -160,6 +160,7 @@ import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnBackgroundChanged;
 import net.iGap.interfaces.OnChannelAddMessageReaction;
 import net.iGap.interfaces.OnChannelGetMessagesStats;
+import net.iGap.interfaces.OnChannelUpdateReactionStatus;
 import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatDelete;
 import net.iGap.interfaces.OnChatDeleteMessageResponse;
@@ -308,7 +309,9 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord, OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged, OnConnectionChangeStateChat {
+    implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
+    OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged,
+    OnConnectionChangeStateChat, OnChannelUpdateReactionStatus {
 
     public static FinishActivity finishActivity;
     public MusicPlayer musicPlayer;
@@ -388,6 +391,7 @@ public class FragmentChat extends BaseFragment
     public static ArrayList<Parcelable> mForwardMessages;
     public static Realm realmChat; // static for FragmentTest
     public static boolean canUpdateAfterDownload = false;
+    private boolean showVoteChannel = true;
 
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
 
@@ -706,6 +710,7 @@ public class FragmentChat extends BaseFragment
         G.onBackgroundChanged = this;
         G.onConnectionChangeStateChat = this;
         G.helperNotificationAndBadge.cancelNotification();
+        G.onChannelUpdateReactionStatusChat = this;
 
         finishActivity = new FinishActivity() {
             @Override
@@ -1220,6 +1225,7 @@ public class FragmentChat extends BaseFragment
                         groupParticipantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
                     } else {
                         groupParticipantsCountLabel = realmRoom.getChannelRoom().getParticipantsCountLabel();
+                        showVoteChannel = realmRoom.getChannelRoom().isReactionStatus();
                     }
                 }
 
@@ -3370,6 +3376,11 @@ public class FragmentChat extends BaseFragment
                 HelperLog.setErrorLog("Activity chat  onPlayMusic    " + e.toString());
             }
         }
+    }
+
+    @Override
+    public boolean getShowVoteChannel() {
+        return showVoteChannel;
     }
 
     @Override
@@ -6339,6 +6350,26 @@ public class FragmentChat extends BaseFragment
                 }
             }
         }, 100);
+
+    }
+
+    @Override
+    public void OnChannelUpdateReactionStatusResponse(long roomId, final boolean status) {
+        if (roomId == mRoomId) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    showVoteChannel = status;
+                    if (mAdapter != null) {
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void OnChannelUpdateReactionStatusError() {
 
     }
 

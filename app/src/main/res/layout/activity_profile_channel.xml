@@ -753,6 +753,44 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/agp_layout_reaction_status"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp48"
+                android:onClick="@{fragmentChannelProfileViewModel::onClickChannelReactionStatus}"
+                android:orientation="horizontal"
+                android:paddingEnd="@dimen/dp16"
+                android:paddingLeft="@dimen/dp16"
+                android:paddingRight="@dimen/dp16"
+                android:paddingStart="@dimen/dp16"
+                android:visibility="@{fragmentChannelProfileViewModel.showLayoutReactStatus}"
+                >
+
+              <TextView
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="1"
+                  android:gravity="center_vertical"
+                  android:paddingTop="@dimen/dp4"
+                  android:text="@string/show_channel_vote"
+                  android:textColor="@color/black_register"
+                  android:textSize="@dimen/dp15"
+                  android:textStyle="normal"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  />
+
+              <ToggleButton
+                  android:id="@+id/agp_toggle_reaction_status"
+                  android:layout_width="@dimen/dp44"
+                  android:layout_height="@dimen/dp40"
+                  android:background="@drawable/st_switch_button"
+                  android:checked="@{fragmentChannelProfileViewModel.isReactionStatus}"
+                  android:onClick="@{fragmentChannelProfileViewModel::onClickChannelReactionStatus}"
+                  android:textOff=""
+                  android:textOn=""
+                  />
+
+            </LinearLayout>
           </LinearLayout>
 
         </LinearLayout>

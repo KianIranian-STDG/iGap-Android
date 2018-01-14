@@ -50,6 +50,7 @@
   <item name="cslr_txt_prefix_forward" type="id" />
   <item name="cslr_txt_forward_from" type="id" />
   <item name="lyt_vote" type="id" />
+  <item name="lyt_vote_sub" type="id" />
   <item name="lyt_vote_up" type="id" />
   <item name="txt_vote_up" type="id" />
   <item name="img_vote_up" type="id" />
