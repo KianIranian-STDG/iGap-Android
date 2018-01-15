@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -1056,7 +1057,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
             private MaterialDesignTextView txtChatIcon;
             private TextView txtTime;
             private MaterialDesignTextView txtPinIcon;
-            private ImageView imgVerifyRoom;
+            private AppCompatImageView imgVerifyRoom;
             private TextView txtUnread;
             protected MaterialDesignTextView mute;
             private EmojiTextViewE lastMessageSender;
@@ -1082,7 +1083,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                 txtPinIcon = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_pinned_message);
                 txtPinIcon.setTypeface(G.typeface_Fontico);
 
-                imgVerifyRoom = (ImageView) view.findViewById(R.id.cs_img_verify_room);
+                imgVerifyRoom = (AppCompatImageView) view.findViewById(R.id.cs_img_verify_room);
 
                 txtUnread = (TextView) view.findViewById(R.id.cs_txt_unread_message);
                 txtUnread.setTypeface(G.typeface_IRANSansMobile);
