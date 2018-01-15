@@ -37,6 +37,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.swipe.SwipeLayout;
+import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
@@ -238,6 +239,8 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                fastItemAdapter.filter(s.toString().toLowerCase());
+
                 if (s.length() > 0) {
                     results = getRealm().where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, s.toString(), Case.INSENSITIVE).findAllSorted(RealmContactsFields.DISPLAY_NAME);
                 } else {
@@ -398,6 +401,13 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         rcvListContact.setItemAnimator(new DefaultItemAnimator());
         rcvListContact.setAdapter(fastItemAdapter);
         rcvListContact.setNestedScrollingEnabled(false);
+
+        fastItemAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<AdapterListContact>() {
+            @Override
+            public boolean filter(AdapterListContact item, CharSequence constraint) {
+                return item.item.toLowerCase().startsWith(String.valueOf(constraint));
+            }
+        });
 
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
