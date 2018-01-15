@@ -64,7 +64,7 @@
   <item name="cs_img_contact_picture" type="id" />
   <item name="cs_txt_chat_icon" type="id" />
   <item name="cs_txt_contact_name" type="id" />
-  <item name="cs_txt_verify_room" type="id" />
+  <item name="cs_img_verify_room" type="id" />
   <item name="lyt_last_message_room" type="id" />
   <item name="cs_txt_last_message_sender" type="id" />
   <item name="cs_txt_last_message" type="id" />
