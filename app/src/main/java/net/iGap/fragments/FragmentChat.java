@@ -68,6 +68,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
@@ -81,25 +82,7 @@ import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
-import io.fabric.sdk.android.services.concurrency.AsyncTask;
-import io.fotoapparat.Fotoapparat;
-import io.fotoapparat.view.CameraRenderer;
-import io.fotoapparat.view.CameraView;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import me.leolin.shortcutbadger.ShortcutBadger;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -269,7 +252,29 @@ import net.iGap.request.RequestUserContactsBlock;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.viewmodel.ActivityCallViewModel;
+
 import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+
+import io.fabric.sdk.android.services.concurrency.AsyncTask;
+import io.fotoapparat.Fotoapparat;
+import io.fotoapparat.view.CameraRenderer;
+import io.fotoapparat.view.CameraView;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -378,11 +383,11 @@ public class FragmentChat extends BaseFragment
     public static OnComplete hashListener;
     public static OnComplete onComplete;
     public static OnUpdateUserOrRoomInfo onUpdateUserOrRoomInfo;
+    public static ArrayList<Long> resentedMessageId = new ArrayList<>();
     private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
     public static ArrayMap<Long, HelperUploadFile.StructUpload> compressingFiles = new ArrayMap<>();
     private ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<StructBottomSheet>();
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
-    private static ArrayList<Long> resentedMessageId = new ArrayList<>();
     private RealmRoomMessage firstUnreadMessage;
     private RealmRoomMessage firstUnreadMessageInChat; // when user is in this room received new message
     private RealmRoomMessage voiceLastMessage = null;
@@ -510,7 +515,7 @@ public class FragmentChat extends BaseFragment
             public void run() {
                 RealmRoomMessage.fetchMessages(getRealmChat(), mRoomId, new OnActivityChatStart() {
                     @Override
-                    public void resendMessage(RealmRoomMessage message) {
+                    public void resendMessage(final RealmRoomMessage message) {
                         if (!allowResendMessage(message.getMessageId())) {
                             return;
                         }
@@ -561,8 +566,10 @@ public class FragmentChat extends BaseFragment
 
                     RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).notEqualTo(RealmRoomFields.ID, mRoomId).findAll();
                     for (RealmRoom realmRoom1 : realmRooms) {
-                        if (realmRoom1.getUnreadCount() > 0) {
-                            unreadCount += realmRoom1.getUnreadCount();
+                        if (!realmRoom1.getMute()) {
+                            if (realmRoom1.getUnreadCount() > 0) {
+                                unreadCount += realmRoom1.getUnreadCount();
+                            }
                         }
                     }
 
@@ -1502,19 +1509,6 @@ public class FragmentChat extends BaseFragment
         getDraft();
         getUserInfo();
         insertShearedData();
-    }
-
-    private boolean allowResendMessage(long messageId) {
-        if (resentedMessageId == null) {
-            resentedMessageId = new ArrayList<>();
-        }
-
-        if (resentedMessageId.contains(messageId)) {
-            return false;
-        }
-
-        resentedMessageId.add(messageId);
-        return true;
     }
 
     private void registerListener() {
@@ -3855,37 +3849,42 @@ public class FragmentChat extends BaseFragment
 
             @Override
             public void resendMessage() {
-                for (int i = 0; i < failedMessages.size(); i++) {
-                    if (failedMessages.get(i).messageID.equals(message.messageID)) {
-                        if (failedMessages.get(i).attachment != null) {
-                            if (HelperUploadFile.isUploading(message.messageID)) {
-                                HelperUploadFile.reUpload(message.messageID);
-                            } else {
-                                G.handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
-                                    }
-                                }, 300);
-                            }
-                        }
-                        break;
-                    }
-                }
 
-                mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                if (FragmentChat.allowResendMessage(Long.parseLong(message.messageID))) {
+                    for (int i = 0; i < failedMessages.size(); i++) {
+                        if (failedMessages.get(i).messageID.equals(message.messageID)) {
+                            if (failedMessages.get(i).attachment != null) {
+                                if (HelperUploadFile.isUploading(message.messageID)) {
+                                    HelperUploadFile.reUpload(message.messageID);
+                                } else {
+                                    G.handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                                        }
+                                    }, 300);
+                                }
+                            }
+                            break;
+                        }
+                    }
+
+                    mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                }
             }
 
             @Override
             public void resendAllMessages() {
                 for (int i = 0; i < failedMessages.size(); i++) {
-                    final int j = i;
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.updateMessageStatus(parseLong(failedMessages.get(j).messageID), ProtoGlobal.RoomMessageStatus.SENDING);
-                        }
-                    }, 1000 * i);
+                    if (FragmentChat.allowResendMessage(Long.parseLong(failedMessages.get(i).messageID))) {
+                        final int j = i;
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.updateMessageStatus(parseLong(failedMessages.get(j).messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                            }
+                        }, 1000 * i);
+                    }
                 }
             }
         }, parseLong(message.messageID), failedMessages);
@@ -4104,6 +4103,25 @@ public class FragmentChat extends BaseFragment
             realmChat = Realm.getDefaultInstance();
         }
         return realmChat;
+    }
+
+    public static boolean allowResendMessage(long messageId) {
+        if (resentedMessageId == null) {
+            resentedMessageId = new ArrayList<>();
+        }
+
+        if (resentedMessageId.contains(messageId)) {
+            return false;
+        }
+
+        resentedMessageId.add(messageId);
+        return true;
+    }
+
+    public static void removeResendList(long messageId) {
+        if (FragmentChat.resentedMessageId.contains(messageId)) {
+            FragmentChat.resentedMessageId.remove(messageId);
+        }
     }
 
     private void updateShowItemInScreen() {

@@ -20,6 +20,7 @@ import com.vanniktech.emoji.EmojiUtils;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperString;
@@ -921,6 +922,9 @@ public class RealmRoomMessage extends RealmObject {
      * make messages failed
      */
     public static void makeFailed(final long messageId) {
+
+        FragmentChat.removeResendList(messageId);
+
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {

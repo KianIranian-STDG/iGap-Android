@@ -29,11 +29,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Display;
 import android.widget.RemoteViews;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import java.util.ArrayList;
-import java.util.List;
-import me.leolin.shortcutbadger.ShortcutBadger;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -48,6 +44,13 @@ import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static net.iGap.G.context;
 
@@ -477,11 +480,12 @@ public class HelperNotificationAndBadge {
             countUnicChat = 0;
 
             RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
-            for (RealmRoom realmRoom1 : realmRooms) {
-                //  realmRoom1.getType() == ProtoGlobal.Room.Type.CHANNEL &&
-                if (realmRoom1.getUnreadCount() > 0) {
-                    unreadMessageCount += realmRoom1.getUnreadCount();
-                    ++countUnicChat;
+            for (RealmRoom room : realmRooms) {
+                if (!room.getMute()) {
+                    if (room.getUnreadCount() > 0) {
+                        unreadMessageCount += room.getUnreadCount();
+                        ++countUnicChat;
+                    }
                 }
             }
 
