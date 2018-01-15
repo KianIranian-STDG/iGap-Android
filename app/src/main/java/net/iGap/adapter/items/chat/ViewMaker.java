@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -1513,7 +1514,7 @@ public class ViewMaker {
         }
         linearLayout_353dd.setLayoutParams(layout_860ss);
 
-        ImageView cs_img_verify = new ImageView(G.context);
+        AppCompatImageView cs_img_verify = new AppCompatImageView(G.context);
         cs_img_verify.setId(R.id.cs_img_verify_room);
         cs_img_verify.setImageResource(R.drawable.ic_verify);
         LinearLayout.LayoutParams layout_152 = new LinearLayout.LayoutParams(52, 52);
