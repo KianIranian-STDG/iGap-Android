@@ -1130,6 +1130,8 @@
 
   <string name="text_empty_user_map">Oops! No user nearby has turned on her/his map yet</string>
   <string name="send_message_to">Send Message To </string>
+  <string name="send_forward_to">Are you sure send forward for</string>
+  <string name="choose_another_one">another one</string>
 
   <string name="st_bio">Bio</string>
   <string name="st_des_bio">You can add a few lines about yourself. anyone who opens your profile will see this text.</string>

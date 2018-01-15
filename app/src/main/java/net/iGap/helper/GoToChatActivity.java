@@ -88,15 +88,39 @@ public class GoToChatActivity {
 
             String message = G.context.getString(R.string.send_message_to) + " " + roomName;
 
-            MaterialDialog.Builder mDialog =
-                new MaterialDialog.Builder(G.currentActivity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(G.currentActivity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     FragmentChat fragmentChat = new FragmentChat();
                     fragmentChat.setArguments(getBundle());
                     new HelperFragment(fragmentChat).setReplace(false).load();
                 }
-                });
+            });
+            if (!(G.fragmentActivity).isFinishing()) {
+                mDialog.show();
+            }
+        } else if (FragmentChat.mForwardMessages != null) {
+
+            String message = G.context.getString(R.string.send_forward_to) + " " + roomName + "?";
+
+            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(G.currentActivity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    FragmentChat fragmentChat = new FragmentChat();
+                    fragmentChat.setArguments(getBundle());
+                    new HelperFragment(fragmentChat).setReplace(false).load();
+                }
+            }).onNegative(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    FragmentChat.mForwardMessages = null;
+                }
+            }).neutralText(R.string.choose_another_one).onNeutral(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    dialog.dismiss();
+                }
+            });
             if (!(G.fragmentActivity).isFinishing()) {
                 mDialog.show();
             }
