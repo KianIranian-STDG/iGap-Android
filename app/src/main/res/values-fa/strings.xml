@@ -1150,5 +1150,6 @@
   <string name="st_cameraBottomSheet">دوربین کوچک در پیوست ها</string>
   <string name="open_default_player">Open video with default player</string>
   <string name="show_channel_vote">Show channel vote</string>
+  <string name="verify_channel">Verified Channel</string>
 
 </resources>

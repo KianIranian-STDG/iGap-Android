@@ -164,6 +164,18 @@
                   app:emojiSize="@dimen/dp14"
                   />
 
+              <net.iGap.module.MaterialDesignTextView
+                  android:id="@+id/ac_txt_verify"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textAppearance="@style/TextIconAppearance.all"
+                  android:paddingLeft="@dimen/dp4"
+                  android:paddingRight="@dimen/dp4"
+                  android:text="@string/md_gap_eye_off"
+                  android:textColor="@color/white"
+                  android:textSize="@dimen/dp12"
+                  />
+
               <!--     <com.wang.avi.AVLoadingIndicatorView
                        android:id="@+id/avi"
                        android:layout_width="wrap_content"

@@ -163,6 +163,7 @@ public class FragmentChannelProfileViewModel
     public ObservableField<Integer> signatureVisibility = new ObservableField<>(View.GONE);
     public ObservableField<Integer> fabVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> menuPopupVisibility = new ObservableField<>(View.VISIBLE);
+    public ObservableField<Integer> verifyTextVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> listAdminVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> moderatorVisibility = new ObservableField<>(View.VISIBLE);
 
@@ -374,6 +375,12 @@ public class FragmentChannelProfileViewModel
             isCheckedSignature.set(true);
         } else {
             isCheckedSignature.set(false);
+        }
+
+        if (realmChannelRoom.isVerified()) {
+            verifyTextVisibility.set(View.VISIBLE);
+        } else {
+            verifyTextVisibility.set(View.INVISIBLE);
         }
 
         G.onChannelUpdateSignature = new OnChannelUpdateSignature() {

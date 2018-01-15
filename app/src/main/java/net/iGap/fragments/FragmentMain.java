@@ -983,6 +983,12 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
                 holder.name.setText(mInfo.getTitle());
 
+                if ((mInfo.getType() == CHANNEL) && mInfo.getChannelRoom().isVerified()) {
+                    holder.txtVerifyRoom.setVisibility(View.VISIBLE);
+                } else {
+                    holder.txtVerifyRoom.setVisibility(View.INVISIBLE);
+                }
+
                 if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
                     holder.txtTime.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
                 }
@@ -1050,6 +1056,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
             private MaterialDesignTextView txtChatIcon;
             private TextView txtTime;
             private MaterialDesignTextView txtPinIcon;
+            private MaterialDesignTextView txtVerifyRoom;
             private TextView txtUnread;
             protected MaterialDesignTextView mute;
             private EmojiTextViewE lastMessageSender;
@@ -1074,6 +1081,10 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
                 txtPinIcon = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_pinned_message);
                 txtPinIcon.setTypeface(G.typeface_Fontico);
+
+                txtVerifyRoom = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_verify_room);
+                txtVerifyRoom.setTypeface(G.typeface_Fontico);
+
 
                 txtUnread = (TextView) view.findViewById(R.id.cs_txt_unread_message);
                 txtUnread.setTypeface(G.typeface_IRANSansMobile);

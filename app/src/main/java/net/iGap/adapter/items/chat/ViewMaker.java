@@ -1468,7 +1468,6 @@ public class ViewMaker {
 
         MaterialDesignTextView cs_txt_chat_icon = new MaterialDesignTextView(G.context);
         cs_txt_chat_icon.setId(R.id.cs_txt_chat_icon);
-        cs_txt_chat_icon.setPadding(0, 0, 0, dpToPixel(2));
         cs_txt_chat_icon.setTextColor(Color.parseColor("#333333"));
 
         setTextSize(cs_txt_chat_icon, R.dimen.dp14);
@@ -1498,19 +1497,29 @@ public class ViewMaker {
         cs_txt_contact_name.setEmojiSize(i_Dp(R.dimen.dp16));
         cs_txt_contact_name.setTextColor(G.context.getResources().getColor(R.color.black90));
         setTextSize(cs_txt_contact_name, R.dimen.dp15);
-        LinearLayout.LayoutParams layout_115 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-
-        if (HelperCalander.isPersianUnicode) {
-            layout_115.gravity = Gravity.RIGHT;
-            cs_txt_contact_name.setGravity(Gravity.RIGHT);
-        } else {
-            layout_115.gravity = Gravity.LEFT;
-            cs_txt_contact_name.setGravity(Gravity.LEFT);
-        }
-
-
+        LinearLayout.LayoutParams layout_115 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         cs_txt_contact_name.setLayoutParams(layout_115);
         linearLayout_922.addView(cs_txt_contact_name);
+
+        MaterialDesignTextView cs_txt_verify = new MaterialDesignTextView(G.context);
+        cs_txt_verify.setId(R.id.cs_txt_verify_room);
+        cs_txt_verify.setText(G.fragmentActivity.getResources().getString(R.string.md_gap_eye_off));
+        cs_txt_verify.setTextColor(G.context.getResources().getColor(R.color.green));
+        setTextSize(cs_txt_verify, R.dimen.dp14);
+        LinearLayout.LayoutParams layout_152 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+        layout_152.leftMargin = i_Dp(R.dimen.dp4);
+        layout_152.rightMargin = i_Dp(R.dimen.dp4);
+
+        if (HelperCalander.isPersianUnicode) {
+            layout_152.gravity = Gravity.RIGHT | Gravity.CENTER;
+            cs_txt_verify.setGravity(Gravity.RIGHT);
+        } else {
+            layout_152.gravity = Gravity.LEFT | Gravity.CENTER;
+            cs_txt_verify.setGravity(Gravity.LEFT);
+        }
+        cs_txt_verify.setLayoutParams(layout_152);
+
+        linearLayout_922.addView(cs_txt_verify);
         linearLayout_353.addView(linearLayout_922);
 
         LinearLayout lyt_last_message_room = new LinearLayout(G.context);
@@ -1638,11 +1647,11 @@ public class ViewMaker {
         cs_txt_mute.setText(G.fragmentActivity.getResources().getString(R.string.md_muted));
         cs_txt_mute.setTextColor(G.context.getResources().getColor(R.color.grayNew));
         setTextSize(cs_txt_mute, R.dimen.dp13);
-        LinearLayout.LayoutParams layout_152 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layout_152.leftMargin = i_Dp(R.dimen.dp4);
-        layout_152.rightMargin = i_Dp(R.dimen.dp4);
+        LinearLayout.LayoutParams layout_152s = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_152s.leftMargin = i_Dp(R.dimen.dp4);
+        layout_152s.rightMargin = i_Dp(R.dimen.dp4);
 
-        cs_txt_mute.setLayoutParams(layout_152);
+        cs_txt_mute.setLayoutParams(layout_152s);
         linearLayout_620.addView(cs_txt_mute);
 
         ImageView cslr_txt_tic = new ImageView(G.context);

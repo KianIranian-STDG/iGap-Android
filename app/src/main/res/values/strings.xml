@@ -1171,6 +1171,7 @@
   <string name="st_cameraBottomSheet">Small camera in attachments</string>
   <string name="open_default_player">Open video with default player</string>
   <string name="show_channel_vote">Show channel vote</string>
+  <string name="verify_channel">Verified Channel</string>
 
 
 </resources>

@@ -244,18 +244,38 @@
                   android:paddingRight="@dimen/dp12"
                   >
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="@{fragmentChannelProfileViewModel.channelNameEnable}"
-                    android:onClick="@{fragmentChannelProfileViewModel::onClickChannelName}"
-                    android:paddingEnd="@dimen/dp4"
-                    android:paddingStart="@dimen/dp4"
-                    android:singleLine="true"
-                    android:text="@string/channel_name"
-                    android:textColor="@color/black_register"
-                    android:textSize="@dimen/dp15"
-                    />
+                    android:orientation="horizontal"
+                    >
+                  <TextView
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:enabled="@{fragmentChannelProfileViewModel.channelNameEnable}"
+                      android:onClick="@{fragmentChannelProfileViewModel::onClickChannelName}"
+                      android:paddingEnd="@dimen/dp4"
+                      android:paddingStart="@dimen/dp4"
+                      android:singleLine="true"
+                      android:text="@string/channel_name"
+                      android:textColor="@color/black_register"
+                      android:textSize="@dimen/dp15"
+                      />
+
+                  <TextView
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:visibility="@{fragmentChannelProfileViewModel.verifyTextVisibility}"
+                      android:paddingEnd="@dimen/dp4"
+                      android:paddingStart="@dimen/dp4"
+                      android:gravity="center"
+                      android:singleLine="true"
+                      android:text="@string/verify_channel"
+                      android:textColor="@color/green"
+                      android:textSize="@dimen/dp16"
+                      />
+                </LinearLayout>
 
                 <net.iGap.module.EmojiTextViewE
                     android:id="@+id/txt_channel_name_info"
