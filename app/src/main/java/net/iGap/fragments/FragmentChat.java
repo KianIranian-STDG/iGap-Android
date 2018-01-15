@@ -40,6 +40,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -329,7 +330,7 @@ public class FragmentChat extends BaseFragment
     private MaterialDesignTextView btnCancelSendingFile;
     private ViewGroup viewGroupLastSeen;
     private CircleImageView imvUserPicture;
-    private MaterialDesignTextView txtVerifyRoomIcon;
+    private AppCompatImageView txtVerifyRoomIcon;
     private ImageView imgBackGround;
     private RecyclerView recyclerView;
     private MaterialDesignTextView imvSmileButton;
@@ -1199,7 +1200,7 @@ public class FragmentChat extends BaseFragment
             txtLastSeen = (TextView) rootView.findViewById(R.id.chl_txt_last_seen);
             viewGroupLastSeen = (ViewGroup) rootView.findViewById(R.id.chl_txt_viewGroup_seen);
             imvUserPicture = (CircleImageView) rootView.findViewById(R.id.chl_imv_user_picture);
-            txtVerifyRoomIcon = (MaterialDesignTextView) rootView.findViewById(R.id.ac_txt_verify);
+            txtVerifyRoomIcon = (AppCompatImageView) rootView.findViewById(R.id.ac_txt_verify);
             txtVerifyRoomIcon.setVisibility(View.GONE);
 
             /**
