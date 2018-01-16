@@ -107,27 +107,25 @@
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp6"
-                android:gravity="bottom"
-                android:orientation="horizontal"
-                >
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginTop="@dimen/dp6"
+              android:gravity="center_vertical"
+              android:orientation="horizontal">
 
 
               <net.iGap.module.EmojiTextViewE
-                  android:id="@+id/chl_txt_name"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:lineSpacingMultiplier=".8"
-                  android:maxWidth="@dimen/dp240"
-                  android:paddingBottom="2dp"
-                  android:singleLine="true"
-                  android:textColor="@android:color/white"
-                  android:textSize="@dimen/dp14"
-                  app:emojiSize="@dimen/dp14"
-                  fontPath="fonts/IRANSansMobile_Bold.ttf"
-                  />
+                android:id="@+id/chl_txt_name"
+                fontPath="fonts/IRANSansMobile_Bold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingMultiplier=".8"
+                android:maxWidth="@dimen/dp240"
+                android:paddingBottom="2dp"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/dp14"
+                app:emojiSize="@dimen/dp14" />
 
               <net.iGap.module.MaterialDesignTextView
                 android:id="@+id/imgMutedRoom"
@@ -143,16 +141,14 @@
                 android:visibility="gone" />
 
               <android.support.v7.widget.AppCompatImageView
-                  android:id="@+id/ac_txt_verify"
-                  android:layout_width="@dimen/dp24"
-                  android:layout_height="@dimen/dp24"
-                  android:paddingLeft="@dimen/dp4"
-                  android:paddingRight="@dimen/dp4"
-                  app:srcCompat="@drawable/ic_verify"
-                  android:tint="@color/white"
-                  android:layout_gravity="center"
-                  android:layout_marginBottom="@dimen/dp4"
-                  />
+                android:id="@+id/ac_txt_verify"
+                android:layout_width="@dimen/dp24"
+                android:layout_height="@dimen/dp24"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="@dimen/dp4"
+                android:paddingRight="@dimen/dp4"
+                android:tint="@color/white"
+                app:srcCompat="@drawable/ic_verify" />
             </LinearLayout>
 
             <LinearLayout
