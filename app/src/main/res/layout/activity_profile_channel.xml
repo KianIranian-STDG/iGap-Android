@@ -46,9 +46,9 @@
             android:id="@+id/acp_ll_collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
             app:contentScrim="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
             app:expandedTitleMarginBottom="32dp"
-            android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
             app:expandedTitleTextAppearance="@android:color/transparent"
@@ -266,14 +266,24 @@
                       android:layout_width="0dp"
                       android:layout_height="wrap_content"
                       android:layout_weight="1"
-                      android:visibility="@{fragmentChannelProfileViewModel.verifyTextVisibility}"
+                      android:gravity="center"
                       android:paddingEnd="@dimen/dp4"
                       android:paddingStart="@dimen/dp4"
-                      android:gravity="center"
                       android:singleLine="true"
                       android:text="@string/verify_channel"
                       android:textColor="@color/green"
                       android:textSize="@dimen/dp16"
+                      android:visibility="@{fragmentChannelProfileViewModel.verifyTextVisibility}"
+                      />
+
+                  <android.support.v7.widget.AppCompatImageView
+                      android:id="@+id/ac_txt_verify"
+                      android:layout_width="@dimen/dp24"
+                      android:layout_height="@dimen/dp24"
+                      android:paddingLeft="@dimen/dp4"
+                      android:paddingRight="@dimen/dp4"
+                      android:visibility="@{fragmentChannelProfileViewModel.isVerified ? View.VISIBLE : View.GONE , default=visible}"
+                      app:srcCompat="@drawable/ic_verify"
                       />
                 </LinearLayout>
 

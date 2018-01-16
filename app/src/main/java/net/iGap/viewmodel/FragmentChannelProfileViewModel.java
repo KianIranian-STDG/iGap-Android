@@ -132,6 +132,7 @@ public class FragmentChannelProfileViewModel
     private String linkUsername;
     private boolean isSignature;
     private boolean isPopup = false;
+    public boolean isVerified = false;
 
     private boolean isNeedGetMemberList = true;
     private Fragment fragment;
@@ -298,6 +299,8 @@ public class FragmentChannelProfileViewModel
         isPrivate = realmChannelRoom.isPrivate();
         linkUsername = realmChannelRoom.getUsername();
         isSignature = realmChannelRoom.isSignature();
+        isVerified = realmChannelRoom.isVerified();
+
 
         if (realmChannelRoom.isReactionStatus()) {
             isReactionStatus.set(true);

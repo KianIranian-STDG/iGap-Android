@@ -141,6 +141,16 @@
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/dp13"
                 android:visibility="gone" />
+
+              <android.support.v7.widget.AppCompatImageView
+                  android:id="@+id/ac_txt_verify"
+                  android:layout_width="@dimen/dp24"
+                  android:layout_height="@dimen/dp24"
+                  android:paddingLeft="@dimen/dp4"
+                  android:paddingRight="@dimen/dp4"
+                  app:srcCompat="@drawable/ic_verify"
+                  android:tint="@color/white"
+                  />
             </LinearLayout>
 
             <LinearLayout
@@ -162,15 +172,6 @@
                   android:textColor="@android:color/white"
                   android:textSize="@dimen/dp12"
                   app:emojiSize="@dimen/dp14"
-                  />
-
-              <android.support.v7.widget.AppCompatImageView
-                  android:id="@+id/ac_txt_verify"
-                  android:layout_width="@dimen/dp24"
-                  android:layout_height="@dimen/dp24"
-                  android:paddingLeft="@dimen/dp4"
-                  android:paddingRight="@dimen/dp4"
-                  app:srcCompat="@drawable/ic_verify"
                   />
 
               <!--     <com.wang.avi.AVLoadingIndicatorView

@@ -1513,7 +1513,7 @@ public class ViewMaker {
         AppCompatImageView cs_img_verify = new AppCompatImageView(G.context);
         cs_img_verify.setId(R.id.cs_img_verify_room);
         cs_img_verify.setImageResource(R.drawable.ic_verify);
-        LinearLayout.LayoutParams layout_152 = new LinearLayout.LayoutParams(52, 52);
+        LinearLayout.LayoutParams layout_152 = new LinearLayout.LayoutParams(48, 48);
         layout_152.gravity = CENTER_VERTICAL;
         layout_152.leftMargin = i_Dp(R.dimen.dp4);
         layout_152.rightMargin = i_Dp(R.dimen.dp4);
