@@ -752,7 +752,7 @@ public class ViewMaker {
         lyt_vote_sub.setOrientation(VERTICAL);
         lyt_vote_sub.setId(R.id.lyt_vote_sub);
         lyt_vote_sub.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.rectangel_white_round));
-        LinearLayout.LayoutParams layout_35644 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layout_35644 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_35644.leftMargin = i_Dp(R.dimen.dp2);
         lyt_vote_sub.setLayoutParams(layout_35644);
 
@@ -761,13 +761,12 @@ public class ViewMaker {
         lyt_vote_up.setGravity(CENTER);
         lyt_vote_up.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_799 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lyt_vote_up.setPadding(0, 0, i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp6));
+        lyt_vote_up.setPadding(0, 0, 0, i_Dp(R.dimen.dp6));
         layout_799.bottomMargin = i_Dp(dp4);
         lyt_vote_up.setLayoutParams(layout_799);
 
         TextView txt_vote_up = new TextView(context);
         txt_vote_up.setId(R.id.txt_vote_up);
-        txt_vote_up.setGravity(CENTER);
         txt_vote_up.setText("0");
         txt_vote_up.setTextAppearance(context, R.style.ChatMessages_Time);
         txt_vote_up.setSingleLine(true);
@@ -784,7 +783,6 @@ public class ViewMaker {
         img_vote_up.setTextColor(context.getResources().getColor(R.color.gray_6c));
         setTextSize(img_vote_up, R.dimen.dp16);
         LinearLayout.LayoutParams layout_216 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layout_216.leftMargin = i_Dp(dp4);
         img_vote_up.setLayoutParams(layout_216);
         lyt_vote_up.addView(img_vote_up);
         lyt_vote_sub.addView(lyt_vote_up);
@@ -792,7 +790,7 @@ public class ViewMaker {
         LinearLayout lyt_vote_down = new LinearLayout(context);
         lyt_vote_down.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.rectangel_white_round));
         lyt_vote_down.setId(R.id.lyt_vote_down);
-        lyt_vote_down.setPadding(0, i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp4), 0);
+        lyt_vote_down.setPadding(0, i_Dp(R.dimen.dp6), 0, 0);
         lyt_vote_down.setGravity(CENTER);
         lyt_vote_down.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_221 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -804,13 +802,11 @@ public class ViewMaker {
         img_vote_down.setTextColor(context.getResources().getColor(R.color.gray_6c));
         setTextSize(img_vote_down, R.dimen.dp16);
         LinearLayout.LayoutParams layout_877 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layout_877.leftMargin = i_Dp(dp4);
         img_vote_down.setLayoutParams(layout_877);
         lyt_vote_down.addView(img_vote_down);
 
         TextView txt_vote_down = new TextView(context);
         txt_vote_down.setId(R.id.txt_vote_down);
-        txt_vote_down.setGravity(CENTER);
         txt_vote_down.setText("0");
         txt_vote_down.setTextAppearance(context, R.style.ChatMessages_Time);
         setTypeFace(txt_vote_down);
