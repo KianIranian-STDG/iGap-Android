@@ -60,7 +60,6 @@
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_alignParentTop="true"
-      android:background="@drawable/background_sky"
       android:layoutDirection="ltr"
       app:layout_heightPercent="57%"
       app:layout_widthPercent="100%"
