@@ -86,6 +86,7 @@ import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.fotoapparat.Fotoapparat;
 import io.fotoapparat.view.CameraRenderer;
 import io.fotoapparat.view.CameraView;
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -110,6 +111,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterBottomSheet;
 import net.iGap.adapter.MessagesAdapter;
+import net.iGap.adapter.items.AdapterBottomSheetForward;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.AudioItem;
 import net.iGap.adapter.items.chat.ContactItem;
@@ -177,6 +179,7 @@ import net.iGap.interfaces.OnClientJoinByUsername;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnConnectionChangeStateChat;
 import net.iGap.interfaces.OnDeleteChatFinishActivity;
+import net.iGap.interfaces.OnForwardBottomSheet;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnHelperSetAction;
@@ -372,9 +375,12 @@ public class FragmentChat extends BaseFragment
     private FrameLayout llScrollNavigate;
     private FastItemAdapter fastItemAdapter;
     private BottomSheetDialog bottomSheetDialog;
+    private BottomSheetDialog bottomSheetDialogForward;
     private static List<StructBottomSheet> contacts;
     public static OnPathAdapterBottomSheet onPathAdapterBottomSheet;
+    public static OnForwardBottomSheet onForwardBottomSheet;
     private View viewBottomSheet;
+    private View viewBottomSheetForward;
     public static OnClickCamera onClickCamera;
     private Fotoapparat fotoapparatSwitcher;
     public static OnComplete hashListener;
@@ -394,6 +400,7 @@ public class FragmentChat extends BaseFragment
     public static Realm realmChat; // static for FragmentTest
     public static boolean canUpdateAfterDownload = false;
     private boolean showVoteChannel = true;
+    private RealmResults<RealmRoom> results = null;
 
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
 
@@ -477,6 +484,7 @@ public class FragmentChat extends BaseFragment
     private String report = "";
     private View rootView;
     private boolean isAllSenderId = true;
+    private ArrayList<Long> multiForwardList = new ArrayList<>();
     private String messageEdit = "";
 
     @Nullable
@@ -645,8 +653,7 @@ public class FragmentChat extends BaseFragment
                                                 }
                                                 //    avi.setVisibility(View.GONE);
 
-                                                if (HelperCalander.isPersianUnicode)
-                                                    txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                                                if (HelperCalander.isPersianUnicode) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                                             }
                                         });
                                     }
@@ -952,8 +959,8 @@ public class FragmentChat extends BaseFragment
                         Uri uri = Uri.fromFile(new File(AttachFile.videoPath));
                         File tempFile = com.lalongooo.videocompressor.file.FileUtils.saveTempFile(G.DIR_TEMP, HelperString.getRandomFileName(5) + ".mp4", G.fragmentActivity, uri);
                         mainVideoPath = tempFile.getPath();
-//                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-//                        String savePathVideoCompress = getCacheDir() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                        //                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                        //                        String savePathVideoCompress = getCacheDir() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                         String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
 
                         listPathString.add(savePathVideoCompress);
@@ -976,8 +983,8 @@ public class FragmentChat extends BaseFragment
                         File mediaStorageDir = new File(G.DIR_VIDEOS);
                         listPathString = new ArrayList<>();
 
-//                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-//                        String savePathVideoCompress = getCacheDir() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                        //                        String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                        //                        String savePathVideoCompress = getCacheDir() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                         String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
 
                         listPathString.add(savePathVideoCompress);
@@ -1005,7 +1012,7 @@ public class FragmentChat extends BaseFragment
 
                             mainVideoPath = listPathString.get(0);
 
-//                            String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                            //                            String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                             String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
 
                             listPathString.set(0, savePathVideoCompress);
@@ -3196,14 +3203,14 @@ public class FragmentChat extends BaseFragment
         StructMessageInfo messageInfo;
         if (isReply()) {
             messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
+                RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID));
         } else {
             if (isMessageWrote()) {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             } else {
                 messageInfo = new StructMessageInfo(getRealmChat(), mRoomId, Long.toString(messageId), Long.toString(senderID), ProtoGlobal.RoomMessageStatus.SENDING.toString(), ProtoGlobal.
-                        RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
+                    RoomMessageType.VOICE, MyType.SendType.send, null, savedPath, updateTime);
             }
         }
 
@@ -3915,8 +3922,11 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onForwardClick(StructMessageInfo message) {
+        //finishChat();
+        itemAdapterBottomSheetForward();
+        initAttachForward();
         mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
-        new HelperFragment().removeAll(true);
+        //new HelperFragment().removeAll(true);
     }
 
     @Override
@@ -3954,8 +3964,7 @@ public class FragmentChat extends BaseFragment
                         }
                     }
                     // change english number to persian number
-                    if (HelperCalander.isPersianUnicode)
-                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    if (HelperCalander.isPersianUnicode) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             });
         }
@@ -3983,8 +3992,7 @@ public class FragmentChat extends BaseFragment
                     //}
                     ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                     // change english number to persian number
-                    if (HelperCalander.isPersianUnicode)
-                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    if (HelperCalander.isPersianUnicode) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             }
         });
@@ -4298,7 +4306,7 @@ public class FragmentChat extends BaseFragment
      * show current state for user if this room is chat
      *
      * @param status current state
-     * @param time   if state is not online set latest online time
+     * @param time if state is not online set latest online time
      */
     private void setUserStatus(final String status, final long time) {
         if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
@@ -4331,8 +4339,7 @@ public class FragmentChat extends BaseFragment
                             //}
                             ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                             // change english number to persian number
-                            if (HelperCalander.isPersianUnicode)
-                                txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                            if (HelperCalander.isPersianUnicode) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
 
                             checkAction();
                         }
@@ -4409,8 +4416,7 @@ public class FragmentChat extends BaseFragment
                         }
                     }
                     // change english number to persian number
-                    if (HelperCalander.isPersianUnicode)
-                        txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
+                    if (HelperCalander.isPersianUnicode) txtLastSeen.setText(convertToUnicodeFarsiNumber(txtLastSeen.getText().toString()));
                 }
             });
         }
@@ -4831,7 +4837,7 @@ public class FragmentChat extends BaseFragment
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-                MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+            MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         };
 
         cursor = activity.getContentResolver().query(uri, projection, null, null, null);
@@ -5177,7 +5183,8 @@ public class FragmentChat extends BaseFragment
                                 sendMessage(AttachFile.request_code_TAKE_PICTURE, pathList.get(i));
                             } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
                                 if (pathList.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
-//                                    final String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
+                                    //                                    final String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format
+                                    // (new Date()) + ".mp4";
                                     final String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
                                     mainVideoPath = pathList.get(0);
 
@@ -5517,6 +5524,109 @@ public class FragmentChat extends BaseFragment
     }
 
     /**
+     * initialize bottomSheet for use in attachment for forward
+     */
+
+
+    private void initAttachForward() {
+
+        multiForwardList.clear();
+        viewBottomSheetForward = G.fragmentActivity.getLayoutInflater().inflate(R.layout.bottom_sheet_forward, null);
+
+
+
+        EditText edtSearch = (EditText) viewBottomSheetForward.findViewById(R.id.edtSearch);
+        TextView textSend = (TextView) viewBottomSheetForward.findViewById(R.id.txtSend);
+        final RecyclerView rcvItem = (RecyclerView) viewBottomSheetForward.findViewById(R.id.rcvBottomSheetForward);
+        rcvItem.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 4, GridLayoutManager.VERTICAL, false));
+        rcvItem.setItemViewCacheSize(100);
+        rcvItem.setAdapter(new AdapterBottomSheetForward(results));
+        bottomSheetDialogForward = new BottomSheetDialog(G.fragmentActivity);
+        bottomSheetDialogForward.setContentView(viewBottomSheetForward);
+        final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheetForward.getParent());
+
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (s.length() > 0) {
+
+                    String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
+                    Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
+                    results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.READ_ONLY, false).contains(RealmRoomFields.TITLE, s.toString(), Case.INSENSITIVE).findAll().sort(fieldNames, sort);
+                } else {
+                    String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
+                    Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
+                    results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.READ_ONLY, false).findAll().sort(fieldNames, sort);
+                }
+
+                rcvItem.setAdapter(new AdapterBottomSheetForward(results));
+
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        viewBottomSheetForward.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    mBehavior.setPeekHeight(viewBottomSheetForward.getHeight());
+                    viewBottomSheetForward.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            }
+        });
+        //height is ready
+
+
+        textSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                manageForwardedMessage();
+                bottomSheetDialogForward.dismiss();
+
+            }
+        });
+
+        onForwardBottomSheet = new OnForwardBottomSheet() {
+            @Override
+            public void path(long path, boolean isCheck) {
+
+                if (isCheck) {
+                    multiForwardList.add(path);
+                } else {
+                    multiForwardList.remove(path);
+                }
+
+                Log.i("CCCCCCCCCCCCCC", "0 path: " + multiForwardList.size());
+            }
+        };
+
+        bottomSheetDialogForward.show();
+
+
+        bottomSheetDialogForward.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                mForwardMessages = null;
+            }
+        });
+    }
+
+
+    /**
      * initialize bottomSheet for use in attachment
      */
     private void initAttach() {
@@ -5657,9 +5767,9 @@ public class FragmentChat extends BaseFragment
                                         public void run() {
 
                                             fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                    .lensPosition(back())       // we want back camera
-                                                    .build();
+                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                .lensPosition(back())       // we want back camera
+                                                .build();
 
                                             fotoapparatSwitcher.start();
                                         }
@@ -5700,9 +5810,9 @@ public class FragmentChat extends BaseFragment
                                         @Override
                                         public void run() {
                                             fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
-                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
-                                                    .lensPosition(back())       // we want back camera
-                                                    .build();
+                                                .photoSize(biggestSize())   // we want to have the biggest photo possible
+                                                .lensPosition(back())       // we want back camera
+                                                .build();
 
                                             fotoapparatSwitcher.stop();
                                         }
@@ -6019,8 +6129,7 @@ public class FragmentChat extends BaseFragment
                 onSelectRoomMenu("txtMuteNotification", mRoomId);
             }
         });
-        if (txtChannelMute == null)
-            txtChannelMute = (TextView) rootView.findViewById(R.id.chl_txt_mute_channel);
+        if (txtChannelMute == null) txtChannelMute = (TextView) rootView.findViewById(R.id.chl_txt_mute_channel);
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);
         } else {
@@ -6305,6 +6414,23 @@ public class FragmentChat extends BaseFragment
 
             }
         });
+    }
+
+
+    private void itemAdapterBottomSheetForward() {
+
+        String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
+        Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
+        results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.READ_ONLY, false).findAll().sort(fieldNames, sort);
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isAdded()) {
+                    bottomSheetDialogForward.show();
+                }
+            }
+        }, 100);
     }
 
     public void itemAdapterBottomSheet() {
@@ -6976,28 +7102,38 @@ public class FragmentChat extends BaseFragment
      * do forward actions if any message forward to this room
      */
     private void manageForwardedMessage() {
-        if (mForwardMessages != null && !isChatReadOnly) {
+        if ((mForwardMessages != null && !isChatReadOnly) || multiForwardList.size() > 0) {
 
             final LinearLayout ll_Forward = (LinearLayout) rootView.findViewById(R.id.ac_ll_forward);
 
-            if (hasForward) {
+            int multiForwardSize = multiForwardList.size();
 
+            if (hasForward || multiForwardSize > 0) {
                 final ArrayList<Parcelable> mg = mForwardMessages;
-
                 for (int i = 0; i < mg.size(); i++) {
                     /**
                      * send forwarded message with one second delay for each message
                      */
                     final int j = i;
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mg.get(j)));
+
+                    if (multiForwardSize > 0) {
+                        for (int k = 0; k < multiForwardSize; k++) {
+                            sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mg.get(j)), multiForwardList.get(k), false);
                         }
-                    }, 1000 * j);
+                        multiForwardList = null;
+                        hasForward = false;
+                        mForwardMessages = null;
+                    } else {
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mg.get(j)), mRoomId, true);
+                            }
+                        }, 1000 * j);
+                        imvCancelForward.performClick();
+                    }
                 }
 
-                imvCancelForward.performClick();
             } else {
                 imvCancelForward = (TextView) rootView.findViewById(R.id.cslhf_imv_cansel);
                 imvCancelForward.setOnClickListener(new View.OnClickListener() {
@@ -7081,10 +7217,16 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void sendForwardedMessage(final StructMessageInfo messageInfo) {
+    private void sendForwardedMessage(final StructMessageInfo messageInfo, final long mRoomId, final boolean isSingleForward) {
 
         final long messageId = SUID.id().get();
 
+        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null && realmRoom.getReadOnly()) {
+            return;
+        }
+
+        final ProtoGlobal.Room.Type type = realmRoom.getType();
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -7100,11 +7242,14 @@ public class FragmentChat extends BaseFragment
                     public void onSuccess() {
 
                         RealmRoomMessage forwardedMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+
                         if (forwardedMessage != null && forwardedMessage.isValid() && !forwardedMessage.isDeleted()) {
-                            switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(getRealmChat(), forwardedMessage))), false);
-                            scrollToEnd();
+                            if (isSingleForward) {
+                                switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(getRealmChat(), forwardedMessage))), false);
+                                scrollToEnd();
+                            }
                             RealmRoomMessage roomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
-                            chatSendMessageUtil.buildForward(chatType, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
+                            chatSendMessageUtil.buildForward(type, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
                         }
 
                         //realm.close();
@@ -7383,7 +7528,7 @@ public class FragmentChat extends BaseFragment
         long gapMessageId;
         if (direction == DOWN) {
             resultsUp =
-                    getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+                getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
              * if for UP state client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
@@ -7656,10 +7801,10 @@ public class FragmentChat extends BaseFragment
                     realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, sort);
                     MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN, getRealmChat());
 
-//                    if (realmRoomMessages.size() == 0) { // Hint : link browsable ; Commented Now!!!
-//                        getOnlineMessage(oldMessageId, direction);
-//                        return;
-//                    }
+                    //                    if (realmRoomMessages.size() == 0) { // Hint : link browsable ; Commented Now!!!
+                    //                        getOnlineMessage(oldMessageId, direction);
+                    //                        return;
+                    //                    }
 
                     /**
                      * I do this for set addToView true
@@ -7839,7 +7984,7 @@ public class FragmentChat extends BaseFragment
      * manage progress state in adapter
      *
      * @param progressState SHOW or HIDE state detect with enum
-     * @param direction     define direction for show progress in UP or DOWN
+     * @param direction define direction for show progress in UP or DOWN
      */
     private void progressItem(final ProgressState progressState, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
         G.handler.post(new Runnable() {
