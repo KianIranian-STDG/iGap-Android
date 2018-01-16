@@ -3401,6 +3401,10 @@ public class FragmentChat extends BaseFragment
             return;
         }
 
+        if (!isAdded() || G.fragmentActivity.isFinishing()) {
+            return;
+        }
+
         DialogAnimation.animationDown(dialog);
         dialog.show();
 

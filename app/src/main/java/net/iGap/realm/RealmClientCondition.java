@@ -309,7 +309,7 @@ public class RealmClientCondition extends RealmObject {
         Realm realm = Realm.getDefaultInstance();
         ProtoClientCondition.ClientCondition.Builder clientCondition = ProtoClientCondition.ClientCondition.newBuilder();
 
-        if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).findAll().size() == 0) {
+        if (realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, false).count() == 0) {
             return clientCondition;
         }
 

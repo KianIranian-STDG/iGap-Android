@@ -1958,7 +1958,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             super.onBackPressed();
 
-            if (G.fragmentManager != null && G.fragmentManager.getBackStackEntryCount() == 0) {
+            if (G.fragmentManager != null && G.fragmentManager.getBackStackEntryCount() < 1) {
                 if (!this.isFinishing()) {
                     resume();
                 }

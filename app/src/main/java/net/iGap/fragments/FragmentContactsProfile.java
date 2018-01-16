@@ -183,6 +183,10 @@ public class FragmentContactsProfile extends BaseFragment {
                 @Override
                 public void onClick(View view) {
 
+                    if (fragmentContactsProfileViewModel.contactName.get() == null) {
+                        return;
+                    }
+
                     final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
                     layoutNickname.setOrientation(LinearLayout.VERTICAL);
 

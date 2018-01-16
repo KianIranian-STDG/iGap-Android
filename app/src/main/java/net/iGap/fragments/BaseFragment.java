@@ -26,8 +26,6 @@ import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static net.iGap.G.fragmentActivity;
-
 public class BaseFragment extends SwipeBackFragment {
 
     protected Fragment currentFragment;
@@ -136,7 +134,10 @@ public class BaseFragment extends SwipeBackFragment {
     }
 
     public void popBackStackFragment() {
-        fragmentActivity.getSupportFragmentManager().popBackStack();
+
+        if (!G.fragmentActivity.isFinishing()) {
+            G.fragmentActivity.getSupportFragmentManager().popBackStack();
+        }
 
         if (G.iTowPanModDesinLayout != null) {
             G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);

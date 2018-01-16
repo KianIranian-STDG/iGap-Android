@@ -232,7 +232,10 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
             G.handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    contactName.set(user.getDisplayName());
+                    if (user.getDisplayName() != null && !user.getDisplayName().equals("")) {
+                        contactName.set(user.getDisplayName());
+                    }
+
                     setAvatar();
                 }
             });

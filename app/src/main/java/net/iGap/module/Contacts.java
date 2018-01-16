@@ -131,6 +131,8 @@ public class Contacts {
                             }
                         } catch (NumberFormatException e) {
                             e.printStackTrace();
+                        } catch (NullPointerException e1) {
+                            e1.printStackTrace();
                         }
 
                         fetchCount++;
@@ -249,6 +251,8 @@ public class Contacts {
                         }
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
+                    } catch (NullPointerException e1) {
+                        e1.printStackTrace();
                     }
 
                     fetchCount++;

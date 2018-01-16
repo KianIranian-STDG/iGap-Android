@@ -13,7 +13,13 @@ package net.iGap.realm;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.format.DateUtils;
-
+import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.RealmResults;
+import io.realm.Sort;
+import io.realm.annotations.PrimaryKey;
+import java.util.List;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperString;
@@ -22,15 +28,6 @@ import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientGetRoom;
-
-import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.RealmResults;
-import io.realm.Sort;
-import io.realm.annotations.PrimaryKey;
 
 import static net.iGap.G.context;
 import static net.iGap.G.userId;
@@ -1135,7 +1132,7 @@ public class RealmRoom extends RealmObject {
     public static void joinRoom(long roomId) {
         Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null) {
+        if (realmRoom != null && realmRoom.isValid()) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {

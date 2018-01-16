@@ -216,18 +216,22 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     }
 
     private void setLastSeen(RealmRoom realmRoom, Realm realm) {
-        RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
-        if (realmRoom.getChatRoom() != null) {
-            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, realmChatRoom.getPeerId());
-            if (realmRegisteredInfo != null) {
-                if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
-                    txtLastSeen.setText(LastSeenTimeUtil.computeTime(realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
-                } else {
-                    txtLastSeen.setText(realmRegisteredInfo.getStatus());
+        try {
+            RealmChatRoom realmChatRoom = realmRoom.getChatRoom();
+            if (realmRoom.getChatRoom() != null) {
+                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, realmChatRoom.getPeerId());
+                if (realmRegisteredInfo != null) {
+                    if (realmRegisteredInfo.getStatus().equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
+                        txtLastSeen.setText(LastSeenTimeUtil.computeTime(realmRegisteredInfo.getId(), realmRegisteredInfo.getLastSeen(), false));
+                    } else {
+                        txtLastSeen.setText(realmRegisteredInfo.getStatus());
+                    }
                 }
+            } else {
+                txtLastSeen.setText("");
             }
-        } else {
-            txtLastSeen.setText("");
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 

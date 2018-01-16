@@ -617,9 +617,11 @@ public class FragmentChannelProfileViewModel
     //******Add And Moderator List
 
     private void showListForCustomRole(String SelectedRole) {
-        FragmentShowMember fragment = FragmentShowMember.newInstance1(this.fragment, roomId, role.toString(), G.userId, SelectedRole, isNeedGetMemberList);
-        new HelperFragment(fragment).setReplace(false).load();
-        isNeedGetMemberList = false;
+        if (role != null) {
+            FragmentShowMember fragment = FragmentShowMember.newInstance1(this.fragment, roomId, role.toString(), G.userId, SelectedRole, isNeedGetMemberList);
+            new HelperFragment(fragment).setReplace(false).load();
+            isNeedGetMemberList = false;
+        }
     }
 
     //****** show admin or moderator list

@@ -5,7 +5,8 @@ import android.app.Application;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
-
+import io.realm.Realm;
+import java.util.ArrayList;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -30,10 +31,6 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestUserUpdateStatus;
 import net.iGap.request.RequestWrapper;
-
-import java.util.ArrayList;
-
-import io.realm.Realm;
 
 import static net.iGap.G.firstEnter;
 import static net.iGap.G.firstTimeEnterToApp;
@@ -196,16 +193,21 @@ public class LoginActions extends Application {
             /**
              * this can be go in the activity for check permission in api 6+
              */
-            G.isSendContact = true;
-            if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        new Contacts.FetchContactForServer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
-                });
-            } else {
-                new RequestUserContactsGetList().userContactGetList();
+
+            try {
+                if (ContextCompat.checkSelfPermission(G.context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            new Contacts.FetchContactForServer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        }
+                    });
+                } else {
+                    new RequestUserContactsGetList().userContactGetList();
+                }
+                G.isSendContact = true;
+            } catch (RuntimeException e) {
+                e.printStackTrace();
             }
         } else {
             G.handler.postDelayed(new Runnable() {
