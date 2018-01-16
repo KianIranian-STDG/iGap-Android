@@ -6988,9 +6988,7 @@ public class FragmentChat extends BaseFragment
             int multiForwardSize = multiForwardList.size();
 
             if (hasForward || multiForwardSize > 0) {
-                ArrayList<Long> mForwarded = multiForwardList;
                 final ArrayList<Parcelable> mg = mForwardMessages;
-
                 for (int i = 0; i < mg.size(); i++) {
                     /**
                      * send forwarded message with one second delay for each message
@@ -6998,10 +6996,10 @@ public class FragmentChat extends BaseFragment
                     final int j = i;
 
                     if (multiForwardSize > 0) {
-                        for (int k = 0; k < mForwarded.size(); k++) {
-                            sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mg.get(j)), mForwarded.get(k), false);
-                            multiForwardList.remove(multiForwardList.get(k));
+                        for (int k = 0; k < multiForwardSize; k++) {
+                            sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mg.get(j)), multiForwardList.get(k), false);
                         }
+                        multiForwardList = null;
                         hasForward = false;
                         mForwardMessages = null;
                     } else {
@@ -7103,7 +7101,6 @@ public class FragmentChat extends BaseFragment
         final long messageId = SUID.id().get();
 
         RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-
         if (realmRoom != null && realmRoom.getReadOnly()) {
             return;
         }
