@@ -1131,7 +1131,6 @@
   <string name="text_empty_user_map">Oops! No user nearby has turned on her/his map yet</string>
   <string name="send_message_to">Send Message To </string>
   <string name="send_forward_to">Are you sure send forward for</string>
-  <string name="choose_another_one">another one</string>
 
   <string name="st_bio">Bio</string>
   <string name="st_des_bio">You can add a few lines about yourself. anyone who opens your profile will see this text.</string>
@@ -1172,8 +1171,10 @@
   <string name="content_attention_dialog">Note: People on the map will be displayed with a 500-meter error. So no worries</string>
   <string name="st_cameraBottomSheet">Small camera in attachments</string>
   <string name="open_default_player">Open video with default player</string>
-  <string name="show_channel_vote">Show channel vote</string>
+  <string name="show_channel_vote">Channel Reaction</string>
   <string name="verify_channel">Verified Channel</string>
-
+  <string name="another_room">Another Room</string>
+  <string name="send">Send</string>
+  <string name="do_not_send">Don\'t Send</string>
 
 </resources>
