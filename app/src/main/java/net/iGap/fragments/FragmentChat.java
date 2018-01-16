@@ -7105,6 +7105,7 @@ public class FragmentChat extends BaseFragment
             return;
         }
 
+        final ProtoGlobal.Room.Type type = realmRoom.getType();
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -7127,7 +7128,7 @@ public class FragmentChat extends BaseFragment
                                 scrollToEnd();
                             }
                             RealmRoomMessage roomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(messageInfo.messageID)).findFirst();
-                            chatSendMessageUtil.buildForward(chatType, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
+                            chatSendMessageUtil.buildForward(type, forwardedMessage.getRoomId(), forwardedMessage, roomMessage.getRoomId(), roomMessage.getMessageId());
                         }
 
                         //realm.close();
