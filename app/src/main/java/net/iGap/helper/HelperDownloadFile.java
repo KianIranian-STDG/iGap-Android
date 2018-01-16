@@ -16,6 +16,7 @@ import io.realm.RealmResults;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Map;
 import net.iGap.G;
@@ -204,7 +205,13 @@ public class HelperDownloadFile {
             item.moveToDirectoryPAth = moveToDirectoryPAth;
             item.size = size;
             item.priority = periority;
-            list.put(primaryKey, item);
+
+            try {
+                list.put(primaryKey, item);
+            } catch (ConcurrentModificationException e) {
+                e.printStackTrace();
+            }
+
         } else {
             item = list.get(primaryKey);
 
