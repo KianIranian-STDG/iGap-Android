@@ -2,15 +2,18 @@ package net.iGap.helper;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+
+import io.realm.Realm;
 
 public class GoToChatActivity {
 
@@ -115,7 +118,7 @@ public class GoToChatActivity {
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     FragmentChat.mForwardMessages = null;
                 }
-            }).neutralText(R.string.choose_another_one).onNeutral(new MaterialDialog.SingleButtonCallback() {
+            }).neutralText(R.string.another_room).onNeutral(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     dialog.dismiss();
