@@ -150,6 +150,8 @@
                   android:paddingRight="@dimen/dp4"
                   app:srcCompat="@drawable/ic_verify"
                   android:tint="@color/white"
+                  android:layout_gravity="center"
+                  android:layout_marginBottom="@dimen/dp4"
                   />
             </LinearLayout>
 
