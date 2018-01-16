@@ -5461,11 +5461,11 @@ public class FragmentChat extends BaseFragment
 
                     String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
                     Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
-                    results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.READ_ONLY, false).contains(RealmRoomFields.TITLE, s.toString(), Case.INSENSITIVE).findAll().sort(fieldNames, sort);
+                    results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.READ_ONLY, false).notEqualTo(RealmRoomFields.ID, mRoomId).contains(RealmRoomFields.TITLE, s.toString(), Case.INSENSITIVE).findAll().sort(fieldNames, sort);
                 } else {
                     String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
                     Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
-                    results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.READ_ONLY, false).findAll().sort(fieldNames, sort);
+                    results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.READ_ONLY, false).notEqualTo(RealmRoomFields.ID, mRoomId).findAll().sort(fieldNames, sort);
                 }
 
                 rcvItem.setAdapter(new AdapterBottomSheetForward(results));
@@ -6320,7 +6320,9 @@ public class FragmentChat extends BaseFragment
 
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
         Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
-        results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.READ_ONLY, false).findAll().sort(fieldNames, sort);
+        results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.READ_ONLY, false).notEqualTo(RealmRoomFields.ID, mRoomId).findAll().sort(fieldNames, sort);
+
+
 
         G.handler.postDelayed(new Runnable() {
             @Override
