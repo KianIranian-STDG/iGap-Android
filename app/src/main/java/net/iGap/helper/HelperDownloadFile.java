@@ -142,9 +142,14 @@ public class HelperDownloadFile {
 
     private static boolean isNeedItemGoToQueue() {
 
-        if (mQueue.size() > 0) return true;
+        if (mQueue.size() > 0 || list.size() > maxDownloadSize) {
+            return true;
+        }
 
-        int count = 0;
+        return false;
+
+
+   /*     int count = 0;
 
         for (int i = 0; i < list.size(); i++) {
 
@@ -156,7 +161,7 @@ public class HelperDownloadFile {
 
         if ((count) > maxDownloadSize) return true;
 
-        return false;
+        return false;*/
     }
 
     private static void addItemToQueue(String primaryKey, int priority) {

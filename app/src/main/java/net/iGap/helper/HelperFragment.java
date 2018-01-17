@@ -155,7 +155,7 @@ public class HelperFragment {
     }
 
     public void removeAll(boolean keepMain) {
-        if (G.fragmentActivity != null) {
+        if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing()) {
             for (Fragment fragment : G.fragmentActivity.getSupportFragmentManager().getFragments()) {
                 if (fragment != null) {
 
