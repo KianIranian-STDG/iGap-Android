@@ -70,6 +70,13 @@ import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class FragmentShowImage extends BaseFragment {
 
+    public static ArrayList<String> downloadedList = new ArrayList<>();
+    public final String ROOM_ID = "roomId";
+    public final String SELECTED_IMAGE = "selectedImage";
+    public final String TYPE = "type";
+    public View appBarLayout;
+    public MediaController videoController;
+    public int po;
     private TextView txtImageNumber;
     private TextView txtImageName;
     private TextView txtImageDate;
@@ -84,24 +91,14 @@ public class FragmentShowImage extends BaseFragment {
     private int selectedFile = 0;
     private AdapterViewPager mAdapter;
     private RealmResults<RealmRoomMessage> mRealmList;
-
     private ArrayList<RealmRoomMessage> mFList = new ArrayList<>();
-
     private Long mRoomId;
     private Long selectedFileToken;
     private MediaPlayer mMediaPlayer;
-    public static ArrayList<String> downloadedList = new ArrayList<>();
-
-    public View appBarLayout;
-    public MediaController videoController;
-    public int po;
     private String path;
     private String type = null;
     private boolean isLockScreen = false;
     private Realm realmShowImage;
-    public final String ROOM_ID = "roomId";
-    public final String SELECTED_IMAGE = "selectedImage";
-    public final String TYPE = "type";
     private ViewGroup rooShowImage;
     private ViewGroup mainShowImage;
     private ExitFragmentTransition exitFragmentTransition;
@@ -190,7 +187,8 @@ public class FragmentShowImage extends BaseFragment {
 
             for (RealmRoomMessage roomMessage : mRealmList) {
                 if (RealmRoomMessage.isImageOrVideo(roomMessage, convertType(type))) {
-                    if ((roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment()) != null) mFList.add(roomMessage);
+                    if ((roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getAttachment() : roomMessage.getAttachment()) != null)
+                        mFList.add(roomMessage);
                 }
             }
 
@@ -457,6 +455,99 @@ public class FragmentShowImage extends BaseFragment {
                 } else if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
                     HelperSaveFile.savePicToGallery(path, true);
                 }
+            }
+        }
+    }
+
+    public String getFilePath(int position) {
+
+        String result = "";
+
+        RealmAttachment at = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage().getAttachment() : mFList.get(position).getAttachment();
+
+        if (at != null) {
+            if (at.getLocalFilePath() != null) result = at.getLocalFilePath();
+        }
+
+        ProtoGlobal.RoomMessageType messageType = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage().getMessageType() : mFList.get(position).getMessageType();
+
+        if (result.length() < 1) {
+            result = AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), messageType);
+        }
+
+        return result;
+    }
+
+    public String getThumbnailPath(RealmRoomMessage roomMessage) {
+
+        String result = "";
+
+        if (roomMessage == null) {
+            return "";
+        }
+
+        if (roomMessage.getAttachment() != null) {
+            if (roomMessage.getAttachment().getLocalThumbnailPath() != null) {
+                result = roomMessage.getAttachment().getLocalThumbnailPath();
+            }
+
+            if (result.length() < 1) {
+                result = AndroidUtils.getFilePathWithCashId(roomMessage.getAttachment().getCacheId(), roomMessage.getAttachment().getName(), G.DIR_TEMP, true);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
+        if (videoController != null) {
+            videoController.hide();
+            videoController = null;
+        }
+
+        if (realmShowImage != null && !realmShowImage.isClosed()) {
+            realmShowImage.close();
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
+        if (videoController != null) {
+            videoController.hide();
+            videoController = null;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+            mMediaPlayer.pause();
+            isLockScreen = true;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (isLockScreen) {
+
+            if (videoController != null) {
+                videoController.show();
             }
         }
     }
@@ -948,100 +1039,6 @@ public class FragmentShowImage extends BaseFragment {
         @Override
         public int getAudioSessionId() {
             return 0;
-        }
-    }
-
-    public String getFilePath(int position) {
-
-        String result = "";
-
-        RealmAttachment at = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage().getAttachment() : mFList.get(position).getAttachment();
-
-        if (at != null) {
-            if (at.getLocalFilePath() != null) result = at.getLocalFilePath();
-        }
-
-        ProtoGlobal.RoomMessageType messageType = mFList.get(position).getForwardMessage() != null ? mFList.get(position).getForwardMessage().getMessageType() : mFList.get(position).getMessageType();
-
-        if (result.length() < 1) {
-            result = AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), messageType);
-        }
-
-        return result;
-    }
-
-    public String getThumbnailPath(RealmRoomMessage roomMessage) {
-
-        String result = "";
-
-        if (roomMessage == null) {
-            return "";
-        }
-
-        if (roomMessage.getAttachment() != null) {
-            if (roomMessage.getAttachment().getLocalThumbnailPath() != null) {
-                result = roomMessage.getAttachment().getLocalThumbnailPath();
-            }
-
-            if (result.length() < 1) {
-                result = AndroidUtils.getFilePathWithCashId(roomMessage.getAttachment().getCacheId(), roomMessage.getAttachment().getName(), G.DIR_TEMP, true);
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mMediaPlayer != null) {
-            mMediaPlayer.stop();
-            mMediaPlayer.release();
-            mMediaPlayer = null;
-        }
-        if (videoController != null) {
-            videoController.hide();
-            videoController = null;
-        }
-
-        if (realmShowImage != null && !realmShowImage.isClosed()) {
-            realmShowImage.close();
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        if (mMediaPlayer != null) {
-            mMediaPlayer.stop();
-            mMediaPlayer.release();
-            mMediaPlayer = null;
-        }
-        if (videoController != null) {
-            videoController.hide();
-            videoController = null;
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-            mMediaPlayer.pause();
-            isLockScreen = true;
-        }
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (isLockScreen) {
-
-            if (videoController != null) {
-                videoController.show();
-            }
         }
     }
 }

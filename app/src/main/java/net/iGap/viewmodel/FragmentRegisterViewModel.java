@@ -109,45 +109,10 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     public static String isoCode = "IR";
     public static TextView btnOk;
     public static Dialog dialogChooseCountry;
-    private MaterialDialog dialogRegistration;
     public static int positionRadioButton = -1;
-    private ArrayList<StructCountry> structCountryArrayList = new ArrayList();
-
-    private Uri image_uriQrCode;
-    private String _resultQrCode;
-    private String phoneNumber;
     //Array List for Store List of StructCountry Object
     public String regex;
-    private String userName;
-    private String authorHash;
-    private String token;
-    private String regexFetchCodeVerification;
-    private long userId;
-    private boolean newUser;
-    private ArrayList<StructCountry> items = new ArrayList<>();
-    private AdapterDialog adapterDialog;
-    private CountDownTimer CountDownTimerQrCode;
-    private CountDownTimer countDownTimer;
-    private SearchView edtSearchView;
-    private Dialog dialog;
-    private int digitCount;
-    private MaterialDialog dialogWait;
-    private String verifyCode;
-    private boolean isRecoveryByEmail = false;
-    private String securityPasswordQuestionOne = "";
-    private String securityPasswordQuestionTwo = "";
-    private String securityPaternEmail = "";
-    private boolean isConfirmedRecoveryEmail;
-    private MaterialDialog dialogQrCode;
     public boolean isVerify = false;
-    private FragmentActivity mActivity;
-
-    private ImageView imgQrCodeNewDevice;
-    private ProgressBar prgQrCodeNewDevice;
-    private FragmentRegister fragmentRegister;
-    private View view;
-    private int sendRequestRegister = 0;
-
     public ObservableField<String> callbackTxtAgreement = new ObservableField<>(G.context.getResources().getString(R.string.rg_agreement_text_register));
     public ObservableField<String> callbackBtnChoseCountry = new ObservableField<>("Iran");
     public ObservableField<String> callbackEdtCodeNumber = new ObservableField<>("+98");
@@ -196,11 +161,38 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     public ObservableBoolean btnChoseCountryEnable = new ObservableBoolean(true);
     public ObservableBoolean edtPhoneNumberEnable = new ObservableBoolean(true);
     public ObservableBoolean btnStartEnable = new ObservableBoolean(true);
-
-
-    public enum Reason {
-        SOCKET, TIME_OUT, INVALID_CODE
-    }
+    private MaterialDialog dialogRegistration;
+    private ArrayList<StructCountry> structCountryArrayList = new ArrayList();
+    private Uri image_uriQrCode;
+    private String _resultQrCode;
+    private String phoneNumber;
+    private String userName;
+    private String authorHash;
+    private String token;
+    private String regexFetchCodeVerification;
+    private long userId;
+    private boolean newUser;
+    private ArrayList<StructCountry> items = new ArrayList<>();
+    private AdapterDialog adapterDialog;
+    private CountDownTimer CountDownTimerQrCode;
+    private CountDownTimer countDownTimer;
+    private SearchView edtSearchView;
+    private Dialog dialog;
+    private int digitCount;
+    private MaterialDialog dialogWait;
+    private String verifyCode;
+    private boolean isRecoveryByEmail = false;
+    private String securityPasswordQuestionOne = "";
+    private String securityPasswordQuestionTwo = "";
+    private String securityPaternEmail = "";
+    private boolean isConfirmedRecoveryEmail;
+    private MaterialDialog dialogQrCode;
+    private FragmentActivity mActivity;
+    private ImageView imgQrCodeNewDevice;
+    private ProgressBar prgQrCodeNewDevice;
+    private FragmentRegister fragmentRegister;
+    private View view;
+    private int sendRequestRegister = 0;
 
 
     public FragmentRegisterViewModel(FragmentRegister fragmentRegister, View root, FragmentActivity mActivity) {
@@ -210,7 +202,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
         getInfo();
     }
-
 
     public void onTextChanged(CharSequence s, int start, int before, int count) {
 
@@ -226,7 +217,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         }
 
     }
-
 
     public void onClickQrCode(View v) {
 
@@ -694,7 +684,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         }
     }
 
-
     //======= process verify : check internet and sms
     private void checkVerify() {
 
@@ -762,7 +751,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         });
         thread.start();
     }
-
 
     // error verify sms and open rg_dialog for enter sms code
     private void errorVerifySms(FragmentRegister.Reason reason) { //when don't receive sms and open rg_dialog for enter code
@@ -1373,7 +1361,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         userVerify(userName, verificationCode);
     }
 
-
     private void closeKeyboard(final View v) {
         G.handler.post(new Runnable() {
             @Override
@@ -1586,6 +1573,10 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
         CountDownTimerQrCode.start();
 
+    }
+
+    public enum Reason {
+        SOCKET, TIME_OUT, INVALID_CODE
     }
 }
 

@@ -21,10 +21,9 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import java.io.File;
-import java.io.IOException;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
@@ -55,6 +54,11 @@ import net.iGap.request.RequestUserProfileGetEmail;
 import net.iGap.request.RequestUserProfileGetGender;
 import net.iGap.viewmodel.FragmentSettingViewModel;
 
+import java.io.File;
+import java.io.IOException;
+
+import io.realm.Realm;
+
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.G.context;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
@@ -65,17 +69,17 @@ import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_
 public class FragmentSetting extends BaseFragment implements OnUserAvatarResponse {
 
     public static String pathSaveImage;
+    public static DateType dateType;
+    public static onRemoveFragmentSetting onRemoveFragmentSetting;
+    public static onClickBack onClickBack;
+    public ProgressBar prgWait;
     private SharedPreferences sharedPreferences;
     private EmojiTextViewE txtNickName;
     private Uri uriIntent;
     private long idAvatar;
-    public ProgressBar prgWait;
     private Realm mRealm;
-    public static DateType dateType;
     private FragmentSettingBinding fragmentSettingBinding;
     private FragmentSettingViewModel fragmentSettingViewModel;
-    public static onRemoveFragmentSetting onRemoveFragmentSetting;
-    public static onClickBack onClickBack;
 
     public FragmentSetting() {
         // Required empty public constructor
@@ -262,8 +266,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     }
 
 
-
-
     @Override
     public void onResume() {
         super.onResume();
@@ -367,13 +369,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         //Override onSaveInstanceState method and comment 'super' from avoid from "Can not perform this action after onSaveInstanceState" error
         //super.onSaveInstanceState(outState);
     }
-
-
-    public interface DateType {
-
-        void dataName(String type);
-    }
-
 
     private void initDataBinding() {
         fragmentSettingViewModel = new FragmentSettingViewModel(this, fragmentSettingBinding);
@@ -481,7 +476,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         });
     }
 
-
     private void setImage(String path) {
         if (path != null) {
             G.imageLoader.displayImage(AndroidUtils.suitablePath(path), fragmentSettingBinding.stImgCircleImage);
@@ -513,6 +507,11 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 }
             }
         });
+    }
+
+    public interface DateType {
+
+        void dataName(String type);
     }
 
     public interface onRemoveFragmentSetting {

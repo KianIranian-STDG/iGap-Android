@@ -29,15 +29,10 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -57,20 +52,21 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientCheckInviteLink;
 import net.iGap.request.RequestClientJoinByInviteLink;
 import net.iGap.request.RequestClientResolveUsername;
+
 import org.chromium.customtabsclient.CustomTabsActivityHelper;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import io.realm.Realm;
+import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class HelperUrl {
-
-    enum linkType {
-        hash, atSighn, igapLink, igapResolve, webLink
-
-    }
-
-    public enum ChatEntry {
-        chat, profile
-    }
 
     public static int LinkColor = Color.BLUE;
     public static MaterialDialog dialogWaiting;
@@ -288,8 +284,6 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    //*********************************************************************************************************
-
     private static SpannableStringBuilder analaysHash(SpannableStringBuilder builder, String messageID) {
 
         if (builder == null) return builder;
@@ -430,6 +424,7 @@ public class HelperUrl {
         builder.setSpan(clickableSpan, start, start + text.length() + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
+    //*********************************************************************************************************
 
     public static SpannableStringBuilder getLinkText(String text, String linkInfo, String messageID) {
 
@@ -512,7 +507,6 @@ public class HelperUrl {
         return linkInfo;
     }
 
-
     private static String analysisAtSignLinkInfo(String text) {
         String result = "";
         if (text == null || text.length() < 1) {
@@ -541,7 +535,6 @@ public class HelperUrl {
 
         return result;
     }
-
 
     private static void checkAndJoinToRoom(final String token) {
 
@@ -689,8 +682,6 @@ public class HelperUrl {
         }
     }
 
-    //************************************  go to room by userName   *********************************************************************
-
     public static void checkUsernameAndGoToRoom(final String userName, final ChatEntry chatEntery) {
 
         if (userName == null || userName.length() < 1) return;
@@ -729,6 +720,8 @@ public class HelperUrl {
             e1.printStackTrace();
         }
     }
+
+    //************************************  go to room by userName   *********************************************************************
 
     private static void openChat(String username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room, ChatEntry chatEntery) {
 
@@ -900,8 +893,6 @@ public class HelperUrl {
         });
     }
 
-    //************************************  go to room by urlLink   *********************************************************************
-
     public static void getLinkinfo(final Intent intent, final Activity activity) {
 
         String action = intent.getAction();
@@ -938,6 +929,8 @@ public class HelperUrl {
         }
     }
 
+    //************************************  go to room by urlLink   *********************************************************************
+
     private static void getToRoom(Uri path) {
 
         if (path != null) {
@@ -969,5 +962,14 @@ public class HelperUrl {
         } else {
             closeDialogWaiting();
         }
+    }
+
+    enum linkType {
+        hash, atSighn, igapLink, igapResolve, webLink
+
+    }
+
+    public enum ChatEntry {
+        chat, profile
     }
 }

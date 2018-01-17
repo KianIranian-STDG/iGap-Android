@@ -21,8 +21,10 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.widget.ImageView;
-import java.io.File;
+
 import net.iGap.R;
+
+import java.io.File;
 
 import static net.iGap.G.context;
 
@@ -34,23 +36,23 @@ public class HelperMimeType {
 
     public static boolean isFileVideo(String path) {
         return path.endsWith(".mp4")
-            || path.endsWith(".3gp")
-            || path.endsWith(".avi")
-            || path.endsWith(".mpg")
-            || path.endsWith(".mpeg")
-            || path.endsWith(".flv")
-            || path.endsWith(".wmv")
-            || path.endsWith(".m4v") || path.endsWith(".mov");
+                || path.endsWith(".3gp")
+                || path.endsWith(".avi")
+                || path.endsWith(".mpg")
+                || path.endsWith(".mpeg")
+                || path.endsWith(".flv")
+                || path.endsWith(".wmv")
+                || path.endsWith(".m4v") || path.endsWith(".mov");
     }
 
     private static boolean isFileAudio(String path) {
         return path.endsWith(".mp3")
-            || path.endsWith(".ogg")
-            || path.endsWith(".wma")
-            || path.endsWith(".m4a")
-            || path.endsWith(".amr")
-            || path.endsWith(".wav")
-            || path.endsWith(".mid") || path.endsWith(".midi");
+                || path.endsWith(".ogg")
+                || path.endsWith(".wma")
+                || path.endsWith(".m4a")
+                || path.endsWith(".amr")
+                || path.endsWith(".wav")
+                || path.endsWith(".mid") || path.endsWith(".midi");
     }
 
     private static boolean isFileText(String path) {
@@ -189,7 +191,8 @@ public class HelperMimeType {
             this.path = path;
         }
 
-        @Override protected Bitmap doInBackground(Object... params) {
+        @Override
+        protected Bitmap doInBackground(Object... params) {
 
             Bitmap bitmap = null;
             BitmapFactory.Options opts = new BitmapFactory.Options();
@@ -201,7 +204,8 @@ public class HelperMimeType {
             return bitmap;
         }
 
-        @Override protected void onPostExecute(Bitmap result) {
+        @Override
+        protected void onPostExecute(Bitmap result) {
             if (result != null && imv != null) {
                 imv.setImageBitmap(result);
             }
@@ -221,12 +225,14 @@ public class HelperMimeType {
             this.path = path;
         }
 
-        @Override protected Bitmap doInBackground(Object... params) {
+        @Override
+        protected Bitmap doInBackground(Object... params) {
 
             return ThumbnailUtils.createVideoThumbnail(path, MediaStore.Video.Thumbnails.FULL_SCREEN_KIND);
         }
 
-        @Override protected void onPostExecute(Bitmap result) {
+        @Override
+        protected void onPostExecute(Bitmap result) {
             if (result != null && imv != null) {
                 imv.setImageBitmap(result);
             }

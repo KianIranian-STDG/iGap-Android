@@ -14,10 +14,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.mikepenz.fastadapter.items.AbstractItem;
-import java.util.List;
+
 import net.iGap.R;
 import net.iGap.fragments.FragmentTransactionPaymentHistory;
+
+import java.util.List;
 
 public class AdapterTransactionPaymentHistory extends AbstractItem<AdapterTransactionPaymentHistory, AdapterTransactionPaymentHistory.ViewHolder> {
     public FragmentTransactionPaymentHistory.StructHistoryPayment item;
@@ -27,15 +30,18 @@ public class AdapterTransactionPaymentHistory extends AbstractItem<AdapterTransa
         return this;
     }
 
-    @Override public int getType() {
+    @Override
+    public int getType() {
         return R.id.ftphs_txt_time1;
     }
 
-    @Override public int getLayoutRes() {
+    @Override
+    public int getLayoutRes() {
         return R.layout.fragment_transaction_payment_history_sub_layout;
     }
 
-    @Override public void bindView(ViewHolder h, List payloads) {
+    @Override
+    public void bindView(ViewHolder h, List payloads) {
         super.bindView(h, payloads);
 
         h.txtTime1.setText(item.time1);
@@ -53,6 +59,11 @@ public class AdapterTransactionPaymentHistory extends AbstractItem<AdapterTransa
                 h.imvCircle.setImageResource(R.drawable.circle_color_notificatin_setting);
                 break;
         }
+    }
+
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
@@ -77,10 +88,6 @@ public class AdapterTransactionPaymentHistory extends AbstractItem<AdapterTransa
             txtCondition = (TextView) view.findViewById(R.id.ftphs_txt_condition);
             txtRightArrowIcon = (net.iGap.module.MaterialDesignTextView) view.findViewById(R.id.ftphs_txt_icon_right_arrow);
         }
-    }
-
-    @Override public ViewHolder getViewHolder(View v) {
-        return new ViewHolder(v);
     }
 }
 

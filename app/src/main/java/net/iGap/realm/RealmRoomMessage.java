@@ -99,353 +99,6 @@ public class RealmRoomMessage extends RealmObject {
     private long futureMessageId;
     private String linkInfo;
 
-    public long getUpdateOrCreateTime() {
-        return updateTime >= createTime ? updateTime : createTime;
-    }
-
-    public boolean isShowTime() {
-        return showTime;
-    }
-
-    public void setShowTime(boolean showTime) {
-        this.showTime = showTime;
-    }
-
-    public long getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(long roomId) {
-        this.roomId = roomId;
-    }
-
-    public long getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(long messageId) {
-        this.messageId = messageId;
-    }
-
-    public long getMessageVersion() {
-        return messageVersion;
-    }
-
-    public void setMessageVersion(long messageVersion) {
-        this.messageVersion = messageVersion;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public long getStatusVersion() {
-        return statusVersion;
-    }
-
-    public void setStatusVersion(long statusVersion) {
-        this.statusVersion = statusVersion;
-    }
-
-    public ProtoGlobal.RoomMessageType getMessageType() {
-        return ProtoGlobal.RoomMessageType.valueOf(messageType);
-    }
-
-    public void setMessageType(ProtoGlobal.RoomMessageType messageType) {
-        this.messageType = messageType.toString();
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-
-        message = message.replaceAll("[\\u2063]", "");
-
-
-        try {
-            this.message = message;
-        } catch (Exception e) {
-            this.message = HelperString.getUtf8String(message);
-        }
-
-        String linkInfo = HelperUrl.getLinkInfo(message);
-        if (linkInfo.length() > 0) {
-            setHasMessageLink(true);
-            setLinkInfo(linkInfo);
-        } else {
-            setHasMessageLink(false);
-        }
-    }
-
-    public boolean getHasMessageLink() {
-        return hasMessageLink;
-    }
-
-    public void setHasMessageLink(boolean hasMessageLink) {
-        this.hasMessageLink = hasMessageLink;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public boolean isHasEmojiInText() {
-        return hasEmojiInText;
-    }
-
-    public void setHasEmojiInText(boolean hasEmojiInText) {
-        this.hasEmojiInText = hasEmojiInText;
-    }
-
-    public RealmRoomMessageLocation getLocation() {
-        return location;
-    }
-
-    public void setLocation(RealmRoomMessageLocation location) {
-        this.location = location;
-    }
-
-    public RealmRoomMessageLog getLog() {
-        return log;
-    }
-
-    public void setLog(RealmRoomMessageLog log) {
-        this.log = log;
-    }
-
-    public String getLogMessage() {
-        return HelperLogMessage.convertLogmessage(logMessage);
-    }
-
-    public String getLogMessageWithLinkInfo() {
-        return logMessage;
-    }
-
-    public void setLogMessage(String logMessage) {
-        this.logMessage = logMessage;
-    }
-
-    public RealmRoomMessageContact getRoomMessageContact() {
-        return roomMessageContact;
-    }
-
-    public void setRoomMessageContact(RealmRoomMessageContact roomMessageContact) {
-        this.roomMessageContact = roomMessageContact;
-    }
-
-    public boolean isEdited() {
-        return edited;
-    }
-
-    public void setEdited(boolean edited) {
-        this.edited = edited;
-    }
-
-    public long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(long createTime) {
-        this.createTime = createTime;
-    }
-
-    public long getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(long updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    public boolean isShowMessage() {
-        return showMessage;
-    }
-
-    public void setShowMessage(boolean showMessage) {
-        this.showMessage = showMessage;
-    }
-
-    /*public int getVoteUp() {
-        return voteUp;
-    }
-
-    public void setVoteUp(int voteUp) {
-        this.voteUp = voteUp;
-    }
-
-    public int getVoteDown() {
-        return voteDown;
-    }
-
-    public void setVoteDown(int voteDown) {
-        this.voteDown = voteDown;
-    }
-
-    public int getViewsLabel() {
-        return seenCount;
-    }
-
-    public void setViewsLabel(int seenCount) {
-        this.seenCount = seenCount;
-    }*/
-
-    public RealmChannelExtra getChannelExtra() {
-        return channelExtra;
-    }
-
-    public void setChannelExtra(RealmChannelExtra channelExtra) {
-        this.channelExtra = channelExtra;
-    }
-
-    public RealmRoomMessage getForwardMessage() {
-        return forwardMessage;
-    }
-
-    public void setForwardMessage(RealmRoomMessage forwardMessage) {
-        this.forwardMessage = forwardMessage;
-    }
-
-    public RealmRoomMessage getReplyTo() {
-        return replyTo;
-    }
-
-    public void setReplyTo(RealmRoomMessage replyTo) {
-        this.replyTo = replyTo;
-    }
-
-    public long getAuthorRoomId() {
-        return authorRoomId;
-    }
-
-    public void setAuthorRoomId(long authorRoomId) {
-        this.authorRoomId = authorRoomId;
-    }
-
-    public String getAuthorHash() {
-        return authorHash;
-    }
-
-    public void setAuthorHash(String authorHash) {
-        this.authorHash = authorHash;
-    }
-
-    public long getPreviousMessageId() {
-        return previousMessageId;
-    }
-
-    public void setPreviousMessageId(long previousMessageId) {
-        this.previousMessageId = previousMessageId;
-    }
-
-    public long getFutureMessageId() {
-        return futureMessageId;
-    }
-
-    public void setFutureMessageId(long futureMessageId) {
-        this.futureMessageId = futureMessageId;
-    }
-
-    public boolean isSenderMe() {
-        boolean output = getUserId() == G.userId;
-        return output;
-    }
-
-    public boolean isAuthorMe() {
-
-        boolean output = false;
-        if (getAuthorHash() != null) {
-            output = getAuthorHash().equals(G.authorHash);
-        }
-
-        return output;
-    }
-
-    public String getLinkInfo() {
-        return linkInfo;
-    }
-
-    public void setLinkInfo(String linkInfo) {
-        this.linkInfo = linkInfo;
-    }
-
-    public boolean isOnlyTime() {
-        return userId == -1;
-    }
-
-    public RealmAttachment getAttachment() {
-        return attachment;
-    }
-
-    public void setAttachment(RealmAttachment attachment) {
-        this.attachment = attachment;
-    }
-
-    public void setAttachment(final long messageId, final ProtoGlobal.File attachment) {
-        Realm realm = Realm.getDefaultInstance();
-        if (!attachment.getToken().isEmpty()) {
-            if (this.attachment == null) {
-                this.attachment = RealmAttachment.putOrUpdate(realm, messageId, null, attachment);
-            } else {
-                if (this.attachment.isValid()) {
-                    this.attachment = RealmAttachment.putOrUpdate(realm, messageId, this.attachment, attachment);
-                }
-            }
-            realm.close();
-        }
-    }
-
-    public void setAttachment(final long messageId, final String path, int width, int height, long size, String name, double duration, LocalFileType type) {
-        if (path == null) {
-            return;
-        }
-        Realm realm = Realm.getDefaultInstance();
-        if (attachment == null) {
-            RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
-            if (realmAttachment == null) {
-                realmAttachment = realm.createObject(RealmAttachment.class, messageId);
-            }
-            if (type == LocalFileType.THUMBNAIL) {
-                realmAttachment.setLocalThumbnailPath(path);
-            } else {
-                realmAttachment.setLocalFilePath(path);
-            }
-            realmAttachment.setWidth(width);
-            realmAttachment.setSize(size);
-            realmAttachment.setHeight(height);
-            realmAttachment.setName(name);
-            realmAttachment.setDuration(duration);
-            attachment = realmAttachment;
-        } else {
-            if (attachment.isValid()) {
-                if (type == LocalFileType.THUMBNAIL) {
-                    attachment.setLocalThumbnailPath(path);
-                } else {
-                    attachment.setLocalFilePath(path);
-                }
-            }
-        }
-        realm.close();
-    }
-
-
     /**
      * if has forward return that otherwise return enter value
      */
@@ -1268,6 +921,30 @@ public class RealmRoomMessage extends RealmObject {
         realm.close();
     }
 
+    /*public int getVoteUp() {
+        return voteUp;
+    }
+
+    public void setVoteUp(int voteUp) {
+        this.voteUp = voteUp;
+    }
+
+    public int getVoteDown() {
+        return voteDown;
+    }
+
+    public void setVoteDown(int voteDown) {
+        this.voteDown = voteDown;
+    }
+
+    public int getViewsLabel() {
+        return seenCount;
+    }
+
+    public void setViewsLabel(int seenCount) {
+        this.seenCount = seenCount;
+    }*/
+
     public static RealmRoomMessage makeUnreadMessage(int countNewMessage) {
         RealmRoomMessage message = new RealmRoomMessage();
         message.setMessageId(TimeUtils.currentLocalTime());
@@ -1418,5 +1095,327 @@ public class RealmRoomMessage extends RealmObject {
             forwardedMessage.setUserId(G.userId);
             forwardedMessage.setShowMessage(true);
         }
+    }
+
+    public long getUpdateOrCreateTime() {
+        return updateTime >= createTime ? updateTime : createTime;
+    }
+
+    public boolean isShowTime() {
+        return showTime;
+    }
+
+    public void setShowTime(boolean showTime) {
+        this.showTime = showTime;
+    }
+
+    public long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(long roomId) {
+        this.roomId = roomId;
+    }
+
+    public long getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(long messageId) {
+        this.messageId = messageId;
+    }
+
+    public long getMessageVersion() {
+        return messageVersion;
+    }
+
+    public void setMessageVersion(long messageVersion) {
+        this.messageVersion = messageVersion;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public long getStatusVersion() {
+        return statusVersion;
+    }
+
+    public void setStatusVersion(long statusVersion) {
+        this.statusVersion = statusVersion;
+    }
+
+    public ProtoGlobal.RoomMessageType getMessageType() {
+        return ProtoGlobal.RoomMessageType.valueOf(messageType);
+    }
+
+    public void setMessageType(ProtoGlobal.RoomMessageType messageType) {
+        this.messageType = messageType.toString();
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+
+        message = message.replaceAll("[\\u2063]", "");
+
+
+        try {
+            this.message = message;
+        } catch (Exception e) {
+            this.message = HelperString.getUtf8String(message);
+        }
+
+        String linkInfo = HelperUrl.getLinkInfo(message);
+        if (linkInfo.length() > 0) {
+            setHasMessageLink(true);
+            setLinkInfo(linkInfo);
+        } else {
+            setHasMessageLink(false);
+        }
+    }
+
+    public boolean getHasMessageLink() {
+        return hasMessageLink;
+    }
+
+    public void setHasMessageLink(boolean hasMessageLink) {
+        this.hasMessageLink = hasMessageLink;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public boolean isHasEmojiInText() {
+        return hasEmojiInText;
+    }
+
+    public void setHasEmojiInText(boolean hasEmojiInText) {
+        this.hasEmojiInText = hasEmojiInText;
+    }
+
+    public RealmRoomMessageLocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(RealmRoomMessageLocation location) {
+        this.location = location;
+    }
+
+    public RealmRoomMessageLog getLog() {
+        return log;
+    }
+
+    public void setLog(RealmRoomMessageLog log) {
+        this.log = log;
+    }
+
+    public String getLogMessage() {
+        return HelperLogMessage.convertLogmessage(logMessage);
+    }
+
+    public void setLogMessage(String logMessage) {
+        this.logMessage = logMessage;
+    }
+
+    public String getLogMessageWithLinkInfo() {
+        return logMessage;
+    }
+
+    public RealmRoomMessageContact getRoomMessageContact() {
+        return roomMessageContact;
+    }
+
+    public void setRoomMessageContact(RealmRoomMessageContact roomMessageContact) {
+        this.roomMessageContact = roomMessageContact;
+    }
+
+    public boolean isEdited() {
+        return edited;
+    }
+
+    public void setEdited(boolean edited) {
+        this.edited = edited;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public boolean isShowMessage() {
+        return showMessage;
+    }
+
+    public void setShowMessage(boolean showMessage) {
+        this.showMessage = showMessage;
+    }
+
+    public RealmChannelExtra getChannelExtra() {
+        return channelExtra;
+    }
+
+    public void setChannelExtra(RealmChannelExtra channelExtra) {
+        this.channelExtra = channelExtra;
+    }
+
+    public RealmRoomMessage getForwardMessage() {
+        return forwardMessage;
+    }
+
+    public void setForwardMessage(RealmRoomMessage forwardMessage) {
+        this.forwardMessage = forwardMessage;
+    }
+
+    public RealmRoomMessage getReplyTo() {
+        return replyTo;
+    }
+
+    public void setReplyTo(RealmRoomMessage replyTo) {
+        this.replyTo = replyTo;
+    }
+
+    public long getAuthorRoomId() {
+        return authorRoomId;
+    }
+
+    public void setAuthorRoomId(long authorRoomId) {
+        this.authorRoomId = authorRoomId;
+    }
+
+    public String getAuthorHash() {
+        return authorHash;
+    }
+
+    public void setAuthorHash(String authorHash) {
+        this.authorHash = authorHash;
+    }
+
+    public long getPreviousMessageId() {
+        return previousMessageId;
+    }
+
+    public void setPreviousMessageId(long previousMessageId) {
+        this.previousMessageId = previousMessageId;
+    }
+
+    public long getFutureMessageId() {
+        return futureMessageId;
+    }
+
+    public void setFutureMessageId(long futureMessageId) {
+        this.futureMessageId = futureMessageId;
+    }
+
+    public boolean isSenderMe() {
+        boolean output = getUserId() == G.userId;
+        return output;
+    }
+
+    public boolean isAuthorMe() {
+
+        boolean output = false;
+        if (getAuthorHash() != null) {
+            output = getAuthorHash().equals(G.authorHash);
+        }
+
+        return output;
+    }
+
+    public String getLinkInfo() {
+        return linkInfo;
+    }
+
+    public void setLinkInfo(String linkInfo) {
+        this.linkInfo = linkInfo;
+    }
+
+    public boolean isOnlyTime() {
+        return userId == -1;
+    }
+
+    public RealmAttachment getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(RealmAttachment attachment) {
+        this.attachment = attachment;
+    }
+
+    public void setAttachment(final long messageId, final ProtoGlobal.File attachment) {
+        Realm realm = Realm.getDefaultInstance();
+        if (!attachment.getToken().isEmpty()) {
+            if (this.attachment == null) {
+                this.attachment = RealmAttachment.putOrUpdate(realm, messageId, null, attachment);
+            } else {
+                if (this.attachment.isValid()) {
+                    this.attachment = RealmAttachment.putOrUpdate(realm, messageId, this.attachment, attachment);
+                }
+            }
+            realm.close();
+        }
+    }
+
+    public void setAttachment(final long messageId, final String path, int width, int height, long size, String name, double duration, LocalFileType type) {
+        if (path == null) {
+            return;
+        }
+        Realm realm = Realm.getDefaultInstance();
+        if (attachment == null) {
+            RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.ID, messageId).findFirst();
+            if (realmAttachment == null) {
+                realmAttachment = realm.createObject(RealmAttachment.class, messageId);
+            }
+            if (type == LocalFileType.THUMBNAIL) {
+                realmAttachment.setLocalThumbnailPath(path);
+            } else {
+                realmAttachment.setLocalFilePath(path);
+            }
+            realmAttachment.setWidth(width);
+            realmAttachment.setSize(size);
+            realmAttachment.setHeight(height);
+            realmAttachment.setName(name);
+            realmAttachment.setDuration(duration);
+            attachment = realmAttachment;
+        } else {
+            if (attachment.isValid()) {
+                if (type == LocalFileType.THUMBNAIL) {
+                    attachment.setLocalThumbnailPath(path);
+                } else {
+                    attachment.setLocalFilePath(path);
+                }
+            }
+        }
+        realm.close();
     }
 }

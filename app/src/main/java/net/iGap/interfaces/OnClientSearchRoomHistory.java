@@ -10,9 +10,10 @@
 
 package net.iGap.interfaces;
 
-import java.util.List;
 import net.iGap.proto.ProtoClientSearchRoomHistory;
 import net.iGap.proto.ProtoGlobal;
+
+import java.util.List;
 
 public interface OnClientSearchRoomHistory {
 

@@ -21,8 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.io.File;
-import java.util.ArrayList;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterExplorer;
@@ -33,6 +32,9 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.structs.StructExplorerItem;
 
+import java.io.File;
+import java.util.ArrayList;
+
 public class FragmentExplorer extends BaseFragment {
 
     String nextnode;
@@ -42,15 +44,12 @@ public class FragmentExplorer extends BaseFragment {
     ArrayList<Integer> mscroll;
     TextView txtCurentPath;
     MaterialDesignTextView btnBack;
-    private boolean finish = false;
-
     StructExplorerItem x;
     RecyclerView recyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-
     String mode = "normal";
     boolean first = true;
-
+    private boolean finish = false;
+    private RecyclerView.LayoutManager mLayoutManager;
     private IPickFile pickFile = null;
 
     @Nullable
@@ -324,15 +323,15 @@ public class FragmentExplorer extends BaseFragment {
             mime = mime.toLowerCase();
 
             if (mime.endsWith(".txt")
-                || mime.endsWith(".pdf")
-                || mime.endsWith(".doc")
-                || mime.endsWith(".xls")
-                || mime.endsWith(".snb")
-                || mime.endsWith(".ppt")
-                || mime.endsWith(".html")
-                || mime.endsWith(".htm")
-                || mime.endsWith(".docx")
-                || mime.endsWith(".xml")) {
+                    || mime.endsWith(".pdf")
+                    || mime.endsWith(".doc")
+                    || mime.endsWith(".xls")
+                    || mime.endsWith(".snb")
+                    || mime.endsWith(".ppt")
+                    || mime.endsWith(".html")
+                    || mime.endsWith(".htm")
+                    || mime.endsWith(".docx")
+                    || mime.endsWith(".xml")) {
                 result = true;
             }
         } else {

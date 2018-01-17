@@ -14,10 +14,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.hanks.library.AnimateCheckBox;
-import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
-import java.util.HashMap;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -29,6 +28,11 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
+
+import java.util.HashMap;
+
+import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
 
 import static net.iGap.G.context;
 
@@ -42,20 +46,6 @@ public class AdapterBottomSheetForward extends RealmRecyclerViewAdapter<RealmRoo
     public AdapterBottomSheetForward(RealmResults<RealmRoom> realmResults) {
         super(realmResults, true);
         this.mList = realmResults;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        private EmojiTextViewE txtName;
-        private CircleImageView imgSrc;
-        protected AnimateCheckBox checkBoxSelect;
-
-        public ViewHolder(View view) {
-            super(view);
-            txtName = (EmojiTextViewE) view.findViewById(R.id.txtTitle_forward_bottomSheet);
-            imgSrc = (CircleImageView) view.findViewById(R.id.imageView_forward_bottomSheet);
-            checkBoxSelect = (AnimateCheckBox) view.findViewById(R.id.checkBox_forward_bottomSheet);
-        }
     }
 
     @Override
@@ -154,8 +144,21 @@ public class AdapterBottomSheetForward extends RealmRecyclerViewAdapter<RealmRoo
         });
     }
 
-}
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
+        protected AnimateCheckBox checkBoxSelect;
+        private EmojiTextViewE txtName;
+        private CircleImageView imgSrc;
+
+        public ViewHolder(View view) {
+            super(view);
+            txtName = (EmojiTextViewE) view.findViewById(R.id.txtTitle_forward_bottomSheet);
+            imgSrc = (CircleImageView) view.findViewById(R.id.imageView_forward_bottomSheet);
+            checkBoxSelect = (AnimateCheckBox) view.findViewById(R.id.checkBox_forward_bottomSheet);
+        }
+    }
+
+}
 
 
 //}

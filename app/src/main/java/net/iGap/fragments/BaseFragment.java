@@ -19,18 +19,19 @@ import android.support.v4.app.FragmentActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
 import net.iGap.G;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperFragment;
 import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class BaseFragment extends SwipeBackFragment {
 
-    protected Fragment currentFragment;
     public boolean isNeedResume = false;
-
+    protected Fragment currentFragment;
 
     @Override
     public void onAttach(Context context) {
@@ -122,7 +123,6 @@ public class BaseFragment extends SwipeBackFragment {
             G.typeface_neuropolitical = Typeface.createFromAsset(G.context.getAssets(), "fonts/neuropolitical.ttf");
         }
     }
-
 
 
     private void hideKeyboard() {

@@ -11,14 +11,7 @@
 package net.iGap.helper;
 
 import android.support.v4.util.ArrayMap;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.Map;
+
 import net.iGap.G;
 import net.iGap.interfaces.OnFileDownloadResponse;
 import net.iGap.module.AndroidUtils;
@@ -28,14 +21,23 @@ import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.request.RequestFileDownload;
 import net.iGap.request.RequestWrapper;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.Map;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class HelperDownloadFile {
 
+    public static ArrayList<String> manuallyStoppedDownload = new ArrayList<>();
     private static ArrayMap<String, StructDownLoad> list = new ArrayMap<>();
     private static ArrayList<StructQueue> mQueue = new ArrayList<>();
-    public static ArrayList<String> manuallyStoppedDownload = new ArrayList<>();
-
-    private OnFileDownloadResponse onFileDownloadResponse;
     private static int maxDownloadSize = 4;
+    private OnFileDownloadResponse onFileDownloadResponse;
 
     public HelperDownloadFile() {
 
@@ -100,44 +102,6 @@ public class HelperDownloadFile {
         };
 
         G.onFileDownloadResponse = onFileDownloadResponse;
-    }
-
-    public static class StructListener {
-        public UpdateListener listener;
-        public String messageId;
-
-        public StructListener(UpdateListener listener, String messageId) {
-            this.listener = listener;
-            this.messageId = messageId;
-        }
-    }
-
-    private static class StructDownLoad {
-
-        public String Token = "";
-        public String cashId = "";
-        public ArrayList<StructListener> structListeners = new ArrayList<>();
-        public int progress = 0;
-        public long offset = 0;
-        public String name = "";
-        public String moveToDirectoryPAth = "";
-        public long size = 0;
-        public String identity = "";
-        public int attampOnError = 2;
-        public ProtoFileDownload.FileDownload.Selector selector;
-        public String path = "";
-        int priority = 0;
-    }
-
-    private static class StructQueue {
-        String primaryKey;
-        int priority;
-    }
-
-    public interface UpdateListener {
-        void OnProgress(String path, int progress);
-
-        void OnError(String token);
     }
 
     private static boolean isNeedItemGoToQueue() {
@@ -450,6 +414,44 @@ public class HelperDownloadFile {
             }
         }
         return false;
+    }
+
+    public interface UpdateListener {
+        void OnProgress(String path, int progress);
+
+        void OnError(String token);
+    }
+
+    public static class StructListener {
+        public UpdateListener listener;
+        public String messageId;
+
+        public StructListener(UpdateListener listener, String messageId) {
+            this.listener = listener;
+            this.messageId = messageId;
+        }
+    }
+
+    private static class StructDownLoad {
+
+        public String Token = "";
+        public String cashId = "";
+        public ArrayList<StructListener> structListeners = new ArrayList<>();
+        public int progress = 0;
+        public long offset = 0;
+        public String name = "";
+        public String moveToDirectoryPAth = "";
+        public long size = 0;
+        public String identity = "";
+        public int attampOnError = 2;
+        public ProtoFileDownload.FileDownload.Selector selector;
+        public String path = "";
+        int priority = 0;
+    }
+
+    private static class StructQueue {
+        String primaryKey;
+        int priority;
     }
 
 }

@@ -20,9 +20,10 @@ import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import java.io.IOException;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
@@ -55,6 +56,8 @@ import net.iGap.request.RequestGroupKickMember;
 import net.iGap.request.RequestGroupKickModerator;
 import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
+import java.io.IOException;
+
 /*
 * This is the source code of iGap for Android
 * It is licensed under GNU AGPL v3.0
@@ -66,16 +69,16 @@ import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 */
 public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarResponse, OnGroupAvatarDelete {
 
+    private static final String ROOM_ID = "RoomId";
+    private static final String IS_NOT_JOIN = "is_not_join";
+    public static OnBackFragment onBackFragment;
     NestedScrollView nestedScrollView;
     AttachFile attachFile;
     private CircleImageView imvGroupAvatar;
     private AppBarLayout appBarLayout;
     private String pathSaveImage;
     private ProgressBar prgWait;
-    private static final String ROOM_ID = "RoomId";
     private Fragment fragment;
-    private static final String IS_NOT_JOIN = "is_not_join";
-    public static OnBackFragment onBackFragment;
     private FragmentGroupProfileViewModel fragmentGroupProfileViewModel;
     private ActivityGroupProfileBinding fragmentGroupProfileBinding;
 
@@ -513,7 +516,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
     }
 
 
-
     /**
      * if user was admin set  role to member
      */
@@ -550,7 +552,6 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
             }
         }).show();
     }
-
 
 
     public interface OnBackFragment {

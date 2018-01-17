@@ -30,14 +30,10 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmList;
-import io.realm.RealmModel;
-import java.util.ArrayList;
-import java.util.List;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -96,6 +92,14 @@ import net.iGap.request.RequestGroupRevokeLink;
 import net.iGap.request.RequestGroupUpdateUsername;
 import net.iGap.request.RequestUserInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmList;
+import io.realm.RealmModel;
+
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
 
@@ -105,50 +109,13 @@ import static net.iGap.G.context;
 
 public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
 
-    NestedScrollView nestedScrollView;
-    AttachFile attachFile;
-    private AppBarLayout appBarLayout;
-    private FloatingActionButton fab;
-    private String tmp = "";
-
-    public long roomId;
-    private String title;
-    private String description;
-    private String initials;
-    private String inviteLink;
-    private String linkUsername;
-    private String color;
-    public GroupChatRole role;
-    private long noLastMessage;
-    private String participantsCountLabel;
-    private String pathSaveImage;
-
-    public static OnMenuClick onMenuClick;
-
-    public boolean isPrivate;
-    private boolean isPopup = false;
-
-    private long startMessageId = 0;
-
-
-    private boolean isNeedgetContactlist = true;
-
-    private RealmChangeListener<RealmModel> changeListener;
-    private RealmRoom mRoom;
-    private Realm realmGroupProfile;
-    private static final String ROOM_ID = "RoomId";
-    private Fragment fragment;
     public static final String FRAGMENT_TAG = "FragmentGroupProfile";
+    private static final String ROOM_ID = "RoomId";
     private static final String IS_NOT_JOIN = "is_not_join";
-    private boolean isNotJoin = false;
-
-
-
-    public FragmentGroupProfileViewModel(FragmentGroupProfile fragmentGroupProfile, Bundle arguments) {
-        this.fragment = fragmentGroupProfile;
-        getInfo(arguments);
-    }
-
+    public static OnMenuClick onMenuClick;
+    public long roomId;
+    public GroupChatRole role;
+    public boolean isPrivate;
     public ObservableField<String> callbackGroupName = new ObservableField<>("");
     public ObservableField<String> callbackMemberNumber = new ObservableField<>("");
     public ObservableField<String> callbackGroupLink = new ObservableField<>("");
@@ -164,6 +131,29 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     public ObservableField<Integer> lineAdminVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> setModereatorVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> layoutMemberCanAddMember = new ObservableField<>(View.GONE);
+    NestedScrollView nestedScrollView;
+    AttachFile attachFile;
+    private AppBarLayout appBarLayout;
+    private FloatingActionButton fab;
+    private String tmp = "";
+    private String title;
+    private String description;
+    private String initials;
+    private String inviteLink;
+    private String linkUsername;
+    private String color;
+    private long noLastMessage;
+    private String participantsCountLabel;
+    private String pathSaveImage;
+    private boolean isPopup = false;
+    private long startMessageId = 0;
+    private boolean isNeedgetContactlist = true;
+    private RealmChangeListener<RealmModel> changeListener;
+    private RealmRoom mRoom;
+    private Realm realmGroupProfile;
+    private Fragment fragment;
+    private boolean isNotJoin = false;
+    private int memberCount;
 
 
     //===============================================================================
@@ -171,10 +161,15 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     //===============================================================================
 
 
-    public void onClickRippleBack(View v) {
-        if (FragmentGroupProfile.onBackFragment != null) FragmentGroupProfile.onBackFragment.onBack();
+    public FragmentGroupProfileViewModel(FragmentGroupProfile fragmentGroupProfile, Bundle arguments) {
+        this.fragment = fragmentGroupProfile;
+        getInfo(arguments);
     }
 
+    public void onClickRippleBack(View v) {
+        if (FragmentGroupProfile.onBackFragment != null)
+            FragmentGroupProfile.onBackFragment.onBack();
+    }
 
     public void onClickRippleMenu(View view) {
 
@@ -324,15 +319,14 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         new HelperFragment(fragmentNotification).setReplace(false).load();
     }
 
-    public void onClickGroupLeftGroup(View v) {
-        groupLeft();
-    }
-
 
     //===============================================================================
     //================================Method========================================
     //===============================================================================
 
+    public void onClickGroupLeftGroup(View v) {
+        groupLeft();
+    }
 
     private void getInfo(Bundle arguments) {
 
@@ -346,7 +340,8 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         //group info
         RealmRoom realmRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom == null || realmRoom.getGroupRoom() == null) {
-            if (FragmentGroupProfile.onBackFragment != null) FragmentGroupProfile.onBackFragment.onBack();
+            if (FragmentGroupProfile.onBackFragment != null)
+                FragmentGroupProfile.onBackFragment.onBack();
             return;
         }
         RealmGroupRoom realmGroupRoom = realmRoom.getGroupRoom();
@@ -520,7 +515,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         layoutUserName.addView(inputUserName, layoutParams);
 
         final MaterialDialog dialog =
-            new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -589,7 +584,6 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                 } else {
                     Selection.setSelection(edtUserName.getText(), edtUserName.getText().length());
                 }
-
 
 
                 if (HelperString.regexCheckUsername(editable.toString().replace(Config.IGAP_LINK_PREFIX, ""))) {
@@ -895,22 +889,22 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         layoutRevoke.addView(inputRevoke, layoutParams);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.group_link_hint_revoke))
-            .positiveText(G.fragmentActivity.getResources().getString(R.string.revoke))
-            .customView(layoutRevoke, true)
-            .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
-            .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-            .neutralText(R.string.array_Copy)
-            .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    String copy;
-                    copy = callbackGroupLink.get();
-                    ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                    clipboard.setPrimaryClip(clip);
-                }
-            })
-            .build();
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.revoke))
+                .customView(layoutRevoke, true)
+                .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .neutralText(R.string.array_Copy)
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String copy;
+                        copy = callbackGroupLink.get();
+                        ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                })
+                .build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setOnClickListener(new View.OnClickListener() {
@@ -961,21 +955,21 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         layoutGroupLink.addView(txtLink, layoutParams);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.group_link))
-            .positiveText(G.fragmentActivity.getResources().getString(R.string.array_Copy))
-            .customView(layoutGroupLink, true)
-            .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
-            .negativeText(G.fragmentActivity.getResources().getString(R.string.no))
-            .onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    String copy;
-                    copy = callbackGroupLink.get();
-                    ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
-                    clipboard.setPrimaryClip(clip);
-                }
-            })
-            .build();
+                .positiveText(G.fragmentActivity.getResources().getString(R.string.array_Copy))
+                .customView(layoutGroupLink, true)
+                .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.no))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        String copy;
+                        copy = callbackGroupLink.get();
+                        ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("LINK_GROUP", copy);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                })
+                .build();
 
         dialog.show();
     }
@@ -1062,99 +1056,6 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         });
     }
 
-
-    class CreatePopUpMessage {
-
-        private void show(View view, final StructContactInfo info) {
-            PopupMenu popup = new PopupMenu(G.fragmentActivity, view, Gravity.TOP);
-            popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
-
-            if (role == GroupChatRole.OWNER) {
-
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                    popup.getMenu().getItem(4).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(4).setVisible(false);
-                }
-            } else if (role == GroupChatRole.ADMIN) {
-
-                /**
-                 *  ----------- Admin ---------------
-                 *  1- admin dose'nt access set another admin
-                 *  2- admin can set moderator
-                 *  3- can remove moderator
-                 *  4- can kick moderator and Member
-                 */
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(4).setVisible(false);
-                }
-            } else if (role == GroupChatRole.MODERATOR) {
-
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                }
-            } else {
-
-                return;
-            }
-
-            // Setup menu item selection
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.menu_setAdmin:
-                            setToAdmin(info.peerId);
-                            return true;
-                        case R.id.menu_set_moderator:
-                            setToModerator(info.peerId);
-                            return true;
-                        case R.id.menu_remove_admin:
-                            ((FragmentGroupProfile) fragment).kickAdmin(info.peerId);
-                            return true;
-                        case R.id.menu_remove_moderator:
-                            ((FragmentGroupProfile) fragment).kickModerator(info.peerId);
-                            return true;
-                        case R.id.menu_kick:
-                            ((FragmentGroupProfile) fragment).kickMember(info.peerId);
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
-            });
-            // Handle dismissal with: popup.setOnDismissListener(...);
-            // Show the menu
-            popup.show();
-        }
-
-        private void setToAdmin(Long peerId) {
-            new RequestGroupAddAdmin().groupAddAdmin(roomId, peerId);
-        }
-
-        private void setToModerator(Long peerId) {
-            new RequestGroupAddModerator().groupAddModerator(roomId, peerId);
-        }
-    }
-
-
     private void onGroupAddMemberCallback() {
         G.onGroupAddMember = new OnGroupAddMember() {
             @Override
@@ -1206,8 +1107,6 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
             }
         };
     }
-
-    private int memberCount;
 
     private void setMemberCount(final long roomId, final boolean plus) {
         getRealm().executeTransaction(new Realm.Transaction() {
@@ -1289,7 +1188,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         layoutUserName.addView(inputUserName, layoutParams);
 
         final MaterialDialog dialog =
-            new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.group_name)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.group_name)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -1428,6 +1327,97 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                 AndroidUtils.closeKeyboard(v);
             }
         });
+    }
+
+    class CreatePopUpMessage {
+
+        private void show(View view, final StructContactInfo info) {
+            PopupMenu popup = new PopupMenu(G.fragmentActivity, view, Gravity.TOP);
+            popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
+
+            if (role == GroupChatRole.OWNER) {
+
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                }
+            } else if (role == GroupChatRole.ADMIN) {
+
+                /**
+                 *  ----------- Admin ---------------
+                 *  1- admin dose'nt access set another admin
+                 *  2- admin can set moderator
+                 *  3- can remove moderator
+                 *  4- can kick moderator and Member
+                 */
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                }
+            } else if (role == GroupChatRole.MODERATOR) {
+
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                }
+            } else {
+
+                return;
+            }
+
+            // Setup menu item selection
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.menu_setAdmin:
+                            setToAdmin(info.peerId);
+                            return true;
+                        case R.id.menu_set_moderator:
+                            setToModerator(info.peerId);
+                            return true;
+                        case R.id.menu_remove_admin:
+                            ((FragmentGroupProfile) fragment).kickAdmin(info.peerId);
+                            return true;
+                        case R.id.menu_remove_moderator:
+                            ((FragmentGroupProfile) fragment).kickModerator(info.peerId);
+                            return true;
+                        case R.id.menu_kick:
+                            ((FragmentGroupProfile) fragment).kickMember(info.peerId);
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+            // Handle dismissal with: popup.setOnDismissListener(...);
+            // Show the menu
+            popup.show();
+        }
+
+        private void setToAdmin(Long peerId) {
+            new RequestGroupAddAdmin().groupAddAdmin(roomId, peerId);
+        }
+
+        private void setToModerator(Long peerId) {
+            new RequestGroupAddModerator().groupAddModerator(roomId, peerId);
+        }
     }
 
 

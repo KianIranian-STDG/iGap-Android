@@ -12,6 +12,7 @@ package net.iGap.activities;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
+
 import net.iGap.R;
 import net.iGap.databinding.ActivityEnterPassCodeBinding;
 import net.iGap.viewmodel.ActivityEnterPassCodeViewModel;
@@ -27,6 +28,7 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
         activityManageSpaceViewModel = new ActivityEnterPassCodeViewModel(this, activityEnterPassCodeBinding.getRoot());
         activityEnterPassCodeBinding.setActivityEnterPassCodeViewModel(activityManageSpaceViewModel);
     }
+
     @Override
     public void onResume() {
         super.onResume();

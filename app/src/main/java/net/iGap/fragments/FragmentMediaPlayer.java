@@ -49,11 +49,10 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     public static OnComplete onComplete;
     public static OnSetImage onSetImage;
+    public static FastItemAdapter fastItemAdapter;
+    public static OnBackFragment onBackFragment;
     private SeekBar musicSeekbar;
     private RecyclerView rcvListMusicPlayer;
-    public static FastItemAdapter fastItemAdapter;
-
-    public static OnBackFragment onBackFragment;
     private FragmentMediaPlayerViewModel fragmentMediaPlayerViewModel;
     private ActivityMediaPlayerBinding fragmentMediaPlayerBinding;
     private ActivityMediaPlayerLandBinding activityMediaPlayerLandBinding;
@@ -89,7 +88,6 @@ public class FragmentMediaPlayer extends BaseFragment {
             removeFromBaseFragment();
             return;
         }
-
 
 
         initComponent(view);
@@ -150,7 +148,6 @@ public class FragmentMediaPlayer extends BaseFragment {
         }
 
 
-
         super.onConfigurationChanged(newConfig);
     }
 
@@ -185,7 +182,6 @@ public class FragmentMediaPlayer extends BaseFragment {
                 return false;
             }
         });
-
 
 
         onBackFragment = new OnBackFragment() {
@@ -239,6 +235,15 @@ public class FragmentMediaPlayer extends BaseFragment {
         rcvListMusicPlayer.scrollToPosition(fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId)));
     }
 
+    public interface OnBackFragment {
+        void onBack();
+    }
+
+
+    public interface OnSetImage {
+        void setImage();
+    }
+
     public class AdapterListMusicPlayer extends AbstractItem<AdapterListMusicPlayer, AdapterListMusicPlayer.ViewHolder> {
 
         private RealmRoomMessage realmRoomMessagesList;
@@ -287,6 +292,11 @@ public class FragmentMediaPlayer extends BaseFragment {
 
         }
 
+        @Override
+        public ViewHolder getViewHolder(View v) {
+            return new ViewHolder(v);
+        }
+
         //The viewHolder used for this item. This viewHolder is always reused by the RecyclerView so scrolling is blazing fast
         protected class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -312,22 +322,6 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
         }
 
-        @Override
-        public ViewHolder getViewHolder(View v) {
-            return new ViewHolder(v);
-        }
-
-    }
-
-
-
-
-    public interface OnBackFragment {
-        void onBack();
-    }
-
-    public interface OnSetImage {
-        void setImage();
     }
 
 }

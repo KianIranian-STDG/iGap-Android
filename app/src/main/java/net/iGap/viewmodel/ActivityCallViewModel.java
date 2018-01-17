@@ -26,9 +26,7 @@ import android.view.animation.Animation;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
-import io.realm.Realm;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
@@ -48,26 +46,16 @@ import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.webrtc.WebRTC;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import io.realm.Realm;
+
 public class ActivityCallViewModel {
 
-    private boolean isIncomingCall = false;
-    private long userId;
-    private boolean isSendLeave = false;
     public static boolean isConnected = false;
-    public Vibrator vibrator;
-    private int musicVolum = 0;
-    private boolean isMuteAllMusic = false;
-    private Timer secendTimer;
-    private int secend = 0;
-    private int minute = 0;
-    private MediaPlayer player;
-    private MediaPlayer ringtonePlayer;
     public static TextView txtTimeChat, txtTimerMain;
-    private Context context;
-    private ActivityCallBinding activityCallBinding;
-    private boolean isFinish = false;
-
-
+    public Vibrator vibrator;
     public ObservableField<String> cllBackBtnSpeaker = new ObservableField<>(G.context.getResources().getString(R.string.md_Mute));
     public ObservableField<String> cllBackBtnMic = new ObservableField<>(G.context.getResources().getString(R.string.md_mic));
     public ObservableField<String> callBackTxtTimer = new ObservableField<>("00:00");
@@ -78,6 +66,19 @@ public class ActivityCallViewModel {
     public ObservableInt txtTimerVisibility = new ObservableInt(View.GONE);
     public ObservableInt layoutChatCallVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt layoutAnswerCallVisibility = new ObservableInt(View.VISIBLE);
+    private boolean isIncomingCall = false;
+    private long userId;
+    private boolean isSendLeave = false;
+    private int musicVolum = 0;
+    private boolean isMuteAllMusic = false;
+    private Timer secendTimer;
+    private int secend = 0;
+    private int minute = 0;
+    private MediaPlayer player;
+    private MediaPlayer ringtonePlayer;
+    private Context context;
+    private ActivityCallBinding activityCallBinding;
+    private boolean isFinish = false;
 
 
     public ActivityCallViewModel(Context context, long userId, boolean isIncomingCall, ActivityCallBinding activityCallBinding) {

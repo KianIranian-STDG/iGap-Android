@@ -18,10 +18,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChatBackground;
@@ -32,6 +31,10 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -138,79 +141,6 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         return mList.size();
     }
 
-    private class ViewHolderImage extends RecyclerView.ViewHolder {
-
-        private ImageView imageView;
-
-        public ViewHolderImage(View itemView) {
-            super(itemView);
-
-            imageView = (ImageView) itemView.findViewById(R.id.imgBackgroundImage);
-
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getString(R.string.choose_picture)).negativeText(G.context.getString(R.string.cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
-                        @Override
-                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-
-                            AttachFile attachFile = new AttachFile(G.fragmentActivity);
-
-                            if (text.toString().equals(G.context.getString(R.string.from_camera))) {
-                                try {
-                                    attachFile.requestTakePicture(fragment);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                try {
-                                    attachFile.requestOpenGalleryForImageSingleSelect(fragment);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            dialog.dismiss();
-                        }
-                    }).show();
-                }
-            });
-        }
-    }
-
-    private class ViewHolderItem extends RecyclerView.ViewHolder {
-
-        private ImageView img;
-        public MessageProgress messageProgress;
-        public ContentLoadingProgressBar contentLoading;
-        public String mPath = "";
-
-        ViewHolderItem(View itemView) {
-            super(itemView);
-
-            img = (ImageView) itemView.findViewById(R.id.imgBackground);
-
-            messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
-            AppUtils.setProgresColor(messageProgress.progressBar);
-
-            messageProgress.withDrawable(R.drawable.ic_download, true);
-
-            contentLoading = (ContentLoadingProgressBar) itemView.findViewById(R.id.ch_progress_loadingContent);
-            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
-
-            img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mPath.length() > 0) {
-                        if (onImageClick != null) {
-                            onImageClick.onClick(mPath);
-                        }
-                    }
-                }
-            });
-        }
-    }
-
     private void startDownload(final int position, final MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
 
         contentLoading.setVisibility(View.VISIBLE);
@@ -255,5 +185,78 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                 }
             }
         });
+    }
+
+    private class ViewHolderImage extends RecyclerView.ViewHolder {
+
+        private ImageView imageView;
+
+        public ViewHolderImage(View itemView) {
+            super(itemView);
+
+            imageView = (ImageView) itemView.findViewById(R.id.imgBackgroundImage);
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(G.context.getString(R.string.choose_picture)).negativeText(G.context.getString(R.string.cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
+                        @Override
+                        public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                            AttachFile attachFile = new AttachFile(G.fragmentActivity);
+
+                            if (text.toString().equals(G.context.getString(R.string.from_camera))) {
+                                try {
+                                    attachFile.requestTakePicture(fragment);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                try {
+                                    attachFile.requestOpenGalleryForImageSingleSelect(fragment);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            dialog.dismiss();
+                        }
+                    }).show();
+                }
+            });
+        }
+    }
+
+    private class ViewHolderItem extends RecyclerView.ViewHolder {
+
+        public MessageProgress messageProgress;
+        public ContentLoadingProgressBar contentLoading;
+        public String mPath = "";
+        private ImageView img;
+
+        ViewHolderItem(View itemView) {
+            super(itemView);
+
+            img = (ImageView) itemView.findViewById(R.id.imgBackground);
+
+            messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
+            AppUtils.setProgresColor(messageProgress.progressBar);
+
+            messageProgress.withDrawable(R.drawable.ic_download, true);
+
+            contentLoading = (ContentLoadingProgressBar) itemView.findViewById(R.id.ch_progress_loadingContent);
+            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
+
+            img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mPath.length() > 0) {
+                        if (onImageClick != null) {
+                            onImageClick.onClick(mPath);
+                        }
+                    }
+                }
+            });
+        }
     }
 }

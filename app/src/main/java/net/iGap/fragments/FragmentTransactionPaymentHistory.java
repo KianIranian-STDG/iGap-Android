@@ -42,23 +42,6 @@ public class FragmentTransactionPaymentHistory extends BaseFragment {
     private RecyclerView recyclerView;
     private PaymentTaype paymentTaype = PaymentTaype.weekly;
 
-    public enum PaymentTaype {
-        weekly, monthly, yearly;
-    }
-
-    public enum PyamentAction {
-        pending, completed;
-    }
-
-    public class StructHistoryPayment {
-
-        public String time1 = "";
-        public String time2 = "";
-        public PyamentAction pyamentAction = PyamentAction.pending;
-        public String price = "";
-        public String comment = "";
-    }
-
     public static FragmentTransactionPaymentHistory newInstance(PaymentTaype paymentTaype) {
         Bundle bundle = new Bundle();
         bundle.putString(tag_payment_type, paymentTaype.toString());
@@ -67,12 +50,15 @@ public class FragmentTransactionPaymentHistory extends BaseFragment {
         return fragment;
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_transaction_payment_history, container, false);
         return attachToSwipeBack(fragmentView);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = getArguments();
@@ -153,7 +139,8 @@ public class FragmentTransactionPaymentHistory extends BaseFragment {
         fastAdapter = FastAdapter.with(itemAdapter);
 
         fastAdapter.withOnClickListener(new OnClickListener<IItem>() {
-            @Override public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
+            @Override
+            public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
                 return false;
             }
         });
@@ -161,5 +148,22 @@ public class FragmentTransactionPaymentHistory extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(fastAdapter);
+    }
+
+    public enum PaymentTaype {
+        weekly, monthly, yearly;
+    }
+
+    public enum PyamentAction {
+        pending, completed;
+    }
+
+    public class StructHistoryPayment {
+
+        public String time1 = "";
+        public String time2 = "";
+        public PyamentAction pyamentAction = PyamentAction.pending;
+        public String price = "";
+        public String comment = "";
     }
 }

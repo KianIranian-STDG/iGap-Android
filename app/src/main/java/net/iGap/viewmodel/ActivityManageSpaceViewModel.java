@@ -16,34 +16,37 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import java.io.File;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.module.FileUtils;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmRoomMessage;
+
 import org.osmdroid.config.Configuration;
 import org.osmdroid.config.IConfigurationProvider;
+
+import java.io.File;
+
+import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.module.FileUtils.getFolderSize;
 
 public class ActivityManageSpaceViewModel {
 
-    private Context context;
-
-    private SharedPreferences sharedPreferences;
-    private int isForever;
-    private File fileMap;
-
     public ObservableField<String> callbackKeepMedia = new ObservableField<>("1Week");
     public ObservableField<String> callbackClearCache = new ObservableField<>("0 KB");
     public ObservableField<String> callbackCleanUp = new ObservableField<>("0 KB");
+    private Context context;
+    private SharedPreferences sharedPreferences;
+    private int isForever;
+    private File fileMap;
 
     public ActivityManageSpaceViewModel(Context context) {
 
@@ -274,10 +277,6 @@ public class ActivityManageSpaceViewModel {
         callbackCleanUp.set(FileUtils.formatFileSize(DbTotalSize));
 
     }
-
-
-
-
 
 
 }

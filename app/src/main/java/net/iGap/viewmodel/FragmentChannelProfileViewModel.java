@@ -37,14 +37,10 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmList;
-import io.realm.RealmModel;
-import java.util.ArrayList;
-import java.util.List;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -109,43 +105,29 @@ import net.iGap.request.RequestChannelUpdateSignature;
 import net.iGap.request.RequestChannelUpdateUsername;
 import net.iGap.request.RequestUserInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmList;
+import io.realm.RealmModel;
+
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
 
 public class FragmentChannelProfileViewModel
-    implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelUpdateReactionStatus, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelDelete,
-    OnChannelLeft, OnChannelEdit, OnChannelRevokeLink {
+        implements OnChannelAddMember, OnChannelKickMember, OnChannelAddModerator, OnChannelUpdateReactionStatus, OnChannelKickModerator, OnChannelAddAdmin, OnChannelKickAdmin, OnChannelDelete,
+        OnChannelLeft, OnChannelEdit, OnChannelRevokeLink {
 
-    private String title;
-    private String initials;
-    private String color;
-    private String participantsCountLabel;
-    private String description;
-    private String inviteLink;
-    public ChannelChatRole role;
-    private long noLastMessage;
-    private MEditText edtRevoke;
-    private RealmList<RealmMember> members;
-    private AttachFile attachFile;
-    public long roomId;
-    public boolean isPrivate;
-    private String linkUsername;
-    private boolean isSignature;
-    private boolean isPopup = false;
-    public boolean isVerified = false;
-
-    private boolean isNeedGetMemberList = true;
-    private Fragment fragment;
-    private Realm realmChannelProfile;
-    private RealmChangeListener<RealmModel> changeListener;
-    private RealmRoom mRoom;
-    private boolean isNotJoin = false;
+    public static final String FRAGMENT_TAG = "FragmentChannelProfile";
     private static final String ROOM_ID = "RoomId";
     private static final String IS_NOT_JOIN = "is_not_join";
-    public static final String FRAGMENT_TAG = "FragmentChannelProfile";
     public static OnMenuClick onMenuClick;
-
-
+    public ChannelChatRole role;
+    public long roomId;
+    public boolean isPrivate;
+    public boolean isVerified = false;
     public ObservableBoolean isCheckedSignature = new ObservableBoolean(false);
     public ObservableBoolean isReactionStatus = new ObservableBoolean(true);
     public ObservableField<Integer> showLayoutReactStatus = new ObservableField<>(View.GONE);
@@ -167,12 +149,32 @@ public class FragmentChannelProfileViewModel
     public ObservableField<Integer> verifyTextVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> listAdminVisibility = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> moderatorVisibility = new ObservableField<>(View.VISIBLE);
+    private String title;
+    private String initials;
+    private String color;
+    private String participantsCountLabel;
+    private String description;
+    private String inviteLink;
+    private long noLastMessage;
+    private MEditText edtRevoke;
+    private RealmList<RealmMember> members;
+    private AttachFile attachFile;
+    private String linkUsername;
+    private boolean isSignature;
+    private boolean isPopup = false;
+    private boolean isNeedGetMemberList = true;
+    private Fragment fragment;
+    private Realm realmChannelProfile;
+    private RealmChangeListener<RealmModel> changeListener;
+    private RealmRoom mRoom;
+    private boolean isNotJoin = false;
+    private String dialogDesc;
+    private String dialogName;
 
     public FragmentChannelProfileViewModel(Bundle arguments, FragmentChannelProfile fragmentChannelProfile) {
         this.fragment = fragmentChannelProfile;
         getInfo(arguments);
     }
-
 
     public void onClickRippleBack(View v) {
         if (FragmentChannelProfile.onBackFragment != null)
@@ -418,7 +420,6 @@ public class FragmentChannelProfileViewModel
 
     }
 
-
     public void onResume() {
 
         mRoom = getRealm().where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -454,7 +455,6 @@ public class FragmentChannelProfileViewModel
         }
     }
 
-
     public void onStop() {
         if (mRoom != null) {
             mRoom.removeAllChangeListeners();
@@ -462,13 +462,11 @@ public class FragmentChannelProfileViewModel
         hideProgressBar();
     }
 
-
     public void onDestroy() {
         if (realmChannelProfile != null && !realmChannelProfile.isClosed()) {
             realmChannelProfile.close();
         }
     }
-
 
     private Realm getRealm() {
         if (realmChannelProfile == null || realmChannelProfile.isClosed()) {
@@ -549,6 +547,8 @@ public class FragmentChannelProfileViewModel
         dialog.show();
     }
 
+    //******Add And Moderator List
+
     private void dialogCopyLink() {
 
         String link = callbackChannelLink.get();
@@ -606,6 +606,7 @@ public class FragmentChannelProfileViewModel
         dialog.show();
     }
 
+    //****** show admin or moderator list
 
     private void initRecycleView() {
 
@@ -617,7 +618,7 @@ public class FragmentChannelProfileViewModel
         };
     }
 
-    //******Add And Moderator List
+    //****** add member
 
     private void showListForCustomRole(String SelectedRole) {
         if (role != null) {
@@ -627,8 +628,6 @@ public class FragmentChannelProfileViewModel
         }
     }
 
-    //****** show admin or moderator list
-
     private void showAdminOrModeratorList() {
         if ((role == ChannelChatRole.MEMBER) || (role == ChannelChatRole.MODERATOR)) {
             listAdminVisibility.set(View.GONE);
@@ -637,8 +636,6 @@ public class FragmentChannelProfileViewModel
             listAdminVisibility.set(View.GONE);
         }
     }
-
-    //****** add member
 
     private void addMemberToChannel() {
         List<StructContactInfo> userList = Contacts.retrieve(null);
@@ -671,6 +668,8 @@ public class FragmentChannelProfileViewModel
         new HelperFragment(fragment).setReplace(false).load();
     }
 
+    //****** create popup
+
     @Override
     public void OnChannelUpdateReactionStatusResponse(long roomId, boolean status) {
         if (roomId == this.roomId) {
@@ -684,97 +683,11 @@ public class FragmentChannelProfileViewModel
         hideProgressBar();
     }
 
-    //****** create popup
-
-    private class CreatePopUpMessage {
-
-        private void show(View view, final StructContactInfo info) {
-            PopupMenu popup = new PopupMenu(G.fragmentActivity, view, Gravity.TOP);
-            popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
-
-            if (role == ChannelChatRole.OWNER) {
-
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                    popup.getMenu().getItem(4).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(4).setVisible(false);
-                }
-            } else if (role == ChannelChatRole.ADMIN) {
-
-                /**
-                 *  ----------- Admin ---------------
-                 *  1- admin dose'nt access set another admin
-                 *  2- admin can set moderator
-                 *  3- can remove moderator
-                 *  4- can kick moderator and Member
-                 */
-
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(4).setVisible(false);
-                }
-            } else if (role == ChannelChatRole.MODERATOR) {
-
-                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
-                    popup.getMenu().getItem(0).setVisible(false);
-                    popup.getMenu().getItem(1).setVisible(false);
-                    popup.getMenu().getItem(2).setVisible(false);
-                    popup.getMenu().getItem(3).setVisible(false);
-                }
-            } else {
-
-                return;
-            }
-
-            // Setup menu item selection
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.menu_setAdmin:
-                            setToAdmin(info.peerId);
-                            return true;
-                        case R.id.menu_set_moderator:
-                            setToModerator(info.peerId);
-                            return true;
-                        case R.id.menu_remove_admin:
-                            ((FragmentChannelProfile) fragment).kickAdmin(info.peerId);
-                            return true;
-                        case R.id.menu_remove_moderator:
-                            ((FragmentChannelProfile) fragment).kickModerator(info.peerId);
-                            return true;
-                        case R.id.menu_kick:
-                            ((FragmentChannelProfile) fragment).kickMember(info.peerId);
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
-            });
-            // Handle dismissal with: popup.setOnDismissListener(...);
-            // Show the menu
-            popup.show();
-        }
-    }
+    //********** channel Add Member
 
     private void setMemberCount(final long roomId, final boolean plus) {
         RealmRoom.updateMemberCount(roomId, plus);
     }
-
-    //********** channel Add Member
 
     private void channelAddMemberResponse(long roomIdResponse, final long userId, final ProtoGlobal.ChannelRoom.Role role) {
         if (roomIdResponse == roomId) {
@@ -788,16 +701,13 @@ public class FragmentChannelProfileViewModel
         }
     }
 
+    //********** dialog for edit channel
+
     private void channelKickMember(final long roomIdResponse, final long memberId) {
         if (roomIdResponse == roomId) {
             setMemberCount(roomId, false);
         }
     }
-
-    //********** dialog for edit channel
-
-    private String dialogDesc;
-    private String dialogName;
 
     private void ChangeGroupDescription(final View v) {
         MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.channel_description).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).alwaysCallInputCallback().widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -956,8 +866,6 @@ public class FragmentChannelProfileViewModel
 
     }
 
-    //********** channel edit name and description
-
     private void editChannelResponse(long roomIdR, final String name, final String description) {
 
         G.handler.post(new Runnable() {
@@ -973,18 +881,25 @@ public class FragmentChannelProfileViewModel
         });
     }
 
+    //********** channel edit name and description
+
     private void editChannelRequest(String name, String description) {
         new RequestChannelEdit().channelEdit(roomId, name, description);
     }
-
-    //********** set roles
 
     private void setToAdmin(Long peerId) {
         new RequestChannelAddAdmin().channelAddAdmin(roomId, peerId);
     }
 
+    //********** set roles
+
     private void setToModerator(Long peerId) {
         new RequestChannelAddModerator().channelAddModerator(roomId, peerId);
+    }
+
+    @Override
+    public void onChannelEdit(long roomId, String name, String description) {
+        editChannelResponse(roomId, name, description);
     }
 
 
@@ -995,25 +910,18 @@ public class FragmentChannelProfileViewModel
     //***Edit Channel
 
     @Override
-    public void onChannelEdit(long roomId, String name, String description) {
-        editChannelResponse(roomId, name, description);
-    }
-
-    //***Delete Channel
-
-    @Override
     public void onChannelDelete(long roomId) {
         closeActivity();
     }
 
-    //***Left Channel
+    //***Delete Channel
 
     @Override
     public void onChannelLeft(long roomId, long memberId) {
         closeActivity();
     }
 
-    //***
+    //***Left Channel
 
     private void closeActivity() {
         G.handler.post(new Runnable() {
@@ -1027,6 +935,7 @@ public class FragmentChannelProfileViewModel
         });
     }
 
+    //***
 
     //***Member
     @Override
@@ -1071,8 +980,6 @@ public class FragmentChannelProfileViewModel
 
     }
 
-    //***time out and errors for either of this interfaces
-
     @Override
     public void onChannelRevokeLink(final long roomId, final String inviteLink, final String inviteToken) {
 
@@ -1085,6 +992,8 @@ public class FragmentChannelProfileViewModel
             }
         });
     }
+
+    //***time out and errors for either of this interfaces
 
     @Override
     public void onError(int majorCode, int minorCode) {
@@ -1392,8 +1301,6 @@ public class FragmentChannelProfileViewModel
         dialog.show();
     }
 
-    //*** show delete channel dialog
-
     private void deleteChannel() {
         String deleteText = "";
         int title;
@@ -1421,7 +1328,7 @@ public class FragmentChannelProfileViewModel
         }).negativeText(R.string.no).show();
     }
 
-    //*** notification and sounds
+    //*** show delete channel dialog
 
     private void notificationAndSound() {
         FragmentNotification fragmentNotification = new FragmentNotification();
@@ -1433,7 +1340,7 @@ public class FragmentChannelProfileViewModel
         new HelperFragment(fragmentNotification).setReplace(false).load();
     }
 
-    //*** onActivityResult
+    //*** notification and sounds
 
     private void showProgressBar() {
         G.handler.post(new Runnable() {
@@ -1446,6 +1353,8 @@ public class FragmentChannelProfileViewModel
             }
         });
     }
+
+    //*** onActivityResult
 
     private void hideProgressBar() {
         G.handler.post(new Runnable() {
@@ -1486,6 +1395,90 @@ public class FragmentChannelProfileViewModel
             }
         };
         countWaitTimer.start();
+    }
+
+    private class CreatePopUpMessage {
+
+        private void show(View view, final StructContactInfo info) {
+            PopupMenu popup = new PopupMenu(G.fragmentActivity, view, Gravity.TOP);
+            popup.getMenuInflater().inflate(R.menu.menu_item_group_profile, popup.getMenu());
+
+            if (role == ChannelChatRole.OWNER) {
+
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.ADMIN.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                }
+            } else if (role == ChannelChatRole.ADMIN) {
+
+                /**
+                 *  ----------- Admin ---------------
+                 *  1- admin dose'nt access set another admin
+                 *  2- admin can set moderator
+                 *  3- can remove moderator
+                 *  4- can kick moderator and Member
+                 */
+
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                } else if (info.role.equals(ProtoGlobal.GroupRoom.Role.MODERATOR.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(4).setVisible(false);
+                }
+            } else if (role == ChannelChatRole.MODERATOR) {
+
+                if (info.role.equals(ProtoGlobal.GroupRoom.Role.MEMBER.toString())) {
+                    popup.getMenu().getItem(0).setVisible(false);
+                    popup.getMenu().getItem(1).setVisible(false);
+                    popup.getMenu().getItem(2).setVisible(false);
+                    popup.getMenu().getItem(3).setVisible(false);
+                }
+            } else {
+
+                return;
+            }
+
+            // Setup menu item selection
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.menu_setAdmin:
+                            setToAdmin(info.peerId);
+                            return true;
+                        case R.id.menu_set_moderator:
+                            setToModerator(info.peerId);
+                            return true;
+                        case R.id.menu_remove_admin:
+                            ((FragmentChannelProfile) fragment).kickAdmin(info.peerId);
+                            return true;
+                        case R.id.menu_remove_moderator:
+                            ((FragmentChannelProfile) fragment).kickModerator(info.peerId);
+                            return true;
+                        case R.id.menu_kick:
+                            ((FragmentChannelProfile) fragment).kickMember(info.peerId);
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+            // Handle dismissal with: popup.setOnDismissListener(...);
+            // Show the menu
+            popup.show();
+        }
     }
 
 

@@ -1,7 +1,6 @@
 package net.iGap.fragments;
 
 
-
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,7 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import java.util.regex.Pattern;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
@@ -23,11 +22,15 @@ import net.iGap.request.RequestUserTwoStepVerificationResendVerifyEmail;
 import net.iGap.request.RequestUserTwoStepVerificationSetPassword;
 import net.iGap.request.RequestUserTwoStepVerificationVerifyRecoveryEmail;
 
+import java.util.regex.Pattern;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FragmentSetSecurityPassword extends BaseFragment {
 
+    private static String txtPassword;
+    private static String oldPassword = "";
     private int page = 1;
     private EditText edtSetPassword;
     private EditText edtSetRePassword;
@@ -38,8 +41,6 @@ public class FragmentSetSecurityPassword extends BaseFragment {
     private EditText edtSetAnswerPassTwo;
     private EditText edtSetEmail;
     private EditText edtSetConfirmEmail;
-    private static String txtPassword;
-    private static String oldPassword = "";
 
     public FragmentSetSecurityPassword() {
         // Required empty public constructor
@@ -253,7 +254,6 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                 btnOk.performClick();
             }
         });
-
 
 
         G.twoStepSecurityConfirmEmail = new TwoStepSecurityConfirmEmail() {

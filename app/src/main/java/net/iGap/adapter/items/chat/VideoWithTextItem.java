@@ -14,8 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import io.realm.Realm;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperRadius;
@@ -27,6 +26,10 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
+
+import java.util.List;
+
+import io.realm.Realm;
 
 import static net.iGap.module.AndroidUtils.suitablePath;
 
@@ -88,33 +91,33 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         }
 
 
-            messageView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    holder.itemView.performLongClick();
-                    return false;
-                }
-            });
+        messageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                holder.itemView.performLongClick();
+                return false;
+            }
+        });
 
-            messageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (G.isLinkClicked) {
-                        G.isLinkClicked = false;
+        messageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (G.isLinkClicked) {
+                    G.isLinkClicked = false;
+                    return;
+                }
+                if (!isSelected()) {
+                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
                     }
-                    if (!isSelected()) {
-                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                            return;
-                        }
-                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                            messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
-                        } else {
-                            messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
-                        }
+                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
+                    } else {
+                        messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
                     }
                 }
-            });
+            }
+        });
     }
 
     @Override
@@ -138,6 +141,11 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         }
     }
 
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
+    }
+
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected ReserveSpaceRoundedImageView image;
         protected TextView duration;
@@ -150,10 +158,5 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             //image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
             //duration = (TextView) view.findViewById(R.id.duration);
         }
-    }
-
-    @Override
-    public ViewHolder getViewHolder(View v) {
-        return new ViewHolder(v);
     }
 }

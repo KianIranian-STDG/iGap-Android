@@ -35,7 +35,8 @@ public class UserDeleteResponse extends MessageHandler {
         this.identity = identity;
     }
 
-    @Override public void handler() {
+    @Override
+    public void handler() {
         super.handler();
         HelperLogout.logout();
         deleteRecursive(new File(G.DIR_APP));
@@ -47,17 +48,20 @@ public class UserDeleteResponse extends MessageHandler {
         Tapstream.getInstance().fireEvent(event);
     }
 
-    @Override public void timeOut() {
+    @Override
+    public void timeOut() {
         super.timeOut();
         if (G.onUserDelete != null) {
             G.onUserDelete.TimeOut();
         }
     }
 
-    @Override public void error() {
+    @Override
+    public void error() {
         super.error();
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-        if (G.onUserDelete != null) G.onUserDelete.Error(errorResponse.getMajorCode(), errorResponse.getMinorCode(), errorResponse.getWait());
+        if (G.onUserDelete != null)
+            G.onUserDelete.Error(errorResponse.getMajorCode(), errorResponse.getMinorCode(), errorResponse.getWait());
     }
 }
 

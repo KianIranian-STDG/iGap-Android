@@ -328,6 +328,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         }
     }
 
+    @Override
+    public ViewHolder getViewHolder(View v) {
+        return new ViewHolder(v);
+    }
+
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         protected ImageView thumbnail;
         protected TextView fileSize;
@@ -419,10 +424,5 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             //    }
             //});
         }
-    }
-
-    @Override
-    public ViewHolder getViewHolder(View v) {
-        return new ViewHolder(v);
     }
 }

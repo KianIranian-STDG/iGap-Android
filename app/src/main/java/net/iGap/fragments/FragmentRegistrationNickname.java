@@ -27,8 +27,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.MaterialDialog;
-import java.io.IOException;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
@@ -52,6 +53,8 @@ import net.iGap.module.IntentRequests;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.viewmodel.FragmentRegistrationNicknameViewModel;
+
+import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
@@ -120,10 +123,12 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -208,8 +213,6 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
     }
 
 
-
-
     public void useCamera() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             try {
@@ -250,46 +253,46 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
 
     private void startDialog() {
         MaterialDialog.Builder imageDialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture))
-            .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-            .items(R.array.profile)
-            .itemsCallback(new MaterialDialog.ListCallback() {
-            @Override
-            public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
+                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
+                .items(R.array.profile)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(final MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                switch (which) {
-                    case 0: {
-                        useGallery();
-                        dialog.dismiss();
-                        break;
-                    }
-                    case 1: {
-                        if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
-                            try {
-                                HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
-                                    @Override
-                                    public void Allow() {
-                                        // this dialog show 2 way for choose image : gallery and camera
-                                        dialog.dismiss();
-                                        useCamera();
-                                    }
-
-                                    @Override
-                                    public void deny() {
-
-                                    }
-                                });
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                        switch (which) {
+                            case 0: {
+                                useGallery();
+                                dialog.dismiss();
+                                break;
                             }
-                        } else {
+                            case 1: {
+                                if (G.context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+                                    try {
+                                        HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
+                                            @Override
+                                            public void Allow() {
+                                                // this dialog show 2 way for choose image : gallery and camera
+                                                dialog.dismiss();
+                                                useCamera();
+                                            }
 
-                            HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.please_check_your_camera), false);
+                                            @Override
+                                            public void deny() {
+
+                                            }
+                                        });
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+
+                                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.please_check_your_camera), false);
+                                }
+                                break;
+                            }
                         }
-                        break;
                     }
-                }
-            }
-            });
+                });
         if (!(G.fragmentActivity).isFinishing()) {
             imageDialog.show();
         }

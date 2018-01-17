@@ -189,12 +189,12 @@ public class RealmChannelRoom extends RealmObject {
         return (role != null) ? ChannelChatRole.valueOf(role) : null;
     }
 
-    public ProtoGlobal.ChannelRoom.Role getMainRole() {
-        return (role != null) ? ProtoGlobal.ChannelRoom.Role.valueOf(role) : ProtoGlobal.ChannelRoom.Role.UNRECOGNIZED;
-    }
-
     public void setRole(ChannelChatRole role) {
         this.role = role.toString();
+    }
+
+    public ProtoGlobal.ChannelRoom.Role getMainRole() {
+        return (role != null) ? ProtoGlobal.ChannelRoom.Role.valueOf(role) : ProtoGlobal.ChannelRoom.Role.UNRECOGNIZED;
     }
 
     public int getParticipants_count() {

@@ -36,7 +36,6 @@ public class GoToChatActivity {
     }
 
 
-
     public GoToChatActivity setfromUserLink(boolean fromUserLink) {
         this.fromUserLink = fromUserLink;
         return this;

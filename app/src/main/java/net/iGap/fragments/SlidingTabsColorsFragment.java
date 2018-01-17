@@ -17,18 +17,21 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import java.util.ArrayList;
+
 import net.iGap.R;
 import net.iGap.module.SlidingTabLayout;
 
+import java.util.ArrayList;
+
 public class SlidingTabsColorsFragment extends BaseFragment {
 
+    private static final String TAG = "SlidingTabsColorsFragment";
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
     private ArrayList<Fragment> pages = new ArrayList<Fragment>();
-    private static final String TAG = "SlidingTabsColorsFragment";
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         pages.add(FragmentTransactionPaymentHistory.newInstance(FragmentTransactionPaymentHistory.PaymentTaype.weekly));
@@ -36,11 +39,13 @@ public class SlidingTabsColorsFragment extends BaseFragment {
         pages.add(FragmentTransactionPaymentHistory.newInstance(FragmentTransactionPaymentHistory.PaymentTaype.yearly));
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_transaction_sliding_tabs, container, false));
     }
 
-    @Override public void onViewCreated(View view, Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
@@ -58,12 +63,14 @@ public class SlidingTabsColorsFragment extends BaseFragment {
             super(fm);
         }
 
-        @Override public Fragment getItem(int i) {
+        @Override
+        public Fragment getItem(int i) {
 
             return pages.get(i);
         }
 
-        @Override public int getCount() {
+        @Override
+        public int getCount() {
             return pages.size();
         }
     }

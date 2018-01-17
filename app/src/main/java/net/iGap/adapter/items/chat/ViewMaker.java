@@ -1479,7 +1479,6 @@ public class ViewMaker {
         }
 
 
-
         cs_txt_chat_icon.setLayoutParams(layout_525);
         linearLayout_922.addView(cs_txt_chat_icon);
 
@@ -1546,10 +1545,6 @@ public class ViewMaker {
         lyt_last_message.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams layout_3382 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1);
         lyt_last_message.setLayoutParams(layout_3382);
-
-
-
-
 
 
         EmojiTextViewE cs_txt_last_message_sender = new EmojiTextViewE(G.context);

@@ -6,17 +6,13 @@ import android.content.res.Configuration;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.one.EmojiOneProvider;
-import io.realm.DynamicRealm;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import java.io.File;
-import java.io.IOException;
-import java.util.Locale;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -31,6 +27,14 @@ import net.iGap.helper.HelperUploadFile;
 import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.webrtc.CallObserver;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
+
+import io.realm.DynamicRealm;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -88,69 +92,6 @@ public final class StartupActions {
     }
 
     /**
-     * if device is tablet twoPaneMode will be enabled
-     */
-    private void detectDeviceType() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-
-        float yInches = metrics.heightPixels / metrics.ydpi;
-        float xInches = metrics.widthPixels / metrics.xdpi;
-        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
-        if (diagonalInches >= 6.5) {
-            G.twoPaneMode = true;
-        } else {
-            G.twoPaneMode = false;
-        }
-
-        if (G.context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || G.twoPaneMode) {
-            G.maxChatBox = Math.min(metrics.widthPixels, metrics.heightPixels) - ViewMaker.i_Dp(R.dimen.dp80);
-        } else {
-            G.maxChatBox = Math.max(metrics.widthPixels, metrics.heightPixels) - ViewMaker.i_Dp(R.dimen.dp80);
-        }
-    }
-
-
-    /**
-     * start connecting to the sever
-     */
-    private void connectToServer() {
-        WebSocketClient.getInstance();
-        new LoginActions();
-    }
-
-    /**
-     * detect preferences value and initialize setting fields
-     */
-    private void manageSettingPreferences() {
-        SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-
-        appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
-        notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
-        toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor);
-        attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
-        headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
-        G.progressColor = preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor);
-        G.multiTab = preferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
-
-        // setting for show layout vote in channel
-        G.showVoteChannelLayout = preferences.getInt(SHP_SETTING.KEY_VOTE, 1) == 1;
-
-        //setting for show layout sender name in group
-        G.showSenderNameInGroup = preferences.getInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, 0) == 1;
-
-        /**
-         * detect need save to gallery automatically
-         */
-        int checkedSaveToGallery = preferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
-        isSaveToGallery = checkedSaveToGallery == 1;
-
-        textSizeDetection(preferences);
-        languageDetection(preferences);
-    }
-
-    /**
      * detect and  initialize text size
      */
     public static void textSizeDetection(SharedPreferences sharedPreferences) {
@@ -174,34 +115,6 @@ public final class StartupActions {
                     userTextSize *= 2;
             }
         }
-    }
-
-    /**
-     * detect language and set font type face
-     */
-    private void languageDetection(SharedPreferences sharedPreferences) {
-
-        String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
-
-        switch (language) {
-            case "فارسی":
-                selectedLanguage = "fa";
-                HelperCalander.isPersianUnicode = true;
-                G.isAppRtl = true;
-                break;
-            case "English":
-                selectedLanguage = "en";
-                HelperCalander.isPersianUnicode = false;
-                G.isAppRtl = false;
-                break;
-            case "العربی":
-                selectedLanguage = "ar";
-                HelperCalander.isPersianUnicode = true;
-                G.isAppRtl = true;
-                break;
-        }
-
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
     }
 
     /**
@@ -287,6 +200,96 @@ public final class StartupActions {
             e.printStackTrace();
         }
         return new File(G.DIR_APP);
+    }
+
+    /**
+     * if device is tablet twoPaneMode will be enabled
+     */
+    private void detectDeviceType() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+
+        float yInches = metrics.heightPixels / metrics.ydpi;
+        float xInches = metrics.widthPixels / metrics.xdpi;
+        double diagonalInches = Math.sqrt(xInches * xInches + yInches * yInches);
+        if (diagonalInches >= 6.5) {
+            G.twoPaneMode = true;
+        } else {
+            G.twoPaneMode = false;
+        }
+
+        if (G.context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || G.twoPaneMode) {
+            G.maxChatBox = Math.min(metrics.widthPixels, metrics.heightPixels) - ViewMaker.i_Dp(R.dimen.dp80);
+        } else {
+            G.maxChatBox = Math.max(metrics.widthPixels, metrics.heightPixels) - ViewMaker.i_Dp(R.dimen.dp80);
+        }
+    }
+
+    /**
+     * start connecting to the sever
+     */
+    private void connectToServer() {
+        WebSocketClient.getInstance();
+        new LoginActions();
+    }
+
+    /**
+     * detect preferences value and initialize setting fields
+     */
+    private void manageSettingPreferences() {
+        SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+        appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
+        notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
+        toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor);
+        attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
+        headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
+        G.progressColor = preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor);
+        G.multiTab = preferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
+
+        // setting for show layout vote in channel
+        G.showVoteChannelLayout = preferences.getInt(SHP_SETTING.KEY_VOTE, 1) == 1;
+
+        //setting for show layout sender name in group
+        G.showSenderNameInGroup = preferences.getInt(SHP_SETTING.KEY_SHOW_SENDER_NEME_IN_GROUP, 0) == 1;
+
+        /**
+         * detect need save to gallery automatically
+         */
+        int checkedSaveToGallery = preferences.getInt(SHP_SETTING.KEY_SAVE_TO_GALLERY, 0);
+        isSaveToGallery = checkedSaveToGallery == 1;
+
+        textSizeDetection(preferences);
+        languageDetection(preferences);
+    }
+
+    /**
+     * detect language and set font type face
+     */
+    private void languageDetection(SharedPreferences sharedPreferences) {
+
+        String language = sharedPreferences.getString(SHP_SETTING.KEY_LANGUAGE, Locale.getDefault().getDisplayLanguage());
+
+        switch (language) {
+            case "فارسی":
+                selectedLanguage = "fa";
+                HelperCalander.isPersianUnicode = true;
+                G.isAppRtl = true;
+                break;
+            case "English":
+                selectedLanguage = "en";
+                HelperCalander.isPersianUnicode = false;
+                G.isAppRtl = false;
+                break;
+            case "العربی":
+                selectedLanguage = "ar";
+                HelperCalander.isPersianUnicode = true;
+                G.isAppRtl = true;
+                break;
+        }
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder().setDefaultFontPath("fonts/IRANSansMobile.ttf").setFontAttrId(R.attr.fontPath).build());
     }
 
     private void initializeGlobalVariables() {

@@ -10,8 +10,9 @@
 
 package net.iGap.interfaces;
 
-import java.util.List;
 import net.iGap.proto.ProtoGeoGetNearbyCoordinate;
+
+import java.util.List;
 
 public interface OnGetNearbyCoordinate {
     void onNearbyCoordinate(List<ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result> results);

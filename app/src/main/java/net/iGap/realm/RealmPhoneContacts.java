@@ -28,40 +28,6 @@ public class RealmPhoneContacts extends RealmObject {
     private String firstName;
     private String lastName;
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-
-        try {
-            this.firstName = firstName;
-        } catch (Exception e) {
-            this.firstName = HelperString.getUtf8String(firstName);
-        }
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-
-        try {
-            this.lastName = lastName;
-        } catch (Exception e) {
-            this.lastName = HelperString.getUtf8String(lastName);
-        }
-    }
-
     public static void sendContactList(final ArrayList<StructListOfContact> list, final boolean force) {
 
         new Thread(new Runnable() {
@@ -167,5 +133,39 @@ public class RealmPhoneContacts extends RealmObject {
         realm.close();
 
         return notImportedList;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+
+        try {
+            this.firstName = firstName;
+        } catch (Exception e) {
+            this.firstName = HelperString.getUtf8String(firstName);
+        }
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+
+        try {
+            this.lastName = lastName;
+        } catch (Exception e) {
+            this.lastName = HelperString.getUtf8String(lastName);
+        }
     }
 }

@@ -48,18 +48,18 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
     public static final String USER_ID_STR = "USER_ID";
     public static final String INCOMING_CALL_STR = "INCOMING_CALL_STR";
-
-    public static boolean isGoingfromApp = false;
+    private static final int SENSOR_SENSITIVITY = 4;
 
     //public static TextView txtTimeChat, txtTimerMain;
-
+    public static boolean isGoingfromApp = false;
+    public static View stripLayoutChat;
+    public static View stripLayoutMain;
+    public static OnFinishActivity onFinishActivity;
     boolean isIncomingCall = false;
     long userId;
-
     boolean canClick = false;
     boolean canTouch = false;
     boolean down = false;
-
     VerticalSwipe verticalSwipe;
     LinearLayout layoutCaller;
     FrameLayout layoutAnswer;
@@ -68,19 +68,32 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     MaterialDesignTextView btnAnswer;
     MediaPlayer player;
     MediaPlayer ringtonePlayer;
-
+    SensorEventListener sensorEventListener;
+    HeadsetPluginReciver headsetPluginReciver;
     private SensorManager mSensorManager;
     private Sensor mProximity;
-    SensorEventListener sensorEventListener;
-    private static final int SENSOR_SENSITIVITY = 4;
-
-    HeadsetPluginReciver headsetPluginReciver;
-    public static View stripLayoutChat;
-    public static View stripLayoutMain;
-    public static OnFinishActivity onFinishActivity;
-
     private ActivityCallViewModel activityCallViewModel;
     private ActivityCallBinding activityCallBinding;
+
+    /**
+     * Enables/Disables all child views in a view group.
+     *
+     * @param viewGroup the view group
+     * @param enabled   <code>true</code> to enable, <code>false</code> to disable
+     *                  the views.
+     */
+    public static void enableDisableViewGroup(ViewGroup viewGroup, boolean enabled) {
+        if (viewGroup != null) {
+            int childCount = viewGroup.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View view = viewGroup.getChildAt(i);
+                view.setEnabled(enabled);
+                if (view instanceof ViewGroup) {
+                    enableDisableViewGroup((ViewGroup) view, enabled);
+                }
+            }
+        }
+    }
 
     @Override
     protected void onDestroy() {
@@ -173,6 +186,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         };
     }
 
+    //***************************************************************************************
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
 
@@ -182,8 +197,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
         return super.dispatchTouchEvent(ev);
     }
-
-    //***************************************************************************************
 
     @Override
     public void onLeaveView(String type) {
@@ -318,8 +331,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         }
     }
 
-
-
     private void setAnimation() {
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.translate_enter_down_circke_button);
         layoutCaller.startAnimation(animation);
@@ -363,6 +374,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         stopRingAnimation();
     }
 
+    //*****************************  distance sensor  **********************************************************
 
     private void stopRingAnimation() {
 
@@ -382,8 +394,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
 
     }
-
-    //*****************************  distance sensor  **********************************************************
 
     private void registerSensor() {
 
@@ -436,26 +446,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         }
     }
 
-    /**
-     * Enables/Disables all child views in a view group.
-     *
-     * @param viewGroup the view group
-     * @param enabled   <code>true</code> to enable, <code>false</code> to disable
-     *                  the views.
-     */
-    public static void enableDisableViewGroup(ViewGroup viewGroup, boolean enabled) {
-        if (viewGroup != null) {
-            int childCount = viewGroup.getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                View view = viewGroup.getChildAt(i);
-                view.setEnabled(enabled);
-                if (view instanceof ViewGroup) {
-                    enableDisableViewGroup((ViewGroup) view, enabled);
-                }
-            }
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -474,6 +464,22 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     }
 
     //***************************************************************************************
+
+    private void setUpSwap(View view) {
+        if (!down) {
+            verticalSwipe.setView(view);
+            canTouch = true;
+            down = true;
+
+            stopRingAnimation();
+        }
+    }
+
+    //***************************************************************************************
+
+    public interface OnFinishActivity {
+        void finishActivity();
+    }
 
     class HeadsetPluginReciver extends BroadcastReceiver {
 
@@ -506,24 +512,12 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
         }
     }
 
-    //***************************************************************************************
-
-    private void setUpSwap(View view) {
-        if (!down) {
-            verticalSwipe.setView(view);
-            canTouch = true;
-            down = true;
-
-            stopRingAnimation();
-        }
-    }
-
     class VerticalSwipe {
 
+        boolean accept = false;
         private int AllMoving = 0;
         private int lastY;
         private int DistanceToAccept = (int) G.context.getResources().getDimension(R.dimen.dp120);
-        boolean accept = false;
         private View view;
 
         public void setView(View view) {
@@ -587,10 +581,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 
             view = null;
         }
-    }
-
-    public interface OnFinishActivity {
-        void finishActivity();
     }
 
 }

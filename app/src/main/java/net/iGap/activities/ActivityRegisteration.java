@@ -2,7 +2,7 @@ package net.iGap.activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import java.io.IOException;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentIntroduce;
@@ -11,6 +11,8 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.StartupActions;
+
+import java.io.IOException;
 
 public class ActivityRegisteration extends ActivityEnhanced {
 
@@ -77,9 +79,9 @@ public class ActivityRegisteration extends ActivityEnhanced {
             public void run() {
                 FragmentRegistrationNickname fragment = new FragmentRegistrationNickname();
                 getSupportFragmentManager().beginTransaction()
-                    .add(R.id.ar_layout_root, fragment)
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
-                    .commitAllowingStateLoss();
+                        .add(R.id.ar_layout_root, fragment)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
+                        .commitAllowingStateLoss();
             }
         });
 

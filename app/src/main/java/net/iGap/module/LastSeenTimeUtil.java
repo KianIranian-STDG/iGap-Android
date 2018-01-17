@@ -29,18 +29,18 @@ import java.util.concurrent.TimeUnit;
 import io.realm.Realm;
 
 public class LastSeenTimeUtil {
+    private static HashMap<Long, Long> hashMapLastSeen = new HashMap<>();
+
     private LastSeenTimeUtil() throws InstantiationException {
         throw new InstantiationException("This class is not for instantiation.");
     }
-
-    private static HashMap<Long, Long> hashMapLastSeen = new HashMap<>();
 
     /**
      * if last seen bigger than 10 minutes return local time otherwise
      * return minutes from latest user seen
      *
      * @param lastSeen time in second state(not millis)
-     * @param update if set true time updating after each Config.LAST_SEEN_DELAY_CHECKING time and send callback to onLastSeenUpdateTiming
+     * @param update   if set true time updating after each Config.LAST_SEEN_DELAY_CHECKING time and send callback to onLastSeenUpdateTiming
      */
     public static String computeTime(long userId, long lastSeen, boolean update, boolean ltr) {
         if (timeOut(lastSeen * DateUtils.SECOND_IN_MILLIS)) {

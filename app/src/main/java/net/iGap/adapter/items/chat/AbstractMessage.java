@@ -27,10 +27,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import io.realm.Realm;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -73,30 +73,23 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChannelAddMessageReaction;
 
+import java.util.List;
+
+import io.realm.Realm;
+
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
 public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
+    public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
     public IMessageItem messageClickListener;
     public StructMessageInfo mMessage;
     public boolean directionalBased = true;
     public View messageView;
-    private int minWith = 0;
     //protected Realm realmChat;
-
-    public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
-
     public ProtoGlobal.Room.Type type;
-
-    protected ProtoGlobal.Room.Type getRoomType() {
-        return type;
-    }
-
-    @Override
-    public void onPlayPauseGIF(VH holder, String localPath) throws ClassCastException {
-        // empty
-    }
+    private int minWith = 0;
 
     /**
      * add this prt for video player
@@ -109,6 +102,45 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         this.directionalBased = directionalBased;
         this.type = type;
         this.messageClickListener = messageClickListener;
+    }
+
+    public static void processVideo(final TextView duration, final View holder1, final StructMessageInfo mMessage) {
+
+        MediaController.onPercentCompress = new MediaController.OnPercentCompress() {
+            @Override
+            public void compress(final long percent, String path) {
+
+                if (mMessage.getAttachment().getLocalFilePath() == null || !mMessage.getAttachment().getLocalFilePath().equals(path)) {
+                    return;
+                }
+
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (percent < 98) {
+
+                            String p = percent + "";
+
+                            if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
+                                p = convertToUnicodeFarsiNumber(p);
+                            }
+                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + G.context.getResources().getString(R.string.compressing) + " %" + p));
+                        } else {
+                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + G.context.getResources().getString(R.string.Uploading)));
+                        }
+                    }
+                });
+            }
+        };
+    }
+
+    protected ProtoGlobal.Room.Type getRoomType() {
+        return type;
+    }
+
+    @Override
+    public void onPlayPauseGIF(VH holder, String localPath) throws ClassCastException {
+        // empty
     }
 
     protected void setTextIfNeeded(TextView view, String msg) {
@@ -917,37 +949,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mContainer.setMinimumWidth(minWith);
             mContainer.addView(forwardView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
-    }
-
-
-    public static void processVideo(final TextView duration, final View holder1, final StructMessageInfo mMessage) {
-
-        MediaController.onPercentCompress = new MediaController.OnPercentCompress() {
-            @Override
-            public void compress(final long percent, String path) {
-
-                if (mMessage.getAttachment().getLocalFilePath() == null || !mMessage.getAttachment().getLocalFilePath().equals(path)) {
-                    return;
-                }
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (percent < 98) {
-
-                            String p = percent + "";
-
-                            if (HelperCalander.isLanguagePersian || HelperCalander.isLanguageArabic) {
-                                p = convertToUnicodeFarsiNumber(p);
-                            }
-                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + G.context.getResources().getString(R.string.compressing) + " %" + p));
-                        } else {
-                            duration.setText(String.format(holder1.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + " " + G.context.getResources().getString(R.string.Uploading)));
-                        }
-                    }
-                });
-            }
-        };
     }
 
     /**

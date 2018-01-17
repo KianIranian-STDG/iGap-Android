@@ -31,12 +31,9 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.MaterialDialog;
-import io.realm.Realm;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCrop;
@@ -64,6 +61,13 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.viewmodel.FragmentNewGroupViewModel;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import io.realm.Realm;
+
 import static net.iGap.G.context;
 import static net.iGap.module.AttachFile.isInAttach;
 import static net.iGap.module.AttachFile.request_code_TAKE_PICTURE;
@@ -71,23 +75,19 @@ import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_
 
 public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarResponse, OnChannelAvatarAdd {
 
-    private CircleImageView imgCircleImageView;
-    private long groomId = 0;
-    //  private String path;
-
-    private EditText edtGroupName;
-    private LinedEditText edtDescription;
-
-    private int lastSpecialRequestsCursorPosition = 0;
-    private String specialRequests;
     public static long avatarId = 0;
+    public static OnRemoveFragmentNewGroup onRemoveFragmentNewGroup;
+    //  private String path;
     private static ProtoGlobal.Room.Type type;
-
     FragmentNewGroupViewModel fragmentNewGroupViewModel;
     ActivityNewGroupBinding fragmentNewGroupBinding;
-
-
-    public static OnRemoveFragmentNewGroup onRemoveFragmentNewGroup;
+    private CircleImageView imgCircleImageView;
+    private long groomId = 0;
+    private EditText edtGroupName;
+    private LinedEditText edtDescription;
+    private int lastSpecialRequestsCursorPosition = 0;
+    private String specialRequests;
+    private String pathSaveImage;
 
     public static FragmentNewGroup newInstance() {
         return new FragmentNewGroup();
@@ -124,8 +124,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         fragmentNewGroupViewModel = new FragmentNewGroupViewModel(this.getArguments());
         fragmentNewGroupBinding.setFragmentNewGroupVieModel(fragmentNewGroupViewModel);
     }
-
-
 
     private void showDialogSelectGallery() {
         new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.choose_picture)).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel)).items(R.array.profile).itemsCallback(new MaterialDialog.ListCallback() {
@@ -339,7 +337,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         realm.close();
     }
 
-
     private void setImage(final String imagePath) {
         G.handler.post(new Runnable() {
             @Override
@@ -484,8 +481,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         }
     }
 
-    private String pathSaveImage;
-
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -505,7 +500,6 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     public interface OnRemoveFragmentNewGroup {
         void onRemove();
     }
-
 
 
 }

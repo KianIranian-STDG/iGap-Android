@@ -28,14 +28,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
 import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
-import io.realm.Realm;
-import java.util.ArrayList;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.SearchItamIGap;
@@ -51,12 +50,17 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestClientSearchUsername;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
+
 public class FragmentIgapSearch extends BaseFragment {
 
-    private FastAdapter fastAdapter;
-    private EditText edtSearch;
     MaterialDesignTextView btnClose;
     RippleView rippleDown;
+    private FastAdapter fastAdapter;
+    private EditText edtSearch;
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     private TextView txtEmptyListComment;
@@ -69,11 +73,14 @@ public class FragmentIgapSearch extends BaseFragment {
         return new FragmentIgapSearch();
     }
 
-    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return attachToSwipeBack(inflater.inflate(R.layout.search_fragment_layout, container, false));
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         initComponent(view);
@@ -128,10 +135,12 @@ public class FragmentIgapSearch extends BaseFragment {
 
         edtSearch.setText("@");
         edtSearch.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
 
-            @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 itemAdapter.clear();
 
@@ -157,7 +166,8 @@ public class FragmentIgapSearch extends BaseFragment {
                 }
             }
 
-            @Override public void afterTextChanged(Editable editable) {
+            @Override
+            public void afterTextChanged(Editable editable) {
                 if (edtSearch.getText().length() == 0 || !edtSearch.getText().toString().substring(0, 1).equals("@")) {
                     edtSearch.setText("@");
                     edtSearch.setSelection(1);
@@ -171,7 +181,8 @@ public class FragmentIgapSearch extends BaseFragment {
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_back);
         final RippleView rippleBack = (RippleView) view.findViewById(R.id.sfl_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
                 InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rippleBack.getWindowToken(), 0);
@@ -182,7 +193,8 @@ public class FragmentIgapSearch extends BaseFragment {
 
         btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
         btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 edtSearch.setText("@");
                 edtSearch.setSelection(1);
             }
@@ -190,7 +202,8 @@ public class FragmentIgapSearch extends BaseFragment {
         rippleDown = (RippleView) view.findViewById(R.id.sfl_ripple_done);
         ((View) rippleDown).setEnabled(false);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override public void onComplete(RippleView rippleView) {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
             }
         });
@@ -233,7 +246,8 @@ public class FragmentIgapSearch extends BaseFragment {
         });
 
         fastAdapter.withOnClickListener(new OnClickListener<IItem>() {
-            @Override public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
+            @Override
+            public boolean onClick(View v, IAdapter adapter, IItem currentItem, int position) {
 
                 ProtoClientSearchUsername.ClientSearchUsernameResponse.Result item = ((SearchItamIGap) currentItem).getItem();
 
@@ -262,10 +276,12 @@ public class FragmentIgapSearch extends BaseFragment {
         recyclerView.setAdapter(fastAdapter);
 
         G.onClientSearchUserName = new IClientSearchUserName() {
-            @Override public void OnGetList(final ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder builderList) {
+            @Override
+            public void OnGetList(final ProtoClientSearchUsername.ClientSearchUsernameResponse.Builder builderList) {
 
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
 
                         loadingProgressBar.setVisibility(View.GONE);
 
@@ -289,17 +305,19 @@ public class FragmentIgapSearch extends BaseFragment {
                             if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.USER) {
 
                                 realm.executeTransaction(new Realm.Transaction() {
-                                    @Override public void execute(Realm realm) {
+                                    @Override
+                                    public void execute(Realm realm) {
                                         RealmRegisteredInfo.putOrUpdate(realm, item.getUser());
                                     }
                                 });
                             } else if (item.getType() == ProtoClientSearchUsername.ClientSearchUsernameResponse.Result.Type.ROOM) {
 
-                                final RealmRoom[] realmRoom = { realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getRoom().getId()).findFirst() };
+                                final RealmRoom[] realmRoom = {realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, item.getRoom().getId()).findFirst()};
 
                                 if (realmRoom[0] == null) {
                                     realm.executeTransaction(new Realm.Transaction() {
-                                        @Override public void execute(Realm realm) {
+                                        @Override
+                                        public void execute(Realm realm) {
                                             realmRoom[0] = RealmRoom.putOrUpdate(item.getRoom(), realm);
                                             realmRoom[0].setDeleted(true);
                                         }
@@ -318,9 +336,11 @@ public class FragmentIgapSearch extends BaseFragment {
                 });
             }
 
-            @Override public void OnErrore() {
+            @Override
+            public void OnErrore() {
                 G.handler.post(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         loadingProgressBar.setVisibility(View.GONE);
                     }
                 });

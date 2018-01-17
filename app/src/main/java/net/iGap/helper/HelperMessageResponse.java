@@ -10,7 +10,6 @@
 
 package net.iGap.helper;
 
-import io.realm.Realm;
 import net.iGap.G;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
@@ -19,6 +18,8 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientGetRoom;
+
+import io.realm.Realm;
 
 import static net.iGap.G.authorHash;
 
@@ -58,7 +59,6 @@ public class HelperMessageResponse {
                     if (roomMessage.getAuthor().hasUser()) {
                         RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
                     }
-
 
 
                     //} else if (!response.getId().isEmpty()) {

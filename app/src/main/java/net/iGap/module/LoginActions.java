@@ -5,8 +5,7 @@ import android.app.Application;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
-import io.realm.Realm;
-import java.util.ArrayList;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
@@ -32,6 +31,10 @@ import net.iGap.request.RequestUserLogin;
 import net.iGap.request.RequestUserUpdateStatus;
 import net.iGap.request.RequestWrapper;
 
+import java.util.ArrayList;
+
+import io.realm.Realm;
+
 import static net.iGap.G.firstEnter;
 import static net.iGap.G.firstTimeEnterToApp;
 import static net.iGap.G.isAppInFg;
@@ -43,19 +46,6 @@ public class LoginActions extends Application {
 
     public LoginActions() {
         initSecureInterface();
-    }
-
-    /**
-     * initialize securing interface for detecting
-     * securing is done and continue login actions
-     */
-    private void initSecureInterface() {
-        G.onSecuring = new OnSecuring() {
-            @Override
-            public void onSecure() {
-                login();
-            }
-        };
     }
 
     /**
@@ -131,7 +121,6 @@ public class LoginActions extends Application {
             }
         }, 500);
     }
-
 
     private static void getUserInfo() {
         Realm realm = Realm.getDefaultInstance();
@@ -244,5 +233,18 @@ public class LoginActions extends Application {
                 }
             }, 1000 * j);
         }
+    }
+
+    /**
+     * initialize securing interface for detecting
+     * securing is done and continue login actions
+     */
+    private void initSecureInterface() {
+        G.onSecuring = new OnSecuring() {
+            @Override
+            public void onSecure() {
+                login();
+            }
+        };
     }
 }

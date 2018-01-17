@@ -62,16 +62,16 @@ import io.realm.RealmResults;
 
 public class SearchFragment extends BaseFragment {
 
-    private FastAdapter fastAdapter;
-    private EditText edtSearch;
+    public static HashMap<Long, CircleImageView> hashMapAvatarSearchFragment = new HashMap<>();
     MaterialDesignTextView btnClose;
     RippleView rippleDown;
+    private FastAdapter fastAdapter;
+    private EditText edtSearch;
     private ArrayList<StructSearch> list = new ArrayList<>();
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     private ImageView imvNothingFound;
     private TextView txtEmptyListComment;
-    public static HashMap<Long, CircleImageView> hashMapAvatarSearchFragment = new HashMap<>();
 
     public static SearchFragment newInstance() {
         return new SearchFragment();

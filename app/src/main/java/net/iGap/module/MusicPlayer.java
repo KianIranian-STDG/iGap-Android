@@ -44,13 +44,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
-import io.realm.Realm;
-import io.realm.RealmResults;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
@@ -68,25 +62,28 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 import static net.iGap.G.context;
 
 public class MusicPlayer extends Service implements AudioManager.OnAudioFocusChangeListener, OnAudioFocusChangeListener {
 
-    private static SensorManager mSensorManager;
-    private static Sensor mProximity;
-    private static SensorEventListener sensorEventListener;
+    public static final int notificationId = 19;
     private static final int SENSOR_SENSITIVITY = 4;
     public static boolean canDoAction = true;
-    private static MediaSessionCompat mSession;
-    private static int latestAudioFocusState;
-    //    private static Bitmap orginalWallPaper = null;
-    //    private static boolean isGetOrginalWallpaper=false;
-
-    public static final int notificationId = 19;
     public static String repeatMode = RepeatMode.noRepeat.toString();
     public static boolean isShuffelOn = false;
     public static TextView txt_music_time;
     public static TextView txt_music_time_counter;
+    //    private static Bitmap orginalWallPaper = null;
+    //    private static boolean isGetOrginalWallpaper=false;
     public static String musicTime = "";
     public static String roomName;
     public static String musicPath;
@@ -100,6 +97,29 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static OnComplete onCompleteChat = null;
     public static boolean isShowMediaPlayer = false;
     public static int musicProgress = 0;
+    public static boolean isPause = false;
+    public static ArrayList<RealmRoomMessage> mediaList;
+    public static String strTimer = "";
+    public static String messageId = "";
+    public static boolean isNearDistance = false;
+    public static boolean isVoice = false;
+    public static boolean pauseSoundFromIGapCall = false;
+    public static boolean isSpeakerON = false;
+    public static boolean pauseSoundFromCall = false;
+    public static boolean isMusicPlyerEnable = false;
+    public static boolean playNextMusic = false;
+    public static String STARTFOREGROUND_ACTION = "STARTFOREGROUND_ACTION";
+    public static String STOPFOREGROUND_ACTION = "STOPFOREGROUND_ACTION";
+    public static boolean downloadNewItem = false;
+    public static LinearLayout mainLayout;
+    public static LinearLayout chatLayout;
+    public static LinearLayout shearedMediaLayout;
+    public static UpdateName updateName;
+    private static SensorManager mSensorManager;
+    private static Sensor mProximity;
+    private static SensorEventListener sensorEventListener;
+    private static MediaSessionCompat mSession;
+    private static int latestAudioFocusState;
     private static LinearLayout layoutTripMusic;
     private static TextView btnPlayMusic;
     private static TextView btnCloseMusic;
@@ -107,43 +127,18 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     private static RemoteViews remoteViews;
     private static NotificationManager notificationManager;
     private static Notification notification;
-    public static boolean isPause = false;
-    public static ArrayList<RealmRoomMessage> mediaList;
     private static int selectedMedia = 0;
     private static Timer mTimer, mTimeSecend;
     private static long time = 0;
     private static double amoungToupdate;
-    public static String strTimer = "";
-    public static String messageId = "";
-    public static boolean isNearDistance = false;
-
-    public static boolean isVoice = false;
-    public static boolean pauseSoundFromIGapCall = false;
-    public static boolean isSpeakerON = false;
-
-    public static boolean pauseSoundFromCall = false;
-    public static boolean isMusicPlyerEnable = false;
     private static int stateHedset = 0;
-
-    public static boolean playNextMusic = false;
     private static boolean pauseOnAudioFocusChange;
-
-    public static String STARTFOREGROUND_ACTION = "STARTFOREGROUND_ACTION";
-    public static String STOPFOREGROUND_ACTION = "STOPFOREGROUND_ACTION";
     private static HeadsetPluginReciver headsetPluginReciver;
     private static BluetoothCallbacks bluetoothCallbacks;
-
     private static RemoteControlClient remoteControlClient;
     private static ComponentName remoteComponentName;
-    public static boolean downloadNewItem = false;
-
-    public static LinearLayout mainLayout;
-    public static LinearLayout chatLayout;
-    public static LinearLayout shearedMediaLayout;
-
     private static Realm mRealm;
     private static boolean isRegisterSensor = false;
-    public static UpdateName updateName;
 
     private static Realm getRealm() {
         if (mRealm == null || mRealm.isClosed()) {
@@ -151,55 +146,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         }
 
         return mRealm;
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-
-        G.onAudioFocusChangeListener = this;
-
-        if (intent == null || intent.getExtras() == null) {
-            stopForeground(true);
-            stopSelf();
-        } else {
-
-            String action = intent.getExtras().getString("ACTION");
-            if (action != null) {
-
-                if (action.equals(STARTFOREGROUND_ACTION)) {
-
-                    if (notification != null) {
-                        startForeground(notificationId, notification);
-                        if (latestAudioFocusState != AudioManager.AUDIOFOCUS_GAIN) { // if do double "AUDIOFOCUS_GAIN", "AUDIOFOCUS_LOSS" will be called
-                            latestAudioFocusState = AudioManager.AUDIOFOCUS_GAIN;
-                            registerAudioFocus(AudioManager.AUDIOFOCUS_GAIN);
-                        }
-                    }
-                    initSensor();
-                } else if (action.equals(STOPFOREGROUND_ACTION)) {
-
-                    removeSensor();
-
-                    stopForeground(true);
-                    stopSelf();
-                }
-            }
-        }
-
-        return START_STICKY;
-    }
-
-    private void registerAudioFocus(int audioState) {
-        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        if (audioManager != null) {
-            audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, audioState);
-        }
     }
 
     public static void setMusicPlayer(LinearLayout layoutTripMusic) {
@@ -219,36 +165,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         //getOrginallWallpaper();
     }
-
-    //
-    //    private static  void getOrginallWallpaper(){
-    //
-    //        if(isGetOrginalWallpaper){
-    //            return;
-    //        }
-    //
-    //        isGetOrginalWallpaper=true;
-    //
-    //
-    //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-    //
-    //            WallpaperManager myWallpaperManager = WallpaperManager.getInstance(G.context);
-    //
-    //            if (myWallpaperManager.isSetWallpaperAllowed()) {
-    //
-    //                ParcelFileDescriptor pfd = myWallpaperManager.getWallpaperFile(WallpaperManager.FLAG_LOCK);
-    //                if (pfd != null) {
-    //                    orginalWallPaper = BitmapFactory.decodeFileDescriptor(pfd.getFileDescriptor());
-    //                    try {
-    //                        pfd.close();
-    //                    } catch (IOException e) {
-    //                        e.printStackTrace();
-    //                    }
-    //                }
-    //            }
-    //
-    //        }
-    //    }
 
     public static void repeatClick() {
 
@@ -348,6 +264,36 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         }
     }
 
+    //
+    //    private static  void getOrginallWallpaper(){
+    //
+    //        if(isGetOrginalWallpaper){
+    //            return;
+    //        }
+    //
+    //        isGetOrginalWallpaper=true;
+    //
+    //
+    //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    //
+    //            WallpaperManager myWallpaperManager = WallpaperManager.getInstance(G.context);
+    //
+    //            if (myWallpaperManager.isSetWallpaperAllowed()) {
+    //
+    //                ParcelFileDescriptor pfd = myWallpaperManager.getWallpaperFile(WallpaperManager.FLAG_LOCK);
+    //                if (pfd != null) {
+    //                    orginalWallPaper = BitmapFactory.decodeFileDescriptor(pfd.getFileDescriptor());
+    //                    try {
+    //                        pfd.close();
+    //                    } catch (IOException e) {
+    //                        e.printStackTrace();
+    //                    }
+    //                }
+    //            }
+    //
+    //        }
+    //    }
+
     public static void playAndPause() {
 
         if (mp != null) {
@@ -408,8 +354,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             FragmentMediaPlayer.fastItemAdapter.notifyAdapterItemChanged(FragmentMediaPlayer.fastItemAdapter.getPosition(Long.parseLong(messageId)));
 
     }
-
-    //**************************************************************************
 
     public static void playSound() {
 
@@ -558,6 +502,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             e.printStackTrace();
         }
     }
+
+    //**************************************************************************
 
     private static void nextRandomMusic() {
         try {
@@ -977,8 +923,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
             notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName)
-                //  .setContentText(place)
-                .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
+                    //  .setContentText(place)
+                    .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
         }
 
         Intent intent = new Intent(context, MusicPlayer.class);
@@ -1200,53 +1146,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         isShuffelOn = sharedPreferences.getBoolean("Shuffel", false);
     }
 
-    @Override
-    public void onAudioFocusChange(int focusChange) {
-        latestAudioFocusState = focusChange;
-        if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-            pauseOnAudioFocusChange = true;
-            pauseSound();
-        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-            if (pauseOnAudioFocusChange) {
-                pauseOnAudioFocusChange = false;
-                //playSound(); // commented this line because after receive incoming call and end call, this listener will be called and sound will be played!!!
-            }
-        }
-    }
-
-    @Override
-    public void onAudioFocusChangeListener(int audioState) {
-        if (latestAudioFocusState != audioState) {
-            latestAudioFocusState = audioState;
-            registerAudioFocus(audioState);
-        }
-    }
-
-    public enum RepeatMode {
-        noRepeat, oneRpeat, repeatAll;
-    }
-
-    public static class customButtonListener extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            String str = intent.getExtras().getString("mode");
-
-            if (str.equals("previous")) {
-                previousMusic();
-                MusicPlayer.canDoAction = false;
-            } else if (str.equals("play")) {
-                playAndPause();
-            } else if (str.equals("forward")) {
-                nextMusic();
-                MusicPlayer.canDoAction = false;
-            } else if (str.equals("close")) {
-                closeLayoutMediaPlayer();
-            }
-        }
-    }
-
     public static boolean downloadNextMusic(String messageId) {
 
         boolean result = false;
@@ -1321,8 +1220,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         }
         return result;
     }
-
-    //***************************************************************************** sensor *********************************
 
     private static void initSensor() {
 
@@ -1439,73 +1336,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         }
     }
 
-    //*************************************************************************************** getPhoneState
-
-    static class HeadsetPluginReciver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
-
-                int state = intent.getIntExtra("state", -1);
-
-                if (state != stateHedset) {
-
-                    stateHedset = state;
-
-                    switch (state) {
-                        case 0:
-
-                            setSpeaker();
-
-                            if (mp != null && mp.isPlaying()) {
-                                pauseSound();
-                            }
-
-                            //  Log.d("dddddd", "Headset is unplugged");
-                            break;
-                        case 1:
-                            setSpeaker();
-
-                            //  Log.d("dddddd", "Headset is plugged");
-                            break;
-                        //default:
-                        //    Log.d("dddddd", "I have no idea what the headset state is");
-                    }
-                }
-            }
-        }
-    }
-
-
-    static class BluetoothCallbacks extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-
-            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
-                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
-                switch (state) {
-                    case BluetoothAdapter.STATE_OFF:
-                        if (mp != null) {
-                            if (mp.isPlaying()) {
-                                pauseSound();
-                            }
-                        }
-                        break;
-                    case BluetoothAdapter.STATE_TURNING_OFF:
-                        break;
-                    case BluetoothAdapter.STATE_ON:
-                        break;
-                    case BluetoothAdapter.STATE_TURNING_ON:
-                        break;
-                }
-            }
-        }
-    }
-
     private static void registerMediaBottom() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -1591,6 +1421,138 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         }
     }
 
+    private static void setSpeaker() {
+
+        if (pauseSoundFromCall || pauseSoundFromIGapCall) {
+            return;
+        }
+
+        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
+        if (isVoice) {
+
+            if (am.isWiredHeadsetOn()) {
+                am.setSpeakerphoneOn(false);
+            } else {
+
+                if (isNearDistance) {
+                    am.setSpeakerphoneOn(false);
+                } else {
+                    am.setSpeakerphoneOn(true);
+                }
+            }
+        } else {
+            am.setSpeakerphoneOn(false);
+        }
+
+        isSpeakerON = am.isSpeakerphoneOn();
+    }
+
+    //***************************************************************************** sensor *********************************
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        G.onAudioFocusChangeListener = this;
+
+        if (intent == null || intent.getExtras() == null) {
+            stopForeground(true);
+            stopSelf();
+        } else {
+
+            String action = intent.getExtras().getString("ACTION");
+            if (action != null) {
+
+                if (action.equals(STARTFOREGROUND_ACTION)) {
+
+                    if (notification != null) {
+                        startForeground(notificationId, notification);
+                        if (latestAudioFocusState != AudioManager.AUDIOFOCUS_GAIN) { // if do double "AUDIOFOCUS_GAIN", "AUDIOFOCUS_LOSS" will be called
+                            latestAudioFocusState = AudioManager.AUDIOFOCUS_GAIN;
+                            registerAudioFocus(AudioManager.AUDIOFOCUS_GAIN);
+                        }
+                    }
+                    initSensor();
+                } else if (action.equals(STOPFOREGROUND_ACTION)) {
+
+                    removeSensor();
+
+                    stopForeground(true);
+                    stopSelf();
+                }
+            }
+        }
+
+        return START_STICKY;
+    }
+
+    private void registerAudioFocus(int audioState) {
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager != null) {
+            audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, audioState);
+        }
+    }
+
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+        latestAudioFocusState = focusChange;
+        if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+            pauseOnAudioFocusChange = true;
+            pauseSound();
+        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+            if (pauseOnAudioFocusChange) {
+                pauseOnAudioFocusChange = false;
+                //playSound(); // commented this line because after receive incoming call and end call, this listener will be called and sound will be played!!!
+            }
+        }
+    }
+
+    //*************************************************************************************** getPhoneState
+
+    @Override
+    public void onAudioFocusChangeListener(int audioState) {
+        if (latestAudioFocusState != audioState) {
+            latestAudioFocusState = audioState;
+            registerAudioFocus(audioState);
+        }
+    }
+
+
+    public enum RepeatMode {
+        noRepeat, oneRpeat, repeatAll;
+    }
+
+    public interface UpdateName {
+        void rename();
+    }
+
+    public static class customButtonListener extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String str = intent.getExtras().getString("mode");
+
+            if (str.equals("previous")) {
+                previousMusic();
+                MusicPlayer.canDoAction = false;
+            } else if (str.equals("play")) {
+                playAndPause();
+            } else if (str.equals("forward")) {
+                nextMusic();
+                MusicPlayer.canDoAction = false;
+            } else if (str.equals("close")) {
+                closeLayoutMediaPlayer();
+            }
+        }
+    }
+
     //    private static void seMediaSesionMetaData() {
     //        if (mSession != null) {
     //
@@ -1645,35 +1607,68 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         }
     }*/
 
-    private static void setSpeaker() {
+    static class HeadsetPluginReciver extends BroadcastReceiver {
 
-        if (pauseSoundFromCall || pauseSoundFromIGapCall) {
-            return;
-        }
+        @Override
+        public void onReceive(Context context, Intent intent) {
 
-        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
 
-        if (isVoice) {
+                int state = intent.getIntExtra("state", -1);
 
-            if (am.isWiredHeadsetOn()) {
-                am.setSpeakerphoneOn(false);
-            } else {
+                if (state != stateHedset) {
 
-                if (isNearDistance) {
-                    am.setSpeakerphoneOn(false);
-                } else {
-                    am.setSpeakerphoneOn(true);
+                    stateHedset = state;
+
+                    switch (state) {
+                        case 0:
+
+                            setSpeaker();
+
+                            if (mp != null && mp.isPlaying()) {
+                                pauseSound();
+                            }
+
+                            //  Log.d("dddddd", "Headset is unplugged");
+                            break;
+                        case 1:
+                            setSpeaker();
+
+                            //  Log.d("dddddd", "Headset is plugged");
+                            break;
+                        //default:
+                        //    Log.d("dddddd", "I have no idea what the headset state is");
+                    }
                 }
             }
-        } else {
-            am.setSpeakerphoneOn(false);
         }
-
-        isSpeakerON = am.isSpeakerphoneOn();
     }
 
-    public interface UpdateName {
-        void rename();
+    static class BluetoothCallbacks extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                switch (state) {
+                    case BluetoothAdapter.STATE_OFF:
+                        if (mp != null) {
+                            if (mp.isPlaying()) {
+                                pauseSound();
+                            }
+                        }
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_OFF:
+                        break;
+                    case BluetoothAdapter.STATE_ON:
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_ON:
+                        break;
+                }
+            }
+        }
     }
 }
 

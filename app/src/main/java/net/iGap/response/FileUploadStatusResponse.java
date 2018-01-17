@@ -12,7 +12,7 @@ package net.iGap.response;
 
 import android.os.Handler;
 import android.os.Looper;
-import io.realm.Realm;
+
 import net.iGap.G;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperUploadFile;
@@ -20,6 +20,8 @@ import net.iGap.proto.ProtoFileUploadStatus;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+
+import io.realm.Realm;
 
 public class FileUploadStatusResponse extends MessageHandler {
 

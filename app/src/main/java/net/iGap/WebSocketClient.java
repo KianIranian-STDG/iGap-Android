@@ -196,8 +196,8 @@ public class WebSocketClient {
      * clear securing state and reconnect to server
      *
      * @param force if set force true try for reconnect even socket is open.
-     * client do this action because maybe connection lost but client not
-     * detected this actions(android 7.*).
+     *              client do this action because maybe connection lost but client not
+     *              detected this actions(android 7.*).
      */
 
     public static void reconnect(boolean force) {

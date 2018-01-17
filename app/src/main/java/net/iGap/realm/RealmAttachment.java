@@ -11,12 +11,7 @@
 package net.iGap.realm;
 
 import android.support.annotation.Nullable;
-import io.realm.Realm;
-import io.realm.RealmAttachmentRealmProxy;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-import java.io.File;
-import java.io.IOException;
+
 import net.iGap.G;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperString;
@@ -24,7 +19,16 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.AttachmentFor;
 import net.iGap.proto.ProtoGlobal;
+
 import org.parceler.Parcel;
+
+import java.io.File;
+import java.io.IOException;
+
+import io.realm.Realm;
+import io.realm.RealmAttachmentRealmProxy;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 @Parcel(implementations = {RealmAttachmentRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmAttachment.class})
 public class RealmAttachment extends RealmObject {

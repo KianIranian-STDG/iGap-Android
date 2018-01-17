@@ -34,6 +34,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.daimajia.swipe.SwipeLayout;
@@ -42,14 +43,7 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
-import io.realm.Case;
-import io.realm.Realm;
-import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -79,24 +73,33 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsGetList;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import io.realm.Case;
+import io.realm.Realm;
+import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
+
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
 import static net.iGap.R.string.contacts;
 
 public class RegisteredContactsFragment extends BaseFragment implements OnUserContactDelete, OnPhoneContact {
 
+    private static boolean getPermission = true;
+    StickyRecyclerHeadersDecoration decoration;
+    RealmResults<RealmContacts> results;
     private TextView menu_txt_titleToolbar;
     private ViewGroup vgAddContact, vgRoot;
-
     private RecyclerView realmRecyclerView;
     private SharedPreferences sharedPreferences;
     private boolean isImportContactList = false;
-    private static boolean getPermission = true;
     private Realm realm;
-    StickyRecyclerHeadersDecoration decoration;
     private ProgressBar prgWaiting;
     private ProgressBar prgWaitingLoadContact;
-    RealmResults<RealmContacts> results;
     private EditText edtSearch;
     private boolean isCallAction = false;
     private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
@@ -105,17 +108,16 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     //private ContactListAdapterA mAdapter;
     private NestedScrollView nestedScrollView;
 
+    public static RegisteredContactsFragment newInstance() {
+        return new RegisteredContactsFragment();
+    }
+
     private Realm getRealm() {
         if (realm == null || realm.isClosed()) {
             realm = Realm.getDefaultInstance();
         }
 
         return realm;
-    }
-
-
-    public static RegisteredContactsFragment newInstance() {
-        return new RegisteredContactsFragment();
     }
 
     @Nullable
@@ -695,62 +697,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             count = realmResults.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-
-            private RealmContacts realmContacts;
-            protected CircleImageView image;
-            protected TextView title;
-            protected TextView subtitle;
-            protected View topLine;
-            private SwipeLayout swipeLayout;
-
-            public ViewHolder(View view) {
-                super(view);
-
-                image = (CircleImageView) view.findViewById(R.id.imageView);
-                title = (TextView) view.findViewById(R.id.title);
-                subtitle = (TextView) view.findViewById(R.id.subtitle);
-                topLine = (View) view.findViewById(R.id.topLine);
-                swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipeRevealLayout);
-                swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        if (isCallAction) {
-                            //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
-
-                            popBackStackFragment();
-
-                            long userId = realmContacts.getId();
-                            if (userId != 134 && G.userId != userId) {
-                                FragmentCall.call(userId, false);
-                            }
-
-
-                        } else {
-                            showProgress();
-
-                            HelperPublicMethod.goToChatRoom(realmContacts.getId(), new HelperPublicMethod.OnComplete() {
-                                @Override
-                                public void complete() {
-                                    hideProgress();
-                                    //  G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
-
-                                    popBackStackFragment();
-
-                                }
-                            }, new HelperPublicMethod.OnError() {
-                                @Override
-                                public void error() {
-                                    hideProgress();
-                                }
-                            });
-                        }
-                    }
-                });
-            }
-        }
-
         @Override
         public ContactListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             // View v = inflater.inflate(R.layout.contact_item, viewGroup, false);
@@ -901,6 +847,62 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                 }
             });
         }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            protected CircleImageView image;
+            protected TextView title;
+            protected TextView subtitle;
+            protected View topLine;
+            private RealmContacts realmContacts;
+            private SwipeLayout swipeLayout;
+
+            public ViewHolder(View view) {
+                super(view);
+
+                image = (CircleImageView) view.findViewById(R.id.imageView);
+                title = (TextView) view.findViewById(R.id.title);
+                subtitle = (TextView) view.findViewById(R.id.subtitle);
+                topLine = (View) view.findViewById(R.id.topLine);
+                swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipeRevealLayout);
+                swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (isCallAction) {
+                            //  G.fragmentActivity.getSupportFragmentManager().popBackStack();
+
+                            popBackStackFragment();
+
+                            long userId = realmContacts.getId();
+                            if (userId != 134 && G.userId != userId) {
+                                FragmentCall.call(userId, false);
+                            }
+
+
+                        } else {
+                            showProgress();
+
+                            HelperPublicMethod.goToChatRoom(realmContacts.getId(), new HelperPublicMethod.OnComplete() {
+                                @Override
+                                public void complete() {
+                                    hideProgress();
+                                    //  G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
+
+                                    popBackStackFragment();
+
+                                }
+                            }, new HelperPublicMethod.OnError() {
+                                @Override
+                                public void error() {
+                                    hideProgress();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }
     }
 
     /**
@@ -1003,6 +1005,11 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
         }
 
+        @Override
+        public ViewHolder getViewHolder(View v) {
+            return new ViewHolder(v);
+        }
+
         //The viewHolder used for this item. This viewHolder is always reused by the RecyclerView so scrolling is blazing fast
         protected class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -1019,11 +1026,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                 root = (ViewGroup) view.findViewById(R.id.root_List_contact);
 
             }
-        }
-
-        @Override
-        public ViewHolder getViewHolder(View v) {
-            return new ViewHolder(v);
         }
     }
 
