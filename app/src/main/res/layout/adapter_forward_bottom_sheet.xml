@@ -41,7 +41,7 @@
     android:clickable="false"
     android:visibility="visible"
     app:animDuration="200"
-    app:checkedColor="#28B463"
+    app:checkedColor="@color/green"
     app:lineColor="#fff"
     app:lineWidth="1.2dp"
     app:unCheckColor="#ff0" />

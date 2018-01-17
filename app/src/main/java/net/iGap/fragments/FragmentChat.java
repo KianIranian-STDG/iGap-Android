@@ -5326,10 +5326,12 @@ public class FragmentChat extends BaseFragment
                         MimeTypeMap mime = MimeTypeMap.getSingleton();
                         String mimeType = mime.getExtensionFromMimeType(cR.getType(uri));
 
+
                         if (mimeType == null || mimeType.length() < 1) {
                             mimeType = "*/*";
+                        } else {
+                            mimeType = "application/" + mimeType;
                         }
-
                         intent.setType(mimeType);
                         intent.putExtra(Intent.EXTRA_STREAM, uri);
                         chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_file);
