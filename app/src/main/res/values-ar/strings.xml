@@ -2110,5 +2110,8 @@
   <string name="another_room">غرفة أخرى</string>
   <string name="send">إرسال</string>
   <string name="do_not_send">لا ترسل</string>
+  <string name="save_data_in_sd_card">Save data in sd card</string>
+  <string name="are_you_sure">Are you sure</string>
+  <string name="change_storage_place">Change storage place</string>
 
 </resources>

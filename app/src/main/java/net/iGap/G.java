@@ -99,6 +99,7 @@ public class G extends MultiDexApplication {
     public static File IMAGE_NEW_GROUP;
     public static File IMAGE_NEW_CHANEL;
     public static File imageFile;
+    public static String DIR_SDCARD_EXTERNAL = "";
     public static String DIR_APP = DIR_SDCARD + IGAP;
     public static String DIR_IMAGES = DIR_APP + IMAGES;
     public static String DIR_VIDEOS = DIR_APP + VIDEOS;

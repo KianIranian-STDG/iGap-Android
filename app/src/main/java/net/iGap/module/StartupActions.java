@@ -30,6 +30,7 @@ import net.iGap.webrtc.CallObserver;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import io.realm.DynamicRealm;
@@ -39,7 +40,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.Config.REALM_SCHEMA_VERSION;
-import static net.iGap.G.DIR_APP;
 import static net.iGap.G.DIR_AUDIOS;
 import static net.iGap.G.DIR_CHAT_BACKGROUND;
 import static net.iGap.G.DIR_DOCUMENT;
@@ -47,6 +47,7 @@ import static net.iGap.G.DIR_IMAGES;
 import static net.iGap.G.DIR_IMAGE_USER;
 import static net.iGap.G.DIR_TEMP;
 import static net.iGap.G.DIR_VIDEOS;
+import static net.iGap.G.IGAP;
 import static net.iGap.G.IMAGE_NEW_CHANEL;
 import static net.iGap.G.IMAGE_NEW_GROUP;
 import static net.iGap.G.appBarColor;
@@ -130,7 +131,6 @@ public final class StartupActions {
             //    }
             //}).start();
 
-            new File(DIR_APP).mkdirs();
             new File(DIR_IMAGES).mkdirs();
             new File(DIR_VIDEOS).mkdirs();
             new File(DIR_AUDIOS).mkdirs();
@@ -167,11 +167,44 @@ public final class StartupActions {
             DIR_VIDEOS = rootPath + G.VIDEOS;
             DIR_AUDIOS = rootPath + G.AUDIOS;
             DIR_DOCUMENT = rootPath + G.DOCUMENT;
+        } else {
+            String selectedStorage = getSelectedStoragePath();
+            DIR_IMAGES = selectedStorage + G.IMAGES;
+            DIR_VIDEOS = selectedStorage + G.VIDEOS;
+            DIR_AUDIOS = selectedStorage + G.AUDIOS;
+            DIR_DOCUMENT = selectedStorage + G.DOCUMENT;
         }
 
         DIR_TEMP = rootPath + G.TEMP;
         DIR_CHAT_BACKGROUND = rootPath + G.CHAT_BACKGROUND;
         DIR_IMAGE_USER = rootPath + G.IMAGE_USER;
+    }
+
+    private static String getSelectedStoragePath() {
+        String selectedStorage = G.DIR_APP;
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+        if (sharedPreferences.getInt(SHP_SETTING.KEY_SDK_ENABLE, 0) == 1) {
+            if (G.DIR_SDCARD_EXTERNAL.equals("")) {
+                List<String> storageList = FileUtils.getSdCardPathList(true);
+                if (storageList.size() > 0) {
+                    G.DIR_SDCARD_EXTERNAL = storageList.get(0);
+                    selectedStorage = G.DIR_SDCARD_EXTERNAL + IGAP;
+                } else {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt(SHP_SETTING.KEY_SDK_ENABLE, 0);
+                    editor.apply();
+                }
+            } else {
+                if (new File(G.DIR_SDCARD_EXTERNAL).exists()) {
+                    selectedStorage = G.DIR_SDCARD_EXTERNAL + IGAP;
+                } else {
+                    G.DIR_SDCARD_EXTERNAL = "";
+                }
+            }
+        }
+        new File(selectedStorage).mkdirs();
+        return selectedStorage;
     }
 
     public static File getCacheDir() {

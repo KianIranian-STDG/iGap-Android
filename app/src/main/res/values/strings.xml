@@ -1176,5 +1176,8 @@
   <string name="another_room">Another Room</string>
   <string name="send">Send</string>
   <string name="do_not_send">Don\'t Send</string>
+  <string name="save_data_in_sd_card">Save data in sd card</string>
+  <string name="are_you_sure">Are you sure</string>
+  <string name="change_storage_place">Change storage place</string>
 
 </resources>

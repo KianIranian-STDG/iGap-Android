@@ -1151,5 +1151,8 @@
   <string name="open_default_player">ویدئو را با پخش کننده پیشفرض باز کن</string>
   <string name="show_channel_vote">واکنش در کانال</string>
   <string name="verify_channel">کانال تأیید شده</string>
+  <string name="save_data_in_sd_card">Save data in sd card</string>
+  <string name="are_you_sure">Are you sure</string>
+  <string name="change_storage_place">Change storage place</string>
 
 </resources>
