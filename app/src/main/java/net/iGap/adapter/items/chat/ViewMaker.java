@@ -838,7 +838,7 @@ public class ViewMaker {
 
         MaterialDesignTextView img_vote_forward = new MaterialDesignTextView(context);
         img_vote_forward.setId(R.id.img_vote_forward);
-        img_vote_forward.setPadding(3, 7, 2, 0);
+        img_vote_forward.setPadding(i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp4), 0, 0);
         img_vote_forward.setGravity(CENTER);
         LinearLayout.LayoutParams layout_216_f = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         img_vote_forward.setText(context.getResources().getString(R.string.md_forward));
