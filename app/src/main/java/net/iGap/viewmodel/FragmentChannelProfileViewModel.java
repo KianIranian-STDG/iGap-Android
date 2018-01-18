@@ -135,7 +135,7 @@ public class FragmentChannelProfileViewModel
     public ObservableBoolean channelDescriptionEnable = new ObservableBoolean(true);
     public ObservableField<String> callbackChannelName = new ObservableField<>("");
     public ObservableField<String> callbackChannelLink = new ObservableField<>("");
-    public ObservableField<String> callbackChannelDescription = new ObservableField<>("");
+    public ObservableField<SpannableStringBuilder> callbackChannelDescription = new ObservableField<>();
     public ObservableField<String> callbackChannelSharedMedia = new ObservableField<>("");
     public ObservableField<String> callBackDeleteLeaveChannel = new ObservableField<>(G.context.getResources().getString(R.string.delete_and_leave_channel));
     public ObservableField<String> callbackChannelLinkTitle = new ObservableField<>(G.context.getResources().getString(R.string.channel_link));
@@ -222,7 +222,9 @@ public class FragmentChannelProfileViewModel
     }
 
     public void onClickChannelDescription(View v) {
-        ChangeGroupDescription(v);
+        if (role == ChannelChatRole.OWNER || role == ChannelChatRole.ADMIN) {
+            ChangeGroupDescription(v);
+        }
     }
 
     public void onClickChannelShowMember(View v) {
@@ -371,9 +373,10 @@ public class FragmentChannelProfileViewModel
         if (description != null && !description.isEmpty()) {
             SpannableStringBuilder spannableStringBuilder = HelperUrl.setUrlLink(description, true, false, null, true);
             if (spannableStringBuilder != null) {
-                callbackChannelDescription.set(spannableStringBuilder.toString());
+                callbackChannelDescription.set(spannableStringBuilder);
             }
         }
+        callbackChannelDescription.set(new SpannableStringBuilder(""));
         callbackChannelName.set(title);
 
         if (isSignature) {
@@ -716,13 +719,13 @@ public class FragmentChannelProfileViewModel
                 editChannelRequest(callbackChannelName.get(), dialogDesc);
                 showProgressBar();
             }
-        }).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(G.fragmentActivity.getResources().getString(R.string.please_enter_group_description), callbackChannelDescription.get(), new MaterialDialog.InputCallback() {
+        }).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(G.fragmentActivity.getResources().getString(R.string.please_enter_group_description), callbackChannelDescription.get().toString(), new MaterialDialog.InputCallback() {
             @Override
             public void onInput(MaterialDialog dialog, CharSequence input) {
                 // Do something
                 View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 dialogDesc = input.toString();
-                if (!input.toString().equals(callbackChannelDescription.get())) {
+                if (!input.toString().equals(callbackChannelDescription.get().toString())) {
 
                     positive.setClickable(true);
                     positive.setAlpha(1.0f);
@@ -838,7 +841,7 @@ public class FragmentChannelProfileViewModel
             @Override
             public void onClick(View view) {
 
-                new RequestChannelEdit().channelEdit(roomId, edtNameChannel.getText().toString(), callbackChannelDescription.get());
+                new RequestChannelEdit().channelEdit(roomId, edtNameChannel.getText().toString(), callbackChannelDescription.get().toString());
                 dialog.dismiss();
                 showProgressBar();
             }
@@ -873,7 +876,13 @@ public class FragmentChannelProfileViewModel
             public void run() {
                 hideProgressBar();
                 callbackChannelName.set(name);
-                callbackChannelDescription.set(description);
+
+                SpannableStringBuilder spannableStringBuilder = HelperUrl.setUrlLink(description, true, false, null, true);
+                if (spannableStringBuilder != null) {
+                    callbackChannelDescription.set(spannableStringBuilder);
+                } else {
+                    callbackChannelDescription.set(new SpannableStringBuilder(""));
+                }
 
                 prgWaitingVisibility.set(View.GONE);
                 G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

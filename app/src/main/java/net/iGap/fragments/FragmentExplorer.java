@@ -199,17 +199,16 @@ public class FragmentExplorer extends BaseFragment {
                 node.add(sdPath + "/");
                 rootcount++;
             }
+        }
 
-            if (new File(G.DIR_APP).exists()) {
-                x = new StructExplorerItem();
-                x.name = "iGap";
-                x.image = R.mipmap.actionbar_icon_myfiles;
-                x.path = G.DIR_APP + "/";
-                item.add(x);
-                node.add(G.DIR_APP + "/");
-                rootcount++;
-            }
-
+        if (new File(G.DIR_APP).exists()) {
+            x = new StructExplorerItem();
+            x.name = "iGap";
+            x.image = R.mipmap.actionbar_icon_myfiles;
+            x.path = G.DIR_APP + "/";
+            item.add(x);
+            node.add(G.DIR_APP + "/");
+            rootcount++;
         }
 
         txtCurentPath.setText("root");

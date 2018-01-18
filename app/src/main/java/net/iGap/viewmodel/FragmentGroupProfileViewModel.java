@@ -119,7 +119,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     public ObservableField<String> callbackGroupName = new ObservableField<>("");
     public ObservableField<String> callbackMemberNumber = new ObservableField<>("");
     public ObservableField<String> callbackGroupLink = new ObservableField<>("");
-    public ObservableField<String> callbackGroupDescription = new ObservableField<>("");
+    public ObservableField<SpannableStringBuilder> callbackGroupDescription = new ObservableField<>();
     public ObservableField<String> callbackGroupShearedMedia = new ObservableField<>("");
     public ObservableField<String> callBackDeleteLeaveGroup = new ObservableField<>(G.context.getResources().getString(R.string.Delete_and_leave_Group));
     public ObservableField<String> callbackGroupLinkTitle = new ObservableField<>(G.context.getResources().getString(R.string.group_link));
@@ -284,7 +284,9 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
     }
 
     public void onClickGroupDescription(View v) {
-        ChangeGroupDescription();
+        if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
+            ChangeGroupDescription();
+        }
     }
 
     public void onClickGroupShearedMedia(View v) {
@@ -357,7 +359,11 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
 
         callbackGroupName.set(title);
         SpannableStringBuilder ds = HelperUrl.setUrlLink(description, true, false, null, true);
-        if (ds != null) callbackGroupDescription.set(ds.toString());
+        if (ds != null) {
+            callbackGroupDescription.set(ds);
+        } else {
+            callbackGroupDescription.set(new SpannableStringBuilder(""));
+        }
 
         callbackAddMemberVisibility.set(View.VISIBLE);
         if (role == GroupChatRole.MODERATOR || role == GroupChatRole.MEMBER) {
@@ -385,14 +391,8 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
 
         if (role == GroupChatRole.OWNER) {
             groupDescriptionVisibility.set(View.VISIBLE);
-
         } else {
             if (description.length() == 0) {
-                groupDescriptionVisibility.set(View.GONE);
-            }
-        }
-        if (role != GroupChatRole.OWNER) {
-            if (description.equals("")) {
                 groupDescriptionVisibility.set(View.GONE);
             }
         }
@@ -1218,7 +1218,12 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
             @Override
             public void onGroupEdit(long roomId, String name, String description) {
                 hideProgressBar();
-                callbackGroupDescription.set(description);
+                SpannableStringBuilder ds = HelperUrl.setUrlLink(description, true, false, null, true);
+                if (ds != null) {
+                    callbackGroupDescription.set(ds);
+                } else {
+                    callbackGroupDescription.set(new SpannableStringBuilder(""));
+                }
                 callbackGroupName.set(name);
             }
 
@@ -1244,7 +1249,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
             @Override
             public void onClick(View view) {
 
-                new RequestGroupEdit().groupEdit(roomId, edtUserName.getText().toString(), callbackGroupDescription.get());
+                new RequestGroupEdit().groupEdit(roomId, edtUserName.getText().toString(), callbackGroupDescription.get().toString());
                 dialog.dismiss();
             }
         });
@@ -1277,13 +1282,17 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
 
                 G.onGroupEdit = new OnGroupEdit() {
                     @Override
-                    public void onGroupEdit(final long roomId, final String name, final String descriptions) {
+                    public void onGroupEdit(final long roomId, final String name, final String description) {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                description = descriptions;
+                                SpannableStringBuilder ds = HelperUrl.setUrlLink(description, true, false, null, true);
+                                if (ds != null) {
+                                    callbackGroupDescription.set(ds);
+                                } else {
+                                    callbackGroupDescription.set(new SpannableStringBuilder(""));
+                                }
 
-                                callbackGroupDescription.set(descriptions);
                                 callbackGroupName.set(name);
                             }
                         });
@@ -1302,14 +1311,14 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
 
                 new RequestGroupEdit().groupEdit(roomId, callbackGroupName.get(), tmp);
             }
-        }).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(G.fragmentActivity.getResources().getString(R.string.please_enter_group_description), callbackGroupDescription.get(), new MaterialDialog.InputCallback() {
+        }).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel)).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT).input(G.fragmentActivity.getResources().getString(R.string.please_enter_group_description), callbackGroupDescription.get().toString(), new MaterialDialog.InputCallback() {
             @Override
             public void onInput(MaterialDialog dialog, CharSequence input) {
                 // Do something
 
                 View positive = dialog.getActionButton(DialogAction.POSITIVE);
                 tmp = input.toString();
-                if (!input.toString().equals(callbackGroupDescription.get())) {
+                if (!input.toString().equals(callbackGroupDescription.get().toString())) {
 
                     positive.setClickable(true);
                     positive.setAlpha(1.0f);
