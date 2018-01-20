@@ -429,7 +429,11 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                             @Override
                             public void run() {
                                 callbackEdtCodeNumber.set("+" + callingCode);
-                                edtPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
+                                if (pattern.equals("")) {
+                                    edtPhoneNumberMask.set("##############################");
+                                } else {
+                                    edtPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
+                                }
                                 regex = regexR;
                                 btnStartBackgroundColor.set(Color.parseColor(G.appBarColor));
                                 btnStartEnable.set(true);
