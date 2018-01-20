@@ -44,6 +44,7 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
+import net.iGap.G;
 import net.iGap.R;
 
 import java.lang.reflect.Field;
@@ -67,6 +68,8 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
     private final static int DEFAULT_ACTIVE_COLOR = Color.WHITE;
     private final static int DEFAULT_STRIP_COLOR = Color.RED;
     private final static int DEFAULT_TITLE_SIZE = 0;
+    private static int DEFAULT_TITLE_BADGE_TOP = 0;
+    private static int PADDING = 0;
 
     // Title size offer to view height
     private final static float TITLE_SIZE_FRACTION = 0.35F;
@@ -79,6 +82,7 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
     private final RectF mBounds = new RectF();
     private final RectF mStripBounds = new RectF();
     private final Rect mTitleBounds = new Rect();
+    private final RectF mBoundsOval = new RectF();
 
     // Main paint
     private final Paint mStripPaint = new Paint(HIGH_QUALITY_FLAGS) {
@@ -94,6 +98,18 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
         }
     };
 
+    private final Paint mTitlePaintBadge = new TextPaint(HIGH_QUALITY_FLAGS) {
+        {
+            setTextAlign(Align.CENTER);
+        }
+    };
+
+    private final Paint mTitlePaintOval = new TextPaint(HIGH_QUALITY_FLAGS) {
+        {
+            setColor(G.context.getResources().getColor(R.color.unread));
+        }
+    };
+
     // Variables for animator
     private final ValueAnimator mAnimator = new ValueAnimator();
     private final ArgbEvaluator mColorEvaluator = new ArgbEvaluator();
@@ -102,6 +118,7 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
 
     // NTS titles
     private String[] mTitles;
+    private String[] mTitlesBadge = {"0", "0", "0", "0", "0"};
 
     // Variables for ViewPager
     private ViewPager mViewPager;
@@ -170,6 +187,8 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
         // Speed and fix for pre 17 API
         ViewCompat.setLayerType(this, ViewCompat.LAYER_TYPE_SOFTWARE, null);
         setLayerType(LAYER_TYPE_SOFTWARE, null);
+        DEFAULT_TITLE_BADGE_TOP = (int) getResources().getDimension(R.dimen.dp12);
+        PADDING = (int) getResources().getDimension(R.dimen.dp4);
 
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.NavigationTabStrip);
         try {
@@ -239,6 +258,11 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
         for (int i = 0; i < titles.length; i++) titles[i] = titles[i].toUpperCase();
         mTitles = titles;
         requestLayout();
+    }
+
+    public void setTitleBadge(String[] titleBadge) {
+        this.mTitlesBadge = titleBadge;
+        postInvalidate();
     }
 
     public void setTitles(final int... titleResIds) {
@@ -319,6 +343,7 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
     public void setTypeface(final Typeface typeface) {
         mTypeface = typeface;
         mTitlePaint.setTypeface(typeface);
+        mTitlePaintBadge.setTypeface(typeface);
         postInvalidate();
     }
 
@@ -370,6 +395,7 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
     public void setTitleSize(final float titleSize) {
         mTitleSize = titleSize;
         mTitlePaint.setTextSize(titleSize);
+        mTitlePaintBadge.setTextSize(getResources().getDimension(R.dimen.dp10));
         postInvalidate();
     }
 
@@ -648,6 +674,7 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
             final float leftTitleOffset = (mTabSize * i) + (mTabSize * 0.5F);
 
             mTitlePaint.getTextBounds(title, 0, title.length(), mTitleBounds);
+            mTitlePaintBadge.getTextBounds(title, 0, title.length(), mTitleBounds);
             final float topTitleOffset = (mBounds.height() - mStripWeight) * 0.5F + mTitleBounds.height() * 0.5F - mTitleBounds.bottom;
 
             // Get interpolated fraction for left last and current tab
@@ -673,22 +700,32 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
             }
 
             canvas.drawText(title, leftTitleOffset, topTitleOffset + (mStripGravity == StripGravity.TOP ? mStripWeight : 0.0F), mTitlePaint);
+
+            if (!mTitlesBadge[i].equals("0")) {
+                int sizeBadge = (int) mTitlePaintBadge.measureText(mTitlesBadge[i], 0, mTitlesBadge[i].length());
+                mBoundsOval.set(leftTitleOffset - PADDING - sizeBadge / 2, topTitleOffset + 2, leftTitleOffset + PADDING + sizeBadge / 2, topTitleOffset + DEFAULT_TITLE_BADGE_TOP + PADDING);
+                canvas.drawRoundRect(mBoundsOval, 5, 5, mTitlePaintOval);
+                canvas.drawText(mTitlesBadge[i], leftTitleOffset, topTitleOffset + DEFAULT_TITLE_BADGE_TOP, mTitlePaintBadge);
+            }
         }
     }
 
     // Method to transform current fraction of NTS and position
     private void updateCurrentTitle(final float interpolation) {
         mTitlePaint.setColor((int) mColorEvaluator.evaluate(interpolation, mInactiveColor, mActiveColor));
+        mTitlePaintBadge.setColor((int) mColorEvaluator.evaluate(interpolation, mInactiveColor, mActiveColor));
     }
 
     // Method to transform last fraction of NTS and position
     private void updateLastTitle(final float lastInterpolation) {
         mTitlePaint.setColor((int) mColorEvaluator.evaluate(lastInterpolation, mActiveColor, mInactiveColor));
+        mTitlePaintBadge.setColor((int) mColorEvaluator.evaluate(lastInterpolation, mActiveColor, mInactiveColor));
     }
 
     // Method to transform others fraction of NTS and position
     private void updateInactiveTitle() {
         mTitlePaint.setColor(mInactiveColor);
+        mTitlePaintBadge.setColor(mInactiveColor);
     }
 
     @Override

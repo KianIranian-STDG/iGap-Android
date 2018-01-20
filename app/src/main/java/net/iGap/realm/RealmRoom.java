@@ -16,6 +16,7 @@ import android.text.format.DateUtils;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperString;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
@@ -361,6 +362,7 @@ public class RealmRoom extends RealmObject {
         if (memberId == userId) {
             final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
             if (realmRoom == null) {
+                realm.close();
                 return;
             }
 
@@ -524,6 +526,7 @@ public class RealmRoom extends RealmObject {
         Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
         if (realmRoom != null) {
+            realm.close();
             return false;
         }
         new RequestClientGetRoom().clientGetRoom(roomId, RequestClientGetRoom.CreateRoomMode.justInfo);
@@ -1065,6 +1068,14 @@ public class RealmRoom extends RealmObject {
 
     public void setUnreadCount(int unreadCount) {
         this.unreadCount = unreadCount;
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (G.onUnreadChange != null) {
+                    G.onUnreadChange.onChange();
+                }
+            }
+        }, 100);
     }
 
     public boolean getReadOnly() {
@@ -1299,4 +1310,33 @@ public class RealmRoom extends RealmObject {
                 return id;
         }
     }
+
+    public static String[] getUnreadCountPages() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmRoom> results = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
+        int all = 0, chat = 0, group = 0, channel = 0;
+        for (RealmRoom rm : results) {
+            switch (rm.getType()) {
+                case CHANNEL:
+                    channel += rm.getUnreadCount();
+                    break;
+                case CHAT:
+                    chat += rm.getUnreadCount();
+                    break;
+                case GROUP:
+                    group += rm.getUnreadCount();
+                    break;
+            }
+            all += rm.getUnreadCount();
+        }
+        String ar[];
+        if (HelperCalander.isPersianUnicode) {
+            ar = new String[]{"0", channel + "", group + "", chat + "", all + ""};
+        } else {
+            ar = new String[]{all + "", chat + "", group + "", channel + "", "0"};
+        }
+        realm.close();
+        return ar;
+    }
+
 }

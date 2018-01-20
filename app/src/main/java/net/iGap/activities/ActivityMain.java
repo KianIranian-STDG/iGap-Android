@@ -99,6 +99,7 @@ import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnMapRegisterStateMain;
 import net.iGap.interfaces.OnRefreshActivity;
+import net.iGap.interfaces.OnUnreadChange;
 import net.iGap.interfaces.OnUpdating;
 import net.iGap.interfaces.OnUserInfoMyClient;
 import net.iGap.interfaces.OnUserSessionLogout;
@@ -147,7 +148,7 @@ import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnUnreadChange, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -976,6 +977,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         onSelectItem(index);
                     }
                 });
+
+                if (G.onUnreadChange != null) {
+                    G.onUnreadChange.onChange();
+                }
+
             }
         }, 100);
     }
@@ -2099,6 +2105,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.onClientGetRoomListResponse = this;
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
+        G.onUnreadChange = this;
 
         startService(new Intent(this, ServiceContact.class));
 
@@ -2141,6 +2148,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         HelperNotificationAndBadge.updateBadgeOnly();
+
+        G.onUnreadChange = null;
 
         if (mViewPager != null && mViewPager.getAdapter() != null) {
 
@@ -2534,6 +2543,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onStop() {
         super.onStop();
         oldTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public void onChange() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (navigationTabStrip != null && navigationTabStrip.getVisibility() == View.VISIBLE) {
+                    navigationTabStrip.setTitleBadge(RealmRoom.getUnreadCountPages());
+                }
+            }
+        });
     }
 
     public enum MainAction {
