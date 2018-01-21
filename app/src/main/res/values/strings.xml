@@ -606,6 +606,7 @@
   <string name="convert_chat_to_group_content">Do you want to convert this chat to a group?</string>
   <string name="convert_chat_to_group_title">Convert chat to group</string>
   <string name="minute_ago">minute ago</string>
+  <string name="minutes_ago">minutes ago</string>
   <string name="device">Device:</string>
   <string name="country">Country:</string>
   <string name="create_time">Create on:</string>
