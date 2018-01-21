@@ -9,8 +9,10 @@ package net.iGap.interfaces;
  * All rights reserved.
 */
 
+import net.iGap.module.structs.StructBottomSheetForward;
+
 public interface OnForwardBottomSheet {
 
-    void path(long roomId, boolean isCheck);
+    void path(StructBottomSheetForward mList, boolean isCheck, boolean isNotExist);
 
 }

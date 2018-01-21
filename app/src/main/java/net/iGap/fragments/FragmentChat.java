@@ -150,6 +150,7 @@ import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatDelete;
 import net.iGap.interfaces.OnChatDeleteMessageResponse;
 import net.iGap.interfaces.OnChatEditMessageResponse;
+import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnChatMessageRemove;
 import net.iGap.interfaces.OnChatMessageSelectionChanged;
 import net.iGap.interfaces.OnChatSendMessage;
@@ -210,6 +211,7 @@ import net.iGap.module.enums.ProgressState;
 import net.iGap.module.enums.SendingStep;
 import net.iGap.module.structs.StructBackGroundSeen;
 import net.iGap.module.structs.StructBottomSheet;
+import net.iGap.module.structs.StructBottomSheetForward;
 import net.iGap.module.structs.StructChannelExtra;
 import net.iGap.module.structs.StructCompress;
 import net.iGap.module.structs.StructMessageAttachment;
@@ -242,6 +244,7 @@ import net.iGap.request.RequestChannelEditMessage;
 import net.iGap.request.RequestChannelUpdateDraft;
 import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestChatEditMessage;
+import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientJoinByUsername;
 import net.iGap.request.RequestClientMuteRoom;
@@ -274,7 +277,6 @@ import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.fotoapparat.Fotoapparat;
 import io.fotoapparat.view.CameraRenderer;
 import io.fotoapparat.view.CameraView;
-import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -410,6 +412,7 @@ public class FragmentChat extends BaseFragment
     private RecyclerView rcvBottomSheet;
     private FrameLayout llScrollNavigate;
     private FastItemAdapter fastItemAdapter;
+    private FastItemAdapter fastItemAdapterForward;
     private BottomSheetDialog bottomSheetDialog;
     private BottomSheetDialog bottomSheetDialogForward;
     private View viewBottomSheet;
@@ -421,6 +424,8 @@ public class FragmentChat extends BaseFragment
     private RealmRoomMessage voiceLastMessage = null;
     private boolean showVoteChannel = true;
     private RealmResults<RealmRoom> results = null;
+    private RealmResults<RealmContacts> resultsContact = null;
+    private List<StructBottomSheetForward> mListBottomSheetForward = new ArrayList<>();
     private ArrayList<StructBackGroundSeen> backGroundSeenList = new ArrayList<>();
     private TextView txtSpamUser;
     private TextView txtSpamClose;
@@ -491,6 +496,8 @@ public class FragmentChat extends BaseFragment
     private View rootView;
     private boolean isAllSenderId = true;
     private ArrayList<Long> multiForwardList = new ArrayList<>();
+    private ArrayList<StructBottomSheetForward> mListForwardNotExict = new ArrayList<>();
+    private int mListForwardSize = 0;
     private String messageEdit = "";
     /**
      * **********************************************************************
@@ -4037,8 +4044,8 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onForwardClick(StructMessageInfo message) {
         //finishChat();
-        itemAdapterBottomSheetForward();
         initAttachForward();
+        itemAdapterBottomSheetForward();
         mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
         //new HelperFragment().removeAll(true);
     }
@@ -5581,16 +5588,24 @@ public class FragmentChat extends BaseFragment
         multiForwardList = new ArrayList<>();
         viewBottomSheetForward = G.fragmentActivity.getLayoutInflater().inflate(R.layout.bottom_sheet_forward, null);
 
+        fastItemAdapterForward = new FastItemAdapter();
 
         EditText edtSearch = (EditText) viewBottomSheetForward.findViewById(R.id.edtSearch);
         TextView textSend = (TextView) viewBottomSheetForward.findViewById(R.id.txtSend);
         final RecyclerView rcvItem = (RecyclerView) viewBottomSheetForward.findViewById(R.id.rcvBottomSheetForward);
         rcvItem.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 4, GridLayoutManager.VERTICAL, false));
         rcvItem.setItemViewCacheSize(100);
-        rcvItem.setAdapter(new AdapterBottomSheetForward(results));
+        rcvItem.setAdapter(fastItemAdapterForward);
         bottomSheetDialogForward = new BottomSheetDialog(G.fragmentActivity);
         bottomSheetDialogForward.setContentView(viewBottomSheetForward);
         final BottomSheetBehavior mBehavior = BottomSheetBehavior.from((View) viewBottomSheetForward.getParent());
+
+        fastItemAdapterForward.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<AdapterBottomSheetForward>() {
+            @Override
+            public boolean filter(AdapterBottomSheetForward item, CharSequence constraint) {
+                return item.mList.getDisplayName().toLowerCase().startsWith(String.valueOf(constraint));
+            }
+        });
 
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -5600,21 +5615,7 @@ public class FragmentChat extends BaseFragment
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if (s.length() > 0) {
-
-                    String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
-                    Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
-                    results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.READ_ONLY, false).notEqualTo(RealmRoomFields.ID, mRoomId).contains(RealmRoomFields.TITLE, s.toString(), Case.INSENSITIVE).findAll().sort(fieldNames, sort);
-                } else {
-                    String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
-                    Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
-                    results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.READ_ONLY, false).notEqualTo(RealmRoomFields.ID, mRoomId).findAll().sort(fieldNames, sort);
-                }
-
-                rcvItem.setAdapter(new AdapterBottomSheetForward(results));
-
-
+                fastItemAdapterForward.filter(s.toString().toLowerCase());
             }
 
             @Override
@@ -5640,6 +5641,14 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View v) {
 
+                mListForwardSize = mListForwardNotExict.size();
+                Log.i("DDDDDD", "3 setOnClickListener: " + mListForwardSize);
+                for (int i = 0; i < mListForwardNotExict.size(); i++) {
+                    if (mListForwardNotExict.get(i).isNotExistRoom()) {
+                        forwardToChatRoom(mListForwardNotExict.get(i).getId());
+                    }
+                }
+                mListForwardNotExict.clear();
                 manageForwardedMessage();
                 bottomSheetDialogForward.dismiss();
 
@@ -5648,12 +5657,20 @@ public class FragmentChat extends BaseFragment
 
         onForwardBottomSheet = new OnForwardBottomSheet() {
             @Override
-            public void path(long path, boolean isCheck) {
+            public void path(StructBottomSheetForward path, boolean isCheck, boolean isNotExist) {
 
-                if (isCheck) {
-                    multiForwardList.add(path);
+                if (path.isNotExistRoom()) {
+                    if (isCheck) {
+                        mListForwardNotExict.add(path);
+                    } else {
+                        mListForwardNotExict.remove(path);
+                    }
                 } else {
-                    multiForwardList.remove(path);
+                    if (isCheck) {
+                        multiForwardList.add(path.getId());
+                    } else {
+                        multiForwardList.remove(path.getId());
+                    }
                 }
             }
         };
@@ -6462,10 +6479,46 @@ public class FragmentChat extends BaseFragment
 
     private void itemAdapterBottomSheetForward() {
 
+        mListBottomSheetForward = new ArrayList<>();
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
         Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
         results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.READ_ONLY, false).notEqualTo(RealmRoomFields.ID, mRoomId).findAll().sort(fieldNames, sort);
 
+        resultsContact = getRealmChat().where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+
+        List<String> te = new ArrayList<>();
+
+        for (RealmRoom r : results) {
+            StructBottomSheetForward item = new StructBottomSheetForward();
+            item.setId(r.getId());
+            te.add(r.getTitle());
+            Log.i("CCCCCCCCCCCCCC", "0 itemAda: " + r.getTitle());
+            item.setDisplayName(r.getTitle());
+            if (r.getChatRoom() != null) item.setPeer_id(r.getChatRoom().getPeerId());
+            item.setType(r.getType());
+            item.setContactList(false);
+            item.setNotExistRoom(false);
+            mListBottomSheetForward.add(item);
+        }
+        for (RealmContacts r : resultsContact) {
+
+
+            StructBottomSheetForward item = new StructBottomSheetForward();
+            item.setId(r.getId());
+            item.setDisplayName(r.getDisplay_name());
+            item.setContactList(true);
+
+            Log.i("CCCCCCCCCCCCCC", "1 itemAda: " + r.getDisplay_name());
+            if (!te.contains(r.getDisplay_name())) {
+                item.setNotExistRoom(true);
+                mListBottomSheetForward.add(item);
+            }
+        }
+
+        for (int i = 0; i < mListBottomSheetForward.size(); i++) {
+            fastItemAdapterForward.add(new AdapterBottomSheetForward(mListBottomSheetForward.get(i)).withIdentifier(100 + i));
+
+        }
 
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -8208,5 +8261,93 @@ public class FragmentChat extends BaseFragment
                 });
             }
         }
+    }
+
+    public static void forwardToChatRoom(final long peerId) {
+
+        final Realm realm = Realm.getDefaultInstance();
+        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+
+        if (realmRoom != null) {
+
+            Log.i("DDDDDD", "room is exist: ");
+
+        } else {
+            G.onChatGetRoom = new OnChatGetRoom() {
+                @Override
+                public void onChatGetRoom(final ProtoGlobal.Room room) {
+
+                    Log.i("DDDDDD", "4 setOnClickListener: " + room.getId());
+                    getUserInfo(peerId, room.getId());
+
+                }
+
+                @Override
+                public void onChatGetRoomTimeOut() {
+
+
+                }
+
+                @Override
+                public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                }
+            };
+
+            new RequestChatGetRoom().chatGetRoom(peerId);
+        }
+        realm.close();
+    }
+
+    private static void getUserInfo(final long peerId, final long roomId) {
+
+        G.onUserInfoResponse = new OnUserInfoResponse() {
+            @Override
+            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
+
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (user.getId() == peerId) {
+                            Realm realm = Realm.getDefaultInstance();
+
+                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmRegisteredInfo.putOrUpdate(realm, user);
+                                }
+                            }, new Realm.Transaction.OnSuccess() {
+                                @Override
+                                public void onSuccess() {
+                                    try {
+                                        Log.i("DDDDDD", "5 setOnClickListener: " + user.getId());
+                                        G.onUserInfoResponse = null;
+
+
+                                    } catch (IllegalStateException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+
+                            realm.close();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onUserInfoTimeOut() {
+
+            }
+
+            @Override
+            public void onUserInfoError(int majorCode, int minorCode) {
+
+            }
+        };
+
+        new RequestUserInfo().userInfo(peerId);
     }
 }
