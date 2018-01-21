@@ -234,6 +234,7 @@ public class ActivityEnterPassCodeViewModel {
 
                             ActivityMain.isLock = false;
                             G.currentActivity.finish();
+                            closeKeyboard(view);
                         }
                     });
                 }
