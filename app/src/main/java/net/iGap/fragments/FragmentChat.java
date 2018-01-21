@@ -4882,13 +4882,12 @@ public class FragmentChat extends BaseFragment
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(metrics);
-        int height = metrics.heightPixels;
         int width = metrics.widthPixels;
 
-        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT || G.twoPaneMode) {
-            G.maxChatBox = Math.min(width, height) - ViewMaker.i_Dp(R.dimen.dp80);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE && G.twoPaneMode) {
+            G.maxChatBox = width - (width / 3) - ViewMaker.i_Dp(R.dimen.dp80);
         } else {
-            G.maxChatBox = Math.max(width, height) - ViewMaker.i_Dp(R.dimen.dp80);
+            G.maxChatBox = width - ViewMaker.i_Dp(R.dimen.dp80);
         }
 
         G.handler.postDelayed(new Runnable() {
