@@ -99,6 +99,13 @@ public class HelperMessageResponse {
                                         G.helperNotificationAndBadge.checkAlert(true, roomType, roomId);
                                     }
                                 }, 200);
+                            } else {
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        new HelperNotificationChannel().initSetting(roomId);
+                                    }
+                                }, 200);
                             }
 
                         }
