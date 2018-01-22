@@ -361,7 +361,7 @@
                     android:layout_marginLeft="@dimen/dp4"
                     android:layout_marginRight="@dimen/dp4"
                     android:src="@mipmap/check"
-                    android:tint="@{fragmentRegisterViewModel.imgVerifySmsColor}"
+                    android:tint="@{fragmentRegisterViewModel.imgVerifySmsColor , default=@color/rg_text_verify}"
                     android:visibility="@{fragmentRegisterViewModel.imgVerifySmsVisibility}" />
 
                   <TextView
