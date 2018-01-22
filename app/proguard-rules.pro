@@ -20,7 +20,7 @@
 -keep class com.google.android.gms.ads.identifier.** { *; }
 
 ########## My Tricks
--keep class io.github.meness.**, io.meness.github.** , net.iGap.proto.** , com.neovisionaries.ws.client.** { *; }
+-keep net.iGap.proto.** , com.neovisionaries.ws.client.** { *; }
 -keep class net.iGap.helper.HelperFillLookUpClass { *; }
 -keep public class * extends net.iGap.response.MessageHandler
 -keepclasseswithmembers class * {
