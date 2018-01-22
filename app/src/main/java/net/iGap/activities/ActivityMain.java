@@ -2032,6 +2032,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onResume();
 
         resume();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     public void resume() {

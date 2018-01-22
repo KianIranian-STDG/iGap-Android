@@ -145,7 +145,7 @@ public class ActivityEnterPassCodeViewModel {
                     ActivityMain.finishActivity.finishActivity();
                 }
                 G.currentActivity.finish();
-
+                closeKeyboard(v);
                 logout(v);
 
             }
@@ -192,7 +192,7 @@ public class ActivityEnterPassCodeViewModel {
 
         if (isFingerPrint) {
 
-            dialog = new MaterialDialog.Builder(G.currentActivity).title(G.context.getString(R.string.FingerPrint)).customView(R.layout.dialog_finger_print, true).onNegative(new MaterialDialog.SingleButtonCallback() {
+            dialog = new MaterialDialog.Builder(context).title(G.context.getString(R.string.FingerPrint)).customView(R.layout.dialog_finger_print, true).onNegative(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -344,6 +344,7 @@ public class ActivityEnterPassCodeViewModel {
         }
         realm.close();
         ActivityMain.isActivityEnterPassCode = false;
+        closeKeyboard(view);
     }
 
     public void onResume() {
