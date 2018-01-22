@@ -64,19 +64,6 @@
 -keep class com.googlecode.** { *; }
 ###
 
-###Netty
--keepattributes Signature,InnerClasses
--keepclasseswithmembers class io.netty.** {
-    *;
-}
--keepnames class io.netty.** {
-    *;
-}
-
--keep class io.netty.** { *; }
--dontwarn io.netty.**
-###
-
 -keepnames class com.squareup.** {
     *;
 }
