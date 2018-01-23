@@ -337,6 +337,7 @@ public class FragmentChat extends BaseFragment
     public static ArrayMap<Long, HelperUploadFile.StructUpload> compressingFiles = new ArrayMap<>();
     public static int forwardMessageCount = 0;
     public static ArrayList<Parcelable> mForwardMessages;
+    public static boolean canClearForwardList = true;
     public static Realm realmChat; // static for FragmentTest
     public static boolean canUpdateAfterDownload = false;
     public static String titleStatic;
@@ -497,7 +498,6 @@ public class FragmentChat extends BaseFragment
     private boolean isAllSenderId = true;
     private ArrayList<Long> multiForwardList = new ArrayList<>();
     private ArrayList<StructBottomSheetForward> mListForwardNotExict = new ArrayList<>();
-    private int mListForwardSize = 0;
     private String messageEdit = "";
     /**
      * **********************************************************************
@@ -3772,10 +3772,8 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                // forward selected messages to room list for selecting room
-                if (mAdapter != null) {
-                    onForwardClick(message);
-                }
+                mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
+                finishChat();
             }
         });
         rootDelete.setOnClickListener(new View.OnClickListener() {
@@ -4044,9 +4042,21 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onForwardClick(StructMessageInfo message) {
         //finishChat();
+        if (message == null) {
+            mForwardMessages = getMessageStructFromSelectedItems();
+            if (ll_AppBarSelected != null && ll_AppBarSelected.getVisibility() == View.VISIBLE) {
+                mAdapter.deselect();
+                toolbar.setVisibility(View.VISIBLE);
+                ll_AppBarSelected.setVisibility(View.GONE);
+                clearReplyView();
+            }
+        } else {
+            mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
+        }
+
         initAttachForward();
         itemAdapterBottomSheetForward();
-        mForwardMessages = new ArrayList<>(Arrays.asList(Parcels.wrap(message)));
+
         //new HelperFragment().removeAll(true);
     }
 
@@ -5584,14 +5594,15 @@ public class FragmentChat extends BaseFragment
 
 
     private void initAttachForward() {
-
+        canClearForwardList = true;
         multiForwardList = new ArrayList<>();
         viewBottomSheetForward = G.fragmentActivity.getLayoutInflater().inflate(R.layout.bottom_sheet_forward, null);
 
         fastItemAdapterForward = new FastItemAdapter();
 
         EditText edtSearch = (EditText) viewBottomSheetForward.findViewById(R.id.edtSearch);
-        TextView textSend = (TextView) viewBottomSheetForward.findViewById(R.id.txtSend);
+        final TextView textSend = (TextView) viewBottomSheetForward.findViewById(R.id.txtSend);
+        textSend.setVisibility(View.INVISIBLE);
         final RecyclerView rcvItem = (RecyclerView) viewBottomSheetForward.findViewById(R.id.rcvBottomSheetForward);
         rcvItem.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 4, GridLayoutManager.VERTICAL, false));
         rcvItem.setItemViewCacheSize(100);
@@ -5640,18 +5651,10 @@ public class FragmentChat extends BaseFragment
         textSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                mListForwardSize = mListForwardNotExict.size();
-                Log.i("DDDDDD", "3 setOnClickListener: " + mListForwardSize);
-                for (int i = 0; i < mListForwardNotExict.size(); i++) {
-                    if (mListForwardNotExict.get(i).isNotExistRoom()) {
-                        forwardToChatRoom(mListForwardNotExict.get(i).getId());
-                    }
-                }
-                mListForwardNotExict.clear();
-                manageForwardedMessage();
-                bottomSheetDialogForward.dismiss();
-
+                canClearForwardList = false;
+                forwardToChatRoom(mListForwardNotExict);
+                prgWaiting.setVisibility(View.VISIBLE);
+                viewBottomSheetForward.setEnabled(false);
             }
         });
 
@@ -5672,6 +5675,12 @@ public class FragmentChat extends BaseFragment
                         multiForwardList.remove(path.getId());
                     }
                 }
+
+                if (mListForwardNotExict.size() + multiForwardList.size() > 0) {
+                    textSend.setVisibility(View.VISIBLE);
+                } else {
+                    textSend.setVisibility(View.INVISIBLE);
+                }
             }
         };
 
@@ -5681,7 +5690,9 @@ public class FragmentChat extends BaseFragment
         bottomSheetDialogForward.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                mForwardMessages = null;
+                if (canClearForwardList) {
+                    mForwardMessages = null;
+                }
             }
         });
     }
@@ -6244,8 +6255,7 @@ public class FragmentChat extends BaseFragment
             public void onComplete(RippleView rippleView) {
                 // forward selected messages to room list for selecting room
                 if (mAdapter != null && mAdapter.getSelectedItems().size() > 0) {
-                    mForwardMessages = getMessageStructFromSelectedItems();
-                    new HelperFragment().removeAll(true);
+                    onForwardClick(null);
                 }
             }
         });
@@ -6482,17 +6492,21 @@ public class FragmentChat extends BaseFragment
         mListBottomSheetForward = new ArrayList<>();
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
         Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
-        results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.READ_ONLY, false).notEqualTo(RealmRoomFields.ID, mRoomId).findAll().sort(fieldNames, sort);
+        results = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).
+                equalTo(RealmRoomFields.READ_ONLY, false).notEqualTo(RealmRoomFields.ID, mRoomId).findAll().sort(fieldNames, sort);
 
         resultsContact = getRealmChat().where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
 
-        List<String> te = new ArrayList<>();
+        List<Long> te = new ArrayList<>();
 
         for (RealmRoom r : results) {
             StructBottomSheetForward item = new StructBottomSheetForward();
             item.setId(r.getId());
-            te.add(r.getTitle());
-            Log.i("CCCCCCCCCCCCCC", "0 itemAda: " + r.getTitle());
+
+            if (r.getType() == ProtoGlobal.Room.Type.CHAT) {
+                te.add(r.getChatRoom().getPeerId());
+            }
+
             item.setDisplayName(r.getTitle());
             if (r.getChatRoom() != null) item.setPeer_id(r.getChatRoom().getPeerId());
             item.setType(r.getType());
@@ -6502,14 +6516,12 @@ public class FragmentChat extends BaseFragment
         }
         for (RealmContacts r : resultsContact) {
 
-
             StructBottomSheetForward item = new StructBottomSheetForward();
             item.setId(r.getId());
             item.setDisplayName(r.getDisplay_name());
             item.setContactList(true);
 
-            Log.i("CCCCCCCCCCCCCC", "1 itemAda: " + r.getDisplay_name());
-            if (!te.contains(r.getDisplay_name())) {
+            if (!te.contains(r.getId())) {
                 item.setNotExistRoom(true);
                 mListBottomSheetForward.add(item);
             }
@@ -7034,29 +7046,19 @@ public class FragmentChat extends BaseFragment
             int multiForwardSize = multiForwardList.size();
 
             if (hasForward || multiForwardSize > 0) {
-                final ArrayList<Parcelable> mg = mForwardMessages;
-                for (int i = 0; i < mg.size(); i++) {
-                    /**
-                     * send forwarded message with one second delay for each message
-                     */
-                    final int j = i;
 
-                    if (multiForwardSize > 0) {
+                if (hasForward) {
+                    sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mForwardMessages.get(0)), mRoomId, true);
+                    imvCancelForward.performClick();
+
+                } else if (multiForwardSize > 0) {
+                    for (int i = 0; i < mForwardMessages.size(); i++) {
                         for (int k = 0; k < multiForwardSize; k++) {
-                            sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mg.get(j)), multiForwardList.get(k), false);
+                            sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mForwardMessages.get(i)), multiForwardList.get(k), false);
                         }
-                        multiForwardList = null;
-                        hasForward = false;
-                        mForwardMessages = null;
-                    } else {
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mg.get(j)), mRoomId, true);
-                            }
-                        }, 1000 * j);
-                        imvCancelForward.performClick();
                     }
+                    multiForwardList.clear();
+                    mForwardMessages = null;
                 }
 
             } else {
@@ -8263,91 +8265,71 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    public static void forwardToChatRoom(final long peerId) {
+    private void forwardToChatRoom(final ArrayList<StructBottomSheetForward> forwardList) {
 
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+        if (forwardList != null && forwardList.size() > 0) {
 
-        if (realmRoom != null) {
+            final int[] count = {0};
 
-            Log.i("DDDDDD", "room is exist: ");
-
-        } else {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final ProtoGlobal.Room room) {
 
-                    Log.i("DDDDDD", "4 setOnClickListener: " + room.getId());
-                    getUserInfo(peerId, room.getId());
+                    if (!multiForwardList.contains(room.getId())) {
+                        multiForwardList.add(room.getId());
+                        RealmRoom.putOrUpdate(room);
+                    }
 
+                    count[0]++;
+                    if (count[0] >= forwardList.size()) {
+                        G.onChatGetRoom = null;
+                        forwardList.clear();
+                        manageForwardedMessage();
+
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                bottomSheetDialogForward.dismiss();
+                                hideProgress();
+                            }
+                        });
+
+
+                    }
                 }
 
                 @Override
                 public void onChatGetRoomTimeOut() {
 
-
                 }
 
                 @Override
                 public void onChatGetRoomError(int majorCode, int minorCode) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            bottomSheetDialogForward.dismiss();
+                            hideProgress();
+                            error(G.fragmentActivity.getResources().getString(R.string.faild));
+                        }
+                    });
+
 
                 }
             };
 
-            new RequestChatGetRoom().chatGetRoom(peerId);
+            for (int i = 0; i < forwardList.size(); i++) {
+                new RequestChatGetRoom().chatGetRoom(forwardList.get(i).getId());
+            }
+
+
+        } else {
+            manageForwardedMessage();
+            bottomSheetDialogForward.dismiss();
+            hideProgress();
         }
-        realm.close();
+
     }
 
-    private static void getUserInfo(final long peerId, final long roomId) {
 
-        G.onUserInfoResponse = new OnUserInfoResponse() {
-            @Override
-            public void onUserInfo(final ProtoGlobal.RegisteredUser user, String identity) {
-
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (user.getId() == peerId) {
-                            Realm realm = Realm.getDefaultInstance();
-
-                            realm.executeTransactionAsync(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    RealmRegisteredInfo.putOrUpdate(realm, user);
-                                }
-                            }, new Realm.Transaction.OnSuccess() {
-                                @Override
-                                public void onSuccess() {
-                                    try {
-                                        Log.i("DDDDDD", "5 setOnClickListener: " + user.getId());
-                                        G.onUserInfoResponse = null;
-
-
-                                    } catch (IllegalStateException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-
-                            realm.close();
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onUserInfoTimeOut() {
-
-            }
-
-            @Override
-            public void onUserInfoError(int majorCode, int minorCode) {
-
-            }
-        };
-
-        new RequestUserInfo().userInfo(peerId);
-    }
 }

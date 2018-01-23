@@ -596,7 +596,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             txtVoteForward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    messageClickListener.onForwardClick(mMessage);
+                    if (!isSelected()) {
+                        messageClickListener.onForwardClick(mMessage);
+                    }
                 }
             });
         }
