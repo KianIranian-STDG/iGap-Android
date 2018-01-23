@@ -21,6 +21,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
+import com.hanks.library.AnimateCheckBox;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -1878,6 +1879,7 @@ public class ViewMaker {
         swipeRevealLayout.addView(LinearLayout);
 
         LinearLayout linearLayout_578 = new LinearLayout(G.context);
+//        linearLayout_578.setId(R.id.rootRegisterContact);
         linearLayout_578.setId(R.id.mainContainer);
         linearLayout_578.setOrientation(VERTICAL);
         linearLayout_578.setBackgroundColor(G.context.getResources().getColor(R.color.white));
@@ -1913,11 +1915,31 @@ public class ViewMaker {
         layout_692.topMargin = i_Dp(R.dimen.dp16);
         linearLayout_823.setLayoutParams(layout_692);
 
+        RelativeLayout layoutCheckBoxAndImage = new RelativeLayout(G.context);
+        RelativeLayout.LayoutParams layoutCheckBoxAndImageParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutCheckBoxAndImage.setLayoutParams(layoutCheckBoxAndImageParams);
+
+
         CircleImageView imageView = new CircleImageView(G.context);
         imageView.setId(R.id.imageView);
         LinearLayout.LayoutParams layout_54 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48));
         imageView.setLayoutParams(layout_54);
-        linearLayout_823.addView(imageView);
+
+        AnimateCheckBox animateCheckBox = new AnimateCheckBox(G.context);
+        animateCheckBox.setId(R.id.animateCheckBoxContact);
+        animateCheckBox.setVisibility(View.GONE);
+        animateCheckBox.setLineColor(R.color.white);
+        LinearLayout.LayoutParams animateCheckBoxParams = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp24), i_Dp(R.dimen.dp24));
+        animateCheckBox.setLayoutParams(animateCheckBoxParams);
+        animateCheckBoxParams.gravity = Gravity.BOTTOM;
+        animateCheckBoxParams.gravity = Gravity.RIGHT;
+        animateCheckBoxParams.gravity = Gravity.END;
+
+
+        layoutCheckBoxAndImage.addView(imageView);
+        layoutCheckBoxAndImage.addView(animateCheckBox);
+
+        linearLayout_823.addView(layoutCheckBoxAndImage);
 
         LinearLayout linearLayout_673 = new LinearLayout(G.context);
         linearLayout_673.setOrientation(VERTICAL);
