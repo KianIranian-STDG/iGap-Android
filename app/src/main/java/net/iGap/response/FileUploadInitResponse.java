@@ -90,11 +90,12 @@ public class FileUploadInitResponse extends MessageHandler {
                                 @Override
                                 public void run() {
                                     G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
+                                    realm.close();
                                 }
                             });
                         }
 
-                        realm.close();
+
                     }
                 }, new Realm.Transaction.OnError() {
                     @Override
