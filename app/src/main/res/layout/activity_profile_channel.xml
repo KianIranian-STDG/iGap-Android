@@ -738,6 +738,11 @@
 
             </LinearLayout>
 
+            <View
+              android:layout_width="match_parent"
+              android:layout_height="1px"
+              android:background="@color/background_editText" />
+
             <LinearLayout
               android:id="@+id/agp_layout_reaction_status"
               android:layout_width="match_parent"

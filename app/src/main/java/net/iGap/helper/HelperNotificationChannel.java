@@ -39,6 +39,10 @@ public class HelperNotificationChannel {
 
             notification = realmRoom.getChannelRoom().getRealmNotificationSetting().getNotification();
 
+            boolean isMute = realmRoom.getMute();
+            if (isMute) {
+                return;
+            }
             if (realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate() != -1) {
                 vibrator = realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate();
             } else {
