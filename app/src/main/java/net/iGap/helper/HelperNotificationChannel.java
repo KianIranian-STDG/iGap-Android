@@ -60,34 +60,48 @@ public class HelperNotificationChannel {
         }
 
         if (notification != 2) {
-            vibrateAct(vibrator);
-            soundAct(sound);
+            AudioManager am2 = (AudioManager) G.fragmentActivity.getSystemService(Context.AUDIO_SERVICE);
+            if (am2 != null && am2.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+                vibrateAct(vibrator);
+                soundAct(sound);
+            } else if (am2 != null && am2.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+                vibrateAct(vibrator);
+            }
         }
     }
 
     private void vibrateAct(int which) {
-
+        Vibrator vSilent = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (vSilent == null) {
+            return;
+        }
         switch (which) {
             case 0:
-                Vibrator vDefault = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                vDefault.vibrate(350);
+                vSilent.vibrate(300);
                 break;
             case 1:
-                Vibrator vShort = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                vShort.vibrate(200);
+                vSilent.vibrate(200);
 
                 break;
             case 2:
-                Vibrator vLong = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                vLong.vibrate(500);
+                vSilent.vibrate(700);
                 break;
             case 3:
                 AudioManager am2 = (AudioManager) G.fragmentActivity.getSystemService(Context.AUDIO_SERVICE);
 
+                if (am2 == null) {
+                    return;
+                }
                 switch (am2.getRingerMode()) {
                     case AudioManager.RINGER_MODE_SILENT:
-                        Vibrator vSilent = (Vibrator) G.context.getSystemService(Context.VIBRATOR_SERVICE);
-                        vSilent.vibrate(AudioManager.VIBRATE_SETTING_ONLY_SILENT);
+                        vSilent.vibrate(0);
+                        break;
+                    case AudioManager.RINGER_MODE_VIBRATE:
+                        vSilent.vibrate(300);
+
+                        break;
+                    case AudioManager.RINGER_MODE_NORMAL:
+                        vSilent.vibrate(0);
                         break;
                 }
                 break;

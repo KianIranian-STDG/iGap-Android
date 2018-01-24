@@ -26,7 +26,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.view.Display;
 import android.widget.RemoteViews;
 
@@ -601,34 +600,41 @@ public class HelperNotificationAndBadge {
     }
 
     public long[] setVibrator(int vb) {
+
         long[] intVibrator = new long[]{};
+
+        AudioManager am2 = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+
+        if (am2 != null && am2.getRingerMode() == AudioManager.RINGER_MODE_SILENT) {
+            return new long[]{0, 0, 0};
+        }
 
         switch (vb) {
             case 0:
-                intVibrator = new long[]{0, 0, 0};
-                break;
-            case 1:
                 intVibrator = new long[]{0, 300, 0};
                 break;
-            case 2:
+            case 1:
                 intVibrator = new long[]{0, 200, 0};
                 break;
-            case 3:
+            case 2:
                 intVibrator = new long[]{0, 700, 0};
                 break;
-            case 4:
-                AudioManager am2 = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+            case 3:
+
                 switch (am2.getRingerMode()) {
                     case AudioManager.RINGER_MODE_SILENT:
-                        intVibrator = new long[]{0, 300, 0};
+                        intVibrator = new long[]{0, 0, 0};
                         break;
                     case AudioManager.RINGER_MODE_VIBRATE:
-                        Log.i("MyApp", "Vibrate mode");
+                        intVibrator = new long[]{0, 300, 0};
                         break;
                     case AudioManager.RINGER_MODE_NORMAL:
-                        Log.i("MyApp", "Normal mode");
+                        intVibrator = new long[]{0, 0, 0};
                         break;
                 }
+                break;
+            case 4:
+                intVibrator = new long[]{0, 0, 0};
                 break;
         }
         return intVibrator;
