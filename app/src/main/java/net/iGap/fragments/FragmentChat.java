@@ -343,6 +343,7 @@ public class FragmentChat extends BaseFragment
     public static String titleStatic;
     public static long messageId;
     public static long mRoomIdStatic = 0;
+    public static long lastChatRoomId = 0;
     private static List<StructBottomSheet> contacts;
     private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
@@ -829,6 +830,7 @@ public class FragmentChat extends BaseFragment
         }, Config.LOW_START_PAGE_TIME);
 
         mRoomIdStatic = mRoomId;
+        lastChatRoomId = mRoomId;
         titleStatic = title;
 
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
@@ -934,12 +936,14 @@ public class FragmentChat extends BaseFragment
     public void onPause() {
         storingLastPosition();
         super.onPause();
+
+        lastChatRoomId = 0;
+
         if (isGoingFromUserLink && isNotJoin) {
             new RequestClientUnsubscribeFromRoom().clientUnsubscribeFromRoom(mRoomId);
         }
         onMusicListener = null;
         iUpdateLogItem = null;
-
 
         unRegisterListener();
     }
