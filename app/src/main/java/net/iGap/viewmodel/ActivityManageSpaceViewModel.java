@@ -117,8 +117,8 @@ public class ActivityManageSpaceViewModel {
         final long sizeFolderVideoDialog = getFolderSize(new File(G.DIR_VIDEOS));
         final long sizeFolderDocumentDialog = getFolderSize(new File(G.DIR_DOCUMENT));
         final long sizeFolderAudio = getFolderSize(new File(G.DIR_AUDIOS));
-
         final long sizeFolderMap = FileUtils.getFolderSize(fileMap);
+        final long sizeFolderOtherFiles = getFolderSize(new File(G.DIR_TEMP));
 
         boolean wrapInScrollView = true;
         final MaterialDialog dialog = new MaterialDialog.Builder(context).title(G.context.getResources().getString(R.string.st_title_Clear_Cache)).customView(R.layout.st_dialog_clear_cach, wrapInScrollView).positiveText(G.context.getResources().getString(R.string.st_title_Clear_Cache)).show();
@@ -153,7 +153,12 @@ public class ActivityManageSpaceViewModel {
         txtMap.setText(FileUtils.formatFileSize(sizeFolderMap));
         final CheckBox checkBoxMap = (CheckBox) view.findViewById(R.id.st_checkBox_map_dialogClearCash);
 
-        long rTotalSize = sizeFolderPhotoDialog + sizeFolderVideoDialog + sizeFolderDocumentDialog + sizeFolderAudio;
+        final File fileOtherFiles = new File(G.DIR_TEMP);
+        TextView txtOtherFiles = (TextView) view.findViewById(R.id.st_txt_otherFiles);
+        txtOtherFiles.setText(FileUtils.formatFileSize(sizeFolderOtherFiles));
+        final CheckBox checkBoxOtherFiles = (CheckBox) view.findViewById(R.id.st_checkBox_otherFiles);
+
+        long rTotalSize = sizeFolderPhotoDialog + sizeFolderVideoDialog + sizeFolderDocumentDialog + sizeFolderAudio + sizeFolderMap + sizeFolderOtherFiles;
         final TextView txtTotalSize = (TextView) view.findViewById(R.id.st_txt_totalSize_dialogClearCash);
         txtTotalSize.setText(FileUtils.formatFileSize(rTotalSize));
 
@@ -186,12 +191,19 @@ public class ActivityManageSpaceViewModel {
                     FragmentiGapMap.deleteMapFileCash();
                 }
 
+                if (checkBoxOtherFiles.isChecked()) {
+                    for (File file : fileOtherFiles.listFiles()) {
+                        if (!file.isDirectory()) file.delete();
+                    }
+                }
+
                 long afterClearSizeFolderPhoto = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
                 long afterClearSizeFolderVideo = FileUtils.getFolderSize(new File(G.DIR_VIDEOS));
                 long afterClearSizeFolderDocument = FileUtils.getFolderSize(new File(G.DIR_DOCUMENT));
                 long afterClearSizeFolderAudio = FileUtils.getFolderSize(new File(G.DIR_AUDIOS));
                 long afterClearSizeFolderMap = FileUtils.getFolderSize(fileMap);
-                long afterClearTotal = afterClearSizeFolderPhoto + afterClearSizeFolderVideo + afterClearSizeFolderDocument + afterClearSizeFolderAudio + afterClearSizeFolderMap;
+                long afterClearSizeFolderOtherFiles = FileUtils.getFolderSize(new File(G.DIR_TEMP));
+                long afterClearTotal = afterClearSizeFolderPhoto + afterClearSizeFolderVideo + afterClearSizeFolderDocument + afterClearSizeFolderAudio + afterClearSizeFolderMap + afterClearSizeFolderOtherFiles;
                 callbackClearCache.set(FileUtils.formatFileSize(afterClearTotal));
                 txtTotalSize.setText(FileUtils.formatFileSize(afterClearTotal));
                 dialog.dismiss();
@@ -262,11 +274,12 @@ public class ActivityManageSpaceViewModel {
         final long sizeFolderVideo = getFolderSize(new File(G.DIR_VIDEOS));
         final long sizeFolderDocument = getFolderSize(new File(G.DIR_DOCUMENT));
         final long sizeFolderAudio = getFolderSize(new File(G.DIR_AUDIOS));
+        final long sizeFolderOtherFiles = getFolderSize(new File(G.DIR_TEMP));
 
         final IConfigurationProvider configurationProvider = Configuration.getInstance();
         fileMap = configurationProvider.getOsmdroidBasePath();
         final long sizeFolderMap = FileUtils.getFolderSize(fileMap);
-        final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument + sizeFolderAudio + sizeFolderMap;
+        final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument + sizeFolderAudio + sizeFolderMap + sizeFolderOtherFiles;
 
         callbackClearCache.set(FileUtils.formatFileSize(total));
 
