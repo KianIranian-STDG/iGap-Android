@@ -72,6 +72,7 @@ public class SearchFragment extends BaseFragment {
     private ItemAdapter itemAdapter;
     private ImageView imvNothingFound;
     private TextView txtEmptyListComment;
+    private long index = 500;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -93,6 +94,7 @@ public class SearchFragment extends BaseFragment {
 
     private void initComponent(View view) {
 
+        index = 500;
         view.findViewById(R.id.sfl_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         imvNothingFound = (ImageView) view.findViewById(R.id.sfl_imv_nothing_found);
@@ -223,9 +225,9 @@ public class SearchFragment extends BaseFragment {
         for (StructSearch item : list) {
             if (item != null) {
                 if (item.type == SearchType.header) {
-                    items.add(new SearchItemHeader().setText(item.name).withIdentifier(100 + list.indexOf(item)));
+                    items.add(new SearchItemHeader().setText(item.name).withIdentifier(index++));
                 } else {
-                    items.add(new SearchItem().setContact(item).withIdentifier(100 + list.indexOf(item)));
+                    items.add(new SearchItem().setContact(item).withIdentifier(index++));
                 }
             }
         }

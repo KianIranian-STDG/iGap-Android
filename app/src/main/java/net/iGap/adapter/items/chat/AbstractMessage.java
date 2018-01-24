@@ -1395,7 +1395,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    private void downLoadFile(final VH holder, final RealmAttachment attachment, int priority) {
+    void downLoadFile(final VH holder, final RealmAttachment attachment, int priority) {
 
         if (attachment == null || attachment.getCacheId() == null) {
             return;

@@ -1532,6 +1532,7 @@ public class FragmentChat extends BaseFragment
 
                                 isNotJoin = false;
                                 HelperUrl.closeDialogWaiting();
+                                RealmRoom.joinRoom(mRoomId);
 
                                 G.handler.post(new Runnable() {
                                     @Override
@@ -1549,7 +1550,6 @@ public class FragmentChat extends BaseFragment
                                             isChatReadOnly = false;
                                         }
 
-                                        RealmRoom.joinRoom(mRoomId);
                                     }
                                 });
                             }
@@ -7044,23 +7044,23 @@ public class FragmentChat extends BaseFragment
      */
     private void manageForwardedMessage() {
         if ((mForwardMessages != null && !isChatReadOnly) || multiForwardList.size() > 0) {
-
             final LinearLayout ll_Forward = (LinearLayout) rootView.findViewById(R.id.ac_ll_forward);
-
             int multiForwardSize = multiForwardList.size();
-
             if (hasForward || multiForwardSize > 0) {
 
-                if (hasForward) {
-                    sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mForwardMessages.get(0)), mRoomId, true);
-                    imvCancelForward.performClick();
-
-                } else if (multiForwardSize > 0) {
-                    for (int i = 0; i < mForwardMessages.size(); i++) {
+                for (int i = 0; i < mForwardMessages.size(); i++) {
+                    if (hasForward) {
+                        sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mForwardMessages.get(i)), mRoomId, true);
+                    } else {
                         for (int k = 0; k < multiForwardSize; k++) {
                             sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mForwardMessages.get(i)), multiForwardList.get(k), false);
                         }
                     }
+                }
+
+                if (hasForward) {
+                    imvCancelForward.performClick();
+                } else {
                     multiForwardList.clear();
                     mForwardMessages = null;
                 }

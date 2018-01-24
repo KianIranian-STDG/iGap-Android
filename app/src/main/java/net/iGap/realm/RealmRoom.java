@@ -867,22 +867,25 @@ public class RealmRoom extends RealmObject {
         realm.close();
     }
 
-    public static void joinRoom(long roomId) {
+    public static void joinRoom(final long roomId) {
         Realm realm = Realm.getDefaultInstance();
         final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-        if (realmRoom != null && realmRoom.isValid()) {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if (realmRoom != null && realmRoom.isValid()) {
                     realmRoom.setDeleted(false);
                     if (realmRoom.getType() == GROUP) {
                         realmRoom.setReadOnly(false);
                     }
+                } else {
+                    new RequestClientGetRoom().clientGetRoom(roomId, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
                 }
-            });
-        } else {
-            new RequestClientGetRoom().clientGetRoom(roomId, RequestClientGetRoom.CreateRoomMode.requestFromOwner);
-        }
+            }
+        });
+
+
         realm.close();
     }
 
