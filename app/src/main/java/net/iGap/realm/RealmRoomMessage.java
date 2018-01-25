@@ -103,10 +103,14 @@ public class RealmRoomMessage extends RealmObject {
      * if has forward return that otherwise return enter value
      */
     public static RealmRoomMessage getFinalMessage(RealmRoomMessage realmRoomMessage) {
-        if (realmRoomMessage != null && realmRoomMessage.getForwardMessage() != null) {
-            return realmRoomMessage.getForwardMessage();
+        if (realmRoomMessage != null && realmRoomMessage.isValid()) {
+            if (realmRoomMessage.getForwardMessage() != null && realmRoomMessage.getForwardMessage().isValid()) {
+                return realmRoomMessage.getForwardMessage();
+            } else {
+                return realmRoomMessage;
+            }
         }
-        return realmRoomMessage;
+        return null;
     }
 
     public static RealmRoomMessage findMessage(Realm realm, long messageId) {

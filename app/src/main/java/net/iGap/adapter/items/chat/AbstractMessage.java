@@ -483,7 +483,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         if (minWith < maxWith) {
                             minWith = maxWith;
                         }
-                        mContainer.setMinimumWidth(minWith);
+                        mContainer.setMinimumWidth(Math.min(minWith, G.maxChatBox));
                         mContainer.addView(_tv, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     }
                 }
@@ -507,10 +507,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         LinearLayout lytContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
-        lytContainer.setMinimumWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
-        lytContainer.setMinimumHeight((int) G.context.getResources().getDimension(R.dimen.dp130));
-
         boolean showThump = G.showVoteChannelLayout && messageClickListener.getShowVoteChannel();
+
+        if (showThump) {
+            lytContainer.setMinimumHeight((int) G.context.getResources().getDimension(R.dimen.dp130));
+        }
 
         LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
         if (lytVote != null) {
@@ -773,7 +774,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 if (type == ProtoGlobal.Room.Type.CHANNEL) {
-                    RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.replayTo.getRoomId()).findFirst();
+                    RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
                     if (realmRoom != null) {
                         replyFrom.setText(realmRoom.getTitle());
                     }
@@ -812,7 +813,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 minWith = maxWith;
-                mContainer.setMinimumWidth(maxWith);
+                mContainer.setMinimumWidth(Math.min(minWith, G.maxChatBox));
 
                 mContainer.addView(replayView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
@@ -948,7 +949,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (minWith < maxWith) {
                 minWith = maxWith;
             }
-            mContainer.setMinimumWidth(minWith);
+            mContainer.setMinimumWidth(Math.min(minWith, G.maxChatBox));
             mContainer.addView(forwardView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
     }
