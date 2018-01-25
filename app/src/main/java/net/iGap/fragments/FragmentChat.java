@@ -3669,6 +3669,10 @@ public class FragmentChat extends BaseFragment
                 break;
         }
 
+        if (message.forwardedFrom != null) {
+            rootEdit.setVisibility(View.GONE);
+        }
+
         RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.roomId).findFirst();
         if (realmRoom != null) {
             /**
