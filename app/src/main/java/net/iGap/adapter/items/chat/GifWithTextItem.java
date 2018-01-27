@@ -26,6 +26,7 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.module.enums.SendingStep;
 import net.iGap.proto.ProtoGlobal;
 
 import java.io.File;
@@ -127,6 +128,10 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             public void onClick(View v) {
                 if (!isSelected()) {
                     if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                        if (!hasFileSize(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getLocalFilePath() :
+                                mMessage.attachment.getLocalFilePath())) {
+                            messageClickListener.onUploadOrCompressCancel(holder.itemView.findViewById(R.id.progress), mMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
+                        }
                         return;
                     }
                     if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {

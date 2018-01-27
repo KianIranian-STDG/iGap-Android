@@ -23,6 +23,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.LocalFileType;
+import net.iGap.module.enums.SendingStep;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
@@ -113,6 +114,13 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
             public void onClick(View v) {
                 if (!isSelected()) {
                     if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+
+                        if (!hasFileSize(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getLocalFilePath() :
+                                mMessage.attachment.getLocalFilePath())) {
+                            messageClickListener.onUploadOrCompressCancel(holder.itemView.findViewById(R.id.progress),
+                                    mMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
+                        }
+
                         return;
                     }
                     if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {

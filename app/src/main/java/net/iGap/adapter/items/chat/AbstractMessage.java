@@ -1267,7 +1267,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         downLoadFile(holder, attachment, 0);
     }
 
-    private boolean hasFileSize(String filPath) {
+    public boolean hasFileSize(String filPath) {
         if (filPath != null) {
             File file = new File(filPath);
             if (file.exists() && file.length() > 0) {
@@ -1291,7 +1291,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         //}
 
         if (HelperUploadFile.isUploading(mMessage.messageID)) {
-            if (mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()) && hasFileSize(mMessage.getAttachment().getLocalFilePath())) {
+            if (mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()) && hasFileSize(attachment.getLocalFilePath())) {
                 if (G.userLogin) {
                     messageClickListener.onFailedMessageClick(progress, mMessage, holder.getAdapterPosition());
 
@@ -1322,6 +1322,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ProtoGlobal.RoomMessageType _type = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
 
                 if (_status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    if (!hasFileSize(attachment.getLocalFilePath())) {
+                        messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
+                    }
                     return;
                 }
                 if (_status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
