@@ -99,6 +99,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static int musicProgress = 0;
     public static boolean isPause = false;
     public static ArrayList<RealmRoomMessage> mediaList;
+    private static boolean isFindNext = false;
     public static String strTimer = "";
     public static String messageId = "";
     public static boolean isNearDistance = false;
@@ -481,7 +482,23 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             selectedMedia++;
             if (selectedMedia < mediaList.size()) {
+
                 RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+
+                while (!roomMessage.getAttachment().isFileExistsOnLocal()) {
+                    selectedMedia++;
+                    roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+                    if (selectedMedia > mediaList.size()) {
+                        stopSound();
+                        return;
+                    }
+                }
+
+                Log.i("TVVVVVVVVVVVVV", "selectedMedia: " + selectedMedia);
+                Log.i("TVVVVVVVVVVVVV", "roomMessage.getAttachment().getName(): " + roomMessage.getAttachment().getName());
+
+
+
                 startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             } else {
                 if (isVoice) { // avoid from return to first voice
@@ -493,6 +510,16 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                 selectedMedia = 0;
                 RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+
+                while (!roomMessage.getAttachment().isFileExistsOnLocal()) {
+                    selectedMedia++;
+                    roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+                    if (selectedMedia > mediaList.size()) {
+                        stopSound();
+                        return;
+                    }
+                }
+
                 startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             }
             if (FragmentChat.onMusicListener != null) {
@@ -511,6 +538,19 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             Random r = new Random();
             selectedMedia = r.nextInt(mediaList.size() - 1);
             RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+
+
+            int maxTry = 0;
+            while (!roomMessage.getAttachment().isFileExistsOnLocal()) {
+                selectedMedia = r.nextInt(mediaList.size() - 1);
+                Log.i("VVVVVVVVVVVVVV", "nextRandomMusic: " + selectedMedia);
+                roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+                maxTry++;
+                if (maxTry > 3) {
+                    nextMusic();
+                }
+            }
+
 
             startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             if (FragmentChat.onMusicListener != null) {
@@ -558,6 +598,16 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             if (selectedMedia >= 0) {
 
                 RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+
+                while (!roomMessage.getAttachment().isFileExistsOnLocal()) {
+                    selectedMedia--;
+                    roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+                    if (selectedMedia <= 0) {
+                        stopSound();
+                        return;
+                    }
+                }
+
                 startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             } else {
                 int index = mediaList.size() - 1;
@@ -565,6 +615,15 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     selectedMedia = index;
 
                     RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+
+                    while (!roomMessage.getAttachment().isFileExistsOnLocal()) {
+                        selectedMedia--;
+                        roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+                        if (selectedMedia <= 0) {
+                            stopSound();
+                            return;
+                        }
+                    }
                     startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
                 }
             }
@@ -958,11 +1017,11 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 } else {
                     if (roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
                         try {
-                            if (roomMessage.getAttachment().getLocalFilePath() != null) {
-                                if (new File(roomMessage.getAttachment().getLocalFilePath()).exists()) {
-                                    mediaList.add(roomMessage);
-                                }
-                            }
+                            //if (roomMessage.getAttachment().getLocalFilePath() != null) {
+                            //    if (new File(roomMessage.getAttachment().getLocalFilePath()).exists()) {
+                            mediaList.add(0, roomMessage);
+                            //    }
+                            //}
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
