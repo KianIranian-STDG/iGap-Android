@@ -73,6 +73,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChannelAddMessageReaction;
 
+import java.io.File;
 import java.util.List;
 
 import io.realm.Realm;
@@ -1266,6 +1267,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         downLoadFile(holder, attachment, 0);
     }
 
+    private boolean hasFileSize(String filPath) {
+        if (filPath != null) {
+            File file = new File(filPath);
+            if (file.exists() && file.length() > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void forOnCLick(VH holder, RealmAttachment attachment) {
 
         final MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
@@ -1280,8 +1291,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         //}
 
         if (HelperUploadFile.isUploading(mMessage.messageID)) {
-
-            if (mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+            if (mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()) && hasFileSize(mMessage.getAttachment().getLocalFilePath())) {
                 if (G.userLogin) {
                     messageClickListener.onFailedMessageClick(progress, mMessage, holder.getAdapterPosition());
 
