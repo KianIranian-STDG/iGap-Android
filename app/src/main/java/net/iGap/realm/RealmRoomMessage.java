@@ -106,11 +106,9 @@ public class RealmRoomMessage extends RealmObject {
         if (realmRoomMessage != null && realmRoomMessage.isValid()) {
             if (realmRoomMessage.getForwardMessage() != null && realmRoomMessage.getForwardMessage().isValid()) {
                 return realmRoomMessage.getForwardMessage();
-            } else {
-                return realmRoomMessage;
             }
         }
-        return null;
+        return realmRoomMessage;
     }
 
     public static RealmRoomMessage findMessage(Realm realm, long messageId) {
