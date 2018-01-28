@@ -26,6 +26,7 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.module.FileUtils;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.StartupActions;
 import net.iGap.realm.RealmRoomMessage;
 
 import org.osmdroid.config.Configuration;
@@ -43,6 +44,8 @@ public class ActivityManageSpaceViewModel {
     public ObservableField<String> callbackKeepMedia = new ObservableField<>("1Week");
     public ObservableField<String> callbackClearCache = new ObservableField<>("0 KB");
     public ObservableField<String> callbackCleanUp = new ObservableField<>("0 KB");
+    public ObservableField<Integer> showLayoutSdk = new ObservableField<>(View.GONE);
+    public ObservableField<Boolean> isSdkEnable = new ObservableField<>();
     private Context context;
     private SharedPreferences sharedPreferences;
     private int isForever;
@@ -252,6 +255,44 @@ public class ActivityManageSpaceViewModel {
 
     }
 
+    public void onClickSdkEnable(View view) {
+
+        new MaterialDialog.Builder(context)
+                .title(G.context.getResources().getString(R.string.are_you_sure))
+                .negativeText(G.context.getResources().getString(R.string.B_cancel))
+                .content(G.context.getResources().getString(R.string.change_storage_place))
+                .positiveText(G.context.getResources().getString(R.string.B_ok))
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        isSdkEnable.set(!isSdkEnable.get());
+
+                    }
+                }).show();
+
+    }
+
+    public void onCheckedSdkEnable(boolean isChecked) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        isSdkEnable.set(isChecked);
+        if (isChecked) {
+            editor.putInt(SHP_SETTING.KEY_SDK_ENABLE, 1);
+            editor.apply();
+        } else {
+            editor.putInt(SHP_SETTING.KEY_SDK_ENABLE, 0);
+            editor.apply();
+        }
+
+        StartupActions.makeFolder();
+    }
+
+    private boolean getBoolean(int num) {
+        if (num == 0) {
+            return false;
+        }
+        return true;
+    }
+
     //===============================================================================
     //====================================Methods====================================
     //===============================================================================
@@ -288,6 +329,14 @@ public class ActivityManageSpaceViewModel {
         realm.close();
 
         callbackCleanUp.set(FileUtils.formatFileSize(DbTotalSize));
+
+        isSdkEnable.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_SDK_ENABLE, 0)));
+
+        if (FileUtils.getSdCardPathList(true).size() > 0) {
+            showLayoutSdk.set(View.VISIBLE);
+        } else {
+            showLayoutSdk.set(View.GONE);
+        }
 
     }
 

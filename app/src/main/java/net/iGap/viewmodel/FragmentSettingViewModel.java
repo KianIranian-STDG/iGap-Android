@@ -76,7 +76,6 @@ import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.module.AttachFile;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiEditTextE;
-import net.iGap.module.FileUtils;
 import net.iGap.module.MEditText;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
@@ -154,8 +153,8 @@ public class FragmentSettingViewModel {
     public ObservableField<Boolean> isDefaultPlayer = new ObservableField<>();
     public ObservableField<Boolean> isCrop = new ObservableField<>();
     public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
-    public ObservableField<Boolean> isSdkEnable = new ObservableField<>();
-    public ObservableField<Integer> showLayoutSdk = new ObservableField<>(View.GONE);
+
+
     private SharedPreferences sharedPreferences;
     private int poRbDialogTextSize = -1;
     private Uri uriIntent;
@@ -1429,36 +1428,7 @@ public class FragmentSettingViewModel {
 
     }
 
-    public void onClickSdkEnable(View view) {
 
-        new MaterialDialog.Builder(G.fragmentActivity)
-                .title(G.fragmentActivity.getResources().getString(R.string.are_you_sure))
-                .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
-                .content(G.fragmentActivity.getResources().getString(R.string.change_storage_place))
-                .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        isSdkEnable.set(!isSdkEnable.get());
-
-                    }
-                }).show();
-
-    }
-
-    public void onCheckedSdkEnable(boolean isChecked) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        isSdkEnable.set(isChecked);
-        if (isChecked) {
-            editor.putInt(SHP_SETTING.KEY_SDK_ENABLE, 1);
-            editor.apply();
-        } else {
-            editor.putInt(SHP_SETTING.KEY_SDK_ENABLE, 0);
-            editor.apply();
-        }
-
-        StartupActions.makeFolder();
-    }
 
     private void getInfo() {
 
@@ -1549,13 +1519,7 @@ public class FragmentSettingViewModel {
 
         callbackVersionApp.set(G.fragmentActivity.getResources().getString(R.string.iGap_version) + " " + getAppVersion());
 
-        isSdkEnable.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_SDK_ENABLE, 0)));
 
-        if (FileUtils.getSdCardPathList(true).size() > 0) {
-            showLayoutSdk.set(View.VISIBLE);
-        } else {
-            showLayoutSdk.set(View.GONE);
-        }
     }
 
     private void updateUserInfoUI(RealmUserInfo userInfo) {

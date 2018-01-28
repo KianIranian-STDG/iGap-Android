@@ -738,49 +738,6 @@
           </LinearLayout>
 
 
-          <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/background_editText"
-            android:visibility="@{fragmentSettingViewModel.showLayoutSdk}" />
-
-          <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp48"
-            android:onClick="@{fragmentSettingViewModel::onClickSdkEnable}"
-            android:orientation="horizontal"
-            android:paddingEnd="@dimen/dp16"
-            android:paddingLeft="@dimen/dp16"
-            android:paddingRight="@dimen/dp16"
-            android:paddingStart="@dimen/dp16"
-            android:visibility="@{fragmentSettingViewModel.showLayoutSdk}">
-
-            <TextView
-              android:id="@+id/stsp_txt_use_sdk"
-              android:layout_width="0dp"
-              android:layout_height="match_parent"
-              android:layout_weight="1"
-              android:gravity="center_vertical"
-              android:paddingTop="@dimen/dp4"
-              android:text="@string/save_data_in_sd_card"
-              android:textColor="@color/black_register"
-              android:textSize="@dimen/dp15"
-              android:textStyle="normal"
-              fontPath="fonts/IRANSansMobile.ttf" />
-
-            <ToggleButton
-              android:id="@+id/stsp_toggle_use_sdk"
-              android:layout_width="@dimen/dp44"
-              android:layout_height="@dimen/dp40"
-              android:background="@drawable/st_switch_button"
-              android:checked="@{fragmentSettingViewModel.isSdkEnable}"
-              android:onCheckedChanged="@{(switch, checked) -> fragmentSettingViewModel.onCheckedSdkEnable(checked)}"
-              android:textOff=""
-              android:textOn=""
-              android:clickable="false" />
-          </LinearLayout>
-
-
         </LinearLayout>
 
 
