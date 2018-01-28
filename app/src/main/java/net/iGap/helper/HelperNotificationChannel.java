@@ -60,7 +60,7 @@ public class HelperNotificationChannel {
         }
 
         if (notification != 2) {
-            AudioManager am2 = (AudioManager) G.fragmentActivity.getSystemService(Context.AUDIO_SERVICE);
+            AudioManager am2 = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
             if (am2 != null && am2.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
                 vibrateAct(vibrator);
                 soundAct(sound);
@@ -87,7 +87,7 @@ public class HelperNotificationChannel {
                 vSilent.vibrate(700);
                 break;
             case 3:
-                AudioManager am2 = (AudioManager) G.fragmentActivity.getSystemService(Context.AUDIO_SERVICE);
+                AudioManager am2 = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
 
                 if (am2 == null) {
                     return;
@@ -111,7 +111,7 @@ public class HelperNotificationChannel {
 
     private void soundAct(int which) {
 
-        MediaPlayer.create(G.fragmentActivity, setSound(which)).start();
+        MediaPlayer.create(G.context, setSound(which)).start();
     }
 
     public int setSound(int which) {
