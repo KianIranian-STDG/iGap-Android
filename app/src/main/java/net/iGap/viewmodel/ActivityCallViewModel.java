@@ -312,11 +312,16 @@ public class ActivityCallViewModel {
 
         AudioManager audioManager = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
 
-        boolean wasOn = audioManager.isSpeakerphoneOn();
+        boolean wasOn = false;
+        if (audioManager != null) {
+            wasOn = audioManager.isSpeakerphoneOn();
+        }
         if (wasOn == on) {
             return;
         }
-        audioManager.setSpeakerphoneOn(on);
+        if (audioManager != null) {
+            audioManager.setSpeakerphoneOn(on);
+        }
     }
 
     public void endCall() {
@@ -358,12 +363,7 @@ public class ActivityCallViewModel {
 
         if (MusicPlayer.pauseSoundFromIGapCall) {
             MusicPlayer.pauseSoundFromIGapCall = false;
-
             MusicPlayer.playSound();
-
-            if (MusicPlayer.isVoice && MusicPlayer.isSpeakerON) {
-                setSpeakerphoneOn(true);
-            }
         }
 
         txtTimeChat = txtTimerMain = null;
@@ -581,8 +581,7 @@ public class ActivityCallViewModel {
 
     private void playSound(final int resSound) {
 
-        final AudioManager audioManager = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setSpeakerphoneOn(false);
+        setSpeakerphoneOn(false);
 
         if (player == null) {
             try {
@@ -743,6 +742,8 @@ public class ActivityCallViewModel {
         G.isInCall = false;
         G.iSignalingCallBack = null;
         G.onCallLeaveView = null;
+
+        setSpeakerphoneOn(false);
 
         cancelRingtone();
         unMuteMusic();

@@ -54,6 +54,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     public static boolean isGoingfromApp = false;
     public static View stripLayoutChat;
     public static View stripLayoutMain;
+    public static boolean isNearDistance = false;
     public static OnFinishActivity onFinishActivity;
     boolean isIncomingCall = false;
     long userId;
@@ -405,12 +406,16 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
             public void onSensorChanged(SensorEvent event) {
                 if (activityCallBinding != null) {
                     if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
-                        if (event.values[0] >= -SENSOR_SENSITIVITY && event.values[0] <= SENSOR_SENSITIVITY) {
-                            // near
-                            screenOff();
-                        } else {
-                            //far
-                            screenOn();
+                        boolean newIsNear = Math.abs(event.values[0]) < Math.min(event.sensor.getMaximumRange(), 3);
+                        if (newIsNear != isNearDistance) {
+                            isNearDistance = newIsNear;
+                            if (isNearDistance) {
+                                // near
+                                screenOff();
+                            } else {
+                                //far
+                                screenOn();
+                            }
                         }
                     }
                 }

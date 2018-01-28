@@ -76,7 +76,6 @@ import static net.iGap.G.context;
 public class MusicPlayer extends Service implements AudioManager.OnAudioFocusChangeListener, OnAudioFocusChangeListener {
 
     public static final int notificationId = 19;
-    private static final int SENSOR_SENSITIVITY = 4;
     public static boolean canDoAction = true;
     public static String repeatMode = RepeatMode.noRepeat.toString();
     public static boolean isShuffelOn = false;
@@ -102,9 +101,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static String strTimer = "";
     public static String messageId = "";
     public static boolean isNearDistance = false;
+    public static int currentDuration = 0;
     public static boolean isVoice = false;
     public static boolean pauseSoundFromIGapCall = false;
-    public static boolean isSpeakerON = false;
+    public static boolean inChangeStreamType = false;
     public static boolean pauseSoundFromCall = false;
     public static boolean isMusicPlyerEnable = false;
     public static boolean playNextMusic = false;
@@ -665,46 +665,38 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
     public static void startPlayer(final String name, String musicPath, String roomName, long roomId, final boolean updateList, final String messageID) {
 
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                canDoAction = true;
-            }
-        }, 1000);
-
-        isVoice = false;
-        isPause = false;
-
-        if (messageID != null && messageID.length() > 0) {
-
-            try {
-                RealmRoomMessage realmRoomMessage = RealmRoomMessage.getFinalMessage(getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst());
-
-                if (realmRoomMessage != null) {
-                    String type = realmRoomMessage.getMessageType().toString();
-
-                    if (type.equals("VOICE")) {
-                        isVoice = true;
-                    }
+        if (!inChangeStreamType) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    canDoAction = true;
                 }
-            } catch (Exception e) {
-                HelperLog.setErrorLog(" music plyer   startPlayer   setISVoice    " + messageID + "    " + e.toString());
+            }, 1000);
+
+            isVoice = false;
+            isPause = false;
+
+            if (messageID != null && messageID.length() > 0) {
+
+                try {
+                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.getFinalMessage(getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(messageID)).findFirst());
+
+                    if (realmRoomMessage != null) {
+                        String type = realmRoomMessage.getMessageType().toString();
+
+                        if (type.equals("VOICE")) {
+                            isVoice = true;
+                        }
+                    }
+                } catch (Exception e) {
+                    HelperLog.setErrorLog(" music plyer   startPlayer   setISVoice    " + messageID + "    " + e.toString());
+                }
             }
-        }
 
-        if (isVoice) {
-            closeLayoutMediaPlayer();
-        }
-
-        try {
-
-            if (mp != null) {
-                mp.setOnCompletionListener(null);
-
-                mp.stop();
-                mp.reset();
-                mp.release();
+            if (isVoice) {
+                closeLayoutMediaPlayer();
             }
+
             updateFastAdapter(MusicPlayer.messageId);
             MusicPlayer.messageId = messageID;
             MusicPlayer.musicPath = musicPath;
@@ -712,12 +704,20 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             mediaThumpnail = null;
             MusicPlayer.roomId = roomId;
 
+        }
+
+        try {
+            if (mp != null) {
+                mp.setOnCompletionListener(null);
+                mp.stop();
+                mp.reset();
+                mp.release();
+            }
+
             if (layoutTripMusic != null) {
                 layoutTripMusic.setVisibility(View.VISIBLE);
             }
-
             musicName = getMusicName(Long.parseLong(messageID), name);
-
             mp = new MediaPlayer();
         } catch (Exception e) {
             e.printStackTrace();
@@ -726,15 +726,19 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         try {
             mp.setDataSource(musicPath);
 
-            if (isVoice) {
+            if (isNearDistance) {
                 mp.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
             } else {
                 mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
             }
 
             mp.prepare();
-
             mp.start();
+
+            if (currentDuration > 0) {
+                mp.seekTo(currentDuration);
+                currentDuration = 0;
+            }
 
             updateFastAdapter(MusicPlayer.messageId);
             musicTime = milliSecondsToTimer((long) mp.getDuration());
@@ -764,7 +768,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             e.printStackTrace();
         }
 
-        updateNotification();
+
+        if (!inChangeStreamType) {
+            updateNotification();
+        }
 
         if (!isShowMediaPlayer) {
 
@@ -780,7 +787,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             downloadNewItem = false;
         }
 
-        setSpeaker();
 
         if (HelperCalander.isPersianUnicode) {
             txt_music_time.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_music_time.getText().toString()));
@@ -788,14 +794,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         isMusicPlyerEnable = true;
 
-        //G.handler.postDelayed(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //
-        //        Log.i("FFFFFFFFFFFF", "run: " + mediaList.size());
-        //        FragmentMediaPlayer.adapterListMusicPlayer.updateAdapter(mediaList);
-        //    }
-        //},2000);
+
+        inChangeStreamType = false;
     }
 
     private static void OnCompleteMusic() {
@@ -1237,17 +1237,17 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 public void onSensorChanged(SensorEvent event) {
 
                     if (event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
-                        if (event.values[0] >= -SENSOR_SENSITIVITY && event.values[0] <= SENSOR_SENSITIVITY) {
-                            // near
-                            isNearDistance = true;
+
+                        AudioManager am = (AudioManager) G.context.getSystemService(AUDIO_SERVICE);
+                        if (am.isWiredHeadsetOn() || am.isSpeakerphoneOn()) {
+                            return;
+                        }
+
+                        boolean newIsNear = Math.abs(event.values[0]) < Math.min(event.sensor.getMaximumRange(), 3);
+                        if (newIsNear != isNearDistance) {
+                            isNearDistance = newIsNear;
                             if (isVoice) {
-                                setSpeaker();
-                            }
-                        } else {
-                            //far
-                            isNearDistance = false;
-                            if (isVoice) {
-                                setSpeaker();
+                                changeStreamType();
                             }
                         }
                     }
@@ -1270,6 +1270,21 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             isRegisterSensor = true;
         }
     }
+
+    private static void changeStreamType() {
+
+        try {
+            if (mp != null && mp.isPlaying()) {
+                inChangeStreamType = true;
+                currentDuration = mp.getCurrentPosition();
+                startPlayer(musicName, musicPath, roomName, roomId, false, MusicPlayer.messageId);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private static void removeSensor() {
 
@@ -1419,33 +1434,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         } catch (Exception e) {
             HelperLog.setErrorLog(" music plyer   setMedoiInfoOnLockScreen    " + e.toString());
         }
-    }
-
-    private static void setSpeaker() {
-
-        if (pauseSoundFromCall || pauseSoundFromIGapCall) {
-            return;
-        }
-
-        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-
-        if (isVoice) {
-
-            if (am.isWiredHeadsetOn()) {
-                am.setSpeakerphoneOn(false);
-            } else {
-
-                if (isNearDistance) {
-                    am.setSpeakerphoneOn(false);
-                } else {
-                    am.setSpeakerphoneOn(true);
-                }
-            }
-        } else {
-            am.setSpeakerphoneOn(false);
-        }
-
-        isSpeakerON = am.isSpeakerphoneOn();
     }
 
     //***************************************************************************** sensor *********************************
@@ -1622,18 +1610,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                     switch (state) {
                         case 0:
-
-                            setSpeaker();
-
+                            //  Log.d("dddddd", "Headset is unplugged");
                             if (mp != null && mp.isPlaying()) {
                                 pauseSound();
                             }
-
-                            //  Log.d("dddddd", "Headset is unplugged");
                             break;
                         case 1:
-                            setSpeaker();
-
                             //  Log.d("dddddd", "Headset is plugged");
                             break;
                         //default:
