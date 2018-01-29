@@ -19,5 +19,6 @@ public interface OnClientSearchRoomHistory {
 
     void onClientSearchRoomHistory(int totalCount, int notDeletedCount, List<ProtoGlobal.RoomMessage> resultList, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter identity);
 
+    void onTimeOut();
     void onError(int majorCode, int minorCode, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter identity);
 }

@@ -33,9 +33,12 @@ import android.widget.TextView;
 
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
+import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
+import com.mikepenz.fastadapter_extensions.items.ProgressItem;
+import com.mikepenz.fastadapter_extensions.scroll.EndlessRecyclerOnScrollListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import net.iGap.G;
@@ -54,6 +57,7 @@ import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestClientSearchRoomHistory;
 import net.iGap.viewmodel.FragmentMediaPlayerViewModel;
 
@@ -63,6 +67,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class FragmentMediaPlayer extends BaseFragment {
 
@@ -76,11 +81,11 @@ public class FragmentMediaPlayer extends BaseFragment {
     private FragmentMediaPlayerViewModel fragmentMediaPlayerViewModel;
     private ActivityMediaPlayerBinding fragmentMediaPlayerBinding;
     private ActivityMediaPlayerLandBinding activityMediaPlayerLandBinding;
+    private ItemAdapter<ProgressItem> footerAdapter;
 
 
     private long nextMessageId = 0;
     private boolean isThereAnyMoreItemToLoad = false;
-    private boolean isSendRequestForLoading = false;
     private int offset;
     private RealmResults<RealmRoomMessage> mRealmList;
     private ArrayList<RealmRoomMessage> mediaList;
@@ -229,27 +234,28 @@ public class FragmentMediaPlayer extends BaseFragment {
 
         rcvListMusicPlayer = (RecyclerView) view.findViewById(R.id.rcvListMusicPlayer);
         final SlidingUpPanelLayout slidingUpPanelLayout = (SlidingUpPanelLayout) view.findViewById(R.id.sliding_layout);
-        fastItemAdapter = new FastItemAdapter();
 
+        footerAdapter = new ItemAdapter<>();
+        fastItemAdapter = new FastItemAdapter();
+        fastItemAdapter.addAdapter(1, footerAdapter);
 
         rcvListMusicPlayer.setAdapter(fastItemAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
         rcvListMusicPlayer.setLayoutManager(linearLayoutManager);
         rcvListMusicPlayer.setHasFixedSize(true);
 
-        /*linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
-        rcvListMusicPlayer.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        rcvListMusicPlayer.addOnScrollListener(new EndlessRecyclerOnScrollListener(footerAdapter) {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (rcvListMusicPlayer.computeVerticalScrollOffset() > 0) {
-                    slidingUpPanelLayout.setEnabled(false);
-                } else {
-                    slidingUpPanelLayout.setEnabled(true);
+            public void onLoadMore(int currentPage) {
+                footerAdapter.clear();
+                footerAdapter.add(new ProgressItem().withEnabled(false));
+                // Load your items here and add it to FastAdapter
+
+                if (isThereAnyMoreItemToLoad) {
+                    getInfoRealm();
                 }
             }
-        });*/
+        });
 
 
         getDataFromServer(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
@@ -259,7 +265,6 @@ public class FragmentMediaPlayer extends BaseFragment {
         for (RealmRoomMessage r : MusicPlayer.mediaList) {
             fastItemAdapter.add(new AdapterListMusicPlayer().setItem(r).withIdentifier(r.getMessageId()));
         }
-
         fastItemAdapter.withSelectable(true);
         fastItemAdapter.withOnClickListener(new OnClickListener() {
             @Override
@@ -276,24 +281,6 @@ public class FragmentMediaPlayer extends BaseFragment {
         });
 
         rcvListMusicPlayer.scrollToPosition(fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId)));
-        onScrollListener = new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(final RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-                if (isThereAnyMoreItemToLoad) {
-                    if (!isSendRequestForLoading) {
-                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                        if (lastVisiblePosition + 50 >= offset) {
-                            new RequestClientSearchRoomHistory().clientSearchRoomHistory(MusicPlayer.roomId, nextMessageId, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
-                            isSendRequestForLoading = true;
-                        }
-                    }
-                }
-            }
-        };
-        rcvListMusicPlayer.addOnScrollListener(onScrollListener);
-
     }
 
     public interface OnBackFragment {
@@ -437,7 +424,6 @@ public class FragmentMediaPlayer extends BaseFragment {
 
                             nextMessageId = resultList.get(0).getMessageId();
 
-                            isSendRequestForLoading = false;
                             isThereAnyMoreItemToLoad = true;
 
                             int deletedCount = 0;
@@ -454,6 +440,11 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
 
             @Override
+            public void onTimeOut() {
+                footerAdapter.clear();
+            }
+
+            @Override
             public void onError(final int majorCode, int minorCode, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter identity) {
 
                 G.handler.post(new Runnable() {
@@ -463,20 +454,14 @@ public class FragmentMediaPlayer extends BaseFragment {
                         if (majorCode == 620) {
 
                             isThereAnyMoreItemToLoad = false;
-
-                            //if (onScrollListener != null) {
-                            //    recyclerView.removeOnScrollListener(onScrollListener);
-                            //}
-                        } else {
-                            isSendRequestForLoading = false;
                         }
+                        footerAdapter.clear();
                     }
                 });
             }
         };
 
         new RequestClientSearchRoomHistory().clientSearchRoomHistory(MusicPlayer.roomId, nextMessageId, filter);
-        isSendRequestForLoading = true;
     }
 
     public void saveDataToLocal(final List<ProtoGlobal.RoomMessage> RoomMessages, final long roomId) {
@@ -518,7 +503,6 @@ public class FragmentMediaPlayer extends BaseFragment {
         changeSize = mRealmList.size();
 
         setListener();
-        isSendRequestForLoading = false;
         isThereAnyMoreItemToLoad = true;
         getDataFromServer(filter);
         return mRealmList;
@@ -641,25 +625,45 @@ public class FragmentMediaPlayer extends BaseFragment {
             @Override
             public void onChange(RealmResults<RealmRoomMessage> element) {
 
-                if (changeSize - element.size() != 0) {
-
-                    int position = ((LinearLayoutManager) rcvListMusicPlayer.getLayoutManager()).findFirstVisibleItemPosition();
-                    MusicPlayer.fillMediaList(false);
-
-                    fastItemAdapter = new FastItemAdapter();
-                    rcvListMusicPlayer.setAdapter(fastItemAdapter);
-                    for (RealmRoomMessage r : MusicPlayer.mediaList) {
-                        fastItemAdapter.add(new AdapterListMusicPlayer().setItem(r).withIdentifier(r.getMessageId()));
-                    }
-                    rcvListMusicPlayer.scrollToPosition(position);
-                    changeSize = element.size();
-                }
+                getInfoRealm();
             }
         };
 
         if (changeListener != null) {
             mRealmList.addChangeListener(changeListener);
         }
+    }
+
+    public void getInfoRealm() {
+
+        List<RealmRoomMessage> realmRoomMessages;
+        realmRoomMessages = getRealm().where(RealmRoomMessage.class)
+                .equalTo(RealmRoomMessageFields.ROOM_ID, MusicPlayer.roomId)
+                .notEqualTo(RealmRoomMessageFields.DELETED, true)
+                .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.AUDIO.toString())
+                .lessThan(RealmRoomMessageFields.MESSAGE_ID, MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
+                .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+
+        if (realmRoomMessages.size() > 0) {
+
+//                                mRealmList = RealmRoomMessage.filterMessage(getRealm(), MusicPlayer.roomId, ProtoGlobal.RoomMessageType.AUDIO);
+            if (realmRoomMessages.size() > MusicPlayer.limitMediaList) {
+                realmRoomMessages = realmRoomMessages.subList(0, MusicPlayer.limitMediaList);
+            } else {
+                realmRoomMessages = realmRoomMessages.subList(0, realmRoomMessages.size());
+            }
+
+            footerAdapter.clear();
+            for (RealmRoomMessage r : realmRoomMessages) {
+                MusicPlayer.mediaList.add(r);
+                fastItemAdapter.add(new AdapterListMusicPlayer().setItem(r).withIdentifier(r.getMessageId()));
+            }
+
+        } else {
+            new RequestClientSearchRoomHistory().clientSearchRoomHistory(MusicPlayer.roomId, nextMessageId, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
+
+        }
+
     }
 
 }
