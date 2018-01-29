@@ -246,7 +246,12 @@ public class FragmentAddContact extends BaseFragment {
                         txtChooseCountry.setText(nameCountry);
                         txtCodeCountry.setText("+" + code);
                         edtPhoneNumber.setText("");
-                        edtPhoneNumber.setMask(mask.replace("X", "#").replace(" ", "-"));
+                        if (!mask.equals(" ")) {
+                            edtPhoneNumber.setMask(mask.replace("X", "#").replace(" ", "-"));
+                        } else {
+                            edtPhoneNumber.setMaxLines(18);
+                            edtPhoneNumber.setMask("##################");
+                        }
                     }
                 });
             }

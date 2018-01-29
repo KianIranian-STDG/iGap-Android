@@ -429,8 +429,9 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                             @Override
                             public void run() {
                                 callbackEdtCodeNumber.set("+" + callingCode);
-                                if (pattern.equals("")) {
-                                    edtPhoneNumberMask.set("##############################");
+                                if (pattern.equals(" ")) {
+                                    FragmentRegister.edtPhoneNumber.setMaxLines(18);
+                                    FragmentRegister.edtPhoneNumber.setMask("##################");
                                 } else {
                                     edtPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
                                 }
@@ -676,8 +677,11 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                 callbackEdtCodeNumber.set("+" + argument.getInt("CALLING_CODE"));
                 callbackBtnChoseCountry.set(argument.getString("COUNTRY_NAME"));
                 String pattern = argument.getString("PATTERN");
-                if (!pattern.equals("")) {
+                if (pattern != null && !pattern.equals(" ")) {
                     edtPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
+                } else {
+                    FragmentRegister.edtPhoneNumber.setMaxLines(18);
+                    FragmentRegister.edtPhoneNumber.setMask("##################");
                 }
                 regex = argument.getString("REGEX");
                 String body = argument.getString("TERMS_BODY");

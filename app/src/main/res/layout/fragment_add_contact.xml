@@ -238,6 +238,7 @@
           android:textColor="@color/rg_black_register"
           android:textColorHint="@color/hint_edit_text"
           android:textSize="@dimen/dp15"
+          android:maxLength="18"
           app:mask="###-###-####" />
 
         <View

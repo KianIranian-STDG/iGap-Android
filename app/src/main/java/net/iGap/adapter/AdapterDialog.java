@@ -84,15 +84,11 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                 notifyDataSetChanged();
 
                 FragmentRegister.edtCodeNumber.setText(("+ " + countrylist.get(position).getCountryCode()));
-                if (countrylist.get(position).getPhonePattern() != null) {
-                    if (countrylist.get(position).getPhonePattern().equals(" ")) {
-                        FragmentRegister.edtPhoneNumber.setMask("###-###-####");
-                    } else {
-
-                        FragmentRegister.edtPhoneNumber.setMask((countrylist.get(position).getPhonePattern().replace("X", "#").replace(" ", "-")));
-                    }
+                if (countrylist.get(position).getPhonePattern() != null || countrylist.get(position).getPhonePattern().equals(" ")) {
+                    FragmentRegister.edtPhoneNumber.setMask((countrylist.get(position).getPhonePattern().replace("X", "#").replace(" ", "-")));
                 } else {
-                    FragmentRegister.edtPhoneNumber.setMask("###-###-####");
+                    FragmentRegister.edtPhoneNumber.setMaxLines(18);
+                    FragmentRegister.edtPhoneNumber.setMask("##################");
                 }
                 FragmentRegister.btnChoseCountry.setText((countrylist.get(position).getName()));
                 FragmentRegisterViewModel.isoCode = countrylist.get(position).getAbbreviation();

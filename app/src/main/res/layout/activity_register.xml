@@ -244,6 +244,7 @@
                   android:textAlignment="gravity"
                   android:textColor="@{fragmentRegisterViewModel.edtPhoneNumberColor , default = @color/rg_black_register}"
                   android:textSize="@dimen/dp14"
+                  android:maxLength="18"
                   app:mask="@{fragmentRegisterViewModel.edtPhoneNumberMask}" />
 
               </LinearLayout>
