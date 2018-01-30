@@ -370,13 +370,15 @@ public class FragmentChannelProfileViewModel
             callBackDeleteLeaveChannel.set(G.fragmentActivity.getResources().getString(R.string.channel_left));
         }
 
+        callbackChannelDescription.set(new SpannableStringBuilder(""));
+
         if (description != null && !description.isEmpty()) {
             SpannableStringBuilder spannableStringBuilder = HelperUrl.setUrlLink(description, true, false, null, true);
             if (spannableStringBuilder != null) {
                 callbackChannelDescription.set(spannableStringBuilder);
             }
         }
-        callbackChannelDescription.set(new SpannableStringBuilder(""));
+
         callbackChannelName.set(title);
 
         if (isSignature) {
