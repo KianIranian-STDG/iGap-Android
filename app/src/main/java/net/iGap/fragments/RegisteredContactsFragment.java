@@ -21,6 +21,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -85,6 +86,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.realm.Case;
 import io.realm.Realm;
@@ -116,7 +118,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     //private ContactListAdapterA mAdapter;
     private NestedScrollView nestedScrollView;
     private ActionMode mActionMode;
-    ArrayList<RealmContacts> multiselect_list;
+    protected ArrayMap<Long, Boolean> selectedList = new ArrayMap<>();
     boolean isMultiSelect = false;
     private ContactListAdapter contactListAdapter;
     private AppBarLayout toolbar;
@@ -262,7 +264,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                     results = getRealm().where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
                 }
 
-                realmRecyclerView.setAdapter(new ContactListAdapter(multiselect_list, results));
+                realmRecyclerView.setAdapter(new ContactListAdapter(results));
 
                 // fastAdapter
                 //mAdapter.clear();
@@ -313,9 +315,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
-                multiselect_list = new ArrayList<>();
-                contactListAdapter = new ContactListAdapter(multiselect_list, results);
+                contactListAdapter = new ContactListAdapter(results);
                 realmRecyclerView.setAdapter(contactListAdapter);
                 prgWaitingLoadContact.setVisibility(View.GONE);
                 realmRecyclerView.setVisibility(View.VISIBLE);
@@ -731,13 +731,11 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         int count;
         private boolean isSwipe = false;
         RealmResults<RealmContacts> usersList;
-        ArrayList<RealmContacts> selected_usersList;
 
-        ContactListAdapter(ArrayList<RealmContacts> selected_usersList, RealmResults<RealmContacts> realmResults) {
+        ContactListAdapter(RealmResults<RealmContacts> realmResults) {
             super(realmResults, true);
             count = realmResults.size();
             usersList = realmResults;
-            this.selected_usersList = selected_usersList;
         }
 
         @Override
@@ -861,7 +859,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                 }
             });
 
-            if (selected_usersList.contains(usersList.get(i))) {
+            if (selectedList.containsKey(usersList.get(i).getPhone())) {
                 viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
                 viewHolder.animateCheckBox.setCircleColor(G.context.getResources().getColor(R.color.green));
                 viewHolder.animateCheckBox.setLineColor(G.context.getResources().getColor(R.color.white));
@@ -1128,20 +1126,20 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
     public void multi_select(int position) {
         if (mActionMode != null) {
-            if (multiselect_list.contains(results.get(position))) {
 
-                multiselect_list.remove(results.get(position));
-            } else {
-
-                multiselect_list.add(results.get(position));
+            if (results.get(position) == null) {
+                return;
             }
 
-
-            if (multiselect_list.size() > 0) {
-
-                mActionMode.setTitle("" + multiselect_list.size());
+            if (selectedList.containsKey(results.get(position).getPhone())) {
+                selectedList.remove(results.get(position).getPhone());
             } else {
+                selectedList.put(results.get(position).getPhone(), true);
+            }
 
+            if (selectedList.size() > 0) {
+                mActionMode.setTitle("" + selectedList.size());
+            } else {
                 mActionMode.setTitle("");
             }
             refreshAdapter(position, false);
@@ -1149,14 +1147,12 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     }
 
     public void refreshAdapter(int position, boolean isAllRefresh) {
-        contactListAdapter.selected_usersList = multiselect_list;
         contactListAdapter.usersList = results;
         if (isAllRefresh) {
             contactListAdapter.notifyDataSetChanged();
         } else {
             contactListAdapter.notifyItemChanged(position);
         }
-
     }
 
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
@@ -1184,9 +1180,10 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            for (RealmContacts realmContacts : multiselect_list) {
-                                new RequestUserContactsDelete().contactsDelete("" + realmContacts.getPhone());
+                            for (Map.Entry<Long, Boolean> entry : selectedList.entrySet()) {
+                                new RequestUserContactsDelete().contactsDelete("" + entry.getKey());
                             }
+
                             mActionMode.finish();
                             refreshAdapter(0, true);
 
@@ -1204,7 +1201,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         public void onDestroyActionMode(ActionMode mode) {
             mActionMode = null;
             isMultiSelect = false;
-            multiselect_list = new ArrayList<>();
+            selectedList.clear();
             refreshAdapter(0, true);
             toolbar.setVisibility(View.VISIBLE);
         }
