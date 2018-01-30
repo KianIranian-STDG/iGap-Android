@@ -12,7 +12,6 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -21,7 +20,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
@@ -582,18 +580,14 @@ public class FragmentShowImage extends BaseFragment {
             final MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
             AppUtils.setProgresColor(progress.progressBar);
 
-
-            final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) layout.findViewById(R.id.ch_progress_loadingContent);
-            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
             final RealmRoomMessage rm = RealmRoomMessage.getFinalMessage(mFList.get(position));
 
             if (rm != null) {
                 if (HelperDownloadFile.isDownLoading(rm.getAttachment().getCacheId())) {
                     progress.withDrawable(R.drawable.ic_cancel, true);
-                    startDownload(position, progress, touchImageView, contentLoading, imgPlay, mTextureView);
+                    startDownload(position, progress, touchImageView, imgPlay, mTextureView);
                 } else {
                     progress.withDrawable(R.drawable.ic_download, true);
-                    contentLoading.setVisibility(View.GONE);
                 }
 
                 path = getFilePath(position);
@@ -687,7 +681,7 @@ public class FragmentShowImage extends BaseFragment {
                         HelperDownloadFile.stopDownLoad(_cashID);
                     } else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
-                        startDownload(position, progress, touchImageView, contentLoading, imgPlay, mTextureView);
+                        startDownload(position, progress, touchImageView, imgPlay, mTextureView);
                     }
                 }
             });
@@ -789,9 +783,7 @@ public class FragmentShowImage extends BaseFragment {
         /**
          * start download
          */
-        private void startDownload(final int position, final MessageProgress progress, final TouchImageView touchImageView, final ContentLoadingProgressBar contentLoading, final ImageView imgPlay, final TextureView mTextureView) {
-
-            contentLoading.setVisibility(View.VISIBLE);
+        private void startDownload(final int position, final MessageProgress progress, final TouchImageView touchImageView, final ImageView imgPlay, final TextureView mTextureView) {
 
             final RealmRoomMessage rm = RealmRoomMessage.getFinalMessage(mFList.get(position));
 
@@ -815,7 +807,6 @@ public class FragmentShowImage extends BaseFragment {
                                 } else {
                                     progress.withProgress(0);
                                     progress.setVisibility(View.GONE);
-                                    contentLoading.setVisibility(View.GONE);
                                     if (rm.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
                                         imgPlay.setVisibility(View.VISIBLE);
                                         //if (position == viewPager.getCurrentItem()) playVideo(position, mTextureView, imgPlay, touchImageView);
@@ -838,7 +829,6 @@ public class FragmentShowImage extends BaseFragment {
                             public void run() {
                                 progress.withProgress(0);
                                 progress.withDrawable(R.drawable.ic_download, true);
-                                contentLoading.setVisibility(View.GONE);
                             }
                         });
                     }

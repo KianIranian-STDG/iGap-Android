@@ -17,7 +17,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -968,7 +967,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (_Progress != null) {
             _Progress.setTag(mMessage.messageID);
             _Progress.setVisibility(View.GONE);
-            itemView.findViewById(R.id.ch_progress_loadingContent).setVisibility(View.GONE);
             return true;
         } else {
             return false;
@@ -1298,9 +1296,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     //HelperUploadFile.reUpload(mMessage.messageID);
                     //progress.withDrawable(R.drawable.ic_cancel, false);
                     //holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
-                    //final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
-                    //contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
-                    //contentLoading.setVisibility(View.VISIBLE);
+
                 } else {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                 }
@@ -1420,10 +1416,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         final MessageProgress progressBar = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         AppUtils.setProgresColor(progressBar.progressBar);
 
-        final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
-        contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
-
-        contentLoading.setVisibility(View.VISIBLE);
 
         final String token = attachment.getToken();
         String name = attachment.getName();
@@ -1461,8 +1453,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     if (progress == 100) {
 
                                         progressBar.setVisibility(View.GONE);
-                                        contentLoading.setVisibility(View.GONE);
-
                                         progressBar.performProgress();
 
                                         onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
@@ -1489,7 +1479,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                                     progressBar.withProgress(0);
                                     progressBar.withDrawable(R.drawable.ic_download, true);
-                                    contentLoading.setVisibility(View.GONE);
+
                                 }
                             }
                         });
@@ -1526,10 +1516,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
-            final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
-            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
-            contentLoading.setVisibility(View.GONE);
-
             /**
              * update progress when user trying to upload or download also if
              * file is compressing do this action for add listener and use later
@@ -1555,7 +1541,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     progressBar.withProgress(progress);
                                     if (progress == 100) {
                                         progressBar.performProgress();
-                                        contentLoading.setVisibility(View.GONE);
                                     }
                                 }
 
@@ -1568,7 +1553,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
                             progressBar.withProgress(0);
                             progressBar.withDrawable(R.drawable.upload, true);
-                            contentLoading.setVisibility(View.GONE);
                             mMessage.status = ProtoGlobal.RoomMessageStatus.FAILED.toString();
                         }
                     }
@@ -1595,7 +1579,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 //}
 
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
-                contentLoading.setVisibility(View.VISIBLE);
                 progressBar.withProgress(HelperUploadFile.getUploadProgress(mMessage.messageID));
             } else {
                 checkForDownloading(holder, attachment);
@@ -1615,14 +1598,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         MessageProgress progressBar = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
             AppUtils.setProgresColor(progressBar.progressBar);
-
-            final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) holder.itemView.findViewById(R.id.ch_progress_loadingContent);
-            // contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
-
             progressBar.withProgress(0);
-
             progressBar.withDrawable(R.drawable.upload, true);
-            contentLoading.setVisibility(View.GONE);
         }
     }
 

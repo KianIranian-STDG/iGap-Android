@@ -91,24 +91,6 @@ public class MessageProgress extends FrameLayout implements IMessageProgress, Vi
 
     }
 
-    public void resetAnimation() {
-        if (autoRest) {
-            postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (autoRest) {
-                        progressBar.startAnimation();
-                        resetAnimation();
-                    }
-                }
-            }, getContext().getResources().getInteger(R.integer.cpv_default_anim_swoop_duration));
-        }
-    }
-
-    public void setAutoRest(boolean autoRest) {
-        this.autoRest = autoRest;
-    }
-
     @Override public void draw(Canvas canvas) {
         canvas.drawCircle(getWidth() / 2, getHeight() / 2, getWidth() / 2, mPaint);
 

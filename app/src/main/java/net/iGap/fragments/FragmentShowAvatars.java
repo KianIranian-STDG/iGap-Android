@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -601,17 +600,13 @@ public class FragmentShowAvatars extends BaseFragment {
             final MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
             AppUtils.setProgresColor(progress.progressBar);
 
-            final ContentLoadingProgressBar contentLoading = (ContentLoadingProgressBar) layout.findViewById(R.id.ch_progress_loadingContent);
-            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
-
             final RealmAttachment ra = avatarList.get(position).getFile();
 
             if (HelperDownloadFile.isDownLoading(ra.getCacheId())) {
                 progress.withDrawable(R.drawable.ic_cancel, true);
-                startDownload(position, progress, touchImageView, contentLoading);
+                startDownload(position, progress, touchImageView);
             } else {
                 progress.withDrawable(R.drawable.ic_download, true);
-                contentLoading.setVisibility(View.GONE);
             }
 
             if (ra != null) {
@@ -680,7 +675,7 @@ public class FragmentShowAvatars extends BaseFragment {
                         HelperDownloadFile.stopDownLoad(_cashId);
                     } else {
                         progress.withDrawable(R.drawable.ic_cancel, true);
-                        startDownload(position, progress, touchImageView, contentLoading);
+                        startDownload(position, progress, touchImageView);
                     }
                 }
             });
@@ -708,12 +703,8 @@ public class FragmentShowAvatars extends BaseFragment {
             return layout;
         }
 
-        private void startDownload(int position, final MessageProgress progress, final TouchImageView touchImageView, final ContentLoadingProgressBar contentLoading) {
-
-            contentLoading.setVisibility(View.VISIBLE);
-
+        private void startDownload(int position, final MessageProgress progress, final TouchImageView touchImageView) {
             final RealmAttachment ra = avatarList.get(position).getFile();
-
             final String dirPath = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_IMAGE_USER, false);
 
             HelperDownloadFile.startDownload(System.currentTimeMillis() + "", ra.getToken(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
@@ -730,8 +721,6 @@ public class FragmentShowAvatars extends BaseFragment {
                                 } else {
                                     progress.withProgress(0);
                                     progress.setVisibility(View.GONE);
-                                    contentLoading.setVisibility(View.GONE);
-
                                     G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
                                 }
                             }
@@ -747,7 +736,6 @@ public class FragmentShowAvatars extends BaseFragment {
                         public void run() {
                             progress.withProgress(0);
                             progress.withDrawable(R.drawable.ic_download, true);
-                            contentLoading.setVisibility(View.GONE);
                         }
                     });
                 }

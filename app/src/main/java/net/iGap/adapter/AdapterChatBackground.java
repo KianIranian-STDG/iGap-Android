@@ -10,9 +10,7 @@
 
 package net.iGap.adapter;
 
-import android.graphics.Color;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -121,7 +119,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             } else {
                 holder2.mPath = "";
                 holder2.messageProgress.setVisibility(View.VISIBLE);
-                startDownload(position, holder2.messageProgress, holder2.contentLoading);
+                startDownload(position, holder2.messageProgress);
             }
         }
     }
@@ -141,9 +139,7 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         return mList.size();
     }
 
-    private void startDownload(final int position, final MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
-
-        contentLoading.setVisibility(View.VISIBLE);
+    private void startDownload(final int position, final MessageProgress messageProgress) {
         messageProgress.withDrawable(R.drawable.ic_cancel, true);
 
         ProtoGlobal.File pf = mList.get(position).getProtoWallpaper().getFile();
@@ -163,7 +159,6 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                             } else {
                                 messageProgress.withProgress(0);
                                 messageProgress.setVisibility(View.GONE);
-                                contentLoading.setVisibility(View.GONE);
                                 notifyItemChanged(position);
                             }
                         }
@@ -179,7 +174,6 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
                         public void run() {
                             messageProgress.withProgress(0);
                             messageProgress.withDrawable(R.drawable.ic_download, true);
-                            contentLoading.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -230,7 +224,6 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
     private class ViewHolderItem extends RecyclerView.ViewHolder {
 
         public MessageProgress messageProgress;
-        public ContentLoadingProgressBar contentLoading;
         public String mPath = "";
         private ImageView img;
 
@@ -243,10 +236,6 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             AppUtils.setProgresColor(messageProgress.progressBar);
 
             messageProgress.withDrawable(R.drawable.ic_download, true);
-
-            contentLoading = (ContentLoadingProgressBar) itemView.findViewById(R.id.ch_progress_loadingContent);
-            contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
-
             img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

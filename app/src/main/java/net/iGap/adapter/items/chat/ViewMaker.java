@@ -26,6 +26,7 @@ import com.hanks.library.AnimateCheckBox;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
+import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
@@ -1346,34 +1347,18 @@ public class ViewMaker {
     }
 
     private static View getProgressBar(int sizeSrc) {
-
-        //MessageProgress messageProgress=new MessageProgress(G.context);
-        //messageProgress.setId(R.id.progress);
-        //FrameLayout.LayoutParams layout_189 = new FrameLayout.LayoutParams(size, size);
-        //messageProgress.setLayoutParams(layout_189);
-        //
-        //
-        //ContentLoadingProgressBar contentLoadingProgressBar=new ContentLoadingProgressBar(G.context);
-        //contentLoadingProgressBar.setId(R.id.ch_progress_loadingContent);
-        //FrameLayout.LayoutParams layout_256 = new FrameLayout.LayoutParams(size, size);
-        //contentLoadingProgressBar.setLayoutParams(layout_256);
-        //contentLoadingProgressBar.setVisibility(View.VISIBLE);
-        //
-        //messageProgress.addView(contentLoadingProgressBar);
-        //
-        //
-        //
-        //
-        //return messageProgress;
-
-        View v = G.inflater.inflate(R.layout.msg_progress_item, null, false);
-
+        MessageProgress messageProgress = new MessageProgress(G.context);
+        messageProgress.setId(R.id.progress);
+        LinearLayout.LayoutParams params;
         if (sizeSrc > 0) {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(i_Dp(sizeSrc), i_Dp(sizeSrc));
-            v.setLayoutParams(params);
+            params = new LinearLayout.LayoutParams(i_Dp(sizeSrc), i_Dp(sizeSrc));
+        } else {
+            params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         }
 
-        return v;
+        messageProgress.setLayoutParams(params);
+
+        return messageProgress;
     }
 
     /**

@@ -1188,8 +1188,6 @@ public class FragmentShearedMedia extends BaseFragment {
         private void startDownload(final int position, final MessageProgress messageProgress) {
 
             messageProgress.withDrawable(R.drawable.ic_cancel, true);
-            messageProgress.setAutoRest(true);
-            messageProgress.resetAnimation();
 
             final RealmAttachment at = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getAttachment() : mList.get(position).item.getAttachment();
             ProtoGlobal.RoomMessageType messageType = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getMessageType() : mList.get(position).item.getMessageType();
@@ -1212,8 +1210,6 @@ public class FragmentShearedMedia extends BaseFragment {
                                     } else {
                                         messageProgress.withProgress(0);
                                         messageProgress.setVisibility(View.GONE);
-                                        messageProgress.setAutoRest(false);
-
                                         updateViewAfterDownload(at.getCacheId());
                                     }
                                 }
@@ -1231,7 +1227,6 @@ public class FragmentShearedMedia extends BaseFragment {
                                 @Override
                                 public void run() {
                                     messageProgress.withProgress(0);
-                                    messageProgress.setAutoRest(false);
                                     messageProgress.withDrawable(R.drawable.ic_download, true);
                                 }
                             });

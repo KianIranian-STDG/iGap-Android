@@ -342,6 +342,10 @@ public class CircularProgressView extends View {
                     invalidate();
                 }
             });
+
+            startAngleRotate.setRepeatCount(ValueAnimator.INFINITE);
+            startAngleRotate.setRepeatMode(ValueAnimator.RESTART);
+
             startAngleRotate.start();
 
 //            // The linear animation shown when progress is updated
@@ -413,6 +417,7 @@ public class CircularProgressView extends View {
             indeterminateAnimator.cancel();
             indeterminateAnimator = null;
         }
+        actualProgress = 0f;
     }
 
     // Creates the animators for one step of the animation
