@@ -122,6 +122,8 @@ public class ActivityManageSpaceViewModel {
         final long sizeFolderAudio = getFolderSize(new File(G.DIR_AUDIOS));
         final long sizeFolderMap = FileUtils.getFolderSize(fileMap);
         final long sizeFolderOtherFiles = getFolderSize(new File(G.DIR_TEMP));
+        final long sizeFolderOtherFilesBackground = getFolderSize(new File(G.DIR_CHAT_BACKGROUND));
+        final long sizeFolderOtherFilesImageUser = getFolderSize(new File(G.DIR_IMAGE_USER));
 
         boolean wrapInScrollView = true;
         final MaterialDialog dialog = new MaterialDialog.Builder(context).title(G.context.getResources().getString(R.string.st_title_Clear_Cache)).customView(R.layout.st_dialog_clear_cach, wrapInScrollView).positiveText(G.context.getResources().getString(R.string.st_title_Clear_Cache)).show();
@@ -158,7 +160,7 @@ public class ActivityManageSpaceViewModel {
 
         final File fileOtherFiles = new File(G.DIR_TEMP);
         TextView txtOtherFiles = (TextView) view.findViewById(R.id.st_txt_otherFiles);
-        txtOtherFiles.setText(FileUtils.formatFileSize(sizeFolderOtherFiles));
+        txtOtherFiles.setText(FileUtils.formatFileSize(sizeFolderOtherFiles + sizeFolderOtherFilesImageUser + sizeFolderOtherFilesBackground));
         final CheckBox checkBoxOtherFiles = (CheckBox) view.findViewById(R.id.st_checkBox_otherFiles);
 
         long rTotalSize = sizeFolderPhotoDialog + sizeFolderVideoDialog + sizeFolderDocumentDialog + sizeFolderAudio + sizeFolderMap + sizeFolderOtherFiles;
@@ -198,6 +200,19 @@ public class ActivityManageSpaceViewModel {
                     for (File file : fileOtherFiles.listFiles()) {
                         if (!file.isDirectory()) file.delete();
                     }
+                    final File fileOtherFilesBackground = new File(G.DIR_CHAT_BACKGROUND);
+
+                    if (fileOtherFilesBackground.listFiles() != null)
+                        for (File fileBackground : fileOtherFilesBackground.listFiles()) {
+                            if (!fileBackground.isDirectory()) fileBackground.delete();
+                        }
+
+                    final File fileOtherFilesImageUser = new File(G.DIR_IMAGE_USER);
+
+                    if (fileOtherFilesImageUser.listFiles() != null)
+                        for (File fileImageUser : fileOtherFilesImageUser.listFiles()) {
+                            if (!fileImageUser.isDirectory()) fileImageUser.delete();
+                        }
                 }
 
                 long afterClearSizeFolderPhoto = FileUtils.getFolderSize(new File(G.DIR_IMAGES));
@@ -206,7 +221,9 @@ public class ActivityManageSpaceViewModel {
                 long afterClearSizeFolderAudio = FileUtils.getFolderSize(new File(G.DIR_AUDIOS));
                 long afterClearSizeFolderMap = FileUtils.getFolderSize(fileMap);
                 long afterClearSizeFolderOtherFiles = FileUtils.getFolderSize(new File(G.DIR_TEMP));
-                long afterClearTotal = afterClearSizeFolderPhoto + afterClearSizeFolderVideo + afterClearSizeFolderDocument + afterClearSizeFolderAudio + afterClearSizeFolderMap + afterClearSizeFolderOtherFiles;
+                long afterClearSizeFolderOtherFilesBackground = FileUtils.getFolderSize(new File(G.DIR_CHAT_BACKGROUND));
+                long afterClearSizeFolderOtherFilesImageUser = FileUtils.getFolderSize(new File(G.DIR_IMAGE_USER));
+                long afterClearTotal = afterClearSizeFolderPhoto + afterClearSizeFolderVideo + afterClearSizeFolderDocument + afterClearSizeFolderAudio + afterClearSizeFolderMap + afterClearSizeFolderOtherFiles + afterClearSizeFolderOtherFilesImageUser + afterClearSizeFolderOtherFilesBackground;
                 callbackClearCache.set(FileUtils.formatFileSize(afterClearTotal));
                 txtTotalSize.setText(FileUtils.formatFileSize(afterClearTotal));
                 dialog.dismiss();
@@ -316,11 +333,13 @@ public class ActivityManageSpaceViewModel {
         final long sizeFolderDocument = getFolderSize(new File(G.DIR_DOCUMENT));
         final long sizeFolderAudio = getFolderSize(new File(G.DIR_AUDIOS));
         final long sizeFolderOtherFiles = getFolderSize(new File(G.DIR_TEMP));
+        final long sizeFolderOtherFilesBackground = getFolderSize(new File(G.DIR_CHAT_BACKGROUND));
+        final long sizeFolderOtherFilesImageUser = getFolderSize(new File(G.DIR_IMAGE_USER));
 
         final IConfigurationProvider configurationProvider = Configuration.getInstance();
         fileMap = configurationProvider.getOsmdroidBasePath();
         final long sizeFolderMap = FileUtils.getFolderSize(fileMap);
-        final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument + sizeFolderAudio + sizeFolderMap + sizeFolderOtherFiles;
+        final long total = sizeFolderPhoto + sizeFolderVideo + sizeFolderDocument + sizeFolderAudio + sizeFolderMap + sizeFolderOtherFiles + sizeFolderOtherFilesBackground + sizeFolderOtherFilesImageUser;
 
         callbackClearCache.set(FileUtils.formatFileSize(total));
 
