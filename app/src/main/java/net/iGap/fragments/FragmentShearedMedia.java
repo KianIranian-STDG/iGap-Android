@@ -30,7 +30,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.util.ArrayMap;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -1099,10 +1098,9 @@ public class FragmentShearedMedia extends BaseFragment {
 
                     holder1.messageProgress.setTag(mList.get(position).messageId);
                     holder1.messageProgress.withDrawable(R.drawable.ic_download, true);
-                    holder1.contentLoading.setVisibility(View.GONE);
 
                     if (HelperDownloadFile.isDownLoading(mList.get(position).item.getAttachment().getCacheId())) {
-                        startDownload(position, holder1.messageProgress, holder1.contentLoading);
+                        startDownload(position, holder1.messageProgress);
                     }
                 }
             } else {
@@ -1187,11 +1185,11 @@ public class FragmentShearedMedia extends BaseFragment {
             }
         }
 
-        private void startDownload(final int position, final MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
-
-            contentLoading.setVisibility(View.VISIBLE);
+        private void startDownload(final int position, final MessageProgress messageProgress) {
 
             messageProgress.withDrawable(R.drawable.ic_cancel, true);
+            messageProgress.setAutoRest(true);
+            messageProgress.resetAnimation();
 
             final RealmAttachment at = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getAttachment() : mList.get(position).item.getAttachment();
             ProtoGlobal.RoomMessageType messageType = mList.get(position).item.getForwardMessage() != null ? mList.get(position).item.getForwardMessage().getMessageType() : mList.get(position).item.getMessageType();
@@ -1214,7 +1212,7 @@ public class FragmentShearedMedia extends BaseFragment {
                                     } else {
                                         messageProgress.withProgress(0);
                                         messageProgress.setVisibility(View.GONE);
-                                        contentLoading.setVisibility(View.GONE);
+                                        messageProgress.setAutoRest(false);
 
                                         updateViewAfterDownload(at.getCacheId());
                                     }
@@ -1233,8 +1231,8 @@ public class FragmentShearedMedia extends BaseFragment {
                                 @Override
                                 public void run() {
                                     messageProgress.withProgress(0);
+                                    messageProgress.setAutoRest(false);
                                     messageProgress.withDrawable(R.drawable.ic_download, true);
-                                    contentLoading.setVisibility(View.GONE);
                                 }
                             });
                         }
@@ -1272,17 +1270,17 @@ public class FragmentShearedMedia extends BaseFragment {
             }
         }
 
-        private void stopDownload(int position, final MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
+        private void stopDownload(int position) {
 
             HelperDownloadFile.stopDownLoad(mList.get(position).item.getAttachment().getCacheId());
         }
 
-        private void downloadFile(int position, MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
+        private void downloadFile(int position, MessageProgress messageProgress) {
 
             if (HelperDownloadFile.isDownLoading(mList.get(position).item.getAttachment().getCacheId())) {
-                stopDownload(position, messageProgress, contentLoading);
+                stopDownload(position);
             } else {
-                startDownload(position, messageProgress, contentLoading);
+                startDownload(position, messageProgress);
             }
         }
 
@@ -1346,7 +1344,6 @@ public class FragmentShearedMedia extends BaseFragment {
         public class mHolder extends RecyclerView.ViewHolder {
 
             public MessageProgress messageProgress;
-            public ContentLoadingProgressBar contentLoading;
 
             public mHolder(View view) {
                 super(view);
@@ -1377,14 +1374,13 @@ public class FragmentShearedMedia extends BaseFragment {
 
                 messageProgress.withDrawable(R.drawable.ic_download, true);
 
-                contentLoading = (ContentLoadingProgressBar) itemView.findViewById(R.id.ch_progress_loadingContent);
-                contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
+
 
                 messageProgress.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        downloadFile(getPosition(), messageProgress, contentLoading);
+                        downloadFile(getPosition(), messageProgress);
                     }
                 });
             }

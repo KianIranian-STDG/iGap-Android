@@ -33,7 +33,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -41,6 +40,7 @@ import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.interfaces.IResendMessage;
+import net.iGap.messageprogress.CircleProgress.CircularProgressView;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserUpdateStatus;
