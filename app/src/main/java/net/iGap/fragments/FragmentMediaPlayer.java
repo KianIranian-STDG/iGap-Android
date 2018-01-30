@@ -281,6 +281,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         });
 
         rcvListMusicPlayer.scrollToPosition(fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId)));
+        rcvListMusicPlayer.scrollToPosition(fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId)));
     }
 
     public interface OnBackFragment {

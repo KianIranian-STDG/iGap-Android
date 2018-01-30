@@ -495,11 +495,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                         return;
                     }
                 }
-
-                Log.i("TVVVVVVVVVVVVV", "selectedMedia: " + selectedMedia);
-                Log.i("TVVVVVVVVVVVVV", "roomMessage.getAttachment().getName(): " + roomMessage.getAttachment().getName());
-
-
                 startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             } else {
                 if (isVoice) { // avoid from return to first voice
@@ -544,7 +539,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             int maxTry = 0;
             while (!roomMessage.getAttachment().isFileExistsOnLocal()) {
                 selectedMedia = r.nextInt(mediaList.size() - 1);
-                Log.i("VVVVVVVVVVVVVV", "nextRandomMusic: " + selectedMedia);
                 roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
                 maxTry++;
                 if (maxTry > 3) {
@@ -994,6 +988,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
     public static ArrayList<RealmRoomMessage> fillMediaList(boolean setSelectedItem) {
 
+        boolean isOnListMusic = false;
         mediaList = new ArrayList<>();
 
         List<RealmRoomMessage> roomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
@@ -1019,8 +1014,11 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                     if ((roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()))) {
 
-                        if (mediaList.size() <= limitMediaList) {
+                        if (mediaList.size() <= limitMediaList || !isOnListMusic) {
                             try {
+                                if (roomMessage.getMessageId() == Long.parseLong(messageId)) {
+                                    isOnListMusic = true;
+                                }
                                 mediaList.add(roomMessage);
                             } catch (Exception e) {
                                 e.printStackTrace();
