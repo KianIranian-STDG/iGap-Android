@@ -64,12 +64,14 @@ import net.iGap.realm.RealmRoomMessageFields;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static net.iGap.G.context;
 
@@ -98,6 +100,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static int musicProgress = 0;
     public static boolean isPause = false;
     public static ArrayList<RealmRoomMessage> mediaList;
+    public static final int limitMediaList = 50;
     public static String strTimer = "";
     public static String messageId = "";
     public static boolean isNearDistance = false;
@@ -481,7 +484,17 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
             selectedMedia++;
             if (selectedMedia < mediaList.size()) {
+
                 RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+
+                while (!roomMessage.getAttachment().isFileExistsOnLocal()) {
+                    selectedMedia++;
+                    roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+                    if (selectedMedia > mediaList.size()) {
+                        stopSound();
+                        return;
+                    }
+                }
                 startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             } else {
                 if (isVoice) { // avoid from return to first voice
@@ -493,6 +506,16 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                 selectedMedia = 0;
                 RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+
+                while (!roomMessage.getAttachment().isFileExistsOnLocal()) {
+                    selectedMedia++;
+                    roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+                    if (selectedMedia > mediaList.size()) {
+                        stopSound();
+                        return;
+                    }
+                }
+
                 startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             }
             if (FragmentChat.onMusicListener != null) {
@@ -511,6 +534,18 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             Random r = new Random();
             selectedMedia = r.nextInt(mediaList.size() - 1);
             RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+
+
+            int maxTry = 0;
+            while (!roomMessage.getAttachment().isFileExistsOnLocal()) {
+                selectedMedia = r.nextInt(mediaList.size() - 1);
+                roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+                maxTry++;
+                if (maxTry > 3) {
+                    nextMusic();
+                }
+            }
+
 
             startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             if (FragmentChat.onMusicListener != null) {
@@ -558,6 +593,16 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             if (selectedMedia >= 0) {
 
                 RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+
+                while (!roomMessage.getAttachment().isFileExistsOnLocal()) {
+                    selectedMedia--;
+                    roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+                    if (selectedMedia <= 0) {
+                        stopSound();
+                        return;
+                    }
+                }
+
                 startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
             } else {
                 int index = mediaList.size() - 1;
@@ -565,6 +610,15 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                     selectedMedia = index;
 
                     RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+
+                    while (!roomMessage.getAttachment().isFileExistsOnLocal()) {
+                        selectedMedia--;
+                        roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
+                        if (selectedMedia <= 0) {
+                            stopSound();
+                            return;
+                        }
+                    }
                     startPlayer(roomMessage.getAttachment().getName(), roomMessage.getAttachment().getLocalFilePath(), roomName, roomId, false, mediaList.get(selectedMedia).getMessageId() + "");
                 }
             }
@@ -934,9 +988,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
     public static ArrayList<RealmRoomMessage> fillMediaList(boolean setSelectedItem) {
 
+        boolean isOnListMusic = false;
         mediaList = new ArrayList<>();
 
-        RealmResults<RealmRoomMessage> roomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.MESSAGE_ID);
+        List<RealmRoomMessage> roomMessages = getRealm().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
 
         if (!roomMessages.isEmpty()) {
             for (RealmRoomMessage realmRoomMessage : roomMessages) { //TODO Saeed Mozaffari; write better code for detect voice and audio instead get all roomMessages
@@ -956,22 +1011,27 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                         }
                     }
                 } else {
-                    if (roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString())) {
-                        try {
-                            if (roomMessage.getAttachment().getLocalFilePath() != null) {
-                                if (new File(roomMessage.getAttachment().getLocalFilePath()).exists()) {
-                                    mediaList.add(roomMessage);
+
+                    if ((roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO.toString()) || roomMessage.getMessageType().toString().equals(ProtoGlobal.RoomMessageType.AUDIO_TEXT.toString()))) {
+
+                        if (mediaList.size() <= limitMediaList || !isOnListMusic) {
+                            try {
+                                if (roomMessage.getMessageId() == Long.parseLong(messageId)) {
+                                    isOnListMusic = true;
                                 }
+                                mediaList.add(roomMessage);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
                     }
                 }
             }
         }
 
-        if (setSelectedItem) {
+        if (setSelectedItem)
+
+        {
             for (int i = mediaList.size() - 1; i >= 0; i--) {
                 try {
                     RealmRoomMessage _rm = RealmRoomMessage.getFinalMessage(mediaList.get(i));
@@ -1541,20 +1601,20 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         }
     }
 
-    //    private static void seMediaSesionMetaData() {
-    //        if (mSession != null) {
-    //
-    //            MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
-    //            builder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "aaaaaaa");
-    //            builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, "bbbbbbb");
-    //            builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, "ccccccccc");
-    //            builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, 1234);
-    //            builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, mediaThumpnail);
-    //            mSession.setMetadata(builder.build());
-    //
-    //
-    //        }
-    //    }
+//    private static void seMediaSesionMetaData() {
+//        if (mSession != null) {
+//
+//            MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
+//            builder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "aaaaaaa");
+//            builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, "bbbbbbb");
+//            builder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, "ccccccccc");
+//            builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, 1234);
+//            builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, mediaThumpnail);
+//            mSession.setMetadata(builder.build());
+//
+//
+//        }
+//    }
 
 
     /*private static void setWallpaperLockScreen(Bitmap bitmap) {

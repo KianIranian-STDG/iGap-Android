@@ -863,6 +863,11 @@ public class FragmentShearedMedia extends BaseFragment {
             }
 
             @Override
+            public void onTimeOut() {
+
+            }
+
+            @Override
             public void onError(final int majorCode, int minorCode, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter identity) {
 
                 G.handler.post(new Runnable() {

@@ -12,9 +12,14 @@ package net.iGap.fragments;
 
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.util.ArrayMap;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,21 +33,41 @@ import android.widget.TextView;
 
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.IItem;
+import com.mikepenz.fastadapter.adapters.ItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
+import com.mikepenz.fastadapter_extensions.items.ProgressItem;
+import com.mikepenz.fastadapter_extensions.scroll.EndlessRecyclerOnScrollListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityMediaPlayerBinding;
 import net.iGap.databinding.ActivityMediaPlayerLandBinding;
+import net.iGap.helper.HelperDownloadFile;
+import net.iGap.interfaces.OnClientSearchRoomHistory;
 import net.iGap.interfaces.OnComplete;
+import net.iGap.messageprogress.MessageProgress;
+import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
+import net.iGap.proto.ProtoClientSearchRoomHistory;
+import net.iGap.proto.ProtoFileDownload;
+import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.request.RequestClientSearchRoomHistory;
 import net.iGap.viewmodel.FragmentMediaPlayerViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class FragmentMediaPlayer extends BaseFragment {
 
@@ -56,6 +81,20 @@ public class FragmentMediaPlayer extends BaseFragment {
     private FragmentMediaPlayerViewModel fragmentMediaPlayerViewModel;
     private ActivityMediaPlayerBinding fragmentMediaPlayerBinding;
     private ActivityMediaPlayerLandBinding activityMediaPlayerLandBinding;
+    private ItemAdapter<ProgressItem> footerAdapter;
+
+
+    private long nextMessageId = 0;
+    private boolean isThereAnyMoreItemToLoad = false;
+    private int offset;
+    private RealmResults<RealmRoomMessage> mRealmList;
+    private ArrayList<RealmRoomMessage> mediaList;
+    private static Realm mRealm;
+    private RecyclerView.OnScrollListener onScrollListener;
+    private boolean canUpdateAfterDownload = false;
+    protected ArrayMap<Long, Boolean> needDownloadList = new ArrayMap<>();
+    private RealmChangeListener<RealmResults<RealmRoomMessage>> changeListener;
+    private int changeSize = 0;
 
     @Nullable
     @Override
@@ -124,6 +163,7 @@ public class FragmentMediaPlayer extends BaseFragment {
     public void onResume() {
         super.onResume();
 
+        canUpdateAfterDownload = true;
         fragmentMediaPlayerViewModel.onResume();
 
     }
@@ -131,6 +171,7 @@ public class FragmentMediaPlayer extends BaseFragment {
     @Override
     public void onStop() {
         super.onStop();
+        canUpdateAfterDownload = false;
         fragmentMediaPlayerViewModel.onStop();
     }
 
@@ -193,30 +234,37 @@ public class FragmentMediaPlayer extends BaseFragment {
 
         rcvListMusicPlayer = (RecyclerView) view.findViewById(R.id.rcvListMusicPlayer);
         final SlidingUpPanelLayout slidingUpPanelLayout = (SlidingUpPanelLayout) view.findViewById(R.id.sliding_layout);
-        fastItemAdapter = new FastItemAdapter();
 
-        for (RealmRoomMessage r : MusicPlayer.mediaList) {
-            fastItemAdapter.add(new AdapterListMusicPlayer().setItem(r).withIdentifier(r.getMessageId()));
-        }
+        footerAdapter = new ItemAdapter<>();
+        fastItemAdapter = new FastItemAdapter();
+        fastItemAdapter.addAdapter(1, footerAdapter);
+
         rcvListMusicPlayer.setAdapter(fastItemAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(_mActivity);
         rcvListMusicPlayer.setLayoutManager(linearLayoutManager);
         rcvListMusicPlayer.setHasFixedSize(true);
 
-        /*linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
-        rcvListMusicPlayer.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        rcvListMusicPlayer.addOnScrollListener(new EndlessRecyclerOnScrollListener(footerAdapter) {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (rcvListMusicPlayer.computeVerticalScrollOffset() > 0) {
-                    slidingUpPanelLayout.setEnabled(false);
-                } else {
-                    slidingUpPanelLayout.setEnabled(true);
+            public void onLoadMore(int currentPage) {
+                footerAdapter.clear();
+                footerAdapter.add(new ProgressItem().withEnabled(false));
+                // Load your items here and add it to FastAdapter
+
+                if (isThereAnyMoreItemToLoad) {
+                    getInfoRealm();
                 }
             }
-        });*/
+        });
 
+
+        getDataFromServer(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
+        loadLocalData(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO, ProtoGlobal.RoomMessageType.AUDIO);
+        mediaList = new ArrayList<>();
+
+        for (RealmRoomMessage r : MusicPlayer.mediaList) {
+            fastItemAdapter.add(new AdapterListMusicPlayer().setItem(r).withIdentifier(r.getMessageId()));
+        }
         fastItemAdapter.withSelectable(true);
         fastItemAdapter.withOnClickListener(new OnClickListener() {
             @Override
@@ -232,6 +280,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
         });
 
+        rcvListMusicPlayer.scrollToPosition(fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId)));
         rcvListMusicPlayer.scrollToPosition(fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId)));
     }
 
@@ -275,21 +324,38 @@ public class FragmentMediaPlayer extends BaseFragment {
         public void bindView(ViewHolder holder, List payloads) {
             super.bindView(holder, payloads);
 
-            if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying() && Long.parseLong(MusicPlayer.messageId) == (realmRoomMessagesList.getMessageId())) {
-                holder.iconPlay.setText(R.string.md_round_pause_button);
-            } else {
-                holder.iconPlay.setText(R.string.md_play_rounded_button);
-            }
             holder.txtNameMusic.setText(realmRoomMessagesList.getAttachment().getName());
-            MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
+            if (realmRoomMessagesList.getAttachment().fileExistsOnLocal()) {
 
-            String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
-            if (artist != null) {
-                holder.txtMusicplace.setText(artist);
+                holder.iconPlay.setVisibility(View.VISIBLE);
+                holder.messageProgress.setVisibility(View.GONE);
+
+                if (MusicPlayer.mp != null && MusicPlayer.mp.isPlaying() && Long.parseLong(MusicPlayer.messageId) == (realmRoomMessagesList.getMessageId())) {
+                    holder.iconPlay.setText(R.string.md_round_pause_button);
+                } else {
+                    holder.iconPlay.setText(R.string.md_play_rounded_button);
+                }
+                //holder.txtNameMusic.setText(realmRoomMessagesList.getAttachment().getName());
+                MediaMetadataRetriever mediaMetadataRetriever = (MediaMetadataRetriever) new MediaMetadataRetriever();
+                String artist = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+                if (artist != null) {
+                    holder.txtMusicplace.setText(artist);
+                } else {
+                    holder.txtMusicplace.setText(G.context.getString(R.string.unknown_artist));
+                }
             } else {
-                holder.txtMusicplace.setText(G.context.getString(R.string.unknown_artist));
-            }
 
+                if (realmRoomMessagesList.getAttachment() != null) {
+                    holder.messageProgress.setTag(realmRoomMessagesList.getMessageId());
+                    holder.messageProgress.withDrawable(R.drawable.ic_download, true);
+                    holder.contentLoading.setVisibility(View.GONE);
+                    holder.iconPlay.setVisibility(View.GONE);
+
+                    if (HelperDownloadFile.isDownLoading(MusicPlayer.mediaList.get(holder.getAdapterPosition()).getAttachment().getCacheId())) {
+                        startDownload(holder.getAdapterPosition(), holder.messageProgress, holder.contentLoading);
+                    }
+                }
+            }
         }
 
         @Override
@@ -301,12 +367,28 @@ public class FragmentMediaPlayer extends BaseFragment {
         protected class ViewHolder extends RecyclerView.ViewHolder {
 
             private TextView txtNameMusic, txtMusicplace, iconPlay;
+            public MessageProgress messageProgress;
+            public ContentLoadingProgressBar contentLoading;
 
             public ViewHolder(View view) {
                 super(view);
                 txtNameMusic = itemView.findViewById(R.id.txtListMusicPlayer);
                 txtMusicplace = itemView.findViewById(R.id.ml_txt_music_place);
                 iconPlay = itemView.findViewById(R.id.ml_btn_play_music);
+
+                messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
+                AppUtils.setProgresColor(messageProgress.progressBar);
+
+                contentLoading = (ContentLoadingProgressBar) itemView.findViewById(R.id.ch_progress_loadingContent);
+                contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
+
+                messageProgress.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        downloadFile(getAdapterPosition(), messageProgress, contentLoading);
+
+                    }
+                });
 
                 iconPlay.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -316,12 +398,274 @@ public class FragmentMediaPlayer extends BaseFragment {
                         } else {
                             MusicPlayer.startPlayer(MusicPlayer.mediaList.get(getAdapterPosition()).getAttachment().getName(), MusicPlayer.mediaList.get(getAdapterPosition()).getAttachment().getLocalFilePath(), FragmentChat.titleStatic, FragmentChat.mRoomIdStatic, false, MusicPlayer.mediaList.get(getAdapterPosition()).getMessageId() + "");
                         }
-
                     }
                 });
             }
         }
 
+
     }
+
+    private void getDataFromServer(final ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter) {
+
+        offset = 0;
+        nextMessageId = 0;
+
+        G.onClientSearchRoomHistory = new OnClientSearchRoomHistory() {
+            @Override
+            public void onClientSearchRoomHistory(int totalCount, final int notDeletedCount, final List<ProtoGlobal.RoomMessage> resultList, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter identity) {
+
+                if (resultList.size() > 0) {
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            saveDataToLocal(resultList, MusicPlayer.roomId);
+
+                            nextMessageId = resultList.get(0).getMessageId();
+
+                            isThereAnyMoreItemToLoad = true;
+
+                            int deletedCount = 0;
+                            for (int i = 0; i < resultList.size(); i++) {
+                                if (resultList.get(i).getDeleted()) {
+                                    deletedCount++;
+                                }
+                            }
+
+                            offset += resultList.size() - deletedCount;
+                        }
+                    }).start();
+                }
+            }
+
+            @Override
+            public void onTimeOut() {
+                footerAdapter.clear();
+            }
+
+            @Override
+            public void onError(final int majorCode, int minorCode, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter identity) {
+
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (majorCode == 620) {
+
+                            isThereAnyMoreItemToLoad = false;
+                        }
+                        footerAdapter.clear();
+                    }
+                });
+            }
+        };
+
+        new RequestClientSearchRoomHistory().clientSearchRoomHistory(MusicPlayer.roomId, nextMessageId, filter);
+    }
+
+    public void saveDataToLocal(final List<ProtoGlobal.RoomMessage> RoomMessages, final long roomId) {
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                //+final Realm realm = Realm.getDefaultInstance();
+                getRealm().executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
+                            RealmRoomMessage.putOrUpdate(roomMessage, roomId, false, false, realm);
+                        }
+                    }
+                    //}, new Realm.Transaction.OnSuccess() {
+                    //    @Override
+                    //    public void onSuccess() {
+                    //        realm.close();
+                    //    }
+                    //}, new Realm.Transaction.OnError() {
+                    //    @Override
+                    //    public void onError(Throwable error) {
+                    //        realm.close();
+                    //    }
+                });
+            }
+        });
+    }
+
+    private RealmResults<RealmRoomMessage> loadLocalData(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter filter, ProtoGlobal.RoomMessageType type) {
+
+        if (mRealmList != null) {
+            mRealmList.removeAllChangeListeners();
+        }
+
+        mRealmList = RealmRoomMessage.filterMessage(getRealm(), MusicPlayer.roomId, type);
+
+        changeSize = mRealmList.size();
+
+        setListener();
+        isThereAnyMoreItemToLoad = true;
+        getDataFromServer(filter);
+        return mRealmList;
+    }
+
+    private static Realm getRealm() {
+        if (mRealm == null || mRealm.isClosed()) {
+            mRealm = Realm.getDefaultInstance();
+        }
+
+        return mRealm;
+    }
+
+    private void downloadFile(int position, MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
+
+        if (HelperDownloadFile.isDownLoading(MusicPlayer.mediaList.get(position).getAttachment().getCacheId())) {
+            stopDownload(position, messageProgress, contentLoading);
+        } else {
+            startDownload(position, messageProgress, contentLoading);
+        }
+    }
+
+    private void stopDownload(int position, final MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
+
+        HelperDownloadFile.stopDownLoad(MusicPlayer.mediaList.get(position).getAttachment().getCacheId());
+    }
+
+    private void startDownload(final int position, final MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
+
+        contentLoading.setVisibility(View.VISIBLE);
+
+        messageProgress.withDrawable(R.drawable.ic_cancel, true);
+
+        final RealmAttachment at = MusicPlayer.mediaList.get(position).getForwardMessage() != null ? MusicPlayer.mediaList.get(position).getForwardMessage().getAttachment() : MusicPlayer.mediaList.get(position).getAttachment();
+        ProtoGlobal.RoomMessageType messageType = MusicPlayer.mediaList.get(position).getForwardMessage() != null ? MusicPlayer.mediaList.get(position).getForwardMessage().getMessageType() : MusicPlayer.mediaList.get(position).getMessageType();
+
+        String dirPath = AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), messageType);
+
+        HelperDownloadFile.startDownload(MusicPlayer.mediaList.get(position).getMessageId() + "", at.getToken(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
+            @Override
+            public void OnProgress(String path, final int progress) {
+
+                if (canUpdateAfterDownload) {
+
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (messageProgress != null && messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
+
+                                G.currentActivity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (progress < 100) {
+                                            messageProgress.withProgress(progress);
+                                        } else {
+                                            messageProgress.withProgress(0);
+                                            messageProgress.setVisibility(View.GONE);
+                                            contentLoading.setVisibility(View.GONE);
+
+                                            updateViewAfterDownload(at.getCacheId());
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void OnError(String token) {
+                if (canUpdateAfterDownload) {
+
+                    if (messageProgress != null && messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
+                        G.currentActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                messageProgress.withProgress(0);
+                                messageProgress.withDrawable(R.drawable.ic_download, true);
+                                contentLoading.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    private void updateViewAfterDownload(String cashId) {
+        for (int j = MusicPlayer.mediaList.size() - 1; j >= 0; j--) {
+            try {
+                if (MusicPlayer.mediaList.get(j) != null && MusicPlayer.mediaList.get(j).isValid() && !MusicPlayer.mediaList.get(j).isDeleted()) {
+                    String mCashId = MusicPlayer.mediaList.get(j).getForwardMessage() != null ? MusicPlayer.mediaList.get(j).getForwardMessage().getAttachment().getCacheId() : MusicPlayer.mediaList.get(j).getAttachment().getCacheId();
+                    if (mCashId.equals(cashId)) {
+                        needDownloadList.remove(MusicPlayer.mediaList.get(j).getMessageId());
+
+                        final int finalJ = j;
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                rcvListMusicPlayer.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        rcvListMusicPlayer.getAdapter().notifyItemChanged(finalJ);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void setListener() {
+        changeListener = new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
+            @Override
+            public void onChange(RealmResults<RealmRoomMessage> element) {
+
+                getInfoRealm();
+            }
+        };
+
+        if (changeListener != null) {
+            mRealmList.addChangeListener(changeListener);
+        }
+    }
+
+    public void getInfoRealm() {
+
+        List<RealmRoomMessage> realmRoomMessages;
+        realmRoomMessages = getRealm().where(RealmRoomMessage.class)
+                .equalTo(RealmRoomMessageFields.ROOM_ID, MusicPlayer.roomId)
+                .notEqualTo(RealmRoomMessageFields.DELETED, true)
+                .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.AUDIO.toString())
+                .lessThan(RealmRoomMessageFields.MESSAGE_ID, MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
+                .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+
+        if (realmRoomMessages.size() > 0) {
+
+//                                mRealmList = RealmRoomMessage.filterMessage(getRealm(), MusicPlayer.roomId, ProtoGlobal.RoomMessageType.AUDIO);
+            if (realmRoomMessages.size() > MusicPlayer.limitMediaList) {
+                realmRoomMessages = realmRoomMessages.subList(0, MusicPlayer.limitMediaList);
+            } else {
+                realmRoomMessages = realmRoomMessages.subList(0, realmRoomMessages.size());
+            }
+
+            footerAdapter.clear();
+            for (RealmRoomMessage r : realmRoomMessages) {
+                MusicPlayer.mediaList.add(r);
+                fastItemAdapter.add(new AdapterListMusicPlayer().setItem(r).withIdentifier(r.getMessageId()));
+            }
+
+        } else {
+            new RequestClientSearchRoomHistory().clientSearchRoomHistory(MusicPlayer.roomId, nextMessageId, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
+
+        }
+
+    }
+
 
 }
