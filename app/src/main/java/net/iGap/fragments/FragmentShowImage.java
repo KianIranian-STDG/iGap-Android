@@ -26,6 +26,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
@@ -576,6 +577,14 @@ public class FragmentShowImage extends BaseFragment {
             final TextureView mTextureView = (TextureView) layout.findViewById(R.id.textureView);
             final ImageView imgPlay = (ImageView) layout.findViewById(R.id.imgPlay);
             final TouchImageView touchImageView = (TouchImageView) layout.findViewById(R.id.sisl_touch_image_view);
+
+            FrameLayout frameLayout = (FrameLayout) layout.findViewById(R.id.Layout_showImage);
+            frameLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    touchImageView.performClick();
+                }
+            });
 
             final MessageProgress progress = (MessageProgress) layout.findViewById(R.id.progress);
             AppUtils.setProgresColor(progress.progressBar);
