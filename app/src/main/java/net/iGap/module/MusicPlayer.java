@@ -1035,7 +1035,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             for (int i = mediaList.size() - 1; i >= 0; i--) {
                 try {
                     RealmRoomMessage _rm = RealmRoomMessage.getFinalMessage(mediaList.get(i));
-                    if (_rm.getAttachment().getLocalFilePath().equals(musicPath)) {
+                    if (_rm.getAttachment().getLocalFilePath() != null && _rm.getAttachment().getLocalFilePath().equals(musicPath)) {
                         selectedMedia = i;
                         break;
                     }
