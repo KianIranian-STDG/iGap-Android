@@ -471,6 +471,16 @@ public class RealmRoom extends RealmObject {
             }
         });
         realm.close();
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                /** call this listener for update tab bars unread count */
+                if (G.onUnreadChange != null) {
+                    G.onUnreadChange.onChange();
+                }
+            }
+        }, 100);
     }
 
     public static void addOwnerToDatabase(long roomId) {
@@ -617,17 +627,35 @@ public class RealmRoom extends RealmObject {
     }
 
     public static void updateMute(final long roomId, final ProtoGlobal.RoomMute muteState) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        G.handler.post(new Runnable() {
             @Override
-            public void execute(Realm realm) {
-                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (room != null) {
-                    room.setMute(muteState);
-                }
+            public void run() {
+                final Realm realm = Realm.getDefaultInstance();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                        if (room != null) {
+                            room.setMute(muteState);
+                        }
+                    }
+                }, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        /** call this listener for update tab bars unread count */
+                        if (G.onUnreadChange != null) {
+                            G.onUnreadChange.onChange();
+                        }
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override
+                    public void onError(Throwable error) {
+                        realm.close();
+                    }
+                });
             }
         });
-        realm.close();
     }
 
     public static void updatePin(final long roomId, final boolean pin, final long pinId) {
@@ -1316,7 +1344,7 @@ public class RealmRoom extends RealmObject {
 
     public static String[] getUnreadCountPages() {
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmRoom> results = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
+        RealmResults<RealmRoom> results = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.MUTE, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll();
         int all = 0, chat = 0, group = 0, channel = 0;
         for (RealmRoom rm : results) {
             switch (rm.getType()) {
