@@ -10,6 +10,7 @@
 
 package net.iGap.module;
 
+import android.app.Activity;
 import android.content.Context;
 
 import net.iGap.G;
@@ -36,9 +37,11 @@ public class ResendMessage implements IResendMessage {
         this.mMessages = messages;
         this.mListener = listener;
         this.mSelectedMessageID = selectedMessageID;
-        AppUtils.buildResendDialog(context, messages.size(), this).show();
-    }
+        if (!((Activity) context).isFinishing()) {
+            AppUtils.buildResendDialog(context, messages.size(), this).show();
+        }
 
+    }
     public List<StructMessageInfo> getMessages() {
         return mMessages;
     }

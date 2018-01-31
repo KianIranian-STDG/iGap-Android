@@ -582,7 +582,7 @@ public class FragmentShowImage extends BaseFragment {
 
             final RealmRoomMessage rm = RealmRoomMessage.getFinalMessage(mFList.get(position));
 
-            if (rm != null) {
+            if (rm != null && rm.isValid()) {
                 if (HelperDownloadFile.isDownLoading(rm.getAttachment().getCacheId())) {
                     progress.withDrawable(R.drawable.ic_cancel, true);
                     startDownload(position, progress, touchImageView, imgPlay, mTextureView);
