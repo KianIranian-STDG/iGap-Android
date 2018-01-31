@@ -43,19 +43,17 @@ public class HelperNotificationChannel {
         if (isMute) {
             return;
         }
-        if (realmRoom.getChannelRoom() != null) {
-            if (realmRoom.getChannelRoom().getRealmNotificationSetting() != null) {
-                notification = realmRoom.getChannelRoom().getRealmNotificationSetting().getNotification();
-                if (realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate() != -1) {
-                    vibrator = realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate();
-                } else {
-                    vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
-                }
-                if (realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
-                    sound = realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound();
-                } else {
-                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
-                }
+        if (realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().getRealmNotificationSetting() != null) {
+            notification = realmRoom.getChannelRoom().getRealmNotificationSetting().getNotification();
+            if (realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate() != -1) {
+                vibrator = realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate();
+            } else {
+                vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
+            }
+            if (realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
+                sound = realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound();
+            } else {
+                sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
             }
 
         } else {
