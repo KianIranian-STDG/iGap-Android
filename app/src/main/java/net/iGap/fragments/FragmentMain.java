@@ -54,6 +54,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyDialog;
 import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.enums.ChannelChatRole;
@@ -564,6 +565,14 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                             new RequestGroupLeft().groupLeft(item.getId());
                         }
                     } else if (item.getType() == CHANNEL) {
+
+                        if (MusicPlayer.mainLayout != null) {
+                            if (item.getId() == MusicPlayer.roomId) {
+                                MusicPlayer.closeLayoutMediaPlayer();
+                            }
+                        }
+
+
                         if (item.getChannelRoom().getRole() == ChannelChatRole.OWNER) {
                             new RequestChannelDelete().channelDelete(item.getId());
                         } else {
