@@ -249,7 +249,6 @@ public class FragmentAddContact extends BaseFragment {
                         if (!mask.equals(" ")) {
                             edtPhoneNumber.setMask(mask.replace("X", "#").replace(" ", "-"));
                         } else {
-                            edtPhoneNumber.setMaxLines(18);
                             edtPhoneNumber.setMask("##################");
                         }
                     }
