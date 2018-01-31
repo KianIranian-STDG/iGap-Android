@@ -12,14 +12,12 @@ package net.iGap.fragments;
 
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -348,11 +346,10 @@ public class FragmentMediaPlayer extends BaseFragment {
                 if (realmRoomMessagesList.getAttachment() != null) {
                     holder.messageProgress.setTag(realmRoomMessagesList.getMessageId());
                     holder.messageProgress.withDrawable(R.drawable.ic_download, true);
-                    holder.contentLoading.setVisibility(View.GONE);
                     holder.iconPlay.setVisibility(View.GONE);
 
                     if (HelperDownloadFile.isDownLoading(MusicPlayer.mediaList.get(holder.getAdapterPosition()).getAttachment().getCacheId())) {
-                        startDownload(holder.getAdapterPosition(), holder.messageProgress, holder.contentLoading);
+                        startDownload(holder.getAdapterPosition(), holder.messageProgress);
                     }
                 }
             }
@@ -368,7 +365,6 @@ public class FragmentMediaPlayer extends BaseFragment {
 
             private TextView txtNameMusic, txtMusicplace, iconPlay;
             public MessageProgress messageProgress;
-            public ContentLoadingProgressBar contentLoading;
 
             public ViewHolder(View view) {
                 super(view);
@@ -379,13 +375,11 @@ public class FragmentMediaPlayer extends BaseFragment {
                 messageProgress = (MessageProgress) itemView.findViewById(R.id.progress);
                 AppUtils.setProgresColor(messageProgress.progressBar);
 
-                contentLoading = (ContentLoadingProgressBar) itemView.findViewById(R.id.ch_progress_loadingContent);
-                contentLoading.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.MULTIPLY);
 
                 messageProgress.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        downloadFile(getAdapterPosition(), messageProgress, contentLoading);
+                        downloadFile(getAdapterPosition(), messageProgress);
 
                     }
                 });
@@ -517,23 +511,22 @@ public class FragmentMediaPlayer extends BaseFragment {
         return mRealm;
     }
 
-    private void downloadFile(int position, MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
+    private void downloadFile(int position, MessageProgress messageProgress) {
 
         if (HelperDownloadFile.isDownLoading(MusicPlayer.mediaList.get(position).getAttachment().getCacheId())) {
-            stopDownload(position, messageProgress, contentLoading);
+            stopDownload(position, messageProgress);
         } else {
-            startDownload(position, messageProgress, contentLoading);
+            startDownload(position, messageProgress);
         }
     }
 
-    private void stopDownload(int position, final MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
+    private void stopDownload(int position, final MessageProgress messageProgress) {
 
         HelperDownloadFile.stopDownLoad(MusicPlayer.mediaList.get(position).getAttachment().getCacheId());
     }
 
-    private void startDownload(final int position, final MessageProgress messageProgress, final ContentLoadingProgressBar contentLoading) {
+    private void startDownload(final int position, final MessageProgress messageProgress) {
 
-        contentLoading.setVisibility(View.VISIBLE);
 
         messageProgress.withDrawable(R.drawable.ic_cancel, true);
 
@@ -561,7 +554,6 @@ public class FragmentMediaPlayer extends BaseFragment {
                                         } else {
                                             messageProgress.withProgress(0);
                                             messageProgress.setVisibility(View.GONE);
-                                            contentLoading.setVisibility(View.GONE);
 
                                             updateViewAfterDownload(at.getCacheId());
                                         }
@@ -584,7 +576,6 @@ public class FragmentMediaPlayer extends BaseFragment {
                             public void run() {
                                 messageProgress.withProgress(0);
                                 messageProgress.withDrawable(R.drawable.ic_download, true);
-                                contentLoading.setVisibility(View.GONE);
                             }
                         });
                     }
