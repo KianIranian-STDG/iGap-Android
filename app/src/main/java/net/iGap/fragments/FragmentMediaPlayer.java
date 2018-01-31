@@ -616,7 +616,6 @@ public class FragmentMediaPlayer extends BaseFragment {
         changeListener = new RealmChangeListener<RealmResults<RealmRoomMessage>>() {
             @Override
             public void onChange(RealmResults<RealmRoomMessage> element) {
-
                 getInfoRealm();
             }
         };
@@ -628,15 +627,20 @@ public class FragmentMediaPlayer extends BaseFragment {
 
     public void getInfoRealm() {
 
-        List<RealmRoomMessage> realmRoomMessages;
-        realmRoomMessages = getRealm().where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.ROOM_ID, MusicPlayer.roomId)
-                .notEqualTo(RealmRoomMessageFields.DELETED, true)
-                .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.AUDIO.toString())
-                .lessThan(RealmRoomMessageFields.MESSAGE_ID, MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
-                .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        changeListener = null;
+        List<RealmRoomMessage> realmRoomMessages = null;
 
-        if (realmRoomMessages.size() > 0) {
+        try {
+            realmRoomMessages = getRealm().where(RealmRoomMessage.class)
+                    .equalTo(RealmRoomMessageFields.ROOM_ID, MusicPlayer.roomId)
+                    .notEqualTo(RealmRoomMessageFields.DELETED, true)
+                    .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.AUDIO.toString())
+                    .lessThan(RealmRoomMessageFields.MESSAGE_ID, MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
+                    .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        } catch (IllegalStateException e) {
+        }
+
+        if (realmRoomMessages != null && realmRoomMessages.size() > 0) {
 
 //                                mRealmList = RealmRoomMessage.filterMessage(getRealm(), MusicPlayer.roomId, ProtoGlobal.RoomMessageType.AUDIO);
             if (realmRoomMessages.size() > MusicPlayer.limitMediaList) {
@@ -657,6 +661,5 @@ public class FragmentMediaPlayer extends BaseFragment {
         }
 
     }
-
 
 }

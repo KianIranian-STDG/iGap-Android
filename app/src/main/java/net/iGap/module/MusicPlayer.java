@@ -631,7 +631,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         }
     }
 
-    private static void closeLayoutMediaPlayer() {
+    public static void closeLayoutMediaPlayer() {
 
         try {
 
