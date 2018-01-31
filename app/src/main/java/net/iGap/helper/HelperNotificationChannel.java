@@ -35,25 +35,29 @@ public class HelperNotificationChannel {
 
         int vibrator = 1;
         int sound = 0;
-        if (realmRoom != null && realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().getRealmNotificationSetting() != null) {
 
-            notification = realmRoom.getChannelRoom().getRealmNotificationSetting().getNotification();
+        if (realmRoom == null) {
+            return;
+        }
+        boolean isMute = realmRoom.getMute();
+        if (isMute) {
+            return;
+        }
+        if (realmRoom.getChannelRoom() != null) {
+            if (realmRoom.getChannelRoom().getRealmNotificationSetting() != null) {
+                notification = realmRoom.getChannelRoom().getRealmNotificationSetting().getNotification();
+                if (realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate() != -1) {
+                    vibrator = realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate();
+                } else {
+                    vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
+                }
+                if (realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
+                    sound = realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound();
+                } else {
+                    sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
+                }
+            }
 
-            boolean isMute = realmRoom.getMute();
-            if (isMute) {
-                return;
-            }
-            if (realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate() != -1) {
-                vibrator = realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate();
-            } else {
-                vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_GROUP, 1);
-            }
-
-            if (realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound() != -1) {
-                sound = realmRoom.getChannelRoom().getRealmNotificationSetting().getIdRadioButtonSound();
-            } else {
-                sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
-            }
         } else {
             vibrator = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_VIBRATE_MESSAGE, 1);
             sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, 0);
