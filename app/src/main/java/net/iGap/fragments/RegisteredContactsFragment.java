@@ -86,7 +86,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.realm.Case;
 import io.realm.Realm;
@@ -122,6 +121,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     boolean isMultiSelect = false;
     private ContactListAdapter contactListAdapter;
     private AppBarLayout toolbar;
+    private long index = 2500;
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -1113,7 +1113,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         @Override
         protected void onPostExecute(Void aVoid) {
             for (int i = 0; i < contacts.size(); i++) {
-                fastItemAdapter.add(new AdapterListContact(contacts.get(i).getDisplayName(), contacts.get(i).getPhone()).withIdentifier(100 + i));
+                fastItemAdapter.add(new AdapterListContact(contacts.get(i).getDisplayName(), contacts.get(i).getPhone()).withIdentifier(index++));
             }
             if (isEnd) {
                 prgWaitingLiadList.setVisibility(View.GONE);
@@ -1180,7 +1180,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            for (Map.Entry<Long, Boolean> entry : selectedList.entrySet()) {
+                            for (ArrayMap.Entry<Long, Boolean> entry : selectedList.entrySet()) {
                                 new RequestUserContactsDelete().contactsDelete("" + entry.getKey());
                             }
 

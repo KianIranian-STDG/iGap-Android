@@ -68,6 +68,7 @@ public class FragmentIgapSearch extends BaseFragment {
     //private TextView txtNothing;
     private ContentLoadingProgressBar loadingProgressBar;
     private ImageView imvNothingFound;
+    private long index = 2000;
 
     public static FragmentIgapSearch newInstance() {
         return new FragmentIgapSearch();
@@ -296,8 +297,6 @@ public class FragmentIgapSearch extends BaseFragment {
 
                         List<IItem> items = new ArrayList<>();
 
-                        int i = 0;
-
                         Realm realm = Realm.getDefaultInstance();
 
                         for (final ProtoClientSearchUsername.ClientSearchUsernameResponse.Result item : builderList.getResultList()) {
@@ -325,7 +324,7 @@ public class FragmentIgapSearch extends BaseFragment {
                                 }
                             }
 
-                            items.add(new SearchItamIGap().setItem(item).withIdentifier(100 + i++));
+                            items.add(new SearchItamIGap().setItem(item).withIdentifier(index++));
                         }
                         itemAdapter.clear();
                         itemAdapter.add(items);

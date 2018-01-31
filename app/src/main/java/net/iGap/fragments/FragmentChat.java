@@ -5137,7 +5137,7 @@ public class FragmentChat extends BaseFragment
         RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
         if (realmRoom != null) {
             RealmRoomDraft draft = realmRoom.getDraft();
-            if (draft != null) {
+            if (draft != null && draft.getMessage().length() > 0) {
                 hasDraft = true;
                 edtChat.setText(draft.getMessage());
             }

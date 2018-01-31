@@ -42,7 +42,7 @@ import static net.iGap.fragments.FragmentAddContact.onCountryCallBack;
 public class FragmentChooseCountry extends BaseFragment {
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList();
     private ArrayList<StructCountry> items = new ArrayList<>();
-
+    private long index = 1500;
     private RecyclerView rcvChooseCountry;
     private EditText edtSearch;
 
@@ -84,7 +84,7 @@ public class FragmentChooseCountry extends BaseFragment {
         final FastItemAdapter fastItemAdapter = new FastItemAdapter();
         items = getLIstCountry();
         for (int i = 0; i < items.size(); i++) {
-            fastItemAdapter.add(new AdapterChooseCountry(items.get(i)).withIdentifier(100 + i));
+            fastItemAdapter.add(new AdapterChooseCountry(items.get(i)).withIdentifier(index++));
         }
         rcvChooseCountry = (RecyclerView) view.findViewById(R.id.rcvChooseCountry);
         rcvChooseCountry.setItemViewCacheSize(1000);
