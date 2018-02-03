@@ -63,12 +63,16 @@ public class ResendMessage implements IResendMessage {
     }
 
     private void resend(final boolean all) {
+
+        if (!G.userLogin) {
+            return;
+        }
+
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 for (StructMessageInfo message : mMessages) {
-                    if (FragmentChat.allowResendMessage(Long.parseLong(message.messageID))) {
                         if (all) {
                             RealmRoomMessage.setStatus(realm, Long.parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
                         } else {
@@ -77,7 +81,7 @@ public class ResendMessage implements IResendMessage {
                                 break;
                             }
                         }
-                    }
+
                 }
             }
         });

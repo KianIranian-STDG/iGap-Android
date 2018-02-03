@@ -282,11 +282,15 @@ public class RealmRoomMessage extends RealmObject {
                                     if (roomMessage.getUserId() != G.userId && !realmClientCondition.containsOfflineSeen(roomMessage.getMessageId())) {
                                         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
                                         RealmClientCondition.addOfflineSeen(realm, realmClientCondition, roomMessage.getMessageId());
-                                        callback.sendSeenStatus(roomMessage);
-                                        count++;
-                                        if (count >= 100) { // do this block for 100 item, (client need to send all status in one request, wait for server change...)
-                                            break;
+
+                                        if (G.userLogin) {
+                                            callback.sendSeenStatus(roomMessage);
+                                            count++;
+                                            if (count >= 100) { // do this block for 100 item, (client need to send all status in one request, wait for server change...)
+                                                break;
+                                            }
                                         }
+
                                     } else {
                                         if (G.userLogin) {
 
