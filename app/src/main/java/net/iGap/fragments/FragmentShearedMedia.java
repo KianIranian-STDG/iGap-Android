@@ -59,6 +59,7 @@ import net.iGap.interfaces.OnClientSearchRoomHistory;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
@@ -1199,24 +1200,32 @@ public class FragmentShearedMedia extends BaseFragment {
 
             String dirPath = AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), messageType);
 
+            messageProgress.withOnProgress(new OnProgress() {
+                @Override
+                public void onProgressFinished() {
+                    if (messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
+                        G.currentActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                messageProgress.withProgress(0);
+                                messageProgress.setVisibility(View.GONE);
+                                updateViewAfterDownload(at.getCacheId());
+                            }
+                        });
+                    }
+                }
+            });
+
             HelperDownloadFile.startDownload(mList.get(position).messageId + "", at.getToken(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(String path, final int progress) {
 
                     if (canUpdateAfterDownload) {
-
-                        if (messageProgress != null && messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
-
+                        if (messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
                             G.currentActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if (progress < 100) {
-                                        messageProgress.withProgress(progress);
-                                    } else {
-                                        messageProgress.withProgress(0);
-                                        messageProgress.setVisibility(View.GONE);
-                                        updateViewAfterDownload(at.getCacheId());
-                                    }
+                                    messageProgress.withProgress(progress);
                                 }
                             });
                         }
@@ -1227,7 +1236,7 @@ public class FragmentShearedMedia extends BaseFragment {
                 public void OnError(String token) {
                     if (canUpdateAfterDownload) {
 
-                        if (messageProgress != null && messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
+                        if (messageProgress.getTag() != null && messageProgress.getTag().equals(mList.get(position).messageId)) {
                             G.currentActivity.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1373,7 +1382,6 @@ public class FragmentShearedMedia extends BaseFragment {
                 AppUtils.setProgresColor(messageProgress.progressBar);
 
                 messageProgress.withDrawable(R.drawable.ic_download, true);
-
 
 
                 messageProgress.setOnClickListener(new View.OnClickListener() {

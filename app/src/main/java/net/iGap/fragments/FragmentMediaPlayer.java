@@ -47,6 +47,7 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.interfaces.OnClientSearchRoomHistory;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
@@ -535,6 +536,26 @@ public class FragmentMediaPlayer extends BaseFragment {
 
         String dirPath = AndroidUtils.getFilePathWithCashId(at.getCacheId(), at.getName(), messageType);
 
+
+        messageProgress.withOnProgress(new OnProgress() {
+            @Override
+            public void onProgressFinished() {
+
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
+                            messageProgress.withProgress(0);
+                            messageProgress.setVisibility(View.GONE);
+                            updateViewAfterDownload(at.getCacheId());
+                        }
+                    }
+                });
+
+            }
+        });
+
+
         HelperDownloadFile.startDownload(MusicPlayer.mediaList.get(position).getMessageId() + "", at.getToken(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
             @Override
             public void OnProgress(String path, final int progress) {
@@ -544,19 +565,12 @@ public class FragmentMediaPlayer extends BaseFragment {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (messageProgress != null && messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
+                            if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
 
                                 G.currentActivity.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (progress < 100) {
-                                            messageProgress.withProgress(progress);
-                                        } else {
-                                            messageProgress.withProgress(0);
-                                            messageProgress.setVisibility(View.GONE);
-
-                                            updateViewAfterDownload(at.getCacheId());
-                                        }
+                                        messageProgress.withProgress(progress);
                                     }
                                 });
                             }
@@ -570,7 +584,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             public void OnError(String token) {
                 if (canUpdateAfterDownload) {
 
-                    if (messageProgress != null && messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
+                    if (messageProgress.getTag() != null && messageProgress.getTag().equals(MusicPlayer.mediaList.get(position).getMessageId())) {
                         G.currentActivity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

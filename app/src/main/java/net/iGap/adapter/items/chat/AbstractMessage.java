@@ -1203,6 +1203,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withOnProgress(new OnProgress() {
                     @Override
                     public void onProgressFinished() {
+
+                        if (_Progress.getTag() == null || !_Progress.getTag().equals(mMessage.messageID)) {
+                            return;
+                        }
+                        _Progress.setVisibility(View.GONE);
+
                         holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(null);
                         _Progress.withDrawable(null, true);
 
@@ -1431,40 +1437,30 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             progressBar.setVisibility(View.VISIBLE);
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
+
             HelperDownloadFile.startDownload(mMessage.messageID, token, attachment.getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progress) {
-
-                    if (progress == 100) {
-                        if (messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT || messageType == ProtoGlobal.RoomMessageType.VOICE) {
-                            if (mMessage.roomId == MusicPlayer.roomId) {
-                                MusicPlayer.downloadNewItem = true;
-                            }
-                        }
-                    }
 
                     if (FragmentChat.canUpdateAfterDownload) {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
-
+                                    progressBar.withProgress(progress);
                                     if (progress == 100) {
 
-                                        progressBar.setVisibility(View.GONE);
-                                        progressBar.performProgress();
-
+                                        if (messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT || messageType == ProtoGlobal.RoomMessageType.VOICE) {
+                                            if (mMessage.roomId == MusicPlayer.roomId) {
+                                                MusicPlayer.downloadNewItem = true;
+                                            }
+                                        }
                                         onLoadThumbnailFromLocal(holder, attachment.getCacheId(), path, LocalFileType.FILE);
-                                    } else {
-
-                                        progressBar.withProgress(progress);
                                     }
                                 }
                             }
                         });
                     }
-
 
                 }
 
@@ -1539,9 +1535,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 //}
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
                                     progressBar.withProgress(progress);
-                                    if (progress == 100) {
-                                        progressBar.performProgress();
-                                    }
                                 }
 
                             }

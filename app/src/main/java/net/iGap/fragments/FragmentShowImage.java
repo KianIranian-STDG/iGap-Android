@@ -41,6 +41,7 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
@@ -661,10 +662,7 @@ public class FragmentShowImage extends BaseFragment {
                                         G.currentActivity.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                if (touchImageView != null) {
-                                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
-                                                }
-
+                                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
                                             }
                                         });
                                     }
@@ -802,45 +800,50 @@ public class FragmentShowImage extends BaseFragment {
                 downloadedList.add(rm.getAttachment().getCacheId());
             }
 
+
+            progress.withOnProgress(new OnProgress() {
+                @Override
+                public void onProgressFinished() {
+                    G.currentActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.withProgress(0);
+                            progress.setVisibility(View.GONE);
+                            if (rm.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
+                                imgPlay.setVisibility(View.VISIBLE);
+                                //if (position == viewPager.getCurrentItem()) playVideo(position, mTextureView, imgPlay, touchImageView);
+                            }
+                        }
+                    });
+                }
+            });
+
+
             HelperDownloadFile.startDownload(System.currentTimeMillis() + "", rm.getAttachment().getToken(), rm.getAttachment().getCacheId(), rm.getAttachment().getName(), rm.getAttachment().getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progres) {
-
-                    if (progress != null) {
-
-                        G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (progres < 100) {
-                                    progress.withProgress(progres);
-                                } else {
-                                    progress.withProgress(0);
-                                    progress.setVisibility(View.GONE);
-                                    if (rm.getMessageType() == ProtoGlobal.RoomMessageType.VIDEO) {
-                                        imgPlay.setVisibility(View.VISIBLE);
-                                        //if (position == viewPager.getCurrentItem()) playVideo(position, mTextureView, imgPlay, touchImageView);
-                                    }
-
-                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
-                                }
+                    G.currentActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.withProgress(progres);
+                            if (progres == 100) {
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
                             }
-                        });
-                    }
+                        }
+                    });
+
                 }
 
                 @Override
                 public void OnError(String token) {
+                    G.currentActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.withProgress(0);
+                            progress.withDrawable(R.drawable.ic_download, true);
+                        }
+                    });
 
-                    if (progress != null) {
-
-                        G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                progress.withProgress(0);
-                                progress.withDrawable(R.drawable.ic_download, true);
-                            }
-                        });
-                    }
                 }
             });
         }

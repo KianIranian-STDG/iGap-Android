@@ -24,6 +24,7 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentChatBackground;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
@@ -146,37 +147,44 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
 
         String path = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
 
+
+        messageProgress.withOnProgress(new OnProgress() {
+            @Override
+            public void onProgressFinished() {
+
+                messageProgress.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        messageProgress.withProgress(0);
+                        messageProgress.setVisibility(View.GONE);
+                        notifyItemChanged(position);
+                    }
+                });
+
+
+            }
+        });
+
         HelperDownloadFile.startDownload(System.currentTimeMillis() + "", pf.getToken(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, path, 2, new HelperDownloadFile.UpdateListener() {
             @Override
             public void OnProgress(String mPath, final int progress) {
-
-                if (messageProgress != null) {
-                    messageProgress.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (progress < 100) {
-                                messageProgress.withProgress(progress);
-                            } else {
-                                messageProgress.withProgress(0);
-                                messageProgress.setVisibility(View.GONE);
-                                notifyItemChanged(position);
-                            }
-                        }
-                    });
-                }
+                messageProgress.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        messageProgress.withProgress(progress);
+                    }
+                });
             }
 
             @Override
             public void OnError(String token) {
-                if (messageProgress != null) {
-                    messageProgress.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            messageProgress.withProgress(0);
-                            messageProgress.withDrawable(R.drawable.ic_download, true);
-                        }
-                    });
-                }
+                messageProgress.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        messageProgress.withProgress(0);
+                        messageProgress.withDrawable(R.drawable.ic_download, true);
+                    }
+                });
             }
         });
     }

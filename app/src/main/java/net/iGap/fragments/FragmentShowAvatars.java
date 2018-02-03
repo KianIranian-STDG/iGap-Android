@@ -36,6 +36,7 @@ import net.iGap.interfaces.OnGroupAvatarDelete;
 import net.iGap.interfaces.OnUserAvatarDelete;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
+import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.DialogAnimation;
@@ -707,25 +708,33 @@ public class FragmentShowAvatars extends BaseFragment {
             final RealmAttachment ra = avatarList.get(position).getFile();
             final String dirPath = AndroidUtils.getFilePathWithCashId(ra.getCacheId(), ra.getName(), G.DIR_IMAGE_USER, false);
 
+            progress.withOnProgress(new OnProgress() {
+                @Override
+                public void onProgressFinished() {
+                    G.currentActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.withProgress(0);
+                            progress.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            });
+
+
             HelperDownloadFile.startDownload(System.currentTimeMillis() + "", ra.getToken(), ra.getCacheId(), ra.getName(), ra.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progres) {
-
-                    if (progress != null) {
-
-                        G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (progres < 100) {
-                                    progress.withProgress(progres);
-                                } else {
-                                    progress.withProgress(0);
-                                    progress.setVisibility(View.GONE);
-                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
-                                }
+                    G.currentActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.withProgress(progres);
+                            if (progres == 100) {
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), touchImageView);
                             }
-                        });
-                    }
+                        }
+                    });
+
                 }
 
                 @Override

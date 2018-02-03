@@ -282,6 +282,11 @@ public class CircularProgressView extends View {
             });
 
             progressAnimator.start();
+
+            if (startAngleRotate == null || !startAngleRotate.isRunning()) {
+                resetAnimation();
+            }
+
         }
         invalidate();
         for (CircularProgressViewListener listener : listeners) {
