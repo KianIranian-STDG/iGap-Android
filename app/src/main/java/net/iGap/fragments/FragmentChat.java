@@ -676,9 +676,7 @@ public class FragmentChat extends BaseFragment
 
                     @Override
                     public void sendSeenStatus(RealmRoomMessage message) {
-                        if (!allowResendMessage(message.getMessageId())) {
-                            return;
-                        }
+
                         if (!isNotJoin) {
                             G.chatUpdateStatusUtil.sendUpdateStatus(chatType, mRoomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
                         }
@@ -3974,13 +3972,13 @@ public class FragmentChat extends BaseFragment
             public void deleteMessage() {
                 if (pos >= 0 && mAdapter.getAdapterItemCount() > pos) {
                     mAdapter.remove(pos);
+                    removeLayoutTimeIfNeed();
                 }
             }
 
             @Override
             public void resendMessage() {
 
-                if (FragmentChat.allowResendMessage(Long.parseLong(message.messageID))) {
                     for (int i = 0; i < failedMessages.size(); i++) {
                         if (failedMessages.get(i).messageID.equals(message.messageID)) {
                             if (failedMessages.get(i).attachment != null) {
@@ -4000,13 +3998,12 @@ public class FragmentChat extends BaseFragment
                     }
 
                     mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
-                }
+
             }
 
             @Override
             public void resendAllMessages() {
                 for (int i = 0; i < failedMessages.size(); i++) {
-                    if (FragmentChat.allowResendMessage(Long.parseLong(failedMessages.get(i).messageID))) {
                         final int j = i;
                         G.handler.postDelayed(new Runnable() {
                             @Override
@@ -4014,7 +4011,7 @@ public class FragmentChat extends BaseFragment
                                 mAdapter.updateMessageStatus(parseLong(failedMessages.get(j).messageID), ProtoGlobal.RoomMessageStatus.SENDING);
                             }
                         }, 1000 * i);
-                    }
+
                 }
             }
         }, parseLong(message.messageID), failedMessages);
@@ -6340,11 +6337,18 @@ public class FragmentChat extends BaseFragment
                         edtChat.setTag(null);
                     }
                 }
+
+                removeLayoutTimeIfNeed();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
+
+    }
+
+    private void removeLayoutTimeIfNeed() {
         if (mAdapter != null) {
             int size = mAdapter.getItemCount();
             for (int i = 0; i < size; i++) {
