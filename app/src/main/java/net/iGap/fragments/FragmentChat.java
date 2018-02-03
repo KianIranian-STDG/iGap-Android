@@ -1794,14 +1794,10 @@ public class FragmentChat extends BaseFragment
                                     return;
                                 }
 
-                                mAdapter.removeMessage(messageId);
+                                ArrayList list = new ArrayList();
+                                list.add(messageId);
+                                deleteSelectedMessageFromAdapter(list);
 
-                                // remove tag from edtChat if the message has deleted
-                                if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                                    if (Long.toString(messageId).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                                        edtChat.setTag(null);
-                                    }
-                                }
                             }
                         });
                     }
@@ -3962,16 +3958,9 @@ public class FragmentChat extends BaseFragment
         G.handler.post(new Runnable() {
             @Override
             public void run() {
-                // remove deleted message from adapter
-                mAdapter.removeMessage(parseLong(message.messageID));
-
-                // remove tag from edtChat if the
-                // message has deleted
-                if (edtChat.getTag() != null && edtChat.getTag() instanceof StructMessageInfo) {
-                    if (Long.toString(parseLong(message.messageID)).equals(((StructMessageInfo) edtChat.getTag()).messageID)) {
-                        edtChat.setTag(null);
-                    }
-                }
+                ArrayList list = new ArrayList();
+                list.add(parseLong(message.messageID));
+                deleteSelectedMessageFromAdapter(list);
             }
         });
         RealmRoomMessage.deleteSelectedMessages(realm, message.roomId, list, bothDeleteMessageId, chatType);

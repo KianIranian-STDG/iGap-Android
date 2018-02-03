@@ -439,6 +439,7 @@
             android:id="@+id/st_layout_bio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="@{fragmentSettingViewModel::onClickBio}"
             android:orientation="vertical">
 
             <TextView
@@ -446,7 +447,6 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="@dimen/dp12"
-              android:onClick="@{fragmentSettingViewModel::onClickBio}"
               android:paddingEnd="@dimen/dp4"
               android:paddingStart="@dimen/dp4"
               android:text="@string/st_bio"

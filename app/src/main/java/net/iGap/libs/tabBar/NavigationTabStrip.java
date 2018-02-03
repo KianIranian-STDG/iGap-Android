@@ -44,7 +44,6 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
-import net.iGap.G;
 import net.iGap.R;
 
 import java.lang.reflect.Field;
@@ -67,6 +66,7 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
     private final static int DEFAULT_INACTIVE_COLOR = Color.GRAY;
     private final static int DEFAULT_ACTIVE_COLOR = Color.WHITE;
     private final static int DEFAULT_STRIP_COLOR = Color.RED;
+    private final static int DEFAULT_BADGE_COLOR = Color.BLACK;
     private final static int DEFAULT_TITLE_SIZE = 0;
     private static int DEFAULT_TITLE_BADGE_TOP = 0;
     private static int PADDING = 0;
@@ -105,9 +105,7 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
     };
 
     private final Paint mTitlePaintOval = new TextPaint(HIGH_QUALITY_FLAGS) {
-        {
-            setColor(G.context.getResources().getColor(R.color.unread));
-        }
+
     };
 
     // Variables for animator
@@ -713,19 +711,23 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
     // Method to transform current fraction of NTS and position
     private void updateCurrentTitle(final float interpolation) {
         mTitlePaint.setColor((int) mColorEvaluator.evaluate(interpolation, mInactiveColor, mActiveColor));
-        mTitlePaintBadge.setColor((int) mColorEvaluator.evaluate(interpolation, mInactiveColor, mActiveColor));
+        mTitlePaintBadge.setColor((int) mColorEvaluator.evaluate(interpolation, mInactiveColor, DEFAULT_BADGE_COLOR));
+        mTitlePaintOval.setColor((int) mColorEvaluator.evaluate(interpolation, mInactiveColor, mActiveColor));
+
     }
 
     // Method to transform last fraction of NTS and position
     private void updateLastTitle(final float lastInterpolation) {
         mTitlePaint.setColor((int) mColorEvaluator.evaluate(lastInterpolation, mActiveColor, mInactiveColor));
-        mTitlePaintBadge.setColor((int) mColorEvaluator.evaluate(lastInterpolation, mActiveColor, mInactiveColor));
+        mTitlePaintBadge.setColor((int) mColorEvaluator.evaluate(lastInterpolation, DEFAULT_BADGE_COLOR, mInactiveColor));
+        mTitlePaintOval.setColor((int) mColorEvaluator.evaluate(lastInterpolation, mActiveColor, mInactiveColor));
     }
 
     // Method to transform others fraction of NTS and position
     private void updateInactiveTitle() {
         mTitlePaint.setColor(mInactiveColor);
         mTitlePaintBadge.setColor(mInactiveColor);
+        mTitlePaintOval.setColor(mInactiveColor);
     }
 
     @Override
