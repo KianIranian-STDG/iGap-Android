@@ -43,6 +43,9 @@ public class HelperNotificationChannel {
         if (isMute) {
             return;
         }
+
+        HelperNotificationAndBadge.updateBadgeOnly(realm, -1);
+
         if (realmRoom.getChannelRoom() != null && realmRoom.getChannelRoom().getRealmNotificationSetting() != null) {
             notification = realmRoom.getChannelRoom().getRealmNotificationSetting().getNotification();
             if (realmRoom.getChannelRoom().getRealmNotificationSetting().getVibrate() != -1) {

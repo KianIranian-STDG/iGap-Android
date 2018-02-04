@@ -33,7 +33,7 @@ public final class HelperLogout {
             @Override
             public void run() {
                 HelperRealm.realmTruncate();
-                HelperNotificationAndBadge.updateBadgeOnly();
+                HelperNotificationAndBadge.cleanBadge();
                 Intent intent = new Intent(G.context, ActivityRegisteration.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 new LoginActions();

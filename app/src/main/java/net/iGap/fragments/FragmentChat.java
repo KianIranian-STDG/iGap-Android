@@ -280,7 +280,6 @@ import io.fotoapparat.view.CameraView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -683,27 +682,9 @@ public class FragmentChat extends BaseFragment
                     }
                 });
 
-                // update badge count after open one chat room
-                Realm realm = Realm.getDefaultInstance();
-                try {
-                    int unreadCount = 0;
 
-                    RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).notEqualTo(RealmRoomFields.ID, mRoomId).findAll();
-                    for (RealmRoom realmRoom1 : realmRooms) {
-                        if (!realmRoom1.getMute()) {
-                            if (realmRoom1.getUnreadCount() > 0) {
-                                unreadCount += realmRoom1.getUnreadCount();
-                            }
-                        }
-                    }
+                HelperNotificationAndBadge.updateBadgeOnly(getRealmChat(), mRoomId);
 
-                    ShortcutBadger.applyCount(context, unreadCount);
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-                }
-
-                realm.close();
             }
         }, 500);
     }

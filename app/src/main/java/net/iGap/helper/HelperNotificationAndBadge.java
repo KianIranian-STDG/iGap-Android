@@ -118,33 +118,38 @@ public class HelperNotificationAndBadge {
     //    remoteViewsLarge.setOnClickPendingIntent(resLayot, pendingIntent);
     //}
 
-    public static void updateBadgeOnly() {
+    public static int[] updateBadgeOnly(Realm realm, long roomId) {
+        int unreadMessageCount = 0;
+        int chatCount = 0;
+        int[] result = new int[2];
 
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
+                equalTo(RealmRoomFields.MUTE, false).equalTo(RealmRoomFields.IS_DELETED, false).notEqualTo(RealmRoomFields.ID, roomId).findAll();
 
-                Realm realm = Realm.getDefaultInstance();
-
-                int unreadMessageCount = 0;
-
-                RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
-                if (realmRooms != null) {
-                    for (RealmRoom realmRoom1 : realmRooms) {
-                        if (realmRoom1.getUnreadCount() > 0) {
-                            unreadMessageCount += realmRoom1.getUnreadCount();
-                        }
-                    }
-                }
-                realm.close();
-
-                try {
-                    ShortcutBadger.applyCount(G.context, unreadMessageCount);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        for (RealmRoom realmRoom1 : realmRooms) {
+            if (realmRoom1.getUnreadCount() > 0) {
+                unreadMessageCount += realmRoom1.getUnreadCount();
+                ++chatCount;
             }
-        }, 200);
+        }
+
+        try {
+            ShortcutBadger.applyCount(G.context, unreadMessageCount);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        result[0] = unreadMessageCount;
+        result[1] = chatCount;
+        return result;
+    }
+
+    static void cleanBadge() {
+        try {
+            ShortcutBadger.applyCount(G.context, 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private NotificationCompat.InboxStyle getBigStyle() {
@@ -501,21 +506,11 @@ public class HelperNotificationAndBadge {
             }
 
             startActivityPopUpNotification(popUpList);
+            int[] result = HelperNotificationAndBadge.updateBadgeOnly(realm, -1);
 
+            unreadMessageCount = result[0];
+            countUnicChat = result[1];
             isFromOnRoom = false;
-
-            unreadMessageCount = 0;
-            countUnicChat = 0;
-
-            RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
-            for (RealmRoom room : realmRooms) {
-                if (!room.getMute()) {
-                    if (room.getUnreadCount() > 0) {
-                        unreadMessageCount += room.getUnreadCount();
-                        ++countUnicChat;
-                    }
-                }
-            }
 
             if (countUnicChat == 1) {
                 isFromOnRoom = true;
@@ -526,12 +521,6 @@ public class HelperNotificationAndBadge {
 
         if (unreadMessageCount == 0) {
             return;
-        }
-
-        try {
-            ShortcutBadger.applyCount(context, unreadMessageCount);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         try {

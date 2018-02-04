@@ -2149,7 +2149,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return;
         }
 
-        HelperNotificationAndBadge.updateBadgeOnly();
+        HelperNotificationAndBadge.updateBadgeOnly(getRealm(), -1);
 
         G.onUnreadChange = null;
 
