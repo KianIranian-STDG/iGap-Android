@@ -3984,20 +3984,21 @@ public class FragmentChat extends BaseFragment
                             if (failedMessages.get(i).attachment != null) {
                                 if (HelperUploadFile.isUploading(message.messageID)) {
                                     HelperUploadFile.reUpload(message.messageID);
-                                } else {
-                                    G.handler.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
-                                        }
-                                    }, 300);
                                 }
                             }
                             break;
                         }
                     }
 
-                    mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyItemChanged(mAdapter.findPositionByMessageId(Long.parseLong(message.messageID)));
+                    }
+                }, 300);
+
 
             }
 

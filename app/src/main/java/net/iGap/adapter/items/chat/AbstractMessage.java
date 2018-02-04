@@ -1324,9 +1324,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ProtoGlobal.RoomMessageType _type = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
 
                 if (_status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                    if (!hasFileSize(attachment.getLocalFilePath())) {
-                        messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
-                    }
+                    messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
                     return;
                 }
                 if (_status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
@@ -1533,10 +1531,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 //        p = mMessage.uploadProgress;
                                 //    }
                                 //}
-                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
+                                if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID) && !(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
                                     progressBar.withProgress(progress);
                                 }
-
                             }
                         });
                     }
@@ -1544,9 +1541,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     @Override
                     public void OnError() {
                         if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
-                            progressBar.withProgress(0);
-                            progressBar.withDrawable(R.drawable.upload, true);
-                            mMessage.status = ProtoGlobal.RoomMessageStatus.FAILED.toString();
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mMessage.status = ProtoGlobal.RoomMessageStatus.FAILED.toString();
+                                    progressBar.withProgress(0);
+                                    progressBar.withDrawable(R.drawable.upload, true);
+                                }
+                            });
                         }
                     }
                 });
