@@ -12,6 +12,7 @@ package net.iGap.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -102,6 +103,8 @@ public class FragmentShowImage extends BaseFragment {
     private ViewGroup rooShowImage;
     private ViewGroup mainShowImage;
     private ExitFragmentTransition exitFragmentTransition;
+    private TouchImageView touchImageViewTmp = null;
+    private int lastOrientation = 0;
 
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
@@ -136,6 +139,21 @@ public class FragmentShowImage extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         if (getIntentData(this.getArguments())) {
             initComponent(view);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation != lastOrientation) {
+            lastOrientation = newConfig.orientation;
+            if (touchImageViewTmp != null && videoController != null && mMediaPlayer != null) {
+                touchImageViewTmp.setVisibility(View.GONE);
+                touchImageViewTmp.setVisibility(View.VISIBLE);
+                if (mMediaPlayer.isPlaying()) {
+                    videoController.show();
+                }
+            }
         }
     }
 
@@ -709,6 +727,14 @@ public class FragmentShowImage extends BaseFragment {
                         ltImageName.setVisibility(View.VISIBLE);
                         isShowToolbar = true;
                     }
+
+                    if (touchImageViewTmp != null && imgPlay.getVisibility() != View.VISIBLE && mMediaPlayer != null && videoController != null) {
+                        if (videoController.isShowing()) {
+                            videoController.hide();
+                        } else {
+                            videoController.show();
+                        }
+                    }
                 }
             });
 
@@ -724,14 +750,6 @@ public class FragmentShowImage extends BaseFragment {
             mTextureView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mMediaPlayer != null) {
-                        if (videoController.isShowing()) {
-                            videoController.setVisibility(View.GONE);
-                        } else if (videoController != null) {
-                            videoController.show();
-                            videoController.setVisibility(View.VISIBLE);
-                        }
-                    }
                     touchImageView.performClick();
                 }
             });
@@ -748,6 +766,8 @@ public class FragmentShowImage extends BaseFragment {
 
                 @Override
                 public void onPageSelected(final int position) {
+
+                    touchImageViewTmp = null;
 
                     txtImageNumber.setText(position + 1 + " " + G.fragmentActivity.getResources().getString(R.string.of) + " " + mFList.size());
                     if (HelperCalander.isPersianUnicode) {
@@ -858,6 +878,7 @@ public class FragmentShowImage extends BaseFragment {
          */
         private void playVideo(final int position, final TextureView mTextureView, final ImageView imgPlay, final TouchImageView touchImageView) {
 
+            touchImageViewTmp = touchImageView;
             if (mMediaPlayer == null) mMediaPlayer = new MediaPlayer();
             if (videoController == null) videoController = new MediaController(G.fragmentActivity);
             mTextureView.setVisibility(View.VISIBLE);
