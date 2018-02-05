@@ -38,13 +38,14 @@
       android:background="@color/transparent"
       android:hint="Send to ..." />
 
-    <TextView
+    <net.iGap.module.MaterialDesignTextView
       android:id="@+id/txtSend"
       android:layout_width="@dimen/dp52"
       android:layout_height="match_parent"
       android:gravity="center"
-      android:text="SEND"
-      android:textColor="@color/gray_6c" />
+      android:text="@string/md_send_button"
+      android:textAppearance="@style/TextIconAppearance.all"
+      android:textColor="@color/green" />
 
   </LinearLayout>
 

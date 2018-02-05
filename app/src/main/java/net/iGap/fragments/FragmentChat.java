@@ -5577,7 +5577,7 @@ public class FragmentChat extends BaseFragment
         fastItemAdapterForward = new FastItemAdapter();
 
         EditText edtSearch = (EditText) viewBottomSheetForward.findViewById(R.id.edtSearch);
-        final TextView textSend = (TextView) viewBottomSheetForward.findViewById(R.id.txtSend);
+        final TextView textSend = (MaterialDesignTextView) viewBottomSheetForward.findViewById(R.id.txtSend);
         textSend.setVisibility(View.INVISIBLE);
         final RecyclerView rcvItem = (RecyclerView) viewBottomSheetForward.findViewById(R.id.rcvBottomSheetForward);
         rcvItem.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 4, GridLayoutManager.VERTICAL, false));
@@ -5691,7 +5691,7 @@ public class FragmentChat extends BaseFragment
         TextView txtPaint = (TextView) viewBottomSheet.findViewById(R.id.txtPaint);
         TextView txtLocation = (TextView) viewBottomSheet.findViewById(R.id.txtLocation);
         TextView txtContact = (TextView) viewBottomSheet.findViewById(R.id.txtContact);
-        send = (TextView) viewBottomSheet.findViewById(R.id.txtSend);
+        send = (MaterialDesignTextView) viewBottomSheet.findViewById(R.id.txtSend);
 
         txtCamera.setTextColor(Color.parseColor(G.attachmentColor));
         textPicture.setTextColor(Color.parseColor(G.attachmentColor));
