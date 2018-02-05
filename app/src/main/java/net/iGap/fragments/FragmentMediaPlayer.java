@@ -262,7 +262,9 @@ public class FragmentMediaPlayer extends BaseFragment {
         mediaList = new ArrayList<>();
 
         for (RealmRoomMessage r : MusicPlayer.mediaList) {
-            fastItemAdapter.add(new AdapterListMusicPlayer().setItem(r).withIdentifier(r.getMessageId()));
+            if (r.isValid()) {
+                fastItemAdapter.add(new AdapterListMusicPlayer().setItem(r).withIdentifier(r.getMessageId()));
+            }
         }
         fastItemAdapter.withSelectable(true);
         fastItemAdapter.withOnClickListener(new OnClickListener() {

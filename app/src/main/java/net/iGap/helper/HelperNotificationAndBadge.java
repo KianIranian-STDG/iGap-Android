@@ -527,6 +527,8 @@ public class HelperNotificationAndBadge {
             if (updateNotification) {
                 setNotification();
             }
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
