@@ -1574,7 +1574,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 //}
 
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
-                progressBar.withProgress(HelperUploadFile.getUploadProgress(mMessage.messageID));
+                progressBar.withProgress(Math.max(2, HelperUploadFile.getUploadProgress(mMessage.messageID)));
             } else {
                 checkForDownloading(holder, attachment);
             }

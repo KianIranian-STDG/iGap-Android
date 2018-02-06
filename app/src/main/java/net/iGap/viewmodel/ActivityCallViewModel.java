@@ -473,30 +473,23 @@ public class ActivityCallViewModel {
     private void loadOrDownloadPicture(RealmRegisteredInfo registeredInfo) {
 
         try {
-
             callBackTxtName.set(registeredInfo.getDisplayName());
-
             RealmAttachment av = registeredInfo.getLastAvatar().getFile();
-
             ProtoFileDownload.FileDownload.Selector se = ProtoFileDownload.FileDownload.Selector.FILE;
             String dirPath = AndroidUtils.getFilePathWithCashId(av.getCacheId(), av.getName(), G.DIR_IMAGE_USER, false);
 
             HelperDownloadFile.startDownload(System.currentTimeMillis() + "", av.getToken(), av.getCacheId(), av.getName(), av.getSize(), se, dirPath, 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, int progress) {
-
                     if (progress == 100) {
-
                         if (activityCallBinding.fcrImvBackground != null) {
-                            //G.handler(new Runnable() {
-                            //    @Override
-                            //    public void run() {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), activityCallBinding.fcrImvBackground);
-                            //    }
-                            //});
+                            activityCallBinding.fcrImvBackground.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), activityCallBinding.fcrImvBackground);
+                                }
+                            });
                         }
-
-
                     }
                 }
 

@@ -168,7 +168,7 @@ public class HelperDownloadFile {
             item = new StructDownLoad();
             item.Token = token;
             item.cashId = cashId;
-
+            item.progress = 2;
             item.structListeners.add(new StructListener(update, messageID));
             item.name = name;
             item.moveToDirectoryPAth = moveToDirectoryPAth;
@@ -242,6 +242,7 @@ public class HelperDownloadFile {
             // if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
             if (isNeedItemGoToQueue()) {
                 addItemToQueue(primaryKey, periority);
+                updateView(item);
                 return;
             }
             // }
