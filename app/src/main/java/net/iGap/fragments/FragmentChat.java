@@ -6487,15 +6487,14 @@ public class FragmentChat extends BaseFragment
         resultsContact = getRealmChat().where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
 
         List<Long> te = new ArrayList<>();
+        te.add(chatPeerId);
 
         for (RealmRoom r : results) {
             StructBottomSheetForward item = new StructBottomSheetForward();
             item.setId(r.getId());
-
             if (r.getType() == ProtoGlobal.Room.Type.CHAT) {
                 te.add(r.getChatRoom().getPeerId());
             }
-
             item.setDisplayName(r.getTitle());
             if (r.getChatRoom() != null) item.setPeer_id(r.getChatRoom().getPeerId());
             item.setType(r.getType());
@@ -6503,14 +6502,13 @@ public class FragmentChat extends BaseFragment
             item.setNotExistRoom(false);
             mListBottomSheetForward.add(item);
         }
+
         for (RealmContacts r : resultsContact) {
-
-            StructBottomSheetForward item = new StructBottomSheetForward();
-            item.setId(r.getId());
-            item.setDisplayName(r.getDisplay_name());
-            item.setContactList(true);
-
             if (!te.contains(r.getId())) {
+                StructBottomSheetForward item = new StructBottomSheetForward();
+                item.setId(r.getId());
+                item.setDisplayName(r.getDisplay_name());
+                item.setContactList(true);
                 item.setNotExistRoom(true);
                 mListBottomSheetForward.add(item);
             }

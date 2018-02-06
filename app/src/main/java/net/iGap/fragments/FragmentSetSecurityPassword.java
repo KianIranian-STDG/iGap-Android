@@ -138,6 +138,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                         txtPassword = edtSetPassword.getText().toString();
                         rootEnterPassword.setVisibility(View.GONE);
                         rootReEnterPassword.setVisibility(View.VISIBLE);
+                        edtSetRePassword.requestFocus();
                     } else {
                         closeKeyboard(v);
                         error(G.fragmentActivity.getResources().getString(R.string.Password_has_to_mor_than_character));
@@ -153,6 +154,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                             txtToolbar.setText(G.fragmentActivity.getResources().getString(R.string.password_hint));
                             rootReEnterPassword.setVisibility(View.GONE);
                             rootHintPassword.setVisibility(View.VISIBLE);
+                            edtSetHintPassword.requestFocus();
                         } else {
                             closeKeyboard(v);
                             error(G.fragmentActivity.getResources().getString(R.string.Password_dose_not_match));
@@ -173,6 +175,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                             txtToolbar.setText(G.fragmentActivity.getResources().getString(R.string.recovery_question));
                             rootHintPassword.setVisibility(View.GONE);
                             rootQuestionPassword.setVisibility(View.VISIBLE);
+                            edtSetQuestionPassOne.requestFocus();
 
                         } else {
                             closeKeyboard(v);
@@ -288,6 +291,8 @@ public class FragmentSetSecurityPassword extends BaseFragment {
 
         //
         edtSetPassword = (EditText) view.findViewById(R.id.setPassword_edtSetPassword);
+        edtSetPassword.requestFocus();
+        openKeyboard(edtSetPassword);
         edtSetRePassword = (EditText) view.findViewById(R.id.setPassword_edtSetRePassword);
         edtSetHintPassword = (EditText) view.findViewById(R.id.edtSetHintPassword);
         edtSetQuestionPassOne = (EditText) view.findViewById(R.id.edtSetQuestionPassOne);
@@ -309,6 +314,17 @@ public class FragmentSetSecurityPassword extends BaseFragment {
             try {
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            } catch (IllegalStateException e) {
+                e.getStackTrace();
+            }
+        }
+    }
+
+    private void openKeyboard(View v) {
+        if (isAdded()) {
+            try {
+                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
             } catch (IllegalStateException e) {
                 e.getStackTrace();
             }
