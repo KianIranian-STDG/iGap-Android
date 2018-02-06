@@ -5697,7 +5697,7 @@ public class FragmentChat extends BaseFragment
         TextView txtPaint = (TextView) viewBottomSheet.findViewById(R.id.txtPaint);
         TextView txtLocation = (TextView) viewBottomSheet.findViewById(R.id.txtLocation);
         TextView txtContact = (TextView) viewBottomSheet.findViewById(R.id.txtContact);
-        send = (MaterialDesignTextView) viewBottomSheet.findViewById(R.id.txtSend);
+        send = (TextView) viewBottomSheet.findViewById(R.id.txtSend);
 
         txtCamera.setTextColor(Color.parseColor(G.attachmentColor));
         textPicture.setTextColor(Color.parseColor(G.attachmentColor));
