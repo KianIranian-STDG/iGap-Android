@@ -21,6 +21,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
@@ -105,6 +107,7 @@ public class FragmentShowImage extends BaseFragment {
     private ExitFragmentTransition exitFragmentTransition;
     private TouchImageView touchImageViewTmp = null;
     private int lastOrientation = 0;
+    ArrayList<TextureView> mTextureViewTmp = new ArrayList<>();
 
     public static FragmentShowImage newInstance() {
         return new FragmentShowImage();
@@ -152,6 +155,10 @@ public class FragmentShowImage extends BaseFragment {
                 touchImageViewTmp.setVisibility(View.VISIBLE);
                 if (mMediaPlayer.isPlaying()) {
                     videoController.show();
+                }
+
+                if (mTextureViewTmp.size() > 0) {
+                    getRealSize(mMediaPlayer, mTextureViewTmp.get(0));
                 }
             }
         }
@@ -882,12 +889,17 @@ public class FragmentShowImage extends BaseFragment {
             if (mMediaPlayer == null) mMediaPlayer = new MediaPlayer();
             if (videoController == null) videoController = new MediaController(G.fragmentActivity);
             mTextureView.setVisibility(View.VISIBLE);
+
             videoPath = getFilePath(position);
             ViewCompat.setLayoutDirection(videoController, View.LAYOUT_DIRECTION_LTR);
             videoController.setAnchorView(touchImageView);
             videoController.setMediaPlayer(this);
             imgPlay.setVisibility(View.GONE);
             mMediaPlayer.reset();
+
+            mTextureViewTmp.clear();
+            mTextureViewTmp.add(mTextureView);
+
             try {
                 mMediaPlayer.setDataSource(G.fragmentActivity, Uri.parse(videoPath));
                 mTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
@@ -898,6 +910,7 @@ public class FragmentShowImage extends BaseFragment {
 
                     @Override
                     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+                        Log.e("ddd", "width  :" + width + "    height  : " + height);
                     }
 
                     @Override
@@ -977,30 +990,6 @@ public class FragmentShowImage extends BaseFragment {
 
         }
 
-        /**
-         * get real width and height video
-         */
-        private void getRealSize(MediaPlayer mp, TextureView mTextureView) {
-            //Get the dimensions of the video
-            int videoWidth = mp.getVideoWidth();
-            int videoHeight = mp.getVideoHeight();
-
-            //Get the width of the screen
-            int screenWidth = G.fragmentActivity.getWindowManager().getDefaultDisplay().getWidth();
-
-            //Get the SurfaceView layout parameters
-            ViewGroup.LayoutParams lp = mTextureView.getLayoutParams();
-
-            //Set the width of the SurfaceView to the width of the screen
-            lp.width = screenWidth;
-
-            //Set the height of the SurfaceView to match the aspect ratio of the video
-            //be sure to cast these as floats otherwise the calculation will likely be 0
-            lp.height = (int) (((float) videoHeight / (float) videoWidth) * (float) screenWidth);
-
-            //Commit the layout parameters
-            mTextureView.setLayoutParams(lp);
-        }
 
         @Override
         public void start() {
@@ -1064,4 +1053,37 @@ public class FragmentShowImage extends BaseFragment {
             return 0;
         }
     }
+
+
+    /**
+     * get real width and height video
+     */
+    private void getRealSize(MediaPlayer mp, TextureView mTextureView) {
+
+        if (mp == null || mTextureView == null) {
+            return;
+        }
+
+        //Get the dimensions of the video
+        int videoWidth = mp.getVideoWidth();
+        int videoHeight = mp.getVideoHeight();
+
+        Display display = G.fragmentActivity.getWindowManager().getDefaultDisplay();
+
+        int finalWith, finalHeight;
+
+        finalWith = display.getWidth();
+        finalHeight = (int) (((float) videoHeight / (float) videoWidth) * (float) display.getWidth());
+
+        if (finalHeight > display.getHeight()) {
+            finalWith = (int) (((float) finalWith / (float) finalHeight) * (float) display.getHeight());
+            finalHeight = display.getHeight();
+        }
+
+        ViewGroup.LayoutParams lp = mTextureView.getLayoutParams();
+        lp.width = finalWith;
+        lp.height = finalHeight;
+        mTextureView.setLayoutParams(lp);
+    }
+
 }
