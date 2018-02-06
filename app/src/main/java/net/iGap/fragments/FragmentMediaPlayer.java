@@ -257,7 +257,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         });
 
 
-        getDataFromServer(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
+//        getDataFromServer(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
         loadLocalData(ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO, ProtoGlobal.RoomMessageType.AUDIO);
         mediaList = new ArrayList<>();
 
@@ -459,7 +459,7 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
         };
 
-        new RequestClientSearchRoomHistory().clientSearchRoomHistory(MusicPlayer.roomId, nextMessageId, filter);
+//        new RequestClientSearchRoomHistory().clientSearchRoomHistory(MusicPlayer.roomId, nextMessageId, filter);
     }
 
     public void saveDataToLocal(final List<ProtoGlobal.RoomMessage> RoomMessages, final long roomId) {
@@ -468,23 +468,14 @@ public class FragmentMediaPlayer extends BaseFragment {
             @Override
             public void run() {
                 //+final Realm realm = Realm.getDefaultInstance();
-                getRealm().executeTransactionAsync(new Realm.Transaction() {
+
+                getRealm().executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         for (final ProtoGlobal.RoomMessage roomMessage : RoomMessages) {
                             RealmRoomMessage.putOrUpdate(roomMessage, roomId, false, false, realm);
                         }
                     }
-                    //}, new Realm.Transaction.OnSuccess() {
-                    //    @Override
-                    //    public void onSuccess() {
-                    //        realm.close();
-                    //    }
-                    //}, new Realm.Transaction.OnError() {
-                    //    @Override
-                    //    public void onError(Throwable error) {
-                    //        realm.close();
-                    //    }
                 });
             }
         });

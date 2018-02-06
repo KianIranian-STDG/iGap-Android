@@ -25,6 +25,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.module.FileUtils;
+import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
 import net.iGap.realm.RealmRoomMessage;
@@ -259,6 +260,9 @@ public class ActivityManageSpaceViewModel {
                 final long DbTotalSize = new File(realm.getConfiguration().getPath()).length();
                 realm.close();
                 callbackCleanUp.set(FileUtils.formatFileSize(DbTotalSize));
+
+                MusicPlayer.closeLayoutMediaPlayer();
+
                 inDialog.dismiss();
             }
         });
