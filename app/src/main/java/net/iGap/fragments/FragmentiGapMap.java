@@ -199,6 +199,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private View vgSlideUp;
     private TextView iconSlide;
+    private boolean isSendRequestGeoCoordinate = false;
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -858,8 +859,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                     public void onClick(View view) {
                         dialog.dismiss();
 
-                        if (location != null) {
+                        if (location != null && !isSendRequestGeoCoordinate) {
                             new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                            isSendRequestGeoCoordinate = true;
                         }
 
                     }
@@ -1019,12 +1021,20 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         G.handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                                if (!isSendRequestGeoCoordinate) {
+                                    new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                                    isSendRequestGeoCoordinate = true;
+                                }
+
                                 getCoordinateLoop(DEFAULT_LOOP_TIME, true);
                             }
                         }, delay);
                     } else {
-                        new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                        if (!isSendRequestGeoCoordinate) {
+                            new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                            isSendRequestGeoCoordinate = true;
+                        }
+
                     }
                 }
             }
@@ -1176,6 +1186,13 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 });
             }
         }
+
+        isSendRequestGeoCoordinate = false;
+    }
+
+    @Override
+    public void onErrorGetNearbyCoordinate() {
+        isSendRequestGeoCoordinate = false;
     }
 
     public void statusCheck() {

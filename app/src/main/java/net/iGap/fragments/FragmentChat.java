@@ -491,6 +491,7 @@ public class FragmentChat extends BaseFragment
     private boolean isCameraStart = false;
     private boolean isCameraAttached = false;
     private boolean isPermissionCamera = false;
+    private boolean isPublicGroup = false;
     private ArrayList<Long> bothDeleteMessageId;
     private RelativeLayout layoutMute;
     private String report = "";
@@ -1340,6 +1341,7 @@ public class FragmentChat extends BaseFragment
                     title = realmRoom.getTitle();
                     if (chatType == GROUP) {
                         groupParticipantsCountLabel = realmRoom.getGroupRoom().getParticipantsCountLabel();
+                        isPublicGroup = !realmRoom.getGroupRoom().isPrivate();
                     } else {
                         groupParticipantsCountLabel = realmRoom.getChannelRoom().getParticipantsCountLabel();
                         showVoteChannel = realmRoom.getChannelRoom().isReactionStatus();
@@ -2057,6 +2059,10 @@ public class FragmentChat extends BaseFragment
                 } else {
                     root3.setVisibility(View.GONE);
                     root5.setVisibility(View.GONE);
+
+                    if (chatType == GROUP && isPublicGroup) {
+                        root2.setVisibility(View.GONE);
+                    }
 
                     if (chatType == CHANNEL) {
                         root2.setVisibility(View.GONE);
@@ -3960,16 +3966,16 @@ public class FragmentChat extends BaseFragment
             @Override
             public void resendMessage() {
 
-                    for (int i = 0; i < failedMessages.size(); i++) {
-                        if (failedMessages.get(i).messageID.equals(message.messageID)) {
-                            if (failedMessages.get(i).attachment != null) {
-                                if (HelperUploadFile.isUploading(message.messageID)) {
-                                    HelperUploadFile.reUpload(message.messageID);
-                                }
+                for (int i = 0; i < failedMessages.size(); i++) {
+                    if (failedMessages.get(i).messageID.equals(message.messageID)) {
+                        if (failedMessages.get(i).attachment != null) {
+                            if (HelperUploadFile.isUploading(message.messageID)) {
+                                HelperUploadFile.reUpload(message.messageID);
                             }
-                            break;
                         }
+                        break;
                     }
+                }
 
                 mAdapter.updateMessageStatus(parseLong(message.messageID), ProtoGlobal.RoomMessageStatus.SENDING);
 
@@ -3986,13 +3992,13 @@ public class FragmentChat extends BaseFragment
             @Override
             public void resendAllMessages() {
                 for (int i = 0; i < failedMessages.size(); i++) {
-                        final int j = i;
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                mAdapter.updateMessageStatus(parseLong(failedMessages.get(j).messageID), ProtoGlobal.RoomMessageStatus.SENDING);
-                            }
-                        }, 1000 * i);
+                    final int j = i;
+                    G.handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.updateMessageStatus(parseLong(failedMessages.get(j).messageID), ProtoGlobal.RoomMessageStatus.SENDING);
+                        }
+                    }, 1000 * i);
 
                 }
             }
@@ -6512,7 +6518,6 @@ public class FragmentChat extends BaseFragment
 
         for (int i = 0; i < mListBottomSheetForward.size(); i++) {
             fastItemAdapterForward.add(new AdapterBottomSheetForward(mListBottomSheetForward.get(i)).withIdentifier(100 + i));
-
         }
 
         G.handler.postDelayed(new Runnable() {

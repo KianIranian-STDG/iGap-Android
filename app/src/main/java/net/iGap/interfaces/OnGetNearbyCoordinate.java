@@ -16,4 +16,6 @@ import java.util.List;
 
 public interface OnGetNearbyCoordinate {
     void onNearbyCoordinate(List<ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse.Result> results);
+
+    void onErrorGetNearbyCoordinate();
 }
