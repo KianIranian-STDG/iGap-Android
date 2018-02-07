@@ -357,16 +357,18 @@
               android:id="@+id/agp_ll_group_description"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:onClick="@{fragmentGroupProfileViewModel::onClickGroupDescription}"
+              android:minHeight="@dimen/dp70"
               android:orientation="vertical"
               android:paddingLeft="@dimen/dp12"
               android:paddingRight="@dimen/dp12"
               android:visibility="@{fragmentGroupProfileViewModel.groupDescriptionVisibility}">
 
               <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
+                android:onClick="@{fragmentGroupProfileViewModel::onClickGroupDescription}"
                 android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:singleLine="true"
