@@ -124,8 +124,9 @@ public class ViewMaker {
         linearLayout_197.setGravity(Gravity.CENTER_VERTICAL);
         setLayoutDirection(linearLayout_197, View.LAYOUT_DIRECTION_LTR);
         linearLayout_197.setMinimumHeight(i_Dp(R.dimen.dp95));
+        linearLayout_197.setMinimumWidth(i_Dp(R.dimen.dp220));
         linearLayout_197.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams layout_80 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp220), ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layout_80 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayout_197.setLayoutParams(layout_80);
 
         LinearLayout audioPlayerViewContainer = new LinearLayout(G.context);
@@ -881,9 +882,10 @@ public class ViewMaker {
         audioBox.setId(R.id.audioBox);
         setLayoutDirection(audioBox, View.LAYOUT_DIRECTION_LTR);
         audioBox.setMinimumHeight((int) context.getResources().getDimension(R.dimen.dp130));
+        audioBox.setMinimumWidth(i_Dp(R.dimen.dp220));
         audioBox.setOrientation(HORIZONTAL);
         audioBox.setPadding(0, (int) G.context.getResources().getDimension(messageContainerPadding), 0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPaddingBottom));
-        LinearLayout.LayoutParams layout_262 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp220), LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layout_262 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         audioBox.setLayoutParams(layout_262);
 
         LinearLayout linearLayout_39 = new LinearLayout(G.context);

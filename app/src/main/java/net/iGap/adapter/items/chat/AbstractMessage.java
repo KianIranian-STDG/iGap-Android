@@ -1254,9 +1254,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     }
                 });
+
+                prepareProgress(holder, attachment);
             }
 
-            prepareProgress(holder, attachment);
+
         }
     }
 
@@ -1311,24 +1313,21 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         } else if (HelperDownloadFile.isDownLoading(attachment.getCacheId())) {
             HelperDownloadFile.stopDownLoad(attachment.getCacheId());
-        } else if (FragmentChat.compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
-            messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.COMPRESSING);
         } else {
             if (thumbnail != null) {
                 thumbnail.setVisibility(View.VISIBLE);
             }
 
             if (attachment.isFileExistsOnLocal()) {
-
                 String _status = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getStatus() : mMessage.status;
                 ProtoGlobal.RoomMessageType _type = mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType;
 
-                if (_status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                    messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
-                    return;
-                }
                 if (_status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                     messageClickListener.onFailedMessageClick(progress, mMessage, holder.getAdapterPosition());
+                } else if (FragmentChat.compressingFiles.containsKey(Long.parseLong(mMessage.messageID))) {
+                    messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.COMPRESSING);
+                } else if (_status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
                 } else {
                     /**
                      * avoid from show GIF in fragment show image
@@ -1499,15 +1498,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      * @param holder VH
      */
     private void prepareProgress(final VH holder, RealmAttachment attachment) {
-        if (!hasProgress(holder.itemView)) {
-            return;
-        }
-
         if (mMessage.sendType == MyType.SendType.send) {
 
             final MessageProgress progressBar = (MessageProgress) holder.itemView.findViewById(R.id.progress);
             AppUtils.setProgresColor(progressBar.progressBar);
 
+            progressBar.setVisibility(View.VISIBLE);
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
             /**
@@ -1533,6 +1529,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 //}
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID) && !(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
                                     progressBar.withProgress(progress);
+                                    if (progress == 100) {
+                                        progressBar.performProgress();
+                                    }
                                 }
                             }
                         });
@@ -1574,7 +1573,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 //}
 
                 holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
-                progressBar.withProgress(Math.max(2, HelperUploadFile.getUploadProgress(mMessage.messageID)));
+                progressBar.withProgress(HelperUploadFile.getUploadProgress(mMessage.messageID));
             } else {
                 checkForDownloading(holder, attachment);
             }
