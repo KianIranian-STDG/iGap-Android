@@ -577,12 +577,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
-        Log.i("TAFFFFFFFFFFFFG", "1 previousMusic: " + canDoAction);
         if (!canDoAction) {
             return;
         }
         canDoAction = false;
-        Log.i("TAFFFFFFFFFFFFG", "2 previousMusic: " + canDoAction);
 
         try {
             String beforeMessageId = MusicPlayer.messageId;
@@ -1677,16 +1675,12 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                     switch (state) {
                         case 0:
-                            //  Log.d("dddddd", "Headset is unplugged");
                             if (mp != null && mp.isPlaying()) {
                                 pauseSound();
                             }
                             break;
                         case 1:
-                            //  Log.d("dddddd", "Headset is plugged");
                             break;
-                        //default:
-                        //    Log.d("dddddd", "I have no idea what the headset state is");
                     }
                 }
             }
