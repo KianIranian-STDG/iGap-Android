@@ -22,7 +22,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -70,7 +69,6 @@ import io.realm.Realm;
 
 import static net.iGap.G.context;
 import static net.iGap.module.AttachFile.isInAttach;
-import static net.iGap.module.AttachFile.request_code_TAKE_PICTURE;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarResponse, OnChannelAvatarAdd {
@@ -217,9 +215,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
                     }
                     // Continue only if the File was successfully created
                     if (photoFile != null) {
-                        fragmentNewGroupViewModel.uriIntent = FileProvider.getUriForFile(G.fragmentActivity, G.fragmentActivity.getApplicationContext().getPackageName() + ".provider", createImageFile());
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fragmentNewGroupViewModel.uriIntent);
-                        startActivityForResult(takePictureIntent, request_code_TAKE_PICTURE);
+                        new AttachFile(G.fragmentActivity).dispatchTakePictureIntent(FragmentNewGroup.this);
                     }
                 }
             } catch (IOException e) {
@@ -227,15 +223,12 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             }
         } else {
 
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (fragmentNewGroupViewModel.prefix.equals("NewChanel")) {
-                fragmentNewGroupViewModel.uriIntent = Uri.fromFile(G.IMAGE_NEW_CHANEL);
-            } else {
-                fragmentNewGroupViewModel.uriIntent = Uri.fromFile(G.IMAGE_NEW_GROUP);
+            try {
+                new AttachFile(G.fragmentActivity).requestTakePicture(FragmentNewGroup.this);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fragmentNewGroupViewModel.uriIntent);
-            startActivityForResult(intent, request_code_TAKE_PICTURE);
         }
     }
 
@@ -419,19 +412,25 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == request_code_TAKE_PICTURE && resultCode == Activity.RESULT_OK) {// result for camera
+        if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == Activity.RESULT_OK) {// result for camera
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
-                ImageHelper.correctRotateImage(fragmentNewGroupViewModel.mCurrentPhotoPath, true);
-                intent.putExtra("IMAGE_CAMERA", fragmentNewGroupViewModel.mCurrentPhotoPath);
+                ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
+                intent.putExtra("IMAGE_CAMERA", AttachFile.mCurrentPhotoPath);
                 intent.putExtra("TYPE", "camera");
                 intent.putExtra("PAGE", fragmentNewGroupViewModel.prefix);
                 startActivityForResult(intent, IntentRequests.REQ_CROP);
             } else {
 
                 Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
+                String filePath = null;
+                ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
+                filePath = "file://" + AttachFile.imagePath;
+                fragmentNewGroupViewModel.uriIntent = Uri.parse(filePath);
+
                 if (fragmentNewGroupViewModel.uriIntent != null) {
+
                     intent.putExtra("IMAGE_CAMERA", fragmentNewGroupViewModel.uriIntent.toString());
                     intent.putExtra("TYPE", "camera");
                     intent.putExtra("PAGE", fragmentNewGroupViewModel.prefix);
