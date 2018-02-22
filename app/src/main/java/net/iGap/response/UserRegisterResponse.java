@@ -45,6 +45,10 @@ public class UserRegisterResponse extends MessageHandler {
         PackageManager pm = G.context.getPackageManager();
         String installationSource = pm.getInstallerPackageName(G.context.getPackageName());
 
+        if (installationSource == null) {
+            installationSource = "(Unknown Market)";
+        }
+
         Event event = new Event("User Register Via " + installationSource, false);
         Tapstream.getInstance().fireEvent(event);
     }
