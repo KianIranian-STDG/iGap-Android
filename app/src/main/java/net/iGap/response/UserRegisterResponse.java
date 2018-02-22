@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import android.content.pm.PackageManager;
+
 import com.tapstream.sdk.Event;
 import com.tapstream.sdk.Tapstream;
 
@@ -40,7 +42,10 @@ public class UserRegisterResponse extends MessageHandler {
         G.authorHash = builder.getAuthorHash();
         G.displayName = builder.getUsername();
 
-        Event event = new Event("User Register", false);
+        PackageManager pm = G.context.getPackageManager();
+        String installationSource = pm.getInstallerPackageName(G.context.getPackageName());
+
+        Event event = new Event("User Register Via " + installationSource, false);
         Tapstream.getInstance().fireEvent(event);
     }
 
