@@ -10,9 +10,6 @@
 
 package net.iGap.response;
 
-import com.tapstream.sdk.Event;
-import com.tapstream.sdk.Tapstream;
-
 import net.iGap.G;
 import net.iGap.helper.HelperLogout;
 import net.iGap.proto.ProtoError;
@@ -43,9 +40,6 @@ public class UserDeleteResponse extends MessageHandler {
         if (G.onUserDelete != null) {
             G.onUserDelete.onUserDeleteResponse();
         }
-
-        Event event = new Event("Deleted Account", false);
-        Tapstream.getInstance().fireEvent(event);
     }
 
     @Override

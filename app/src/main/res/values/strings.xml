@@ -675,6 +675,7 @@
   <string name="share_image_from_igap">Share image from iGap</string>
   <string name="TERMINATE">"TERMINATE"</string>
   <string name="iGap_version">"iGap Android Client V"</string>
+  <string name="Bazzar">"Bazaar"</string>
 
   <string name="do_you_want_to_delete_this_group">Are you sure you want to delete this group?</string>
   <string name="do_you_want_to_leave_this_group">Are you sure you want to leave this group?</string>

@@ -12,8 +12,7 @@ package net.iGap.response;
 
 import android.content.pm.PackageManager;
 
-import com.tapstream.sdk.Event;
-import com.tapstream.sdk.Tapstream;
+import com.crashlytics.android.Crashlytics;
 
 import net.iGap.G;
 import net.iGap.proto.ProtoError;
@@ -49,8 +48,7 @@ public class UserRegisterResponse extends MessageHandler {
             installationSource = "(Unknown Market)";
         }
 
-        Event event = new Event("User Register Via " + installationSource, false);
-        Tapstream.getInstance().fireEvent(event);
+        Crashlytics.logException(new Exception("installationSource : " + installationSource));
     }
 
     @Override
