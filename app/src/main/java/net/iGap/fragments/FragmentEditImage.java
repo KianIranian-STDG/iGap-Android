@@ -27,6 +27,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
 import net.iGap.helper.HelperFragment;
+import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.MaterialDesignTextView;
@@ -86,6 +87,7 @@ public class FragmentEditImage extends Fragment {
         txtEditImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AndroidUtils.closeKeyboard(v);
                 new HelperFragment(FragmentFilterImage.newInstance(path)).setReplace(false).load();
 
             }
@@ -107,6 +109,7 @@ public class FragmentEditImage extends Fragment {
         view.findViewById(R.id.pu_ripple_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AndroidUtils.closeKeyboard(v);
                 new HelperFragment(FragmentEditImage.this).remove();
             }
         });
@@ -114,6 +117,7 @@ public class FragmentEditImage extends Fragment {
         view.findViewById(R.id.pu_txt_crop).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AndroidUtils.closeKeyboard(v);
 
                 String newPath = "file://" + path;
                 Uri uri = Uri.parse(newPath);
@@ -174,6 +178,7 @@ public class FragmentEditImage extends Fragment {
             public void onClick(View v) {
                 new HelperFragment(FragmentEditImage.this).remove();
                 FragmentChat.completeEditImage.result(path, edtChat.getText().toString());
+                AndroidUtils.closeKeyboard(v);
             }
         });
 
