@@ -10,16 +10,16 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -28,7 +28,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentEditImage;
 import net.iGap.helper.HelperFragment;
+import net.iGap.module.AttachFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -44,8 +46,8 @@ import static net.iGap.module.AndroidUtils.suitablePath;
  */
 public class FragmentFilterImage extends Fragment {
 
-    private ListView listView;
-    private List<Integer> options;
+    private RecyclerView rcvEditImage;
+    private List<StructFilterImage> options;
     private List<String> optionTexts;
 
     private StyleImageView image;
@@ -85,9 +87,13 @@ public class FragmentFilterImage extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         image = (StyleImageView) view.findViewById(R.id.image);
-        listView = (ListView) view.findViewById(R.id.list);
         initOptions();
-        listView.setAdapter(new ListAdapter());
+
+        rcvEditImage = (RecyclerView) view.findViewById(R.id.rcvEditImage);
+        rcvEditImage.setAdapter(new AdapterFilterImage());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(G.context, LinearLayoutManager.HORIZONTAL, false);
+        rcvEditImage.setLayoutManager(layoutManager);
+        rcvEditImage.setHasFixedSize(true);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -103,6 +109,13 @@ public class FragmentFilterImage extends Fragment {
             }
         });
 
+        view.findViewById(R.id.pu_txt_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(getImageUri(G.context, image.getBitmap())));
+                new HelperFragment(FragmentFilterImage.this).remove();
+            }
+        });
 
         view.findViewById(R.id.pu_txt_clear).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,109 +222,226 @@ public class FragmentFilterImage extends Fragment {
     }
 
     public void initOptions() {
+
         options = new ArrayList<>();
-        optionTexts = new ArrayList<>();
-        options.add(Styler.Mode.GREY_SCALE);
-        optionTexts.add("Grey Scale");
-        options.add(Styler.Mode.INVERT);
-        optionTexts.add("Invert");
-        options.add(Styler.Mode.RGB_TO_BGR);
-        optionTexts.add("RGB to BGR");
-        options.add(Styler.Mode.SEPIA);
-        optionTexts.add("Sepia");
-        options.add(Styler.Mode.BLACK_AND_WHITE);
-        optionTexts.add("Black & White");
-        options.add(Styler.Mode.BRIGHT);
-        optionTexts.add("Bright");
-        options.add(Styler.Mode.VINTAGE_PINHOLE);
-        optionTexts.add("Vintage Pinhole");
-        options.add(Styler.Mode.KODACHROME);
-        optionTexts.add("Kodachrome");
-        options.add(Styler.Mode.TECHNICOLOR);
-        optionTexts.add("Technicolor");
-        options.add(Styler.Mode.SATURATION);
-        optionTexts.add("Saturation");
+        for (int i = 0; i < 10; i++) {
+            StructFilterImage structFilterImage = new StructFilterImage();
+            structFilterImage.setCreate(false);
+            switch (i) {
+                case 0: {
+
+                    structFilterImage.setName("Grey Scale");
+                    structFilterImage.setStyle(Styler.Mode.GREY_SCALE);
+                }
+                break;
+                case 1: {
+                    structFilterImage.setName("Invert");
+                    structFilterImage.setStyle(Styler.Mode.INVERT);
+
+                }
+                break;
+                case 2: {
+                    structFilterImage.setName("RGB to BGR");
+                    structFilterImage.setStyle(Styler.Mode.RGB_TO_BGR);
+                }
+                break;
+                case 3: {
+                    structFilterImage.setName("Sepia");
+                    structFilterImage.setStyle(Styler.Mode.SEPIA);
+                }
+                break;
+                case 4: {
+                    structFilterImage.setName("Black & White");
+                    structFilterImage.setStyle(Styler.Mode.BLACK_AND_WHITE);
+                }
+                break;
+                case 5: {
+                    structFilterImage.setName("Bright");
+                    structFilterImage.setStyle(Styler.Mode.BRIGHT);
+                }
+                break;
+                case 6: {
+                    structFilterImage.setName("Vintage Pinhole");
+                    structFilterImage.setStyle(Styler.Mode.VINTAGE_PINHOLE);
+                }
+                break;
+                case 7: {
+                    structFilterImage.setName("Kodachrome");
+                    structFilterImage.setStyle(Styler.Mode.KODACHROME);
+                }
+                break;
+                case 8: {
+                    structFilterImage.setName("Technicolor");
+                    structFilterImage.setStyle(Styler.Mode.TECHNICOLOR);
+                }
+                break;
+                case 9: {
+                    structFilterImage.setName("Saturation");
+                    structFilterImage.setStyle(Styler.Mode.SATURATION);
+                }
+                break;
+            }
+
+            options.add(structFilterImage);
+        }
+
+
     }
 
-    class ListAdapter extends BaseAdapter {
+//    class ListAdapter extends BaseAdapter {
+//        @Override
+//        public int getCount() {
+//            return options.size() + 1;
+//        }
+//
+//        @Override
+//        public Object getItem(int i) {
+//            if (i >= options.size()) {
+//                return 100;
+//            }
+//            return options.get(i);
+//        }
+//
+//        @Override
+//        public long getItemId(int i) {
+//            return i;
+//        }
+//
+//        @Override
+//        public View getView(final int i, View view, ViewGroup viewGroup) {
+//            final View result = getLayoutInflater().inflate(R.layout.option_item, null);
+//            if (i < options.size() && image.getMode() == options.get(i) || i >= options.size() && image.getMode() == Styler.Mode.NONE) {
+//                result.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
+//                lastChosenOptionView = result;
+//            }
+//            TextView title = (TextView) result.findViewById(R.id.text);
+//            title.setText(optionTexts.get(i));
+//            if (options.get(i) == Styler.Mode.SATURATION) {
+//                saturationBar = (SeekBar) result.findViewById(R.id.seekbar_saturation);
+//                saturationBar.setVisibility(View.VISIBLE);
+//                saturationBar.setProgress((int) (image.getSaturation() * 100));
+//                saturationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//                    @Override
+//                    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+//                        image.setSaturation(i / 100F).updateStyle();
+//                        if (lastChosenOptionView != result) {
+//                            if (lastChosenOptionView != null) {
+//                                lastChosenOptionView.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
+//                            }
+//                            result.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
+//                            lastChosenOptionView = result;
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onStartTrackingTouch(SeekBar seekBar) {
+//                    }
+//
+//                    @Override
+//                    public void onStopTrackingTouch(SeekBar seekBar) {
+//                    }
+//                });
+//            }
+//
+//        }
+//    }
+
+    private class AdapterFilterImage extends RecyclerView.Adapter<AdapterFilterImage.ViewHolder> {
+
         @Override
-        public int getCount() {
-            return options.size() + 1;
+        public AdapterFilterImage.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.option_item, parent, false);
+            return new ViewHolder(view);
         }
 
         @Override
-        public Object getItem(int i) {
-            if (i >= options.size()) {
-                return 100;
-            }
-            return options.get(i);
+        public void onBindViewHolder(AdapterFilterImage.ViewHolder holder, int position) {
+
+            options.get(position).setCreate(true);
+            holder.txtName.setText(options.get(position).getName());
+            G.imageLoader.displayImage(suitablePath(path), holder.imgFilter);
+            holder.imgFilter.setMode(options.get(position).getStyle()).updateStyle();
+
         }
 
         @Override
-        public long getItemId(int i) {
-            return i;
+        public int getItemCount() {
+            return options.size();
         }
 
-        @Override
-        public View getView(final int i, View view, ViewGroup viewGroup) {
-            final View result = getLayoutInflater().inflate(R.layout.option_item, null);
-            if (i < options.size() && image.getMode() == options.get(i) || i >= options.size() && image.getMode() == Styler.Mode.NONE) {
-                result.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
-                lastChosenOptionView = result;
-            }
-            TextView title = (TextView) result.findViewById(R.id.text);
-            title.setText(optionTexts.get(i));
-            if (options.get(i) == Styler.Mode.SATURATION) {
-                saturationBar = (SeekBar) result.findViewById(R.id.seekbar_saturation);
-                saturationBar.setVisibility(View.VISIBLE);
-                saturationBar.setProgress((int) (image.getSaturation() * 100));
-                saturationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            private StyleImageView imgFilter;
+            private TextView txtName;
+
+            public ViewHolder(final View itemView) {
+                super(itemView);
+
+                imgFilter = (StyleImageView) itemView.findViewById(R.id.imgFilter);
+                txtName = (TextView) itemView.findViewById(R.id.txtName);
+
+                itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                        image.setSaturation(i / 100F).updateStyle();
-                        if (lastChosenOptionView != result) {
-                            if (lastChosenOptionView != null) {
-                                lastChosenOptionView.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
-                            }
-                            result.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
-                            lastChosenOptionView = result;
+                    public void onClick(View v) {
+
+//                        if (lastChosenOptionView != null) {
+//                            lastChosenOptionView.setBackgroundColor(G.context.getResources().getColor(R.color.black));
+//                        }
+//                        itemView.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
+
+                        image.setMode(options.get(getAdapterPosition()).getStyle()).updateStyle();
+
+                        if (saturationBar != null && options.get(getAdapterPosition()).getStyle() != Styler.Mode.SATURATION) {
+                            saturationBar.setProgress(100);
                         }
-                    }
 
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                    }
+                        lastChosenOptionView = itemView;
 
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
+
                     }
                 });
+
+
             }
-
-            result.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (lastChosenOptionView != null) {
-                        lastChosenOptionView.setBackgroundColor(G.context.getResources().getColor(R.color.black));
-                    }
-                    view.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
-
-                    image.setMode(options.get(i)).updateStyle();
-                    if (saturationBar != null && options.get(i) != Styler.Mode.SATURATION) {
-                        saturationBar.setProgress(100);
-                    }
-
-                    lastChosenOptionView = view;
-                }
-            });
-            return result;
         }
     }
+
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
+    }
+
+    public class StructFilterImage {
+
+        private String name;
+        private int style;
+        private boolean isCreate;
+
+        public boolean isCreate() {
+            return isCreate;
+        }
+
+        public void setCreate(boolean create) {
+            isCreate = create;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getStyle() {
+            return style;
+        }
+
+        public void setStyle(int style) {
+            this.style = style;
+        }
     }
 }
