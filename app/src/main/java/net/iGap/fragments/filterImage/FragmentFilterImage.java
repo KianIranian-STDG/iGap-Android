@@ -28,9 +28,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentEditImage;
 import net.iGap.helper.HelperFragment;
-import net.iGap.module.AttachFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -105,11 +103,25 @@ public class FragmentFilterImage extends Fragment {
             }
         });
 
-        view.findViewById(R.id.pu_txt_ok).setOnClickListener(new View.OnClickListener() {
+
+        view.findViewById(R.id.pu_txt_clear).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(getImageUri(G.context, image.getBitmap())));
-                new HelperFragment(FragmentFilterImage.this).remove();
+                new MaterialDialog.Builder(G.fragmentActivity)
+                        .title("Clear")
+                        .content("Are you sure")
+                        .positiveText("ok")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                image.clearStyle();
+                                if (saturationBar != null) {
+                                    saturationBar.setProgress(100);
+                                }
+                            }
+                        })
+                        .negativeText("cancel")
+                        .show();
             }
         });
 
@@ -248,37 +260,34 @@ public class FragmentFilterImage extends Fragment {
                 lastChosenOptionView = result;
             }
             TextView title = (TextView) result.findViewById(R.id.text);
-            if (i >= options.size()) {
-                title.setText("Clear");
-            } else {
-                title.setText(optionTexts.get(i));
-                if (options.get(i) == Styler.Mode.SATURATION) {
-                    saturationBar = (SeekBar) result.findViewById(R.id.seekbar_saturation);
-                    saturationBar.setVisibility(View.VISIBLE);
-                    saturationBar.setProgress((int) (image.getSaturation() * 100));
-                    saturationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                        @Override
-                        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                            image.setSaturation(i / 100F).updateStyle();
-                            if (lastChosenOptionView != result) {
-                                if (lastChosenOptionView != null) {
-                                    lastChosenOptionView.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
-                                }
-                                result.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
-                                lastChosenOptionView = result;
+            title.setText(optionTexts.get(i));
+            if (options.get(i) == Styler.Mode.SATURATION) {
+                saturationBar = (SeekBar) result.findViewById(R.id.seekbar_saturation);
+                saturationBar.setVisibility(View.VISIBLE);
+                saturationBar.setProgress((int) (image.getSaturation() * 100));
+                saturationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                        image.setSaturation(i / 100F).updateStyle();
+                        if (lastChosenOptionView != result) {
+                            if (lastChosenOptionView != null) {
+                                lastChosenOptionView.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
                             }
+                            result.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
+                            lastChosenOptionView = result;
                         }
+                    }
 
-                        @Override
-                        public void onStartTrackingTouch(SeekBar seekBar) {
-                        }
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
 
-                        @Override
-                        public void onStopTrackingTouch(SeekBar seekBar) {
-                        }
-                    });
-                }
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                    }
+                });
             }
+
             result.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -286,31 +295,12 @@ public class FragmentFilterImage extends Fragment {
                         lastChosenOptionView.setBackgroundColor(G.context.getResources().getColor(R.color.black));
                     }
                     view.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
-                    if (i >= options.size()) {
 
-                        new MaterialDialog.Builder(G.fragmentActivity)
-                                .title("Clear")
-                                .content("Are you sure")
-                                .positiveText("ok")
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                        image.clearStyle();
-                                        if (saturationBar != null) {
-                                            saturationBar.setProgress(100);
-                                        }
-                                    }
-                                })
-                                .negativeText("cancel")
-                                .show();
-
-
-                    } else {
-                        image.setMode(options.get(i)).updateStyle();
-                        if (saturationBar != null && options.get(i) != Styler.Mode.SATURATION) {
-                            saturationBar.setProgress(100);
-                        }
+                    image.setMode(options.get(i)).updateStyle();
+                    if (saturationBar != null && options.get(i) != Styler.Mode.SATURATION) {
+                        saturationBar.setProgress(100);
                     }
+
                     lastChosenOptionView = view;
                 }
             });
