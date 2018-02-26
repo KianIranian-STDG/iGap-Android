@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,14 +16,23 @@ import android.widget.TextView;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
+import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
+import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.module.AttachFile;
+import net.iGap.module.EmojiEditTextE;
+import net.iGap.module.MaterialDesignTextView;
 
 import static android.app.Activity.RESULT_OK;
+import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
 /**
@@ -34,7 +44,11 @@ public class FragmentEditImage extends Fragment {
     private String path;
     private ImageView imgEditImage;
     public static UpdateImage updateImage;
-
+    private EmojiEditTextE edtChat;
+    private MaterialDesignTextView imvSmileButton;
+    private boolean isEmojiSHow = false;
+    private boolean initEmoji = false;
+    private EmojiPopup emojiPopup;
 
     public FragmentEditImage() {
         // Required empty public constructor
@@ -58,7 +72,7 @@ public class FragmentEditImage extends Fragment {
 
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle bundle = getArguments();
@@ -122,6 +136,48 @@ public class FragmentEditImage extends Fragment {
                         .start(G.fragmentActivity, FragmentEditImage.this);
             }
         });
+
+        imvSmileButton = (MaterialDesignTextView) view.findViewById(R.id.chl_imv_smile_button);
+
+        edtChat = (EmojiEditTextE) view.findViewById(R.id.chl_edt_chat);
+        edtChat.requestFocus();
+
+        edtChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isEmojiSHow) {
+
+                    imvSmileButton.performClick();
+                }
+            }
+        });
+
+
+        imvSmileButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (!initEmoji) {
+                    initEmoji = true;
+                    setUpEmojiPopup(view);
+                }
+
+                emojiPopup.toggle();
+            }
+        });
+
+
+        MaterialDesignTextView imvSendButton = (MaterialDesignTextView) view.findViewById(R.id.pu_txt_sendImage);
+
+        imvSendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new HelperFragment(FragmentEditImage.this).remove();
+                FragmentChat.completeEditImage.result(path, edtChat.getText().toString());
+            }
+        });
+
+
     }
 
 
@@ -143,4 +199,39 @@ public class FragmentEditImage extends Fragment {
         void result(String path);
     }
 
+    private void setUpEmojiPopup(View view) {
+        emojiPopup = EmojiPopup.Builder.fromRootView(view.findViewById(ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+
+            @Override
+            public void onEmojiBackspaceClick(View v) {
+
+            }
+        }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
+            @Override
+            public void onEmojiPopupShown() {
+                changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+                isEmojiSHow = true;
+            }
+        }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
+            @Override
+            public void onKeyboardOpen(final int keyBoardHeight) {
+
+            }
+        }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
+            @Override
+            public void onEmojiPopupDismiss() {
+                changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+                isEmojiSHow = false;
+            }
+        }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
+            @Override
+            public void onKeyboardClose() {
+                emojiPopup.dismiss();
+            }
+        }).build(edtChat);
+    }
+
+    private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
+        imvSmileButton.setText(drawableResourceId);
+    }
 }

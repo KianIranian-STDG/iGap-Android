@@ -532,6 +532,8 @@ public class FragmentChat extends BaseFragment
     private int totalItemCount; // all item in recycler view
     private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
 
+    public static CompleteEditImage completeEditImage;
+
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
             realmChat = Realm.getDefaultInstance();
@@ -5753,6 +5755,20 @@ public class FragmentChat extends BaseFragment
             }
         };
 
+        completeEditImage = new CompleteEditImage() {
+            @Override
+            public void result(String path, String message) {
+                listPathString = null;
+                listPathString = new ArrayList<>();
+                listPathString.add(path);
+                edtChat.setText(message);
+                latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
+                ll_attach_text.setVisibility(View.VISIBLE);
+                imvSendButton.performClick();
+
+            }
+        };
+
         rcvBottomSheet = (RecyclerView) viewBottomSheet.findViewById(R.id.rcvContent);
         rcvBottomSheet.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 1, GridLayoutManager.HORIZONTAL, false));
         rcvBottomSheet.setItemViewCacheSize(100);
@@ -8321,6 +8337,10 @@ public class FragmentChat extends BaseFragment
             hideProgress();
         }
 
+    }
+
+    public interface CompleteEditImage {
+        void result(String path, String message);
     }
 
 
