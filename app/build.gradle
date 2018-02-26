@@ -127,6 +127,7 @@ dependencies {
     compile group: 'com.github.msarhan', name: 'ummalqura-calendar', version: '1.1.7'
     compile 'com.sothree.slidinguppanel:library:3.4.0'
     compile "com.tapstream.sdk:tapstream-android:3.3.1"
+    compile 'it.chengdazhi.styleimageview:styleimageview:1.0.4'
 }
 
 configurations.all {

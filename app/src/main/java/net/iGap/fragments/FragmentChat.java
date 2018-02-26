@@ -5724,7 +5724,7 @@ public class FragmentChat extends BaseFragment
 
         onPathAdapterBottomSheet = new OnPathAdapterBottomSheet() {
             @Override
-            public void path(String path, boolean isCheck) {
+            public void path(String path, boolean isCheck, boolean isEdit) {
 
                 if (isCheck) {
                     listPathString.add(path);
@@ -5732,17 +5732,23 @@ public class FragmentChat extends BaseFragment
                     listPathString.remove(path);
                 }
 
-                listPathString.size();
-                if (listPathString.size() > 0) {
-                    //send.setText(R.mipmap.send2);
-                    send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-                    isCheckBottomSheet = true;
-                    txtCountItem.setText("" + listPathString.size() + " " + G.fragmentActivity.getResources().getString(item));
+                if (isEdit) {
+                    bottomSheetDialog.dismiss();
+                    new HelperFragment(FragmentEditImage.newInstance(path)).setReplace(false).load();
+//                    new HelperFragment(FragmentFilterImage.newInstance(path)).setReplace(false).load();
                 } else {
-                    //send.setImageResource(R.mipmap.ic_close);
-                    send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
-                    isCheckBottomSheet = false;
-                    txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
+                    listPathString.size();
+                    if (listPathString.size() > 0) {
+                        //send.setText(R.mipmap.send2);
+                        send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
+                        isCheckBottomSheet = true;
+                        txtCountItem.setText("" + listPathString.size() + " " + G.fragmentActivity.getResources().getString(item));
+                    } else {
+                        //send.setImageResource(R.mipmap.ic_close);
+                        send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
+                        isCheckBottomSheet = false;
+                        txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
+                    }
                 }
             }
         };
