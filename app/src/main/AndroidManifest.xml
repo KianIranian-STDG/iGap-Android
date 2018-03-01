@@ -275,6 +275,12 @@
     <activity
       android:name=".activities.ActivityManageSpace"
       android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
+
+    <activity
+      android:name="com.yalantis.ucrop.UCropActivity"
+      android:screenOrientation="portrait"
+      android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
   </application>
 
 </manifest>

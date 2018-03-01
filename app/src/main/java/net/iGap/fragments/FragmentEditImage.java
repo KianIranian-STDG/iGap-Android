@@ -7,21 +7,20 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
+import com.yalantis.ucrop.UCrop;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -31,6 +30,8 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.MaterialDesignTextView;
+
+import java.io.File;
 
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.R.id.ac_ll_parent;
@@ -50,6 +51,7 @@ public class FragmentEditImage extends Fragment {
     private boolean isEmojiSHow = false;
     private boolean initEmoji = false;
     private EmojiPopup emojiPopup;
+    private String SAMPLE_CROPPED_IMAGE_NAME;
 
     public FragmentEditImage() {
         // Required empty public constructor
@@ -101,7 +103,6 @@ public class FragmentEditImage extends Fragment {
 
                 path = pathImageFilter;
                 G.imageLoader.displayImage(suitablePath(path), imgEditImage);
-                Log.i("SSSSSSSSSSSS", "result: " + pathImageFilter);
             }
         };
 
@@ -120,24 +121,17 @@ public class FragmentEditImage extends Fragment {
                 AndroidUtils.closeKeyboard(v);
 
                 String newPath = "file://" + path;
+                SAMPLE_CROPPED_IMAGE_NAME = path.substring(path.lastIndexOf("/"));
                 Uri uri = Uri.parse(newPath);
+                UCrop.Options options = new UCrop.Options();
+                options.setStatusBarColor(ContextCompat.getColor(G.context, R.color.black));
+                options.setToolbarColor(ContextCompat.getColor(G.context, R.color.black));
+                options.setCompressionQuality(80);
 
-                CropImage.activity(uri)
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .setMinCropResultSize(120, 120)
-                        .setAutoZoomEnabled(false)
-                        .setInitialCropWindowPaddingRatio(.08f) // padding window from all
-                        .setBorderCornerLength(50)
-                        .setBorderCornerOffset(0)
-                        .setAllowCounterRotation(true)
-                        .setBorderCornerThickness(8.0f)
-                        .setShowCropOverlay(true)
-                        .setAspectRatio(1, 1)
-                        .setFixAspectRatio(false)
-                        .setBorderCornerColor(getResources().getColor(R.color.whit_background))
-                        .setBackgroundColor(getResources().getColor(R.color.ou_background_crop))
-                        .setScaleType(CropImageView.ScaleType.FIT_CENTER)
-                        .start(G.fragmentActivity, FragmentEditImage.this);
+                UCrop.of(uri, Uri.fromFile(new File(G.DIR_IMAGES, SAMPLE_CROPPED_IMAGE_NAME)))
+                        .withAspectRatio(16, 9)
+                        .withOptions(options)
+                        .start(G.context, FragmentEditImage.this);
             }
         });
 
@@ -190,12 +184,12 @@ public class FragmentEditImage extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) { // result for crop
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
-                imgEditImage.setImageURI(result.getUri());
-                path = AttachFile.getFilePathFromUri(result.getUri());
-            }
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            final Uri resultUri = UCrop.getOutput(data);
+            path = AttachFile.getFilePathFromUri(resultUri);
+//            G.imageLoader.displayImage(path, imgEditImage);
+
+            imgEditImage.setImageURI(Uri.parse(path));
         }
 
     }
