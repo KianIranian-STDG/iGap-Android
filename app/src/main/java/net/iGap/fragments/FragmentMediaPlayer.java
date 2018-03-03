@@ -663,7 +663,8 @@ public class FragmentMediaPlayer extends BaseFragment {
             }
 
         } else {
-            new RequestClientSearchRoomHistory().clientSearchRoomHistory(MusicPlayer.roomId, nextMessageId, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
+            if (isThereAnyMoreItemToLoad)
+                new RequestClientSearchRoomHistory().clientSearchRoomHistory(MusicPlayer.roomId, nextMessageId, ProtoClientSearchRoomHistory.ClientSearchRoomHistory.Filter.AUDIO);
 
         }
 

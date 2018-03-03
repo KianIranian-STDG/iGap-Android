@@ -471,10 +471,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         //if (FragmentMediaPlayer.adapterListMusicPlayer != null) FragmentMediaPlayer.adapterListMusicPlayer.notifyDataSetChanged();
 
-        if (!canDoAction) {
-            return;
-        }
-        canDoAction = false;
+//        if (!canDoAction) {
+//            return;
+//        }
+//        canDoAction = false;
 
         try {
 
@@ -577,10 +577,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
-        if (!canDoAction) {
-            return;
-        }
-        canDoAction = false;
+//        if (!canDoAction) {
+//            return;
+//        }
+//        canDoAction = false;
 
         try {
             String beforeMessageId = MusicPlayer.messageId;
@@ -728,7 +728,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 @Override
                 public void run() {
                     Log.i("TAFFFFFFFFFFFFG", "0 startPlayer: ");
-                    canDoAction = true;
+//                    canDoAction = true;
                 }
             }, 1000);
 
@@ -1593,13 +1593,15 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             String str = intent.getExtras().getString("mode");
 
             if (str.equals("previous")) {
+//                canDoAction= true;
                 previousMusic();
-                MusicPlayer.canDoAction = false;
+//                MusicPlayer.canDoAction = false;
             } else if (str.equals("play")) {
                 playAndPause();
             } else if (str.equals("forward")) {
+//                canDoAction= true;
                 nextMusic();
-                MusicPlayer.canDoAction = false;
+//                MusicPlayer.canDoAction = false;
             } else if (str.equals("close")) {
                 closeLayoutMediaPlayer();
             }
