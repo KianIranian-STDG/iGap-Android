@@ -724,16 +724,16 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     public static void startPlayer(final String name, String musicPath, String roomName, long roomId, final boolean updateList, final String messageID) {
 
         if (!inChangeStreamType) {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Log.i("TAFFFFFFFFFFFFG", "0 startPlayer: ");
-//                    canDoAction = true;
-                }
-            }, 1000);
+//            G.handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+////                    canDoAction = true;
+//                }
+//            }, 1000);
 
             isVoice = false;
             isPause = false;
+
 
             if (messageID != null && messageID.length() > 0) {
 
@@ -763,6 +763,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             mediaThumpnail = null;
             MusicPlayer.roomId = roomId;
 
+        }
+
+        if (MusicPlayer.downloadNextMusic(messageId)) {
+            FragmentMediaPlayer.fastItemAdapter.notifyAdapterDataSetChanged();
         }
 
         try {
