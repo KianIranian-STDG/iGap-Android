@@ -532,7 +532,7 @@ public class FragmentChat extends BaseFragment
     private int totalItemCount; // all item in recycler view
     private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
 
-    public static CompleteEditImage completeEditImage;
+
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -5736,7 +5736,7 @@ public class FragmentChat extends BaseFragment
 
                 if (isEdit) {
                     bottomSheetDialog.dismiss();
-                    new HelperFragment(FragmentEditImage.newInstance(path)).setReplace(false).load();
+                    new HelperFragment(FragmentEditImage.newInstance(path, true)).setReplace(false).load();
 //                    new HelperFragment(FragmentFilterImage.newInstance(path)).setReplace(false).load();
                 } else {
                     listPathString.size();
@@ -5755,7 +5755,8 @@ public class FragmentChat extends BaseFragment
             }
         };
 
-        completeEditImage = new CompleteEditImage() {
+
+        FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
             public void result(String path, String message) {
                 listPathString = null;
@@ -5765,7 +5766,6 @@ public class FragmentChat extends BaseFragment
                 latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
                 ll_attach_text.setVisibility(View.VISIBLE);
                 imvSendButton.performClick();
-
             }
         };
 
@@ -8337,10 +8337,6 @@ public class FragmentChat extends BaseFragment
             hideProgress();
         }
 
-    }
-
-    public interface CompleteEditImage {
-        void result(String path, String message);
     }
 
 

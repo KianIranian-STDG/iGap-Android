@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ import static net.iGap.module.AndroidUtils.suitablePath;
 public class FragmentEditImage extends Fragment {
 
     private final static String PATH = "PATH";
+    private final static String ISCHAT = "ISCHAT";
     private String path;
     private ImageView imgEditImage;
     public static UpdateImage updateImage;
@@ -52,6 +54,9 @@ public class FragmentEditImage extends Fragment {
     private boolean initEmoji = false;
     private EmojiPopup emojiPopup;
     private String SAMPLE_CROPPED_IMAGE_NAME;
+    private boolean isChatPage = true;
+    public static CompleteEditImage completeEditImage;
+    private int num = 0;
 
     public FragmentEditImage() {
         // Required empty public constructor
@@ -65,9 +70,10 @@ public class FragmentEditImage extends Fragment {
         return inflater.inflate(R.layout.fragment_edit_image, container, false);
     }
 
-    public static FragmentEditImage newInstance(String path) {
+    public static FragmentEditImage newInstance(String path, boolean isChatPage) {
         Bundle args = new Bundle();
         args.putString(PATH, path);
+        args.putBoolean(ISCHAT, isChatPage);
         FragmentEditImage fragment = new FragmentEditImage();
         fragment.setArguments(args);
         return fragment;
@@ -81,6 +87,7 @@ public class FragmentEditImage extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             path = bundle.getString(PATH);
+            isChatPage = bundle.getBoolean(ISCHAT);
         }
 
         imgEditImage = (ImageView) view.findViewById(R.id.imgEditImage);
@@ -94,7 +101,7 @@ public class FragmentEditImage extends Fragment {
 
             }
         });
-
+        Log.i("FFFFFFF", "00 nActivityResult: " + path);
         G.imageLoader.displayImage(suitablePath(path), imgEditImage);
 
         updateImage = new UpdateImage() {
@@ -102,6 +109,9 @@ public class FragmentEditImage extends Fragment {
             public void result(String pathImageFilter) {
 
                 path = pathImageFilter;
+
+                Log.i("FFFFFFF", "o2 nActivityResult: " + path);
+
                 G.imageLoader.displayImage(suitablePath(path), imgEditImage);
             }
         };
@@ -121,7 +131,10 @@ public class FragmentEditImage extends Fragment {
                 AndroidUtils.closeKeyboard(v);
 
                 String newPath = "file://" + path;
-                SAMPLE_CROPPED_IMAGE_NAME = path.substring(path.lastIndexOf("/"));
+                String fileNameWithOutExt = path.substring(path.lastIndexOf("/"));
+                String extension = path.substring(path.lastIndexOf("."));
+                SAMPLE_CROPPED_IMAGE_NAME = fileNameWithOutExt.substring(0, fileNameWithOutExt.lastIndexOf(".")) + num + extension;
+                num++;
                 Uri uri = Uri.parse(newPath);
                 UCrop.Options options = new UCrop.Options();
                 options.setStatusBarColor(ContextCompat.getColor(G.context, R.color.black));
@@ -164,18 +177,42 @@ public class FragmentEditImage extends Fragment {
             }
         });
 
-
+        ViewGroup layoutCaption = view.findViewById(R.id.layout_caption);
+        MaterialDesignTextView txtSet = view.findViewById(R.id.txtSet);
         MaterialDesignTextView imvSendButton = (MaterialDesignTextView) view.findViewById(R.id.pu_txt_sendImage);
+
+
+        if (isChatPage) {
+            layoutCaption.setVisibility(View.VISIBLE);
+            imvSendButton.setVisibility(View.VISIBLE);
+            txtSet.setVisibility(View.GONE);
+        } else {
+            txtSet.setVisibility(View.VISIBLE);
+            layoutCaption.setVisibility(View.GONE);
+            imvSendButton.setVisibility(View.GONE);
+        }
+
+        txtSet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                completeEditImage.result(path, "");
+
+                new HelperFragment(FragmentEditImage.this).remove();
+                AndroidUtils.closeKeyboard(v);
+
+
+            }
+        });
 
         imvSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new HelperFragment(FragmentEditImage.this).remove();
-                FragmentChat.completeEditImage.result(path, edtChat.getText().toString());
+                completeEditImage.result(path, edtChat.getText().toString());
                 AndroidUtils.closeKeyboard(v);
             }
         });
-
 
     }
 
@@ -189,6 +226,7 @@ public class FragmentEditImage extends Fragment {
             path = AttachFile.getFilePathFromUri(resultUri);
 //            G.imageLoader.displayImage(path, imgEditImage);
 
+            Log.i("FFFFFFF", "o1 nActivityResult: " + path);
             imgEditImage.setImageURI(Uri.parse(path));
         }
 
@@ -232,5 +270,9 @@ public class FragmentEditImage extends Fragment {
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
         imvSmileButton.setText(drawableResourceId);
+    }
+
+    public interface CompleteEditImage {
+        void result(String path, String message);
     }
 }

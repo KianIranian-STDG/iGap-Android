@@ -26,14 +26,13 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityCrop;
 import net.iGap.databinding.FragmentSettingBinding;
 import net.iGap.helper.HelperAvatar;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
-import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnAvatarDelete;
 import net.iGap.interfaces.OnAvatarGet;
@@ -45,7 +44,6 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
-import net.iGap.module.IntentRequests;
 import net.iGap.module.SUID;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserAvatarAdd;
@@ -215,6 +213,32 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             }
         };
 
+        FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
+            @Override
+            public void result(String path, String message) {
+
+                pathSaveImage = path;
+                long lastUploadedAvatarId = idAvatar + 1L;
+
+                showProgressBar();
+                HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+                    @Override
+                    public void OnProgress(int progress, FileUploadStructure struct) {
+                        if (progress < 100) {
+                            fragmentSettingBinding.stPrgWaitingAddContact.setProgress(progress);
+                        } else {
+                            new RequestUserAvatarAdd().userAddAvatar(struct.token);
+                        }
+                    }
+
+                    @Override
+                    public void OnError() {
+                        hideProgressBar();
+                    }
+                });
+            }
+        };
+
         setAvatar();
 
 
@@ -283,64 +307,19 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //fragmentSettingViewModel.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == RESULT_OK) {// result for camera
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
-                ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
-                intent.putExtra("IMAGE_CAMERA", AttachFile.mCurrentPhotoPath);
-                intent.putExtra("TYPE", "camera");
-                intent.putExtra("PAGE", "setting");
-                intent.putExtra("ID", (int) (idAvatar + 1L));
-                startActivityForResult(intent, IntentRequests.REQ_CROP);
+                new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false)).setReplace(false).load();
             } else {
-                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
-                if (uriIntent != null) {
-                    ImageHelper.correctRotateImage(pathSaveImage, true);
-                    intent.putExtra("IMAGE_CAMERA", uriIntent.toString());
-                    intent.putExtra("TYPE", "camera");
-                    intent.putExtra("PAGE", "setting");
-                    intent.putExtra("ID", (int) (idAvatar + 1L));
-                    startActivityForResult(intent, IntentRequests.REQ_CROP);
-                }
+                new HelperFragment(FragmentEditImage.newInstance(pathSaveImage, false)).setReplace(false).load();
             }
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
             if (data != null) {
                 if (data.getData() == null) {
                     return;
                 }
-                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
-                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image));
-                intent.putExtra("TYPE", "gallery");
-                intent.putExtra("PAGE", "setting");
-                intent.putExtra("ID", (int) (idAvatar + 1L));
-                startActivityForResult(intent, IntentRequests.REQ_CROP);
+                new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false)).setReplace(false).load();
             }
-        } else if (requestCode == IntentRequests.REQ_CROP && resultCode == RESULT_OK) { // save path image on data base ( realm )
-
-            if (data != null) {
-                pathSaveImage = data.getData().toString();
-            }
-
-            long lastUploadedAvatarId = idAvatar + 1L;
-
-            showProgressBar();
-            HelperUploadFile.startUploadTaskAvatar(pathSaveImage, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
-                @Override
-                public void OnProgress(int progress, FileUploadStructure struct) {
-                    if (progress < 100) {
-                        fragmentSettingBinding.stPrgWaitingAddContact.setProgress(progress);
-                    } else {
-                        new RequestUserAvatarAdd().userAddAvatar(struct.token);
-                    }
-                }
-
-                @Override
-                public void OnError() {
-                    hideProgressBar();
-                }
-            });
         }
     }
 
