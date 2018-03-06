@@ -55,6 +55,11 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
     @Override
     public void onOffer(final long called_userId, ProtoSignalingOffer.SignalingOffer.Type type, final String callerSdp) {
+
+        if (type != ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING) {
+            return;
+        }
+
         new RequestSignalingRinging().signalingRinging();
 
         G.handler.post(new Runnable() {
