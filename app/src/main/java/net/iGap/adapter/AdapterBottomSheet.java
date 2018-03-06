@@ -76,12 +76,12 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
                 if (holder.checkBoxSelect.isChecked()) {
                     holder.checkBoxSelect.setChecked(false);
                     holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), false);
+                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), false, false);
                     mList.setSelected(true);
                 } else {
                     holder.checkBoxSelect.setChecked(true);
                     holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
-                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), true);
+                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), true, false);
                     mList.setSelected(false);
                 }
             }
@@ -93,14 +93,15 @@ public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, Adapter
                 if (holder.checkBoxSelect.isChecked()) {
                     holder.checkBoxSelect.setChecked(false);
                     holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
-                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), false);
+                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), false, true);
                     mList.setSelected(false);
                 } else {
                     holder.checkBoxSelect.setChecked(true);
                     holder.checkBoxSelect.setUnCheckColor(G.context.getResources().getColor(R.color.green));
-                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), true);
+                    FragmentChat.onPathAdapterBottomSheet.path(mList.getPath(), true, true);
                     mList.setSelected(true);
                 }
+
             }
         });
     }
