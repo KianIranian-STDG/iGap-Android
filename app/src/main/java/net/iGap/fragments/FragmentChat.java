@@ -88,7 +88,6 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
-import net.iGap.activities.ActivityCrop;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterBottomSheet;
@@ -531,7 +530,6 @@ public class FragmentChat extends BaseFragment
     private int visibleItemCount; // visible item in recycler view
     private int totalItemCount; // all item in recycler view
     private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
-
 
 
     public static Realm getRealmChat() {
@@ -1180,13 +1178,8 @@ public class FragmentChat extends BaseFragment
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
-
                                 Uri uri = Uri.parse(listPathString.get(0));
-                                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
-                                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUriAndCheckForAndroid7(uri, HelperGetDataFromOtherApp.FileType.image));
-                                intent.putExtra("TYPE", "gallery");
-                                intent.putExtra("PAGE", "chat");
-                                startActivityForResult(intent, IntentRequests.REQ_CROP);
+                                new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(uri, HelperGetDataFromOtherApp.FileType.image), true, false)).setReplace(false).load();
 
                                 G.handler.post(new Runnable() {
                                     @Override
@@ -1198,13 +1191,8 @@ public class FragmentChat extends BaseFragment
                                 });
                             } else {
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
-                                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
                                 Uri uri = Uri.parse(listPathString.get(0));
-                                uri = Uri.parse("file://" + getFilePathFromUri(uri));
-                                intent.putExtra("IMAGE_CAMERA", uri.toString());
-                                intent.putExtra("TYPE", "gallery");
-                                intent.putExtra("PAGE", "chat");
-                                startActivityForResult(intent, IntentRequests.REQ_CROP);
+                                new HelperFragment(FragmentEditImage.newInstance(uri.toString(), true, false)).setReplace(false).load();
 
                                 G.handler.post(new Runnable() {
                                     @Override
@@ -1230,13 +1218,7 @@ public class FragmentChat extends BaseFragment
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
                             ImageHelper.correctRotateImage(listPathString.get(0), true);
-                            Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
-
-                            intent.putExtra("IMAGE_CAMERA", listPathString.get(0));
-                            intent.putExtra("TYPE", "camera");
-                            intent.putExtra("PAGE", "chat");
-                            startActivityForResult(intent, IntentRequests.REQ_CROP);
-
+                            new HelperFragment(FragmentEditImage.newInstance(listPathString.get(0), true, false)).setReplace(false).load();
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1247,14 +1229,7 @@ public class FragmentChat extends BaseFragment
                             });
                         } else {
                             ImageHelper.correctRotateImage(listPathString.get(0), true);
-
-                            Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
-
-                            intent.putExtra("IMAGE_CAMERA", "file://" + listPathString.get(0));
-                            intent.putExtra("TYPE", "camera");
-                            intent.putExtra("PAGE", "chat");
-                            startActivityForResult(intent, IntentRequests.REQ_CROP);
-
+                            new HelperFragment(FragmentEditImage.newInstance(listPathString.get(0), true, false)).setReplace(false).load();
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -5736,7 +5711,7 @@ public class FragmentChat extends BaseFragment
 
                 if (isEdit) {
                     bottomSheetDialog.dismiss();
-                    new HelperFragment(FragmentEditImage.newInstance(path, true)).setReplace(false).load();
+                    new HelperFragment(FragmentEditImage.newInstance(path, true, false)).setReplace(false).load();
 //                    new HelperFragment(FragmentFilterImage.newInstance(path)).setReplace(false).load();
                 } else {
                     listPathString.size();
