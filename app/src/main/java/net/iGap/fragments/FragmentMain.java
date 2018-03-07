@@ -416,7 +416,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
         boolean cleanAfter = false;
 
-        if (roomList.size() < Config.LIMIT_LOAD_ROOM) {
+        if (roomList.size() == 0) {
             isThereAnyMoreItemToLoad = false;
             cleanAfter = true;
         } else {

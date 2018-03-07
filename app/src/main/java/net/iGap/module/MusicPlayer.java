@@ -766,7 +766,9 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         }
 
         if (MusicPlayer.downloadNextMusic(messageId)) {
-            FragmentMediaPlayer.fastItemAdapter.notifyAdapterDataSetChanged();
+            if (FragmentMediaPlayer.fastItemAdapter != null) {
+                FragmentMediaPlayer.fastItemAdapter.notifyAdapterDataSetChanged();
+            }
         }
 
         try {

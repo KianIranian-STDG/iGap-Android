@@ -6,7 +6,8 @@
   android:layout_height="match_parent"
   android:background="@color/rg_text_dark_verify"
   android:clickable="true"
-  android:orientation="vertical">
+  android:orientation="vertical"
+  app:ignore="NamespaceTypo">
 
   <android.support.v7.widget.Toolbar
     android:layout_width="match_parent"
