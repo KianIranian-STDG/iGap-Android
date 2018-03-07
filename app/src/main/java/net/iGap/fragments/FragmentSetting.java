@@ -309,16 +309,16 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == RESULT_OK) {// result for camera
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false)).setReplace(false).load();
+                new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, false)).setReplace(false).load();
             } else {
-                new HelperFragment(FragmentEditImage.newInstance(pathSaveImage, false)).setReplace(false).load();
+                new HelperFragment(FragmentEditImage.newInstance(pathSaveImage, false, false)).setReplace(false).load();
             }
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
             if (data != null) {
                 if (data.getData() == null) {
                     return;
                 }
-                new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false)).setReplace(false).load();
+                new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, false)).setReplace(false).load();
             }
         }
     }

@@ -45,6 +45,7 @@ public class FragmentEditImage extends Fragment {
 
     private final static String PATH = "PATH";
     private final static String ISCHAT = "ISCHAT";
+    private final static String ISNICKNAMEPAGE = "ISNICKNAMEPAGE";
     private String path;
     private ImageView imgEditImage;
     public static UpdateImage updateImage;
@@ -55,6 +56,7 @@ public class FragmentEditImage extends Fragment {
     private EmojiPopup emojiPopup;
     private String SAMPLE_CROPPED_IMAGE_NAME;
     private boolean isChatPage = true;
+    private boolean isNicknamePage = false;
     public static CompleteEditImage completeEditImage;
     private int num = 0;
 
@@ -70,10 +72,11 @@ public class FragmentEditImage extends Fragment {
         return inflater.inflate(R.layout.fragment_edit_image, container, false);
     }
 
-    public static FragmentEditImage newInstance(String path, boolean isChatPage) {
+    public static FragmentEditImage newInstance(String path, boolean isChatPage, boolean isNicknamePage) {
         Bundle args = new Bundle();
         args.putString(PATH, path);
         args.putBoolean(ISCHAT, isChatPage);
+        args.putBoolean(ISNICKNAMEPAGE, isNicknamePage);
         FragmentEditImage fragment = new FragmentEditImage();
         fragment.setArguments(args);
         return fragment;
@@ -88,6 +91,7 @@ public class FragmentEditImage extends Fragment {
         if (bundle != null) {
             path = bundle.getString(PATH);
             isChatPage = bundle.getBoolean(ISCHAT);
+            isNicknamePage = bundle.getBoolean(ISNICKNAMEPAGE);
         }
 
         imgEditImage = (ImageView) view.findViewById(R.id.imgEditImage);
@@ -97,8 +101,12 @@ public class FragmentEditImage extends Fragment {
             @Override
             public void onClick(View v) {
                 AndroidUtils.closeKeyboard(v);
-                new HelperFragment(FragmentFilterImage.newInstance(path)).setReplace(false).load();
-
+                if (!isNicknamePage) {
+                    new HelperFragment(FragmentFilterImage.newInstance(path)).setReplace(false).load();
+                } else {
+                    FragmentFilterImage fragment = FragmentFilterImage.newInstance(path);
+                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                }
             }
         });
         Log.i("FFFFFFF", "00 nActivityResult: " + path);

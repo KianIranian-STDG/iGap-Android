@@ -32,7 +32,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityCrop;
 import net.iGap.databinding.FragmentRegistrationNicknameBinding;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
@@ -40,7 +39,6 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
-import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnUserAvatarResponse;
@@ -135,6 +133,33 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
             }
         });
 
+        FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
+            @Override
+            public void result(String path, String message) {
+
+                pathImageUser = path;
+
+                int lastUploadedAvatarId = idAvatar + 1;
+
+                fragmentRegistrationNicknameViewModel.showProgressBar();
+                HelperUploadFile.startUploadTaskAvatar(pathImageUser, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
+                    @Override
+                    public void OnProgress(int progress, FileUploadStructure struct) {
+                        if (progress < 100) {
+                            fragmentRegistrationNicknameBinding.prg.setProgress(progress);
+                        } else {
+                            new RequestUserAvatarAdd().userAddAvatar(struct.token);
+                        }
+                    }
+
+                    @Override
+                    public void OnError() {
+                        fragmentRegistrationNicknameViewModel.hideProgressBar();
+                    }
+                });
+            }
+        };
+
     }
 
     private void initDataBinding() {
@@ -157,58 +182,25 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
         if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == RESULT_OK) {// result for camera
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false)).setReplace(false).setStateLoss(true).load();
+                FragmentEditImage fragment = FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, true);
+                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
 
-                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
-                ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
-                intent.putExtra("IMAGE_CAMERA", AttachFile.mCurrentPhotoPath);
-                intent.putExtra("TYPE", "camera");
-                intent.putExtra("PAGE", "profile");
-                intent.putExtra("ID", fragmentRegistrationNicknameViewModel.userId);
-                startActivityForResult(intent, IntentRequests.REQ_CROP);
             } else {
-                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
-                ImageHelper.correctRotateImage(AttachFile.imagePath, true);
-                intent.putExtra("IMAGE_CAMERA", AttachFile.imagePath);
-                intent.putExtra("TYPE", "camera");
-                intent.putExtra("PAGE", "profile");
-                intent.putExtra("ID", fragmentRegistrationNicknameViewModel.userId);
-                startActivityForResult(intent, IntentRequests.REQ_CROP);
+//                new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false)).setReplace(false).setStateLoss(true).load();
+                FragmentEditImage fragment = FragmentEditImage.newInstance(AttachFile.imagePath, false, true);
+                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
             }
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
             if (data != null) {
-                Intent intent = new Intent(G.fragmentActivity, ActivityCrop.class);
                 if (data.getData() == null) {
                     return;
                 }
-                intent.putExtra("IMAGE_CAMERA", AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image));
-                intent.putExtra("TYPE", "gallery");
-                intent.putExtra("PAGE", "profile");
-                intent.putExtra("ID", fragmentRegistrationNicknameViewModel.userId);
-                startActivityForResult(intent, IntentRequests.REQ_CROP);
+                FragmentEditImage fragment = FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, true);
+                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
             }
         } else if (requestCode == IntentRequests.REQ_CROP && resultCode == RESULT_OK) {
-            if (data != null) {
-                pathImageUser = data.getData().toString();
-            }
 
-            int lastUploadedAvatarId = idAvatar + 1;
-
-            fragmentRegistrationNicknameViewModel.showProgressBar();
-            HelperUploadFile.startUploadTaskAvatar(pathImageUser, lastUploadedAvatarId, new HelperUploadFile.UpdateListener() {
-                @Override
-                public void OnProgress(int progress, FileUploadStructure struct) {
-                    if (progress < 100) {
-                        fragmentRegistrationNicknameBinding.prg.setProgress(progress);
-                    } else {
-                        new RequestUserAvatarAdd().userAddAvatar(struct.token);
-                    }
-                }
-
-                @Override
-                public void OnError() {
-                    fragmentRegistrationNicknameViewModel.hideProgressBar();
-                }
-            });
         }
     }
 
