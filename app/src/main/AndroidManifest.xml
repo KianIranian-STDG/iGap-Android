@@ -76,6 +76,9 @@
       android:theme="@style/Theme.AppCompat.Translucent"
       android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
 
+    <activity
+      android:name=".activities.ActivityCrop"
+      android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale" />
 
     <activity android:name=".activities.ActivityTrimVideo" />
 
