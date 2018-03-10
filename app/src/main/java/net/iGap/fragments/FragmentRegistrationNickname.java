@@ -39,6 +39,7 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
+import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnUserAvatarResponse;
@@ -47,7 +48,6 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.EditTextAdjustPan;
 import net.iGap.module.FileUploadStructure;
-import net.iGap.module.IntentRequests;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.viewmodel.FragmentRegistrationNicknameViewModel;
@@ -55,7 +55,6 @@ import net.iGap.viewmodel.FragmentRegistrationNicknameViewModel;
 import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
-import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
 public class FragmentRegistrationNickname extends BaseFragment implements OnUserAvatarResponse {
 
@@ -183,24 +182,33 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 //                new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false)).setReplace(false).setStateLoss(true).load();
+                ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
                 FragmentEditImage fragment = FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, true);
-                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                G.fragmentActivity.getSupportFragmentManager()
+                        .beginTransaction().add(R.id.ar_layout_root, fragment)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
+                        .commitAllowingStateLoss();
 
             } else {
 //                new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false)).setReplace(false).setStateLoss(true).load();
+                ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
                 FragmentEditImage fragment = FragmentEditImage.newInstance(AttachFile.imagePath, false, true);
-                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                G.fragmentActivity.getSupportFragmentManager()
+                        .beginTransaction().add(R.id.ar_layout_root, fragment)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
+                        .commitAllowingStateLoss();
             }
-        } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
+        } else if (requestCode == AttachFile.request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
             if (data != null) {
                 if (data.getData() == null) {
                     return;
                 }
                 FragmentEditImage fragment = FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, true);
-                G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                G.fragmentActivity.getSupportFragmentManager()
+                        .beginTransaction().add(R.id.ar_layout_root, fragment)
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left)
+                        .commitAllowingStateLoss();
             }
-        } else if (requestCode == IntentRequests.REQ_CROP && resultCode == RESULT_OK) {
-
         }
     }
 

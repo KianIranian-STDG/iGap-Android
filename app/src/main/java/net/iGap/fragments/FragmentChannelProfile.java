@@ -32,6 +32,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
+import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnAvatarDelete;
 import net.iGap.interfaces.OnAvatarGet;
@@ -447,8 +448,10 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 case AttachFile.request_code_TAKE_PICTURE:
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
                         new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, false)).setReplace(false).load();
                     } else {
+                        ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
                         new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false)).setReplace(false).load();
                     }
                     break;

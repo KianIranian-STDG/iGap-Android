@@ -33,6 +33,7 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
+import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnAvatarDelete;
 import net.iGap.interfaces.OnAvatarGet;
@@ -309,8 +310,10 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == RESULT_OK) {// result for camera
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
                 new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, false)).setReplace(false).load();
             } else {
+                ImageHelper.correctRotateImage(pathSaveImage, true); //rotate image
                 new HelperFragment(FragmentEditImage.newInstance(pathSaveImage, false, false)).setReplace(false).load();
             }
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
