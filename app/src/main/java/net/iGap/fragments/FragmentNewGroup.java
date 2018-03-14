@@ -41,6 +41,7 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
+import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnChannelAvatarAdd;
 import net.iGap.interfaces.OnGetPermission;
@@ -447,10 +448,12 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == Activity.RESULT_OK) {// result for camera
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
                 new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, false)).setReplace(false).load();
 
 
             } else {
+                ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
                 new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false)).setReplace(false).load();
             }
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == Activity.RESULT_OK) {// result for gallery

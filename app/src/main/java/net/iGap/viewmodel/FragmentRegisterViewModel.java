@@ -1214,7 +1214,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
                         txtVerifyServerColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
 
-
                         if (newUser) {
                             G.handler.post(new Runnable() {
                                 @Override
