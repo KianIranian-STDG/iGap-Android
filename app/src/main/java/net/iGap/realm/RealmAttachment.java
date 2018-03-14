@@ -147,6 +147,17 @@ public class RealmAttachment extends RealmObject {
                 realmAttachment.setWidth(file.getWidth());
             }
 
+            if (realmAttachment.smallThumbnail != null) {
+                realmAttachment.smallThumbnail.setSize(file.getSmallThumbnail().getSize());
+            }
+            if (realmAttachment.largeThumbnail != null) {
+                realmAttachment.largeThumbnail.setSize(file.getLargeThumbnail().getSize());
+            }
+
+            if (realmAttachment.size != file.getSize()) {
+                realmAttachment.setSize(file.getSize());
+            }
+
             String _filePath = realmAttachment.getLocalFilePath();
 
             String _Dir = "";
