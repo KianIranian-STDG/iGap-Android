@@ -508,6 +508,12 @@ public final class AndroidUtils {
             _mimeType = name.substring(index);
         }
 
+        if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
+            if (_mimeType.equals("")) {
+                _mimeType = ".jpg";
+            }
+        }
+
         String _result = "";
 
         try {
