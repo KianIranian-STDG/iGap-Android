@@ -25,6 +25,8 @@ import android.support.v4.content.ContextCompat;
 
 import net.iGap.Config;
 import net.iGap.G;
+import net.iGap.interfaces.OnQueueSendContactEdit;
+import net.iGap.module.Contacts;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmPhoneContacts;
@@ -34,9 +36,10 @@ import java.util.ArrayList;
 import static net.iGap.G.context;
 
 public class ServiceContact extends Service {
-
     private MyContentObserver contentObserver;
     private long fetchContactTime;
+    private static boolean isEnd;
+    public static int onlinePhoneContactId = 0;
 
     @Nullable
     @Override
@@ -98,7 +101,14 @@ public class ServiceContact extends Service {
             try {
                 ArrayList<StructListOfContact> contactList = new ArrayList<>();
                 ContentResolver cr = G.context.getContentResolver();
-                Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+
+                String startContactId = ">=" + onlinePhoneContactId;
+                String selection = ContactsContract.Contacts._ID + startContactId;
+
+                Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, selection, null, null);
+
+                int fetchCount = 0;
+                isEnd = false;
 
                 if (cur != null && !cur.isClosed()) {
                     if (cur.getCount() > 0) {
@@ -106,6 +116,11 @@ public class ServiceContact extends Service {
                             StructListOfContact itemContact = new StructListOfContact();
                             itemContact.setDisplayName(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
                             String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+
+                            int contactId = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                            onlinePhoneContactId = contactId + 1;
+
+
                             if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
                                 Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{
                                         id
@@ -121,9 +136,18 @@ public class ServiceContact extends Service {
                                 }
                             }
                             contactList.add(itemContact);
+                            fetchCount++;
+
+                            if (fetchCount > Contacts.PHONE_CONTACT_FETCH_LIMIT) {
+                                break;
+                            }
                         }
                     }
                     cur.close();
+                }
+
+                if (fetchCount < Contacts.PHONE_CONTACT_FETCH_LIMIT) {
+                    isEnd = true;
                 }
                 ArrayList<StructListOfContact> resultContactList = new ArrayList<>();
                 for (int i = 0; i < contactList.size(); i++) {
@@ -159,7 +183,25 @@ public class ServiceContact extends Service {
                     }
                 }
 
-                RealmPhoneContacts.sendContactList(resultContactList, false);
+                if (!isEnd) {
+                    G.onQueueSendContactEdit = new OnQueueSendContactEdit() {
+                        @Override
+                        public void sendContact() {
+                            G.handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    fetchContacts();
+                                }
+                            }, 100);
+                        }
+                    };
+                } else {
+                    G.onQueueSendContactEdit = null;
+                    onlinePhoneContactId = 0;
+                }
+
+                RealmPhoneContacts.sendContactList(resultContactList, false, isEnd);
+
             } catch (IllegalStateException e) {
                 e.printStackTrace();
             } catch (RuntimeException e1) {

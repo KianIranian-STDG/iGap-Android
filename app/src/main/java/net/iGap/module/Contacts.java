@@ -18,6 +18,7 @@ import android.provider.ContactsContract;
 
 import net.iGap.G;
 import net.iGap.helper.HelperPermission;
+import net.iGap.interfaces.OnQueueSendContact;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmContacts;
@@ -35,10 +36,12 @@ import io.realm.RealmResults;
  */
 public class Contacts {
 
-    private static final int PHONE_CONTACT_FETCH_LIMIT = 100;
+    public static final int PHONE_CONTACT_FETCH_LIMIT = 100;
 
     //Online Fetch Contacts Fields
     public static int onlinePhoneContactId = 0;
+    private static ArrayList<StructListOfContact> resultContactList;
+    private static boolean isEnd;
 
     //Local Fetch Contacts Fields
     public static boolean getContact = true;
@@ -100,7 +103,7 @@ public class Contacts {
         }
 
         int fetchCount = 0;
-        boolean isEnd = false;
+        isEnd = false;
 
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
         ContentResolver cr = G.context.getContentResolver();
@@ -151,8 +154,7 @@ public class Contacts {
             if (fetchCount < PHONE_CONTACT_FETCH_LIMIT) {
                 isEnd = true;
             }
-
-            ArrayList<StructListOfContact> resultContactList = new ArrayList<>();
+            resultContactList = new ArrayList<>();
             for (int i = 0; i < contactList.size(); i++) {
 
                 if (contactList.get(i).getPhone() != null && contactList.get(i).getDisplayName() != null) {
@@ -185,18 +187,32 @@ public class Contacts {
                 }
             }
 
+
             if (G.onContactFetchForServer != null) {
                 G.onContactFetchForServer.onFetch(resultContactList, isEnd);
             }
 
+
             if (!isEnd) {
-                G.handler.postDelayed(new Runnable() {
+                G.onQueueSendContact = new OnQueueSendContact() {
                     @Override
-                    public void run() {
-                        new FetchContactForServer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    public void sendContact() {
+
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                new FetchContactForServer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            }
+                        }, 100);
+
                     }
-                }, 100);
+                };
+            } else {
+                G.onQueueSendContact = null;
             }
+
+
+
         } catch (SQLiteException e) {
             e.printStackTrace();
         } catch (IllegalStateException e) {

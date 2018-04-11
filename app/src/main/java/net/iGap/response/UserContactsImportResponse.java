@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.request.RequestUserContactsGetList;
 
 public class UserContactsImportResponse extends MessageHandler {
@@ -34,6 +35,17 @@ public class UserContactsImportResponse extends MessageHandler {
         if (identity != null) {
             getContactList = (Boolean) identity;
         }
+
+
+        if (!getContactList && G.onQueueSendContact != null) {
+            G.onQueueSendContact.sendContact();
+        }
+
+        if (!getContactList && G.onQueueSendContactEdit != null) {
+            G.onQueueSendContactEdit.sendContact();
+        }
+
+
 
         if (getContactList) {
             new RequestUserContactsGetList().userContactGetList();

@@ -280,8 +280,6 @@ public class FragmentMediaPlayer extends BaseFragment {
                 return false;
             }
         });
-
-        rcvListMusicPlayer.scrollToPosition(fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId)));
         rcvListMusicPlayer.scrollToPosition(fastItemAdapter.getPosition(Long.parseLong(MusicPlayer.messageId)));
     }
 
