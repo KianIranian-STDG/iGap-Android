@@ -3,28 +3,33 @@ package net.iGap.fragments.filterImage;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.SeekBar;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.zomato.photofilters.FilterPack;
+import com.zomato.photofilters.imageprocessors.Filter;
+import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
+import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
+import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
+import com.zomato.photofilters.utils.ThumbnailItem;
+import com.zomato.photofilters.utils.ThumbnailsManager;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -33,32 +38,48 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.module.AttachFile;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import it.chengdazhi.styleimageview.StyleImageView;
-import it.chengdazhi.styleimageview.Styler;
 
 import static net.iGap.module.AndroidUtils.suitablePath;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentFilterImage extends Fragment {
+public class FragmentFilterImage extends Fragment implements FiltersListFragment.FiltersListFragmentListener, EditImageFragment.EditImageFragmentListener, ThumbnailsAdapter.ThumbnailsAdapterListener {
 
     private RecyclerView rcvEditImage;
-    private List<StructFilterImage> options;
-    private List<String> optionTexts;
-
-    private StyleImageView image;
-    private View lastChosenOptionView;
-    private CheckBox enableAnimationCheckBox;
-    private EditText animationDurationEditText;
-    private SeekBar brightnessBar;
-    private SeekBar contrastBar;
-    private SeekBar saturationBar;
+    private ImageView imageFilter;
     private final static String PATH = "PATH";
     private String path;
+
+    Bitmap originalImage;
+    // to backup image with filter applied
+    Bitmap filteredImage;
+
+    // the final image after applying
+    // brightness, saturation, contrast
+    Bitmap finalImage;
+
+    FiltersListFragment filtersListFragment;
+    EditImageFragment editImageFragment;
+
+    // modified image values
+    int brightnessFinal = 0;
+    float saturationFinal = 1.0f;
+    float contrastFinal = 1.0f;
+
+
+    ThumbnailsAdapter mAdapter;
+    List<ThumbnailItem> thumbnailItemList;
+
+    FiltersListFragment.FiltersListFragmentListener listener;
+
+    // load native image filters library
+    static {
+        System.loadLibrary("NativeImageProcessor");
+    }
 
 
     public FragmentFilterImage() {
@@ -86,21 +107,28 @@ public class FragmentFilterImage extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        image = (StyleImageView) view.findViewById(R.id.image);
-        initOptions();
-
-        rcvEditImage = (RecyclerView) view.findViewById(R.id.rcvEditImage);
-        rcvEditImage.setAdapter(new AdapterFilterImage());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(G.context, LinearLayoutManager.HORIZONTAL, false);
-        rcvEditImage.setLayoutManager(layoutManager);
-        rcvEditImage.setHasFixedSize(true);
-
         Bundle bundle = getArguments();
         if (bundle != null) {
             path = bundle.getString(PATH);
         }
 
-        G.imageLoader.displayImage(suitablePath(path), image);
+        imageFilter = (ImageView) view.findViewById(R.id.imageFilter);
+        rcvEditImage = (RecyclerView) view.findViewById(R.id.rcvEditImage);
+
+
+        thumbnailItemList = new ArrayList<>();
+        mAdapter = new ThumbnailsAdapter(getActivity(), thumbnailItemList, this);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        rcvEditImage.setLayoutManager(mLayoutManager);
+        rcvEditImage.setItemAnimator(new DefaultItemAnimator());
+        int space = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8,
+                getResources().getDisplayMetrics());
+        rcvEditImage.addItemDecoration(new SpacesItemDecoration(space));
+        rcvEditImage.setAdapter(mAdapter);
+        prepareThumbnail(null);
+        loadImage();
+        G.imageLoader.displayImage(suitablePath(path), imageFilter);
 
         view.findViewById(R.id.pu_ripple_back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +140,8 @@ public class FragmentFilterImage extends Fragment {
         view.findViewById(R.id.pu_txt_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(getImageUri(G.context, image.getBitmap())));
+                final String path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
+                FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path)));
                 new HelperFragment(FragmentFilterImage.this).remove();
             }
         });
@@ -127,10 +156,7 @@ public class FragmentFilterImage extends Fragment {
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                image.clearStyle();
-                                if (saturationBar != null) {
-                                    saturationBar.setProgress(100);
-                                }
+                                resetControls();
                             }
                         })
                         .negativeText("cancel")
@@ -138,274 +164,7 @@ public class FragmentFilterImage extends Fragment {
             }
         });
 
-        enableAnimationCheckBox = (CheckBox) view.findViewById(R.id.animation_checkbox);
-        animationDurationEditText = (EditText) view.findViewById(R.id.duration_edittext);
-        enableAnimationCheckBox.setChecked(image.isAnimationEnabled());
-        animationDurationEditText.setText(String.valueOf(image.getAnimationDuration()));
-        if (image.isAnimationEnabled()) {
-            animationDurationEditText.setEnabled(true);
-            animationDurationEditText.setTextColor(Color.BLACK);
-        } else {
-            animationDurationEditText.setEnabled(false);
-            animationDurationEditText.setTextColor(Color.GRAY);
-        }
-        enableAnimationCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (!b) {
-                    animationDurationEditText.setText("0");
-                    animationDurationEditText.setEnabled(false);
-                    animationDurationEditText.setTextColor(Color.GRAY);
-                } else {
-                    animationDurationEditText.setEnabled(true);
-                    animationDurationEditText.setTextColor(Color.BLACK);
-                }
-                if (b) {
-                    image.enableAnimation(Long.parseLong(animationDurationEditText.getText().toString()));
-                } else {
-                    image.disableAnimation();
-                }
-            }
-        });
-        animationDurationEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                try {
-                    image.enableAnimation(Long.parseLong(charSequence.toString()));
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-        brightnessBar = (SeekBar) view.findViewById(R.id.seekbar_brightness);
-        contrastBar = (SeekBar) view.findViewById(R.id.seekbar_contrast);
-        brightnessBar.setProgress(image.getBrightness() + 255);
-        contrastBar.setProgress((int) (image.getContrast() * 100));
-        brightnessBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                image.setBrightness(i - 255).updateStyle();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-        contrastBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                image.setContrast(i / 100F).updateStyle();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
     }
-
-    public void initOptions() {
-
-        options = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            StructFilterImage structFilterImage = new StructFilterImage();
-            structFilterImage.setCreate(false);
-            switch (i) {
-                case 0: {
-
-                    structFilterImage.setName("Grey Scale");
-                    structFilterImage.setStyle(Styler.Mode.GREY_SCALE);
-                }
-                break;
-                case 1: {
-                    structFilterImage.setName("Invert");
-                    structFilterImage.setStyle(Styler.Mode.INVERT);
-
-                }
-                break;
-                case 2: {
-                    structFilterImage.setName("RGB to BGR");
-                    structFilterImage.setStyle(Styler.Mode.RGB_TO_BGR);
-                }
-                break;
-                case 3: {
-                    structFilterImage.setName("Sepia");
-                    structFilterImage.setStyle(Styler.Mode.SEPIA);
-                }
-                break;
-                case 4: {
-                    structFilterImage.setName("Black & White");
-                    structFilterImage.setStyle(Styler.Mode.BLACK_AND_WHITE);
-                }
-                break;
-                case 5: {
-                    structFilterImage.setName("Bright");
-                    structFilterImage.setStyle(Styler.Mode.BRIGHT);
-                }
-                break;
-                case 6: {
-                    structFilterImage.setName("Vintage Pinhole");
-                    structFilterImage.setStyle(Styler.Mode.VINTAGE_PINHOLE);
-                }
-                break;
-                case 7: {
-                    structFilterImage.setName("Kodachrome");
-                    structFilterImage.setStyle(Styler.Mode.KODACHROME);
-                }
-                break;
-                case 8: {
-                    structFilterImage.setName("Technicolor");
-                    structFilterImage.setStyle(Styler.Mode.TECHNICOLOR);
-                }
-                break;
-                case 9: {
-                    structFilterImage.setName("Saturation");
-                    structFilterImage.setStyle(Styler.Mode.SATURATION);
-                }
-                break;
-            }
-
-            options.add(structFilterImage);
-        }
-
-
-    }
-
-//    class ListAdapter extends BaseAdapter {
-//        @Override
-//        public int getCount() {
-//            return options.size() + 1;
-//        }
-//
-//        @Override
-//        public Object getItem(int i) {
-//            if (i >= options.size()) {
-//                return 100;
-//            }
-//            return options.get(i);
-//        }
-//
-//        @Override
-//        public long getItemId(int i) {
-//            return i;
-//        }
-//
-//        @Override
-//        public View getView(final int i, View view, ViewGroup viewGroup) {
-//            final View result = getLayoutInflater().inflate(R.layout.option_item, null);
-//            if (i < options.size() && image.getMode() == options.get(i) || i >= options.size() && image.getMode() == Styler.Mode.NONE) {
-//                result.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
-//                lastChosenOptionView = result;
-//            }
-//            TextView title = (TextView) result.findViewById(R.id.text);
-//            title.setText(optionTexts.get(i));
-//            if (options.get(i) == Styler.Mode.SATURATION) {
-//                saturationBar = (SeekBar) result.findViewById(R.id.seekbar_saturation);
-//                saturationBar.setVisibility(View.VISIBLE);
-//                saturationBar.setProgress((int) (image.getSaturation() * 100));
-//                saturationBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//                    @Override
-//                    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-//                        image.setSaturation(i / 100F).updateStyle();
-//                        if (lastChosenOptionView != result) {
-//                            if (lastChosenOptionView != null) {
-//                                lastChosenOptionView.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
-//                            }
-//                            result.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
-//                            lastChosenOptionView = result;
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onStartTrackingTouch(SeekBar seekBar) {
-//                    }
-//
-//                    @Override
-//                    public void onStopTrackingTouch(SeekBar seekBar) {
-//                    }
-//                });
-//            }
-//
-//        }
-//    }
-
-    private class AdapterFilterImage extends RecyclerView.Adapter<AdapterFilterImage.ViewHolder> {
-
-        @Override
-        public AdapterFilterImage.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.option_item, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(AdapterFilterImage.ViewHolder holder, int position) {
-
-            options.get(position).setCreate(true);
-            holder.txtName.setText(options.get(position).getName());
-            G.imageLoader.displayImage(suitablePath(path), holder.imgFilter);
-            holder.imgFilter.setMode(options.get(position).getStyle()).updateStyle();
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return options.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-
-            private StyleImageView imgFilter;
-            private TextView txtName;
-
-            public ViewHolder(final View itemView) {
-                super(itemView);
-
-                imgFilter = (StyleImageView) itemView.findViewById(R.id.imgFilter);
-                txtName = (TextView) itemView.findViewById(R.id.txtName);
-
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-//                        if (lastChosenOptionView != null) {
-//                            lastChosenOptionView.setBackgroundColor(G.context.getResources().getColor(R.color.black));
-//                        }
-//                        itemView.setBackgroundColor(G.context.getResources().getColor(R.color.gray_3c));
-
-                        image.setMode(options.get(getAdapterPosition()).getStyle()).updateStyle();
-
-                        if (saturationBar != null && options.get(getAdapterPosition()).getStyle() != Styler.Mode.SATURATION) {
-                            saturationBar.setProgress(100);
-                        }
-
-                        lastChosenOptionView = itemView;
-
-
-                    }
-                });
-
-
-            }
-        }
-    }
-
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -443,5 +202,169 @@ public class FragmentFilterImage extends Fragment {
         public void setStyle(int style) {
             this.style = style;
         }
+    }
+
+    @Override
+    public void onFilterSelected(Filter filter) {
+        // reset image controls
+        resetControls();
+
+        // applying the selected filter
+        filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
+        // preview filtered image
+        imageFilter.setImageBitmap(filter.processFilter(filteredImage));
+
+        finalImage = filteredImage.copy(Bitmap.Config.ARGB_8888, true);
+
+        if (listener != null)
+            listener.onFilterSelected(filter);
+    }
+
+    @Override
+    public void onBrightnessChanged(final int brightness) {
+        brightnessFinal = brightness;
+        Filter myFilter = new Filter();
+        myFilter.addSubFilter(new BrightnessSubFilter(brightness));
+        imageFilter.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
+    }
+
+    @Override
+    public void onSaturationChanged(final float saturation) {
+        saturationFinal = saturation;
+        Filter myFilter = new Filter();
+        myFilter.addSubFilter(new SaturationSubfilter(saturation));
+        imageFilter.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
+    }
+
+    @Override
+    public void onContrastChanged(final float contrast) {
+        contrastFinal = contrast;
+        Filter myFilter = new Filter();
+        myFilter.addSubFilter(new ContrastSubFilter(contrast));
+        imageFilter.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
+    }
+
+    @Override
+    public void onEditStarted() {
+
+    }
+
+    @Override
+    public void onEditCompleted() {
+        // once the editing is done i.e seekbar is drag is completed,
+        // apply the values on to filtered image
+        final Bitmap bitmap = filteredImage.copy(Bitmap.Config.ARGB_8888, true);
+
+        Filter myFilter = new Filter();
+        myFilter.addSubFilter(new BrightnessSubFilter(brightnessFinal));
+        myFilter.addSubFilter(new ContrastSubFilter(contrastFinal));
+        myFilter.addSubFilter(new SaturationSubfilter(saturationFinal));
+        finalImage = myFilter.processFilter(bitmap);
+    }
+
+    /**
+     * Resets image edit controls to normal when new filter
+     * is selected
+     */
+    private void resetControls() {
+        if (editImageFragment != null) {
+            editImageFragment.resetControls();
+        }
+        brightnessFinal = 0;
+        saturationFinal = 1.0f;
+        contrastFinal = 1.0f;
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
+    // load the default image from assets on app launch
+    private void loadImage() {
+        originalImage = getBitmapFile(getActivity(), path, 300, 300);
+        filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
+        finalImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
+        imageFilter.setImageBitmap(originalImage);
+    }
+
+    public void prepareThumbnail(final Bitmap bitmap) {
+        Runnable r = new Runnable() {
+            public void run() {
+                Bitmap thumbImage;
+
+                if (bitmap == null) {
+                    thumbImage = getBitmapFile(getActivity(), path, 100, 100);
+                } else {
+                    thumbImage = Bitmap.createScaledBitmap(bitmap, 100, 100, false);
+                }
+
+                if (thumbImage == null)
+                    return;
+
+                ThumbnailsManager.clearThumbs();
+                thumbnailItemList.clear();
+
+                // add normal bitmap first
+                ThumbnailItem thumbnailItem = new ThumbnailItem();
+                thumbnailItem.image = thumbImage;
+                thumbnailItem.filterName = getString(R.string.about);
+                ThumbnailsManager.addThumb(thumbnailItem);
+
+                List<Filter> filters = FilterPack.getFilterPack(getActivity());
+
+                for (Filter filter : filters) {
+                    ThumbnailItem tI = new ThumbnailItem();
+                    tI.image = thumbImage;
+                    tI.filter = filter;
+                    tI.filterName = filter.getName();
+                    ThumbnailsManager.addThumb(tI);
+                }
+
+                thumbnailItemList.addAll(ThumbnailsManager.processThumbs(getActivity()));
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        };
+
+        new Thread(r).start();
+    }
+
+    public Bitmap getBitmapFile(Context context, String fileName, int width, int height) {
+
+        File image = new File(fileName);
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(), bmOptions);
+//        bitmap = Bitmap.createScaledBitmap(bitmap,width,height,true);
+        return bitmap;
     }
 }
