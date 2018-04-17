@@ -6,14 +6,16 @@
   android:layout_margin="@dimen/dp2"
   android:orientation="vertical">
 
-  <RelativeLayout
-    android:layout_width="@dimen/dp120"
-    android:layout_height="wrap_content">
+  <LinearLayout
+    android:layout_width="@dimen/dp80"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <net.iGap.module.CircleImageView
       android:id="@+id/imgFilter"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+      android:layout_width="@dimen/dp80"
+      android:layout_height="@dimen/dp80"
+      android:layout_gravity="center" />
 
     <TextView
       android:id="@+id/txtName"
@@ -23,10 +25,9 @@
       android:gravity="center"
       android:textColor="@color/white"
       android:textSize="@dimen/dp13"
-      android:layout_alignParentBottom="true"
-      android:layout_centerHorizontal="true"
       android:text="style"
+      android:layout_marginTop="@dimen/dp6"
       android:layout_marginBottom="@dimen/dp10" />
 
-  </RelativeLayout>
+  </LinearLayout>
 </LinearLayout>
