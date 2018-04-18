@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import android.util.Log;
+
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperConnectionState;
@@ -77,6 +79,7 @@ public class UserLoginResponse extends MessageHandler {
             }
             realm.close();
         } else {
+            Log.i("VVVVVVVVVV", "timeOut: ");
             WebSocketClient.getInstance().disconnect();
         }
     }

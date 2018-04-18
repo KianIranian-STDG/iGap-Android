@@ -11,6 +11,7 @@
 package net.iGap.realm;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.helper.HelperMimeType;
@@ -36,6 +37,7 @@ public class RealmAttachment extends RealmObject {
     @PrimaryKey
     private long id;
     private String token;
+    private String url;
     private String name;
     private long size;
     private int width;
@@ -82,7 +84,10 @@ public class RealmAttachment extends RealmObject {
         realmAttachment.setName(attachment.getName());
         realmAttachment.setSize(attachment.getSize());
         realmAttachment.setToken(attachment.getToken());
+        realmAttachment.setUrl(attachment.getPublicUrl());
         realmAttachment.setWidth(attachment.getWidth());
+
+        Log.i("FFFFFFFFFFFFFFF", "0 putOrUpdate: " + attachment.getToken());
 
         long smallMessageThumbnail = SUID.id().get();
         RealmThumbnail.put(smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
@@ -98,6 +103,8 @@ public class RealmAttachment extends RealmObject {
 
     public static RealmAttachment build(ProtoGlobal.File file, AttachmentFor attachmentFor, @Nullable ProtoGlobal.RoomMessageType messageType) {
         Realm realm = Realm.getDefaultInstance();
+
+        Log.i("FFFFFFFFFFFFFFF", "3 build: " + file.getPublicUrl());
 
         RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, file.getToken()).findFirst();
         if (realmAttachment == null) {
@@ -136,6 +143,7 @@ public class RealmAttachment extends RealmObject {
             realmAttachment.setName(file.getName());
             realmAttachment.setSize(file.getSize());
             realmAttachment.setToken(file.getToken());
+            realmAttachment.setUrl(file.getPublicUrl());
             realmAttachment.setWidth(file.getWidth());
         } else {
 
@@ -263,6 +271,14 @@ public class RealmAttachment extends RealmObject {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getName() {

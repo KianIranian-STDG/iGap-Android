@@ -1,16 +1,21 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.helper;
 
 import android.support.v4.util.ArrayMap;
+import android.util.Log;
+
+import com.liulishuo.filedownloader.BaseDownloadTask;
+import com.liulishuo.filedownloader.FileDownloadListener;
+import com.liulishuo.filedownloader.FileDownloader;
 
 import net.iGap.G;
 import net.iGap.interfaces.OnFileDownloadResponse;
@@ -157,9 +162,12 @@ public class HelperDownloadFile {
         }
     }
 
-    public static void startDownload(String messageID, String token, String cashId, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, int periority, UpdateListener update) {
+    public static void startDownload(String messageID, String token, String url, String cashId, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, int periority, UpdateListener update) {
 
         StructDownLoad item;
+
+
+        Log.i("FFFFFFFFFFFFFFF", "2 startDownload: " + url);
 
         String primaryKey = cashId + selector;
 
@@ -167,6 +175,7 @@ public class HelperDownloadFile {
 
             item = new StructDownLoad();
             item.Token = token;
+            item.url = url;
             item.cashId = cashId;
             item.progress = 2;
             item.structListeners.add(new StructListener(update, messageID));
@@ -205,22 +214,32 @@ public class HelperDownloadFile {
 
 
             updateView(item);
-
+            Log.i("FFFFFFFFFFFFFFFDD", "10 pppppp: ");
             return;
         }
 
         item.selector = selector;
-
+        String sel;
         switch (item.selector) {
             case FILE:
                 item.path = AndroidUtils.getFilePathWithCashId(item.cashId, item.name, G.DIR_TEMP, false);
                 break;
             case SMALL_THUMBNAIL:
+                sel = "?selector=" + 1;
+                item.url = item.url + sel;
+                item.path = AndroidUtils.getFilePathWithCashId(item.cashId, item.name, G.DIR_TEMP, true);
+                break;
             case LARGE_THUMBNAIL:
+                sel = "?selector=" + 2;
+                item.url = item.url + sel;
                 item.path = AndroidUtils.getFilePathWithCashId(item.cashId, item.name, G.DIR_TEMP, true);
                 break;
         }
-
+        if (url != null && !url.isEmpty()) {
+            Log.i("FFFFFFFFFFFFFFFDD", "11 pppppp: ");
+            downloadFileWithUrl(item);
+            return;
+        }
         File tmpFile = new File(item.path);
 
         if (tmpFile.exists()) {
@@ -247,9 +266,11 @@ public class HelperDownloadFile {
             }
             // }
         }
-
+        Log.i("FFFFFFFFFFFFFFFDD", "5 progress: ");
         requestDownloadFile(item);
+
     }
+
 
     public static void stopDownLoad(String cacheId) {
         manuallyStoppedDownload.add(cacheId);
@@ -286,10 +307,112 @@ public class HelperDownloadFile {
             mQueue.remove(0);
 
             if (list.size() > 0 && list.containsKey(_primaryKey)) {
-                requestDownloadFile(list.get(_primaryKey));
+                if (list.get(_primaryKey).url != null && !list.get(_primaryKey).url.isEmpty()) {
+                    downloadFileWithUrl(list.get(_primaryKey));
+                } else {
+                    requestDownloadFile(list.get(_primaryKey));
+                }
+
                 break;
             }
         }
+    }
+
+    private static void downloadFileWithUrl(final StructDownLoad item) {
+
+
+        manuallyStoppedDownload.remove(item.cashId);
+
+        startDownloadManager(item);
+//        updateView(item);
+
+    }
+
+    private static void startDownloadManager(final StructDownLoad item) {
+        Log.i("FFFFFFFFFFFFFFFDD", "4.5 progressssss: " + item.url);
+        FileDownloader.getImpl().create(item.url)
+                .setPath(item.path)
+                .setListener(new FileDownloadListener() {
+                    @Override
+                    protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        Log.i("FFFFFFFFFFFFFFFDD", "20 pending: ");
+                    }
+
+                    @Override
+                    protected void started(BaseDownloadTask task) {
+                        Log.i("FFFFFFFFFFFFFFFDD", "7 started: ");
+                    }
+
+                    @Override
+                    protected void connected(BaseDownloadTask task, String etag, boolean isContinue, int soFarBytes, int totalBytes) {
+                        Log.i("FFFFFFFFFFFFFFFDD", "27 connected: ");
+                    }
+
+                    @Override
+                    protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+
+                        Log.i("FFFFFFFFFFFFFFFDD", "progress: " + soFarBytes);
+                        item.progress = (int) ((soFarBytes * 100) / totalBytes);
+//                        item.progress = soFarBytes;
+                        updateView(item);
+
+                    }
+
+                    @Override
+                    protected void blockComplete(BaseDownloadTask task) {
+                        Log.i("FFFFFFFFFFFFFFFDD", "26 blockComplete: ");
+                    }
+
+                    @Override
+                    protected void retry(final BaseDownloadTask task, final Throwable ex, final int retryingTimes, final int soFarBytes) {
+                        Log.i("FFFFFFFFFFFFFFFDD", "25 retry: ");
+                    }
+
+                    @Override
+                    protected void completed(BaseDownloadTask task) {
+                        Log.i("FFFFFFFFFFFFFFFDD", "24 completed: ");
+                        moveTmpFileToOrginFolder(item.Token, item.selector, item.cashId);
+
+                        updateView(item);
+
+                        list.remove(item.cashId + item.selector);
+
+                        // if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE){
+                        addDownloadFromQueue();
+                        // }
+
+                        // save downloaded file to gallery
+
+                        if (G.isSaveToGallery && HelperPermission.grantedUseStorage() && item.selector == ProtoFileDownload.FileDownload.Selector.FILE && item.moveToDirectoryPAth != null) {
+                            File file = new File(item.moveToDirectoryPAth);
+                            if (file.exists()) {
+
+                                if (HelperMimeType.isFileImage(item.moveToDirectoryPAth.toLowerCase()) || HelperMimeType.isFileVideo(item.moveToDirectoryPAth.toLowerCase())) {
+                                    HelperSaveFile.savePicToGallery(item.moveToDirectoryPAth, false);
+                                }
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        Log.i("FFFFFFFFFFFFFFFDD", "23 paused: ");
+                    }
+
+                    @Override
+                    protected void error(BaseDownloadTask task, Throwable e) {
+                        stopDownLoad(item.cashId);
+                        Log.i("FFFFFFFFFFFFFFFDD", "21 error: " + e.getMessage());
+                    }
+
+                    @Override
+                    protected void warn(BaseDownloadTask task) {
+                        Log.i("FFFFFFFFFFFFFFFDD", "22 warn: " + task.getUrl());
+                    }
+                }).start();
+
+
     }
 
     private static void requestDownloadFile(final StructDownLoad item) {
@@ -342,7 +465,7 @@ public class HelperDownloadFile {
                 } catch (IOException e) {
                 }
             }
-
+            String sel;
             switch (item.selector) {
                 case FILE:
                     setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
@@ -436,6 +559,7 @@ public class HelperDownloadFile {
     private static class StructDownLoad {
 
         public String Token = "";
+        public String url = "";
         public String cashId = "";
         public ArrayList<StructListener> structListeners = new ArrayList<>();
         public int progress = 0;
