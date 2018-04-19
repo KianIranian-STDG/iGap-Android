@@ -7131,17 +7131,20 @@ public class FragmentChat extends BaseFragment
 
     private void sendForwardedMessage(final StructMessageInfo messageInfo, final long mRoomId, final boolean isSingleForward) {
 
-        final long messageId = SUID.id().get();
 
-        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
-        if (realmRoom == null || realmRoom.getReadOnly()) {
-            return;
-        }
-
-        final ProtoGlobal.Room.Type type = realmRoom.getType();
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
+
+                final long messageId = SUID.id().get();
+
+                RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+                if (realmRoom == null || realmRoom.getReadOnly()) {
+                    return;
+                }
+
+                final ProtoGlobal.Room.Type type = realmRoom.getType();
+
                 //final Realm realm = Realm.getDefaultInstance();
 
                 getRealmChat().executeTransactionAsync(new Realm.Transaction() {
