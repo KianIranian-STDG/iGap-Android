@@ -1480,6 +1480,8 @@ public class FragmentChat extends BaseFragment
                 layoutJoin.setBackgroundColor(Color.parseColor(G.appBarColor));
                 layoutJoin.setVisibility(View.VISIBLE);
                 layoutMute.setVisibility(View.GONE);
+                viewAttachFile.setVisibility(View.GONE);
+
                 layoutJoin.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
