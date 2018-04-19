@@ -42,12 +42,14 @@ import net.iGap.interfaces.OnCountryCallBack;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.structs.StructListOfContact;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserContactImport;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import static net.iGap.G.context;
+import static net.iGap.module.Contacts.showLimitDialog;
 
 public class FragmentAddContact extends BaseFragment {
 
@@ -280,6 +282,11 @@ public class FragmentAddContact extends BaseFragment {
      * import contact to server with True force
      */
     private void addContactToServer() {
+
+        if (RealmUserInfo.isLimitImportContacts()) {
+            showLimitDialog();
+            return;
+        }
 
         String _phone = edtPhoneNumber.getText().toString();
         String codeCountry = txtCodeCountry.getText().toString();

@@ -16,7 +16,10 @@ import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnQueueSendContact;
 import net.iGap.module.structs.StructContactInfo;
@@ -24,12 +27,15 @@ import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmUserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static net.iGap.Config.PHONE_CONTACT_MAX_COUNT_LIMIT;
 
 /**
  * work with saved contacts in database
@@ -97,8 +103,36 @@ public class Contacts {
         return items;
     }
 
+
+    public static void showLimitDialog() {
+        try {
+            if (G.currentActivity != null) {
+                G.currentActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new MaterialDialog.Builder(G.currentActivity)
+                                .title(R.string.title_import_contact_limit)
+                                .content(R.string.content_import_contact_limit)
+                                .positiveText(G.context.getResources().getString(R.string.B_ok)).show();
+                    }
+                });
+            }
+
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+    }
+
+
     public static void getPhoneContactForServer() { //get List Of Contact
         if (!HelperPermission.grantedContactPermission()) {
+            return;
+        }
+
+        if (RealmUserInfo.isLimitImportContacts()) {
+            showLimitDialog();
             return;
         }
 
@@ -113,8 +147,14 @@ public class Contacts {
 
         try {
             Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, selection, null, null);
-
             if (cur != null) {
+
+                if (cur.getCount() > PHONE_CONTACT_MAX_COUNT_LIMIT) {
+                    cur.close();
+                    showLimitDialog();
+                    return;
+                }
+
                 if (cur.getCount() > 0) {
                     while (cur.moveToNext()) {
                         int contactId = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));

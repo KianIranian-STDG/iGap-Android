@@ -30,10 +30,13 @@ import net.iGap.module.Contacts;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmPhoneContacts;
+import net.iGap.realm.RealmUserInfo;
 
 import java.util.ArrayList;
 
+import static net.iGap.Config.PHONE_CONTACT_MAX_COUNT_LIMIT;
 import static net.iGap.G.context;
+import static net.iGap.module.Contacts.showLimitDialog;
 
 public class ServiceContact extends Service {
     private MyContentObserver contentObserver;
@@ -99,6 +102,12 @@ public class ServiceContact extends Service {
 
         private void fetchContacts() {
             try {
+
+                if (RealmUserInfo.isLimitImportContacts()) {
+                    showLimitDialog();
+                    return;
+                }
+
                 ArrayList<StructListOfContact> contactList = new ArrayList<>();
                 ContentResolver cr = G.context.getContentResolver();
 
@@ -109,6 +118,12 @@ public class ServiceContact extends Service {
 
                 int fetchCount = 0;
                 isEnd = false;
+
+                if (cur != null && cur.getCount() > PHONE_CONTACT_MAX_COUNT_LIMIT) {
+                    cur.close();
+                    showLimitDialog();
+                    return;
+                }
 
                 if (cur != null && !cur.isClosed()) {
                     if (cur.getCount() > 0) {
