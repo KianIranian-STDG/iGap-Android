@@ -94,6 +94,13 @@ public class FragmentEditImage extends Fragment {
             isNicknamePage = bundle.getBoolean(ISNICKNAMEPAGE);
         }
 
+        if (path == null) {
+            if (G.fragmentManager != null) {
+                G.fragmentManager.beginTransaction().remove(FragmentEditImage.this).commit();
+            }
+            return;
+        }
+
         imgEditImage = (ImageView) view.findViewById(R.id.imgEditImage);
 
         TextView txtEditImage = (TextView) view.findViewById(R.id.txtEditImage);
