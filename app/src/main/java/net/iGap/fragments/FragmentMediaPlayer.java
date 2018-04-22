@@ -641,7 +641,7 @@ public class FragmentMediaPlayer extends BaseFragment {
                     .notEqualTo(RealmRoomMessageFields.DELETED, true)
                     .contains(RealmRoomMessageFields.MESSAGE_TYPE, ProtoGlobal.RoomMessageType.AUDIO.toString())
                     .lessThan(RealmRoomMessageFields.MESSAGE_ID, MusicPlayer.mediaList.get(MusicPlayer.mediaList.size() - 1).getMessageId())
-                    .findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+                    .findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         } catch (IllegalStateException e) {
         }
 

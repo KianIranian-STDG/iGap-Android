@@ -26,11 +26,11 @@ import java.io.File;
 import java.io.IOException;
 
 import io.realm.Realm;
-import io.realm.RealmAttachmentRealmProxy;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.net_iGap_realm_RealmAttachmentRealmProxy;
 
-@Parcel(implementations = {RealmAttachmentRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmAttachment.class})
+@Parcel(implementations = {net_iGap_realm_RealmAttachmentRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmAttachment.class})
 public class RealmAttachment extends RealmObject {
     // should be message id for message attachment and user id for avatar
     @PrimaryKey

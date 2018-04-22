@@ -322,7 +322,7 @@ public class FragmentShowAvatars extends BaseFragment {
 
         if (isRoomExist) {
 
-            avatarList = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING);
+            avatarList = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, mPeerId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING);
             avatarList.addChangeListener(new RealmChangeListener<RealmResults<RealmAvatar>>() {
                 @Override
                 public void onChange(RealmResults<RealmAvatar> element) {

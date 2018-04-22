@@ -218,7 +218,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         String pathName = "";
         Bitmap bitmap = null;
         Realm realm = Realm.getDefaultInstance();
-        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAllSorted(RealmAvatarFields.ID, Sort.DESCENDING)) {
+        for (RealmAvatar avatar : realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, userId).findAll().sort(RealmAvatarFields.ID, Sort.DESCENDING)) {
             if (avatar.getFile() != null) {
                 pathName = avatar.getFile().getLocalFilePath();
                 if (pathName == null) {

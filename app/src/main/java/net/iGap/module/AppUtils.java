@@ -504,7 +504,7 @@ public final class AppUtils {
     public static String computeLastMessage(long roomId) {
         Realm realm = Realm.getDefaultInstance();
         String lastMessage = "";
-        RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        RealmResults<RealmRoomMessage> realmList = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         for (RealmRoomMessage realmRoomMessage : realmList) {
             if (realmRoomMessage != null && !realmRoomMessage.isDeleted()) {
                 lastMessage = AppUtils.rightLastMessage(realmRoomMessage);

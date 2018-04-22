@@ -1311,7 +1311,7 @@ public class RealmRoom extends RealmObject {
     public static void setLastMessage(final long roomId) {
         //TODO [Saeed Mozaffari] [2017-10-22 5:26 PM] - Write Better Code
         Realm realm = Realm.getDefaultInstance();
-        final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAllSorted(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
+        final RealmResults<RealmRoomMessage> realmRoomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, Sort.DESCENDING);
         if (realmRoomMessages.size() > 0 && realmRoomMessages.first() != null) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override

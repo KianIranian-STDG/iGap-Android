@@ -67,9 +67,9 @@ public class Contacts {
 
         RealmResults<RealmContacts> contacts;
         if (filter == null) {
-            contacts = realm.where(RealmContacts.class).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+            contacts = realm.where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
         } else {
-            contacts = realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, filter).findAllSorted(RealmContactsFields.DISPLAY_NAME);
+            contacts = realm.where(RealmContacts.class).contains(RealmContactsFields.DISPLAY_NAME, filter).findAll().sort(RealmContactsFields.DISPLAY_NAME);
         }
 
         String lastHeader = "";
