@@ -11,7 +11,6 @@
 package net.iGap.helper;
 
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
@@ -163,12 +162,7 @@ public class HelperDownloadFile {
     }
 
     public static void startDownload(String messageID, String token, String url, String cashId, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, int periority, UpdateListener update) {
-
         StructDownLoad item;
-
-
-        Log.i("FFFFFFFFFFFFFFF", "2 startDownload: " + url);
-
         String primaryKey = cashId + selector;
 
         if (!list.containsKey(primaryKey)) {
@@ -214,7 +208,6 @@ public class HelperDownloadFile {
 
 
             updateView(item);
-            Log.i("FFFFFFFFFFFFFFFDD", "10 pppppp: ");
             return;
         }
 
@@ -235,8 +228,8 @@ public class HelperDownloadFile {
                 item.path = AndroidUtils.getFilePathWithCashId(item.cashId, item.name, G.DIR_TEMP, true);
                 break;
         }
+
         if (url != null && !url.isEmpty()) {
-            Log.i("FFFFFFFFFFFFFFFDD", "11 pppppp: ");
             downloadFileWithUrl(item);
             return;
         }
@@ -258,15 +251,14 @@ public class HelperDownloadFile {
         }
 
         if (item.progress < 100) {
-            // if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
+            if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
             if (isNeedItemGoToQueue()) {
                 addItemToQueue(primaryKey, periority);
                 updateView(item);
                 return;
             }
-            // }
+            }
         }
-        Log.i("FFFFFFFFFFFFFFFDD", "5 progress: ");
         requestDownloadFile(item);
 
     }
@@ -281,6 +273,10 @@ public class HelperDownloadFile {
             //removeRequestQueue(list.get(primaryKey).identity); // don't need remove this item, remove listener in enough for stop download
 
             StructDownLoad item = list.get(primaryKey);
+
+            if (item.url != null && !item.url.isEmpty()) {
+                FileDownloader.getImpl().pause(item.idDownload);
+            }
 
             if (item != null && item.structListeners != null) {
                 for (StructListener mItem : item.structListeners) {
@@ -319,99 +315,80 @@ public class HelperDownloadFile {
     }
 
     private static void downloadFileWithUrl(final StructDownLoad item) {
-
-
         manuallyStoppedDownload.remove(item.cashId);
-
         startDownloadManager(item);
-//        updateView(item);
-
     }
 
     private static void startDownloadManager(final StructDownLoad item) {
-        Log.i("FFFFFFFFFFFFFFFDD", "4.5 progressssss: " + item.url);
-        FileDownloader.getImpl().create(item.url)
-                .setPath(item.path)
-                .setListener(new FileDownloadListener() {
-                    @Override
-                    protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-                        Log.i("FFFFFFFFFFFFFFFDD", "20 pending: ");
-                    }
+//        String url = "http://ipv4.download.thinkbroadband.com/20MB.zip";
+        final FileDownloadListener queueTarget = new FileDownloadListener() {
+            @Override
+            protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+            }
 
-                    @Override
-                    protected void started(BaseDownloadTask task) {
-                        Log.i("FFFFFFFFFFFFFFFDD", "7 started: ");
-                    }
+            @Override
+            protected void connected(BaseDownloadTask task, String etag, boolean isContinue, int soFarBytes, int totalBytes) {
+                item.idDownload = task.getId();
+            }
 
-                    @Override
-                    protected void connected(BaseDownloadTask task, String etag, boolean isContinue, int soFarBytes, int totalBytes) {
-                        Log.i("FFFFFFFFFFFFFFFDD", "27 connected: ");
-                    }
+            @Override
+            protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                item.progress = (int) ((soFarBytes * 100) / totalBytes);
+                updateView(item);
+            }
 
-                    @Override
-                    protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+            @Override
+            protected void blockComplete(BaseDownloadTask task) {
+            }
 
-                        Log.i("FFFFFFFFFFFFFFFDD", "progress: " + soFarBytes);
-                        item.progress = (int) ((soFarBytes * 100) / totalBytes);
-//                        item.progress = soFarBytes;
-                        updateView(item);
+            @Override
+            protected void retry(final BaseDownloadTask task, final Throwable ex, final int retryingTimes, final int soFarBytes) {
+            }
 
-                    }
+            @Override
+            protected void completed(BaseDownloadTask task) {
+                item.progress = 100;
+                moveTmpFileToOrginFolder(item.Token, item.selector, item.cashId);
+                updateView(item);
+                list.remove(item.cashId + item.selector);
 
-                    @Override
-                    protected void blockComplete(BaseDownloadTask task) {
-                        Log.i("FFFFFFFFFFFFFFFDD", "26 blockComplete: ");
-                    }
+                // if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE){
+//                        addDownloadFromQueue();
+                // }
 
-                    @Override
-                    protected void retry(final BaseDownloadTask task, final Throwable ex, final int retryingTimes, final int soFarBytes) {
-                        Log.i("FFFFFFFFFFFFFFFDD", "25 retry: ");
-                    }
+                // save downloaded file to gallery
 
-                    @Override
-                    protected void completed(BaseDownloadTask task) {
-                        Log.i("FFFFFFFFFFFFFFFDD", "24 completed: ");
-                        moveTmpFileToOrginFolder(item.Token, item.selector, item.cashId);
+                if (G.isSaveToGallery && HelperPermission.grantedUseStorage() && item.selector == ProtoFileDownload.FileDownload.Selector.FILE && item.moveToDirectoryPAth != null) {
+                    File file = new File(item.moveToDirectoryPAth);
+                    if (file.exists()) {
 
-                        updateView(item);
-
-                        list.remove(item.cashId + item.selector);
-
-                        // if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE){
-                        addDownloadFromQueue();
-                        // }
-
-                        // save downloaded file to gallery
-
-                        if (G.isSaveToGallery && HelperPermission.grantedUseStorage() && item.selector == ProtoFileDownload.FileDownload.Selector.FILE && item.moveToDirectoryPAth != null) {
-                            File file = new File(item.moveToDirectoryPAth);
-                            if (file.exists()) {
-
-                                if (HelperMimeType.isFileImage(item.moveToDirectoryPAth.toLowerCase()) || HelperMimeType.isFileVideo(item.moveToDirectoryPAth.toLowerCase())) {
-                                    HelperSaveFile.savePicToGallery(item.moveToDirectoryPAth, false);
-                                }
-                            }
+                        if (HelperMimeType.isFileImage(item.moveToDirectoryPAth.toLowerCase()) || HelperMimeType.isFileVideo(item.moveToDirectoryPAth.toLowerCase())) {
+                            HelperSaveFile.savePicToGallery(item.moveToDirectoryPAth, false);
                         }
-
                     }
+                }
+            }
 
-                    @Override
-                    protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-                        Log.i("FFFFFFFFFFFFFFFDD", "23 paused: ");
-                    }
+            @Override
+            protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+            }
 
-                    @Override
-                    protected void error(BaseDownloadTask task, Throwable e) {
-                        stopDownLoad(item.cashId);
-                        Log.i("FFFFFFFFFFFFFFFDD", "21 error: " + e.getMessage());
-                    }
+            @Override
+            protected void error(BaseDownloadTask task, Throwable e) {
+                stopDownLoad(item.cashId);
+            }
 
-                    @Override
-                    protected void warn(BaseDownloadTask task) {
-                        Log.i("FFFFFFFFFFFFFFFDD", "22 warn: " + task.getUrl());
-                    }
-                }).start();
-
+            @Override
+            protected void warn(BaseDownloadTask task) {
+            }
+        };
+        FileDownloader.getImpl().create(item.url).setPath(item.path)
+//            .setCallbackProgressTimes(0) // why do this? in here i assume do not need for each task callback `FileDownloadListener#progress`,
+// we just consider which task will complete. so in this way reduce ipc will be effective optimization
+                .setListener(queueTarget)
+                .asInQueueTask()
+                .enqueue();
+        FileDownloader.getImpl().start(queueTarget, false);
 
     }
 
@@ -426,9 +403,9 @@ public class HelperDownloadFile {
 
             list.remove(item.cashId + item.selector);
 
-            // if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE){
-            addDownloadFromQueue();
-            // }
+//            if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
+//                addDownloadFromQueue();
+//            }
 
             // save downloaded file to gallery
 
@@ -560,6 +537,7 @@ public class HelperDownloadFile {
 
         public String Token = "";
         public String url = "";
+        public int idDownload = 0;
         public String cashId = "";
         public ArrayList<StructListener> structListeners = new ArrayList<>();
         public int progress = 0;

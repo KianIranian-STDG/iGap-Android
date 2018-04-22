@@ -11,7 +11,6 @@
 package net.iGap.realm;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.helper.HelperMimeType;
@@ -87,8 +86,6 @@ public class RealmAttachment extends RealmObject {
         realmAttachment.setUrl(attachment.getPublicUrl());
         realmAttachment.setWidth(attachment.getWidth());
 
-        Log.i("FFFFFFFFFFFFFFF", "0 putOrUpdate: " + attachment.getToken());
-
         long smallMessageThumbnail = SUID.id().get();
         RealmThumbnail.put(smallMessageThumbnail, messageId, attachment.getSmallThumbnail());
 
@@ -103,8 +100,6 @@ public class RealmAttachment extends RealmObject {
 
     public static RealmAttachment build(ProtoGlobal.File file, AttachmentFor attachmentFor, @Nullable ProtoGlobal.RoomMessageType messageType) {
         Realm realm = Realm.getDefaultInstance();
-
-        Log.i("FFFFFFFFFFFFFFF", "3 build: " + file.getPublicUrl());
 
         RealmAttachment realmAttachment = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.TOKEN, file.getToken()).findFirst();
         if (realmAttachment == null) {

@@ -1384,7 +1384,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                     if (FragmentChat.canUpdateAfterDownload) {
                         if (progress == 100) {
-
+                            Log.i("FFFFFFFFFFFFFFFDD", "30 downLoadThumbnail: ");
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1448,10 +1448,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             public void run() {
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
                                     progressBar.withProgress(progress);
-                                    Log.i("FFFFFFFFFFFFFFFDDGGG", "27 p: " + progress);
+
 
                                     if (progress == 100) {
-
+                                        Log.i("FFFFFFFFFFFFFFFDD", "31 downLoadFile: " + progress);
                                         if (messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT || messageType == ProtoGlobal.RoomMessageType.VOICE) {
                                             if (mMessage.roomId == MusicPlayer.roomId) {
                                                 MusicPlayer.downloadNewItem = true;
