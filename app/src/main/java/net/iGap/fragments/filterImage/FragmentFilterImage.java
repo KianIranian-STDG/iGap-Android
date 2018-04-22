@@ -1,55 +1,74 @@
+/*
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
+
 package net.iGap.fragments.filterImage;
 
 
+import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.zomato.photofilters.FilterPack;
 import com.zomato.photofilters.imageprocessors.Filter;
-import com.zomato.photofilters.utils.ThumbnailItem;
-import com.zomato.photofilters.utils.ThumbnailsManager;
+import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
+import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
+import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.module.AttachFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.iGap.module.AndroidUtils.suitablePath;
+public class FragmentFilterImage extends Fragment implements FiltersListFragment.FiltersListFragmentListener, EditImageFragment.EditImageFragmentListener, ThumbnailsAdapter.ThumbnailsAdapterListener {
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class FragmentFilterImage extends Fragment implements ThumbnailsAdapter.ThumbnailsAdapterListener {
-
-    private RecyclerView rcvEditImage;
+    //    private RecyclerView rcvEditImage;
     private ImageView imageFilter;
     private final static String PATH = "PATH";
     private String path;
 
-    Bitmap originalImage;
-    Bitmap filteredImage;
-    Bitmap finalImage;
-    ThumbnailsAdapter mAdapter;
-    List<ThumbnailItem> thumbnailItemList;
+    private Bitmap originalImage;
+    // to backup image with filter applied
+    private Bitmap filteredImage;
+
+    // the final image after applying
+    // brightness, saturation, contrast
+    private Bitmap finalImage;
+
+    private FiltersListFragment filtersListFragment;
+    private EditImageFragment editImageFragment;
+
+    // modified image values
+    int brightnessFinal = 0;
+    float saturationFinal = 1.0f;
+    float contrastFinal = 1.0f;
+
+    // load native image filters library
     static {
         System.loadLibrary("NativeImageProcessor");
     }
-
 
     public FragmentFilterImage() {
         // Required empty public constructor
@@ -76,30 +95,20 @@ public class FragmentFilterImage extends Fragment implements ThumbnailsAdapter.T
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             path = bundle.getString(PATH);
         }
-
         imageFilter = (ImageView) view.findViewById(R.id.imageFilter);
-        rcvEditImage = (RecyclerView) view.findViewById(R.id.rcvEditImage);
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
-
-        thumbnailItemList = new ArrayList<>();
-        mAdapter = new ThumbnailsAdapter(getActivity(), thumbnailItemList, this);
-
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        rcvEditImage.setLayoutManager(mLayoutManager);
-        rcvEditImage.setItemAnimator(new DefaultItemAnimator());
-        int space = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8,
-                getResources().getDisplayMetrics());
-        rcvEditImage.addItemDecoration(new SpacesItemDecoration(space));
-        rcvEditImage.setAdapter(mAdapter);
-        prepareThumbnail(null);
         loadImage();
-        G.imageLoader.displayImage(suitablePath(path), imageFilter);
-
-        view.findViewById(R.id.pu_ripple_back).setOnClickListener(new View.OnClickListener() {
+        setupViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
+        view.findViewById(R.id.pu_txt_agreeImage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new HelperFragment(FragmentFilterImage.this).remove();
@@ -115,27 +124,26 @@ public class FragmentFilterImage extends Fragment implements ThumbnailsAdapter.T
             }
         });
 
-//        view.findViewById(R.id.pu_txt_clear).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                new MaterialDialog.Builder(G.fragmentActivity)
-//                        .title("Clear")
-//                        .content("Are you sure")
-//                        .positiveText("ok")
-//                        .onPositive(new MaterialDialog.SingleButtonCallback() {
-//                            @Override
-//                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-//                            }
-//                        })
-//                        .negativeText("cancel")
-//                        .show();
-//            }
-//        });
-
     }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
+
+//         adding filter list fragment
+        filtersListFragment = FiltersListFragment.newInstance(path);
+        filtersListFragment.setListener(this);
+        // adding edit image fragment
+        editImageFragment = new EditImageFragment();
+        editImageFragment.setListener(this);
+        adapter.addFragment(filtersListFragment, getString(R.string.tab_filters));
+        adapter.addFragment(editImageFragment, getString(R.string.tab_edit));
+        viewPager.setAdapter(adapter);
+    }
+
     @Override
     public void onFilterSelected(Filter filter) {
         // reset image controls
+        resetControls();
 
         // applying the selected filter
         filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
@@ -144,58 +152,104 @@ public class FragmentFilterImage extends Fragment implements ThumbnailsAdapter.T
 
         finalImage = filteredImage.copy(Bitmap.Config.ARGB_8888, true);
     }
+
+    @Override
+    public void onBrightnessChanged(final int brightness) {
+        brightnessFinal = brightness;
+        Filter myFilter = new Filter();
+        myFilter.addSubFilter(new BrightnessSubFilter(brightness));
+        imageFilter.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
+    }
+
+    @Override
+    public void onSaturationChanged(final float saturation) {
+        saturationFinal = saturation;
+        Filter myFilter = new Filter();
+        myFilter.addSubFilter(new SaturationSubfilter(saturation));
+        imageFilter.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
+    }
+
+    @Override
+    public void onContrastChanged(final float contrast) {
+        contrastFinal = contrast;
+        Filter myFilter = new Filter();
+        myFilter.addSubFilter(new ContrastSubFilter(contrast));
+        imageFilter.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
+    }
+
+    @Override
+    public void onEditStarted() {
+
+    }
+
+    @Override
+    public void onEditCompleted() {
+        // once the editing is done i.e seekbar is drag is completed,
+        // apply the values on to filtered image
+        final Bitmap bitmap = filteredImage.copy(Bitmap.Config.ARGB_8888, true);
+
+        Filter myFilter = new Filter();
+        myFilter.addSubFilter(new BrightnessSubFilter(brightnessFinal));
+        myFilter.addSubFilter(new ContrastSubFilter(contrastFinal));
+        myFilter.addSubFilter(new SaturationSubfilter(saturationFinal));
+        finalImage = myFilter.processFilter(bitmap);
+    }
+
+    /**
+     * Resets image edit controls to normal when new filter
+     * is selected
+     */
+    private void resetControls() {
+        if (editImageFragment != null) {
+            editImageFragment.resetControls();
+        }
+        brightnessFinal = 0;
+        saturationFinal = 1.0f;
+        contrastFinal = 1.0f;
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
     // load the default image from assets on app launch
     private void loadImage() {
-        originalImage = BitmapUtils.getBitmapFile(getActivity(), path, 300, 300);
+        originalImage = getBitmapFile(getActivity(), path, 300, 300);
         filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         finalImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
         imageFilter.setImageBitmap(originalImage);
     }
 
-    public void prepareThumbnail(final Bitmap bitmap) {
-        Runnable r = new Runnable() {
-            public void run() {
-                Bitmap thumbImage;
+    public static Bitmap getBitmapFile(Context context, String fileName, int width, int height) {
 
-                if (bitmap == null) {
-                    thumbImage = BitmapUtils.getBitmapFile(getActivity(), path, 100, 100);
-                } else {
-                    thumbImage = Bitmap.createScaledBitmap(bitmap, 100, 100, false);
-                }
-
-                if (thumbImage == null)
-                    return;
-
-                ThumbnailsManager.clearThumbs();
-                thumbnailItemList.clear();
-
-                // add normal bitmap first
-                ThumbnailItem thumbnailItem = new ThumbnailItem();
-                thumbnailItem.image = thumbImage;
-                thumbnailItem.filterName = getString(R.string.about);
-                ThumbnailsManager.addThumb(thumbnailItem);
-
-                List<Filter> filters = FilterPack.getFilterPack(getActivity());
-
-                for (Filter filter : filters) {
-                    ThumbnailItem tI = new ThumbnailItem();
-                    tI.image = thumbImage;
-                    tI.filter = filter;
-                    tI.filterName = filter.getName();
-                    ThumbnailsManager.addThumb(tI);
-                }
-
-                thumbnailItemList.addAll(ThumbnailsManager.processThumbs(getActivity()));
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        };
-
-        new Thread(r).start();
+        File image = new File(fileName);
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        //        bitmap = Bitmap.createScaledBitmap(bitmap,width,height,true);
+        return BitmapFactory.decodeFile(image.getAbsolutePath(), bmOptions);
     }
 }

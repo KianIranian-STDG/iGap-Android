@@ -1183,5 +1183,10 @@
   <string name="change_storage_place">Change storage place</string>
   <string name="other_files">Other Files</string>
 
+  <string name="lbl_brightness">BRIGHTNESS</string>
+  <string name="lbl_contrast">CONTRAST</string>
+  <string name="lbl_saturation">SATURATION</string>
+  <string name="tab_filters">FILTERS</string>
+  <string name="tab_edit">EDIT</string>
 
 </resources>

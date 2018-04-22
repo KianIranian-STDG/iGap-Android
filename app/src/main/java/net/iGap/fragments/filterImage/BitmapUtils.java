@@ -1,23 +1,26 @@
+/*
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
+
 package net.iGap.fragments.filterImage;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-
-/**
- * Created by ravi on 06/11/17.
- */
 
 public class BitmapUtils {
 
@@ -130,12 +133,4 @@ public class BitmapUtils {
         }
     }
 
-    public static Bitmap getBitmapFile(Context context, String fileName, int width, int height) {
-
-        File image = new File(fileName);
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(), bmOptions);
-//        bitmap = Bitmap.createScaledBitmap(bitmap,width,height,true);
-        return bitmap;
-    }
 }
