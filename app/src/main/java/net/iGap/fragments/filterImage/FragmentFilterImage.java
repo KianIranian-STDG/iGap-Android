@@ -2,6 +2,7 @@ package net.iGap.fragments.filterImage;
 
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -85,6 +86,8 @@ public class FragmentFilterImage extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         image = (StyleImageView) view.findViewById(R.id.image);
         initOptions();
