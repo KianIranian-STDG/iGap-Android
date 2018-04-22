@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.22.0'
+        classpath 'io.fabric.tools:gradle:1.25.3'
     }
 }
 apply plugin: 'com.android.application'
@@ -86,7 +86,7 @@ dependencies {
     compile 'com.mikepenz:fastadapter-commons:3.0.3@aar'
     compile 'com.mikepenz:fastadapter-extensions:3.0.3@aar'
     compile 'com.mikepenz:materialize:1.0.3@aar'
-    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:multidex:1.0.3'
     compile 'com.android.support:appcompat-v7:26.0.2'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support:recyclerview-v7:26.0.2'
