@@ -11,6 +11,7 @@
 package net.iGap.helper;
 
 import android.support.v4.util.ArrayMap;
+import android.util.Log;
 
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
@@ -162,6 +163,7 @@ public class HelperDownloadFile {
     }
 
     public static void startDownload(String messageID, String token, String url, String cashId, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, int periority, UpdateListener update) {
+        Log.i("CCCCC", "startDownload: " + url);
         StructDownLoad item;
         String primaryKey = cashId + selector;
 
@@ -252,11 +254,11 @@ public class HelperDownloadFile {
 
         if (item.progress < 100) {
             if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
-            if (isNeedItemGoToQueue()) {
-                addItemToQueue(primaryKey, periority);
-                updateView(item);
-                return;
-            }
+                if (isNeedItemGoToQueue()) {
+                    addItemToQueue(primaryKey, periority);
+                    updateView(item);
+                    return;
+                }
             }
         }
         requestDownloadFile(item);
@@ -315,6 +317,7 @@ public class HelperDownloadFile {
     }
 
     private static void downloadFileWithUrl(final StructDownLoad item) {
+        Log.i("CCCCC", "downloadFileWithUrl: " + item.url);
         manuallyStoppedDownload.remove(item.cashId);
         startDownloadManager(item);
     }
@@ -334,7 +337,9 @@ public class HelperDownloadFile {
             @Override
             protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
                 item.progress = (int) ((soFarBytes * 100) / totalBytes);
+                Log.i("CCCCC", "progress: " + item.progress);
                 updateView(item);
+
             }
 
             @Override
@@ -347,6 +352,7 @@ public class HelperDownloadFile {
 
             @Override
             protected void completed(BaseDownloadTask task) {
+                Log.i("CCCCC", "completed: ");
                 item.progress = 100;
                 moveTmpFileToOrginFolder(item.Token, item.selector, item.cashId);
                 updateView(item);
@@ -375,7 +381,9 @@ public class HelperDownloadFile {
 
             @Override
             protected void error(BaseDownloadTask task, Throwable e) {
+                Log.i("CCCCC", "error: " + e.getMessage());
                 stopDownLoad(item.cashId);
+
             }
 
             @Override
@@ -386,9 +394,10 @@ public class HelperDownloadFile {
 //            .setCallbackProgressTimes(0) // why do this? in here i assume do not need for each task callback `FileDownloadListener#progress`,
 // we just consider which task will complete. so in this way reduce ipc will be effective optimization
                 .setListener(queueTarget)
+                .setAutoRetryTimes(3)
                 .asInQueueTask()
                 .enqueue();
-        FileDownloader.getImpl().start(queueTarget, false);
+        FileDownloader.getImpl().start(queueTarget, true);
 
     }
 

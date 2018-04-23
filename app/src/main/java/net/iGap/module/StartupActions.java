@@ -106,8 +106,8 @@ public final class StartupActions {
         FileDownloader.setupOnApplicationOnCreate((Application) G.context)
                 .connectionCreator(new FileDownloadUrlConnection
                         .Creator(new FileDownloadUrlConnection.Configuration()
-                        .connectTimeout(30_000) // set connection timeout.
-                        .readTimeout(30_000) // set read timeout.
+                        .connectTimeout(15_000) // set connection timeout.
+                        .readTimeout(15_000) // set read timeout.
                 ))
                 .commit();
 

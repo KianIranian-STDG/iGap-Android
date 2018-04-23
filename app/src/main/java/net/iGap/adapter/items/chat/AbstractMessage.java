@@ -1384,7 +1384,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                     if (FragmentChat.canUpdateAfterDownload) {
                         if (progress == 100) {
-                            Log.i("FFFFFFFFFFFFFFFDD", "30 downLoadThumbnail: ");
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
