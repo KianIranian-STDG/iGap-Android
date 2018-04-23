@@ -348,6 +348,9 @@ public class HelperDownloadFile {
 
             @Override
             protected void retry(final BaseDownloadTask task, final Throwable ex, final int retryingTimes, final int soFarBytes) {
+                Log.i("CCCCC", "retry: " + retryingTimes);
+                Log.i("CCCCC", "ex.getMessage(): " + ex.getMessage());
+
             }
 
             @Override

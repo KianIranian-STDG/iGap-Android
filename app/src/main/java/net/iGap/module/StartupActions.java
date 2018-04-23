@@ -10,6 +10,7 @@ import android.view.WindowManager;
 
 import com.liulishuo.filedownloader.FileDownloader;
 import com.liulishuo.filedownloader.connection.FileDownloadUrlConnection;
+import com.liulishuo.filedownloader.util.FileDownloadHelper;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -103,13 +104,18 @@ public final class StartupActions {
          * by below code, so please do not worry about performance.
          * @see FileDownloader#init(Context)
          */
-        FileDownloader.setupOnApplicationOnCreate((Application) G.context)
-                .connectionCreator(new FileDownloadUrlConnection
-                        .Creator(new FileDownloadUrlConnection.Configuration()
-                        .connectTimeout(15_000) // set connection timeout.
-                        .readTimeout(15_000) // set read timeout.
-                ))
+        FileDownloader.setupOnApplicationOnCreate((Application) G.context).maxNetworkThreadCount(1).connectionCountAdapter(new FileDownloadHelper.ConnectionCountAdapter() {
+            @Override
+            public int determineConnectionCount(int downloadId, String url, String path, long totalLength) {
+                return 1;
+            }
+        }).connectionCreator(new FileDownloadUrlConnection
+                .Creator(new FileDownloadUrlConnection.Configuration()
+                .connectTimeout(15_000) // set connection timeout.
+                .readTimeout(15_000) // set read timeout.
+        ))
                 .commit();
+
 
     }
 
