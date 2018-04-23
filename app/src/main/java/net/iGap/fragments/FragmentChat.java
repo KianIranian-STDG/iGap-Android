@@ -3259,7 +3259,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onMessageFailed(long roomId, RealmRoomMessage message) {
 
-        if (mAdapter != null && message != null && roomId == mRoomId) {
+        if (roomId == mRoomId && mAdapter != null && message != null) {
             mAdapter.updateMessageStatus(message.getMessageId(), ProtoGlobal.RoomMessageStatus.FAILED);
         }
     }
@@ -4491,28 +4491,14 @@ public class FragmentChat extends BaseFragment
      * @param fakeMessageId messageId that create when created this message
      */
     private void makeFailed(final long fakeMessageId) {
-        // message failed
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void run() {
-                final Realm realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoomMessage.setStatusFailedInChat(realm, fakeMessageId);
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, fakeMessageId).findFirst();
-                        if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                            chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
-                        }
-                        realm.close();
-                    }
-                });
+            public void execute(Realm realm) {
+                RealmRoomMessage.setStatusFailedInChat(realm, fakeMessageId);
             }
         });
+        realm.close();
     }
 
     private void showErrorDialog(final int time) {
