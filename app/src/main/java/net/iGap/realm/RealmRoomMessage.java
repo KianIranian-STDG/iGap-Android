@@ -139,9 +139,7 @@ public class RealmRoomMessage extends RealmObject {
 
     public static RealmResults<RealmRoomMessage> findNotificationMessage(Realm realm) {
         return realm.where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString())
-                .or()
-                .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.DELIVERED.toString())
+                .in(RealmRoomMessageFields.STATUS, new String[]{ProtoGlobal.RoomMessageStatus.SENT.toString(), ProtoGlobal.RoomMessageStatus.DELIVERED.toString()})
                 .equalTo(RealmRoomMessageFields.DELETED, false)
                 .notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash)
                 .notEqualTo(RealmRoomMessageFields.USER_ID, G.userId)
@@ -162,11 +160,7 @@ public class RealmRoomMessage extends RealmObject {
             //TODO [Saeed Mozaffari] [2017-10-28 9:59 AM] - Can Write Better Code?
             results = realm.where(RealmRoomMessage.class).
                     equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                    equalTo(RealmRoomMessageFields.MESSAGE_TYPE, messageType.toString()).
-                    equalTo(RealmRoomMessageFields.DELETED, false).
-                    or().
-                    equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                    equalTo(RealmRoomMessageFields.MESSAGE_TYPE, messageType.toString() + "_TEXT").
+                    in(RealmRoomMessageFields.MESSAGE_TYPE, new String[]{messageType.toString(), messageType.toString() + "_TEXT"}).
                     equalTo(RealmRoomMessageFields.DELETED, false).
                     findAll().sort(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
         }
