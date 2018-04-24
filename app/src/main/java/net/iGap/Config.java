@@ -47,7 +47,7 @@ public class Config {
     public static final int GET_MESSAGE_STATE_TIME_OUT_CHECKING = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int LAST_SEEN_DELAY_CHECKING = (int) (60 * DateUtils.SECOND_IN_MILLIS);
     public static final int GET_CONTACT_LIST_TIME_OUT = (int) (60 * DateUtils.SECOND_IN_MILLIS);
-    public static final int HEART_BEAT_CHECKING_TIME_OUT = (int) (60 * DateUtils.SECOND_IN_MILLIS);
+    public static final int HEART_BEAT_CHECKING_TIME_OUT = (int) (10 * DateUtils.SECOND_IN_MILLIS);
     public static final int UPDATING_TIME_SHOWING = (int) (2 * DateUtils.SECOND_IN_MILLIS);
     public static final int CONNECTION_OPEN_TIME_OUT = (int) (20 * DateUtils.SECOND_IN_MILLIS);
     public static final int FETCH_CONTACT_TIME_OUT = (int) (5 * DateUtils.SECOND_IN_MILLIS);
