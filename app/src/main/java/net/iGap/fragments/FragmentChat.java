@@ -2283,6 +2283,11 @@ public class FragmentChat extends BaseFragment
         llScrollNavigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (isWaitingForHistoryUp || isWaitingForHistoryDown) {
+                    return;
+                }
+
                 latestButtonClickTime = System.currentTimeMillis();
                 /**
                  * have unread
