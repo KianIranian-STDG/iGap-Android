@@ -36,6 +36,7 @@ public class RealmAttachment extends RealmObject {
     @PrimaryKey
     private long id;
     private String token;
+    private String url;
     private String name;
     private long size;
     private int width;
@@ -82,6 +83,7 @@ public class RealmAttachment extends RealmObject {
         realmAttachment.setName(attachment.getName());
         realmAttachment.setSize(attachment.getSize());
         realmAttachment.setToken(attachment.getToken());
+        realmAttachment.setUrl(attachment.getPublicUrl());
         realmAttachment.setWidth(attachment.getWidth());
 
         long smallMessageThumbnail = SUID.id().get();
@@ -136,6 +138,7 @@ public class RealmAttachment extends RealmObject {
             realmAttachment.setName(file.getName());
             realmAttachment.setSize(file.getSize());
             realmAttachment.setToken(file.getToken());
+            realmAttachment.setUrl(file.getPublicUrl());
             realmAttachment.setWidth(file.getWidth());
         } else {
 
@@ -263,6 +266,14 @@ public class RealmAttachment extends RealmObject {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getName() {

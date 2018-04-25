@@ -7,6 +7,8 @@ import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.downloader.PRDownloader;
+import com.downloader.PRDownloaderConfig;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -82,6 +84,7 @@ public final class StartupActions {
         manageSettingPreferences();
         makeFolder();
         ConnectionManager.manageConnection();
+        configDownloadManager();
 
 
         new CallObserver();
@@ -90,6 +93,16 @@ public final class StartupActions {
          */
         new HelperDownloadFile();
         new HelperUploadFile();
+    }
+
+    private void configDownloadManager() {
+
+        PRDownloaderConfig config = PRDownloaderConfig.newBuilder()
+                .setDatabaseEnabled(true)
+                .build();
+        PRDownloader.initialize(G.context, config);
+
+
     }
 
     /**
