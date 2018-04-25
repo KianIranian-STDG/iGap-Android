@@ -1,6 +1,5 @@
 package net.iGap.module;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -8,9 +7,8 @@ import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
-import com.liulishuo.filedownloader.FileDownloader;
-import com.liulishuo.filedownloader.connection.FileDownloadUrlConnection;
-import com.liulishuo.filedownloader.util.FileDownloadHelper;
+import com.downloader.PRDownloader;
+import com.downloader.PRDownloaderConfig;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -99,22 +97,10 @@ public final class StartupActions {
 
     private void configDownloadManager() {
 
-        /**
-         * just for cache Application's Context, and ':filedownloader' progress will NOT be launched
-         * by below code, so please do not worry about performance.
-         * @see FileDownloader#init(Context)
-         */
-        FileDownloader.setupOnApplicationOnCreate((Application) G.context).maxNetworkThreadCount(1).connectionCountAdapter(new FileDownloadHelper.ConnectionCountAdapter() {
-            @Override
-            public int determineConnectionCount(int downloadId, String url, String path, long totalLength) {
-                return 1;
-            }
-        }).connectionCreator(new FileDownloadUrlConnection
-                .Creator(new FileDownloadUrlConnection.Configuration()
-                .connectTimeout(15_000) // set connection timeout.
-                .readTimeout(15_000) // set read timeout.
-        ))
-                .commit();
+        PRDownloaderConfig config = PRDownloaderConfig.newBuilder()
+                .setDatabaseEnabled(true)
+                .build();
+        PRDownloader.initialize(G.context, config);
 
 
     }

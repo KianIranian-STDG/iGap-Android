@@ -19,7 +19,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1448,9 +1447,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
                                     progressBar.withProgress(progress);
 
-
                                     if (progress == 100) {
-                                        Log.i("FFFFFFFFFFFFFFFDD", "31 downLoadFile: " + progress);
+
                                         if (messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT || messageType == ProtoGlobal.RoomMessageType.VOICE) {
                                             if (mMessage.roomId == MusicPlayer.roomId) {
                                                 MusicPlayer.downloadNewItem = true;
@@ -1473,7 +1471,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             @Override
                             public void run() {
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
-
                                     progressBar.withProgress(0);
                                     progressBar.withDrawable(R.drawable.ic_download, true);
 

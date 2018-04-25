@@ -11,11 +11,16 @@
 package net.iGap.helper;
 
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 
-import com.liulishuo.filedownloader.BaseDownloadTask;
-import com.liulishuo.filedownloader.FileDownloadListener;
-import com.liulishuo.filedownloader.FileDownloader;
+import com.downloader.Error;
+import com.downloader.OnCancelListener;
+import com.downloader.OnDownloadListener;
+import com.downloader.OnPauseListener;
+import com.downloader.OnProgressListener;
+import com.downloader.OnStartOrResumeListener;
+import com.downloader.PRDownloader;
+import com.downloader.Progress;
+import com.downloader.utils.Utils;
 
 import net.iGap.G;
 import net.iGap.interfaces.OnFileDownloadResponse;
@@ -43,6 +48,7 @@ public class HelperDownloadFile {
     private static ArrayList<StructQueue> mQueue = new ArrayList<>();
     private static int maxDownloadSize = 4;
     private OnFileDownloadResponse onFileDownloadResponse;
+    private static int downloadId;
 
     public HelperDownloadFile() {
 
@@ -163,7 +169,6 @@ public class HelperDownloadFile {
     }
 
     public static void startDownload(String messageID, String token, String url, String cashId, String name, long size, ProtoFileDownload.FileDownload.Selector selector, String moveToDirectoryPAth, int periority, UpdateListener update) {
-        Log.i("CCCCC", "startDownload: " + url);
         StructDownLoad item;
         String primaryKey = cashId + selector;
 
@@ -231,10 +236,7 @@ public class HelperDownloadFile {
                 break;
         }
 
-        if (url != null && !url.isEmpty()) {
-            downloadFileWithUrl(item);
-            return;
-        }
+
         File tmpFile = new File(item.path);
 
         if (tmpFile.exists()) {
@@ -261,6 +263,7 @@ public class HelperDownloadFile {
                 }
             }
         }
+
         requestDownloadFile(item);
 
     }
@@ -277,19 +280,20 @@ public class HelperDownloadFile {
             StructDownLoad item = list.get(primaryKey);
 
             if (item.url != null && !item.url.isEmpty()) {
-                FileDownloader.getImpl().pause(item.idDownload);
+                PRDownloader.pause(item.idDownload);
+
             }
 
             if (item != null && item.structListeners != null) {
                 for (StructListener mItem : item.structListeners) {
                     if (mItem.listener != null) {
+                        item.isPause = true;
                         mItem.listener.OnError(item.Token);
                     }
                 }
             }
 
             list.remove(primaryKey);
-
             addDownloadFromQueue();
         }
     }
@@ -305,122 +309,84 @@ public class HelperDownloadFile {
             mQueue.remove(0);
 
             if (list.size() > 0 && list.containsKey(_primaryKey)) {
-                if (list.get(_primaryKey).url != null && !list.get(_primaryKey).url.isEmpty()) {
-                    downloadFileWithUrl(list.get(_primaryKey));
-                } else {
-                    requestDownloadFile(list.get(_primaryKey));
-                }
-
+                requestDownloadFile(list.get(_primaryKey));
                 break;
             }
         }
     }
 
-    private static void downloadFileWithUrl(final StructDownLoad item) {
-        Log.i("CCCCC", "downloadFileWithUrl: " + item.url);
-        manuallyStoppedDownload.remove(item.cashId);
-        startDownloadManager(item);
-    }
+
 
     private static void startDownloadManager(final StructDownLoad item) {
-//        String url = "http://ipv4.download.thinkbroadband.com/20MB.zip";
-        final FileDownloadListener queueTarget = new FileDownloadListener() {
-            @Override
-            protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-            }
 
-            @Override
-            protected void connected(BaseDownloadTask task, String etag, boolean isContinue, int soFarBytes, int totalBytes) {
-                item.idDownload = task.getId();
-            }
-
-            @Override
-            protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-                item.progress = (int) ((soFarBytes * 100) / totalBytes);
-                Log.i("CCCCC", "progress: " + item.progress);
-                updateView(item);
-
-            }
-
-            @Override
-            protected void blockComplete(BaseDownloadTask task) {
-            }
-
-            @Override
-            protected void retry(final BaseDownloadTask task, final Throwable ex, final int retryingTimes, final int soFarBytes) {
-                Log.i("CCCCC", "retry: " + retryingTimes);
-                Log.i("CCCCC", "ex.getMessage(): " + ex.getMessage());
-
-            }
-
-            @Override
-            protected void completed(BaseDownloadTask task) {
-                Log.i("CCCCC", "completed: ");
-                item.progress = 100;
-                moveTmpFileToOrginFolder(item.Token, item.selector, item.cashId);
-                updateView(item);
-                list.remove(item.cashId + item.selector);
-
-                // if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE){
-//                        addDownloadFromQueue();
-                // }
-
-                // save downloaded file to gallery
-
-                if (G.isSaveToGallery && HelperPermission.grantedUseStorage() && item.selector == ProtoFileDownload.FileDownload.Selector.FILE && item.moveToDirectoryPAth != null) {
-                    File file = new File(item.moveToDirectoryPAth);
-                    if (file.exists()) {
-
-                        if (HelperMimeType.isFileImage(item.moveToDirectoryPAth.toLowerCase()) || HelperMimeType.isFileVideo(item.moveToDirectoryPAth.toLowerCase())) {
-                            HelperSaveFile.savePicToGallery(item.moveToDirectoryPAth, false);
+        item.path = Utils.getTempPath(item.path, item.name);
+        final String path = item.path.replace("/" + new File(item.path).getName(), "");
+        final String name = new File(item.path).getName();
+        item.idDownload = PRDownloader.download(item.url, path, name).setTag(item.cashId)
+                .build()
+                .setOnStartOrResumeListener(new OnStartOrResumeListener() {
+                    @Override
+                    public void onStartOrResume() {
+                        item.isPause = false;
+                    }
+                })
+                .setOnPauseListener(new OnPauseListener() {
+                    @Override
+                    public void onPause() {
+                        stopDownLoad(item.cashId);
+                        item.isPause = true;
+                    }
+                })
+                .setOnCancelListener(new OnCancelListener() {
+                    @Override
+                    public void onCancel() {
+                        stopDownLoad(item.cashId);
+                    }
+                })
+                .setOnProgressListener(new OnProgressListener() {
+                    @Override
+                    public void onProgress(Progress progress) {
+                        item.progress = (int) ((progress.currentBytes * 100) / progress.totalBytes);
+                        if (item.progress < 100 && !item.isPause) {
+                            updateView(item);
                         }
                     }
-                }
-            }
+                })
+                .start(new OnDownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                        moveTmpFileToOrginFolder(item.selector, item.cashId);
+                        updateView(item);
+                        list.remove(item.cashId + item.selector);
+                        if (G.isSaveToGallery && HelperPermission.grantedUseStorage() && item.selector == ProtoFileDownload.FileDownload.Selector.FILE && item.moveToDirectoryPAth != null) {
+                            File file = new File(item.moveToDirectoryPAth);
+                            if (file.exists()) {
 
-            @Override
-            protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
-            }
+                                if (HelperMimeType.isFileImage(item.moveToDirectoryPAth.toLowerCase()) || HelperMimeType.isFileVideo(item.moveToDirectoryPAth.toLowerCase())) {
+                                    HelperSaveFile.savePicToGallery(item.moveToDirectoryPAth, false);
+                                }
+                            }
+                        }
+                    }
 
-            @Override
-            protected void error(BaseDownloadTask task, Throwable e) {
-                Log.i("CCCCC", "error: " + e.getMessage());
-                stopDownLoad(item.cashId);
-
-            }
-
-            @Override
-            protected void warn(BaseDownloadTask task) {
-            }
-        };
-        FileDownloader.getImpl().create(item.url).setPath(item.path)
-//            .setCallbackProgressTimes(0) // why do this? in here i assume do not need for each task callback `FileDownloadListener#progress`,
-// we just consider which task will complete. so in this way reduce ipc will be effective optimization
-                .setListener(queueTarget)
-                .setAutoRetryTimes(3)
-                .asInQueueTask()
-                .enqueue();
-        FileDownloader.getImpl().start(queueTarget, true);
-
+                    @Override
+                    public void onError(Error error) {
+                        stopDownLoad(item.cashId);
+                    }
+                });
     }
-
     private static void requestDownloadFile(final StructDownLoad item) {
 
         manuallyStoppedDownload.remove(item.cashId);
-
         if (item.progress == 100 || item.offset >= item.size) {
-            moveTmpFileToOrginFolder(item.Token, item.selector, item.cashId);
-
+            moveTmpFileToOrginFolder(item.selector, item.cashId);
             updateView(item);
-
             list.remove(item.cashId + item.selector);
-
 //            if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
 //                addDownloadFromQueue();
 //            }
 
             // save downloaded file to gallery
-
             if (G.isSaveToGallery && HelperPermission.grantedUseStorage() && item.selector == ProtoFileDownload.FileDownload.Selector.FILE && item.moveToDirectoryPAth != null) {
                 File file = new File(item.moveToDirectoryPAth);
                 if (file.exists()) {
@@ -433,12 +399,15 @@ public class HelperDownloadFile {
 
             return;
         }
-
         updateView(item);
-        new RequestFileDownload().download(item.Token, item.offset, (int) item.size, item.selector, new RequestFileDownload.IdentityFileDownload(item.cashId, item.path, item.selector, item.size, item.offset, true));
+        if (item.url != null && !item.url.isEmpty()) {
+            startDownloadManager(item);
+        } else {
+            new RequestFileDownload().download(item.Token, item.offset, (int) item.size, item.selector, new RequestFileDownload.IdentityFileDownload(item.cashId, item.path, item.selector, item.size, item.offset, true));
+        }
     }
 
-    private static void moveTmpFileToOrginFolder(String token, ProtoFileDownload.FileDownload.Selector selector, String cashId) {
+    private static void moveTmpFileToOrginFolder(ProtoFileDownload.FileDownload.Selector selector, String cashId) {
 
         StructDownLoad item = list.get(cashId + selector);
 
@@ -454,7 +423,6 @@ public class HelperDownloadFile {
                 } catch (IOException e) {
                 }
             }
-            String sel;
             switch (item.selector) {
                 case FILE:
                     setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
@@ -561,7 +529,8 @@ public class HelperDownloadFile {
         public int attampOnError = 2;
         public ProtoFileDownload.FileDownload.Selector selector;
         public String path = "";
-        int priority = 0;
+        public int priority = 0;
+        public boolean isPause = false;
     }
 
     private static class StructQueue {
