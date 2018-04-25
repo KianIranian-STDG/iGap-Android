@@ -107,7 +107,13 @@ public class FragmentFilterImage extends Fragment implements FiltersListFragment
         Bundle bundle = getArguments();
         if (bundle != null) {
             path = bundle.getString(PATH);
+            if (path == null) {
+                return;
+            }
+        } else {
+            return;
         }
+
         imageFilter = (ImageView) view.findViewById(R.id.imageFilter);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
