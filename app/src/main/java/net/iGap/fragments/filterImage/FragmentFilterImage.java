@@ -31,6 +31,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperLog;
 import net.iGap.module.AttachFile;
 
 import java.io.ByteArrayOutputStream;
@@ -115,8 +116,11 @@ public class FragmentFilterImage extends Fragment {
         view.findViewById(R.id.pu_txt_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(getImageUri(G.context, image.getBitmap())));
-                new HelperFragment(FragmentFilterImage.this).remove();
+                Uri path = getImageUri(G.context, image.getBitmap());
+                if (path != null) {
+                    FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(path));
+                    new HelperFragment(FragmentFilterImage.this).remove();
+                }
             }
         });
 
@@ -414,7 +418,11 @@ public class FragmentFilterImage extends Fragment {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
+        if (path != null) {
+            return Uri.parse(path);
+        }
+        HelperLog.setErrorLog("fragmentFilterImage  method getImageUri  path is null   ");
+        return null;
     }
 
     public class StructFilterImage {
