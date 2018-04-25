@@ -268,23 +268,23 @@ public class FragmentFilterImage extends Fragment implements FiltersListFragment
         return BitmapFactory.decodeFile(image.getAbsolutePath(), bmOptions);
     }
 
-    private class FilterImageTask extends AsyncTask<Filter, Integer, Filter> {
+    private class FilterImageTask extends AsyncTask<Filter, Integer, Bitmap> {
 
         @Override
-        protected Filter doInBackground(Filter... filters) {
+        protected Bitmap doInBackground(Filter... filters) {
             // applying the selected filter
             filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
             // preview filtered image
+            Bitmap bitmap = filters[0].processFilter(filteredImage);
             finalImage = filteredImage.copy(Bitmap.Config.ARGB_8888, true);
-
-            return filters[0];
+            return bitmap;
         }
 
         @Override
-        protected void onPostExecute(Filter filter) {
-            super.onPostExecute(filter);
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
             resetControls();
-            imageFilter.setImageBitmap(filter.processFilter(filteredImage));
+            imageFilter.setImageBitmap(bitmap);
         }
     }
 
@@ -313,7 +313,6 @@ public class FragmentFilterImage extends Fragment implements FiltersListFragment
             saturationFinal = values[0];
             Filter myFilter = new Filter();
             myFilter.addSubFilter(new SaturationSubfilter(values[0]));
-
             return myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true));
         }
 
