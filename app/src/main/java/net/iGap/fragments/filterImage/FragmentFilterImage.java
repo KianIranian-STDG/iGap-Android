@@ -16,7 +16,9 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -28,11 +30,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.imageprocessors.subfilters.BrightnessSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.ContrastSubFilter;
 import com.zomato.photofilters.imageprocessors.subfilters.SaturationSubfilter;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.helper.HelperFragment;
@@ -64,6 +69,8 @@ public class FragmentFilterImage extends Fragment implements FiltersListFragment
     int brightnessFinal = 0;
     float saturationFinal = 1.0f;
     float contrastFinal = 1.0f;
+
+    public boolean isChange = false;
 
     // load native image filters library
     static {
@@ -111,7 +118,30 @@ public class FragmentFilterImage extends Fragment implements FiltersListFragment
         view.findViewById(R.id.pu_txt_agreeImage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HelperFragment(FragmentFilterImage.this).remove();
+                if (isChange) {
+                    new MaterialDialog.Builder(G.fragmentActivity)
+                            .title(R.string.tab_filters)
+                            .content(R.string.cancel)
+                            .positiveText(R.string.save)
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    final String path = BitmapUtils.insertImage(getActivity().getContentResolver(), finalImage, System.currentTimeMillis() + "_profile.jpg", null);
+                                    FragmentEditImage.updateImage.result(AttachFile.getFilePathFromUri(Uri.parse(path)));
+                                    new HelperFragment(FragmentFilterImage.this).remove();
+                                }
+                            }).onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            new HelperFragment(FragmentFilterImage.this).remove();
+                        }
+                    })
+                            .negativeText(R.string.close)
+                            .show();
+                } else {
+                    new HelperFragment(FragmentFilterImage.this).remove();
+                }
+
             }
         });
 
@@ -143,38 +173,23 @@ public class FragmentFilterImage extends Fragment implements FiltersListFragment
     @Override
     public void onFilterSelected(Filter filter) {
         // reset image controls
-        resetControls();
-
-        // applying the selected filter
-        filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
-        // preview filtered image
-        imageFilter.setImageBitmap(filter.processFilter(filteredImage));
-
-        finalImage = filteredImage.copy(Bitmap.Config.ARGB_8888, true);
+        isChange = true;
+        new FilterImageTask().execute(filter, null, filter);
     }
 
     @Override
     public void onBrightnessChanged(final int brightness) {
-        brightnessFinal = brightness;
-        Filter myFilter = new Filter();
-        myFilter.addSubFilter(new BrightnessSubFilter(brightness));
-        imageFilter.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
+        new BrightnessChangedTask().execute(brightness);
     }
 
     @Override
     public void onSaturationChanged(final float saturation) {
-        saturationFinal = saturation;
-        Filter myFilter = new Filter();
-        myFilter.addSubFilter(new SaturationSubfilter(saturation));
-        imageFilter.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
+        new SaturationChangedTask().execute(saturation);
     }
 
     @Override
     public void onContrastChanged(final float contrast) {
-        contrastFinal = contrast;
-        Filter myFilter = new Filter();
-        myFilter.addSubFilter(new ContrastSubFilter(contrast));
-        imageFilter.setImageBitmap(myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true)));
+        new ContrastChangedTask().execute(contrast);
     }
 
     @Override
@@ -251,5 +266,78 @@ public class FragmentFilterImage extends Fragment implements FiltersListFragment
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         //        bitmap = Bitmap.createScaledBitmap(bitmap,width,height,true);
         return BitmapFactory.decodeFile(image.getAbsolutePath(), bmOptions);
+    }
+
+    private class FilterImageTask extends AsyncTask<Filter, Integer, Filter> {
+
+        @Override
+        protected Filter doInBackground(Filter... filters) {
+            // applying the selected filter
+            filteredImage = originalImage.copy(Bitmap.Config.ARGB_8888, true);
+            // preview filtered image
+            finalImage = filteredImage.copy(Bitmap.Config.ARGB_8888, true);
+
+            return filters[0];
+        }
+
+        @Override
+        protected void onPostExecute(Filter filter) {
+            super.onPostExecute(filter);
+            resetControls();
+            imageFilter.setImageBitmap(filter.processFilter(filteredImage));
+        }
+    }
+
+
+    private class BrightnessChangedTask extends AsyncTask<Integer, Void, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(Integer... integers) {
+
+            brightnessFinal = integers[0];
+            Filter myFilter = new Filter();
+            myFilter.addSubFilter(new BrightnessSubFilter(integers[0]));
+            return myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true));
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap myFilter) {
+            super.onPostExecute(myFilter);
+            imageFilter.setImageBitmap(myFilter);
+        }
+    }
+
+    private class SaturationChangedTask extends AsyncTask<Float, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(Float... values) {
+            saturationFinal = values[0];
+            Filter myFilter = new Filter();
+            myFilter.addSubFilter(new SaturationSubfilter(values[0]));
+
+            return myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true));
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap myFilter) {
+            super.onPostExecute(myFilter);
+            imageFilter.setImageBitmap(myFilter);
+        }
+    }
+
+    private class ContrastChangedTask extends AsyncTask<Float, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(Float... values) {
+            contrastFinal = values[0];
+            Filter myFilter = new Filter();
+            myFilter.addSubFilter(new ContrastSubFilter(values[0]));
+            return myFilter.processFilter(finalImage.copy(Bitmap.Config.ARGB_8888, true));
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap myFilter) {
+            super.onPostExecute(myFilter);
+            imageFilter.setImageBitmap(myFilter);
+        }
     }
 }

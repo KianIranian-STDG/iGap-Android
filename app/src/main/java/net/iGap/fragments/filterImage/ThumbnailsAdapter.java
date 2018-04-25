@@ -22,7 +22,6 @@ import com.zomato.photofilters.imageprocessors.Filter;
 import com.zomato.photofilters.utils.ThumbnailItem;
 
 import net.iGap.R;
-import net.iGap.module.CircleImageView;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.My
     private int selectedIndex = 0;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private CircleImageView thumbnail;
+        private de.hdodenhof.circleimageview.CircleImageView thumbnail;
         private TextView filterName;
 
         public MyViewHolder(View view) {

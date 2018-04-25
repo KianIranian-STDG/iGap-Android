@@ -11,7 +11,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <net.iGap.module.CircleImageView
+    <de.hdodenhof.circleimageview.CircleImageView
       android:id="@+id/imgFilter"
       android:layout_width="@dimen/dp80"
       android:layout_height="@dimen/dp80"
