@@ -92,6 +92,9 @@ public class HelperGetDataFromOtherApp {
      */
     private void checkData(Intent intent) {
 
+        messageType = null;
+        fileTypeArray.clear();
+
         String action = intent.getAction();
         String type = intent.getType();
         if (action == null || type == null) return;

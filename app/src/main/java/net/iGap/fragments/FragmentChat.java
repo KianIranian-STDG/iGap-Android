@@ -5197,7 +5197,6 @@ public class FragmentChat extends BaseFragment
                             }
                         }
                     }
-                    messageType = null;
                 }
             }
         }, 300);
