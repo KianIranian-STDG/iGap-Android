@@ -82,7 +82,7 @@ public class Config {
     public static String default_dark_notificationColor = "#000000";
     public static String default_dark_toggleButtonColor = "#000000";
     public static String default_dark_attachmentColor = "#000000";
-    public static String default_dark_headerTextColor = "#ffffff";
+    public static String default_dark_headerTextColor = "#111111";
     public static String default_dark_progressColor = "#ffffff";
 
 }

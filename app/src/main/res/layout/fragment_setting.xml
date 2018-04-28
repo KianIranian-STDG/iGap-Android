@@ -988,7 +988,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:paddingTop="@dimen/dp4"
-                android:text="@string/st_Auto_Rotate"
+                android:text="@string/st_dark_theme"
                 android:textColor="@color/black_register"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />

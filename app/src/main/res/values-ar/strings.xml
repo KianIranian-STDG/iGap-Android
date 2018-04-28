@@ -2099,7 +2099,7 @@
   <string name="zihaje">ذیحجه</string>
 
   <string name="st_multi_tab">تبويب متعدد</string>
-
+  <string name="st_dark_theme">موضوع الظلام</string>
   <string name="dont_ask_again">حصلت عليه</string>
   <string name="attention">اهتمام</string>
   <string name="content_attention_dialog">ملاحظة: تجدر الإشارة إلى أن الأفراد على الخريطة سيتم عرض مع وجود خطأ من 500 متر. لذلك لا تقلق</string>
