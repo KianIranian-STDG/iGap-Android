@@ -49,7 +49,7 @@ public class HelperDownloadFile {
     private static ArrayList<StructQueue> mQueue = new ArrayList<>();
     private static int maxDownloadSize = 4;
     private OnFileDownloadResponse onFileDownloadResponse;
-    private static int downloadId;
+
 
     public HelperDownloadFile() {
 
@@ -386,7 +386,7 @@ public class HelperDownloadFile {
             updateView(item);
             list.remove(item.cashId + item.selector);
 //            if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
-//                addDownloadFromQueue();
+            addDownloadFromQueue();
 //            }
 
             // save downloaded file to gallery
