@@ -21,7 +21,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperPermission;
-import net.iGap.interfaces.OnQueueSendContact;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmContacts;
@@ -43,11 +42,8 @@ import static net.iGap.Config.PHONE_CONTACT_MAX_COUNT_LIMIT;
 public class Contacts {
 
     public static final int PHONE_CONTACT_FETCH_LIMIT = 100;
-
-    //Online Fetch Contacts Fields
-    public static int onlinePhoneContactId = 0;
-    private static ArrayList<StructListOfContact> resultContactList;
-    private static boolean isEnd;
+    private static List<StructListOfContact> resultContactList;
+    public static boolean isSendingContactToServer = false;
 
     //Local Fetch Contacts Fields
     public static boolean getContact = true;
@@ -126,7 +122,7 @@ public class Contacts {
     }
 
 
-    public static void getPhoneContactForServer() { //get List Of Contact
+    private static void getPhoneContactForServer() { //get List Of Contact
         if (!HelperPermission.grantedContactPermission()) {
             return;
         }
@@ -136,17 +132,11 @@ public class Contacts {
             return;
         }
 
-        int fetchCount = 0;
-        isEnd = false;
-
         ArrayList<StructListOfContact> contactList = new ArrayList<>();
         ContentResolver cr = G.context.getContentResolver();
 
-        String startContactId = ">=" + onlinePhoneContactId;
-        String selection = ContactsContract.Contacts._ID + startContactId;
-
         try {
-            Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, selection, null, null);
+            Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
             if (cur != null) {
 
                 if (cur.getCount() > PHONE_CONTACT_MAX_COUNT_LIMIT) {
@@ -158,8 +148,6 @@ public class Contacts {
                 if (cur.getCount() > 0) {
                     while (cur.moveToNext()) {
                         int contactId = cur.getInt(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                        onlinePhoneContactId = contactId + 1;
-
                         try {
                             if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
                                 Cursor pCur = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
@@ -181,19 +169,12 @@ public class Contacts {
                             e1.printStackTrace();
                         }
 
-                        fetchCount++;
-
-                        if (fetchCount > PHONE_CONTACT_FETCH_LIMIT) {
-                            break;
-                        }
                     }
                 }
                 cur.close();
             }
 
-            if (fetchCount < PHONE_CONTACT_FETCH_LIMIT) {
-                isEnd = true;
-            }
+
             resultContactList = new ArrayList<>();
             for (int i = 0; i < contactList.size(); i++) {
 
@@ -229,28 +210,8 @@ public class Contacts {
 
 
             if (G.onContactFetchForServer != null) {
-                G.onContactFetchForServer.onFetch(resultContactList, isEnd);
+                G.onContactFetchForServer.onFetch(resultContactList, true);
             }
-
-
-            if (!isEnd) {
-                G.onQueueSendContact = new OnQueueSendContact() {
-                    @Override
-                    public void sendContact() {
-
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                new FetchContactForServer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                            }
-                        }, 100);
-
-                    }
-                };
-            } else {
-                G.onQueueSendContact = null;
-            }
-
 
 
         } catch (SQLiteException e) {

@@ -302,7 +302,6 @@ public class G extends MultiDexApplication {
     public static OnPhoneContact onPhoneContact;
     public static OnContactFetchForServer onContactFetchForServer;
     public static OnQueueSendContact onQueueSendContact;
-    public static OnQueueSendContactEdit onQueueSendContactEdit;
     public static OnAudioFocusChangeListener onAudioFocusChangeListener;
     public static IDispatchTochEvent dispatchTochEventChat;
     public static IOnBackPressed onBackPressedChat;

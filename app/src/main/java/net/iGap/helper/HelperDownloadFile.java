@@ -10,6 +10,7 @@
 
 package net.iGap.helper;
 
+import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 
 import com.downloader.Error;
@@ -439,10 +440,10 @@ public class HelperDownloadFile {
 
     private static void setThumbnailPathDataBaseAttachment(final String cashID, final String path) {
 
-        final Realm realm = Realm.getDefaultInstance();
+        Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void execute(Realm realm) {
+            public void execute(@NonNull Realm realm) {
                 RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
                 for (RealmAttachment attachment : attachments) {
                     attachment.setLocalThumbnailPath(path);
@@ -454,12 +455,8 @@ public class HelperDownloadFile {
     }
 
     public static boolean isDownLoading(String cashID) {
-
         String primaryKey = cashID + ProtoFileDownload.FileDownload.Selector.FILE;
-
-        if (list.containsKey(primaryKey)) return true;
-
-        return false;
+        return list.containsKey(primaryKey);
     }
 
     private static void setFilePAthToDataBaseAttachment(final String cashID, final String path) {

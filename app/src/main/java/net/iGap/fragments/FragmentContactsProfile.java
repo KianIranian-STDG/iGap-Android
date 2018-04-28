@@ -73,6 +73,7 @@ import net.iGap.viewmodel.FragmentContactsProfileViewModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 
@@ -572,7 +573,7 @@ public class FragmentContactsProfile extends BaseFragment {
             return;
         }
 
-        ArrayList<StructListOfContact> contacts = new ArrayList<>();
+        List<StructListOfContact> contacts = new ArrayList<>();
         StructListOfContact contact = new StructListOfContact();
         contact.firstName = fragmentContactsProfileViewModel.firstName;
         contact.lastName = fragmentContactsProfileViewModel.lastName;
