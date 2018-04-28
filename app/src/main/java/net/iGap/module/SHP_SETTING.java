@@ -28,6 +28,7 @@ public class SHP_SETTING {
     public static final String KEY_DATA = "data";
     public static final String KEY_IN_APP_BROWSER = "app_browser";
     public static final String KEY_SEND_BT_ENTER = "send_by_enter";
+    public static final String KEY_THEME_DARK = "KEY_THEME_DARK";
     public static final String KEY_ENABLE_ANIMATION = "enable_animation";
     public static final String KEY_ENABLE_DATA_SHAMS = "enable_dataShams";
     public static final String KEY_AUTO_ROTATE = "KEY_AUTO_ROTATE";
