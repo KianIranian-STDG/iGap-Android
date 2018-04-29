@@ -825,6 +825,18 @@ public class RealmRoom extends RealmObject {
         realm.close();
     }
 
+    public static void clearAllScrollPositions() {
+        Realm realm = Realm.getDefaultInstance();
+        for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
+            clearScrollPosition(realmRoom.id);
+        }
+        realm.close();
+    }
+
+    public static void clearScrollPosition(long roomId) {
+        setLastScrollPosition(roomId, 0);
+    }
+
     public static void setDraft(final long roomId, final String message, final long replyToMessageId) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {

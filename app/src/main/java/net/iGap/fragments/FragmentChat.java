@@ -497,38 +497,6 @@ public class FragmentChat extends BaseFragment
     private ArrayList<Long> multiForwardList = new ArrayList<>();
     private ArrayList<StructBottomSheetForward> mListForwardNotExict = new ArrayList<>();
     private String messageEdit = "";
-    /**
-     * **********************************************************************
-     * *************************** Message Loader ***************************
-     * **********************************************************************
-     */
-
-    private boolean addToView; // allow to message for add to recycler view or no
-    private boolean topMore = true; // more message exist in local for load in up direction (topMore default value is true for allowing that try load top message )
-    private boolean bottomMore; // more message exist in local for load in bottom direction
-    private boolean isWaitingForHistoryUp; // client send request for getHistory, avoid for send request again
-    private boolean isWaitingForHistoryDown; // client send request for getHistory, avoid for send request again
-    private boolean allowGetHistoryUp = true;
-    // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
-    private boolean allowGetHistoryDown = true;
-    // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
-    private boolean firstUp = true; // if is firstUp getClientRoomHistory with low limit in UP direction
-    private boolean firstDown = true; // if is firstDown getClientRoomHistory with low limit in DOWN direction
-    private long gapMessageIdUp; // messageId that maybe lost in local
-    private long gapMessageIdDown; // messageId that maybe lost in local
-    private long reachMessageIdUp; // messageId that will be checked after getHistory for detect reached to that or no
-    private long reachMessageIdDown; // messageId that will be checked after getHistory for detect reached to that or no
-    private long startFutureMessageIdUp;
-    // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
-    private long startFutureMessageIdDown;
-    // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
-    private long progressIdentifierUp; // store identifier for Up progress item and use it if progress not removed from view after check 'instanceOf' in 'progressItem' method
-    private long progressIdentifierDown; // store identifier for Down progress item and use it if progress not removed from view after check 'instanceOf' in 'progressItem' method
-    private int firstVisiblePosition; // difference between start of adapter item and items that Showing.
-    private int visibleItemCount; // visible item in recycler view
-    private int totalItemCount; // all item in recycler view
-    private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
-
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -7312,6 +7280,35 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+
+    /**
+     * **********************************************************************
+     * *************************** Message Loader ***************************
+     * **********************************************************************
+     */
+
+    private boolean addToView; // allow to message for add to recycler view or no
+    private boolean topMore = true; // more message exist in local for load in up direction (topMore default value is true for allowing that try load top message )
+    private boolean bottomMore; // more message exist in local for load in bottom direction
+    private boolean isWaitingForHistoryUp; // client send request for getHistory, avoid for send request again
+    private boolean isWaitingForHistoryDown; // client send request for getHistory, avoid for send request again
+    private boolean allowGetHistoryUp = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
+    private boolean allowGetHistoryDown = true; // after insuring for get end of message from server set this false. (set false in history error maybe was wrong , because maybe this was for another error not end  of message, (hint: can check error code for end of message from history))
+    private boolean firstUp = true; // if is firstUp getClientRoomHistory with low limit in UP direction
+    private boolean firstDown = true; // if is firstDown getClientRoomHistory with low limit in DOWN direction
+    private long gapMessageIdUp; // messageId that maybe lost in local
+    private long gapMessageIdDown; // messageId that maybe lost in local
+    private long reachMessageIdUp; // messageId that will be checked after getHistory for detect reached to that or no
+    private long reachMessageIdDown; // messageId that will be checked after getHistory for detect reached to that or no
+    private long startFutureMessageIdUp; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
+    private long startFutureMessageIdDown; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
+    private long progressIdentifierUp = 0; // store identifier for Up progress item and use it if progress not removed from view after check 'instanceOf' in 'progressItem' method
+    private long progressIdentifierDown = 0; // store identifier for Down progress item and use it if progress not removed from view after check 'instanceOf' in 'progressItem' method
+    private int firstVisiblePosition; // difference between start of adapter item and items that Showing.
+    private int visibleItemCount; // visible item in recycler view
+    private int totalItemCount; // all item in recycler view
+    private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
+
     private void getMessages() {
         //+Realm realm = Realm.getDefaultInstance();
 
@@ -7721,7 +7718,6 @@ public class FragmentChat extends BaseFragment
 
                         if (direction == UP) {
                             isWaitingForHistoryUp = false;
-                            isWaitingForHistoryUp = false;
                             allowGetHistoryUp = false;
                             G.handler.post(new Runnable() {
                                 @Override
@@ -7858,10 +7854,10 @@ public class FragmentChat extends BaseFragment
                         recyclerView.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (direction == DOWN) {
+                                if (direction == DOWN && progressIdentifierDown == 0) {
                                     progressIdentifierDown = SUID.id().get();
                                     mAdapter.add(new ProgressWaiting(getRealmChat(), FragmentChat.this).withIdentifier(progressIdentifierDown));
-                                } else {
+                                } else if (direction == UP && progressIdentifierUp == 0) {
                                     progressIdentifierUp = SUID.id().get();
                                     mAdapter.add(0, new ProgressWaiting(getRealmChat(), FragmentChat.this).withIdentifier(progressIdentifierUp));
                                 }
@@ -7875,6 +7871,11 @@ public class FragmentChat extends BaseFragment
                      */
                     if ((mAdapter.getItemCount() > 0) && (mAdapter.getAdapterItem(progressIndex) instanceof ProgressWaiting)) {
                         mAdapter.remove(progressIndex);
+                        if (direction == DOWN) {
+                            progressIdentifierDown = 0;
+                        } else {
+                            progressIdentifierUp = 0;
+                        }
                     } else {
                         G.handler.post(new Runnable() {
                             @Override
@@ -7905,14 +7906,6 @@ public class FragmentChat extends BaseFragment
                 }
             }
         });
-    }
-
-    private void progressItem(final ProgressState progressState, final String direction) {
-        if (direction.equals(UP.toString())) {
-            progressItem(progressState, UP);
-        } else {
-            progressItem(progressState, DOWN);
-        }
     }
 
     /**

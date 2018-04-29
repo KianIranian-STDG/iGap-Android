@@ -28,6 +28,7 @@ import net.iGap.module.FileUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
+import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessage;
 
 import org.osmdroid.config.Configuration;
@@ -257,6 +258,7 @@ public class ActivityManageSpaceViewModel {
             public void onClick(View v) {
                 Realm realm = Realm.getDefaultInstance();
                 RealmRoomMessage.ClearAllMessage(realm, true, 0);
+                RealmRoom.clearAllScrollPositions();
                 final long DbTotalSize = new File(realm.getConfiguration().getPath()).length();
                 realm.close();
                 callbackCleanUp.set(FileUtils.formatFileSize(DbTotalSize));
