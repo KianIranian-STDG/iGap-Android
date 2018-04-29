@@ -357,7 +357,7 @@ public class ActivityManageSpaceViewModel {
 
         isSdkEnable.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_SDK_ENABLE, 0)));
 
-        if (FileUtils.getSdCardPathList(true).size() > 0) {
+        if (FileUtils.getSdCardPathList().size() > 0) {
             showLayoutSdk.set(View.VISIBLE);
         } else {
             showLayoutSdk.set(View.GONE);
