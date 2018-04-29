@@ -7374,8 +7374,7 @@ public class FragmentChat extends BaseFragment
 
         long gapMessageId;
         if (direction == DOWN) {
-            resultsUp =
-                    getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().sort(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
+            resultsUp = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().sort(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
              * if for UP state client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
@@ -7599,7 +7598,15 @@ public class FragmentChat extends BaseFragment
      */
     private void getOnlineMessage(final long oldMessageId, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
         if ((direction == UP && !isWaitingForHistoryUp && allowGetHistoryUp) || (direction == DOWN && !isWaitingForHistoryDown && allowGetHistoryDown)) {
+            /**
+             * show progress when start for get history from server
+             */
+            progressItem(SHOW, direction);
 
+            if (!G.userLogin) {
+                getOnlineMessageAfterTimeOut(oldMessageId, direction);
+                return;
+            }
             long reachMessageId;
             if (direction == UP) {
                 reachMessageId = reachMessageIdUp;
@@ -7609,10 +7616,6 @@ public class FragmentChat extends BaseFragment
                 isWaitingForHistoryDown = true;
             }
 
-            /**
-             * show progress when start for get history from server
-             */
-            progressItem(SHOW, direction);
 
             int limit = Config.LIMIT_GET_HISTORY_NORMAL;
             if ((firstUp && direction == UP) || (firstDown && direction == DOWN)) {
@@ -7738,14 +7741,23 @@ public class FragmentChat extends BaseFragment
                      * if time out came up try again for get history with previous value
                      */
                     if (majorCode == 5) {
-                        if (direction == UP) {
-                            //getOnlineMessage(messageIdGetHistory, UP);
-                        } else {
-                            //getOnlineMessage(messageIdGetHistory, DOWN);
-                        }
+                        getOnlineMessageAfterTimeOut(messageIdGetHistory, direction);
                     }
                 }
             });
+        }
+    }
+
+    private void getOnlineMessageAfterTimeOut(final long messageIdGetHistory, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+        if (G.userLogin) {
+            getOnlineMessage(messageIdGetHistory, direction);
+        } else {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getOnlineMessageAfterTimeOut(messageIdGetHistory, direction);
+                }
+            }, 1000);
         }
     }
 
