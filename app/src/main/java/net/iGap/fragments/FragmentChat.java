@@ -2913,7 +2913,8 @@ public class FragmentChat extends BaseFragment
                         int selectedPosition = -1;
                         for (int i = (mAdapter.getAdapterItemCount() - 1); i >= 0; i--) {
                             try {
-                                if (Long.parseLong(mAdapter.getAdapterItem(i).mMessage.messageID) == clearId) {
+                                StructMessageInfo structMessageInfo = mAdapter.getAdapterItem(i).mMessage;
+                                if (structMessageInfo != null && Long.parseLong(structMessageInfo.messageID) == clearId) {
                                     selectedPosition = i;
                                     break;
                                 }
@@ -7737,6 +7738,11 @@ public class FragmentChat extends BaseFragment
                      * if time out came up try again for get history with previous value
                      */
                     if (majorCode == 5) {
+                        if (direction == UP) {
+                            isWaitingForHistoryUp = false;
+                        } else {
+                            isWaitingForHistoryDown = false;
+                        }
                         getOnlineMessageAfterTimeOut(messageIdGetHistory, direction);
                     }
                 }

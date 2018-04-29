@@ -1945,7 +1945,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 txtNavName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavName.getText().toString()));
             }
             if (updateFromServer) {
-                getUserInfo(realmUserInfo);
+                //getUserInfo(realmUserInfo);
             }
             setImage();
         }
