@@ -199,7 +199,7 @@ public final class StartupActions {
 
         if (sharedPreferences.getInt(SHP_SETTING.KEY_SDK_ENABLE, 0) == 1) {
             if (G.DIR_SDCARD_EXTERNAL.equals("")) {
-                List<String> storageList = FileUtils.getSdCardPathList(true);
+                List<String> storageList = FileUtils.getSdCardPathList();
                 if (storageList.size() > 0) {
                     G.DIR_SDCARD_EXTERNAL = storageList.get(0);
                     selectedStorage = G.DIR_SDCARD_EXTERNAL + IGAP;
