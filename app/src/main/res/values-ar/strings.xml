@@ -2121,6 +2121,6 @@
   <string name="lbl_brightness">سطوع</string>
   <string name="lbl_contrast">تناقض</string>
   <string name="lbl_saturation">التشبع</string>
-  <string name="undo">نصح بالعدول</string>
+  <string name="tab_filters">منقي</string>
   <string name="tab_edit">تصحيح</string>
 </resources>

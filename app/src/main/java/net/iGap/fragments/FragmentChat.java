@@ -1521,7 +1521,7 @@ public class FragmentChat extends BaseFragment
                 unreadCount = realmRoom.getUnreadCount();
                 firstUnreadMessage = realmRoom.getFirstUnreadMessage();
                 savedScrollMessageId = realmRoom.getLastScrollPositionMessageId();
-
+                firstVisiblePositionOffset = realmRoom.getLastScrollPositionOffset();
                 if (isChatReadOnly) {
                     viewAttachFile.setVisibility(View.GONE);
                     (rootView.findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
@@ -4787,23 +4787,20 @@ public class FragmentChat extends BaseFragment
     private void storingLastPosition() {
         try {
             if (recyclerView != null && mAdapter != null) {
-                int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                if (mAdapter.getItem(lastVisibleItemPosition) instanceof TimeItem || mAdapter.getItem(lastVisibleItemPosition) instanceof UnreadMessage) {
-                    lastVisibleItemPosition--;
+
+                int firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                if (mAdapter.getItem(firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(firstVisiblePosition) instanceof UnreadMessage) {
+                    firstVisiblePosition++;
                 }
 
-                if (mAdapter.getItem(lastVisibleItemPosition) instanceof TimeItem || mAdapter.getItem(lastVisibleItemPosition) instanceof UnreadMessage) {
-                    lastVisibleItemPosition--;
+                if (mAdapter.getItem(firstVisiblePosition) instanceof TimeItem || mAdapter.getItem(firstVisiblePosition) instanceof UnreadMessage) {
+                    firstVisiblePosition++;
                 }
 
                 long lastScrolledMessageID = 0;
 
-                //if (firstVisiblePosition + 15 < mAdapter.getAdapterItemCount()) {
-                //    lastScrolledMessageID = parseLong(mAdapter.getItem(firstVisiblePosition).mMessage.messageID);
-                //}
-
-                if (lastVisibleItemPosition < mAdapter.getAdapterItemCount() - 2) {
-                    lastScrolledMessageID = parseLong(mAdapter.getItem(lastVisibleItemPosition).mMessage.messageID);
+                if (firstVisiblePosition + 10 < mAdapter.getAdapterItemCount()) {
+                    lastScrolledMessageID = parseLong(mAdapter.getItem(firstVisiblePosition).mMessage.messageID);
                 }
 
                 saveMessageIdPositionState(lastScrolledMessageID);
@@ -4841,7 +4838,7 @@ public class FragmentChat extends BaseFragment
      * save latest messageId position that user saw in chat before close it
      */
     private void saveMessageIdPositionState(final long messageId) {
-        RealmRoom.setLastScrollPosition(mRoomId, messageId);
+        RealmRoom.setLastScrollPosition(mRoomId, messageId, firstVisiblePositionOffset);
     }
 
     /**
@@ -7311,6 +7308,7 @@ public class FragmentChat extends BaseFragment
     private long progressIdentifierUp = 0; // store identifier for Up progress item and use it if progress not removed from view after check 'instanceOf' in 'progressItem' method
     private long progressIdentifierDown = 0; // store identifier for Down progress item and use it if progress not removed from view after check 'instanceOf' in 'progressItem' method
     private int firstVisiblePosition; // difference between start of adapter item and items that Showing.
+    private int firstVisiblePositionOffset; // amount of offset from top of view for first visible item in adapter
     private int visibleItemCount; // visible item in recycler view
     private int totalItemCount; // all item in recycler view
     private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
@@ -7472,7 +7470,7 @@ public class FragmentChat extends BaseFragment
             if (hasSavedState()) {
                 int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
                 LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
-                linearLayout.scrollToPositionWithOffset(position, 0);
+                linearLayout.scrollToPositionWithOffset(position, firstVisiblePositionOffset);
                 savedScrollMessageId = 0;
             }
         }
@@ -7484,9 +7482,16 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                visibleItemCount = (recyclerView.getLayoutManager()).getChildCount();
-                totalItemCount = (recyclerView.getLayoutManager()).getItemCount();
-                firstVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+                LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
+                int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
+                View view = linearLayoutManager.getChildAt(0);
+                if (firstVisiblePosition > 0 && view != null) {
+                    firstVisiblePositionOffset = view.getTop();
+                }
+
+                visibleItemCount = linearLayoutManager.getChildCount();
+                totalItemCount = linearLayoutManager.getItemCount();
 
                 if (firstVisiblePosition < scrollEnd) {
                     /**

@@ -202,6 +202,11 @@ public class RealmMigration implements io.realm.RealmMigration {
                 realmAttachment.addField("url", String.class);
             }
 
+            RealmObjectSchema realmRoom = schema.get(RealmRoom.class.getSimpleName());
+            if (realmRoom != null) {
+                realmRoom.addField("lastScrollPositionOffset", int.class, FieldAttribute.REQUIRED);
+            }
+
             oldVersion++;
         }
     }

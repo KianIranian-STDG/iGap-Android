@@ -512,7 +512,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         map.setTileSource(new OnlineTileSourceBase("USGS Topo", ZOOM_LEVEL_MIN, ZOOM_LEVEL_MAX, 256, ".png", new String[]{url}) {
             @Override
             public String getTileURLString(MapTile aTile) {
-                return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;
+                String mapUrl = "http://mt.google.com/vt/lyrs=r&x=" + aTile.getX() + "&y=" + aTile.getY() + "&z=" + aTile.getZoomLevel();
+                return mapUrl;
+                //return getBaseUrl() + aTile.getZoomLevel() + "/" + aTile.getX() + "/" + aTile.getY() + mImageFilenameEnding;
             }
         });
 

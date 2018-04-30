@@ -1163,7 +1163,7 @@
   <string name="lbl_brightness">روشنایی</string>
   <string name="lbl_contrast">تضاد</string>
   <string name="lbl_saturation">اشباع</string>
-  <string name="undo">لغو تغییرات</string>
+  <string name="tab_filters">فیلتر</string>
   <string name="tab_edit">ویرایش</string>
 
 </resources>
