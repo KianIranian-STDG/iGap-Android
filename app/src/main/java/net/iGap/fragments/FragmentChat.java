@@ -5946,14 +5946,15 @@ public class FragmentChat extends BaseFragment
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ArrayList<String> pathStrings = listPathString;
-                                    if (pathStrings.size() == 1) {
+
+                                    if (listPathString.size() == 1) {
                                         showDraftLayout();
+                                        listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
                                         setDraftMessage(AttachFile.requestOpenGalleryForImageMultipleSelect);
                                         latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
                                         //sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, pathStrings.get(0));
                                     } else {
-                                        for (String path : pathStrings) {
+                                        for (String path : listPathString) {
                                             //if (!path.toLowerCase().endsWith(".gif")) {
                                             String localPathNew = attachFile.saveGalleryPicToLocal(path);
                                             sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localPathNew);
@@ -6471,13 +6472,9 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void Allow() throws IOException {
 
+                        fastItemAdapter.add(new AdapterCamera("").withIdentifier(99));
                         for (int i = 0; i < itemGalleryList.size(); i++) {
-                            if (i == 0) {
-                                fastItemAdapter.add(new AdapterCamera("").withIdentifier(99 + i));
-                                fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
-                            } else {
-                                fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
-                            }
+                            fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
                             isPermissionCamera = true;
                         }
                         G.handler.postDelayed(new Runnable() {
