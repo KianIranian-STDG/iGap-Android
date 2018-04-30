@@ -3825,6 +3825,7 @@ public class FragmentChat extends BaseFragment
                     String cacheId = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getCacheId() : message.getAttachment().cashID;
                     final String name = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getName() : message.getAttachment().name;
                     String fileToken = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getToken() : message.getAttachment().token;
+                    String fileUrl = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getUrl() : message.getAttachment().url;
                     Long size = message.forwardedFrom != null ? message.forwardedFrom.getAttachment().getSize() : message.getAttachment().size;
 
                     if (cacheId == null) {
@@ -3834,7 +3835,7 @@ public class FragmentChat extends BaseFragment
 
                     final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
                     if (fileToken != null && fileToken.length() > 0 && size > 0) {
-                        HelperDownloadFile.startDownload(message.messageID, fileToken, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
+                        HelperDownloadFile.startDownload(message.messageID, fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(String path, int progress) {
 

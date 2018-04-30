@@ -7,6 +7,8 @@ import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.downloader.PRDownloader;
+import com.downloader.PRDownloaderConfig;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -82,6 +84,7 @@ public final class StartupActions {
         manageSettingPreferences();
         makeFolder();
         ConnectionManager.manageConnection();
+        configDownloadManager();
 
 
         new CallObserver();
@@ -90,6 +93,16 @@ public final class StartupActions {
          */
         new HelperDownloadFile();
         new HelperUploadFile();
+    }
+
+    private void configDownloadManager() {
+
+        PRDownloaderConfig config = PRDownloaderConfig.newBuilder()
+                .setDatabaseEnabled(true)
+                .build();
+        PRDownloader.initialize(G.context, config);
+
+
     }
 
     /**
@@ -274,12 +287,22 @@ public final class StartupActions {
     private void manageSettingPreferences() {
         SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
-        notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
-        toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor);
-        attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
-        headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
-        G.progressColor = preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor);
+        if (preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false)) {
+            appBarColor = Config.default_dark_appBarColor;
+            notificationColor = Config.default_dark_notificationColor;
+            toggleButtonColor = Config.default_dark_toggleButtonColor;
+            attachmentColor = Config.default_dark_attachmentColor;
+            headerTextColor = Config.default_dark_headerTextColor;
+            G.progressColor = Config.default_dark_progressColor;
+        } else {
+            appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
+            notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
+            toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor);
+            attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
+            headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
+            G.progressColor = preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor);
+        }
+
         G.multiTab = preferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
 
         // setting for show layout vote in channel
