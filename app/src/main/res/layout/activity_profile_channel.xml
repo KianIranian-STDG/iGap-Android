@@ -24,7 +24,7 @@
     android:id="@+id/fragmentContainer_channel_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    style="?backgroundColorSettingTheme"
     android:clickable="true"
     tools:ignore="MissingPrefix">
 
@@ -173,14 +173,14 @@
       <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        style="?backgroundColorSettingTheme"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@android:color/white"
+          style="?backgroundColorSettingTheme"
           android:descendantFocusability="beforeDescendants"
           android:focusableInTouchMode="true"
           android:orientation="vertical">
@@ -237,7 +237,7 @@
                     android:paddingStart="@dimen/dp4"
                     android:singleLine="true"
                     android:text="@string/channel_name"
-                    android:textColor="@color/black_register"
+                    style="?textTitleColorSettingTheme"
                     android:textSize="@dimen/dp15" />
 
                   <LinearLayout
@@ -315,7 +315,7 @@
                 android:paddingStart="@dimen/dp4"
                 android:singleLine="true"
                 android:text="@{fragmentChannelProfileViewModel.callbackChannelLinkTitle , default=@string/channel_link}"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15" />
 
               <TextView
@@ -352,7 +352,7 @@
                 android:paddingStart="@dimen/dp4"
                 android:singleLine="true"
                 android:text="@string/channel_description"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15" />
 
               <net.iGap.module.EmojiTextViewE
@@ -389,7 +389,7 @@
                 android:paddingStart="@dimen/dp4"
                 android:singleLine="true"
                 android:text="@string/shared_media"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15" />
 
               <TextView
@@ -412,7 +412,7 @@
             android:id="@+id/agp_root_layout_add_member"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/gray_f2"
+            style="?backgroundColorSettingTheme_2"
             android:gravity="left"
             android:orientation="vertical"
             android:visibility="@{fragmentChannelProfileViewModel.addMemberVisibility}">
@@ -460,6 +460,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_margin="@dimen/dp8"
                 android:text="@string/add_new_member"
+                style="?textSubColorSettingTheme"
                 android:textSize="@dimen/dp16" />
 
 
@@ -507,6 +508,7 @@
                 android:layout_margin="@dimen/dp8"
                 android:gravity=""
                 android:text="@string/show_member"
+                style="?textSubColorSettingTheme"
                 android:textSize="@dimen/dp16" />
             </LinearLayout>
 
@@ -519,6 +521,7 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:orientation="vertical"
+            style="?backgroundColorSettingTheme"
             android:visibility="@{fragmentChannelProfileViewModel.settingVisibility}">
 
             <net.iGap.module.HeaderTextview
@@ -558,7 +561,7 @@
                 android:paddingStart="@dimen/dp16"
                 android:singleLine="true"
                 android:text="@string/list_admin"
-                android:textColor="@android:color/black"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15" />
 
 
@@ -588,7 +591,7 @@
                 android:paddingStart="@dimen/dp16"
                 android:singleLine="true"
                 android:text="@string/list_modereator"
-                android:textColor="@android:color/black"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15" />
 
 
@@ -621,7 +624,7 @@
                   android:gravity="center_vertical"
                   android:singleLine="true"
                   android:text="@string/member_can_add_new_member"
-                  android:textColor="@android:color/black"
+                  style="?textTitleColorSettingTheme"
                   android:textSize="@dimen/dp15" />
 
                 <ToggleButton
@@ -662,7 +665,7 @@
                 android:paddingStart="@dimen/dp16"
                 android:singleLine="true"
                 android:text="@string/notificaion_and_sound"
-                android:textColor="@android:color/black"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15" />
 
             </LinearLayout>
@@ -690,7 +693,7 @@
                 android:paddingStart="@dimen/dp16"
                 android:singleLine="true"
                 android:text="@{fragmentChannelProfileViewModel.callBackDeleteLeaveChannel , default=@string/delete_and_leave_channel}"
-                android:textColor="@android:color/black"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15" />
             </LinearLayout>
 
@@ -720,7 +723,7 @@
                 android:gravity="center_vertical"
                 android:paddingTop="@dimen/dp4"
                 android:text="@string/st_signature"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -761,7 +764,7 @@
                 android:gravity="center_vertical"
                 android:paddingTop="@dimen/dp4"
                 android:text="@string/show_channel_vote"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 

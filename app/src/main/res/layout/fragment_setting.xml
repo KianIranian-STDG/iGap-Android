@@ -179,7 +179,7 @@
     <android.support.v4.widget.NestedScrollView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="@android:color/white"
+      style="?backgroundColorSettingTheme"
       android:clipToPadding="false"
       app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -187,16 +187,16 @@
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true"
+        style="?backgroundColorSettingTheme"
         android:orientation="vertical">
 
 
         <LinearLayout
+          style="?backgroundColorSettingTheme"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@android:color/white"
           android:orientation="vertical"
           android:paddingBottom="@dimen/dp4"
           android:paddingLeft="@dimen/dp16"
@@ -231,13 +231,13 @@
 
 
               <TextView
+                style="?textTitleColorSettingTheme"
                 fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:text="@string/name"
-                android:textColor="@color/black_register"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -254,7 +254,7 @@
                 android:paddingStart="@dimen/dp4"
                 android:singleLine="true"
                 android:text="@{fragmentSettingViewModel.callbackSetName , default=@string/first_name}"
-                android:textColor="@color/gray_5c"
+                style="?textSubColorSettingTheme"
                 android:textSize="@dimen/dp14"
                 android:theme="@style/Setting_editText"
                 app:emojiSize="@dimen/dp14" />
@@ -285,7 +285,7 @@
                 android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:text="@string/st_Gander"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -299,7 +299,7 @@
                 android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:text="@{fragmentSettingViewModel.callbackGander , default = @string/set_gender }"
-                android:textColor="@color/gray_5c"
+                style="?textSubColorSettingTheme"
                 android:textSize="@dimen/dp14"
                 android:theme="@style/Setting_editText" />
 
@@ -329,7 +329,7 @@
                 android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:text="@string/st_username"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -344,7 +344,7 @@
                 android:paddingStart="@dimen/dp4"
                 android:singleLine="true"
                 android:text="@{fragmentSettingViewModel.callbackSetUserName , default=@string/st_username}"
-                android:textColor="@color/gray_5c"
+                style="?textSubColorSettingTheme"
                 android:textSize="@dimen/dp14"
                 android:theme="@style/Setting_editText" />
             </LinearLayout>
@@ -371,7 +371,7 @@
                 android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:text="@string/st_email"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -386,7 +386,7 @@
                 android:paddingStart="@dimen/dp4"
                 android:singleLine="true"
                 android:text="@{fragmentSettingViewModel.callbackSetEmail , default = @string/set_email }"
-                android:textColor="@color/gray_5c"
+                style="?textSubColorSettingTheme"
                 android:textSize="@dimen/dp14"
                 android:theme="@style/Setting_editText"
 
@@ -409,7 +409,7 @@
               android:paddingEnd="@dimen/dp4"
               android:paddingStart="@dimen/dp4"
               android:text="@string/st_phoneNumber"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -428,7 +428,7 @@
                 android:paddingEnd="@dimen/dp4"
                 android:paddingStart="@dimen/dp4"
                 android:text="@{fragmentSettingViewModel.callbackSetPhoneNumber , default =@string/st_phoneNumber }"
-                android:textColor="@color/gray_5c"
+                style="?textSubColorSettingTheme"
                 android:textSize="@dimen/dp14"
                 android:textStyle="normal" />
             </RelativeLayout>
@@ -450,7 +450,7 @@
               android:paddingEnd="@dimen/dp4"
               android:paddingStart="@dimen/dp4"
               android:text="@string/st_bio"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -463,7 +463,7 @@
               android:paddingEnd="@dimen/dp4"
               android:paddingStart="@dimen/dp4"
               android:text="@{fragmentSettingViewModel.callbackSetBio , default = @string/st_bio }"
-              android:textColor="@color/gray_5c"
+              style="?textSubColorSettingTheme"
               android:textSize="@dimen/dp14"
               android:theme="@style/Setting_editText"
 
@@ -473,10 +473,10 @@
         </LinearLayout>
 
         <LinearLayout
+          style="?backgroundColorSettingTheme_2"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/dp8"
-          android:background="@color/st_background2"
           android:orientation="vertical"
           android:visibility="visible">
 
@@ -508,14 +508,14 @@
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
             android:text="@string/st_title_notification_sounds"
-            android:textColor="@color/black_register"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
 
           <TextView
@@ -529,14 +529,14 @@
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp8"
             android:text="@string/st_title_Privacy_Security"
-            android:textColor="@color/black_register"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
 
           <RelativeLayout
@@ -557,7 +557,7 @@
               android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp8"
               android:text="@string/data_storage"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -567,7 +567,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <LinearLayout
             android:id="@+id/st_layout_language"
@@ -587,7 +587,7 @@
               android:paddingStart="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_Language"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -610,7 +610,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <LinearLayout
             android:id="@+id/vg_toggle_dataShams"
@@ -631,7 +631,7 @@
               android:paddingStart="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@string/date"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -654,7 +654,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <LinearLayout
 
@@ -676,7 +676,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_Auto_Rotate"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -696,7 +696,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText"
+            style="?lineColorSettingTheme"
             android:visibility="visible" />
 
           <LinearLayout
@@ -720,7 +720,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_multi_tab"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -742,9 +742,9 @@
 
 
         <LinearLayout
+          style="?backgroundColorSettingTheme"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@android:color/white"
           android:orientation="vertical"
           android:paddingTop="@dimen/dp8"
           android:visibility="visible">
@@ -779,7 +779,7 @@
               android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_title_message_textSize"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -804,7 +804,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <TextView
             android:id="@+id/st_txt_chatBackground"
@@ -817,7 +817,7 @@
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
             android:text="@string/st_chatBackground"
-            android:textColor="@color/black_register"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
@@ -825,7 +825,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <LinearLayout
             android:layout_width="match_parent"
@@ -842,7 +842,7 @@
               android:layout_weight="1"
               android:gravity="center_vertical"
               android:text="@string/show_vote_layout_in_channel"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -865,7 +865,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <LinearLayout
             android:layout_width="match_parent"
@@ -882,7 +882,7 @@
               android:layout_weight="1"
               android:gravity="center_vertical"
               android:text="@string/show_sender_name_in_group"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -903,7 +903,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <LinearLayout
 
@@ -927,7 +927,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_send_by_enter"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -947,7 +947,7 @@
           <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/st_background2"
+            style="?backgroundColorSettingTheme_2"
             android:orientation="vertical"
             android:paddingTop="@dimen/dp4"
             android:visibility="visible">
@@ -967,7 +967,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1dp"
-              android:background="@color/background_editText" />
+              style="?lineColorSettingTheme" />
 
             <LinearLayout
 
@@ -989,7 +989,7 @@
                 android:gravity="center_vertical"
                 android:paddingTop="@dimen/dp4"
                 android:text="@string/st_Auto_Rotate"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -1009,7 +1009,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1dp"
-              android:background="@color/background_editText"
+              style="?lineColorSettingTheme"
               android:visibility="visible" />
 
 
@@ -1034,7 +1034,7 @@
                 android:paddingRight="@dimen/dp16"
                 android:paddingTop="@dimen/dp4"
                 android:text="@string/app_theme"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -1053,7 +1053,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1dp"
-              android:background="@color/background_editText" />
+              style="?lineColorSettingTheme" />
 
             <LinearLayout
               android:layout_width="match_parent"
@@ -1076,7 +1076,7 @@
                 android:paddingRight="@dimen/dp16"
                 android:paddingTop="@dimen/dp4"
                 android:text="@string/app_notif_color"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -1097,7 +1097,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1dp"
-              android:background="@color/background_editText"
+              style="?lineColorSettingTheme"
               android:visibility="gone" />
 
             <LinearLayout
@@ -1122,7 +1122,7 @@
                 android:paddingRight="@dimen/dp16"
                 android:paddingTop="@dimen/dp4"
                 android:text="@string/toggle_botton_color"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -1141,7 +1141,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1dp"
-              android:background="@color/background_editText" />
+              style="?lineColorSettingTheme" />
 
             <LinearLayout
               android:layout_width="match_parent"
@@ -1164,7 +1164,7 @@
                 android:paddingRight="@dimen/dp16"
                 android:paddingTop="@dimen/dp4"
                 android:text="@string/send_and_attach_botton_color"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -1183,7 +1183,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1dp"
-              android:background="@color/background_editText" />
+              style="?lineColorSettingTheme" />
 
             <LinearLayout
               android:layout_width="match_parent"
@@ -1206,7 +1206,7 @@
                 android:paddingRight="@dimen/dp16"
                 android:paddingTop="@dimen/dp4"
                 android:text="@string/default_header_font_color"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -1225,7 +1225,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1dp"
-              android:background="@color/background_editText" />
+              style="?lineColorSettingTheme" />
 
 
             <LinearLayout
@@ -1249,7 +1249,7 @@
                 android:paddingRight="@dimen/dp16"
                 android:paddingTop="@dimen/dp4"
                 android:text="@string/default_progress_color"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -1268,7 +1268,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1dp"
-              android:background="@color/background_editText" />
+              style="?lineColorSettingTheme" />
 
             <LinearLayout
               android:layout_width="match_parent"
@@ -1290,7 +1290,7 @@
                 android:paddingRight="@dimen/dp16"
                 android:paddingTop="@dimen/dp4"
                 android:text="@string/set_color_to_default"
-                android:textColor="@color/black_register"
+                style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
 
@@ -1305,7 +1305,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText"
+            style="?lineColorSettingTheme"
             android:visibility="gone" />
 
           <RelativeLayout
@@ -1344,7 +1344,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_inApp_Browser"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -1353,7 +1353,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText"
+            style="?lineColorSettingTheme"
             android:visibility="gone" />
 
 
@@ -1361,9 +1361,9 @@
 
 
         <LinearLayout
+          style="?backgroundColorSettingTheme"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@color/white"
           android:orientation="vertical"
           android:paddingTop="@dimen/dp4"
           android:visibility="visible">
@@ -1392,14 +1392,14 @@
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
             android:text="@string/st_auto_download_data"
-            android:textColor="@color/black_register"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <TextView
             android:id="@+id/st_txt_autoDownloadWifi"
@@ -1411,14 +1411,14 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_auto_download_wifi"
-            android:textColor="@color/black_register"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <TextView
             android:id="@+id/st_txt_autoDownloadRoaming"
@@ -1430,14 +1430,14 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:text="@string/st_auto_download_roaming"
-            android:textColor="@color/black_register"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <!--this part is Gone-->
           <RelativeLayout
@@ -1476,7 +1476,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_Enable_Animation"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -1486,7 +1486,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText"
+            style="?lineColorSettingTheme"
             android:visibility="gone" />
 
           <LinearLayout
@@ -1509,7 +1509,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_auto_gif"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -1528,7 +1528,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <LinearLayout
             android:layout_width="match_parent"
@@ -1549,7 +1549,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_save_to_gallery"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -1570,7 +1570,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <LinearLayout
             android:layout_width="match_parent"
@@ -1593,7 +1593,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_compress"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -1615,7 +1615,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <LinearLayout
             android:layout_width="match_parent"
@@ -1638,7 +1638,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/st_trim"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -1659,7 +1659,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <LinearLayout
             android:layout_width="match_parent"
@@ -1680,7 +1680,7 @@
               android:gravity="center_vertical"
               android:paddingTop="@dimen/dp4"
               android:text="@string/open_default_player"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -1698,7 +1698,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <LinearLayout
             android:layout_width="match_parent"
@@ -1717,7 +1717,7 @@
               android:layout_weight="1"
               android:gravity="center_vertical"
               android:text="@string/st_crop"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -1737,7 +1737,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <LinearLayout
             android:layout_width="match_parent"
@@ -1756,7 +1756,7 @@
               android:layout_weight="1"
               android:gravity="center_vertical"
               android:text="@string/st_cameraBottomSheet"
-              android:textColor="@color/black_register"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal" />
 
@@ -1778,9 +1778,9 @@
 
 
         <LinearLayout
+          style="?backgroundColorSettingTheme_2"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@color/st_background2"
           android:orientation="vertical"
           android:visibility="visible">
 
@@ -1806,7 +1806,7 @@
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
             android:text="@string/st_ask_question"
-            android:textColor="@color/black_register"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp15"
             android:textStyle="normal"
             android:visibility="gone" />
@@ -1814,7 +1814,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText"
+            style="?lineColorSettingTheme"
             android:visibility="gone" />
 
 
@@ -1829,14 +1829,14 @@
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
             android:text="@string/st_privacy_iGap_home"
-            android:textColor="@color/black_register"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <TextView
             android:id="@+id/st_txt_privacy_blog"
@@ -1849,7 +1849,7 @@
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
             android:text="@string/st_privacy_blog"
-            android:textColor="@color/black_register"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
@@ -1857,7 +1857,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
           <TextView
             android:id="@+id/st_txt_create_ticket"
@@ -1870,7 +1870,7 @@
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
             android:text="@string/st_privacy_create_ticket"
-            android:textColor="@color/black_register"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
@@ -1878,7 +1878,7 @@
           <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/background_editText" />
+            style="?lineColorSettingTheme" />
 
 
           <TextView
@@ -1891,7 +1891,7 @@
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
             android:text="@{fragmentSettingViewModel.callbackVersionApp , default=@string/iGap_version}"
-            android:textColor="@color/black_register"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp13"
             android:textStyle="normal" />
         </LinearLayout>

@@ -1106,6 +1106,7 @@ public class FragmentSettingViewModel {
             editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_dark_attachmentColor);
             editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_dark_headerTextColor);
             editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_dark_progressColor);
+            editor.putString(SHP_SETTING.KEY_MENU_BACKGROUND_COLOR, Config.default_dark_menuBackgroundColor);
             editor.apply();
 
             appBarColor = Config.default_dark_appBarColor;
@@ -1136,6 +1137,7 @@ public class FragmentSettingViewModel {
             sendAndAttachColorClick(Color.parseColor(Config.default_attachmentColor));
             appBarColorClick(Color.parseColor(Config.default_appBarColor));
             progressColorClick(Color.parseColor(Config.default_appBarColor), false);
+            menuBackgroundClick(Color.parseColor(Config.default_appBarColor), false);
         }
 
     }
@@ -1868,6 +1870,17 @@ public class FragmentSettingViewModel {
         //if (updateUi && G.onRefreshActivity != null) {
         //    G.onRefreshActivity.refresh("");
         //}
+    }
+
+    private void menuBackgroundClick(int color, boolean updateUi) {
+
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+//        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgDefaultProgressColor.getBackground();
+//        bgShape.setColor(color);
+        G.progressColor = "#" + Integer.toHexString(color);
+        editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
+        editor.apply();
+
     }
 
     private void toggleBottomClick(int color) {

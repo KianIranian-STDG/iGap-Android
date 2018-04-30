@@ -5,7 +5,7 @@
   android:id="@+id/menu_parent_layout"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@android:color/white"
+  style="?backgroundColorSettingTheme"
   android:clickable="true"
   tools:ignore="MissingPrefix">
 
@@ -225,7 +225,7 @@
         <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
-          android:background="@color/background_editText" />
+          style="?lineColorSettingTheme" />
 
         <TextView
           android:id="@+id/txtNon_User"

@@ -114,6 +114,7 @@ public class G extends MultiDexApplication {
     public static String attachmentColor;
     public static String progressColor;
     public static String headerTextColor;
+    public static String menuBackgroundColor;
     public static String authorHash;
     public static String displayName;
     public static boolean isAppInFg = false;

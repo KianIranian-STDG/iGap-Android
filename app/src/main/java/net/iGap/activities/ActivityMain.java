@@ -365,12 +365,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        setTheme(R.style.AppThemeTranslucent);
+//        setTheme(R.style.AppThemeTranslucent);
 
         if (G.isFirstPassCode) {
             openActivityPassCode();
         }
-
         //if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
         //isNeedToRegister = true; // continue app even don't have storage permission
         //isOnGetPermission = true;
@@ -443,8 +442,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 editor.apply();
             }
         }
-
-
+        SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        if (preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false)) {
+            this.setTheme(R.style.Material_blackCustom);
+        } else {
+            this.setTheme(R.style.Material_lightCustom);
+        }
         setContentView(R.layout.activity_main);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

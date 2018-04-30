@@ -60,6 +60,7 @@ import static net.iGap.G.helperNotificationAndBadge;
 import static net.iGap.G.imageFile;
 import static net.iGap.G.imageLoader;
 import static net.iGap.G.isSaveToGallery;
+import static net.iGap.G.menuBackgroundColor;
 import static net.iGap.G.notificationColor;
 import static net.iGap.G.selectedLanguage;
 import static net.iGap.G.toggleButtonColor;
@@ -281,6 +282,7 @@ public final class StartupActions {
             attachmentColor = Config.default_dark_attachmentColor;
             headerTextColor = Config.default_dark_headerTextColor;
             G.progressColor = Config.default_dark_progressColor;
+            menuBackgroundColor = Config.default_dark_menuBackgroundColor;
         } else {
             appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
             notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
@@ -288,6 +290,7 @@ public final class StartupActions {
             attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
             headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
             G.progressColor = preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor);
+            headerTextColor = preferences.getString(SHP_SETTING.KEY_MENU_BACKGROUND_COLOR, Config.default_dark_menuBackgroundColor);
         }
 
         G.multiTab = preferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);

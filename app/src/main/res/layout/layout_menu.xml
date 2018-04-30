@@ -90,14 +90,14 @@
 
 
       <FrameLayout
+        android:id="@+id/lm_layout_main"
+        style="?backgroundColorMenuTheme"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:layout_height="wrap_content">
 
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@color/white"
           android:orientation="vertical"
           android:paddingEnd="@dimen/dp8"
           android:paddingLeft="@dimen/dp8"
@@ -114,6 +114,7 @@
             android:layout_marginTop="@dimen/dp16">
 
             <net.iGap.module.MaterialDesignTextView
+              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_new_chat"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
@@ -121,7 +122,6 @@
               android:minWidth="@dimen/dp32"
               android:text="@string/md_user_account_box"
               android:textAppearance="@style/TextIconAppearance.menu"
-              android:textColor="@color/grayNew"
               android:textSize="@dimen/dp20"
               android:textStyle="bold"
 
@@ -129,6 +129,7 @@
 
             <TextView
               android:id="@+id/textView6"
+              style="?textColorMenuTheme"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -139,7 +140,6 @@
               android:paddingRight="@dimen/dp8"
               android:paddingTop="@dimen/dp8"
               android:text="@string/New_Chat"
-              android:textColor="@color/black90"
               android:textSize="@dimen/dp14"
 
               />
@@ -156,6 +156,7 @@
             android:orientation="horizontal">
 
             <net.iGap.module.MaterialDesignTextView
+              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_group"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
@@ -163,10 +164,10 @@
               android:minWidth="@dimen/dp32"
               android:text="@string/md_users_social_symbol"
               android:textAppearance="@style/TextIconAppearance.menu"
-              android:textColor="@color/grayNew"
               android:textSize="@dimen/dp20" />
 
             <TextView
+              style="?textColorMenuTheme"
               android:id="@+id/textView9"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
@@ -178,7 +179,6 @@
               android:paddingRight="@dimen/dp8"
               android:paddingTop="@dimen/dp8"
               android:text="@string/New_Group"
-              android:textColor="@color/black90"
               android:textSize="@dimen/dp14"
 
               />
@@ -196,6 +196,7 @@
             android:orientation="horizontal">
 
             <TextView
+              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_channel"
               fontPath="fonts/iGap-Fontico.ttf"
               android:layout_width="wrap_content"
@@ -203,12 +204,12 @@
               android:gravity="center"
               android:minWidth="@dimen/dp32"
               android:text="@string/md_channel_icon"
-              android:textColor="@color/grayNew"
               android:textSize="@dimen/dp20"
 
               />
 
             <TextView
+              style="?textColorMenuTheme"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
@@ -219,7 +220,6 @@
               android:paddingRight="@dimen/dp8"
               android:paddingTop="@dimen/dp8"
               android:text="@string/New_Chanel"
-              android:textColor="@color/black90"
               android:textSize="@dimen/dp14"
 
               />
@@ -235,6 +235,7 @@
 
 
             <net.iGap.module.MaterialDesignTextView
+              style="?iconColorMenuTheme"
               android:id="@+id/amr_btn_search"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
@@ -242,11 +243,11 @@
               android:minWidth="@dimen/dp32"
               android:text="@string/md_searching_magnifying_glass"
               android:textAppearance="@style/TextIconAppearance_toolbar"
-              android:textColor="@color/grayNew"
               android:textSize="@dimen/dp20" />
 
 
             <TextView
+              style="?textColorMenuTheme"
               android:id="@+id/textView4"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
@@ -258,7 +259,6 @@
               android:paddingRight="@dimen/dp8"
               android:paddingTop="@dimen/dp8"
               android:text="@string/igap_search"
-              android:textColor="@color/black90"
               android:textSize="@dimen/dp14" />
 
           </LinearLayout>
@@ -280,6 +280,7 @@
             android:orientation="horizontal">
 
             <net.iGap.module.MaterialDesignTextView
+              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_contacts"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
@@ -287,12 +288,12 @@
               android:minWidth="@dimen/dp32"
               android:text="@string/md_igap_contacts"
               android:textAppearance="@style/TextIconAppearance.menu"
-              android:textColor="@color/grayNew"
               android:textSize="@dimen/dp20"
 
               />
 
             <TextView
+              style="?textColorMenuTheme"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -303,7 +304,6 @@
               android:paddingRight="@dimen/dp8"
               android:paddingTop="@dimen/dp8"
               android:text="@string/contacts"
-              android:textColor="@color/black90"
               android:textSize="@dimen/dp14" />
 
           </LinearLayout>
@@ -318,6 +318,7 @@
             android:orientation="horizontal">
 
             <net.iGap.module.MaterialDesignTextView
+              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_setting"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
@@ -325,10 +326,10 @@
               android:minWidth="@dimen/dp32"
               android:text="@string/md_settings_cogwheel_button"
               android:textAppearance="@style/TextIconAppearance.menu"
-              android:textColor="@color/grayNew"
               android:textSize="@dimen/dp20" />
 
             <TextView
+              style="?textColorMenuTheme"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -339,7 +340,6 @@
               android:paddingRight="@dimen/dp8"
               android:paddingTop="@dimen/dp8"
               android:text="@string/chi_title_setting"
-              android:textColor="@color/black90"
 
               android:textSize="@dimen/dp14" />
 
@@ -356,18 +356,19 @@
             android:visibility="visible">
 
             <net.iGap.module.MaterialDesignTextView
+              style="?iconColorMenuTheme"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center"
               android:minWidth="@dimen/dp32"
               android:text="@string/md_nearby"
               android:textAppearance="@style/TextIconAppearance.menu"
-              android:textColor="@color/grayNew"
               android:textSize="@dimen/dp20"
 
               />
 
             <TextView
+              style="?textColorMenuTheme"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -378,7 +379,6 @@
               android:paddingRight="@dimen/dp8"
               android:paddingTop="@dimen/dp12"
               android:text="@string/igap_nearby"
-              android:textColor="@color/black90"
               android:textSize="@dimen/dp14"
 
               />
@@ -396,18 +396,19 @@
             android:visibility="visible">
 
             <net.iGap.module.MaterialDesignTextView
+              style="?iconColorMenuTheme"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center"
               android:minWidth="@dimen/dp32"
               android:text="@string/md_phone"
               android:textAppearance="@style/TextIconAppearance.menu"
-              android:textColor="@color/grayNew"
               android:textSize="@dimen/dp20"
 
               />
 
             <TextView
+              style="?textColorMenuTheme"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -418,7 +419,6 @@
               android:paddingRight="@dimen/dp8"
               android:paddingTop="@dimen/dp12"
               android:text="@string/calls"
-              android:textColor="@color/black90"
               android:textSize="@dimen/dp14"
 
               />
@@ -436,6 +436,7 @@
             android:orientation="horizontal">
 
             <net.iGap.module.MaterialDesignTextView
+              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_qrCode"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
@@ -443,10 +444,10 @@
               android:minWidth="@dimen/dp32"
               android:text="@string/md_qrCode"
               android:textAppearance="@style/TextIconAppearance.menu"
-              android:textColor="@color/grayNew"
               android:textSize="@dimen/dp20" />
 
             <TextView
+              style="?textColorMenuTheme"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -457,7 +458,6 @@
               android:paddingRight="@dimen/dp8"
               android:paddingTop="@dimen/dp8"
               android:text="@string/QrCode_Scan"
-              android:textColor="@color/black90"
 
               android:textSize="@dimen/dp14" />
 
@@ -473,6 +473,7 @@
             android:orientation="horizontal">
 
             <net.iGap.module.MaterialDesignTextView
+              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_invite_friends"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
@@ -481,10 +482,10 @@
               android:paddingRight="@dimen/dp4"
               android:text="@string/md_add_user_button"
               android:textAppearance="@style/TextIconAppearance.menu"
-              android:textColor="@color/grayNew"
               android:textSize="@dimen/dp20" />
 
             <TextView
+              style="?textColorMenuTheme"
               android:id="@+id/textView2"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
@@ -496,7 +497,6 @@
               android:paddingRight="@dimen/dp8"
               android:paddingTop="@dimen/dp8"
               android:text="@string/Invite_Friends"
-              android:textColor="@color/black90"
 
               android:textSize="@dimen/dp14" />
 
@@ -511,6 +511,7 @@
             android:orientation="horizontal">
 
             <net.iGap.module.MaterialDesignTextView
+              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_igap_faq"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
@@ -518,10 +519,10 @@
               android:minWidth="@dimen/dp32"
               android:text="@string/md_exit_app"
               android:textAppearance="@style/TextIconAppearance.menu"
-              android:textColor="@color/grayNew"
               android:textSize="@dimen/dp20" />
 
             <TextView
+              style="?textColorMenuTheme"
               android:id="@+id/textView3"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
@@ -533,7 +534,6 @@
               android:paddingRight="@dimen/dp8"
               android:paddingTop="@dimen/dp8"
               android:text="@string/log_out"
-              android:textColor="@color/black90"
               android:textSize="@dimen/dp14" />
 
           </LinearLayout>
