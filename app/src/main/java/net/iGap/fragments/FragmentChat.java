@@ -6919,7 +6919,14 @@ public class FragmentChat extends BaseFragment
         }
 
         realm.close();
-        scrollToEnd();
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                scrollToEnd();
+            }
+        }, 100);
+
     }
 
     public void sendCancelAction() {

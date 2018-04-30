@@ -341,7 +341,7 @@ public class AttachFile {
     public void requestTakePicture(final Fragment fragment) throws IOException {
 
         PackageManager packageManager = context.getPackageManager();
-        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) == false) {
+        if (!packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             Toast.makeText(context, context.getString(R.string.device_dosenot_camera_en), Toast.LENGTH_SHORT).show();
             return;
         }
