@@ -428,7 +428,7 @@ public class HelperError {
                 break;
             case 615:
                 if (minorCode == 1) {
-                    error = G.fragmentActivity.getResources().getString(R.string.E_615_1);
+                    //error = G.fragmentActivity.getResources().getString(R.string.E_615_1);
                 } else if (minorCode == 2) {
                     error = G.fragmentActivity.getResources().getString(R.string.E_615_2);
                 }
