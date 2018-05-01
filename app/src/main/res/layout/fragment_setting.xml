@@ -967,6 +967,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1dp"
+              android:visibility="gone"
               android:background="@color/background_editText" />
 
             <LinearLayout
@@ -976,6 +977,7 @@
               android:onClick="@{fragmentSettingViewModel::onClickThemeDark}"
               android:orientation="horizontal"
               android:paddingEnd="@dimen/dp16"
+              android:visibility="gone"
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
               android:paddingStart="@dimen/dp16">
