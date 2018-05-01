@@ -127,7 +127,7 @@ public class FragmentFilterImage extends Fragment implements FiltersListFragment
                 if (isChange) {
                     new MaterialDialog.Builder(G.fragmentActivity)
                             .title(R.string.tab_filters)
-                            .content(R.string.cancel)
+                            .content(R.string.filter_cancel_content)
                             .positiveText(R.string.save)
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
