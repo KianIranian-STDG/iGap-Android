@@ -20,6 +20,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.adapter.items.chat.ViewMaker;
+import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFillLookUpClass;
@@ -286,6 +287,14 @@ public final class StartupActions {
      */
     private void manageSettingPreferences() {
         SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+        /** clear map cache and use from new map tile url */
+        if (preferences.getBoolean(SHP_SETTING.KEY_MAP_CLEAR_CACHE, true)) {
+            FragmentiGapMap.deleteMapFileCash();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(SHP_SETTING.KEY_MAP_CLEAR_CACHE, false);
+            editor.apply();
+        }
 
         if (preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false)) {
             appBarColor = Config.default_dark_appBarColor;
