@@ -155,7 +155,6 @@
           android:id="@+id/menu_layout_addContact"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:background="@color/gray_f2"
           android:gravity="center"
           android:orientation="horizontal"
           android:paddingBottom="@dimen/dp6"
@@ -180,7 +179,7 @@
             android:singleLine="true"
             android:text="@string/menu_add_contact"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:textColor="@color/cardview_dark_background"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp16" />
 
         </LinearLayout>

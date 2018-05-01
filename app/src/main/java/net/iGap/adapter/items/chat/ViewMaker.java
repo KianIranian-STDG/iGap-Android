@@ -2,6 +2,7 @@ package net.iGap.adapter.items.chat;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatImageView;
@@ -511,7 +512,8 @@ public class ViewMaker {
         // ContextThemeWrapper newContext = new ContextThemeWrapper(G.context, R.style.ChatMessages_MaterialDesignTextView_Tick);
         ImageView cslr_txt_tic = new ImageView(context);
         cslr_txt_tic.setId(R.id.cslr_txt_tic);
-        cslr_txt_tic.setColorFilter(context.getResources().getColor(R.color.colorOldBlack));
+//        cslr_txt_tic.setColorFilter(context.getResources().getColor(R.color.colorOldBlack));
+        cslr_txt_tic.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
         //AppUtils.setImageDrawable(cslr_txt_tic, R.drawable.ic_double_check);
         LinearLayout.LayoutParams layout_311 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp16), ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_311.leftMargin = i_Dp(dp4);
@@ -1406,13 +1408,15 @@ public class ViewMaker {
         root_chat_sub_layout.setId(R.id.root_chat_sub_layout);
         LinearLayout.LayoutParams layout_553 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp68));
         root_chat_sub_layout.setLayoutParams(layout_553);
+        root_chat_sub_layout.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
         CircleImageView cs_img_contact_picture = new CircleImageView(G.context);
         cs_img_contact_picture.setId(R.id.cs_img_contact_picture);
         LinearLayout.LayoutParams layout_113 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp52), i_Dp(R.dimen.dp52));
         layout_113.gravity = Gravity.CENTER;
-        layout_113.setMargins(i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6));
+//        layout_113.setMargins(i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6));
         cs_img_contact_picture.setLayoutParams(layout_113);
+        cs_img_contact_picture.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
         root_chat_sub_layout.addView(cs_img_contact_picture);
 
@@ -1420,12 +1424,15 @@ public class ViewMaker {
         linearLayout_849.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_162 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         linearLayout_849.setLayoutParams(layout_162);
+        linearLayout_849.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
         LinearLayout linearLayout_938 = new LinearLayout(G.context);
         linearLayout_938.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams layout_347 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         layout_347.weight = 1;
         linearLayout_938.setLayoutParams(layout_347);
+        linearLayout_938.setBackgroundColor(Color.parseColor(G.backgroundTheme));
+
 
         LinearLayout linearLayout_353 = new LinearLayout(G.context);
         linearLayout_353.setGravity(Gravity.TOP | Gravity.LEFT);
@@ -1439,6 +1446,7 @@ public class ViewMaker {
         }
         layout_860.weight = 1;
         linearLayout_353.setLayoutParams(layout_860);
+        linearLayout_353.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
         LinearLayout linearLayout_922 = new LinearLayout(G.context);
         linearLayout_922.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
@@ -1455,7 +1463,7 @@ public class ViewMaker {
 
         MaterialDesignTextView cs_txt_chat_icon = new MaterialDesignTextView(G.context);
         cs_txt_chat_icon.setId(R.id.cs_txt_chat_icon);
-        cs_txt_chat_icon.setTextColor(Color.parseColor("#333333"));
+        cs_txt_chat_icon.setTextColor(Color.parseColor(G.textTitleTheme));
 
         setTextSize(cs_txt_chat_icon, R.dimen.dp14);
         LinearLayout.LayoutParams layout_525 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -1481,7 +1489,7 @@ public class ViewMaker {
         cs_txt_contact_name.setEllipsize(TextUtils.TruncateAt.END);
         cs_txt_contact_name.setSingleLine(true);
         cs_txt_contact_name.setEmojiSize(i_Dp(R.dimen.dp16));
-        cs_txt_contact_name.setTextColor(G.context.getResources().getColor(R.color.black90));
+        cs_txt_contact_name.setTextColor(Color.parseColor(G.textTitleTheme));
         setTextSize(cs_txt_contact_name, R.dimen.dp15);
         LinearLayout.LayoutParams layout_115 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         cs_txt_contact_name.setLayoutParams(layout_115);
@@ -1642,6 +1650,7 @@ public class ViewMaker {
 
         ImageView cslr_txt_tic = new ImageView(G.context);
         cslr_txt_tic.setId(R.id.cslr_txt_tic);
+        cslr_txt_tic.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
         LinearLayout.LayoutParams layout_516 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp16), i_Dp(R.dimen.dp16));
 
         if (HelperCalander.isPersianUnicode) {
@@ -1718,6 +1727,7 @@ public class ViewMaker {
         linearLayout_205.setId(R.id.mainContainer);
         LinearLayout.LayoutParams layout_218 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayout_205.setLayoutParams(layout_218);
+        linearLayout_205.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
         CircleImageView fcsl_imv_picture = new CircleImageView(G.context);
         fcsl_imv_picture.setId(R.id.fcsl_imv_picture);
@@ -1750,7 +1760,7 @@ public class ViewMaker {
         fcsl_txt_name.setPadding(0, 0, 0, dpToPixel(1));
         fcsl_txt_name.setText("Name");
         fcsl_txt_name.setSingleLine(true);
-        fcsl_txt_name.setTextColor(G.context.getResources().getColor(R.color.black90));
+        fcsl_txt_name.setTextColor(Color.parseColor(G.textTitleTheme));
         setTextSize(fcsl_txt_name, R.dimen.dp15);
         fcsl_txt_name.setTypeface(G.typeface_IRANSansMobile_Bold);
         LinearLayout.LayoutParams layout_415 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -1768,7 +1778,7 @@ public class ViewMaker {
         fcsl_txt_time_info.setGravity(Gravity.START);
         fcsl_txt_time_info.setSingleLine(true);
         fcsl_txt_time_info.setText("(4) 9:24 am");
-        fcsl_txt_time_info.setTextColor(G.context.getResources().getColor(R.color.gray_5c));
+        fcsl_txt_time_info.setTextColor(Color.parseColor(G.textSubTheme));
         setTextSize(fcsl_txt_time_info, R.dimen.dp12);
         fcsl_txt_time_info.setTypeface(G.typeface_IRANSansMobile);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -1823,6 +1833,7 @@ public class ViewMaker {
     public static View getViewRegisteredContacts() {
 
         LinearLayout linearLayout_main = new LinearLayout(G.context);
+        linearLayout_main.setBackgroundColor(Color.parseColor(G.backgroundTheme));
         linearLayout_main.setOrientation(VERTICAL);
 
         LinearLayout.LayoutParams layout_main = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -1869,7 +1880,7 @@ public class ViewMaker {
 //        linearLayout_578.setId(R.id.rootRegisterContact);
         linearLayout_578.setId(R.id.mainContainer);
         linearLayout_578.setOrientation(VERTICAL);
-        linearLayout_578.setBackgroundColor(G.context.getResources().getColor(R.color.white));
+        linearLayout_578.setBackgroundColor(Color.parseColor(G.backgroundTheme));
         if (HelperCalander.isPersianUnicode) {
             linearLayout_578.setPadding(i_Dp(R.dimen.dp20), 0, i_Dp(R.dimen.dp20), 0);
         } else {
@@ -1942,7 +1953,7 @@ public class ViewMaker {
         title.setId(R.id.title);
         title.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
         title.setSingleLine(true);
-        title.setTextColor(Color.parseColor("#000000"));
+        title.setTextColor(Color.parseColor(G.textTitleTheme));
         setTextSize(title, R.dimen.dp16);
         setTypeFace(title);
         LinearLayout.LayoutParams layout_949 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0, 1);
@@ -1956,7 +1967,7 @@ public class ViewMaker {
         setTextSize(subtitle, R.dimen.dp14);
         subtitle.setSingleLine(true);
         setTypeFace(subtitle);
-        subtitle.setTextColor(Color.parseColor("#bbbbbb"));
+        subtitle.setTextColor(Color.parseColor(G.textSubTheme));
         LinearLayout.LayoutParams layout_488 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 0, 1);
         subtitle.setLayoutParams(layout_488);
         linearLayout_673.addView(subtitle);

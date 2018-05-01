@@ -1098,7 +1098,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                     holder.txtPinIcon.setVisibility(View.VISIBLE);
 
                 } else {
-                    holder.rootChat.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+//                    holder.rootChat.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
                     holder.txtPinIcon.setVisibility(View.GONE);
                 }
 

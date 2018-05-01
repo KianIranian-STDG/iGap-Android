@@ -35,7 +35,7 @@
   </style>
 
   <style name="AppTheme" parent="BaseTheme">
-
+    <!--<item name="md_dark_theme">true</item>-->
   </style>
 
   <style name="AppThemeTranslucent" parent="BaseTheme">
@@ -307,7 +307,14 @@
     <item name="android:textColor">@color/white</item>
   </style>
 
-  <!---->
+  <style name="emojiColorChat_dark">
+    <item name="android:textColor">@color/white</item>
+    <item name="android:textSize">@dimen/dp22</item>
+  </style>
+
+  <style name="dialog_dark">
+    <item name="md_dark_theme">true</item>
+  </style>
 
 
   <!--==================================Light==================================-->
@@ -376,5 +383,13 @@
     <item name="android:textColor">@color/gray_4c</item>
   </style>
 
+  <style name="emojiColorChat_light">
+    <item name="android:textColor">@color/colorEmojiPopupCategoryBottomBorder</item>
+    <item name="android:textSize">@dimen/dp22</item>
+  </style>
+
+  <style name="dialog_light">
+    <item name="md_dark_theme">false</item>
+  </style>
 
 </resources>

@@ -183,7 +183,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         nestedScrollView = view.findViewById(R.id.nestedScrollContact);
 
         TextView txtNonUser = (TextView) view.findViewById(R.id.txtNon_User);
-        txtNonUser.setTextColor(Color.parseColor(G.appBarColor));
+//        txtNonUser.setTextColor(Color.parseColor(G.appBarColor));
         prgWaitingLiadList = (ProgressBar) view.findViewById(R.id.prgWaiting_loadList);
         prgWaitingLoadContact = (ProgressBar) view.findViewById(R.id.prgWaitingLoadContact);
 

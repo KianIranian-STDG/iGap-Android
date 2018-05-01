@@ -114,6 +114,10 @@ public class G extends MultiDexApplication {
     public static String attachmentColor;
     public static String progressColor;
     public static String headerTextColor;
+    public static String backgroundTheme;
+    public static String textTitleTheme;
+    public static String textSubTheme;
+    public static String tintImage;
     public static String menuBackgroundColor;
     public static String authorHash;
     public static String displayName;
@@ -147,6 +151,7 @@ public class G extends MultiDexApplication {
     public static boolean isLandscape = false;
     public static boolean isAppRtl = false;
     public static boolean isLinkClicked = false;
+    public static boolean isDarkTheme = false;
     public static String selectedTabInMainActivity = "";
     public static int ivSize;
     public static int userTextSize = 0;

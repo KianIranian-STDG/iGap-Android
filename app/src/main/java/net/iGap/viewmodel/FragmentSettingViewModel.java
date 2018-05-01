@@ -1115,6 +1115,10 @@ public class FragmentSettingViewModel {
             attachmentColor = Config.default_dark_attachmentColor;
             headerTextColor = Config.default_dark_headerTextColor;
             G.progressColor = Config.default_dark_progressColor;
+            G.backgroundTheme = "#151515";
+            G.textTitleTheme = "#ffffff";
+            G.textSubTheme = "#ffffff";
+            G.tintImage = "#ffffff";
 
             G.isRestartActivity = true;
             G.isUpdateNotificaionColorMain = true;
@@ -1131,6 +1135,10 @@ public class FragmentSettingViewModel {
         } else {
             editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, false);
             editor.apply();
+            G.backgroundTheme = "#FFFFFF";
+            G.textTitleTheme = "#000000";
+            G.textSubTheme = "#bbbbbb";
+            G.tintImage = "#000000";
             notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
             headerColorClick(Color.parseColor(Config.default_headerTextColor), false);
             toggleBottomClick(Color.parseColor(Config.default_toggleButtonColor));
@@ -1138,6 +1146,7 @@ public class FragmentSettingViewModel {
             appBarColorClick(Color.parseColor(Config.default_appBarColor));
             progressColorClick(Color.parseColor(Config.default_appBarColor), false);
             menuBackgroundClick(Color.parseColor(Config.default_appBarColor), false);
+
         }
 
     }

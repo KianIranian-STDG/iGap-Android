@@ -17,6 +17,9 @@
     <item name="textBackgroundColor_2">@style/text_background_dark_2</item>
     <item name="textBackgroundColor">@style/text_background_dark</item>
     <item name="textSecurityColor">@style/text_title_security_dark</item>
+    <item name="emojiChat">@style/emojiColorChat_dark</item>
+    <item name="md_dark_theme">true</item>
+
   </style>
 
 
@@ -37,8 +40,8 @@
     <item name="textBackgroundColor_2">@style/text_background_light_2</item>
     <item name="textBackgroundColor">@style/text_background_light</item>
     <item name="textSecurityColor">@style/text_title_security_light</item>
-
-
+    <item name="emojiChat">@style/emojiColorChat_light</item>
+    <item name="md_dark_theme">false</item>
   </style>
 
 </resources>

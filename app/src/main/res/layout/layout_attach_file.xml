@@ -4,6 +4,7 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:clickable="true"
+  style="?backgroundColorSettingTheme"
   android:orientation="vertical">
 
 
@@ -25,14 +26,14 @@
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="@android:color/white"
+      style="?backgroundColorSettingTheme"
       android:gravity="center"
       android:minHeight="@dimen/dp48"
       android:orientation="horizontal">
 
       <net.iGap.module.MaterialDesignTextView
         android:id="@+id/chl_imv_smile_button"
-        style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+        style="?emojiChat"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
@@ -42,7 +43,6 @@
         android:paddingRight="@dimen/dp8"
         android:text="@string/md_emoticon_with_happy_face"
         android:textAppearance="@style/TextIconAppearance.all"
-        android:textColor="@color/colorEmojiPopupCategoryBottomBorder"
         android:textSize="@dimen/dp20" />
 
 
@@ -57,20 +57,19 @@
         android:hint="@string/type_message"
         android:imeOptions="flagNoExtractUi"
         android:maxLines="4"
-        android:textColorHint="@color/light_gray"
+        style="?hintColorSettingTheme"
         android:textSize="@dimen/dp16"
         app:emojiSize="@dimen/dp22" />
 
       <net.iGap.module.MaterialDesignTextView
         android:id="@+id/chl_imv_send_button"
-        style="@style/ChatMessages.MaterialDesignTextView.BottomIcon.SendBtn"
+        style="?emojiChat"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="bottom|end|right"
         android:padding="@dimen/dp8"
         android:text="@string/md_send_button"
-        android:textAppearance="@style/TextIconAppearance.all"
         android:textSize="@dimen/dp20"
         android:visibility="gone" />
 
@@ -84,28 +83,24 @@
 
         <net.iGap.module.MaterialDesignTextView
           android:id="@+id/chl_imv_attach_button"
-          style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+          style="?emojiChat"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:padding="@dimen/dp8"
           android:rotation="135"
           android:text="@string/md_attachment_clip"
-          android:textAppearance="@style/TextIconAppearance.all"
-          android:textColor="@color/colorEmojiPopupCategoryBottomBorder"
           android:textSize="@dimen/dp20" />
 
 
         <net.iGap.module.MaterialDesignTextView
           android:id="@+id/chl_imv_mic_button"
-          style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+          style="?emojiChat"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:padding="@dimen/dp8"
           android:text="@string/md_voice_message_microphone_button"
-          android:textAppearance="@style/TextIconAppearance.all"
-          android:textColor="@color/colorEmojiPopupCategoryBottomBorder"
           android:textSize="@dimen/dp20" />
 
 

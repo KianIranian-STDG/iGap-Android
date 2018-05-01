@@ -5678,16 +5678,16 @@ public class FragmentChat extends BaseFragment
         TextView txtContact = (TextView) viewBottomSheet.findViewById(R.id.txtContact);
         send = (TextView) viewBottomSheet.findViewById(R.id.txtSend);
 
-        txtCamera.setTextColor(Color.parseColor(G.attachmentColor));
-        textPicture.setTextColor(Color.parseColor(G.attachmentColor));
-        txtVideo.setTextColor(Color.parseColor(G.attachmentColor));
-        txtMusic.setTextColor(Color.parseColor(G.attachmentColor));
-        txtDocument.setTextColor(Color.parseColor(G.attachmentColor));
-        txtFile.setTextColor(Color.parseColor(G.attachmentColor));
-        txtPaint.setTextColor(Color.parseColor(G.attachmentColor));
-        txtLocation.setTextColor(Color.parseColor(G.attachmentColor));
-        txtContact.setTextColor(Color.parseColor(G.attachmentColor));
-        send.setTextColor(Color.parseColor(G.attachmentColor));
+//        txtCamera.setTextColor(Color.parseColor(G.attachmentColor));
+//        textPicture.setTextColor(Color.parseColor(G.attachmentColor));
+//        txtVideo.setTextColor(Color.parseColor(G.attachmentColor));
+//        txtMusic.setTextColor(Color.parseColor(G.attachmentColor));
+//        txtDocument.setTextColor(Color.parseColor(G.attachmentColor));
+//        txtFile.setTextColor(Color.parseColor(G.attachmentColor));
+//        txtPaint.setTextColor(Color.parseColor(G.attachmentColor));
+//        txtLocation.setTextColor(Color.parseColor(G.attachmentColor));
+//        txtContact.setTextColor(Color.parseColor(G.attachmentColor));
+//        send.setTextColor(Color.parseColor(G.attachmentColor));
 
         txtCountItem = (TextView) viewBottomSheet.findViewById(R.id.txtNumberItem);
         ViewGroup camera = (ViewGroup) viewBottomSheet.findViewById(R.id.camera);
