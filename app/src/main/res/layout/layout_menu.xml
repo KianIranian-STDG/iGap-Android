@@ -91,7 +91,7 @@
 
       <FrameLayout
         android:id="@+id/lm_layout_main"
-        style="?backgroundColorMenuTheme"
+        style="?backgroundColorSettingTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
