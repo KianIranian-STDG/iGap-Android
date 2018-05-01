@@ -47,7 +47,7 @@ public class HelperDownloadFile {
     public static ArrayList<String> manuallyStoppedDownload = new ArrayList<>();
     private static ArrayMap<String, StructDownLoad> list = new ArrayMap<>();
     private static ArrayList<StructQueue> mQueue = new ArrayList<>();
-    private static int maxDownloadSize = 4;
+    private static int maxDownloadSize = 2;
     private OnFileDownloadResponse onFileDownloadResponse;
 
 
