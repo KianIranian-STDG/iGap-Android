@@ -284,6 +284,7 @@ public final class StartupActions {
             G.progressColor = Config.default_dark_progressColor;
             menuBackgroundColor = Config.default_dark_menuBackgroundColor;
             G.backgroundTheme = "#151515";
+            G.backgroundTheme_2 = "#000000";
             G.textTitleTheme = "#ffffff";
             G.textSubTheme = "#ffffff";
             G.tintImage = "#ffffff";
@@ -299,6 +300,7 @@ public final class StartupActions {
             G.textTitleTheme = "#000000";
             G.textSubTheme = "#bbbbbb";
             G.tintImage = "#000000";
+            G.backgroundTheme_2 = "#f9f9f9";
         }
 
         G.multiTab = preferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);

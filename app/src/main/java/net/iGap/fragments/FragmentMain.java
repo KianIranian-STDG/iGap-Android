@@ -1094,11 +1094,11 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                  */
 
                 if (mInfo.isPinned()) {
-                    holder.rootChat.setBackgroundColor(ContextCompat.getColor(context, R.color.pin_color));
+                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
                     holder.txtPinIcon.setVisibility(View.VISIBLE);
 
                 } else {
-//                    holder.rootChat.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme));
                     holder.txtPinIcon.setVisibility(View.GONE);
                 }
 

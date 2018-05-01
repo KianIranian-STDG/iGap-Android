@@ -115,6 +115,7 @@ public class G extends MultiDexApplication {
     public static String progressColor;
     public static String headerTextColor;
     public static String backgroundTheme;
+    public static String backgroundTheme_2;
     public static String textTitleTheme;
     public static String textSubTheme;
     public static String tintImage;

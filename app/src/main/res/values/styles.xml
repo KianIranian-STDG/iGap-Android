@@ -285,7 +285,7 @@
   </style>
 
   <style name="line_style_setting_dark">
-    <item name="android:background">@color/background_editText</item>
+    <item name="android:background">@color/line</item>
   </style>
 
   <style name="hint_style_setting_dark">

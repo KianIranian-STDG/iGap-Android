@@ -1416,7 +1416,7 @@ public class ViewMaker {
         layout_113.gravity = Gravity.CENTER;
 //        layout_113.setMargins(i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6));
         cs_img_contact_picture.setLayoutParams(layout_113);
-        cs_img_contact_picture.setBackgroundColor(Color.parseColor(G.backgroundTheme));
+//        cs_img_contact_picture.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
         root_chat_sub_layout.addView(cs_img_contact_picture);
 
@@ -1424,14 +1424,14 @@ public class ViewMaker {
         linearLayout_849.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_162 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         linearLayout_849.setLayoutParams(layout_162);
-        linearLayout_849.setBackgroundColor(Color.parseColor(G.backgroundTheme));
+//        linearLayout_849.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
         LinearLayout linearLayout_938 = new LinearLayout(G.context);
         linearLayout_938.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams layout_347 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         layout_347.weight = 1;
         linearLayout_938.setLayoutParams(layout_347);
-        linearLayout_938.setBackgroundColor(Color.parseColor(G.backgroundTheme));
+//        linearLayout_938.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
 
         LinearLayout linearLayout_353 = new LinearLayout(G.context);
@@ -1446,7 +1446,7 @@ public class ViewMaker {
         }
         layout_860.weight = 1;
         linearLayout_353.setLayoutParams(layout_860);
-        linearLayout_353.setBackgroundColor(Color.parseColor(G.backgroundTheme));
+//        linearLayout_353.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
         LinearLayout linearLayout_922 = new LinearLayout(G.context);
         linearLayout_922.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);

@@ -59,6 +59,7 @@
   <!--REGISTER PAGE-->
 
   <color name="background_editText">#e7e7e7</color>
+  <color name="line">#313131</color>
   <color name="border_editText">#757575</color>
   <color name="black_register">#1a1a1a</color>
   <color name="whit_background">#ffffff</color>
@@ -139,6 +140,6 @@
   <color name="background_check_gps">#85565656</color>
 
   <color name="background_setting_dark">#151515</color>
-  <color name="background_setting_dark_2">#000000</color>
+  <color name="background_setting_dark_2">#101010</color>
 
 </resources>
