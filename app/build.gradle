@@ -117,7 +117,7 @@ dependencies {
     compile 'com.github.RooyeKhat-Media.Emoji:emoji-one:0.5.1.Fix2'
     compile 'io.realm:android-adapters:2.1.1'
     compile 'org.osmdroid:osmdroid-android:5.6.5'
-    compile 'io.fotoapparat.fotoapparat:library:2.1.1'
+    compile 'io.fotoapparat.fotoapparat:library:1.3.0'
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     compile 'com.github.pchmn:MaterialChipsInput:1.0.8'
     testCompile 'junit:junit:4.12'

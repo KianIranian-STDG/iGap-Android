@@ -285,7 +285,8 @@ import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
-import static io.fotoapparat.selector.LensPositionSelectorsKt.back;
+import static io.fotoapparat.parameter.selector.LensPositionSelectors.back;
+import static io.fotoapparat.parameter.selector.SizeSelectors.biggestSize;
 import static java.lang.Long.parseLong;
 import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
@@ -5745,10 +5746,8 @@ public class FragmentChat extends BaseFragment
                                     G.handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-
-                                            fotoapparatSwitcher = Fotoapparat.
-                                                    with(G.fragmentActivity)
-                                                    .into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                            fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
                                                     .lensPosition(back())       // we want back camera
                                                     .build();
 
@@ -5792,6 +5791,7 @@ public class FragmentChat extends BaseFragment
                                         public void run() {
 
                                             fotoapparatSwitcher = Fotoapparat.with(G.fragmentActivity).into((CameraRenderer) view.findViewById(R.id.cameraView))           // view which will draw the camera preview
+                                                    .photoSize(biggestSize())   // we want to have the biggest photo possible
                                                     .lensPosition(back())       // we want back camera
                                                     .build();
 
