@@ -111,6 +111,8 @@
   <attr name="textBackgroundColor" format="reference" />
   <attr name="textBackgroundColor_2" format="reference" />
   <attr name="textSecurityColor" format="reference" />
+  <attr name="textColorCall" format="reference" />
+  <attr name="backgroundColorCall" format="reference" />
   <attr name="emojiChat" format="reference" />
 
 

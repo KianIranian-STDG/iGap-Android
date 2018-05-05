@@ -141,5 +141,8 @@
 
   <color name="background_setting_dark">#151515</color>
   <color name="background_setting_dark_2">#101010</color>
+  <color name="textColorCall">#f8f4df</color>
+  <color name="backgroundColorCall">#00B0BF</color>
+  <color name="backgroundColorCall2">#0098cc</color>
 
 </resources>

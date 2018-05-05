@@ -500,7 +500,7 @@
           android:id="@+id/chl_recycler_view_chat"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:background="@android:color/transparent"
+          style="?backgroundColorSettingTheme_2"
           android:fadeScrollbars="true"
           android:scrollbarSize="@dimen/dp4"
           android:scrollbarStyle="outsideOverlay"

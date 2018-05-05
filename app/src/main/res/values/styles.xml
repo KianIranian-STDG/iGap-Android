@@ -316,6 +316,10 @@
     <item name="md_dark_theme">true</item>
   </style>
 
+  <style name="backgroundColorCallDark">
+    <item name="android:background">@drawable/background_call_fragment_dark</item>
+  </style>
+
 
   <!--==================================Light==================================-->
   <style name="page_background_light">
@@ -390,6 +394,10 @@
 
   <style name="dialog_light">
     <item name="md_dark_theme">false</item>
+  </style>
+
+  <style name="backgroundColorCallLight">
+    <item name="android:background">@drawable/background_call_fragment</item>
   </style>
 
 </resources>
