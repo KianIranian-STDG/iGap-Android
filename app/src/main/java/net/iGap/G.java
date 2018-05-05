@@ -116,6 +116,8 @@ public class G extends MultiDexApplication {
     public static String headerTextColor;
     public static String backgroundTheme;
     public static String backgroundTheme_2;
+    public static String logLineTheme;
+    public static String voteIconTheme;
     public static String textTitleTheme;
     public static String textSubTheme;
     public static String tintImage;

@@ -2204,7 +2204,7 @@ public class FragmentChat extends BaseFragment
         });
 
         imvSendButton = (MaterialDesignTextView) rootView.findViewById(R.id.chl_imv_send_button);
-        imvSendButton.setTextColor(Color.parseColor(G.attachmentColor));
+        imvSendButton.setTextColor(Color.parseColor(G.textTitleTheme));
 
         imvAttachFileButton = (MaterialDesignTextView) rootView.findViewById(R.id.chl_imv_attach_button);
         layoutAttachBottom = (LinearLayout) rootView.findViewById(R.id.layoutAttachBottom);

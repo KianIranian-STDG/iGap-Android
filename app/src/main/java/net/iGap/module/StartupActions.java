@@ -288,6 +288,8 @@ public final class StartupActions {
             G.textTitleTheme = "#ffffff";
             G.textSubTheme = "#ffffff";
             G.tintImage = "#ffffff";
+            G.logLineTheme = "#4b4b4b";
+            G.voteIconTheme = "#cacaca";
         } else {
             appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
             notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
@@ -301,6 +303,8 @@ public final class StartupActions {
             G.textSubTheme = "#bbbbbb";
             G.tintImage = "#000000";
             G.backgroundTheme_2 = "#f9f9f9";
+            G.logLineTheme = "#e9e9e9";
+            G.voteIconTheme = "#696969";
         }
 
         G.multiTab = preferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);

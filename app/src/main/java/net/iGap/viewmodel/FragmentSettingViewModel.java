@@ -1099,6 +1099,9 @@ public class FragmentSettingViewModel {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (isThemeDark.get()) {
+
+            G.isDarkTheme = true;
+
             editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, true);
             editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_dark_appBarColor);
             editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_dark_notificationColor);
@@ -1120,6 +1123,8 @@ public class FragmentSettingViewModel {
             G.textSubTheme = "#ffffff";
             G.tintImage = "#ffffff";
             G.backgroundTheme_2 = "#151515";
+            G.logLineTheme = "#4b4b4b";
+            G.voteIconTheme = "#cacaca";
 
             G.isRestartActivity = true;
             G.isUpdateNotificaionColorMain = true;
@@ -1134,6 +1139,8 @@ public class FragmentSettingViewModel {
             }
 
         } else {
+            G.isDarkTheme = false;
+
             editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, false);
             editor.apply();
             G.backgroundTheme = "#FFFFFF";
@@ -1141,6 +1148,8 @@ public class FragmentSettingViewModel {
             G.textSubTheme = "#bbbbbb";
             G.tintImage = "#000000";
             G.backgroundTheme_2 = "#f9f9f9";
+            G.logLineTheme = "#e9e9e9";
+            G.voteIconTheme = "#696969";
             notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
             headerColorClick(Color.parseColor(Config.default_headerTextColor), false);
             toggleBottomClick(Color.parseColor(Config.default_toggleButtonColor));

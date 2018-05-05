@@ -22,6 +22,7 @@
   <color name="unread">#e51c23</color>
 
   <color name="background_log_time">#e9e9e9</color>
+  <color name="background_log_time_dark">#4b4b4b</color>
   <color name="text_log_time">#333333</color>
   <color name="am_iconFab_black">#000</color>
   <color name="white_s1">#f7f5d8</color>
@@ -129,6 +130,7 @@
   <color name="messageBox_receiveColor">#ffffff</color>
   <color name="messageBox_replyBoxBackgroundSend">#f9f4e1</color>
   <color name="messageBox_replyBoxBackgroundReceive">#f9f4e1</color>
+  <color name="messageBox_replyBoxBackgroundReceive_dark">#f9f4e1</color>
   <color name="colorOldBlack">#2A2A2A</color>
   <color name="room_message_blue">#007eff</color>
   <color name="room_message_gray">#FF616161</color>
