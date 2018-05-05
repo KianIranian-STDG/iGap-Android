@@ -140,7 +140,7 @@
                 android:id="@+id/vgMessageGps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/gray10"
+                style="?backgroundColorSettingTheme"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -164,14 +164,14 @@
                     android:paddingLeft="@dimen/dp10"
                     android:paddingRight="@dimen/dp10"
                     android:paddingStart="@dimen/dp12"
-                    android:textColorHint="@color/light_gray"
+                    style="?hintColorSettingTheme"
                     android:textSize="@dimen/dp15" />
 
                   <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginBottom="@dimen/dp8"
-                    android:background="@color/gray_9d" />
+                    style="?lineColorSettingTheme" />
                 </LinearLayout>
 
                 <RelativeLayout
@@ -312,7 +312,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp52"
         android:alpha="0"
-        android:background="@color/white" />
+        style="?backgroundColorSettingTheme" />
 
 
       <net.iGap.module.MaterialDesignTextView
@@ -337,7 +337,7 @@
       android:id="@+id/rcy_map_user"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="@color/white"
+      style="?backgroundColorSettingTheme"
       android:fadeScrollbars="false"
       android:overScrollMode="never"
       android:scrollbarSize="5dp"

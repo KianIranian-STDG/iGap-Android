@@ -1449,7 +1449,10 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 holder.arrow.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow));
             }
 
-            holder.arrow.setTextColor(Color.parseColor(G.appBarColor));
+            holder.arrow.setTextColor(Color.parseColor(G.textTitleTheme));
+            holder.comment.setTextColor(Color.parseColor(G.textTitleTheme));
+            holder.distance.setTextColor(Color.parseColor(G.textTitleTheme));
+            holder.username.setTextColor(Color.parseColor(G.textTitleTheme));
 
             holder.layoutMap.setOnClickListener(new View.OnClickListener() {
                 @Override

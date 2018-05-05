@@ -1119,6 +1119,7 @@ public class FragmentSettingViewModel {
             G.textTitleTheme = "#ffffff";
             G.textSubTheme = "#ffffff";
             G.tintImage = "#ffffff";
+            G.backgroundTheme_2 = "#151515";
 
             G.isRestartActivity = true;
             G.isUpdateNotificaionColorMain = true;
@@ -1139,6 +1140,7 @@ public class FragmentSettingViewModel {
             G.textTitleTheme = "#000000";
             G.textSubTheme = "#bbbbbb";
             G.tintImage = "#000000";
+            G.backgroundTheme_2 = "#f9f9f9";
             notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
             headerColorClick(Color.parseColor(Config.default_headerTextColor), false);
             toggleBottomClick(Color.parseColor(Config.default_toggleButtonColor));
