@@ -185,7 +185,7 @@
                     android:gravity="center"
                     android:text="@string/md_close_button"
                     android:textAppearance="@style/TextIconAppearance_toolbar"
-                    android:textColor="@color/gray_4c"
+                    style="?textSubColorSettingTheme"
                     android:visibility="gone" />
 
                   <ProgressBar

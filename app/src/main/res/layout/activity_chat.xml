@@ -488,20 +488,21 @@
 
       <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        style="?backgroundColorSettingTheme_2">
 
         <ImageView
           android:id="@+id/chl_img_view_chat"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:background="#f7f7f7"
+          style="?backgroundColorSettingTheme_2"
           android:scaleType="centerCrop" />
 
         <android.support.v7.widget.RecyclerView
           android:id="@+id/chl_recycler_view_chat"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          style="?backgroundColorSettingTheme_2"
+          android:background="@android:color/transparent"
           android:fadeScrollbars="true"
           android:scrollbarSize="@dimen/dp4"
           android:scrollbarStyle="outsideOverlay"

@@ -1353,6 +1353,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
         ViewGroup itemQrCode = (ViewGroup) findViewById(R.id.lm_ll_qrCode);
+
         itemQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1375,6 +1376,87 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 closeDrawer();
             }
         });
+//        final ToggleButton toggleButton = findViewById(R.id.st_txt_st_toggle_theme_dark);
+//        ViewGroup rootDarkTheme = (ViewGroup) findViewById(R.id.lt_txt_st_theme_dark);
+//        rootDarkTheme.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                toggleButton.performClick();
+//            }
+//        });
+//        boolean checkedThemeDark = sharedPreferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
+//
+//
+//
+//        toggleButton.setChecked(checkedThemeDark);
+//        toggleButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//                if (toggleButton.isChecked()) {
+//
+//                    G.isDarkTheme = true;
+//
+//                    editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, true);
+//                    editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_dark_appBarColor);
+//                    editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_dark_notificationColor);
+//                    editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_dark_toggleButtonColor);
+//                    editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_dark_attachmentColor);
+//                    editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_dark_headerTextColor);
+//                    editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_dark_progressColor);
+//                    editor.putString(SHP_SETTING.KEY_MENU_BACKGROUND_COLOR, Config.default_dark_menuBackgroundColor);
+//                    editor.apply();
+//
+//                    appBarColor = Config.default_dark_appBarColor;
+//                    notificationColor = Config.default_dark_notificationColor;
+//                    toggleButtonColor = Config.default_dark_toggleButtonColor;
+//                    attachmentColor = Config.default_dark_attachmentColor;
+//                    headerTextColor = Config.default_dark_headerTextColor;
+//                    G.progressColor = Config.default_dark_progressColor;
+//                    G.backgroundTheme = "#151515";
+//                    G.textTitleTheme = "#ffffff";
+//                    G.textSubTheme = "#ffffff";
+//                    G.tintImage = "#ffffff";
+//                    G.backgroundTheme_2 = "#151515";
+//                    G.logLineTheme = "#4b4b4b";
+//                    G.voteIconTheme = "#cacaca";
+//
+//                    G.isRestartActivity = true;
+//                    G.isUpdateNotificaionColorMain = true;
+//                    G.isUpdateNotificaionColorChannel = true;
+//                    G.isUpdateNotificaionColorGroup = true;
+//                    G.isUpdateNotificaionColorChat = true;
+//                    G.fragmentActivity.recreate();
+//
+//                    if (G.onRefreshActivity != null) {
+//                        G.onRefreshActivity.refresh("");
+//                        G.isRestartActivity = true;
+//                    }
+//
+//                } else {
+//                    G.isDarkTheme = false;
+//
+//                    editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, false);
+//                    editor.apply();
+//                    G.backgroundTheme = "#FFFFFF";
+//                    G.textTitleTheme = "#000000";
+//                    G.textSubTheme = "#bbbbbb";
+//                    G.tintImage = "#000000";
+//                    G.backgroundTheme_2 = "#f9f9f9";
+//                    G.logLineTheme = "#e9e9e9";
+//                    G.voteIconTheme = "#696969";
+//                    notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
+//                    headerColorClick(Color.parseColor(Config.default_headerTextColor), false);
+//                    toggleBottomClick(Color.parseColor(Config.default_toggleButtonColor));
+//                    sendAndAttachColorClick(Color.parseColor(Config.default_attachmentColor));
+//                    appBarColorClick(Color.parseColor(Config.default_appBarColor));
+//                    progressColorClick(Color.parseColor(Config.default_appBarColor), false);
+//                    menuBackgroundClick(Color.parseColor(Config.default_appBarColor), false);
+//
+//                }
+//            }
+//        });
 
         ViewGroup itemNavOut = (ViewGroup) findViewById(R.id.lm_ll_igap_faq);
         itemNavOut.setOnClickListener(new View.OnClickListener() {

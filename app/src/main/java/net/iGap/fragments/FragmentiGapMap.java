@@ -596,7 +596,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         prgWaitingSendMessage = (ProgressBar) view.findViewById(R.id.prgWaitSendMessage);
         txtSendMessageGps = (TextView) view.findViewById(R.id.txtSendMessageGps);
         txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
-        txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+//        txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
 
         G.onGeoCommentResponse = new OnGeoCommentResponse() {
             @Override
