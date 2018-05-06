@@ -161,7 +161,7 @@ public class RealmPhoneContacts extends RealmObject {
                     boolean _addItem = false;
                     final StructListOfContact _item = list.get(i);
 
-                    if (_item.getPhone() == null || _item.getPhone().length() == 0) {
+                    if (_item == null || _item.getPhone() == null || _item.getPhone().length() == 0) {
                         continue;
                     }
 

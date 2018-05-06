@@ -652,7 +652,7 @@ public class HelperUrl {
                         imageView[0].setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imageView[0].getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
-                if (!G.fragmentActivity.isFinishing()) {
+                if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing() && !G.currentActivity.isFinishing()) {
                     dialog.show();
                 }
             }

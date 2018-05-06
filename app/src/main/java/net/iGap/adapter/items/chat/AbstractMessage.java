@@ -1529,7 +1529,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 //    }
                                 //}
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID) && !(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
-                                    progressBar.withProgress(progress);
+                                    if (progress >= 1) {
+                                        progressBar.withProgress(progress);
+                                    }
                                     if (progress == 100) {
                                         progressBar.performProgress();
                                     }
