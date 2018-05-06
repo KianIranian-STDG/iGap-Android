@@ -7,6 +7,8 @@ import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.downloader.PRDownloader;
+import com.downloader.PRDownloaderConfig;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -18,6 +20,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.adapter.items.chat.ViewMaker;
+import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFillLookUpClass;
@@ -83,6 +86,7 @@ public final class StartupActions {
         manageSettingPreferences();
         makeFolder();
         ConnectionManager.manageConnection();
+        configDownloadManager();
 
 
         new CallObserver();
@@ -91,6 +95,16 @@ public final class StartupActions {
          */
         new HelperDownloadFile();
         new HelperUploadFile();
+    }
+
+    private void configDownloadManager() {
+
+        PRDownloaderConfig config = PRDownloaderConfig.newBuilder()
+                .setDatabaseEnabled(true)
+                .build();
+        PRDownloader.initialize(G.context, config);
+
+
     }
 
     /**
@@ -187,7 +201,7 @@ public final class StartupActions {
 
         if (sharedPreferences.getInt(SHP_SETTING.KEY_SDK_ENABLE, 0) == 1) {
             if (G.DIR_SDCARD_EXTERNAL.equals("")) {
-                List<String> storageList = FileUtils.getSdCardPathList(true);
+                List<String> storageList = FileUtils.getSdCardPathList();
                 if (storageList.size() > 0) {
                     G.DIR_SDCARD_EXTERNAL = storageList.get(0);
                     selectedStorage = G.DIR_SDCARD_EXTERNAL + IGAP;
@@ -274,6 +288,15 @@ public final class StartupActions {
      */
     private void manageSettingPreferences() {
         SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+
+        /** clear map cache and use from new map tile url */
+        if (preferences.getBoolean(SHP_SETTING.KEY_MAP_CLEAR_CACHE, true)) {
+            FragmentiGapMap.deleteMapFileCash();
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(SHP_SETTING.KEY_MAP_CLEAR_CACHE, false);
+            editor.apply();
+        }
+
         G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
         if (G.isDarkTheme) {
             appBarColor = Config.default_dark_appBarColor;

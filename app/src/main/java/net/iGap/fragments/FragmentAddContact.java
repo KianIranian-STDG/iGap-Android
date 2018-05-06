@@ -47,6 +47,7 @@ import net.iGap.request.RequestUserContactImport;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static net.iGap.G.context;
 import static net.iGap.module.Contacts.showLimitDialog;
@@ -299,7 +300,7 @@ public class FragmentAddContact extends BaseFragment {
             saveNumber = codeCountry + _phone;
         }
 
-        ArrayList<StructListOfContact> contacts = new ArrayList<>();
+        List<StructListOfContact> contacts = new ArrayList<>();
         StructListOfContact contact = new StructListOfContact();
         contact.firstName = edtFirstName.getText().toString();
         contact.lastName = edtLastName.getText().toString();

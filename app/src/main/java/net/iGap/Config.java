@@ -26,7 +26,7 @@ public class Config {
     public static final int ACTION_CHECKING = 500;
     public static final int GROUP_SHOW_ACTIONS_COUNT = 3;
     public static final int LIMIT_GET_HISTORY_LOW = 10;
-    public static final int LIMIT_GET_HISTORY_NORMAL = 100;
+    public static final int LIMIT_GET_HISTORY_NORMAL = 50;
     public static final int LIMIT_LOAD_ROOM = 50;
     public static final int FAST_START_PAGE_TIME = (int) 20;
     public static final int LOW_START_PAGE_TIME = (int) 25;
@@ -47,7 +47,7 @@ public class Config {
     public static final int GET_MESSAGE_STATE_TIME_OUT_CHECKING = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int LAST_SEEN_DELAY_CHECKING = (int) (60 * DateUtils.SECOND_IN_MILLIS);
     public static final int GET_CONTACT_LIST_TIME_OUT = (int) (60 * DateUtils.SECOND_IN_MILLIS);
-    public static final int HEART_BEAT_CHECKING_TIME_OUT = (int) (60 * DateUtils.SECOND_IN_MILLIS);
+    public static final int HEART_BEAT_CHECKING_TIME_OUT = (int) (10 * DateUtils.SECOND_IN_MILLIS);
     public static final int UPDATING_TIME_SHOWING = (int) (2 * DateUtils.SECOND_IN_MILLIS);
     public static final int CONNECTION_OPEN_TIME_OUT = (int) (20 * DateUtils.SECOND_IN_MILLIS);
     public static final int FETCH_CONTACT_TIME_OUT = (int) (5 * DateUtils.SECOND_IN_MILLIS);

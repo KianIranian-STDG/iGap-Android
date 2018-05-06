@@ -1385,6 +1385,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (attachment == null) return;
 
         String token = attachment.getToken();
+        String url = attachment.getUrl();
         String name = attachment.getName();
 
         long size = 0;
@@ -1401,13 +1402,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (token != null && token.length() > 0 && size > 0) {
 
-            HelperDownloadFile.startDownload(mMessage.messageID, token, attachment.getCacheId(), name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(mMessage.messageID, token, url, attachment.getCacheId(), name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, int progress) {
 
                     if (FragmentChat.canUpdateAfterDownload) {
                         if (progress == 100) {
-
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1446,6 +1446,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         final String token = attachment.getToken();
+        final String url = attachment.getUrl();
         String name = attachment.getName();
         Long size = attachment.getSize();
         ProtoFileDownload.FileDownload.Selector selector = ProtoFileDownload.FileDownload.Selector.FILE;
@@ -1460,7 +1461,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
 
-            HelperDownloadFile.startDownload(mMessage.messageID, token, attachment.getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.startDownload(mMessage.messageID, token, url, attachment.getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progress) {
 
@@ -1470,6 +1471,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             public void run() {
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
                                     progressBar.withProgress(progress);
+
                                     if (progress == 100) {
 
                                         if (messageType == ProtoGlobal.RoomMessageType.AUDIO || messageType == ProtoGlobal.RoomMessageType.AUDIO_TEXT || messageType == ProtoGlobal.RoomMessageType.VOICE) {
@@ -1494,7 +1496,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             @Override
                             public void run() {
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID)) {
-
                                     progressBar.withProgress(0);
                                     progressBar.withDrawable(R.drawable.ic_download, true);
 
@@ -1553,7 +1554,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 //    }
                                 //}
                                 if (progressBar.getTag() != null && progressBar.getTag().equals(mMessage.messageID) && !(mMessage.status.equals(ProtoGlobal.RoomMessageStatus.FAILED.toString()))) {
-                                    progressBar.withProgress(progress);
+                                    if (progress >= 1) {
+                                        progressBar.withProgress(progress);
+                                    }
                                     if (progress == 100) {
                                         progressBar.performProgress();
                                     }

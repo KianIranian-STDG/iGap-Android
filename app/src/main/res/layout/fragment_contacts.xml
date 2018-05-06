@@ -91,6 +91,7 @@
         android:layout_weight="1"
         android:autoText="false"
         android:background="@null"
+        android:singleLine="true"
         android:hint="@string/search"
         android:paddingEnd="@dimen/dp8"
         android:paddingLeft="@dimen/dp8"

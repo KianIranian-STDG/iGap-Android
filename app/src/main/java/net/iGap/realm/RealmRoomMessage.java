@@ -139,9 +139,7 @@ public class RealmRoomMessage extends RealmObject {
 
     public static RealmResults<RealmRoomMessage> findNotificationMessage(Realm realm) {
         return realm.where(RealmRoomMessage.class)
-                .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.SENT.toString())
-                .or()
-                .equalTo(RealmRoomMessageFields.STATUS, ProtoGlobal.RoomMessageStatus.DELIVERED.toString())
+                .in(RealmRoomMessageFields.STATUS, new String[]{ProtoGlobal.RoomMessageStatus.SENT.toString(), ProtoGlobal.RoomMessageStatus.DELIVERED.toString()})
                 .equalTo(RealmRoomMessageFields.DELETED, false)
                 .notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash)
                 .notEqualTo(RealmRoomMessageFields.USER_ID, G.userId)
@@ -162,11 +160,7 @@ public class RealmRoomMessage extends RealmObject {
             //TODO [Saeed Mozaffari] [2017-10-28 9:59 AM] - Can Write Better Code?
             results = realm.where(RealmRoomMessage.class).
                     equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                    equalTo(RealmRoomMessageFields.MESSAGE_TYPE, messageType.toString()).
-                    equalTo(RealmRoomMessageFields.DELETED, false).
-                    or().
-                    equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                    equalTo(RealmRoomMessageFields.MESSAGE_TYPE, messageType.toString() + "_TEXT").
+                    in(RealmRoomMessageFields.MESSAGE_TYPE, new String[]{messageType.toString(), messageType.toString() + "_TEXT"}).
                     equalTo(RealmRoomMessageFields.DELETED, false).
                     findAll().sort(RealmRoomMessageFields.UPDATE_TIME, Sort.DESCENDING);
         }
@@ -581,34 +575,16 @@ public class RealmRoomMessage extends RealmObject {
      * make messages failed
      */
     public static void makeFailed(final long messageId) {
-
         FragmentChat.removeResendList(messageId);
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void run() {
-                final Realm realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                        if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                            message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
-                        }
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        final RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                        if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
-                        }
-
-                        realm.close();
-                    }
-                });
+            public void execute(Realm realm) {
+                setStatusFailedInChat(realm, messageId);
             }
         });
+        realm.close();
     }
 
     /**
@@ -876,6 +852,7 @@ public class RealmRoomMessage extends RealmObject {
         RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
         if (message != null && message.getStatus().equals(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
             message.setStatus(ProtoGlobal.RoomMessageStatus.FAILED.toString());
+            G.chatSendMessageUtil.onMessageFailed(message.getRoomId(), message);
         }
     }
 

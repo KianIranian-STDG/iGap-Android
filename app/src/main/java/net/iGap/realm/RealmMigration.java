@@ -197,6 +197,16 @@ public class RealmMigration implements io.realm.RealmMigration {
                 realmUserInfo.addField("importContactLimit", boolean.class, FieldAttribute.REQUIRED);
             }
 
+            RealmObjectSchema realmAttachment = schema.get(RealmAttachment.class.getSimpleName());
+            if (realmAttachment != null) {
+                realmAttachment.addField("url", String.class);
+            }
+
+            RealmObjectSchema realmRoom = schema.get(RealmRoom.class.getSimpleName());
+            if (realmRoom != null) {
+                realmRoom.addField("lastScrollPositionOffset", int.class, FieldAttribute.REQUIRED);
+            }
+
             oldVersion++;
         }
     }

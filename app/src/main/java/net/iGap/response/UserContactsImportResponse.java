@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import net.iGap.G;
+import net.iGap.module.Contacts;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserContactsGetList;
@@ -39,14 +40,9 @@ public class UserContactsImportResponse extends MessageHandler {
         }
 
 
-        if (!getContactList && G.onQueueSendContact != null) {
+        if (G.onQueueSendContact != null) {
             G.onQueueSendContact.sendContact();
         }
-
-        if (!getContactList && G.onQueueSendContactEdit != null) {
-            G.onQueueSendContactEdit.sendContact();
-        }
-
 
 
         if (getContactList) {
@@ -62,6 +58,9 @@ public class UserContactsImportResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+
+        Contacts.isSendingContactToServer = false;
+        G.onQueueSendContact = null;
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
