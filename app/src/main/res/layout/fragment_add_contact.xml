@@ -120,8 +120,7 @@
       android:layout_height="wrap_content"
       android:layout_marginLeft="@dimen/dp16"
       android:layout_marginRight="@dimen/dp16"
-      style="?hintColorSettingTheme"
-      app:hintTextAppearance="@style/Hint_appearance">
+      style="?hintColorSettingTheme">
 
       <net.iGap.module.MEditText
         android:id="@+id/ac_edt_firstName"
@@ -132,14 +131,14 @@
         android:background="@android:color/transparent"
         android:hint="@string/fac_First_Name"
         android:singleLine="true"
-
+        style="?textTitleColorSettingTheme"
         android:textSize="@dimen/dp15" />
 
       <View
         android:id="@+id/ac_view_firstName"
         android:layout_width="match_parent"
         android:layout_height=".5dp"
-        android:background="@color/line_edit_text" />
+        style="?lineColorSettingTheme" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -159,13 +158,14 @@
         android:background="@android:color/transparent"
         android:hint="@string/fac_Last_Name"
         android:singleLine="true"
+        style="?textTitleColorSettingTheme"
         android:textSize="@dimen/dp15" />
 
       <View
         android:id="@+id/ac_view_lastName"
         android:layout_width="match_parent"
         android:layout_height=".5dp"
-        android:background="@color/line_edit_text" />
+        style="?lineColorSettingTheme" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -221,7 +221,7 @@
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_gravity="bottom"
-          android:background="@color/line_edit_text" />
+          style="?lineColorSettingTheme" />
       </LinearLayout>
 
       <RelativeLayout
@@ -249,7 +249,7 @@
           android:layout_height="1dp"
           android:layout_alignParentBottom="true"
           android:layout_gravity="bottom"
-          android:background="@color/line_edit_text" />
+          style="?lineColorSettingTheme" />
       </RelativeLayout>
 
     </LinearLayout>

@@ -286,6 +286,9 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         vgAddContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (mActionMode != null) {
+                    mActionMode.finish();
+                }
                 FragmentAddContact fragment = FragmentAddContact.newInstance();
                 Bundle bundle = new Bundle();
                 bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
@@ -360,6 +363,13 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         StickyHeader stickyHeader = new StickyHeader(results);
         decoration = new StickyRecyclerHeadersDecoration(stickyHeader);
         realmRecyclerView.addItemDecoration(decoration);
+        realmRecyclerView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
+            }
+        });
+
 
         realmRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(G.fragmentActivity, realmRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override

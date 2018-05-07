@@ -76,7 +76,6 @@
             android:gravity="center_vertical|start"
             android:singleLine="true"
             android:text="Dominika Faniz"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
             style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp16" />
 
@@ -88,7 +87,6 @@
             android:gravity="center_vertical|start"
             android:singleLine="true"
             android:text="@string/last_seen_recently"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
             style="?textSubColorSettingTheme"
             android:textSize="@dimen/dp14" />
 

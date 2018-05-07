@@ -2171,7 +2171,12 @@ public class FragmentChat extends BaseFragment
         });
 
         imvSendButton = (MaterialDesignTextView) rootView.findViewById(R.id.chl_imv_send_button);
-        imvSendButton.setTextColor(Color.parseColor(G.textTitleTheme));
+        if (G.isDarkTheme) {
+            imvSendButton.setTextColor(Color.parseColor(G.textTitleTheme));
+        } else {
+            imvSendButton.setTextColor(Color.parseColor(G.attachmentColor));
+        }
+
 
         imvAttachFileButton = (MaterialDesignTextView) rootView.findViewById(R.id.chl_imv_attach_button);
         layoutAttachBottom = (LinearLayout) rootView.findViewById(R.id.layoutAttachBottom);

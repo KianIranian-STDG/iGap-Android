@@ -383,7 +383,7 @@ public class ViewMaker {
         text.setGravity(CENTER);
         text.setText("Log");
         if (isDarkTheme) {
-            text.setTextColor(Color.parseColor(G.textSubTheme));
+            text.setTextColor(Color.parseColor(G.textTitleTheme));
             text.setBackgroundResource(R.drawable.recangle_gray_tranceparent_dark);
         } else {
             text.setTextColor(Color.parseColor("#4a5d5c"));
@@ -1292,7 +1292,12 @@ public class ViewMaker {
         if (hasEmoji) {
             EmojiTextViewE emojiTextViewE = new EmojiTextViewE(context);
             emojiTextViewE.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            emojiTextViewE.setTextColor(Color.parseColor("#333333"));
+            if (G.isDarkTheme) {
+                emojiTextViewE.setTextColor(Color.parseColor(G.textTitleTheme));
+            } else {
+                emojiTextViewE.setTextColor(Color.parseColor("#333333"));
+            }
+
             emojiTextViewE.setId(R.id.messageSenderTextMessage);
             emojiTextViewE.setPadding(10, 4, 10, 4);
             emojiTextViewE.setTypeface(G.typeface_IRANSansMobile);
@@ -1314,7 +1319,12 @@ public class ViewMaker {
         } else {
             TextView textView = new TextView(context);
             textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            textView.setTextColor(Color.parseColor("#333333"));
+            if (G.isDarkTheme) {
+                textView.setTextColor(Color.parseColor(G.textTitleTheme));
+            } else {
+                textView.setTextColor(Color.parseColor("#333333"));
+            }
+
             textView.setId(R.id.messageSenderTextMessage);
             textView.setPadding(10, 0, 10, 0);
             textView.setTypeface(G.typeface_IRANSansMobile);
@@ -1337,7 +1347,13 @@ public class ViewMaker {
     static View makeHeaderTextView(String text) {
 
         EmojiTextViewE textView = new EmojiTextViewE(context);
-        textView.setTextColor(Color.BLACK);
+
+        if (G.isDarkTheme) {
+            textView.setTextColor(Color.BLACK);
+        } else {
+            textView.setTextColor(Color.parseColor(G.textTitleTheme));
+        }
+
         textView.setBackgroundResource(R.drawable.rect_radios_top_gray);
         textView.setId(R.id.messageSenderName);
         textView.setGravity(LEFT);
@@ -1444,9 +1460,8 @@ public class ViewMaker {
         cs_img_contact_picture.setId(R.id.cs_img_contact_picture);
         LinearLayout.LayoutParams layout_113 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp52), i_Dp(R.dimen.dp52));
         layout_113.gravity = Gravity.CENTER;
-//        layout_113.setMargins(i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6));
+        layout_113.setMargins(i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6));
         cs_img_contact_picture.setLayoutParams(layout_113);
-//        cs_img_contact_picture.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
         root_chat_sub_layout.addView(cs_img_contact_picture);
 
@@ -1454,14 +1469,12 @@ public class ViewMaker {
         linearLayout_849.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_162 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         linearLayout_849.setLayoutParams(layout_162);
-//        linearLayout_849.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
         LinearLayout linearLayout_938 = new LinearLayout(G.context);
         linearLayout_938.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams layout_347 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         layout_347.weight = 1;
         linearLayout_938.setLayoutParams(layout_347);
-//        linearLayout_938.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
 
         LinearLayout linearLayout_353 = new LinearLayout(G.context);
@@ -1476,7 +1489,6 @@ public class ViewMaker {
         }
         layout_860.weight = 1;
         linearLayout_353.setLayoutParams(layout_860);
-//        linearLayout_353.setBackgroundColor(Color.parseColor(G.backgroundTheme));
 
         LinearLayout linearLayout_922 = new LinearLayout(G.context);
         linearLayout_922.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
@@ -1493,7 +1505,12 @@ public class ViewMaker {
 
         MaterialDesignTextView cs_txt_chat_icon = new MaterialDesignTextView(G.context);
         cs_txt_chat_icon.setId(R.id.cs_txt_chat_icon);
-        cs_txt_chat_icon.setTextColor(Color.parseColor(G.textTitleTheme));
+        if (G.isDarkTheme) {
+            cs_txt_chat_icon.setTextColor(Color.parseColor(G.textTitleTheme));
+        } else {
+            cs_txt_chat_icon.setTextColor(Color.parseColor("#333333"));
+        }
+
 
         setTextSize(cs_txt_chat_icon, R.dimen.dp14);
         LinearLayout.LayoutParams layout_525 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -1519,7 +1536,12 @@ public class ViewMaker {
         cs_txt_contact_name.setEllipsize(TextUtils.TruncateAt.END);
         cs_txt_contact_name.setSingleLine(true);
         cs_txt_contact_name.setEmojiSize(i_Dp(R.dimen.dp16));
-        cs_txt_contact_name.setTextColor(Color.parseColor(G.textTitleTheme));
+        if (G.isDarkTheme) {
+            cs_txt_contact_name.setTextColor(Color.parseColor(G.textTitleTheme));
+        } else {
+            cs_txt_contact_name.setTextColor(G.context.getResources().getColor(R.color.black90));
+        }
+
         setTextSize(cs_txt_contact_name, R.dimen.dp15);
         LinearLayout.LayoutParams layout_115 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         cs_txt_contact_name.setLayoutParams(layout_115);
@@ -1624,7 +1646,11 @@ public class ViewMaker {
         // cs_txt_last_message_file_text.setMaxWidth(i_Dp(R.dimen.dp180));
         cs_txt_last_message_file_text.setText("");
         setTypeFace(cs_txt_last_message_file_text);
-        cs_txt_last_message_file_text.setTextColor(Color.parseColor("#FF616161"));
+        if (G.isDarkTheme) {
+            cs_txt_last_message_file_text.setTextColor(Color.parseColor(G.textSubTheme));
+        } else {
+            cs_txt_last_message_file_text.setTextColor(Color.parseColor("#FF616161"));
+        }
         setTextSize(cs_txt_last_message_file_text, R.dimen.dp12);
         cs_txt_last_message_file_text.setEmojiSize(i_Dp(R.dimen.dp13));
         LinearLayout.LayoutParams layout_1151_file_text = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -1790,7 +1816,12 @@ public class ViewMaker {
         fcsl_txt_name.setPadding(0, 0, 0, dpToPixel(1));
         fcsl_txt_name.setText("Name");
         fcsl_txt_name.setSingleLine(true);
-        fcsl_txt_name.setTextColor(Color.parseColor(G.textTitleTheme));
+        if (G.isDarkTheme) {
+            fcsl_txt_name.setTextColor(Color.parseColor(G.textTitleTheme));
+        } else {
+            fcsl_txt_name.setTextColor(G.context.getResources().getColor(R.color.black90));
+        }
+
         setTextSize(fcsl_txt_name, R.dimen.dp15);
         fcsl_txt_name.setTypeface(G.typeface_IRANSansMobile_Bold);
         LinearLayout.LayoutParams layout_415 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -1808,7 +1839,11 @@ public class ViewMaker {
         fcsl_txt_time_info.setGravity(Gravity.START);
         fcsl_txt_time_info.setSingleLine(true);
         fcsl_txt_time_info.setText("(4) 9:24 am");
-        fcsl_txt_time_info.setTextColor(Color.parseColor(G.textSubTheme));
+        if (G.isDarkTheme) {
+            fcsl_txt_time_info.setTextColor(Color.parseColor(G.textSubTheme));
+        } else {
+            fcsl_txt_time_info.setTextColor(G.context.getResources().getColor(R.color.gray_5c));
+        }
         setTextSize(fcsl_txt_time_info, R.dimen.dp12);
         fcsl_txt_time_info.setTypeface(G.typeface_IRANSansMobile);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {

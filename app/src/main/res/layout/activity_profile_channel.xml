@@ -570,7 +570,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1px"
-              android:background="@color/background_editText" />
+              style="?lineColorSettingTheme" />
 
             <LinearLayout
               android:id="@+id/lyt_list_moderator"
@@ -600,7 +600,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1px"
-              android:background="@color/background_editText" />
+              style="?lineColorSettingTheme" />
 
             <LinearLayout
               android:id="@+id/agp_ll_member_can_add_member"
@@ -644,7 +644,7 @@
               <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/background_editText" />
+                style="?lineColorSettingTheme" />
             </LinearLayout>
 
             <LinearLayout
@@ -673,7 +673,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1px"
-              android:background="@color/background_editText" />
+              style="?lineColorSettingTheme" />
 
             <LinearLayout
               android:id="@+id/lyt_delete_channel"
@@ -700,7 +700,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1px"
-              android:background="@color/background_editText" />
+              style="?lineColorSettingTheme" />
 
             <LinearLayout
               android:id="@+id/agp_layout_signature"
@@ -742,7 +742,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1px"
-              android:background="@color/background_editText" />
+              style="?lineColorSettingTheme" />
 
             <LinearLayout
               android:id="@+id/agp_layout_reaction_status"
@@ -801,8 +801,7 @@
         android:layout_margin="@dimen/dp20"
         android:clickable="true"
         android:src="@mipmap/pu_camera"
-        android:theme="@style/FabButton"
-        android:tint="@color/gray"
+        style="?fabButton"
         android:visibility="@{fragmentChannelProfileViewModel.fabVisibility}"
         app:fabSize="normal"
         app:layout_anchor="@+id/pch_appbar"

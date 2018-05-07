@@ -988,7 +988,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:paddingTop="@dimen/dp4"
-                android:text="@string/st_Auto_Rotate"
+                android:text="@string/Theme_Dark"
                 style="?textTitleColorSettingTheme"
                 android:textSize="@dimen/dp15"
                 android:textStyle="normal" />
@@ -1915,8 +1915,7 @@
       android:background="?attr/selectableItemBackground"
       android:clickable="true"
       android:src="@mipmap/pu_camera"
-      android:theme="@style/FabButton"
-      android:tint="@color/gray"
+      style="?fabButton"
       app:fabSize="normal"
       app:layout_anchor="@+id/st_appbar"
       app:layout_anchorGravity="bottom|right|end"

@@ -116,7 +116,7 @@
 
         <net.iGap.module.MaterialDesignTextView
           android:id="@+id/menu_btn_close"
-          android:layout_width="@dimen/dp52"
+          android:layout_width="wrap_content"
           android:layout_height="match_parent"
           android:background="@null"
           android:gravity="center"
@@ -143,12 +143,14 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       app:elevation="0dp"
+      style="?backgroundSubChatTheme"
       app:popupTheme="@style/ThemeOverlay.AppCompat">
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        style="?backgroundSubChatTheme"
         app:layout_scrollFlags="scroll|enterAlways">
 
 
@@ -162,6 +164,7 @@
           android:paddingEnd="@dimen/dp20"
           android:paddingLeft="@dimen/dp52"
           android:paddingRight="@dimen/dp20"
+          style="?backgroundSubChatTheme"
           android:paddingTop="@dimen/dp12">
 
           <ImageView

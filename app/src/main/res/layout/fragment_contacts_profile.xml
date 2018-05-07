@@ -517,8 +517,7 @@
         android:layout_margin="@dimen/dp20"
         android:clickable="true"
         android:src="@mipmap/comment"
-        android:theme="@style/FabButton"
-        android:tint="@color/gray"
+        style="?fabButton"
         app:fabSize="normal"
         app:layout_anchor="@+id/chi_appbar"
         app:layout_anchorGravity="bottom|right|end" />

@@ -1094,6 +1094,7 @@
   <string name="exceed_4_line">Your status cannot exceed 4 lines.</string>
 
   <string name="st_Auto_Rotate">Auto-Rotate Screen</string>
+  <string name="Theme_Dark">Dark Theme</string>
   <string name="two_step_pass_code">PassCode Lock</string>
   <string name="unlock_with_fingerPrint">Unlock With FingerPrint</string>
   <string name="change_pass_code">Change PassCode</string>

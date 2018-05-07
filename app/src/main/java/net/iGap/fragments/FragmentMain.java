@@ -1047,7 +1047,12 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                         cs_txt_contact_initials.setId(R.id.cs_txt_contact_initials);
                         cs_txt_contact_initials.setGravity(Gravity.CENTER);
                         cs_txt_contact_initials.setText(context.getResources().getString(R.string.md_cloud));
-                        cs_txt_contact_initials.setTextColor(Color.parseColor("#ad333333"));
+                        if (G.isDarkTheme) {
+                            cs_txt_contact_initials.setTextColor(Color.parseColor(G.textSubTheme));
+                        } else {
+                            cs_txt_contact_initials.setTextColor(Color.parseColor("#ad333333"));
+                        }
+
                         ViewMaker.setTextSize(cs_txt_contact_initials, R.dimen.dp32);
                         LinearLayout.LayoutParams layout_936 = new LinearLayout.LayoutParams(ViewMaker.i_Dp(R.dimen.dp52), ViewMaker.i_Dp(R.dimen.dp52));
                         layout_936.gravity = Gravity.CENTER;

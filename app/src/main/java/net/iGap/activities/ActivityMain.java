@@ -47,6 +47,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
@@ -134,6 +135,7 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.viewmodel.ActivityCallViewModel;
+import net.iGap.viewmodel.FragmentSettingViewModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -1350,6 +1352,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
         ViewGroup itemQrCode = (ViewGroup) findViewById(R.id.lm_ll_qrCode);
+
         itemQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1370,6 +1373,30 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 lockNavigation();
                 closeDrawer();
+            }
+        });
+        final ToggleButton toggleButton = findViewById(R.id.st_txt_st_toggle_theme_dark);
+        ViewGroup rootDarkTheme = (ViewGroup) findViewById(R.id.lt_txt_st_theme_dark);
+        rootDarkTheme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleButton.performClick();
+            }
+        });
+        boolean checkedThemeDark = sharedPreferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
+
+        toggleButton.setChecked(checkedThemeDark);
+        toggleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                if (toggleButton.isChecked()) {
+                    FragmentSettingViewModel.setDarkTheme(editor);
+                } else {
+                    FragmentSettingViewModel.setLightTheme(editor);
+                }
             }
         });
 

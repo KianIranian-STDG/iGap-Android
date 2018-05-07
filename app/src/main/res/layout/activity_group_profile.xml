@@ -593,7 +593,7 @@
               android:id="@+id/agp_ll_line_admin"
               android:layout_width="match_parent"
               android:layout_height="1px"
-              android:background="@color/background_editText"
+              style="?lineColorSettingTheme"
               android:visibility="@{fragmentGroupProfileViewModel.lineAdminVisibility}" />
 
             <LinearLayout
@@ -624,7 +624,7 @@
             <View
               android:layout_width="match_parent"
               android:layout_height="1px"
-              android:background="@color/background_editText" />
+              style="?lineColorSettingTheme" />
 
             <LinearLayout
               android:id="@+id/agp_ll_member_can_add_member"
@@ -668,7 +668,7 @@
               <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/background_editText" />
+                style="?lineColorSettingTheme" />
             </LinearLayout>
 
             <LinearLayout
@@ -698,7 +698,7 @@
               android:layout_width="match_parent"
               android:layout_height="1px"
 
-              android:background="@color/background_editText" />
+              style="?lineColorSettingTheme" />
 
             <LinearLayout
               android:id="@+id/agp_ll_delete_and_left_group"
@@ -738,8 +738,7 @@
         android:layout_margin="@dimen/dp20"
         android:clickable="true"
         android:src="@mipmap/pu_camera"
-        android:theme="@style/FabButton"
-        android:tint="@color/gray"
+        style="?fabButton"
         android:visibility="gone"
         app:fabSize="normal"
         app:layout_anchor="@+id/agp_appbar"

@@ -661,7 +661,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
-        setTextColor(imgTick, R.color.colorOldBlack);
+        if (G.isDarkTheme) {
+            setTextColor(imgTick, R.color.white);
+        } else {
+            setTextColor(imgTick, R.color.colorOldBlack);
+        }
+
 
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.LEFT;
 
@@ -721,7 +726,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             setTextColor(imgTick, R.color.iGapColor);
             imgTick.setVisibility(View.VISIBLE);
         } else {
-            setTextColor(imgTick, R.color.colorOldBlack);
+
+            if (G.isDarkTheme) {
+                setTextColor(imgTick, R.color.white);
+            } else {
+                setTextColor(imgTick, R.color.colorOldBlack);
+            }
         }
         if (G.isDarkTheme) {
             ((View) (holder.itemView.findViewById(R.id.contentContainer)).getParent()).setBackgroundResource(R.drawable.rectangle_send_round_color_dark);

@@ -137,7 +137,7 @@
             android:layout_marginBottom="@dimen/dp52"
             android:layout_marginTop="@dimen/dp20"
             android:text="@string/empty_call"
-            android:textColor="@color/black90"
+            style="?textTitleColorSettingTheme"
             android:textSize="@dimen/dp18" />
         </LinearLayout>
       </ScrollView>
