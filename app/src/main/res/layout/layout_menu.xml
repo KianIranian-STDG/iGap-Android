@@ -114,8 +114,8 @@
             android:layout_marginTop="@dimen/dp16">
 
             <net.iGap.module.MaterialDesignTextView
-              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_new_chat"
+              style="?iconColorMenuTheme"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center"
@@ -156,8 +156,8 @@
             android:orientation="horizontal">
 
             <net.iGap.module.MaterialDesignTextView
-              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_group"
+              style="?iconColorMenuTheme"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center"
@@ -167,8 +167,8 @@
               android:textSize="@dimen/dp20" />
 
             <TextView
-              style="?textColorMenuTheme"
               android:id="@+id/textView9"
+              style="?textColorMenuTheme"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -196,8 +196,8 @@
             android:orientation="horizontal">
 
             <TextView
-              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_channel"
+              style="?iconColorMenuTheme"
               fontPath="fonts/iGap-Fontico.ttf"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
@@ -235,8 +235,8 @@
 
 
             <net.iGap.module.MaterialDesignTextView
-              style="?iconColorMenuTheme"
               android:id="@+id/amr_btn_search"
+              style="?iconColorMenuTheme"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center"
@@ -247,8 +247,8 @@
 
 
             <TextView
-              style="?textColorMenuTheme"
               android:id="@+id/textView4"
+              style="?textColorMenuTheme"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
@@ -280,8 +280,8 @@
             android:orientation="horizontal">
 
             <net.iGap.module.MaterialDesignTextView
-              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_contacts"
+              style="?iconColorMenuTheme"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center"
@@ -318,8 +318,8 @@
             android:orientation="horizontal">
 
             <net.iGap.module.MaterialDesignTextView
-              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_setting"
+              style="?iconColorMenuTheme"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center"
@@ -436,8 +436,8 @@
             android:orientation="horizontal">
 
             <net.iGap.module.MaterialDesignTextView
-              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_qrCode"
+              style="?iconColorMenuTheme"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center"
@@ -473,8 +473,8 @@
             android:orientation="horizontal">
 
             <net.iGap.module.MaterialDesignTextView
-              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_invite_friends"
+              style="?iconColorMenuTheme"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center"
@@ -485,8 +485,8 @@
               android:textSize="@dimen/dp20" />
 
             <TextView
-              style="?textColorMenuTheme"
               android:id="@+id/textView2"
+              style="?textColorMenuTheme"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -503,39 +503,53 @@
           </LinearLayout>
 
 
-          <!--<LinearLayout-->
-          <!--android:id="@+id/lt_txt_st_theme_dark"-->
-          <!--android:layout_width="match_parent"-->
-          <!--android:layout_height="@dimen/dp48"-->
-          <!--android:orientation="horizontal"-->
-          <!--android:paddingEnd="@dimen/dp16"-->
-          <!--android:paddingLeft="@dimen/dp16"-->
-          <!--android:paddingRight="@dimen/dp16"-->
-          <!--android:paddingStart="@dimen/dp16">-->
+          <LinearLayout
+            android:id="@+id/lt_txt_st_theme_dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp6"
+            android:layout_marginTop="@dimen/dp4"
+            android:orientation="horizontal">
 
-          <!--<TextView-->
-          <!--android:id="@+id/st_txt_st_theme_dark"-->
-          <!--fontPath="fonts/IRANSansMobile.ttf"-->
-          <!--android:layout_width="0dp"-->
-          <!--android:layout_height="match_parent"-->
-          <!--android:layout_weight="1"-->
-          <!--android:gravity="center_vertical"-->
-          <!--android:paddingTop="@dimen/dp4"-->
-          <!--android:text="@string/Theme_Dark"-->
-          <!--style="?textTitleColorSettingTheme"-->
-          <!--android:textSize="@dimen/dp15"-->
-          <!--android:textStyle="normal" />-->
+            <net.iGap.module.MaterialDesignTextView
+              style="?iconColorMenuTheme"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:minWidth="@dimen/dp32"
+              android:paddingRight="@dimen/dp4"
+              android:text="@string/md_brush"
+              android:textAppearance="@style/TextIconAppearance.menu"
+              android:textSize="@dimen/dp20" />
+
+            <TextView
+              android:id="@+id/st_txt_st_theme_dark"
+              style="?textColorMenuTheme"
+              fontPath="fonts/IRANSansMobile_Bold.ttf"
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_marginLeft="@dimen/dp4"
+              android:layout_marginStart="@dimen/dp4"
+              android:layout_weight="1"
+              android:gravity="center_vertical"
+              android:paddingBottom="@dimen/dp8"
+              android:paddingLeft="@dimen/dp8"
+              android:paddingRight="@dimen/dp8"
+              android:paddingTop="@dimen/dp4"
+              android:text="@string/Theme_Dark"
+              android:textSize="@dimen/dp15"
+              android:textStyle="normal" />
 
 
-          <!--<ToggleButton-->
-          <!--android:id="@+id/st_txt_st_toggle_theme_dark"-->
-          <!--android:layout_width="@dimen/dp44"-->
-          <!--android:layout_height="@dimen/dp40"-->
-          <!--android:background="@drawable/st_switch_button"-->
-          <!--android:textOff=""-->
-          <!--android:textOn="" />-->
+            <ToggleButton
+              android:id="@+id/st_txt_st_toggle_theme_dark"
+              android:layout_width="@dimen/dp44"
+              android:layout_height="@dimen/dp40"
+              android:background="@drawable/st_switch_button"
+              android:textOff=""
+              android:textOn="" />
 
-          <!--</LinearLayout>-->
+          </LinearLayout>
 
           <LinearLayout
             android:id="@+id/lm_ll_igap_faq"
@@ -546,8 +560,8 @@
             android:orientation="horizontal">
 
             <net.iGap.module.MaterialDesignTextView
-              style="?iconColorMenuTheme"
               android:id="@+id/lm_txt_icon_igap_faq"
+              style="?iconColorMenuTheme"
               android:layout_width="wrap_content"
               android:layout_height="match_parent"
               android:gravity="center"
@@ -557,8 +571,8 @@
               android:textSize="@dimen/dp20" />
 
             <TextView
-              style="?textColorMenuTheme"
               android:id="@+id/textView3"
+              style="?textColorMenuTheme"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
