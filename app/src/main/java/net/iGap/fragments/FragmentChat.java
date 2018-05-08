@@ -5299,14 +5299,17 @@ public class FragmentChat extends BaseFragment
         btnDownHash = (TextView) rootView.findViewById(R.id.ac_btn_hash_down);
         txtHashCounter = (TextView) rootView.findViewById(R.id.ac_txt_hash_counter);
 
-        btnUpHash.setTextColor(Color.parseColor(G.appBarColor));
-        btnDownHash.setTextColor(Color.parseColor(G.appBarColor));
-        txtHashCounter.setTextColor(Color.parseColor(G.appBarColor));
+        if (!G.isDarkTheme) {
+            btnUpHash.setTextColor(Color.parseColor(G.appBarColor));
+            btnDownHash.setTextColor(Color.parseColor(G.appBarColor));
+            txtHashCounter.setTextColor(Color.parseColor(G.appBarColor));
+        }
+
 
         searchHash = new SearchHash();
 
         btnHashLayoutClose = (MaterialDesignTextView) rootView.findViewById(R.id.ac_btn_hash_close);
-        btnHashLayoutClose.setTextColor(Color.parseColor(G.appBarColor));
+        if (!G.isDarkTheme) btnHashLayoutClose.setTextColor(Color.parseColor(G.appBarColor));
         btnHashLayoutClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

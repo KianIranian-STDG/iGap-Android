@@ -180,11 +180,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                if (G.isDarkTheme) {
-                    ds.linkColor = Color.parseColor(G.textTitleTheme);
-                } else {
-                    ds.linkColor = LinkColor;
-                }
+                ds.linkColor = LinkColor;
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
@@ -248,11 +244,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                if (G.isDarkTheme) {
-                    ds.linkColor = Color.parseColor(G.textTitleTheme);
-                } else {
-                    ds.linkColor = LinkColor;
-                }
+                ds.linkColor = LinkColor;
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -284,11 +276,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                if (G.isDarkTheme) {
-                    ds.linkColor = Color.parseColor(G.textTitleTheme);
-                } else {
-                    ds.linkColor = LinkColor;
-                }
+                ds.linkColor = LinkColor;
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -356,11 +344,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                if (G.isDarkTheme) {
-                    ds.linkColor = Color.parseColor(G.textTitleTheme);
-                } else {
-                    ds.linkColor = LinkColor;
-                }
+                ds.linkColor = LinkColor;
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -432,11 +416,7 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                if (G.isDarkTheme) {
-                    ds.linkColor = Color.parseColor(G.textTitleTheme);
-                } else {
-                    ds.linkColor = LinkColor;
-                }
+                ds.linkColor = LinkColor;
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
