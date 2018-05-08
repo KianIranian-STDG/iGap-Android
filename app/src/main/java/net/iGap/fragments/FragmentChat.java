@@ -3371,12 +3371,13 @@ public class FragmentChat extends BaseFragment
         Intent intent = HelperMimeType.appropriateProgram(_filePath);
         if (intent != null) {
             try {
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(intent);
             } catch (Exception e) {
                 // to prevent from 'No Activity found to handle Intent'
                 e.printStackTrace();
             }
+        } else {
+            Toast.makeText(context, R.string.can_not_open_file, Toast.LENGTH_SHORT).show();
         }
     }
 

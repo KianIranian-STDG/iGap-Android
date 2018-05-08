@@ -1192,5 +1192,6 @@
   <string name="lbl_saturation">Saturation</string>
   <string name="tab_filters">Filters</string>
   <string name="tab_edit">Edit</string>
+  <string name="can_not_open_file">This file can not be opened</string>
 
 </resources>
