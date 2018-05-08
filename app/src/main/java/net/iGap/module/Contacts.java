@@ -101,7 +101,7 @@ public class Contacts {
 
     public static void showLimitDialog() {
         try {
-            if (G.currentActivity != null) {
+            if (G.currentActivity != null && !G.currentActivity.isFinishing()) {
                 G.currentActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
