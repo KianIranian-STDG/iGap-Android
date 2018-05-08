@@ -1149,7 +1149,6 @@ public class FragmentSettingViewModel {
         G.logLineTheme = "#4b4b4b";
         G.voteIconTheme = "#cacaca";
 
-        G.isRestartActivity = true;
         G.isUpdateNotificaionColorMain = true;
         G.isUpdateNotificaionColorChannel = true;
         G.isUpdateNotificaionColorGroup = true;
@@ -1157,8 +1156,8 @@ public class FragmentSettingViewModel {
         G.fragmentActivity.recreate();
 
         if (G.onRefreshActivity != null) {
-            G.onRefreshActivity.refresh("");
             G.isRestartActivity = true;
+            G.onRefreshActivity.refresh("");
         }
     }
 
@@ -1861,8 +1860,8 @@ public class FragmentSettingViewModel {
 
         // G.fragmentActivity.recreate();
         if (G.onRefreshActivity != null) {
-            G.onRefreshActivity.refresh("");
             G.isRestartActivity = true;
+            G.onRefreshActivity.refresh("");
         }
     }
 
