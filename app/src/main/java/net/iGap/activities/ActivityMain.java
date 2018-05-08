@@ -338,6 +338,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void checkIntent(Intent intent) {
 
+        if (G.isRestartActivity) {
+            return;
+        }
+
         new HelperGetDataFromOtherApp(intent);
 
         Bundle extras = intent.getExtras();
