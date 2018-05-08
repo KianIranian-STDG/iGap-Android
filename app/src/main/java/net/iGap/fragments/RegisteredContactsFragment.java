@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
@@ -60,7 +60,6 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
-import net.iGap.helper.RecyclerItemClickListener;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnPhoneContact;
@@ -122,6 +121,9 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     private ContactListAdapter contactListAdapter;
     private AppBarLayout toolbar;
     private long index = 2500;
+    public onClickRecyclerView onCliclRecyclerView;
+    public onLongClickRecyclerView onLongClickRecyclerView;
+
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -363,25 +365,42 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         StickyHeader stickyHeader = new StickyHeader(results);
         decoration = new StickyRecyclerHeadersDecoration(stickyHeader);
         realmRecyclerView.addItemDecoration(decoration);
-        realmRecyclerView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                return false;
-            }
-        });
 
+//        realmRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(G.fragmentActivity, realmRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                if (isMultiSelect) {
+//                    multi_select(position);
+//                }
+//            }
+//
+//
+//            @Override
+//            public void onItemLongClick(View view, int position) {
+//                if (!isMultiSelect) {
+//                    isMultiSelect = true;
+//                    refreshAdapter(0, true);
+//                    if (mActionMode == null) {
+//                        mActionMode = G.fragmentActivity.startActionMode(mActionModeCallback);
+//                    }
+//                }
+//                multi_select(position);
+//            }
+//        }));
 
-        realmRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(G.fragmentActivity, realmRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+        onCliclRecyclerView = new onClickRecyclerView() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onClick(View view, int position) {
+
                 if (isMultiSelect) {
                     multi_select(position);
                 }
             }
+        };
 
-
+        onLongClickRecyclerView = new onLongClickRecyclerView() {
             @Override
-            public void onItemLongClick(View view, int position) {
+            public void onClick(View view, int position) {
                 if (!isMultiSelect) {
                     isMultiSelect = true;
                     refreshAdapter(0, true);
@@ -391,8 +410,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                 }
                 multi_select(position);
             }
-        }));
-
+        };
 
         RecyclerView rcvListContact = (RecyclerView) view.findViewById(R.id.rcv_friends_to_invite);
         fastItemAdapter = new FastItemAdapter();
@@ -780,12 +798,13 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
             String header = contact.getDisplay_name();
 
-            if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
-                viewHolder.topLine.setVisibility(View.VISIBLE);
-            } else {
-                viewHolder.topLine.setVisibility(View.GONE);
+            if (!isMultiSelect) {
+                if (lastHeader.isEmpty() || (!lastHeader.isEmpty() && !header.isEmpty() && lastHeader.toLowerCase().charAt(0) != header.toLowerCase().charAt(0))) {
+                    viewHolder.topLine.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.topLine.setVisibility(View.GONE);
+                }
             }
-
             lastHeader = header;
 
             viewHolder.title.setText(contact.getDisplay_name());
@@ -939,6 +958,16 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                 subtitle = (TextView) view.findViewById(R.id.subtitle);
                 topLine = (View) view.findViewById(R.id.topLine);
                 swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipeRevealLayout);
+
+                root.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        if (onLongClickRecyclerView != null)
+                            onLongClickRecyclerView.onClick(v, getAdapterPosition());
+                        return false;
+                    }
+                });
+
                 swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -974,6 +1003,9 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                                     }
                                 });
                             }
+                        } else {
+                            if (onCliclRecyclerView != null)
+                                onCliclRecyclerView.onClick(v, getAdapterPosition());
                         }
                     }
                 });
@@ -1059,9 +1091,14 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             holder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.igap))
 
-                            .content(G.fragmentActivity.getResources().getString(R.string.invite_friend)).positiveText(G.fragmentActivity.getResources().getString(R.string.ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+
+                    new MaterialDialog.Builder(G.fragmentActivity)
+                            .title(G.fragmentActivity.getResources()
+                                    .getString(R.string.igap))
+                            .content(G.fragmentActivity.getResources().getString(R.string.invite_friend))
+                            .positiveText(G.fragmentActivity.getResources().getString(R.string.ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel))
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
@@ -1216,5 +1253,13 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             toolbar.setVisibility(View.VISIBLE);
         }
     };
+
+    private interface onClickRecyclerView {
+        void onClick(View view, int position);
+    }
+
+    private interface onLongClickRecyclerView {
+        void onClick(View view, int position);
+    }
 }
 

@@ -596,8 +596,11 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         prgWaitingSendMessage = (ProgressBar) view.findViewById(R.id.prgWaitSendMessage);
         txtSendMessageGps = (TextView) view.findViewById(R.id.txtSendMessageGps);
         txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
-//        txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
-
+        if (G.isDarkTheme) {
+            txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
+        } else {
+            txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+        }
         G.onGeoCommentResponse = new OnGeoCommentResponse() {
             @Override
             public void commentResponse() {
@@ -614,7 +617,11 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         }
                         prgWaitingSendMessage.setVisibility(View.GONE);
                         txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
-                        txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+                        if (G.isDarkTheme) {
+                            txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
+                        } else {
+                            txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+                        }
                         edtMessageGps.setEnabled(true);
                     }
                 });
@@ -629,7 +636,11 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         txtSendMessageGps.setVisibility(View.VISIBLE);
                         prgWaitingSendMessage.setVisibility(View.GONE);
                         txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
-                        txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+                        if (G.isDarkTheme) {
+                            txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
+                        } else {
+                            txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+                        }
                         edtMessageGps.setEnabled(true);
                     }
                 });
@@ -643,7 +654,11 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
                         txtSendMessageGps.setVisibility(View.VISIBLE);
                         txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
-                        txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+                        if (G.isDarkTheme) {
+                            txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
+                        } else {
+                            txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+                        }
                         prgWaitingSendMessage.setVisibility(View.GONE);
                         edtMessageGps.setEnabled(true);
                     }
@@ -665,7 +680,11 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                             edtMessageGps.setText("");
                             txtSendMessageGps.setVisibility(View.GONE);
                             txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
-                            txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+                            if (G.isDarkTheme) {
+                                txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
+                            } else {
+                                txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+                            }
 
                         }
                     }).negativeText(R.string.st_dialog_reset_all_notification_no).onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -730,11 +749,19 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                     if (!txtComment.equals(s.toString())) {
                         txtSendMessageGps.setVisibility(View.VISIBLE);
                         txtSendMessageGps.setText(G.context.getString(R.string.md_igap_check));
-                        txtSendMessageGps.setTextColor(Color.parseColor(G.appBarColor));
+                        if (G.isDarkTheme) {
+                            txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
+                        } else {
+                            txtSendMessageGps.setTextColor(Color.parseColor(G.appBarColor));
+                        }
                     } else {
                         txtSendMessageGps.setVisibility(View.VISIBLE);
                         txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
-                        txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+                        if (G.isDarkTheme) {
+                            txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
+                        } else {
+                            txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+                        }
                     }
                 } else {
                     txtSendMessageGps.setVisibility(View.GONE);
@@ -1348,7 +1375,11 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 if (G.userId == userIdR && comment.length() > 0) {
                     edtMessageGps.setText(comment);
                     txtSendMessageGps.setText(G.context.getString(R.string.md_close_button));
-                    txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+                    if (G.isDarkTheme) {
+                        txtSendMessageGps.setTextColor(Color.parseColor(G.textTitleTheme));
+                    } else {
+                        txtSendMessageGps.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+                    }
                 } else {
                     txtSendMessageGps.setVisibility(View.GONE);
                 }
