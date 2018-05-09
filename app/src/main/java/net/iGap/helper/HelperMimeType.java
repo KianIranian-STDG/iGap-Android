@@ -94,7 +94,7 @@ public class HelperMimeType {
         String path = filePath.toLowerCase();
         Intent intent = new Intent();
         intent.setAction(android.content.Intent.ACTION_VIEW);
-        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         if (isFileText(path)) {
             intent.setDataAndType(uri, "text/*");
