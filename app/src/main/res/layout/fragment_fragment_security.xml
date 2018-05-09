@@ -163,6 +163,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        style="?backgroundColorSettingTheme"
         android:visibility="@{fragmentSecurityViewModel.rootChangePassword ,default=gone}"
 
         >
@@ -172,7 +173,6 @@
           fontPath="fonts/IRANSansMobile.ttf"
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp40"
-          android:background="@color/white"
           android:gravity="center_vertical|start"
           android:onClick="@{fragmentSecurityViewModel::onClickChangePassword}"
           android:paddingLeft="@dimen/dp8"
@@ -196,18 +196,16 @@
           fontPath="fonts/IRANSansMobile.ttf"
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp40"
-          android:background="@color/white"
           android:gravity="center_vertical|start"
           android:onClick="@{fragmentSecurityViewModel::onClickChangeHint}"
           android:paddingLeft="@dimen/dp8"
           android:paddingRight="@dimen/dp8"
           android:paddingTop="@dimen/dp4"
           android:text="@string/Change_hint"
-          android:textColor="@color/black_register"
           android:textSize="@dimen/dp14"
           android:textStyle="normal"
           android:visibility="visible"
-          style="?textBackgroundColor" />
+          style="?textTitleColorSettingTheme" />
 
         <View
           android:layout_width="match_parent"
@@ -226,11 +224,10 @@
           android:paddingRight="@dimen/dp8"
           android:paddingTop="@dimen/dp4"
           android:text="@string/turn_Password_off"
-          android:textColor="@color/black_register"
+          style="?textTitleColorSettingTheme"
           android:textSize="@dimen/dp14"
           android:textStyle="normal"
           android:visibility="visible"
-          style="?textBackgroundColor"
           />
 
         <View
@@ -244,14 +241,13 @@
           fontPath="fonts/IRANSansMobile.ttf"
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp40"
-          style="?textBackgroundColor"
+          style="?textTitleColorSettingTheme"
           android:gravity="center_vertical|start"
           android:onClick="@{fragmentSecurityViewModel::onClickSetRecoveryEmail}"
           android:paddingLeft="@dimen/dp8"
           android:paddingRight="@dimen/dp8"
           android:paddingTop="@dimen/dp4"
           android:text="@string/change_email_recovery"
-          android:textColor="@color/black_register"
           android:textSize="@dimen/dp14"
           android:textStyle="normal"
           android:visibility="@{fragmentSecurityViewModel.setRecoveryEmail}"
@@ -270,14 +266,14 @@
           fontPath="fonts/IRANSansMobile.ttf"
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp40"
-          style="?textBackgroundColor"
+
           android:gravity="center_vertical|start"
           android:onClick="@{fragmentSecurityViewModel::onClickSetConfirmedEmail}"
           android:paddingLeft="@dimen/dp8"
           android:paddingRight="@dimen/dp8"
           android:paddingTop="@dimen/dp4"
           android:text="@string/set_unconfirmed_email"
-          android:textColor="@color/black_register"
+          style="?textTitleColorSettingTheme"
           android:textSize="@dimen/dp14"
           android:textStyle="normal"
           android:visibility="@{fragmentSecurityViewModel.setConfirmedEmail}" />
@@ -294,14 +290,13 @@
           fontPath="fonts/IRANSansMobile.ttf"
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp40"
-          style="?textBackgroundColor"
           android:gravity="center_vertical|start"
           android:onClick="@{fragmentSecurityViewModel::onClicksetRecoveryQuestion}"
           android:paddingLeft="@dimen/dp8"
           android:paddingRight="@dimen/dp8"
           android:paddingTop="@dimen/dp4"
           android:text="@string/Change_question_recovery"
-          android:textColor="@color/black_register"
+          style="?textTitleColorSettingTheme"
           android:textSize="@dimen/dp14"
           android:textStyle="normal"
           android:visibility="visible" />
