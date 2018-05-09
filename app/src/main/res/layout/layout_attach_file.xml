@@ -71,6 +71,7 @@
         android:padding="@dimen/dp8"
         android:text="@string/md_send_button"
         android:textSize="@dimen/dp20"
+        android:textAppearance="@style/TextIconAppearance.all"
         android:visibility="gone" />
 
       <LinearLayout
@@ -90,6 +91,7 @@
           android:padding="@dimen/dp8"
           android:rotation="135"
           android:text="@string/md_attachment_clip"
+          android:textAppearance="@style/TextIconAppearance.all"
           android:textSize="@dimen/dp20" />
 
 
@@ -101,6 +103,7 @@
           android:layout_weight="1"
           android:padding="@dimen/dp8"
           android:text="@string/md_voice_message_microphone_button"
+          android:textAppearance="@style/TextIconAppearance.all"
           android:textSize="@dimen/dp20" />
 
 
