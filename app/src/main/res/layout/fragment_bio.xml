@@ -154,6 +154,7 @@
           android:layout_marginStart="@dimen/dp10"
           android:gravity="center"
           android:maxLength="70"
+          style="?textSubColorSettingTheme"
           android:text="@{fragmentBioViewModel.callBackTxtCountBio ,default = 70}" />
 
 

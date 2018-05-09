@@ -505,7 +505,13 @@ public class ViewMaker {
         txtEditedIndicator.setGravity(CENTER);
         txtEditedIndicator.setSingleLine(true);
         txtEditedIndicator.setText(context.getResources().getString(R.string.edited));
-        txtEditedIndicator.setTextAppearance(context, R.style.ChatMessages_Time);
+        setTextSize(txtEditedIndicator, R.dimen.dp8);
+        if (G.isDarkTheme) {
+            txtEditedIndicator.setTextAppearance(context, R.style.text_sub_style_setting_dark);
+        } else {
+            txtEditedIndicator.setTextAppearance(context, R.style.ChatMessages_Time);
+        }
+
         setTypeFace(txtEditedIndicator);
         LinearLayout.LayoutParams layout_927 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_927.rightMargin = i_Dp(dp4);
@@ -1752,7 +1758,7 @@ public class ViewMaker {
         cs_txt_pinned_message.setId(R.id.cs_txt_pinned_message);
         cs_txt_pinned_message.setGravity(CENTER);
         cs_txt_pinned_message.setText(G.fragmentActivity.getResources().getString(R.string.md_circlePin));
-        cs_txt_pinned_message.setTextColor(Color.BLACK);
+        cs_txt_pinned_message.setTextColor(Color.parseColor(G.textSubTheme));
         cs_txt_pinned_message.setTextSize(i_Dp(R.dimen.dp20));
         setTextSize(cs_txt_pinned_message, R.dimen.dp20);
         LinearLayout.LayoutParams layout_175 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

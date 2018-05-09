@@ -283,7 +283,7 @@
               android:paddingTop="@dimen/dp8"
               android:text="@string/change_pass_code"
               android:textColor="@{fragmentPassCodeViewModel.txtChangePassCodeColor }"
-              style="?textBackgroundColor_2"
+              style="?textTitleColorSettingTheme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal"
 
