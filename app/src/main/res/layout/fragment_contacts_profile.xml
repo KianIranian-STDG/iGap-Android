@@ -517,9 +517,11 @@
         android:layout_margin="@dimen/dp20"
         android:clickable="true"
         android:src="@mipmap/comment"
-        style="?fabButton"
+        android:background="@android:color/white"
+        app:backgroundTint="@android:color/white"
         app:fabSize="normal"
         app:layout_anchor="@+id/chi_appbar"
+        app:tint="@color/gray"
         app:layout_anchorGravity="bottom|right|end" />
 
     </android.support.design.widget.CoordinatorLayout>

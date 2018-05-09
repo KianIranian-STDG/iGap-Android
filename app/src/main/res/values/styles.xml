@@ -417,7 +417,6 @@
   <style name="FabButton">
     <item name="android:backgroundTint">@android:color/white</item>
     <item name="android:tint">@color/gray</item>
-    <item name="android:theme">@android:color/white</item>
   </style>
 
 </resources>

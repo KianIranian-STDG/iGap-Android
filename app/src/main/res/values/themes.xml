@@ -20,7 +20,7 @@
     <item name="emojiChat">@style/emojiColorChat_dark</item>
     <item name="backgroundColorCall">@style/backgroundColorCallDark</item>
     <item name="backgroundSubChatTheme">@style/backgroundSubChat_dark</item>
-    <item name="fabButton">@style/FabButtonDark</item>
+    <item name="fabButtoniGap">@style/FabButtonDark</item>
     <item name="md_dark_theme">true</item>
     <!--<item name="colorAccent">@color/colorOldBlack</item>-->
 
@@ -47,7 +47,7 @@
     <item name="backgroundColorCall">@style/backgroundColorCallLight</item>
     <item name="emojiChat">@style/emojiColorChat_light</item>
     <item name="backgroundSubChatTheme">@style/backgroundSubChat_light</item>
-    <item name="fabButton">@style/FabButton</item>
+    <item name="fabButtoniGap">@style/FabButton</item>
     <item name="md_dark_theme">false</item>
     <!--<item name="colorAccent">@color/white</item>-->
   </style>

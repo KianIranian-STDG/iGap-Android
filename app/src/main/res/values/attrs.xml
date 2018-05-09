@@ -115,7 +115,7 @@
   <attr name="backgroundColorCall" format="reference" />
   <attr name="emojiChat" format="reference" />
   <attr name="backgroundSubChatTheme" format="reference" />
-  <attr name="fabButton" format="reference" />
+  <attr name="fabButtoniGap" format="reference" />
 
 
 </resources>
