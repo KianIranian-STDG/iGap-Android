@@ -290,10 +290,10 @@ public final class StartupActions {
         SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
         /** clear map cache and use from new map tile url */
-        if (preferences.getBoolean(SHP_SETTING.KEY_MAP_CLEAR_CACHE, true)) {
+        if (preferences.getBoolean(SHP_SETTING.KEY_MAP_CLEAR_CACHE_GOOGLE, true)) {
             FragmentiGapMap.deleteMapFileCash();
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean(SHP_SETTING.KEY_MAP_CLEAR_CACHE, false);
+            editor.putBoolean(SHP_SETTING.KEY_MAP_CLEAR_CACHE_GOOGLE, false);
             editor.apply();
         }
 
