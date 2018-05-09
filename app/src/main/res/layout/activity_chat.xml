@@ -576,7 +576,7 @@
       android:id="@+id/ac_ll_attach_text"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp48"
-      style="?backgroundSubChatTheme"
+      android:backgroundTint="@color/messageBox_replyBoxBackgroundSend"
       android:clickable="true"
       android:gravity="center"
       android:orientation="horizontal"
@@ -590,6 +590,7 @@
         android:layout_weight="1"
         android:paddingLeft="@dimen/dp12"
         android:text="New Text"
+        android:singleLine="true"
         android:textSize="@dimen/dp13" />
 
       <net.iGap.module.MaterialDesignTextView

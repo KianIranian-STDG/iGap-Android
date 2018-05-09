@@ -153,10 +153,11 @@ public class FragmentEditImage extends BaseFragment {
                     options.setStatusBarColor(ContextCompat.getColor(G.context, R.color.black));
                     options.setToolbarColor(ContextCompat.getColor(G.context, R.color.black));
                     options.setCompressionQuality(80);
+                    options.setFreeStyleCropEnabled(true);
 
                     UCrop.of(uri, Uri.fromFile(new File(G.DIR_IMAGES, SAMPLE_CROPPED_IMAGE_NAME)))
-                            .withAspectRatio(16, 9)
                             .withOptions(options)
+                            .useSourceImageAspectRatio()
                             .start(G.context, FragmentEditImage.this);
                 } else {
                     CropImage.activity(uri)
