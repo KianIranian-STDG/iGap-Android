@@ -192,7 +192,7 @@ public class Contacts {
                         itemContact.setDisplayName(item.displayName);
                     } else if (sp.length == 3) {
                         itemContact.setFirstName(sp[0]);
-                        itemContact.setLastName(sp[1] + sp[2]);
+                        itemContact.setLastName(sp[1] + " " + sp[2]);
                         itemContact.setPhone(item.getPhone());
                         itemContact.setDisplayName(item.displayName);
                     } else if (sp.length >= 3) {
