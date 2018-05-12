@@ -71,7 +71,7 @@ public class SHP_SETTING {
 
     public static final String KEY_STNS_ALERT_MESSAGE = "STNS_ALERT_MESSAGE";
     public static final String KEY_STNS_MESSAGE_PREVIEW_MESSAGE = "STNS_MESSAGE_PREVIEW_MESSAGE";
-    public static final String KEY_STNS_ALERT_GROUP = "STNS_ALERT_MESSAGE";
+    public static final String KEY_STNS_ALERT_GROUP = "STNS_ALERT_GROUP";
     public static final String KEY_STNS_MESSAGE_PREVIEW_GROUP = "STNS_MESSAGE_PREVIEW_GROUP";
 
     public static final String KEY_STNS_APP_SOUND = "STNS_APP_SOUND";
