@@ -16,6 +16,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.databinding.ObservableField;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -176,7 +177,7 @@ public class FragmentSettingViewModel {
     private RealmPrivacy realmPrivacy;
     private RealmRegisteredInfo mRealmRegisteredInfo;
     private FragmentSetting fragmentSetting;
-    private FragmentSettingBinding fragmentSettingBinding;
+    private static FragmentSettingBinding fragmentSettingBinding;
     private int[] fontSizeArray = {11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
 
 
@@ -1873,8 +1874,8 @@ public class FragmentSettingViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-//        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgNotificationColor.getBackground();
-//        bgShape.setColor(color);
+        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgNotificationColor.getBackground();
+        bgShape.setColor(color);
         G.notificationColor = "#" + Integer.toHexString(color);
         editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
         editor.apply();
@@ -1898,8 +1899,8 @@ public class FragmentSettingViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-//        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgDefaultProgressColor.getBackground();
-//        bgShape.setColor(color);
+        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgDefaultProgressColor.getBackground();
+        bgShape.setColor(color);
         G.progressColor = "#" + Integer.toHexString(color);
         editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
         editor.apply();
@@ -1918,8 +1919,8 @@ public class FragmentSettingViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-//        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgDefaultProgressColor.getBackground();
-//        bgShape.setColor(color);
+        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgDefaultProgressColor.getBackground();
+        bgShape.setColor(color);
         G.progressColor = "#" + Integer.toHexString(color);
         editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
         editor.apply();
@@ -1934,8 +1935,8 @@ public class FragmentSettingViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-//        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgToggleBottonColor.getBackground();
-//        bgShape.setColor(color);
+        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgToggleBottonColor.getBackground();
+        bgShape.setColor(color);
         G.toggleButtonColor = "#" + Integer.toHexString(color);
         editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
         editor.apply();
@@ -1949,8 +1950,8 @@ public class FragmentSettingViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-//        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgDefaultHeaderFontColor.getBackground();
-//        bgShape.setColor(color);
+        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgDefaultHeaderFontColor.getBackground();
+        bgShape.setColor(color);
         G.headerTextColor = "#" + Integer.toHexString(color);
         editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
         editor.apply();
@@ -1969,8 +1970,8 @@ public class FragmentSettingViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-//        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgSendAndAttachColor.getBackground();
-//        bgShape.setColor(color);
+        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgSendAndAttachColor.getBackground();
+        bgShape.setColor(color);
         G.attachmentColor = "#" + Integer.toHexString(color);
         editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, G.attachmentColor);
         editor.apply();
