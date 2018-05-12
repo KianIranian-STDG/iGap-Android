@@ -3608,7 +3608,7 @@ public class FragmentChat extends BaseFragment
                 break;
         }
 
-        if (message.forwardedFrom != null) {
+        if (message.forwardedFrom != null || ( rootView.findViewById(R.id.replayLayoutAboveEditText) != null && rootView.findViewById(R.id.replayLayoutAboveEditText).getVisibility() == View.VISIBLE)) {
             rootEdit.setVisibility(View.GONE);
         }
 
