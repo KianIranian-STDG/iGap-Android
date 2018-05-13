@@ -1166,7 +1166,7 @@ public class FragmentSettingViewModel {
         G.textTitleTheme = "#ffffff";
         G.textSubTheme = "#ffffff";
         G.tintImage = "#ffffff";
-        G.backgroundTheme_2 = "#151515";
+        G.backgroundTheme_2 = "#000000";
         G.logLineTheme = "#4b4b4b";
         G.voteIconTheme = "#cacaca";
 
