@@ -328,6 +328,7 @@ public class G extends MultiDexApplication {
     public static OnRegistrationInfo onRegistrationInfo;
     public static OnGeoCommentResponse onGeoCommentResponse;
     public static OnGeoGetConfiguration onGeoGetConfiguration;
+    public static OnNotifyTime onNotifyTime;
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
     public static ISignalingAccept iSignalingAccept;
@@ -348,6 +349,7 @@ public class G extends MultiDexApplication {
     public static boolean isRestartActivity = false; // for check passCode
     public static boolean isFirstPassCode = true; // for check passCode
     public static boolean multiTab = false;
+    public static boolean isTimeWhole = false;
     public static FragmentManager fragmentManager;
     private Tracker mTracker;
 

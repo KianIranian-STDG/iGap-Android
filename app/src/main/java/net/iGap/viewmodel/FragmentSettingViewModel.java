@@ -161,6 +161,7 @@ public class FragmentSettingViewModel {
     public ObservableField<Boolean> isTrim = new ObservableField<>();
     public ObservableField<Boolean> isDefaultPlayer = new ObservableField<>();
     public ObservableField<Boolean> isCrop = new ObservableField<>();
+    public ObservableField<Boolean> isTime = new ObservableField<>();
     public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
 
 
@@ -1047,6 +1048,25 @@ public class FragmentSettingViewModel {
             FragmentSetting.onRemoveFragmentSetting.removeFragment();
 
     }
+    public void onClickTime(View view) {
+
+        isTime.set(!isTime.get());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
+        if (isTime.get()) {
+            G.isTimeWhole = true;
+            editor.putBoolean(SHP_SETTING.KEY_WHOLE_TIME, true);
+            editor.apply();
+        } else {
+            G.isTimeWhole = false;
+            editor.putBoolean(SHP_SETTING.KEY_WHOLE_TIME, false);
+            editor.apply();
+        }
+        if (G.onNotifyTime !=null){
+            G.onNotifyTime.notifyTime();
+        }
+    }
 
     public void onCheckedChangedMultiTab(boolean isChecked) {
 
@@ -1572,6 +1592,9 @@ public class FragmentSettingViewModel {
 
         boolean checkedEnableMultiTab = sharedPreferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
         isMultiTab.set(checkedEnableMultiTab);
+
+        boolean checkedEnableTime = sharedPreferences.getBoolean(SHP_SETTING.KEY_WHOLE_TIME, false);
+        isTime.set(checkedEnableTime);
 
         poRbDialogTextSize = sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14) - 11;
         String textSize = "" + sharedPreferences.getInt(SHP_SETTING.KEY_MESSAGE_TEXT_SIZE, 14);

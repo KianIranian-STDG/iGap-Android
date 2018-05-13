@@ -13,6 +13,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,7 @@ import net.iGap.interfaces.OnDateChanged;
 import net.iGap.interfaces.OnDraftMessage;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
 import net.iGap.interfaces.OnMute;
+import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
 import net.iGap.interfaces.OnSelectMenu;
 import net.iGap.interfaces.OnSetActionInRoom;
@@ -281,6 +283,18 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                 }
             });
         }
+
+        G.onNotifyTime = new OnNotifyTime() {
+            @Override
+            public void notifyTime() {
+                if (mRecyclerView != null) {
+                    if (mRecyclerView.getAdapter() != null) {
+                        mRecyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                }
+            }
+        };
+
     }
 
     //***************************************************************************************************************************

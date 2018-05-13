@@ -86,6 +86,7 @@ public final class StartupActions {
         makeFolder();
         ConnectionManager.manageConnection();
         configDownloadManager();
+        manageTime();
 
 
         new CallObserver();
@@ -94,6 +95,11 @@ public final class StartupActions {
          */
         new HelperDownloadFile();
         new HelperUploadFile();
+    }
+
+    private void manageTime() {
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        G.isTimeWhole = sharedPreferences.getBoolean(SHP_SETTING.KEY_WHOLE_TIME, false);
     }
 
     private void configDownloadManager() {
