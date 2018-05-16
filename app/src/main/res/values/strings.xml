@@ -1195,5 +1195,8 @@
   <string name="tab_filters">Filters</string>
   <string name="tab_edit">Edit</string>
   <string name="can_not_open_file">This file can not be opened</string>
+  <string name="disable">Disable</string>
+  <string name="scheduled">Scheduled</string>
+  <string name="automatic">Automatic</string>
 
 </resources>
