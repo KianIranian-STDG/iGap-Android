@@ -427,8 +427,10 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         if (!isVoice) {
             try {
-                remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
-                notificationManager.notify(notificationId, notification);
+                if (remoteViews != null) {
+                    remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
+                    notificationManager.notify(notificationId, notification);
+                }
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
@@ -673,6 +675,9 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             intent.putExtra("ACTION", STOPFOREGROUND_ACTION);
             context.startService(intent);
         } catch (RuntimeException e) {
+
+            if (notificationManager == null)
+                notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
             if (notificationManager != null) {
                 notificationManager.cancel(notificationId);
@@ -967,22 +972,22 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             //    }
             //}
 
-            Intent intentPrevious = new Intent(context, customButtonListener.class);
+            Intent intentPrevious = new Intent(context, CustomButtonListener.class);
             intentPrevious.putExtra("mode", "previous");
             PendingIntent pendingIntentPrevious = PendingIntent.getBroadcast(context, 1, intentPrevious, 0);
             remoteViews.setOnClickPendingIntent(R.id.mln_btn_Previous_music, pendingIntentPrevious);
 
-            Intent intentPlayPause = new Intent(context, customButtonListener.class);
+            Intent intentPlayPause = new Intent(context, CustomButtonListener.class);
             intentPlayPause.putExtra("mode", "play");
             PendingIntent pendingIntentPlayPause = PendingIntent.getBroadcast(context, 2, intentPlayPause, 0);
             remoteViews.setOnClickPendingIntent(R.id.mln_btn_play_music, pendingIntentPlayPause);
 
-            Intent intentforward = new Intent(context, customButtonListener.class);
+            Intent intentforward = new Intent(context, CustomButtonListener.class);
             intentforward.putExtra("mode", "forward");
             PendingIntent pendingIntentforward = PendingIntent.getBroadcast(context, 3, intentforward, 0);
             remoteViews.setOnClickPendingIntent(R.id.mln_btn_forward_music, pendingIntentforward);
 
-            Intent intentClose = new Intent(context, customButtonListener.class);
+            Intent intentClose = new Intent(context, CustomButtonListener.class);
             intentClose.putExtra("mode", "close");
             PendingIntent pendingIntentClose = PendingIntent.getBroadcast(context, 4, intentClose, 0);
             remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
@@ -1522,7 +1527,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         G.onAudioFocusChangeListener = this;
 
         if (intent == null || intent.getExtras() == null) {
-            stopForeground(true);
+            stopForeground(false);
             stopSelf();
         } else {
 
@@ -1543,13 +1548,24 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                     removeSensor();
 
-                    stopForeground(true);
+                    stopForeground(false);
                     stopSelf();
                 }
             }
         }
 
         return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (notificationManager == null)
+            notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (notificationManager != null) {
+            notificationManager.cancel(notificationId);
+        }
     }
 
     private void registerAudioFocus(int audioState) {
@@ -1592,28 +1608,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         void rename();
     }
 
-    public static class customButtonListener extends BroadcastReceiver {
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            String str = intent.getExtras().getString("mode");
-
-            if (str.equals("previous")) {
-//                canDoAction= true;
-                previousMusic();
-//                MusicPlayer.canDoAction = false;
-            } else if (str.equals("play")) {
-                playAndPause();
-            } else if (str.equals("forward")) {
-//                canDoAction= true;
-                nextMusic();
-//                MusicPlayer.canDoAction = false;
-            } else if (str.equals("close")) {
-                closeLayoutMediaPlayer();
-            }
-        }
-    }
 
 //    private static void seMediaSesionMetaData() {
 //        if (mSession != null) {

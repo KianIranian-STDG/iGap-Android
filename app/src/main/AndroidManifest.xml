@@ -54,8 +54,12 @@
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
     tools:replace="allowBackup">
-    <receiver android:name=".module.MusicPlayer$customButtonListener" />
-    <receiver android:name=".helper.HelperNotificationAndBadge$RemoteActionReceiver" />
+    <receiver
+      android:name=".module.CustomButtonListener"
+      android:exported="false" />
+    <receiver
+      android:name=".helper.HelperNotificationAndBadge$RemoteActionReceiver"
+      android:exported="false" />
     <receiver android:name=".module.MyPhonStateService">
       <intent-filter>
         <action android:name="android.intent.action.PHONE_STATE" />
