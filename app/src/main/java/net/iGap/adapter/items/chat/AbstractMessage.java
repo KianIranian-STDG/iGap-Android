@@ -720,10 +720,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
         if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN) {
-            setTextColor(imgTick, R.color.iGapColor);
+            if (G.isDarkTheme) {
+                setTextColor(imgTick, R.color.iGapColor);
+            }else {
+                setTextColor(imgTick, R.color.backgroundColorCall2);
+            }
+
         } else if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.LISTENED) {
             // iconHearing.setVisibility(View.VISIBLE);
-            setTextColor(imgTick, R.color.iGapColor);
+            if (G.isDarkTheme) {
+                setTextColor(imgTick, R.color.iGapColor);
+            }else {
+                setTextColor(imgTick, R.color.backgroundColorCall2);
+            }
+
             imgTick.setVisibility(View.VISIBLE);
         } else {
 
