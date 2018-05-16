@@ -126,7 +126,7 @@
 
   <color name="newBlack">#171717</color>
   <color name="gray10">#e5e5e5</color>
-  <color name="messageBox_sendColor">#f7f7f7</color>
+  <color name="messageBox_sendColor">#2800b0bf</color>
   <color name="messageBox_receiveColor">#ffffff</color>
   <color name="messageBox_replyBoxBackgroundSend">#f9f4e1</color>
   <color name="messageBox_replyBoxBackgroundReceive">#f9f4e1</color>
