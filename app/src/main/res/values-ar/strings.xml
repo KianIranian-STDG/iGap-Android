@@ -2124,4 +2124,5 @@
   <string name="tab_filters">مرشح اللون</string>
   <string name="tab_edit">تحرير</string>
   <string name="can_not_open_file">لا يمكن فتح هذا الملف</string>
+  <string name="st_24_Clock">24 ساعة</string>
 </resources>
