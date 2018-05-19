@@ -13,7 +13,9 @@ package net.iGap;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
@@ -353,19 +355,6 @@ public class G extends MultiDexApplication {
     public static FragmentManager fragmentManager;
     private Tracker mTracker;
 
-    public static void checkLanguage() {
-        try {
-            String selectedLanguage = G.selectedLanguage;
-            if (selectedLanguage == null) return;
-            Locale locale = new Locale(selectedLanguage);
-            Locale.setDefault(locale);
-            Configuration config = new Configuration();
-            config.locale = locale;
-            context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onCreate() {
@@ -381,7 +370,6 @@ public class G extends MultiDexApplication {
             }
         }).start();
 
-
         context = getApplicationContext();
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -391,9 +379,37 @@ public class G extends MultiDexApplication {
 
     @Override
     protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        //MultiDex.install(this);
+        super.attachBaseContext(updateResources(base));
         new MultiDexUtils().getLoadedExternalDexClasses(this);
+    }
+
+    public static Context updateResources(Context baseContext) {
+        String selectedLanguage = G.selectedLanguage;
+        if (selectedLanguage == null) {
+            selectedLanguage = "en";
+        }
+
+        Locale locale = new Locale(selectedLanguage);
+        Locale.setDefault(locale);
+
+        Resources res = baseContext.getResources();
+        Configuration configuration = res.getConfiguration();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            configuration.setLocale(locale);
+        } else {
+            configuration.locale = locale;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            baseContext = baseContext.createConfigurationContext(configuration);
+        } else {
+            res.updateConfiguration(configuration, res.getDisplayMetrics());
+        }
+
+        G.context = baseContext;
+
+        return baseContext;
     }
 
     synchronized public Tracker getDefaultTracker() {

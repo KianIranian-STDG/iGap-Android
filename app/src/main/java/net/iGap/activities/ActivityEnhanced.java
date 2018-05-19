@@ -83,7 +83,7 @@ public class ActivityEnhanced extends AppCompatActivity {
     }
 
     public void onCreate(Bundle savedInstanceState) {
-        G.checkLanguage();
+        G.updateResources(G.context);
         checkFont();
 
         IntentFilter screenStateFilter = new IntentFilter();

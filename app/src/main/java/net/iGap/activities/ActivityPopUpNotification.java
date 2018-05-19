@@ -180,7 +180,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        G.checkLanguage();
+        G.updateResources(G.context);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         super.onCreate(savedInstanceState);
