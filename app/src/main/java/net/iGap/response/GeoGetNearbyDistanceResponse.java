@@ -63,9 +63,6 @@ public class GeoGetNearbyDistanceResponse extends MessageHandler {
                                                 }, new OnSuccess() {
                                                     @Override
                                                     public void onSuccess() {
-                                                        if (G.onMapUsersGet != null) {
-                                                            G.onMapUsersGet.onMapUsersGet(result.getUserId());
-                                                        }
                                                         realm.close();
                                                     }
                                                 }, new OnError() {
@@ -94,6 +91,11 @@ public class GeoGetNearbyDistanceResponse extends MessageHandler {
                 });
             }
         });
+
+        if (G.onMapUsersGet != null) {
+            G.onMapUsersGet.onMapUsersGet();
+        }
+
     }
 
     @Override
@@ -104,6 +106,9 @@ public class GeoGetNearbyDistanceResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        if (G.onMapUsersGet != null) {
+            G.onMapUsersGet.onMapUsersGet();
+        }
     }
 }
 
