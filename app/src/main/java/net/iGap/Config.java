@@ -86,4 +86,25 @@ public class Config {
     public static String default_dark_headerTextColor = "#ffffff";
     public static String default_dark_progressColor = "#ffffff";
 
+    public static void darkThemeColor() {
+        G.backgroundTheme = "#151515";
+        G.textTitleTheme = "#ffffff";
+        G.textSubTheme = "#ffffff";
+        G.tintImage = "#ffffff";
+        G.backgroundTheme_2 = "#000000";
+        G.logLineTheme = "#4b4b4b";
+        G.voteIconTheme = "#cacaca";
+    }
+
+    public static void lightThemeColor() {
+        G.backgroundTheme = "#FFFFFF";
+        G.textTitleTheme = "#000000";
+        G.textSubTheme = "#bbbbbb";
+        G.tintImage = "#000000";
+        G.backgroundTheme_2 = "#f9f9f9";
+        G.logLineTheme = "#e9e9e9";
+        G.voteIconTheme = "#696969";
+
+    }
+
 }

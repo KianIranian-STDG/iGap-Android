@@ -344,7 +344,7 @@
         android:paddingEnd="@dimen/dp16"
         android:paddingStart="@dimen/dp16"
         android:paddingTop="@dimen/dp4"
-        android:text="@string/st_dialog_content_keepMedia"
+        android:text="@string/automatic_description_theme"
         android:textSize="@dimen/dp15"
         android:textStyle="normal"
         android:visibility="@{fragmentDarkThemeViewModel.isAutoDarkTheme  , default=gone}" />

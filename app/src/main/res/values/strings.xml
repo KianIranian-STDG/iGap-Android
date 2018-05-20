@@ -1200,6 +1200,7 @@
   <string name="from_theme">From: </string>
   <string name="to_theme">To: </string>
   <string name="automatic">Automatic</string>
+  <string name="automatic_description_theme">The night mode was activated from 19 to 8 with automatic mode selection</string>
   <string name="setting_dark_theme">Setting Dark Theme</string>
   <string name="Select_Time">Select Time</string>
 

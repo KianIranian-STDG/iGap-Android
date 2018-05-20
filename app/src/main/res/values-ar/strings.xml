@@ -2126,4 +2126,6 @@
   <string name="can_not_open_file">لا يمكن فتح هذا الملف</string>
   <string name="setting_dark_theme">إعدادات الوضع الليلي</string>
   <string name="Select_Time">اختر الوقت</string>
+  <string name="automatic_description_theme">تم تنشيط الوضع الليلي من 19 إلى 8 مع اختيار الوضع التلقائي</string>
+
 </resources>

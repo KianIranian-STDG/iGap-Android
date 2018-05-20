@@ -326,22 +326,10 @@ public final class StartupActions {
         }
 
         if (G.isDarkTheme) {
-            G.backgroundTheme = "#151515";
-            G.backgroundTheme_2 = "#000000";
-            G.textTitleTheme = "#ffffff";
-            G.textSubTheme = "#ffffff";
-            G.tintImage = "#ffffff";
-            G.logLineTheme = "#4b4b4b";
-            G.voteIconTheme = "#cacaca";
+            Config.darkThemeColor();
 
         } else {
-            G.backgroundTheme = "#FFFFFF";
-            G.backgroundTheme_2 = "#f9f9f9";
-            G.textTitleTheme = "#000000";
-            G.textSubTheme = "#bbbbbb";
-            G.tintImage = "#000000";
-            G.logLineTheme = "#e9e9e9";
-            G.voteIconTheme = "#696969";
+            Config.lightThemeColor();
         }
         G.multiTab = preferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
 
