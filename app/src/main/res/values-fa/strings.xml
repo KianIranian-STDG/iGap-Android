@@ -1111,6 +1111,7 @@
   <string name="password">رمز</string>
   <string name="text_empty_user_map">متأسفانه هیچ کاربری اطراف شما نفشه خود را فعال نکرده است</string>
   <string name="send_message_to">ارسال پیام به  </string>
+  <string name="send_forward_to">آیا شما مطمئنید میخواهید انتقال دهید به </string>
 
   <string name="st_bio">بیو</string>
   <string name="st_des_bio">شما می توانید توضیح مختصری دربارهٔ خود در پروفایل وارد کنید. لازم به ذکر است هر کاربر با ورود به پروفایل شما این متن را خواهد دید.</string>
@@ -1160,6 +1161,7 @@
   <string name="other_files">سایر فایل ها</string>
   <string name="title_import_contact_limit">در حال وارد کردن لیست تماس</string>
   <string name="content_import_contact_limit">متاسفانه تعداد مخاطبین شما بیش از حد مجاز میباشد. نمیتوانیم با سرور بررسی کنیم ، لطفا مخاطبین را در حد معقول ذخیره کنید</string>
+  <string name="another_room">اتاق دیگر</string>
 
   <string name="filter_cancel_content">آیا از تغییرات انجام داده منصرف شدید ؟</string>
   <string name="lbl_brightness">روشنایی</string>
