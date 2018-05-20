@@ -2124,4 +2124,6 @@
   <string name="tab_filters">مرشح اللون</string>
   <string name="tab_edit">تحرير</string>
   <string name="can_not_open_file">لا يمكن فتح هذا الملف</string>
+  <string name="setting_dark_theme">إعدادات الوضع الليلي</string>
+  <string name="Select_Time">اختر الوقت</string>
 </resources>

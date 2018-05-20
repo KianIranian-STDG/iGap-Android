@@ -90,7 +90,7 @@
       android:id="@+id/st_layout_fa"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp52"
-      android:onClick="@{fragmentLanguageViewModel::onClickDisable}"
+      android:onClick="@{fragmentDarkThemeViewModel::onClickDisable}"
       android:orientation="horizontal">
 
 
@@ -124,17 +124,22 @@
         android:textAppearance="@style/TextIconAppearance_toolbar"
         android:textColor="@color/toolbar_background"
         android:textSize="@dimen/dp15"
-        android:visibility="@{fragmentLanguageViewModel.isDisableDarkTheme ? View.VISIBLE : View.GONE}" />
+        android:visibility="@{fragmentDarkThemeViewModel.isDisableDarkTheme }" />
 
-      <!--android:visibility="@{fragmentLanguageViewModel.farsiVisibility, default=invisible}"-->
+      <!--android:visibility="@{fragmentDarkThemeViewModel.farsiVisibility, default=invisible}"-->
 
     </LinearLayout>
+
+    <View
+      style="?lineColorSettingTheme"
+      android:layout_width="match_parent"
+      android:layout_height="1dp" />
 
     <LinearLayout
       android:id="@+id/st_layout_scheduled"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp52"
-      android:onClick="@{fragmentLanguageViewModel::onClickScheduled}"
+      android:onClick="@{fragmentDarkThemeViewModel::onClickScheduled}"
       android:orientation="horizontal">
 
 
@@ -170,17 +175,22 @@
         android:textAppearance="@style/TextIconAppearance_toolbar"
         android:textColor="@color/toolbar_background"
         android:textSize="@dimen/dp15"
-        android:visibility="@{fragmentLanguageViewModel.isScheduled ? View.VISIBLE : View.GONE}" />
+        android:visibility="@{fragmentDarkThemeViewModel.isScheduledDarkTheme }" />
 
-      <!--android:visibility="@{fragmentLanguageViewModel.englishVisibility, default=invisible}"-->
+      <!--android:visibility="@{fragmentDarkThemeViewModel.englishVisibility, default=invisible}"-->
 
     </LinearLayout>
+
+    <View
+      style="?lineColorSettingTheme"
+      android:layout_width="match_parent"
+      android:layout_height="1dp" />
 
     <LinearLayout
       android:id="@+id/st_layout_automatic"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dp52"
-      android:onClick="@{fragmentLanguageViewModel::onClickAutomatic}"
+      android:onClick="@{fragmentDarkThemeViewModel::onClickAutomatic}"
       android:orientation="horizontal">
 
 
@@ -216,25 +226,25 @@
         android:textAppearance="@style/TextIconAppearance_toolbar"
         android:textColor="@color/toolbar_background"
         android:textSize="@dimen/dp15"
-        android:visibility="@{fragmentLanguageViewModel.isAuto ? View.VISIBLE : View.GONE}"
+        android:visibility="@{fragmentDarkThemeViewModel.isAutoDarkTheme }"
 
         />
-      <!--android:visibility="@{fragmentLanguageViewModel.arabiVisibility, default=invisible}"-->
+      <!--android:visibility="@{fragmentDarkThemeViewModel.arabiVisibility, default=invisible}"-->
 
     </LinearLayout>
 
-
     <LinearLayout
+      style="?backgroundColorSettingTheme_2"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="vertical"
-      android:visibility="@{fragmentDarkThemeViewModel.isScheduledDarkTheme ? View.VISIBLE : View.GONE , default=gone}">
+      android:visibility="@{fragmentDarkThemeViewModel.isScheduledDarkTheme, default=gone}">
 
       <TextView
         style="?textTitleColorSettingTheme"
         fontPath="fonts/IRANSansMobile.ttf"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp52"
+        android:layout_height="@dimen/dp28"
         android:gravity="center_vertical"
         android:paddingEnd="@dimen/dp16"
         android:paddingStart="@dimen/dp16"
@@ -260,8 +270,7 @@
           android:gravity="center_vertical"
           android:paddingEnd="@dimen/dp16"
           android:paddingStart="@dimen/dp16"
-          android:paddingTop="@dimen/dp4"
-          android:text="@string/st_Language"
+          android:text="@string/from_theme"
           android:textSize="@dimen/dp15"
           android:textStyle="normal" />
 
@@ -299,7 +308,7 @@
           android:paddingEnd="@dimen/dp16"
           android:paddingStart="@dimen/dp16"
           android:paddingTop="@dimen/dp4"
-          android:text="@string/st_Language"
+          android:text="@string/to_theme"
           android:textSize="@dimen/dp15"
           android:textStyle="normal" />
 
@@ -311,7 +320,7 @@
           android:gravity="center_vertical"
           android:paddingLeft="@dimen/dp16"
           android:paddingRight="@dimen/dp16"
-          android:text="@{fragmentDarkThemeViewModel.callbackToTime , default=English}"
+          android:text="@{fragmentDarkThemeViewModel.callbackToTime , default=8}"
           android:textColor="@color/toolbar_background"
           android:textSize="@dimen/dp15"
           android:textStyle="normal" />
@@ -320,20 +329,26 @@
 
     </LinearLayout>
 
-    <TextView
-      style="?textTitleColorSettingTheme"
-      fontPath="fonts/IRANSansMobile.ttf"
+    <LinearLayout
       android:layout_width="match_parent"
-      android:layout_height="@dimen/dp52"
-      android:gravity="center_vertical"
-      android:paddingEnd="@dimen/dp16"
-      android:paddingStart="@dimen/dp16"
-      android:paddingTop="@dimen/dp4"
-      android:text="@string/st_Language"
-      android:textSize="@dimen/dp15"
-      android:textStyle="normal"
-      android:visibility="@{fragmentDarkThemeViewModel.isAutoDarkTheme ? View.VISIBLE : View.GONE , default=gone}" />
+      android:layout_height="wrap_content"
+      style="?backgroundColorSettingTheme_2"
+      android:orientation="horizontal">
 
+      <TextView
+        style="?textTitleColorSettingTheme"
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingEnd="@dimen/dp16"
+        android:paddingStart="@dimen/dp16"
+        android:paddingTop="@dimen/dp4"
+        android:text="@string/st_dialog_content_keepMedia"
+        android:textSize="@dimen/dp15"
+        android:textStyle="normal"
+        android:visibility="@{fragmentDarkThemeViewModel.isAutoDarkTheme  , default=gone}" />
+    </LinearLayout>
   </LinearLayout>
 
 

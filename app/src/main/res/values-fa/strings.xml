@@ -1168,5 +1168,6 @@
   <string name="tab_filters">فیلتر رنگ</string>
   <string name="tab_edit">ویرایش</string>
   <string name="can_not_open_file">این فایل باز نمی شود</string>
-
+  <string name="setting_dark_theme">تنظیمات حالت شب</string>
+  <string name="Select_Time">انتخاب زمان</string>
 </resources>

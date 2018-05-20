@@ -151,9 +151,11 @@ public class SHP_SETTING {
 
     public static final String KEY_SELECTED_HOUR_FROM = "KEY_SELECTED_HOUR_FROM";
     public static final String KEY_SELECTED_MINUTE_FROM = "KEY_SELECTED_MINUTE_FROM";
+    public static final String KEY_SELECTED_MILISECOND_FROM = "KEY_SELECTED_MILISECOND_FROM";
 
     public static final String KEY_SELECTED_HOUR_TO = "KEY_SELECTED_HOUR_TO";
     public static final String KEY_SELECTED_MINUTE_TO = "KEY_SELECTED_MINUTE_TO";
+    public static final String KEY_SELECTED_MILISECOND_TO = "KEY_SELECTED_MILISECOND_TO";
 
     public static class Defaults {
         public static final int KEY_AUTOPLAY_GIFS = 1;

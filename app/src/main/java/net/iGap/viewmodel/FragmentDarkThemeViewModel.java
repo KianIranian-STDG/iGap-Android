@@ -3,15 +3,23 @@ package net.iGap.viewmodel;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
+import android.databinding.ObservableField;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.widget.TimePicker;
 
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.fragments.FragmentDarkTheme;
 import net.iGap.module.SHP_SETTING;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -32,6 +40,12 @@ public class FragmentDarkThemeViewModel {
     private SharedPreferences sharedPreferences;
     private FragmentDarkTheme fragmentDarkTheme;
 
+    public ObservableField<String> callbackFromTime = new ObservableField<>("");
+    public ObservableField<String> callbackToTime = new ObservableField<>("");
+    public ObservableField<Integer> isScheduledDarkTheme = new ObservableField<>(View.GONE);
+    public ObservableField<Integer> isAutoDarkTheme = new ObservableField<>(View.GONE);
+    public ObservableField<Integer> isDisableDarkTheme = new ObservableField<>(View.VISIBLE);
+
     public FragmentDarkThemeViewModel(FragmentDarkTheme fragmentDarkTheme) {
         this.fragmentDarkTheme = fragmentDarkTheme;
         getInfo();
@@ -42,12 +56,28 @@ public class FragmentDarkThemeViewModel {
         sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         isDisable = sharedPreferences.getBoolean(SHP_SETTING.KEY_DISABLE_TIME_DARK_THEME, true);
 
+        int hour_To = sharedPreferences.getInt(SHP_SETTING.KEY_SELECTED_HOUR_TO, 8);
+        int minute_To = sharedPreferences.getInt(SHP_SETTING.KEY_SELECTED_MINUTE_TO, 10);
+        callbackToTime.set("" + hour_To + ":" + minute_To);
+
+        int hour_From = sharedPreferences.getInt(SHP_SETTING.KEY_SELECTED_HOUR_FROM, 22);
+        int minute_From = sharedPreferences.getInt(SHP_SETTING.KEY_SELECTED_MINUTE_FROM, 10);
+        callbackFromTime.set("" + hour_From + ":" + minute_From);
+
         if (isDisable) {
-            isAuto = false;
-            isScheduled = false;
+            isDisableDarkTheme.set(View.VISIBLE);
+            isAutoDarkTheme.set(View.GONE);
+            isScheduledDarkTheme.set(View.GONE);
         } else {
             isAuto = sharedPreferences.getBoolean(SHP_SETTING.KEY_IS_AUTOMATIC_TIME_DARK_THEME, false);
-            isScheduled = !isAuto;
+            isDisableDarkTheme.set(View.GONE);
+            if (isAuto) {
+                isAutoDarkTheme.set(View.VISIBLE);
+                isScheduledDarkTheme.set(View.GONE);
+            } else {
+                isAutoDarkTheme.set(View.GONE);
+                isScheduledDarkTheme.set(View.VISIBLE);
+            }
         }
 
 
@@ -59,91 +89,76 @@ public class FragmentDarkThemeViewModel {
         editor.putBoolean(SHP_SETTING.KEY_DISABLE_TIME_DARK_THEME, true);
         editor.putBoolean(SHP_SETTING.KEY_IS_AUTOMATIC_TIME_DARK_THEME, false);
         editor.apply();
-        isDisable = true;
-        isAuto = false;
-        isScheduled = false;
-
-
+        isDisableDarkTheme.set(View.VISIBLE);
+        isScheduledDarkTheme.set(View.GONE);
+        isAutoDarkTheme.set(View.GONE);
     }
 
     public void onClickScheduled(View v) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SHP_SETTING.KEY_DISABLE_TIME_DARK_THEME, false);
-        editor.putBoolean(SHP_SETTING.KEY_IS_AUTOMATIC_TIME_DARK_THEME, true);
+        editor.putBoolean(SHP_SETTING.KEY_IS_AUTOMATIC_TIME_DARK_THEME, false);
         editor.apply();
-        isDisable = false;
-        isAuto = true;
-        isScheduled = false;
+
+        isDisableDarkTheme.set(View.GONE);
+        isScheduledDarkTheme.set(View.VISIBLE);
+        isAutoDarkTheme.set(View.GONE);
 
     }
 
     public void onClickAutomatic(View v) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(SHP_SETTING.KEY_DISABLE_TIME_DARK_THEME, false);
-        editor.putBoolean(SHP_SETTING.KEY_IS_AUTOMATIC_TIME_DARK_THEME, false);
+        editor.putBoolean(SHP_SETTING.KEY_IS_AUTOMATIC_TIME_DARK_THEME, true);
         editor.apply();
-        isDisable = false;
-        isAuto = false;
-        isScheduled = true;
+
+        isDisableDarkTheme.set(View.GONE);
+        isScheduledDarkTheme.set(View.GONE);
+        isAutoDarkTheme.set(View.VISIBLE);
     }
 
-    private void onClickFromTime(View v) {
-        Calendar mCurrentTime = Calendar.getInstance();
-        int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
-        int minute = mCurrentTime.get(Calendar.MINUTE);
-        TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(G.currentActivity, new TimePickerDialog.OnTimeSetListener() {
+    public void onClickFromTime(View v) {
+        sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        int hour = sharedPreferences.getInt(SHP_SETTING.KEY_SELECTED_HOUR_FROM, 8);
+        int minute = sharedPreferences.getInt(SHP_SETTING.KEY_SELECTED_MINUTE_FROM, 0);
+
+        TimePickerDialog mTimePicker = new TimePickerDialog(G.currentActivity, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-
+                long fNow = (selectedHour * 3600000) + (selectedMinute * 60000);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt(SHP_SETTING.KEY_SELECTED_HOUR_FROM, selectedHour);
                 editor.putInt(SHP_SETTING.KEY_SELECTED_MINUTE_FROM, selectedMinute);
+                editor.putLong(SHP_SETTING.KEY_SELECTED_MILISECOND_FROM, fNow);
                 editor.apply();
-
-//                eReminderTime.setText(selectedHour + ":" + selectedMinute);
+                callbackFromTime.set("" + selectedHour + ":" + selectedMinute);
             }
         }, hour, minute, true);//Yes 24 hour time
-        mTimePicker.setTitle("Select Time");
+        mTimePicker.setTitle(G.context.getResources().getString(R.string.Select_Time));
         mTimePicker.show();
 
     }
 
-    private void onClickToTime(View v) {
+    public void onClickToTime(View v) {
 
-        Calendar mCurrentTime = Calendar.getInstance();
-        int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
-        int minute = mCurrentTime.get(Calendar.MINUTE);
-        TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(G.currentActivity, new TimePickerDialog.OnTimeSetListener() {
+        sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        int hour = sharedPreferences.getInt(SHP_SETTING.KEY_SELECTED_HOUR_TO, 8);
+        int minute = sharedPreferences.getInt(SHP_SETTING.KEY_SELECTED_MINUTE_TO, 0);
+
+        TimePickerDialog mTimePicker = new TimePickerDialog(G.currentActivity, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-
+                long fNow = (selectedHour * 3600000) + (selectedMinute * 60000);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt(SHP_SETTING.KEY_SELECTED_HOUR_TO, selectedHour);
                 editor.putInt(SHP_SETTING.KEY_SELECTED_MINUTE_TO, selectedMinute);
+                editor.putLong(SHP_SETTING.KEY_SELECTED_MILISECOND_TO, fNow);
                 editor.apply();
-
-//                eReminderTime.setText(selectedHour + ":" + selectedMinute);
+                callbackToTime.set("" + selectedHour + ":" + selectedMinute);
             }
         }, hour, minute, true);//Yes 24 hour time
-        mTimePicker.setTitle("Select Time");
+        mTimePicker.setTitle(G.context.getResources().getString(R.string.Select_Time));
         mTimePicker.show();
 
     }
-
-
-    public boolean isAutoDarkTheme() {
-        return isAuto;
-    }
-
-    public boolean isScheduledDarkTheme() {
-        return isScheduled;
-    }
-
-    public boolean isDisableDarkTheme() {
-        return isDisable;
-    }
-
-
 }

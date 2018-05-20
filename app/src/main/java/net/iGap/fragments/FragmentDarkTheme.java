@@ -21,11 +21,14 @@ import net.iGap.viewmodel.FragmentLanguageViewModel;
  */
 public class FragmentDarkTheme extends BaseFragment {
 
+    public static FragmentDarkTheme newInstance() {
+        return new FragmentDarkTheme();
+    }
+
 
     private FragmentDarkThemeViewModel fragmentDarkThemeViewModel;
     private FragmentDarkThemeBinding fragmentDarkThemeBinding;
-    public ObservableField<String> callbackVersionApp = new ObservableField<>("");
-    public ObservableField<String> callbackFromTime = new ObservableField<>("");
+
 
     public FragmentDarkTheme() {
         // Required empty public constructor
@@ -41,11 +44,20 @@ public class FragmentDarkTheme extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initDataBinding();
 
+        initDataBinding();
+        fragmentDarkThemeBinding.stnsRippleBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // mActivity.getSupportFragmentManager().popBackStack();
+                popBackStackFragment();
+            }
+        });
+
     }
 
     private void initDataBinding() {
         fragmentDarkThemeViewModel = new FragmentDarkThemeViewModel(this);
-        fragmentDarkThemeBinding.setFragmentDarkThemeViewModel(fragmentDarkThemeBinding);
+        fragmentDarkThemeBinding.setFragmentDarkThemeViewModel(fragmentDarkThemeViewModel);
 
     }
 }

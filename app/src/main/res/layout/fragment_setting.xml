@@ -1056,6 +1056,27 @@
               android:layout_height="1dp"
               android:visibility="visible" />
 
+            <TextView
+              android:id="@+id/asn_txt_autoTimeDarkTheme"
+              style="?textTitleColorSettingTheme"
+              fontPath="fonts/IRANSansMobile.ttf"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp48"
+              android:gravity="center_vertical"
+              android:paddingLeft="@dimen/dp16"
+              android:paddingRight="@dimen/dp16"
+              android:paddingTop="@dimen/dp4"
+              android:text="@string/setting_dark_theme"
+              android:textSize="@dimen/dp15"
+              android:textStyle="normal"
+              android:visibility="@{fragmentSettingViewModel.isAutoThemeDark  ,default = gone}"
+              android:onClick="@{fragmentSettingViewModel::onClickAutoTimeDarkTheme}" />
+
+            <View
+              style="?lineColorSettingTheme"
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:visibility="@{fragmentSettingViewModel.isAutoThemeDark  ,default = gone}" />
 
             <LinearLayout
               android:layout_width="match_parent"

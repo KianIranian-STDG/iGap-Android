@@ -52,6 +52,7 @@ import net.iGap.databinding.FragmentSettingBinding;
 import net.iGap.fragments.FragmentBio;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChatBackground;
+import net.iGap.fragments.FragmentDarkTheme;
 import net.iGap.fragments.FragmentData;
 import net.iGap.fragments.FragmentDeleteAccount;
 import net.iGap.fragments.FragmentLanguage;
@@ -163,6 +164,7 @@ public class FragmentSettingViewModel {
     public ObservableField<Boolean> isCrop = new ObservableField<>();
     public ObservableField<Boolean> isTime = new ObservableField<>();
     public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
+    public ObservableField<Integer> isAutoThemeDark = new ObservableField<>(View.GONE);
 
 
     private static SharedPreferences sharedPreferences;
@@ -1117,15 +1119,26 @@ public class FragmentSettingViewModel {
         isThemeDark.set(!isThemeDark.get());
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if (isThemeDark.get()) {
+            isAutoThemeDark.set(View.VISIBLE);
             setDarkTheme(editor);
         } else {
+            isAutoThemeDark.set(View.GONE);
             setLightTheme(editor);
         }
+    }
+
+//    public boolean isDarkTheme() {
+//        return isThemeDark.get();
+//    }
+
+    public void onClickAutoTimeDarkTheme(View v) {
+        new HelperFragment(FragmentDarkTheme.newInstance()).setReplace(false).load();
     }
 
     public static void setLightTheme(SharedPreferences.Editor editor) {
         G.isDarkTheme = false;
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, false);
+        editor.putBoolean(SHP_SETTING.KEY_DISABLE_TIME_DARK_THEME, true);
         editor.apply();
         G.backgroundTheme = "#FFFFFF";
         G.textTitleTheme = "#000000";
@@ -1610,6 +1623,11 @@ public class FragmentSettingViewModel {
 
         boolean checkedThemeDark = sharedPreferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
         isThemeDark.set(checkedThemeDark);
+        if (isThemeDark.get()) {
+            isAutoThemeDark.set(View.VISIBLE);
+        } else {
+            isAutoThemeDark.set(View.GONE);
+        }
 
         int checkedAutoGif = sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS);
         isAutoGif.set(getBoolean(checkedAutoGif));
