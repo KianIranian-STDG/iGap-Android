@@ -655,6 +655,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
+        LinearLayout timeLayout = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer).getParent();
+        timeLayout.setGravity(Gravity.LEFT);
 
         if (messageText != null) {
             messageText.setTextColor(Color.parseColor(G.textTitleTheme));
