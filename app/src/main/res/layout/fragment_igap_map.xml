@@ -301,7 +301,7 @@
       android:layout_height="@dimen/dp52"
       android:padding="@dimen/dp12"
       android:layout_gravity="center"
-      android:visibility="visible" />
+      android:visibility="gone" />
 
   </FrameLayout>
 
@@ -361,7 +361,7 @@
         android:layout_height="@dimen/dp52"
         android:padding="@dimen/dp12"
         android:layout_gravity="center"
-        android:visibility="visible" />
+        android:visibility="gone" />
     </FrameLayout>
   </LinearLayout>
 

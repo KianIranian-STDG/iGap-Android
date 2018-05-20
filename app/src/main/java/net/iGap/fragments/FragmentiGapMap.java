@@ -894,6 +894,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
                         if (location != null && !isSendRequestGeoCoordinate) {
                             new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                            showProgress(true);
                             isSendRequestGeoCoordinate = true;
                         }
 
@@ -1056,6 +1057,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                             public void run() {
                                 if (!isSendRequestGeoCoordinate) {
                                     new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                                    showProgress(true);
                                     isSendRequestGeoCoordinate = true;
                                 }
 
@@ -1065,6 +1067,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                     } else {
                         if (!isSendRequestGeoCoordinate) {
                             new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                            showProgress(true);
                             isSendRequestGeoCoordinate = true;
                         }
 
@@ -1251,6 +1254,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         });
                     }
                 }
+
+                showProgress(false);
+
             }
         }, 2000);
 
@@ -1264,9 +1270,23 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 if (prgWaitingGetUser != null) {
                     if (show) {
                         prgWaitingGetUser.setVisibility(View.VISIBLE);
-                        prgWaitingGetUserList.setVisibility(View.VISIBLE);
                     } else {
                         prgWaitingGetUser.setVisibility(View.GONE);
+
+                    }
+                }
+            }
+        });
+    }
+
+    private void showProgressList(final boolean show) {
+        G.currentActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (prgWaitingGetUserList != null) {
+                    if (show) {
+                        prgWaitingGetUserList.setVisibility(View.VISIBLE);
+                    } else {
                         prgWaitingGetUserList.setVisibility(View.GONE);
                     }
                 }
@@ -1276,6 +1296,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
     @Override
     public void onErrorGetNearbyCoordinate() {
+        showProgress(false);
         isSendRequestGeoCoordinate = false;
     }
 
@@ -1487,12 +1508,12 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         public void run() {
                             new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
                             getDistanceLoop(DEFAULT_LOOP_TIME, true);
-                            showProgress(true);
+                            showProgressList(true);
                         }
                     }, delay);
                 } else {
                     new RequestGeoGetNearbyDistance().getNearbyDistance(FragmentiGapMap.location.getLatitude(), FragmentiGapMap.location.getLongitude());
-                    showProgress(true);
+                    showProgressList(true);
                 }
             }
         }, GET_NEARBY_DELAY);
@@ -1508,7 +1529,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
     @Override
     public void onMapUsersGet() {
-        showProgress(false);
+        showProgressList(false);
     }
 
     public enum MarkerColor {

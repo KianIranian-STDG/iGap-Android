@@ -77,7 +77,18 @@ public class GeoGetNearbyDistanceResponse extends MessageHandler {
                                 });
                             }
                         }
+
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (G.onMapUsersGet != null) {
+                                    G.onMapUsersGet.onMapUsersGet();
+                                }
+                            }
+                        }, 200);
+
                     }
+
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
@@ -92,9 +103,6 @@ public class GeoGetNearbyDistanceResponse extends MessageHandler {
             }
         });
 
-        if (G.onMapUsersGet != null) {
-            G.onMapUsersGet.onMapUsersGet();
-        }
 
     }
 
