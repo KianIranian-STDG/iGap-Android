@@ -817,11 +817,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
                     if (G.isDarkTheme) {
-                        replayView.setBackgroundColor(Color.parseColor(G.backgroundTheme));
+                        replayView.setBackgroundResource(R.drawable.rectangle_reply_sender_round_color_dark);
                         replyFrom.setTextColor(Color.parseColor(G.textTitleTheme));
                         replayMessage.setTextColor(Color.parseColor(G.textTitleTheme));
                     } else {
-                        replayView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundSend));
+                        replayView.setBackgroundResource(R.drawable.rectangle_reply_sender_round_color);
                         replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
                         replayMessage.setTextColor(holder.itemView.getResources().getColor(R.color.replay_message_text));
                     }
@@ -831,12 +831,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 } else {
 
                     if (G.isDarkTheme) {
-                        replayView.setBackgroundColor(Color.parseColor(G.backgroundTheme));
+                        replayView.setBackgroundResource(R.drawable.rectangle_reply_recive_round_color_dark);
                         // holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_receiveColor));
                         replyFrom.setTextColor(Color.parseColor(G.textTitleTheme));
                         replayMessage.setTextColor(Color.parseColor(G.textTitleTheme));
                     } else {
-                        replayView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.messageBox_replyBoxBackgroundReceive));
+                        replayView.setBackgroundResource(R.drawable.rectangle_reply_recive_round_color);
                         // holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_receiveColor));
                         replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
                         replayMessage.setTextColor(holder.itemView.getResources().getColor(R.color.replay_message_text));
