@@ -375,16 +375,14 @@ public final class StartupActions {
             Date time2 = new SimpleDateFormat("HH:mm:ss").parse(string2);
             Calendar calendar2 = Calendar.getInstance();
             calendar2.setTime(time2);
-            calendar2.add(Calendar.DATE, 1);
 
             String someRandomTime = time(now);
             Date d = new SimpleDateFormat("HH:mm:ss").parse(someRandomTime);
             Calendar calendar3 = Calendar.getInstance();
             calendar3.setTime(d);
-            calendar3.add(Calendar.DATE, 1);
 
             Date currentTime = calendar3.getTime();
-            if (currentTime.after(calendar1.getTime()) && currentTime.before(calendar2.getTime())) {
+            if ((currentTime.after(calendar1.getTime()) && currentTime.before(calendar2.getTime()))) {
                 //checkes whether the current time is between 14:49:00 and 20:11:13.
                 G.isDarkTheme = true;
                 appBarColor = Config.default_dark_appBarColor;
