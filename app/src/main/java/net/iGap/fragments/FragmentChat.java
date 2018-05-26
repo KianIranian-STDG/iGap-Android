@@ -168,6 +168,7 @@ import net.iGap.interfaces.OnHelperSetAction;
 import net.iGap.interfaces.OnLastSeenUpdateTiming;
 import net.iGap.interfaces.OnMessageReceive;
 import net.iGap.interfaces.OnPathAdapterBottomSheet;
+import net.iGap.interfaces.OnPinedMessage;
 import net.iGap.interfaces.OnReport;
 import net.iGap.interfaces.OnSetAction;
 import net.iGap.interfaces.OnUpdateUserOrRoomInfo;
@@ -240,6 +241,7 @@ import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelEditMessage;
+import net.iGap.request.RequestChannelPinMessage;
 import net.iGap.request.RequestChannelUpdateDraft;
 import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestChatEditMessage;
@@ -251,6 +253,7 @@ import net.iGap.request.RequestClientRoomReport;
 import net.iGap.request.RequestClientSubscribeToRoom;
 import net.iGap.request.RequestClientUnsubscribeFromRoom;
 import net.iGap.request.RequestGroupEditMessage;
+import net.iGap.request.RequestGroupPinMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserContactsBlock;
@@ -317,7 +320,7 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
-        implements IMessageItem, OnChatClearMessageResponse, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
+        implements IMessageItem, OnChatClearMessageResponse, OnPinedMessage, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged,
         OnConnectionChangeStateChat, OnChannelUpdateReactionStatus {
 
@@ -792,6 +795,7 @@ public class FragmentChat extends BaseFragment
         G.onConnectionChangeStateChat = this;
         G.helperNotificationAndBadge.cancelNotification();
         G.onChannelUpdateReactionStatusChat = this;
+        G.onPinedMessage = this;
 
         finishActivity = new FinishActivity() {
             @Override
@@ -1416,6 +1420,7 @@ public class FragmentChat extends BaseFragment
          */
         mediaLayout = (LinearLayout) rootView.findViewById(R.id.ac_ll_music_layout);
         MusicPlayer.setMusicPlayer(mediaLayout);
+        initPinedMessage();
 
         lyt_user = (LinearLayout) rootView.findViewById(R.id.lyt_user);
         viewAttachFile = rootView.findViewById(R.id.layout_attach_file);
@@ -1571,6 +1576,72 @@ public class FragmentChat extends BaseFragment
         getDraft();
         getUserInfo();
         insertShearedData(HelperGetDataFromOtherApp.messageFileAddress);
+    }
+
+    private void initPinedMessage() {
+        final long pinMessageId = RealmRoom.hasPinedMessage(mRoomId);
+        final LinearLayout pinedMessageLayout = (LinearLayout) rootView.findViewById(R.id.ac_ll_strip_Pin);
+        if (pinMessageId > 0) {
+            RealmRoomMessage realmRoomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, pinMessageId).findFirst();
+            if (realmRoomMessage != null && realmRoomMessage.isValid() && !realmRoomMessage.isDeleted()) {
+                pinedMessageLayout.setVisibility(View.VISIBLE);
+                TextView txtPinMessage = (TextView) rootView.findViewById(R.id.pl_txt_pined_Message);
+                MaterialDesignTextView iconPinClose = (MaterialDesignTextView) rootView.findViewById(R.id.pl_btn_close);
+                final boolean isMyPinMessage = G.authorHash.equals(realmRoomMessage.getAuthorHash());
+                String text = realmRoomMessage.getMessage();
+                if (text == null || text.length() == 0) {
+                    text = AppUtils.conversionMessageType(realmRoomMessage.getMessageType());
+                }
+                txtPinMessage.setText(text);
+                iconPinClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RealmRoom.updatePinedMessageDeleted(mRoomId, pinMessageId);
+                        pinedMessageLayout.setVisibility(View.GONE);
+                        if (isMyPinMessage) {
+                            sendRequestPinMessage(0);
+                        }
+                    }
+                });
+
+                pinedMessageLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = mAdapter.findPositionByMessageId(pinMessageId);
+                        if (position != -1) {
+                            LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
+                            linearLayout.scrollToPositionWithOffset(position, 0);
+                        } else {
+                            resetMessagingValue();
+                            savedScrollMessageId = pinMessageId;
+                            firstVisiblePositionOffset = 0;
+                            getMessages();
+                        }
+                    }
+                });
+
+            } else {
+                pinedMessageLayout.setVisibility(View.GONE);
+            }
+        } else {
+            pinedMessageLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private void sendRequestPinMessage(final long id) {
+        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.igap)
+                .content(String.format(context.getString(R.string.pin_messages_content), G.fragmentActivity.getResources().getString(id == 0 ? R.string.unpin : R.string.PIN)))
+                .positiveText(R.string.ok).
+                onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (chatType == CHANNEL) {
+                            new RequestChannelPinMessage().channelPinMessage(mRoomId, id);
+                        } else {
+                            new RequestGroupPinMessage().groupPinMessage(mRoomId, id);
+                        }
+                    }
+                }).negativeText(R.string.cancel).show();
     }
 
     private void registerListener() {
@@ -3608,7 +3679,7 @@ public class FragmentChat extends BaseFragment
                 break;
         }
 
-        if (message.forwardedFrom != null || ( rootView.findViewById(R.id.replayLayoutAboveEditText) != null && rootView.findViewById(R.id.replayLayoutAboveEditText).getVisibility() == View.VISIBLE)) {
+        if (message.forwardedFrom != null || (rootView.findViewById(R.id.replayLayoutAboveEditText) != null && rootView.findViewById(R.id.replayLayoutAboveEditText).getVisibility() == View.VISIBLE)) {
             rootEdit.setVisibility(View.GONE);
         }
 
@@ -3617,11 +3688,17 @@ public class FragmentChat extends BaseFragment
             /**
              * if user clicked on any message which he wasn't its sender, remove edit mList option
              */
+
+            boolean showLayoutPin = false;
+
             if (chatType == CHANNEL) {
                 if (channelRole == ChannelChatRole.MEMBER) {
                     rootEdit.setVisibility(View.GONE);
                     rootReplay.setVisibility(View.GONE);
                     rootDelete.setVisibility(View.GONE);
+
+                } else {
+                    showLayoutPin = true;
                 }
                 ChannelChatRole roleSenderMessage = RealmChannelRoom.detectMemberRole(mRoomId, parseLong(message.senderID));
                 if (!G.authorHash.equals(message.authorHash)) {
@@ -3640,6 +3717,9 @@ public class FragmentChat extends BaseFragment
                 }
             } else if (chatType == GROUP) {
 
+                if (groupRole != GroupChatRole.MEMBER) {
+                    showLayoutPin = true;
+                }
                 GroupChatRole roleSenderMessage = RealmGroupRoom.detectMemberRole(mRoomId, parseLong(message.senderID));
                 if (!G.authorHash.equals(message.authorHash)) {
                     if (groupRole == GroupChatRole.MEMBER) {
@@ -3662,6 +3742,31 @@ public class FragmentChat extends BaseFragment
                     rootEdit.setVisibility(View.GONE);
                 }
             }
+
+            if (showLayoutPin && !isNotJoin) {
+                ViewGroup rootPin = (ViewGroup) v.findViewById(R.id.dialog_root_item9_notification);
+                rootPin.setVisibility(View.VISIBLE);
+                TextView txtPin = (TextView) v.findViewById(R.id.dialog_text_item9_notification);
+                TextView iconPin = (TextView) v.findViewById(R.id.dialog_icon_item9_notification);
+                final boolean isPinedMessage = RealmRoom.isPinedMessage(mRoomId, Long.parseLong(message.messageID));
+                if (isPinedMessage) {
+                    txtPin.setText(G.fragmentActivity.getResources().getString(R.string.unpin));
+                    iconPin.setText(G.fragmentActivity.getResources().getString(R.string.md_unpin));
+                }
+                rootPin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        long _messageId = 0;
+                        if (!isPinedMessage) {
+                            _messageId = Long.parseLong(message.messageID);
+                            RealmRoom.updatePinedMessageDeleted(mRoomId, 0);
+                        }
+                        dialog.dismiss();
+                        sendRequestPinMessage(_messageId);
+                    }
+                });
+            }
+
         }
 
         String _savedFolderName = "";
@@ -8007,6 +8112,11 @@ public class FragmentChat extends BaseFragment
                 e.getStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onPinMessage() {
+        initPinedMessage();
     }
 
     /**

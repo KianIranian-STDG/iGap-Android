@@ -300,6 +300,7 @@ public class G extends MultiDexApplication {
     public static OnContactsGetList onContactsGetList;
     public static OnCallLogClear onCallLogClear;
     public static OnMapUsersGet onMapUsersGet;
+    public static OnPinedMessage onPinedMessage;
     public static OnSelectMenu onSelectMenu;
     public static OnRemoveFragment onRemoveFragment;
     public static OnChatDeleteInRoomList onChatDeleteInRoomList;

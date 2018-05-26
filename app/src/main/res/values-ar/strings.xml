@@ -2125,4 +2125,7 @@
   <string name="tab_edit">تحرير</string>
   <string name="can_not_open_file">لا يمكن فتح هذا الملف</string>
   <string name="st_24_Clock">24 ساعة</string>
+  <string name="pin_messages_content" formatted="false">"Do you want to %s this message"</string>
+  <string name="unpin">UnPin</string>
+  <string name="pined_message">Pined message</string>
 </resources>

@@ -65,6 +65,9 @@ public class RealmRoom extends RealmObject {
     private boolean isDeleted = false;
     private boolean isPinned;
     private long pinId;
+    private long pinMessageId;
+    private long pinMessageIdDeleted;
+
     /**
      * client need keepRoom info for show in forward message that forward
      * from a room that user don't have that room
@@ -129,6 +132,11 @@ public class RealmRoom extends RealmObject {
         } else {
             realmRoom.setPinned(false);
         }
+
+        if (room.getPinnedMessage() != null) {
+            realmRoom.setPinMessageId(room.getPinnedMessage().getMessageId());
+        }
+
         realmRoom.setActionState(null, 0);
         switch (room.getType()) {
             case CHANNEL:
@@ -1273,6 +1281,95 @@ public class RealmRoom extends RealmObject {
         this.pinId = pinId;
     }
 
+
+    public long getPinMessageId() {
+        return pinMessageId;
+    }
+
+    public void setPinMessageId(long pinMessageId) {
+        this.pinMessageId = pinMessageId;
+    }
+
+    public long getPinMessageIdDeleted() {
+        return pinMessageIdDeleted;
+    }
+
+    public void setPinMessageIdDeleted(long pinMessageIdDeleted) {
+        this.pinMessageIdDeleted = pinMessageIdDeleted;
+    }
+
+    public static boolean isPinedMessage(long roomId, long messageId) {
+        boolean result = false;
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
+        if (room != null) {
+            if (room.getPinMessageId() == messageId) {
+                result = true;
+            }
+        }
+        realm.close();
+        return result;
+    }
+
+    public static void updatePinedMessage(long roomId, final long messageId) {
+        Realm realm = Realm.getDefaultInstance();
+        final RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
+        if (room != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    room.setPinMessageId(messageId);
+                }
+            });
+
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (G.onPinedMessage != null) {
+                        G.onPinedMessage.onPinMessage();
+                    }
+                }
+            }, 200);
+
+        }
+        realm.close();
+    }
+
+    public static void updatePinedMessageDeleted(long roomId, final long messageIdDeleted) {
+        Realm realm = Realm.getDefaultInstance();
+        final RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
+        if (room != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    room.setPinMessageIdDeleted(messageIdDeleted);
+                }
+            });
+        }
+        realm.close();
+    }
+
+    public static long hasPinedMessage(long roomId) {
+        long result = 0;
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
+        if (room != null) {
+            if (room.getPinMessageId() > 0) {
+                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).
+                        equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+                        equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).
+                        notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageIdDeleted()).
+                        equalTo(RealmRoomMessageFields.DELETED, false).
+                        equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findFirst();
+
+                if (roomMessage != null) {
+                    result = roomMessage.getMessageId();
+                }
+            }
+        }
+        realm.close();
+        return result;
+    }
     public long getUpdatedTime() {
         if (getLastMessage() != null && getLastMessage().isValid()) {
             if (getLastMessage().getUpdateOrCreateTime() > updatedTime) {

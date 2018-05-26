@@ -12,6 +12,7 @@ package net.iGap.response;
 
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoGroupPinMessage;
+import net.iGap.realm.RealmRoom;
 
 public class GroupPinMessageResponse extends MessageHandler {
 
@@ -30,10 +31,13 @@ public class GroupPinMessageResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-
         ProtoGroupPinMessage.GroupPinMessageResponse.Builder builder = (ProtoGroupPinMessage.GroupPinMessageResponse.Builder) message;
-        builder.getRoomId();
-        builder.getPinnedMessage();
+
+        long pinedMessageId = 0;
+        if (builder.getPinnedMessage() != null) {
+            pinedMessageId = builder.getPinnedMessage().getMessageId();
+        }
+        RealmRoom.updatePinedMessage(builder.getRoomId(), pinedMessageId);
     }
 
     @Override
