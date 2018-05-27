@@ -179,6 +179,7 @@ import net.iGap.interfaces.OnUserContactsUnBlock;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserUpdateStatus;
 import net.iGap.interfaces.OnVoiceRecord;
+import net.iGap.interfaces.OpenBottomSheetItem;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -503,6 +504,7 @@ public class FragmentChat extends BaseFragment
     private ArrayList<Long> multiForwardList = new ArrayList<>();
     private ArrayList<StructBottomSheetForward> mListForwardNotExict = new ArrayList<>();
     private String messageEdit = "";
+    private boolean isNewBottomSheet = true;
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -2642,6 +2644,14 @@ public class FragmentChat extends BaseFragment
                 //realmMessage.close();
             }
         });
+
+        G.openBottomSheetItem = new OpenBottomSheetItem() {
+            @Override
+            public void openBottomSheet(boolean isNew) {
+                isNewBottomSheet = isNew;
+                imvAttachFileButton.performClick();
+            }
+        };
 
         imvAttachFileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -5731,30 +5741,8 @@ public class FragmentChat extends BaseFragment
     private void initAttach() {
 
         fastItemAdapter = new FastItemAdapter();
-
         viewBottomSheet = G.fragmentActivity.getLayoutInflater().inflate(R.layout.bottom_sheet, null);
-
-        TextView txtCamera = (TextView) viewBottomSheet.findViewById(R.id.txtCamera);
-        TextView textPicture = (TextView) viewBottomSheet.findViewById(R.id.textPicture);
-        TextView txtVideo = (TextView) viewBottomSheet.findViewById(R.id.txtVideo);
-        TextView txtMusic = (TextView) viewBottomSheet.findViewById(R.id.txtMusic);
-        TextView txtDocument = (TextView) viewBottomSheet.findViewById(R.id.txtDocument);
-        TextView txtFile = (TextView) viewBottomSheet.findViewById(R.id.txtFile);
-        TextView txtPaint = (TextView) viewBottomSheet.findViewById(R.id.txtPaint);
-        TextView txtLocation = (TextView) viewBottomSheet.findViewById(R.id.txtLocation);
-        TextView txtContact = (TextView) viewBottomSheet.findViewById(R.id.txtContact);
         send = (TextView) viewBottomSheet.findViewById(R.id.txtSend);
-
-//        txtCamera.setTextColor(Color.parseColor(G.attachmentColor));
-//        textPicture.setTextColor(Color.parseColor(G.attachmentColor));
-//        txtVideo.setTextColor(Color.parseColor(G.attachmentColor));
-//        txtMusic.setTextColor(Color.parseColor(G.attachmentColor));
-//        txtDocument.setTextColor(Color.parseColor(G.attachmentColor));
-//        txtFile.setTextColor(Color.parseColor(G.attachmentColor));
-//        txtPaint.setTextColor(Color.parseColor(G.attachmentColor));
-//        txtLocation.setTextColor(Color.parseColor(G.attachmentColor));
-//        txtContact.setTextColor(Color.parseColor(G.attachmentColor));
-//        send.setTextColor(Color.parseColor(G.attachmentColor));
 
         txtCountItem = (TextView) viewBottomSheet.findViewById(R.id.txtNumberItem);
         ViewGroup camera = (ViewGroup) viewBottomSheet.findViewById(R.id.camera);
@@ -5832,7 +5820,6 @@ public class FragmentChat extends BaseFragment
         });
         //height is ready
 
-        bottomSheetDialog.show();
         onClickCamera = new OnClickCamera() {
             @Override
             public void onclickCamera() {
@@ -5987,11 +5974,11 @@ public class FragmentChat extends BaseFragment
         bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
+                isNewBottomSheet = true;
                 dialog.dismiss();
                 //send.setImageResource(R.mipmap.ic_close);
                 send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
                 txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
-                itemGalleryList.clear();
             }
         });
 
@@ -6597,12 +6584,15 @@ public class FragmentChat extends BaseFragment
 
     public void itemAdapterBottomSheet() {
         listPathString.clear();
-        fastItemAdapter.clear();
-        itemGalleryList = getAllShownImagesPath(G.fragmentActivity);
+        if (isNewBottomSheet) {
+            fastItemAdapter.clear();
+            itemGalleryList.clear();
+            itemGalleryList = getAllShownImagesPath(G.fragmentActivity);
+        }
 
         boolean isCameraButtonSheet = sharedPreferences.getBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true);
 
-        if (isCameraButtonSheet) {
+        if (isCameraButtonSheet && isNewBottomSheet) {
             try {
                 HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                     @Override
@@ -6621,6 +6611,7 @@ public class FragmentChat extends BaseFragment
                                 }
                             }
                         }, 100);
+
                     }
 
                     @Override
@@ -6641,14 +6632,16 @@ public class FragmentChat extends BaseFragment
 
     private void loadImageGallery() {
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < itemGalleryList.size(); i++) {
-                    fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
+        if (isNewBottomSheet) {
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 0; i < itemGalleryList.size(); i++) {
+                        fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
+                    }
                 }
-            }
-        });
+            });
+        }
 
         G.handler.postDelayed(new Runnable() {
             @Override

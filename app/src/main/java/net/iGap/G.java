@@ -326,6 +326,7 @@ public class G extends MultiDexApplication {
     public static OnGeoGetComment onGeoGetComment;
     public static OnMapRegisterState onMapRegisterState;
     public static OnMapRegisterStateMain onMapRegisterStateMain;
+    public static OpenBottomSheetItem openBottomSheetItem;
     public static OnUnreadChange onUnreadChange;
     public static OnMapClose onMapClose;
     public static OnRegistrationInfo onRegistrationInfo;
