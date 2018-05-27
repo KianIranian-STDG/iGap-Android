@@ -157,6 +157,7 @@ import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnChatUpdateStatusResponse;
 import net.iGap.interfaces.OnClearChatHistory;
 import net.iGap.interfaces.OnClickCamera;
+import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.interfaces.OnClientJoinByUsername;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnConnectionChangeStateChat;
@@ -247,6 +248,7 @@ import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestChatEditMessage;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestChatUpdateDraft;
+import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestClientJoinByUsername;
 import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientRoomReport;
@@ -1612,10 +1614,32 @@ public class FragmentChat extends BaseFragment
                             LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
                             linearLayout.scrollToPositionWithOffset(position, 0);
                         } else {
-                            resetMessagingValue();
-                            savedScrollMessageId = pinMessageId;
-                            firstVisiblePositionOffset = 0;
-                            getMessages();
+
+                            RealmRoomMessage rm = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, pinMessageId).findFirst();
+                            if (rm != null) {
+                                resetMessagingValue();
+                                savedScrollMessageId = pinMessageId;
+                                firstVisiblePositionOffset = 0;
+                                getMessages();
+                            } else {
+                                new RequestClientGetRoomMessage().clientGetRoomMessage(mRoomId, pinMessageId);
+                                G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
+                                    @Override
+                                    public void onClientGetRoomMessageResponse(long messageId) {
+                                        G.onClientGetRoomMessage = null;
+                                        G.handler.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                resetMessagingValue();
+                                                savedScrollMessageId = pinMessageId;
+                                                firstVisiblePositionOffset = 0;
+                                                getMessages();
+                                            }
+                                        });
+
+                                    }
+                                };
+                            }
                         }
                     }
                 });
