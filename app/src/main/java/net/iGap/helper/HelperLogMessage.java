@@ -256,10 +256,12 @@ public class HelperLogMessage {
             case MISSED_VOICE_CALL:
                 // persianResult = authorName + " " + logMessage;
                 //  linlInfoPersian = persianResult.indexOf(authorName) + "@" + authorName.length() + "@" + updateID + "@" + author.hasUser();
-
                 persianResult = englishResult = logMessage;
                 linkInfoEnglish = linlInfoPersian = "";
 
+            case PINNED_MESSAGE:
+                persianResult = englishResult = logMessage;
+                linkInfoEnglish = linlInfoPersian = "";
                 break;
         }
 
@@ -329,6 +331,9 @@ public class HelperLogMessage {
                 break;
             case "MISSED_VIDEO_CALL":
                 messageID = R.string.MISSED_VIDEO_CALL;
+                break;
+            case "PINNED_MESSAGE":
+                messageID = R.string.pined_message;
                 break;
         }
 

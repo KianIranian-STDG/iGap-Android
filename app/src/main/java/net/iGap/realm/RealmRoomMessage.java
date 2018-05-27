@@ -29,6 +29,7 @@ import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnActivityMainStart;
+import net.iGap.module.AppUtils;
 import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.enums.AttachmentFor;
@@ -674,6 +675,15 @@ public class RealmRoomMessage extends RealmObject {
         return message;
     }
 
+    public static RealmRoomMessage deleteMessage(Realm realm, long messageId, long roomId) {
+        RealmRoomMessage message = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId)
+                .equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findFirst();
+        if (message != null) {
+            message.deleteFromRealm();
+        }
+        return message;
+    }
+
     public static void deleteAllMessage(Realm realm, long roomId) {
         realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).findAll().deleteAllFromRealm();
     }
@@ -952,7 +962,7 @@ public class RealmRoomMessage extends RealmObject {
             return null;
         }
 
-        final long messageId = SUID.id().get();
+        final long messageId = AppUtils.makeRandomId();
         final long currentTime = TimeUtils.currentLocalTime();
 
         getRealmChat().executeTransaction(new Realm.Transaction() {

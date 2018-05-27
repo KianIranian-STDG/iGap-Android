@@ -10,16 +10,16 @@
 
 package net.iGap.request;
 
-import net.iGap.proto.ProtoClientGetRoomMessage;
+import net.iGap.proto.ProtoChannelPinMessage;
 
-public class RequestClientGetRoomMessage {
+public class RequestChannelPinMessage {
 
-    public void clientGetRoomMessage(long roomId, long messageId) {
-        ProtoClientGetRoomMessage.ClientGetRoomMessage.Builder builder = ProtoClientGetRoomMessage.ClientGetRoomMessage.newBuilder();
+    public void channelPinMessage(long roomId, long messageId) {
+        ProtoChannelPinMessage.ChannelPinMessage.Builder builder = ProtoChannelPinMessage.ChannelPinMessage.newBuilder();
         builder.setRoomId(roomId);
         builder.setMessageId(messageId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(604, builder, roomId + "");
+        RequestWrapper requestWrapper = new RequestWrapper(427, builder);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

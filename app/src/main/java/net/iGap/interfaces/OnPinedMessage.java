@@ -10,6 +10,6 @@
 
 package net.iGap.interfaces;
 
-public interface OnClientGetRoomMessage {
-    void onClientGetRoomMessageResponse(long messageId);
+public interface OnPinedMessage {
+    void onPinMessage();
 }
