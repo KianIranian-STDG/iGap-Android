@@ -4338,7 +4338,7 @@ public class FragmentChat extends BaseFragment
     private ArrayList<Parcelable> getMessageStructFromSelectedItems() {
         ArrayList<Parcelable> messageInfos = new ArrayList<>(mAdapter.getSelectedItems().size());
         for (int item : mAdapter.getSelections()) {
-            messageInfos.add(Parcels.wrap(mAdapter.getItem(item).mMessage));
+            messageInfos.add(Parcels.wrap(mAdapter.getAdapterItem(item).mMessage));
         }
         return messageInfos;
     }
@@ -6973,10 +6973,10 @@ public class FragmentChat extends BaseFragment
 
                 for (int i = 0; i < mForwardMessages.size(); i++) {
                     if (hasForward) {
-                        sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mForwardMessages.get(i)), mRoomId, true);
+                        sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mForwardMessages.get(i)), mRoomId, true, i);
                     } else {
                         for (int k = 0; k < multiForwardSize; k++) {
-                            sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mForwardMessages.get(i)), multiForwardList.get(k), false);
+                            sendForwardedMessage((StructMessageInfo) Parcels.unwrap(mForwardMessages.get(i)), multiForwardList.get(k), false, (i + k));
                         }
                     }
                 }
@@ -7071,10 +7071,10 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private void sendForwardedMessage(final StructMessageInfo messageInfo, final long mRoomId, final boolean isSingleForward) {
+    private void sendForwardedMessage(final StructMessageInfo messageInfo, final long mRoomId, final boolean isSingleForward, int k) {
 
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
 
@@ -7120,7 +7120,7 @@ public class FragmentChat extends BaseFragment
                     }
                 });
             }
-        });
+        }, (50 * k));
     }
 
     private StructMessageInfo makeLayoutTime(long time) {
