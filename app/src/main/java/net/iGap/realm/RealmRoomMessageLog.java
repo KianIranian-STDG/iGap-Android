@@ -10,7 +10,7 @@
 
 package net.iGap.realm;
 
-import net.iGap.module.SUID;
+import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 
 import org.parceler.Parcel;
@@ -28,7 +28,7 @@ public class RealmRoomMessageLog extends RealmObject {
 
     public static RealmRoomMessageLog put(final ProtoGlobal.RoomMessageLog input) {
         Realm realm = Realm.getDefaultInstance();
-        RealmRoomMessageLog messageLocation = realm.createObject(RealmRoomMessageLog.class, SUID.id().get());
+        RealmRoomMessageLog messageLocation = realm.createObject(RealmRoomMessageLog.class, AppUtils.makeRandomId());
         messageLocation.setType(input.getType());
         realm.close();
 

@@ -3322,7 +3322,7 @@ public class FragmentChat extends BaseFragment
         sendCancelAction();
 
         //+Realm realm = Realm.getDefaultInstance();
-        final long messageId = SUID.id().get();
+        final long messageId = AppUtils.makeRandomId();
         final long updateTime = TimeUtils.currentLocalTime();
         final long senderID = G.userId;
         final long duration = AndroidUtils.getAudioDuration(G.fragmentActivity, savedPath) / 1000;
@@ -6673,7 +6673,7 @@ public class FragmentChat extends BaseFragment
             removeLayoutUnreadMessage();
         }
         Realm realm = Realm.getDefaultInstance();
-        long messageId = SUID.id().get();
+        long messageId = AppUtils.makeRandomId();
         final long updateTime = TimeUtils.currentLocalTime();
         ProtoGlobal.RoomMessageType messageType = null;
         String fileName = null;
@@ -7051,7 +7051,7 @@ public class FragmentChat extends BaseFragment
         if (isShowLayoutUnreadMessage) {
             removeLayoutUnreadMessage();
         }
-        final long messageId = SUID.id().get();
+        final long messageId = AppUtils.makeRandomId();
         RealmRoomMessage.makePositionMessage(mRoomId, messageId, replyMessageId(), latitude, longitude, imagePath);
 
         G.handler.postDelayed(new Runnable() {
@@ -7183,7 +7183,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void run() {
 
-                final long messageId = SUID.id().get();
+                final long messageId = AppUtils.makeRandomId();
 
                 RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                 if (realmRoom == null || realmRoom.getReadOnly()) {
