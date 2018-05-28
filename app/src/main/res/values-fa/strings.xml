@@ -1174,4 +1174,6 @@
   <string name="pin_messages_content" formatted="false">"Do you want to %s this message"</string>
   <string name="unpin">UnPin</string>
   <string name="pined_message">Pined message</string>
+  <string name="all_member">all member</string>
+  <string name="this_page">this page</string>
 </resources>
