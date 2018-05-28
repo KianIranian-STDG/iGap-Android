@@ -209,5 +209,15 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             oldVersion++;
         }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 17
+            RealmObjectSchema realmRoom = schema.get(RealmRoom.class.getSimpleName());
+            if (realmRoom != null) {
+                realmRoom.addField(RealmRoomFields.PIN_MESSAGE_ID, long.class, FieldAttribute.REQUIRED);
+                realmRoom.addField(RealmRoomFields.PIN_MESSAGE_ID_DELETED, long.class, FieldAttribute.REQUIRED);
+            }
+
+            oldVersion++;
+        }
     }
 }
