@@ -788,7 +788,7 @@
   <string name="ROOM_CONVERTED_TO_PRIVATE">"converted to Private"</string>
   <string name="MEMBER_JOINED_BY_INVITE_LINK">"joined via Invite Link"</string>
   <string name="Room_Deleted_log">"deleted Room"</string>
-  <string name="conversation">""</string>
+  <string name="conversation">"conversation"</string>
 
   <string name="MISSED_SCREEN_SHARE">"Missed Screen Share"</string>
   <string name="MISSED_VOICE_CALL">"Missed Voice Call"</string>

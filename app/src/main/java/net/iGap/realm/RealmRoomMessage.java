@@ -79,8 +79,6 @@ public class RealmRoomMessage extends RealmObject {
     private RealmAttachment attachment;
     private long userId;
     private RealmRoomMessageLocation location;
-    private RealmRoomMessageLog log;
-    private String logMessage;
     private RealmRoomMessageContact roomMessageContact;
     private boolean edited;
     private long createTime;
@@ -99,6 +97,7 @@ public class RealmRoomMessage extends RealmObject {
     private long previousMessageId;
     private long futureMessageId;
     private String linkInfo;
+    private byte[] Logs;
 
     /**
      * if has forward return that otherwise return enter value
@@ -412,9 +411,11 @@ public class RealmRoomMessage extends RealmObject {
             message.setLocation(RealmRoomMessageLocation.put(input.getLocation(), id));
         }
         if (input.hasLog()) {
-            message.setLog(RealmRoomMessageLog.put(input.getLog()));
-            message.setLogMessage(HelperLogMessage.logMessage(roomId, input.getAuthor(), input.getLog(), message.getMessageId()));
-
+            if (input.getReplyTo() != null) {
+                message.setLogs(HelperLogMessage.serializeLog(roomId, input.getAuthor(), input.getLog(), input.getMessageId(), input.getReplyTo().getMessage(), input.getReplyTo().getMessageType()));
+            } else {
+                message.setLogs(HelperLogMessage.serializeLog(roomId, input.getAuthor(), input.getLog(), input.getMessageId(), "", null));
+            }
         }
         if (input.hasContact()) {
             message.setRoomMessageContact(RealmRoomMessageContact.put(input.getContact()));
@@ -900,19 +901,7 @@ public class RealmRoomMessage extends RealmObject {
         return roomMessage;
     }
 
-    public static void setLogMessage(final long messageId, final String logMessage) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                if (roomMessage != null) {
-                    roomMessage.setLogMessage(logMessage);
-                }
-            }
-        });
-        realm.close();
-    }
+
 
     /*public int getVoteUp() {
         return voteUp;
@@ -1206,24 +1195,12 @@ public class RealmRoomMessage extends RealmObject {
         this.location = location;
     }
 
-    public RealmRoomMessageLog getLog() {
-        return log;
+    public byte[] getLogs() {
+        return Logs;
     }
 
-    public void setLog(RealmRoomMessageLog log) {
-        this.log = log;
-    }
-
-    public String getLogMessage() {
-        return HelperLogMessage.convertLogmessage(logMessage);
-    }
-
-    public void setLogMessage(String logMessage) {
-        this.logMessage = logMessage;
-    }
-
-    public String getLogMessageWithLinkInfo() {
-        return logMessage;
+    public void setLogs(byte[] logs) {
+        Logs = logs;
     }
 
     public RealmRoomMessageContact getRoomMessageContact() {

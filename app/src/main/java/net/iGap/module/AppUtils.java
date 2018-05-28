@@ -38,6 +38,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperLogMessage;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.interfaces.IResendMessage;
 import net.iGap.messageprogress.CircleProgress.CircularProgressView;
@@ -410,7 +411,7 @@ public final class AppUtils {
                     messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, G.fragmentActivity.getString(R.string.location_message));
                     break;
                 case LOG:
-                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, message.getLogMessage());
+                    messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, HelperLogMessage.deserializeLog(message.getLogs(), false).toString());
                     break;
                 case VIDEO_TEXT:
                 case VIDEO:

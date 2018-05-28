@@ -1425,7 +1425,7 @@
 
   <string name="un_block_user">"إزالة حظر جهة الاتصال"</string>
 
-  <string name="prefix">"الاختصار"</string>
+  <string name="prefix">"بواسطة"</string>
 
   <string name="USER_JOINED">"إنضمّ إلى آي كب "</string>
 
@@ -1445,7 +1445,7 @@
 
   <string name="MEMBER_JOINED_BY_INVITE_LINK">"بالدعوة إلى "</string>
 
-  <string name="Room_Deleted_log">"تمّت الإضافة "</string>
+  <string name="Room_Deleted_log">"تم الحذف "</string>
 
   <string name="revoke">الإبطال </string>
 

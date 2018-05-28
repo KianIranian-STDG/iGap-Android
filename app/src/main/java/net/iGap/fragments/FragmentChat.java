@@ -1858,7 +1858,7 @@ public class FragmentChat extends BaseFragment
 
         iUpdateLogItem = new IUpdateLogItem() {
             @Override
-            public void onUpdate(String logText, long messageId) {
+            public void onUpdate(byte[] log, long messageId) {
                 if (mAdapter == null) {
                     return;
                 }
@@ -1868,7 +1868,7 @@ public class FragmentChat extends BaseFragment
                         AbstractMessage item = mAdapter.getAdapterItem(i);
 
                         if (item.mMessage != null && item.mMessage.messageID.equals(messageId + "")) {
-                            item.mMessage.messageText = logText;
+                            item.mMessage.logs = log;
                             mAdapter.notifyAdapterItemChanged(i);
                             break;
                         }

@@ -765,7 +765,7 @@
   <string name="ROOM_CONVERTED_TO_PUBLIC">"از خصوصی به عمومی تبدیل شد"</string>
   <string name="ROOM_CONVERTED_TO_PRIVATE">"از عمومی به خصوصی تبدیل شد"</string>
   <string name="MEMBER_JOINED_BY_INVITE_LINK">"با دعوت به"</string>
-  <string name="Room_Deleted_log">"اضافه شد"</string>
+  <string name="Room_Deleted_log">"حذف شد"</string>
   <string name="revoke">ابطال</string>
   <string name="conversation">صفحه</string>
 
