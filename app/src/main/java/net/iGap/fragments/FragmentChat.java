@@ -423,7 +423,7 @@ public class FragmentChat extends BaseFragment
     private View viewBottomSheet;
     private View viewBottomSheetForward;
     private Fotoapparat fotoapparatSwitcher;
-    private ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<StructBottomSheet>();
+    public static ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<StructBottomSheet>();
     private RealmRoomMessage firstUnreadMessage;
     private RealmRoomMessage firstUnreadMessageInChat; // when user is in this room received new message
     private RealmRoomMessage voiceLastMessage = null;

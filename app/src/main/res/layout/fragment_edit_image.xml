@@ -85,16 +85,23 @@
       </RelativeLayout>
     </android.support.v7.widget.Toolbar>
 
-    <ImageView
-      android:id="@+id/imgEditImage"
-      android:layout_width="match_parent"
+    <!--<ImageView-->
+    <!--android:id="@+id/imgEditImage"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_above="@+id/pu_layout_cancel_crop"-->
+    <!--android:adjustViewBounds="true"-->
+    <!--android:cropToPadding="false"-->
+    <!--android:scaleType="fitCenter"-->
+    <!--android:src="@mipmap/pu_gallary" />-->
+
+
+    <android.support.v4.view.ViewPager
+      android:id="@+id/viewPagerEditText"
+      android:layout_width="wrap_content"
       android:layout_height="0dp"
-      android:layout_weight="1"
-      android:layout_above="@+id/pu_layout_cancel_crop"
-      android:adjustViewBounds="true"
-      android:cropToPadding="false"
-      android:scaleType="fitCenter"
-      android:src="@mipmap/pu_gallary" />
+      android:layout_weight="1" />
 
 
     <LinearLayout

@@ -9,9 +9,12 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -35,11 +38,14 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.structs.StructBottomSheet;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.R.id.ac_ll_parent;
+import static net.iGap.R.id.viewpager;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
 /**
@@ -51,7 +57,9 @@ public class FragmentEditImage extends BaseFragment {
     private final static String ISCHAT = "ISCHAT";
     private final static String ISNICKNAMEPAGE = "ISNICKNAMEPAGE";
     private String path;
-    private ImageView imgEditImage;
+    //    private ImageView imgEditImage;
+    private ViewPager viewPager;
+    private AdapterViewPager mAdapter;
     public static UpdateImage updateImage;
     private EmojiEditTextE edtChat;
     private MaterialDesignTextView imvSmileButton;
@@ -105,7 +113,14 @@ public class FragmentEditImage extends BaseFragment {
             return;
         }
 
-        imgEditImage = (ImageView) view.findViewById(R.id.imgEditImage);
+//        imgEditImage = (ImageView) view.findViewById(R.id.imgEditImage);
+
+        viewPager = view.findViewById(R.id.viewPagerEditText);
+        mAdapter = new AdapterViewPager(FragmentChat.itemGalleryList);
+        viewPager.setAdapter(mAdapter);
+
+//        viewPager.setCurrentItem(selectedFile);
+
 
         TextView txtEditImage = (TextView) view.findViewById(R.id.txtEditImage);
         txtEditImage.setOnClickListener(new View.OnClickListener() {
@@ -120,14 +135,14 @@ public class FragmentEditImage extends BaseFragment {
                 }
             }
         });
-        G.imageLoader.displayImage(suitablePath(path), imgEditImage);
+//        G.imageLoader.displayImage(suitablePath(path), imgEditImage);
 
         updateImage = new UpdateImage() {
             @Override
             public void result(String pathImageFilter) {
 
                 path = pathImageFilter;
-                G.imageLoader.displayImage(suitablePath(path), imgEditImage);
+//                G.imageLoader.displayImage(suitablePath(path), imgEditImage);
             }
         };
 
@@ -262,13 +277,13 @@ public class FragmentEditImage extends BaseFragment {
             final Uri resultUri = UCrop.getOutput(data);
             path = AttachFile.getFilePathFromUri(resultUri);
 //            G.imageLoader.displayImage(path, imgEditImage);
-            imgEditImage.setImageURI(Uri.parse(path));
+//            imgEditImage.setImageURI(Uri.parse(path));
         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) { // result for crop
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
 
                 path = result.getUri().getPath();
-                imgEditImage.setImageURI(Uri.parse(path));
+//                imgEditImage.setImageURI(Uri.parse(path));
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
 //                Exception error = result.getError();
             }
@@ -343,4 +358,42 @@ public class FragmentEditImage extends BaseFragment {
             }
         });
     }
+
+    private class AdapterViewPager extends PagerAdapter {
+
+        ArrayList<StructBottomSheet> itemGalleryList;
+
+        public AdapterViewPager(ArrayList<StructBottomSheet> itemGalleryList) {
+            this.itemGalleryList = itemGalleryList;
+        }
+
+        @Override
+        public int getCount() {
+            return itemGalleryList.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view.equals(object);
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+
+            LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
+            ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.adapter_viewpager_edittext, (ViewGroup) container, false);
+            final ImageView imgPlay = (ImageView) layout.findViewById(R.id.img_editImage);
+            G.imageLoader.displayImage(suitablePath(itemGalleryList.get(position).path), imgPlay);
+
+
+            ((ViewGroup) container).addView(layout);
+            return layout;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
+        }
+    }
+
 }
