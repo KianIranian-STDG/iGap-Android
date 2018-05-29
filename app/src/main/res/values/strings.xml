@@ -1200,5 +1200,13 @@
   <string name="pined_message">Pined message</string>
   <string name="all_member">all member</string>
   <string name="this_page">this page</string>
+  <string name="disable">Disable</string>
+  <string name="scheduled">Scheduled: </string>
+  <string name="from_theme">From: </string>
+  <string name="to_theme">To: </string>
+  <string name="automatic">Automatic</string>
+  <string name="automatic_description_theme">The night mode was activated from 19 to 8 with automatic mode selection</string>
+  <string name="setting_dark_theme">Setting Dark Theme</string>
+  <string name="Select_Time">Select Time</string>
 
 </resources>

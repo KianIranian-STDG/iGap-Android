@@ -2130,4 +2130,8 @@
   <string name="pined_message">Pined message</string>
   <string name="all_member">all member</string>
   <string name="this_page">this page</string>
+  <string name="setting_dark_theme">إعدادات الوضع الليلي</string>
+  <string name="Select_Time">اختر الوقت</string>
+  <string name="automatic_description_theme">تم تنشيط الوضع الليلي من 19 إلى 8 مع اختيار الوضع التلقائي</string>
+
 </resources>

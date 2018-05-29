@@ -52,6 +52,7 @@ import net.iGap.databinding.FragmentSettingBinding;
 import net.iGap.fragments.FragmentBio;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChatBackground;
+import net.iGap.fragments.FragmentDarkTheme;
 import net.iGap.fragments.FragmentData;
 import net.iGap.fragments.FragmentDeleteAccount;
 import net.iGap.fragments.FragmentLanguage;
@@ -163,6 +164,7 @@ public class FragmentSettingViewModel {
     public ObservableField<Boolean> isCrop = new ObservableField<>();
     public ObservableField<Boolean> isTime = new ObservableField<>();
     public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
+    public ObservableField<Integer> isAutoThemeDark = new ObservableField<>(View.GONE);
 
 
     private static SharedPreferences sharedPreferences;
@@ -1048,6 +1050,7 @@ public class FragmentSettingViewModel {
             FragmentSetting.onRemoveFragmentSetting.removeFragment();
 
     }
+
     public void onClickTime(View view) {
 
         isTime.set(!isTime.get());
@@ -1063,7 +1066,7 @@ public class FragmentSettingViewModel {
             editor.putBoolean(SHP_SETTING.KEY_WHOLE_TIME, false);
             editor.apply();
         }
-        if (G.onNotifyTime !=null){
+        if (G.onNotifyTime != null) {
             G.onNotifyTime.notifyTime();
         }
     }
@@ -1117,23 +1120,27 @@ public class FragmentSettingViewModel {
         isThemeDark.set(!isThemeDark.get());
         SharedPreferences.Editor editor = sharedPreferences.edit();
         if (isThemeDark.get()) {
+            isAutoThemeDark.set(View.VISIBLE);
             setDarkTheme(editor);
         } else {
+            isAutoThemeDark.set(View.GONE);
             setLightTheme(editor);
         }
+    }
+
+//    public boolean isDarkTheme() {
+//        return isThemeDark.get();
+//    }
+
+    public void onClickAutoTimeDarkTheme(View v) {
+        new HelperFragment(FragmentDarkTheme.newInstance()).setReplace(false).load();
     }
 
     public static void setLightTheme(SharedPreferences.Editor editor) {
         G.isDarkTheme = false;
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, false);
+        editor.putBoolean(SHP_SETTING.KEY_DISABLE_TIME_DARK_THEME, true);
         editor.apply();
-        G.backgroundTheme = "#FFFFFF";
-        G.textTitleTheme = "#000000";
-        G.textSubTheme = "#bbbbbb";
-        G.tintImage = "#000000";
-        G.backgroundTheme_2 = "#f9f9f9";
-        G.logLineTheme = "#e9e9e9";
-        G.voteIconTheme = "#696969";
         notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
         headerColorClick(Color.parseColor(Config.default_headerTextColor), false);
         toggleBottomClick(Color.parseColor(Config.default_toggleButtonColor));
@@ -1141,6 +1148,7 @@ public class FragmentSettingViewModel {
         appBarColorClick(Color.parseColor(Config.default_appBarColor));
         progressColorClick(Color.parseColor(Config.default_appBarColor), false);
         menuBackgroundClick(Color.parseColor(Config.default_appBarColor), false);
+        Config.lightThemeColor();
     }
 
     public static void setDarkTheme(SharedPreferences.Editor editor) {
@@ -1162,13 +1170,8 @@ public class FragmentSettingViewModel {
         attachmentColor = Config.default_dark_attachmentColor;
         headerTextColor = Config.default_dark_headerTextColor;
         G.progressColor = Config.default_dark_progressColor;
-        G.backgroundTheme = "#151515";
-        G.textTitleTheme = "#ffffff";
-        G.textSubTheme = "#ffffff";
-        G.tintImage = "#ffffff";
-        G.backgroundTheme_2 = "#000000";
-        G.logLineTheme = "#4b4b4b";
-        G.voteIconTheme = "#cacaca";
+
+        Config.darkThemeColor();
 
         G.isUpdateNotificaionColorMain = true;
         G.isUpdateNotificaionColorChannel = true;
@@ -1610,6 +1613,11 @@ public class FragmentSettingViewModel {
 
         boolean checkedThemeDark = sharedPreferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
         isThemeDark.set(checkedThemeDark);
+        if (isThemeDark.get()) {
+            isAutoThemeDark.set(View.VISIBLE);
+        } else {
+            isAutoThemeDark.set(View.GONE);
+        }
 
         int checkedAutoGif = sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS);
         isAutoGif.set(getBoolean(checkedAutoGif));
@@ -1875,7 +1883,7 @@ public class FragmentSettingViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-        if (fragmentSettingBinding !=null){
+        if (fragmentSettingBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgTitleBarColor.getBackground();
             bgShape.setColor(color);
         }
@@ -1899,7 +1907,7 @@ public class FragmentSettingViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-        if (fragmentSettingBinding !=null){
+        if (fragmentSettingBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgNotificationColor.getBackground();
             bgShape.setColor(color);
         }
@@ -1927,7 +1935,7 @@ public class FragmentSettingViewModel {
             editor = sharedPreferences.edit();
         }
 
-        if (fragmentSettingBinding !=null){
+        if (fragmentSettingBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgDefaultProgressColor.getBackground();
             bgShape.setColor(color);
         }
@@ -1950,7 +1958,7 @@ public class FragmentSettingViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-        if (fragmentSettingBinding !=null){
+        if (fragmentSettingBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgDefaultProgressColor.getBackground();
             bgShape.setColor(color);
         }
@@ -1970,7 +1978,7 @@ public class FragmentSettingViewModel {
             editor = sharedPreferences.edit();
         }
 
-        if (fragmentSettingBinding !=null){
+        if (fragmentSettingBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgToggleBottonColor.getBackground();
             bgShape.setColor(color);
         }
@@ -1988,7 +1996,7 @@ public class FragmentSettingViewModel {
             editor = sharedPreferences.edit();
         }
 
-        if (fragmentSettingBinding !=null){
+        if (fragmentSettingBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgDefaultHeaderFontColor.getBackground();
             bgShape.setColor(color);
         }
@@ -2012,7 +2020,7 @@ public class FragmentSettingViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-        if (fragmentSettingBinding !=null){
+        if (fragmentSettingBinding != null) {
             GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgSendAndAttachColor.getBackground();
             bgShape.setColor(color);
         }

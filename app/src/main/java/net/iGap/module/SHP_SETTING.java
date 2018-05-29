@@ -146,6 +146,17 @@ public class SHP_SETTING {
     public static final String KEY_MAP_ATTENTION_DIALOG = "MAP_ATTENTION_DIALOG";
     public static final String KEY_MAP_CLEAR_CACHE_GOOGLE = "MAP_CLEAR_CACHE_GOOGLE";
 
+    public static final String KEY_DISABLE_TIME_DARK_THEME = "KEY_DISABLE_TIME_DARK_THEME";
+    public static final String KEY_IS_AUTOMATIC_TIME_DARK_THEME = "KEY_IS_AUTOMATIC_TIME_DARK_THEME";
+
+    public static final String KEY_SELECTED_HOUR_FROM = "KEY_SELECTED_HOUR_FROM";
+    public static final String KEY_SELECTED_MINUTE_FROM = "KEY_SELECTED_MINUTE_FROM";
+    public static final String KEY_SELECTED_MILISECOND_FROM = "KEY_SELECTED_MILISECOND_FROM";
+
+    public static final String KEY_SELECTED_HOUR_TO = "KEY_SELECTED_HOUR_TO";
+    public static final String KEY_SELECTED_MINUTE_TO = "KEY_SELECTED_MINUTE_TO";
+    public static final String KEY_SELECTED_MILISECOND_TO = "KEY_SELECTED_MILISECOND_TO";
+
     public static class Defaults {
         public static final int KEY_AUTOPLAY_GIFS = 1;
     }

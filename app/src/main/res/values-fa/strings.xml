@@ -1176,4 +1176,8 @@
   <string name="pined_message">Pined message</string>
   <string name="all_member">all member</string>
   <string name="this_page">this page</string>
+  <string name="setting_dark_theme">تنظیمات حالت شب</string>
+  <string name="Select_Time">انتخاب زمان</string>
+  <string name="automatic_description_theme">با انتخاب حالت اتوماتیک حالت شب از ساعت ۱۹ الی 8 فعال می شد</string>
+
 </resources>
