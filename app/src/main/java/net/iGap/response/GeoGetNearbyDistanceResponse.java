@@ -36,72 +36,36 @@ public class GeoGetNearbyDistanceResponse extends MessageHandler {
     public void handler() {
         super.handler();
 
-        final ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder builder = (ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder) message;
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                final Realm realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(final Realm realm) {
-                        for (final ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Result result : builder.getResultList()) {
-                            if (G.userId != result.getUserId()) { // don't show my account
-                                RealmRegisteredInfo.getRegistrationInfo(result.getUserId(), new OnInfo() {
-                                    @Override
-                                    public void onInfo(RealmRegisteredInfo registeredInfo) {
-                                        G.handler.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                final Realm realm = Realm.getDefaultInstance();
-                                                realm.executeTransactionAsync(new Realm.Transaction() {
-                                                    @Override
-                                                    public void execute(Realm realm) {
-                                                        RealmGeoNearbyDistance geoNearbyDistance = realm.createObject(RealmGeoNearbyDistance.class, result.getUserId());
-                                                        geoNearbyDistance.setHasComment(result.getHasComment());
-                                                        geoNearbyDistance.setDistance(result.getDistance());
-                                                    }
-                                                }, new OnSuccess() {
-                                                    @Override
-                                                    public void onSuccess() {
-                                                        realm.close();
-                                                    }
-                                                }, new OnError() {
-                                                    @Override
-                                                    public void onError(Throwable error) {
-                                                        realm.close();
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        }
+        ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder builder = (ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Builder) message;
 
-                        G.handler.postDelayed(new Runnable() {
+        for (final ProtoGeoGetNearbyDistance.GeoGetNearbyDistanceResponse.Result result : builder.getResultList()) {
+            if (G.userId != result.getUserId()) { // don't show my account
+                RealmRegisteredInfo.getRegistrationInfo(result.getUserId(), new OnInfo() {
+                    @Override
+                    public void onInfo(RealmRegisteredInfo registeredInfo) {
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
                             @Override
-                            public void run() {
-                                if (G.onMapUsersGet != null) {
-                                    G.onMapUsersGet.onMapUsersGet();
-                                }
+                            public void execute(Realm realm) {
+                                RealmGeoNearbyDistance geoNearbyDistance = realm.createObject(RealmGeoNearbyDistance.class, result.getUserId());
+                                geoNearbyDistance.setHasComment(result.getHasComment());
+                                geoNearbyDistance.setDistance(result.getDistance());
                             }
-                        }, 200);
-
-                    }
-
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        realm.close();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
+                        });
                         realm.close();
                     }
                 });
             }
-        });
+        }
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (G.onMapUsersGet != null) {
+                    G.onMapUsersGet.onMapUsersGet();
+                }
+            }
+        }, 250);
 
 
     }
