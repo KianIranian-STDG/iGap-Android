@@ -191,7 +191,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 16
+        if (oldVersion == 16) {
             RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
             if (realmUserInfo != null) {
                 realmUserInfo.addField("importContactLimit", boolean.class, FieldAttribute.REQUIRED);
@@ -215,6 +215,22 @@ public class RealmMigration implements io.realm.RealmMigration {
             if (realmRoom != null) {
                 realmRoom.addField(RealmRoomFields.PIN_MESSAGE_ID, long.class, FieldAttribute.REQUIRED);
                 realmRoom.addField(RealmRoomFields.PIN_MESSAGE_ID_DELETED, long.class, FieldAttribute.REQUIRED);
+            }
+
+            RealmObjectSchema realmRoomMessage = schema.get(RealmRoomMessage.class.getSimpleName());
+            if (realmRoomMessage != null) {
+                if (realmRoomMessage.hasField("log")) {
+                    realmRoomMessage.removeField("log");
+                }
+
+                if (realmRoomMessage.hasField("logMessage")) {
+                    realmRoomMessage.removeField("logMessage");
+                }
+
+                realmRoomMessage.addField(RealmRoomMessageFields.LOGS, byte[].class);
+            }
+            if (schema.contains("RealmRoomMessageLog")) {
+                schema.remove("RealmRoomMessageLog");
             }
 
             oldVersion++;
