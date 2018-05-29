@@ -18,11 +18,13 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperString;
+import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientGetRoom;
+import net.iGap.request.RequestClientGetRoomMessage;
 
 import java.util.List;
 
@@ -1335,14 +1337,14 @@ public class RealmRoom extends RealmObject {
         realm.close();
     }
 
-    public static void updatePinedMessageDeleted(long roomId, final long messageIdDeleted) {
+    public static void updatePinedMessageDeleted(long roomId, final boolean reset) {
         Realm realm = Realm.getDefaultInstance();
         final RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
         if (room != null) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    room.setPinMessageIdDeleted(messageIdDeleted);
+                    room.setPinMessageIdDeleted(reset ? 0 : room.getPinMessageId());
                 }
             });
         }
@@ -1355,21 +1357,39 @@ public class RealmRoom extends RealmObject {
         RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
         if (room != null) {
             if (room.getPinMessageId() > 0) {
-                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).
-                        equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
-                        equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).
-                        notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageIdDeleted()).
-                        equalTo(RealmRoomMessageFields.DELETED, false).
-                        equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findFirst();
+                RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+                        equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).findFirst();
+                if (roomMessage == null) {
+                    G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
+                        @Override
+                        public void onClientGetRoomMessageResponse(long messageId) {
+                            G.onClientGetRoomMessage = null;
+                            G.handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (G.onPinedMessage != null) {
+                                        G.onPinedMessage.onPinMessage();
+                                    }
+                                }
+                            }, 200);
+                        }
+                    };
 
-                if (roomMessage != null) {
-                    result = roomMessage.getMessageId();
+                    new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, room.getPinMessageId());
+                } else {
+                    RealmRoomMessage roomMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
+                            equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageIdDeleted()).
+                            equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findFirst();
+                    if (roomMessage1 != null) {
+                        result = roomMessage1.getMessageId();
+                    }
                 }
             }
         }
         realm.close();
         return result;
     }
+
     public long getUpdatedTime() {
         if (getLastMessage() != null && getLastMessage().isValid()) {
             if (getLastMessage().getUpdateOrCreateTime() > updatedTime) {

@@ -410,6 +410,7 @@ public class FragmentChat extends BaseFragment
     private LinearLayout ll_navigateHash;
     private LinearLayout lyt_user;
     private LinearLayout mReplayLayout;
+    private LinearLayout pinedMessageLayout;
     private ProgressBar prgWaiting;
     //  private AVLoadingIndicatorView avi;
     private ViewGroup vgSpamUser;
@@ -1584,14 +1585,15 @@ public class FragmentChat extends BaseFragment
 
     private void initPinedMessage() {
         final long pinMessageId = RealmRoom.hasPinedMessage(mRoomId);
-        final LinearLayout pinedMessageLayout = (LinearLayout) rootView.findViewById(R.id.ac_ll_strip_Pin);
+        pinedMessageLayout = (LinearLayout) rootView.findViewById(R.id.ac_ll_strip_Pin);
         if (pinMessageId > 0) {
             RealmRoomMessage realmRoomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, pinMessageId).findFirst();
             if (realmRoomMessage != null && realmRoomMessage.isValid() && !realmRoomMessage.isDeleted()) {
+                realmRoomMessage = RealmRoomMessage.getFinalMessage(realmRoomMessage);
                 pinedMessageLayout.setVisibility(View.VISIBLE);
                 TextView txtPinMessage = (TextView) rootView.findViewById(R.id.pl_txt_pined_Message);
                 MaterialDesignTextView iconPinClose = (MaterialDesignTextView) rootView.findViewById(R.id.pl_btn_close);
-                final boolean isMyPinMessage = G.authorHash.equals(realmRoomMessage.getAuthorHash());
+
                 String text = realmRoomMessage.getMessage();
                 if (text == null || text.length() == 0) {
                     text = AppUtils.conversionMessageType(realmRoomMessage.getMessageType());
@@ -1600,9 +1602,10 @@ public class FragmentChat extends BaseFragment
                 iconPinClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        RealmRoom.updatePinedMessageDeleted(mRoomId, pinMessageId);
-                        pinedMessageLayout.setVisibility(View.GONE);
-                        if (isMyPinMessage) {
+                        if (channelRole == ChannelChatRole.MEMBER || groupRole == GroupChatRole.MEMBER || isNotJoin) {
+                            RealmRoom.updatePinedMessageDeleted(mRoomId, false);
+                            pinedMessageLayout.setVisibility(View.GONE);
+                        } else {
                             sendRequestPinMessage(0);
                         }
                     }
@@ -1618,6 +1621,7 @@ public class FragmentChat extends BaseFragment
                         } else {
 
                             RealmRoomMessage rm = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, pinMessageId).findFirst();
+                            rm = RealmRoomMessage.getFinalMessage(rm);
                             if (rm != null) {
                                 resetMessagingValue();
                                 savedScrollMessageId = pinMessageId;
@@ -1655,19 +1659,46 @@ public class FragmentChat extends BaseFragment
     }
 
     private void sendRequestPinMessage(final long id) {
-        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.igap)
-                .content(String.format(context.getString(R.string.pin_messages_content), G.fragmentActivity.getResources().getString(id == 0 ? R.string.unpin : R.string.PIN)))
-                .positiveText(R.string.ok).
-                onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (chatType == CHANNEL) {
-                            new RequestChannelPinMessage().channelPinMessage(mRoomId, id);
-                        } else {
-                            new RequestGroupPinMessage().groupPinMessage(mRoomId, id);
+        if (id == 0) {
+            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.igap)
+                    .content(String.format(context.getString(R.string.pin_messages_content), context.getString(R.string.unpin)))
+                    .neutralText(R.string.all_member)
+                    .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            if (chatType == CHANNEL) {
+                                new RequestChannelPinMessage().channelPinMessage(mRoomId, id);
+                            } else {
+                                new RequestGroupPinMessage().groupPinMessage(mRoomId, id);
+                            }
                         }
-                    }
-                }).negativeText(R.string.cancel).show();
+                    })
+                    .positiveText(R.string.this_page)
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            if (pinedMessageLayout != null) {
+                                pinedMessageLayout.setVisibility(View.GONE);
+                            }
+                            RealmRoom.updatePinedMessageDeleted(mRoomId, false);
+                        }
+                    }).negativeText(R.string.cancel).show();
+        } else {
+            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.igap)
+                    .content(String.format(context.getString(R.string.pin_messages_content), context.getString(R.string.PIN)))
+                    .positiveText(R.string.ok).
+                    onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            if (chatType == CHANNEL) {
+                                new RequestChannelPinMessage().channelPinMessage(mRoomId, id);
+                            } else {
+                                new RequestGroupPinMessage().groupPinMessage(mRoomId, id);
+                            }
+                        }
+                    }).negativeText(R.string.cancel).show();
+        }
+
     }
 
     private void registerListener() {
@@ -3793,7 +3824,7 @@ public class FragmentChat extends BaseFragment
                         long _messageId = 0;
                         if (!isPinedMessage) {
                             _messageId = Long.parseLong(message.messageID);
-                            RealmRoom.updatePinedMessageDeleted(mRoomId, 0);
+                            RealmRoom.updatePinedMessageDeleted(mRoomId, true);
                         }
                         dialog.dismiss();
                         sendRequestPinMessage(_messageId);
