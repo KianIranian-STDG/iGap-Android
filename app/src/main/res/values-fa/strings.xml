@@ -1172,8 +1172,9 @@
   <string name="tab_edit">ویرایش</string>
   <string name="can_not_open_file">این فایل باز نمی شود</string>
   <string name="st_24_Clock">زمان ۲۴ ساعته</string>
-  <string name="pin_messages_content" formatted="false">"کنید %s میخواهید این پیام را"</string>
+  <string name="pin_messages_content" formatted="false">"میخواهید این پیام را %s کنید؟"</string>
   <string name="unpin">غیرسنجاق</string>
+  <string name="pin_message">سنجاق</string>
   <string name="pined_message">سنجاق</string>
   <string name="all_member">همه اعضا</string>
   <string name="this_page">همین صفحه</string>

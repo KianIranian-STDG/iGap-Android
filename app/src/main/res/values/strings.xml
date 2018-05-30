@@ -1196,8 +1196,9 @@
   <string name="tab_filters">Filters</string>
   <string name="tab_edit">Edit</string>
   <string name="can_not_open_file">This file can not be opened</string>
-  <string name="pin_messages_content" formatted="false">"Do you want to %s this message"</string>
+  <string name="pin_messages_content" formatted="false">"Do you want to %s this message?"</string>
   <string name="unpin">UnPin</string>
+  <string name="pin_message">Pin</string>
   <string name="pined_message">Pinned Message</string>
   <string name="all_member">All Members</string>
   <string name="this_page">This Page</string>
