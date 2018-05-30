@@ -4,10 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Environment;
-import android.os.SystemClock;
-import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.downloader.PRDownloader;
@@ -38,7 +35,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -375,7 +371,7 @@ public final class StartupActions {
             String someRandomTime = time(now);
             Date currentTime = new SimpleDateFormat("HH:mm:ss").parse(someRandomTime);
 
-            if (currentTime.getTime() > time1.getTime() && currentTime.getTime() > time2.getTime()) {
+            if (currentTime.getTime() > time1.getTime() && currentTime.getTime() < time2.getTime()) {
 
                 //checkes whether the current time is between 14:49:00 and 20:11:13.
                 G.isDarkTheme = true;
