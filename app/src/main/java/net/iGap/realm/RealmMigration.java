@@ -229,6 +229,19 @@ public class RealmMigration implements io.realm.RealmMigration {
 
                 realmRoomMessage.addField(RealmRoomMessageFields.LOGS, byte[].class);
             }
+
+            RealmObjectSchema realmRegisteredInfo = schema.get(RealmRegisteredInfo.class.getSimpleName());
+            if (realmRegisteredInfo != null) {
+                realmRegisteredInfo.addField("verified", boolean.class, FieldAttribute.REQUIRED);
+            }
+
+            RealmObjectSchema realmContact = schema.get(RealmContacts.class.getSimpleName());
+            if (realmContact != null) {
+                realmContact.addField("verified", boolean.class, FieldAttribute.REQUIRED);
+                realmContact.addField("mutual", boolean.class, FieldAttribute.REQUIRED);
+                realmContact.addField("bio", String.class);
+            }
+
             if (schema.contains("RealmRoomMessageLog")) {
                 schema.remove("RealmRoomMessageLog");
             }

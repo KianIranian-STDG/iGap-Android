@@ -1276,11 +1276,13 @@ public class FragmentChat extends BaseFragment
                 if (chatType == CHAT) {
                     chatPeerId = realmRoom.getChatRoom().getPeerId();
                     RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), chatPeerId);
-                    ;
                     if (realmRegisteredInfo != null) {
                         title = realmRegisteredInfo.getDisplayName();
                         lastSeen = realmRegisteredInfo.getLastSeen();
                         userStatus = realmRegisteredInfo.getStatus();
+                        if (realmRegisteredInfo.isVerified()) {
+                            txtVerifyRoomIcon.setVisibility(View.VISIBLE);
+                        }
                     } else {
                         /**
                          * when userStatus isn't EXACTLY lastSeen time not used so don't need

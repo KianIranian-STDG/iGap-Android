@@ -2107,6 +2107,7 @@
   <string name="open_default_player">فتح الفيديو باستخدام المشغل الافتراضي</string>
   <string name="show_channel_vote">تفاعل القناة</string>
   <string name="verify_channel">تم التحقق من القناة</string>
+  <string name="verify_user">تم التحقق من المستخدم</string>
   <string name="another_room">غرفة أخرى</string>
   <string name="send">إرسال</string>
   <string name="do_not_send">لا ترسل</string>

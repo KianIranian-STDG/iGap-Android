@@ -1178,6 +1178,7 @@
   <string name="open_default_player">Open video with default player</string>
   <string name="show_channel_vote">Channel Reaction</string>
   <string name="verify_channel">Verified Channel</string>
+  <string name="verify_user">Verified User</string>
   <string name="another_room">Another Room</string>
   <string name="send">Send</string>
   <string name="do_not_send">Don\'t Send</string>
