@@ -188,7 +188,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                     }
                     ImageHelper.correctRotateImage(path, true); //rotate image
                     G.fragmentActivity.getSupportFragmentManager().beginTransaction().
-                            add(R.id.ar_layout_root, FragmentEditImage.newInstance(path, false, true))
+                            add(R.id.ar_layout_root, FragmentEditImage.newInstance(path, false, true, 0))
                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
 
                     break;
@@ -198,7 +198,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                             return;
                         }
                         G.fragmentActivity.getSupportFragmentManager().beginTransaction().
-                                add(R.id.ar_layout_root, FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, true))
+                                add(R.id.ar_layout_root, FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, true, 0))
                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
                     }
                     break;

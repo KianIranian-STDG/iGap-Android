@@ -449,10 +449,10 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
-                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, false)).setReplace(false).load();
+                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, false, 0)).setReplace(false).load();
                     } else {
                         ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
-                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false)).setReplace(false).load();
+                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0)).setReplace(false).load();
                     }
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
@@ -460,7 +460,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                         return;
                     }
 //
-                    new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, false)).setReplace(false).load();
+                    new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, false, 0)).setReplace(false).load();
                     break;
             }
         }

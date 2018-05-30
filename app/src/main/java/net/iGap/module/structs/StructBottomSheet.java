@@ -12,8 +12,18 @@ package net.iGap.module.structs;
 
 public class StructBottomSheet {
 
+    public int id;
     public boolean isSelected;
     public String path;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public boolean isSelected() {
         return isSelected;

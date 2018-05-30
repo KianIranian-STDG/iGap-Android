@@ -374,7 +374,7 @@ public class FragmentChat extends BaseFragment
     //  private MaterialDesignTextView btnReplaySelected;
     private RippleView rippleDeleteSelected;
     private RippleView rippleReplaySelected;
-    private ArrayList<String> listPathString;
+    public static ArrayList<String> listPathString;
     private MaterialDesignTextView btnCancelSendingFile;
     private ViewGroup viewGroupLastSeen;
     private CircleImageView imvUserPicture;
@@ -564,6 +564,7 @@ public class FragmentChat extends BaseFragment
                 absolutePathOfImage = cursor.getString(column_index_data);
 
                 StructBottomSheet item = new StructBottomSheet();
+                item.setId(listOfAllImages.size());
                 item.setPath(absolutePathOfImage);
                 item.isSelected = true;
                 listOfAllImages.add(0, item);
@@ -1154,7 +1155,7 @@ public class FragmentChat extends BaseFragment
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
                                 Uri uri = Uri.parse(listPathString.get(0));
-                                new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(uri, HelperGetDataFromOtherApp.FileType.image), true, false)).setReplace(false).load();
+                                new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(uri, HelperGetDataFromOtherApp.FileType.image), true, false, 0)).setReplace(false).load();
 
                                 G.handler.post(new Runnable() {
                                     @Override
@@ -1167,7 +1168,7 @@ public class FragmentChat extends BaseFragment
                             } else {
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
                                 Uri uri = Uri.parse(listPathString.get(0));
-                                new HelperFragment(FragmentEditImage.newInstance(uri.toString(), true, false)).setReplace(false).load();
+                                new HelperFragment(FragmentEditImage.newInstance(uri.toString(), true, false, 0)).setReplace(false).load();
 
                                 G.handler.post(new Runnable() {
                                     @Override
@@ -1193,7 +1194,7 @@ public class FragmentChat extends BaseFragment
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
                             ImageHelper.correctRotateImage(listPathString.get(0), true);
-                            new HelperFragment(FragmentEditImage.newInstance(listPathString.get(0), true, false)).setReplace(false).load();
+                            new HelperFragment(FragmentEditImage.newInstance(listPathString.get(0), true, false, 0)).setReplace(false).load();
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1204,7 +1205,7 @@ public class FragmentChat extends BaseFragment
                             });
                         } else {
                             ImageHelper.correctRotateImage(listPathString.get(0), true);
-                            new HelperFragment(FragmentEditImage.newInstance(listPathString.get(0), true, false)).setReplace(false).load();
+                            new HelperFragment(FragmentEditImage.newInstance(listPathString.get(0), true, false, 0)).setReplace(false).load();
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -2648,6 +2649,7 @@ public class FragmentChat extends BaseFragment
         G.openBottomSheetItem = new OpenBottomSheetItem() {
             @Override
             public void openBottomSheet(boolean isNew) {
+                fastItemAdapter.notifyAdapterDataSetChanged();
                 isNewBottomSheet = isNew;
                 imvAttachFileButton.performClick();
             }
@@ -5756,9 +5758,20 @@ public class FragmentChat extends BaseFragment
         ViewGroup location = (ViewGroup) viewBottomSheet.findViewById(R.id.location);
         ViewGroup contact = (ViewGroup) viewBottomSheet.findViewById(R.id.contact);
 
+        if (listPathString != null && listPathString.size() > 0) {
+            //send.setText(R.mipmap.send2);
+            send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
+            isCheckBottomSheet = true;
+            txtCountItem.setText("" + listPathString.size() + " " + G.fragmentActivity.getResources().getString(item));
+        } else {
+            //send.setImageResource(R.mipmap.ic_close);
+            send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
+            txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
+        }
+
         onPathAdapterBottomSheet = new OnPathAdapterBottomSheet() {
             @Override
-            public void path(String path, boolean isCheck, boolean isEdit) {
+            public void path(String path, boolean isCheck, boolean isEdit, StructBottomSheet mList, int id) {
 
                 if (isCheck) {
                     listPathString.add(path);
@@ -5768,7 +5781,8 @@ public class FragmentChat extends BaseFragment
 
                 if (isEdit) {
                     bottomSheetDialog.dismiss();
-                    new HelperFragment(FragmentEditImage.newInstance(path, true, false)).setReplace(false).load();
+                    itemGalleryList.set(id, mList);
+                    new HelperFragment(FragmentEditImage.newInstance(path, true, false, id)).setReplace(false).load();
 //                    new HelperFragment(FragmentFilterImage.newInstance(path)).setReplace(false).load();
                 } else {
                     listPathString.size();
@@ -5791,9 +5805,10 @@ public class FragmentChat extends BaseFragment
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
             public void result(String path, String message) {
-                listPathString = null;
-                listPathString = new ArrayList<>();
-                listPathString.add(path);
+//                listPathString = null;
+//                listPathString = new ArrayList<>();
+////                listPathString.add(path);
+                Log.i("CCCCCCC", "result: " + listPathString.size());
                 edtChat.setText(message);
                 latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
                 ll_attach_text.setVisibility(View.VISIBLE);
@@ -5979,6 +5994,7 @@ public class FragmentChat extends BaseFragment
                 //send.setImageResource(R.mipmap.ic_close);
                 send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
                 txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
+                listPathString.clear();
             }
         });
 
