@@ -368,21 +368,15 @@ public final class StartupActions {
         try {
             String string1 = time(fromMs);
             Date time1 = new SimpleDateFormat("HH:mm:ss").parse(string1);
-            Calendar calendar1 = Calendar.getInstance();
-            calendar1.setTime(time1);
 
             String string2 = time(toMs);
             Date time2 = new SimpleDateFormat("HH:mm:ss").parse(string2);
-            Calendar calendar2 = Calendar.getInstance();
-            calendar2.setTime(time2);
 
             String someRandomTime = time(now);
-            Date d = new SimpleDateFormat("HH:mm:ss").parse(someRandomTime);
-            Calendar calendar3 = Calendar.getInstance();
-            calendar3.setTime(d);
+            Date currentTime = new SimpleDateFormat("HH:mm:ss").parse(someRandomTime);
 
-            Date currentTime = calendar3.getTime();
-            if ((currentTime.after(calendar1.getTime()) && currentTime.before(calendar2.getTime()))) {
+            if (currentTime.getTime() > time1.getTime() && currentTime.getTime() > time2.getTime()) {
+
                 //checkes whether the current time is between 14:49:00 and 20:11:13.
                 G.isDarkTheme = true;
                 appBarColor = Config.default_dark_appBarColor;
