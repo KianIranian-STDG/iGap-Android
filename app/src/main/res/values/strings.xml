@@ -1198,13 +1198,13 @@
   <string name="can_not_open_file">This file can not be opened</string>
   <string name="pin_messages_content" formatted="false">"Do you want to %s this message"</string>
   <string name="unpin">UnPin</string>
-  <string name="pined_message">Pined message</string>
-  <string name="all_member">all member</string>
-  <string name="this_page">this page</string>
+  <string name="pined_message">Pinned Message</string>
+  <string name="all_member">All Members</string>
+  <string name="this_page">This Page</string>
   <string name="disable">Disable</string>
   <string name="scheduled">Scheduled: </string>
   <string name="from_theme">From: </string>
-  <string name="to_theme">To: </string>
+  <string name="to_theme">Until: </string>
   <string name="automatic">Automatic</string>
   <string name="automatic_description_theme">The night mode was activated from 19 to 8 with automatic mode selection</string>
   <string name="setting_dark_theme">Setting Dark Theme</string>

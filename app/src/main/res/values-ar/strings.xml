@@ -2126,13 +2126,18 @@
   <string name="tab_edit">تحرير</string>
   <string name="can_not_open_file">لا يمكن فتح هذا الملف</string>
   <string name="st_24_Clock">24 ساعة</string>
-  <string name="pin_messages_content" formatted="false">"Do you want to %s this message"</string>
-  <string name="unpin">UnPin</string>
-  <string name="pined_message">Pined message</string>
-  <string name="all_member">all member</string>
-  <string name="this_page">this page</string>
-  <string name="setting_dark_theme">إعدادات الوضع الليلي</string>
+  <string name="pin_messages_content" formatted="false">"ترید %s هذه الرسالة"</string>
+  <string name="unpin">غير دبوس</string>
+  <string name="pined_message">دبوس</string>
+  <string name="all_member">جميع الأعضاء</string>
+  <string name="this_page">ههذه الصفحة</string>
+  <string name="disable">معاق</string>
+  <string name="scheduled">تخطيط: </string>
+  <string name="from_theme">من:</string>
+  <string name="to_theme">يصل الى:</string>
+  <string name="automatic">تلقائيا</string>
+  <string name="automatic_description_theme">تم تنشيط الوضع الليلي من 19 إلى 8 عن طريق تحديد الوضع التلقائي</string>
+  <string name="setting_dark_theme">إعدادات قذيفة الظلام</string>
   <string name="Select_Time">اختر الوقت</string>
-  <string name="automatic_description_theme">تم تنشيط الوضع الليلي من 19 إلى 8 مع اختيار الوضع التلقائي</string>
 
 </resources>

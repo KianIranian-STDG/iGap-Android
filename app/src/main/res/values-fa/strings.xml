@@ -1172,13 +1172,18 @@
   <string name="tab_edit">ویرایش</string>
   <string name="can_not_open_file">این فایل باز نمی شود</string>
   <string name="st_24_Clock">زمان ۲۴ ساعته</string>
-  <string name="pin_messages_content" formatted="false">"Do you want to %s this message"</string>
-  <string name="unpin">UnPin</string>
-  <string name="pined_message">Pined message</string>
-  <string name="all_member">all member</string>
-  <string name="this_page">this page</string>
-  <string name="setting_dark_theme">تنظیمات حالت شب</string>
+  <string name="pin_messages_content" formatted="false">"کنید %s میخواهید این پیام را"</string>
+  <string name="unpin">غیرسنجاق</string>
+  <string name="pined_message">سنجاق</string>
+  <string name="all_member">همه اعضا</string>
+  <string name="this_page">همین صفحه</string>
+  <string name="disable">غیرفعال</string>
+  <string name="scheduled">برنامه ریزی: </string>
+  <string name="from_theme">از:</string>
+  <string name="to_theme">تا:</string>
+  <string name="automatic">خودکار</string>
+  <string name="automatic_description_theme">حالت شب از 19 تا 8 با انتخاب حالت خودکار فعال شد</string>
+  <string name="setting_dark_theme">تنظیمات پوسته تاریک</string>
   <string name="Select_Time">انتخاب زمان</string>
-  <string name="automatic_description_theme">با انتخاب حالت اتوماتیک حالت شب از ساعت ۱۹ الی 8 فعال می شد</string>
 
 </resources>
