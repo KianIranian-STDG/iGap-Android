@@ -463,6 +463,21 @@ public class RealmRoom extends RealmObject {
         realm.close();
     }
 
+    public static String getMemberCount(Realm realm, long roomId) {
+
+        String memberCount = "";
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+        if (realmRoom != null) {
+            if (realmRoom.getType() == GROUP) {
+                memberCount = realmRoom.getGroupRoom().getParticipantsCountLabel();
+            } else if (realmRoom.getType() == CHANNEL) {
+                memberCount = realmRoom.getGroupRoom().getParticipantsCountLabel();
+            }
+        }
+
+        return memberCount;
+    }
+
     /**
      * delete room with transaction from realm and also delete all messages
      * from this room and finally delete RealmClientCondition
