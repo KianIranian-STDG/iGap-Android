@@ -1343,7 +1343,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
             HelperAvatar.getAvatar(idForGetAvatar, avatarType, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(String avatarPath, long idForGetAvatar) {
-                    if (hashMapAvatar.get(idForGetAvatar) != null) {
+                    if (hashMapAvatar.get(idForGetAvatar) != null && avatarPath != null) {
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(idForGetAvatar));
                     }
                 }

@@ -2259,12 +2259,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         HelperAvatar.getAvatar(G.userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgNavImage);
-                    }
-                });
+                if (avatarPath != null) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgNavImage);
+                        }
+                    });
+                }
             }
 
             @Override

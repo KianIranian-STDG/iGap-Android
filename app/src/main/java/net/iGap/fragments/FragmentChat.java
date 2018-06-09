@@ -4539,7 +4539,7 @@ public class FragmentChat extends BaseFragment
                         //}
                         ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                     } else {
-                        if (status != null) {
+                        if (status != null && txtLastSeen != null) {
                             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                                 txtLastSeen.setText(LastSeenTimeUtil.computeTime(chatPeerId, time, true, false));
                             } else {
@@ -4817,7 +4817,9 @@ public class FragmentChat extends BaseFragment
             }
         }
 
-        mAdapter.removeMessage(position);
+        if (position >= 0) {
+            mAdapter.removeMessage(position);
+        }
         RealmRoomMessage.deleteMessage(messageId);
     }
 
