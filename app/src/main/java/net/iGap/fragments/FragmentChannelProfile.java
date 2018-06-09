@@ -46,6 +46,7 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
+import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestChannelAvatarAdd;
 import net.iGap.request.RequestChannelKickAdmin;
@@ -55,6 +56,7 @@ import net.iGap.viewmodel.FragmentChannelProfileViewModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class FragmentChannelProfile extends BaseFragment implements OnChannelAvatarAdd, OnChannelAvatarDelete {
 
@@ -186,7 +188,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
-            public void result(String path, String message) {
+            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
                 pathSaveImage = null;
                 pathSaveImage = path;
                 long avatarId = SUID.id().get();

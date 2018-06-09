@@ -80,7 +80,20 @@
             android:textColor="@color/whit_background"
             android:visibility="gone"
             android:textSize="@dimen/dp22" />
+
+          <TextView
+            android:id="@+id/stfaq_txt_countImageEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="right|center_vertical"
+            android:text="@string/photo"
+            android:textColor="@color/whit_background"
+            android:textSize="@dimen/dp16"
+            android:textStyle="bold"
+            android:layout_marginRight="@dimen/dp20"
+            android:visibility="visible" />
         </LinearLayout>
+
 
       </RelativeLayout>
     </android.support.v7.widget.Toolbar>
@@ -150,6 +163,22 @@
           android:textSize="@dimen/dp16"
           android:textColor="@color/light_gray"
           app:emojiSize="@dimen/dp22" />
+
+        <net.iGap.module.MaterialDesignTextView
+          android:id="@+id/chl_imv_ok_message"
+          style="@style/ChatMessages.MaterialDesignTextView.BottomIcon"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:layout_gravity="bottom"
+          android:gravity="bottom"
+          android:paddingBottom="@dimen/dp8"
+          android:paddingLeft="@dimen/dp8"
+          android:paddingRight="@dimen/dp8"
+          android:text="@string/md_check_symbol"
+          android:textAppearance="@style/TextIconAppearance.all"
+          android:textColor="@color/colorEmojiPopupCategoryBottomBorder"
+          android:textSize="@dimen/dp20" />
+
 
       </LinearLayout>
 

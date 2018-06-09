@@ -47,6 +47,7 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
 import net.iGap.module.enums.GroupChatRole;
+import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestGroupAvatarAdd;
 import net.iGap.request.RequestGroupKickAdmin;
@@ -55,6 +56,7 @@ import net.iGap.request.RequestGroupKickModerator;
 import net.iGap.viewmodel.FragmentGroupProfileViewModel;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 /*
 * This is the source code of iGap for Android
@@ -120,7 +122,7 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
 
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
-            public void result(String path, String message) {
+            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
                 pathSaveImage = null;
                 pathSaveImage = path;
                 long avatarId = SUID.id().get();

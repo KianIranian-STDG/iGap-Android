@@ -53,6 +53,7 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.LinedEditText;
+import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.viewmodel.FragmentNewGroupViewModel;
@@ -61,6 +62,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import io.realm.Realm;
 
@@ -104,7 +106,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
-            public void result(String path, String message) {
+            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
 
                 pathSaveImage = path;
                 avatarId = System.nanoTime();

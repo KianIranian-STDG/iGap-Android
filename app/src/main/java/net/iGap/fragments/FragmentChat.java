@@ -274,8 +274,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
@@ -462,7 +464,6 @@ public class FragmentChat extends BaseFragment
     private String userStatus;
     private Boolean isGoingFromUserLink = false;
     private Boolean isNotJoin = false; // this value will be trued when come to this chat with username
-    private boolean isCheckBottomSheet = false;
     private boolean firsInitScrollPosition = false;
     private boolean initHash = false;
     private boolean initAttach = false;
@@ -5752,32 +5753,17 @@ public class FragmentChat extends BaseFragment
         ViewGroup video = (ViewGroup) viewBottomSheet.findViewById(R.id.video);
         ViewGroup music = (ViewGroup) viewBottomSheet.findViewById(R.id.music);
         ViewGroup document = (ViewGroup) viewBottomSheet.findViewById(R.id.document);
-        ViewGroup close = (ViewGroup) viewBottomSheet.findViewById(R.id.close);
+        final ViewGroup close = (ViewGroup) viewBottomSheet.findViewById(R.id.close);
         ViewGroup file = (ViewGroup) viewBottomSheet.findViewById(R.id.file);
         ViewGroup paint = (ViewGroup) viewBottomSheet.findViewById(R.id.paint);
         ViewGroup location = (ViewGroup) viewBottomSheet.findViewById(R.id.location);
         ViewGroup contact = (ViewGroup) viewBottomSheet.findViewById(R.id.contact);
+        Log.i("CCCCCCCCCC", "0 initAttach: ");
 
-        if (listPathString != null && listPathString.size() > 0) {
-            //send.setText(R.mipmap.send2);
-            send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-            isCheckBottomSheet = true;
-            txtCountItem.setText("" + listPathString.size() + " " + G.fragmentActivity.getResources().getString(item));
-        } else {
-            //send.setImageResource(R.mipmap.ic_close);
-            send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
-            txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
-        }
 
         onPathAdapterBottomSheet = new OnPathAdapterBottomSheet() {
             @Override
             public void path(String path, boolean isCheck, boolean isEdit, StructBottomSheet mList, int id) {
-
-                if (isCheck) {
-                    listPathString.add(path);
-                } else {
-                    listPathString.remove(path);
-                }
 
                 if (isEdit) {
                     bottomSheetDialog.dismiss();
@@ -5785,16 +5771,18 @@ public class FragmentChat extends BaseFragment
                     new HelperFragment(FragmentEditImage.newInstance(path, true, false, id)).setReplace(false).load();
 //                    new HelperFragment(FragmentFilterImage.newInstance(path)).setReplace(false).load();
                 } else {
-                    listPathString.size();
+                    if (isCheck) {
+                        listPathString.add(path);
+                    } else {
+                        listPathString.remove(path);
+                    }
                     if (listPathString.size() > 0) {
                         //send.setText(R.mipmap.send2);
                         send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-                        isCheckBottomSheet = true;
                         txtCountItem.setText("" + listPathString.size() + " " + G.fragmentActivity.getResources().getString(item));
                     } else {
                         //send.setImageResource(R.mipmap.ic_close);
                         send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
-                        isCheckBottomSheet = false;
                         txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
                     }
                 }
@@ -5804,15 +5792,21 @@ public class FragmentChat extends BaseFragment
 
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
-            public void result(String path, String message) {
-//                listPathString = null;
-//                listPathString = new ArrayList<>();
-////                listPathString.add(path);
-                Log.i("CCCCCCC", "result: " + listPathString.size());
-                edtChat.setText(message);
-                latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
-                ll_attach_text.setVisibility(View.VISIBLE);
-                imvSendButton.performClick();
+            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
+                listPathString = null;
+
+                for (Map.Entry<String, StructBottomSheet> items : textImageList.entrySet()) {
+
+                    listPathString = new ArrayList<>();
+                    edtChat.setText(items.getValue().getText());
+                    listPathString.add(items.getValue().getPath());
+                    latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
+                    ll_attach_text.setVisibility(View.VISIBLE);
+                    imvSendButton.performClick();
+                }
+
+//                close.performClick();
+
             }
         };
 
@@ -5994,7 +5988,6 @@ public class FragmentChat extends BaseFragment
                 //send.setImageResource(R.mipmap.ic_close);
                 send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
                 txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
-                listPathString.clear();
             }
         });
 
@@ -6071,9 +6064,8 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View v) {
 
-                if (isCheckBottomSheet) {
+                if (listPathString.size() > 0) {
                     bottomSheetDialog.dismiss();
-
                     fastItemAdapter.clear();
                     //send.setImageResource(R.mipmap.ic_close);
                     send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
@@ -6093,6 +6085,7 @@ public class FragmentChat extends BaseFragment
                                         latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
                                         //sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, pathStrings.get(0));
                                     } else {
+                                        Log.i("CCCCCCCCCCC", "run: " + listPathString.size());
                                         for (String path : listPathString) {
                                             //if (!path.toLowerCase().endsWith(".gif")) {
                                             String localPathNew = attachFile.saveGalleryPicToLocal(path);
@@ -6599,8 +6592,8 @@ public class FragmentChat extends BaseFragment
     }
 
     public void itemAdapterBottomSheet() {
-        listPathString.clear();
         if (isNewBottomSheet) {
+            listPathString.clear();
             fastItemAdapter.clear();
             itemGalleryList.clear();
             itemGalleryList = getAllShownImagesPath(G.fragmentActivity);
@@ -6665,6 +6658,19 @@ public class FragmentChat extends BaseFragment
                 if (isAdded()) {
                     bottomSheetDialog.show();
                     fastItemAdapter.notifyDataSetChanged();
+                    Log.i("CCCCCCCCCC", "10 initAttach: " + listPathString.size());
+                    if (listPathString != null && listPathString.size() > 0) {
+                        Log.i("CCCCCCCCCC", "1 initAttach: " + listPathString.size());
+                        //send.setText(R.mipmap.send2);
+                        send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
+                        txtCountItem.setText("" + listPathString.size() + " " + G.fragmentActivity.getResources().getString(item));
+                    } else {
+                        //send.setImageResource(R.mipmap.ic_close);
+                        send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
+                        txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
+                    }
+
+
                 }
             }
         }, 100);

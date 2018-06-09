@@ -48,11 +48,13 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.EditTextAdjustPan;
 import net.iGap.module.FileUploadStructure;
+import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.viewmodel.FragmentRegistrationNicknameViewModel;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -134,7 +136,7 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
 
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
-            public void result(String path, String message) {
+            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
 
                 pathImageUser = path;
 

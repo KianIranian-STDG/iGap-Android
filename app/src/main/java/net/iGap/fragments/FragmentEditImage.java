@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,10 +41,11 @@ import net.iGap.module.structs.StructBottomSheet;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.R.id.ac_ll_parent;
-import static net.iGap.R.id.viewpager;
+import static net.iGap.module.AndroidUtils.closeKeyboard;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
 /**
@@ -64,6 +64,7 @@ public class FragmentEditImage extends BaseFragment {
     private AdapterViewPager mAdapter;
     public static UpdateImage updateImage;
     private EmojiEditTextE edtChat;
+    private TextView iconOk;
     private MaterialDesignTextView imvSmileButton;
     private boolean isEmojiSHow = false;
     private boolean initEmoji = false;
@@ -73,7 +74,10 @@ public class FragmentEditImage extends BaseFragment {
     private boolean isNicknamePage = false;
     public static CompleteEditImage completeEditImage;
     private int num = 0;
+    private TextView txtCountImage;
     private ArrayList<String> listPathString = new ArrayList<>();
+    private HashMap<String, StructBottomSheet> textImageList = new HashMap<>();
+
     public FragmentEditImage() {
         // Required empty public constructor
     }
@@ -119,12 +123,36 @@ public class FragmentEditImage extends BaseFragment {
 
 //        imgEditImage = (ImageView) view.findViewById(R.id.imgEditImage);
 
+        txtCountImage = view.findViewById(R.id.stfaq_txt_countImageEditText);
+        txtCountImage.setText(FragmentChat.listPathString.size() + " Selected");
+
         viewPager = view.findViewById(R.id.viewPagerEditText);
         mAdapter = new AdapterViewPager(FragmentChat.itemGalleryList);
         viewPager.setAdapter(mAdapter);
 
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                if (textImageList.containsKey(FragmentChat.itemGalleryList.get(position).path)) {
+                    edtChat.setText(textImageList.get(FragmentChat.itemGalleryList.get(position).path).getText());
+                } else {
+                    edtChat.setText("");
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         if (selectPosition != 0) {
-            Log.i("CCCCCCCCCC", "onViewCreated: " + selectPosition);
             viewPager.setCurrentItem((FragmentChat.itemGalleryList.size() - selectPosition) - 1);
         }
 //        viewPager.setCurrentItem(selectedFile);
@@ -226,6 +254,28 @@ public class FragmentEditImage extends BaseFragment {
 
         imvSmileButton = (MaterialDesignTextView) view.findViewById(R.id.chl_imv_smile_button);
 
+
+        imvSmileButton = (MaterialDesignTextView) view.findViewById(R.id.chl_imv_smile_button);
+
+        iconOk = (TextView) view.findViewById(R.id.chl_imv_ok_message);
+        iconOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String path = FragmentChat.itemGalleryList.get(viewPager.getCurrentItem()).path;
+                String message = edtChat.getText().toString();
+
+                StructBottomSheet item = new StructBottomSheet();
+                item.setPath(path);
+                item.setText(message);
+
+                textImageList.put(path, item);
+                closeKeyboard(v);
+
+            }
+        });
+
+
         edtChat = (EmojiEditTextE) view.findViewById(R.id.chl_edt_chat);
         edtChat.requestFocus();
 
@@ -272,7 +322,7 @@ public class FragmentEditImage extends BaseFragment {
             @Override
             public void onClick(View v) {
 
-                if (completeEditImage != null) completeEditImage.result(path, "");
+                if (completeEditImage != null) completeEditImage.result(path, "", textImageList);
 
                 new HelperFragment(FragmentEditImage.this).remove();
                 AndroidUtils.closeKeyboard(v);
@@ -285,7 +335,7 @@ public class FragmentEditImage extends BaseFragment {
             @Override
             public void onClick(View v) {
                 new HelperFragment(FragmentEditImage.this).remove();
-                completeEditImage.result(path, edtChat.getText().toString());
+                completeEditImage.result(path, edtChat.getText().toString(), textImageList);
                 AndroidUtils.closeKeyboard(v);
             }
         });
@@ -377,7 +427,7 @@ public class FragmentEditImage extends BaseFragment {
     }
 
     public interface CompleteEditImage {
-        void result(String path, String message);
+        void result(String path, String message, HashMap<String, StructBottomSheet> textImageList);
     }
 
     @Override
@@ -447,29 +497,50 @@ public class FragmentEditImage extends BaseFragment {
                         FragmentChat.listPathString.remove(itemGalleryList.get(position).path);
                         checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
                         itemGalleryList.get(position).setSelected(true);
+                        textImageList.remove(itemGalleryList.get(position).path);
+
                     } else {
                         checkBox.setChecked(true);
                         FragmentChat.listPathString.add(itemGalleryList.get(position).path);
+
+                        StructBottomSheet item = new StructBottomSheet();
+                        item.setText(edtChat.getText().toString());
+                        item.setPath(itemGalleryList.get(position).path);
+                        textImageList.put(itemGalleryList.get(position).path, item);
+
+
                         checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.green));
                         itemGalleryList.get(position).setSelected(false);
                     }
+                    txtCountImage.setText(FragmentChat.listPathString.size() + " Selected");
                 }
             });
             checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
+
                     if (checkBox.isChecked()) {
                         checkBox.setChecked(false);
                         checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.transparent));
                         FragmentChat.listPathString.remove(itemGalleryList.get(position).path);
+                        textImageList.remove(itemGalleryList.get(position).path);
                         itemGalleryList.get(position).setSelected(true);
                     } else {
                         checkBox.setChecked(true);
                         checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.green));
                         FragmentChat.listPathString.add(itemGalleryList.get(position).path);
+
+
+                        StructBottomSheet item = new StructBottomSheet();
+                        item.setText(edtChat.getText().toString());
+                        item.setPath(itemGalleryList.get(position).path);
+                        textImageList.put(itemGalleryList.get(position).path, item);
+
                         itemGalleryList.get(position).setSelected(false);
+
                     }
+                    txtCountImage.setText(FragmentChat.listPathString.size() + " Selected");
                 }
             });
 

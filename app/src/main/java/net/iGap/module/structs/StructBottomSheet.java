@@ -15,6 +15,7 @@ public class StructBottomSheet {
     public int id;
     public boolean isSelected;
     public String path;
+    private String text;
 
 
     public int getId() {
@@ -39,5 +40,13 @@ public class StructBottomSheet {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

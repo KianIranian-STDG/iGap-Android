@@ -46,6 +46,7 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
+import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserProfileGetBio;
@@ -55,6 +56,7 @@ import net.iGap.viewmodel.FragmentSettingViewModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import io.realm.Realm;
 
@@ -216,7 +218,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
 
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
-            public void result(String path, String message) {
+            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
 
                 pathSaveImage = path;
                 long lastUploadedAvatarId = idAvatar + 1L;
