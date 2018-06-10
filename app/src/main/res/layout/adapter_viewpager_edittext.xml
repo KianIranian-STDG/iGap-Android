@@ -20,20 +20,5 @@
       android:layout_height="match_parent"
       android:scaleType="centerCrop"
       android:src="@mipmap/difaultimage" />
-
-    <com.hanks.library.AnimateCheckBox
-      android:id="@+id/checkBox_editImage"
-      android:layout_width="@dimen/dp24"
-      android:layout_height="@dimen/dp24"
-      android:layout_alignParentRight="true"
-      android:layout_gravity="top|end|right"
-      android:layout_margin="@dimen/dp10"
-      android:background="@drawable/background_check"
-      android:visibility="visible"
-      app:animDuration="100"
-      app:checkedColor="@color/green"
-      app:lineColor="#fff"
-      app:lineWidth="1.2dp"
-      app:unCheckColor="@color/background_checkbox_bottomSheet" />
   </RelativeLayout>
 </LinearLayout>

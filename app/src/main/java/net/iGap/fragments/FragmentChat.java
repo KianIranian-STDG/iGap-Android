@@ -426,6 +426,7 @@ public class FragmentChat extends BaseFragment
     private View viewBottomSheetForward;
     private Fotoapparat fotoapparatSwitcher;
     public static ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<StructBottomSheet>();
+    public static HashMap<String, StructBottomSheet> textImageList = new HashMap<>();
     private RealmRoomMessage firstUnreadMessage;
     private RealmRoomMessage firstUnreadMessageInChat; // when user is in this room received new message
     private RealmRoomMessage voiceLastMessage = null;
@@ -5758,7 +5759,6 @@ public class FragmentChat extends BaseFragment
         ViewGroup paint = (ViewGroup) viewBottomSheet.findViewById(R.id.paint);
         ViewGroup location = (ViewGroup) viewBottomSheet.findViewById(R.id.location);
         ViewGroup contact = (ViewGroup) viewBottomSheet.findViewById(R.id.contact);
-        Log.i("CCCCCCCCCC", "0 initAttach: ");
 
 
         onPathAdapterBottomSheet = new OnPathAdapterBottomSheet() {
@@ -5773,8 +5773,14 @@ public class FragmentChat extends BaseFragment
                 } else {
                     if (isCheck) {
                         listPathString.add(path);
+
+                        StructBottomSheet item = new StructBottomSheet();
+                        item.setPath(path);
+                        item.setText("");
+                        textImageList.put(path, item);
                     } else {
                         listPathString.remove(path);
+                        textImageList.remove(path);
                     }
                     if (listPathString.size() > 0) {
                         //send.setText(R.mipmap.send2);
@@ -6064,7 +6070,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View v) {
 
-                if (listPathString.size() > 0) {
+                if (textImageList.size() > 0) {
                     bottomSheetDialog.dismiss();
                     fastItemAdapter.clear();
                     //send.setImageResource(R.mipmap.ic_close);
@@ -6077,22 +6083,23 @@ public class FragmentChat extends BaseFragment
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-
-                                    if (listPathString.size() == 1) {
-                                        showDraftLayout();
-                                        listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
-                                        setDraftMessage(AttachFile.requestOpenGalleryForImageMultipleSelect);
-                                        latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
-                                        //sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, pathStrings.get(0));
-                                    } else {
-                                        Log.i("CCCCCCCCCCC", "run: " + listPathString.size());
-                                        for (String path : listPathString) {
+                                    for (Map.Entry<String, StructBottomSheet> items : textImageList.entrySet()) {
+                                        if (textImageList.size() == 1) {
+                                            showDraftLayout();
+                                            listPathString.set(0, attachFile.saveGalleryPicToLocal(items.getValue().getPath()));
+                                            setDraftMessage(AttachFile.requestOpenGalleryForImageMultipleSelect);
+                                            latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
+                                            //sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, pathStrings.get(0));
+                                        } else {
                                             //if (!path.toLowerCase().endsWith(".gif")) {
-                                            String localPathNew = attachFile.saveGalleryPicToLocal(path);
+                                            String localPathNew = attachFile.saveGalleryPicToLocal(items.getValue().path);
+                                            edtChat.setText(items.getValue().getText());
                                             sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localPathNew);
                                             //}
+
                                         }
                                     }
+
 
                                 }
                             });
@@ -6593,9 +6600,16 @@ public class FragmentChat extends BaseFragment
 
     public void itemAdapterBottomSheet() {
         if (isNewBottomSheet) {
-            listPathString.clear();
+
+            if (listPathString != null) {
+                listPathString.clear();
+            } else {
+                listPathString = new ArrayList<>();
+            }
+
             fastItemAdapter.clear();
             itemGalleryList.clear();
+            textImageList.clear();
             itemGalleryList = getAllShownImagesPath(G.fragmentActivity);
         }
 
@@ -6658,9 +6672,7 @@ public class FragmentChat extends BaseFragment
                 if (isAdded()) {
                     bottomSheetDialog.show();
                     fastItemAdapter.notifyDataSetChanged();
-                    Log.i("CCCCCCCCCC", "10 initAttach: " + listPathString.size());
                     if (listPathString != null && listPathString.size() > 0) {
-                        Log.i("CCCCCCCCCC", "1 initAttach: " + listPathString.size());
                         //send.setText(R.mipmap.send2);
                         send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
                         txtCountItem.setText("" + listPathString.size() + " " + G.fragmentActivity.getResources().getString(item));
