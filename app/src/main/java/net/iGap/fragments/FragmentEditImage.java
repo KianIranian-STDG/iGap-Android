@@ -1,6 +1,7 @@
 package net.iGap.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -13,11 +14,15 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -69,6 +74,7 @@ public class FragmentEditImage extends BaseFragment {
     public static UpdateImage updateImage;
     private EmojiEditTextE edtChat;
     private TextView iconOk;
+    private ViewGroup rootSend;
     private MaterialDesignTextView imvSmileButton;
     private boolean isEmojiSHow = false;
     private boolean initEmoji = false;
@@ -110,6 +116,8 @@ public class FragmentEditImage extends BaseFragment {
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             path = bundle.getString(PATH);
@@ -127,6 +135,7 @@ public class FragmentEditImage extends BaseFragment {
 
 //        imgEditImage = (ImageView) view.findViewById(R.id.imgEditImage);
         iconOk = (TextView) view.findViewById(R.id.chl_imv_ok_message);
+        rootSend = (ViewGroup) view.findViewById(R.id.pu_layout_cancel_crop);
         TextView txtEditImage = (TextView) view.findViewById(R.id.txtEditImage);
         edtChat = (EmojiEditTextE) view.findViewById(R.id.chl_edt_chat);
         txtCountImage = view.findViewById(R.id.stfaq_txt_countImageEditText);
@@ -403,8 +412,6 @@ public class FragmentEditImage extends BaseFragment {
 
                 new HelperFragment(FragmentEditImage.this).remove();
                 AndroidUtils.closeKeyboard(v);
-
-
             }
         });
 
@@ -417,6 +424,19 @@ public class FragmentEditImage extends BaseFragment {
             }
         });
 
+
+        view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int heightDiff = view.getRootView().getHeight() - view.getHeight();
+                if (heightDiff > AndroidUtils.dpToPx(G.fragmentActivity, 200)) { // if more than 200 dp, it's probably a keyboard...
+                    // ... do something here
+                    rootSend.setVisibility(View.GONE);
+                } else {
+                    rootSend.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
 
@@ -550,6 +570,11 @@ public class FragmentEditImage extends BaseFragment {
         }
 
         @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        @Override
         public Object instantiateItem(ViewGroup container, final int position) {
 
             LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
@@ -575,8 +600,6 @@ public class FragmentEditImage extends BaseFragment {
     }
 
     private void setValueCheckBox(int position) {
-
-        Log.i("CCCCCCCCCCCCC", "setValueCheckBox: " + checkBox.isChecked());
 
         if (checkBox.isChecked()) {
             checkBox.setChecked(false);
