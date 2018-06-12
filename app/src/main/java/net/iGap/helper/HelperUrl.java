@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.helper;
 
@@ -27,6 +27,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -752,6 +753,18 @@ public class HelperUrl {
     }
 
     public static void checkUsernameAndGoToRoom(final String userName, final ChatEntry chatEntery) {
+        checkUsernameAndGoToRoomWithMessageId(userName, chatEntery, 0);
+    }
+
+
+    /**
+     *
+     * @param userName
+     * @param chatEntery
+     * @param messageId // use for detect message position
+     */
+
+    public static void checkUsernameAndGoToRoomWithMessageId(final String userName, final ChatEntry chatEntery, final long messageId) {
 
         if (userName == null || userName.length() < 1 || isInCurrentChat(userName)) return;
 
@@ -760,7 +773,7 @@ public class HelperUrl {
             G.onClientResolveUsername = new OnClientResolveUsername() {
                 @Override
                 public void onClientResolveUsername(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
-                    openChat(userName, type, user, room, chatEntery);
+                    openChat(userName, type, user, room, chatEntery , messageId);
                 }
 
                 @Override
@@ -792,25 +805,25 @@ public class HelperUrl {
 
     //************************************  go to room by userName   *********************************************************************
 
-    private static void openChat(String username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room, ChatEntry chatEntery) {
+    private static void openChat(String username, ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room, ChatEntry chatEntery, long messageId) {
 
         switch (type) {
             case USER:
-                goToChat(user, chatEntery);
+                goToChat(user, chatEntery , messageId);
                 break;
             case ROOM:
-                goToRoom(username, room);
+                goToRoom(username, room ,messageId);
                 break;
         }
     }
 
-    private static void goToActivity(final long roomId, final long peerId, ChatEntry chatEntry) {
+    private static void goToActivity(final long roomId, final long peerId, ChatEntry chatEntry, final long messageId) {
 
         switch (chatEntry) {
             case chat:
 
                 if (roomId != FragmentChat.lastChatRoomId) {
-                    new GoToChatActivity(roomId).setPeerID(peerId).startActivity();
+                    new GoToChatActivity(roomId).setMessageID(messageId).setPeerID(peerId).startActivity();
                 }
 
                 break;
@@ -831,7 +844,7 @@ public class HelperUrl {
         }
     }
 
-    private static void goToChat(final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery) {
+    private static void goToChat(final ProtoGlobal.RegisteredUser user, final ChatEntry chatEntery, long messageId) {
 
         Long id = user.getId();
 
@@ -841,7 +854,7 @@ public class HelperUrl {
         if (realmRoom != null) {
             closeDialogWaiting();
 
-            goToActivity(realmRoom.getId(), id, chatEntery);
+            goToActivity(realmRoom.getId(), id, chatEntery ,messageId);
 
             realm.close();
         } else {
@@ -894,7 +907,7 @@ public class HelperUrl {
                     @Override
                     public void onSuccess() {
 
-                        goToActivity(roomId, user.getId(), chatEntery);
+                        goToActivity(roomId, user.getId(), chatEntery, 0);
 
                         realm.close();
                     }
@@ -908,7 +921,7 @@ public class HelperUrl {
         });
     }
 
-    private static void goToRoom(String username, final ProtoGlobal.Room room) {
+    private static void goToRoom(String username, final ProtoGlobal.Room room, long messageId) {
 
         final Realm realm = Realm.getDefaultInstance();
 
@@ -922,7 +935,7 @@ public class HelperUrl {
                 closeDialogWaiting();
 
                 if (room.getId() != FragmentChat.lastChatRoomId) {
-                    new GoToChatActivity(room.getId()).startActivity();
+                    new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity();
                 }
 
             }

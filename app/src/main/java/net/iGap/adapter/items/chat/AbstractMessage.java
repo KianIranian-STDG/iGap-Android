@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.adapter.items.chat;
 
@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IChatItemAttachment;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.interfaces.OnProgressUpdate;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnMessageProgressClick;
@@ -71,6 +73,7 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChannelAddMessageReaction;
+import net.iGap.request.RequestClientGetRoomMessage;
 
 import java.io.File;
 import java.util.List;
@@ -79,6 +82,7 @@ import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
+import static net.iGap.fragments.FragmentChat.messageId;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
 public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
@@ -894,7 +898,29 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 public void onClick(View v) {
 
                     if (mMessage.username.length() > 0) {
-                        HelperUrl.checkUsernameAndGoToRoom(mMessage.username, HelperUrl.ChatEntry.profile);
+
+                        long messageId =(mMessage.forwardedFrom.getMessageId() *(-1));
+
+                        RealmRoomMessage rm = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mMessage.forwardedFrom.getRoomId()).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.forwardedFrom.getMessageId()).findFirst();
+                        rm = RealmRoomMessage.getFinalMessage(rm);
+                        if (rm != null) {
+                            HelperUrl.checkUsernameAndGoToRoomWithMessageId(mMessage.username, HelperUrl.ChatEntry.profile, messageId);
+                        } else {
+                            new RequestClientGetRoomMessage().clientGetRoomMessage(mMessage.roomId, messageId);
+                            G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
+                                @Override
+                                public void onClientGetRoomMessageResponse(final long messageId) {
+                                    G.onClientGetRoomMessage = null;
+                                    G.handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            HelperUrl.checkUsernameAndGoToRoomWithMessageId(mMessage.username, HelperUrl.ChatEntry.profile, messageId);
+                                        }
+                                    });
+
+                                }
+                            };
+                        }
                     }
                 }
             });

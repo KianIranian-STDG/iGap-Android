@@ -1507,6 +1507,7 @@ public class FragmentChat extends BaseFragment
                     }
                 });
             }
+
             messageId = extras.getLong("MessageId");
 
             /**
@@ -1535,6 +1536,11 @@ public class FragmentChat extends BaseFragment
                 firstUnreadMessage = realmRoom.getFirstUnreadMessage();
                 savedScrollMessageId = realmRoom.getLastScrollPositionMessageId();
                 firstVisiblePositionOffset = realmRoom.getLastScrollPositionOffset();
+
+                if (messageId != 0) {
+                    savedScrollMessageId = messageId;
+                    firstVisiblePositionOffset = 0;
+                }
                 if (isChatReadOnly) {
                     viewAttachFile.setVisibility(View.GONE);
                     (rootView.findViewById(R.id.chl_recycler_view_chat)).setPadding(0, 0, 0, 0);
