@@ -1006,11 +1006,6 @@
               android:textSize="@dimen/dp18"
               android:textStyle="normal" />
 
-            <View
-              style="?lineColorSettingTheme"
-              android:layout_width="match_parent"
-              android:layout_height="1dp" />
-
             <LinearLayout
 
               android:layout_width="match_parent"
@@ -1049,7 +1044,6 @@
             </LinearLayout>
 
 
-
             <View
               style="?lineColorSettingTheme"
               android:layout_width="match_parent"
@@ -1063,306 +1057,313 @@
               android:layout_width="match_parent"
               android:layout_height="@dimen/dp48"
               android:gravity="center_vertical"
+              android:onClick="@{fragmentSettingViewModel::onClickAutoTimeDarkTheme}"
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@string/setting_dark_theme"
               android:textSize="@dimen/dp15"
               android:textStyle="normal"
-              android:visibility="@{fragmentSettingViewModel.isAutoThemeDark  ,default = gone}"
-              android:onClick="@{fragmentSettingViewModel::onClickAutoTimeDarkTheme}" />
-
-            <View
-              style="?lineColorSettingTheme"
-              android:layout_width="match_parent"
-              android:layout_height="1dp"
               android:visibility="@{fragmentSettingViewModel.isAutoThemeDark  ,default = gone}" />
 
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true"
-              android:onClick="@{fragmentSettingViewModel::onClickTitleBarColor}"
-              android:orientation="horizontal">
-
-
-              <TextView
-                android:id="@+id/asn_txt_app_title_bar_color"
-                style="?textTitleColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp48"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingRight="@dimen/dp16"
-                android:paddingTop="@dimen/dp4"
-                android:text="@string/app_theme"
-                android:textSize="@dimen/dp15"
-                android:textStyle="normal" />
-
-              <ImageView
-                android:id="@+id/asn_img_title_bar_color"
-                android:layout_width="@dimen/dp24"
-                android:layout_height="@dimen/dp24"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp16"
-                android:layout_marginRight="@dimen/dp16"
-                android:background="@drawable/circle_color_notificatin_setting"
-                android:gravity="center" />
-
-            </LinearLayout>
-
-            <View
-              style="?lineColorSettingTheme"
-              android:layout_width="match_parent"
-              android:layout_height="1dp" />
 
             <LinearLayout
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true"
-              android:onClick="@{fragmentSettingViewModel::onClickNotificationColor}"
-              android:orientation="horizontal">
+              android:orientation="vertical"
+              android:visibility="@{fragmentSettingViewModel.isGoneLayoutColor  ,default = visible}">
 
-
-              <TextView
-                android:id="@+id/asn_txt_app_notification_color"
-                style="?textTitleColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp48"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingRight="@dimen/dp16"
-                android:paddingTop="@dimen/dp4"
-                android:text="@string/app_notif_color"
-                android:textSize="@dimen/dp15"
-                android:textStyle="normal" />
-
-              <ImageView
-                android:id="@+id/asn_img_notification_color"
-                android:layout_width="@dimen/dp24"
-                android:layout_height="@dimen/dp24"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp16"
-                android:layout_marginRight="@dimen/dp16"
-                android:background="@drawable/circle_color_notificatin_setting"
-                android:gravity="center"
-
-                />
-
-            </LinearLayout>
-
-            <View
-              style="?lineColorSettingTheme"
-              android:layout_width="match_parent"
-              android:layout_height="1dp"
-              android:visibility="gone" />
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true"
-              android:onClick="@{fragmentSettingViewModel::onClickToggleBottonColor}"
-              android:orientation="horizontal"
-              android:visibility="gone">
-
-
-              <TextView
-                android:id="@+id/asn_txt_app_toggle_botton_color"
-                style="?textTitleColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp48"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingRight="@dimen/dp16"
-                android:paddingTop="@dimen/dp4"
-                android:text="@string/toggle_botton_color"
-                android:textSize="@dimen/dp15"
-                android:textStyle="normal" />
-
-              <ImageView
-                android:id="@+id/asn_img_toggle_botton_color"
-                android:layout_width="@dimen/dp24"
-                android:layout_height="@dimen/dp24"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp16"
-                android:layout_marginRight="@dimen/dp16"
-                android:background="@drawable/circle_color_notificatin_setting"
-                android:gravity="center" />
-
-            </LinearLayout>
-
-            <View
-              style="?lineColorSettingTheme"
-              android:layout_width="match_parent"
-              android:layout_height="1dp" />
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true"
-              android:onClick="@{fragmentSettingViewModel::onClickSendAndAttachColor}"
-              android:orientation="horizontal">
-
-
-              <TextView
-                android:id="@+id/asn_txt_send_and_attach_color"
-                style="?textTitleColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp48"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingRight="@dimen/dp16"
-                android:paddingTop="@dimen/dp4"
-                android:text="@string/send_and_attach_botton_color"
-                android:textSize="@dimen/dp15"
-                android:textStyle="normal" />
-
-              <ImageView
-                android:id="@+id/asn_img_send_and_attach_color"
-                android:layout_width="@dimen/dp24"
-                android:layout_height="@dimen/dp24"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp16"
-                android:layout_marginRight="@dimen/dp16"
-                android:background="@drawable/circle_color_notificatin_setting"
-                android:gravity="center" />
-
-            </LinearLayout>
-
-            <View
-              style="?lineColorSettingTheme"
-              android:layout_width="match_parent"
-              android:layout_height="1dp" />
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true"
-              android:onClick="@{fragmentSettingViewModel::onClickDefaultHeaderFontColor}"
-              android:orientation="horizontal">
-
-
-              <TextView
-                android:id="@+id/asn_txt_default_header_font_color"
-                style="?textTitleColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp48"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingRight="@dimen/dp16"
-                android:paddingTop="@dimen/dp4"
-                android:text="@string/default_header_font_color"
-                android:textSize="@dimen/dp15"
-                android:textStyle="normal" />
-
-              <ImageView
-                android:id="@+id/asn_img_default_header_font_color"
-                android:layout_width="@dimen/dp24"
-                android:layout_height="@dimen/dp24"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp16"
-                android:layout_marginRight="@dimen/dp16"
-                android:background="@drawable/circle_color_notificatin_setting"
-                android:gravity="center" />
-
-            </LinearLayout>
-
-            <View
-              style="?lineColorSettingTheme"
-              android:layout_width="match_parent"
-              android:layout_height="1dp" />
-
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true"
-              android:onClick="@{fragmentSettingViewModel::onClickDefaultProgressColor}"
-              android:orientation="horizontal">
-
-
-              <TextView
-                android:id="@+id/asn_txt_default_progress_color"
-                style="?textTitleColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp48"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingRight="@dimen/dp16"
-                android:paddingTop="@dimen/dp4"
-                android:text="@string/default_progress_color"
-                android:textSize="@dimen/dp15"
-                android:textStyle="normal" />
-
-              <ImageView
-                android:id="@+id/asn_img_default_progress_color"
-                android:layout_width="@dimen/dp24"
-                android:layout_height="@dimen/dp24"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/dp16"
-                android:layout_marginRight="@dimen/dp16"
-                android:background="@drawable/circle_color_notificatin_setting"
-                android:gravity="center" />
-
-            </LinearLayout>
-
-            <View
-              style="?lineColorSettingTheme"
-              android:layout_width="match_parent"
-              android:layout_height="1dp" />
-
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_alignParentEnd="true"
-              android:layout_alignParentRight="true"
-              android:layout_centerInParent="true"
-              android:onClick="@{fragmentSettingViewModel::onClickSetColorToDefault}"
-              android:orientation="horizontal">
-
-
-              <TextView
-                android:id="@+id/asn_txt_set_color_to_default"
-                style="?textTitleColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
+              <View
+                style="?lineColorSettingTheme"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp48"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/dp16"
-                android:paddingRight="@dimen/dp16"
-                android:paddingTop="@dimen/dp4"
-                android:text="@string/set_color_to_default"
-                android:textSize="@dimen/dp15"
-                android:textStyle="normal" />
+                android:layout_height="1dp"
+                android:visibility="@{fragmentSettingViewModel.isAutoThemeDark  ,default = gone}" />
 
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:onClick="@{fragmentSettingViewModel::onClickTitleBarColor}"
+                android:orientation="horizontal">
+
+
+                <TextView
+                  android:id="@+id/asn_txt_app_title_bar_color"
+                  style="?textTitleColorSettingTheme"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="0dp"
+                  android:layout_height="@dimen/dp48"
+                  android:layout_weight="1"
+                  android:gravity="center_vertical"
+                  android:paddingLeft="@dimen/dp16"
+                  android:paddingRight="@dimen/dp16"
+                  android:paddingTop="@dimen/dp4"
+                  android:text="@string/app_theme"
+                  android:textSize="@dimen/dp15"
+                  android:textStyle="normal" />
+
+                <ImageView
+                  android:id="@+id/asn_img_title_bar_color"
+                  android:layout_width="@dimen/dp24"
+                  android:layout_height="@dimen/dp24"
+                  android:layout_gravity="center_vertical"
+                  android:layout_marginLeft="@dimen/dp16"
+                  android:layout_marginRight="@dimen/dp16"
+                  android:background="@drawable/circle_color_notificatin_setting"
+                  android:gravity="center" />
+
+              </LinearLayout>
+
+              <View
+                style="?lineColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:onClick="@{fragmentSettingViewModel::onClickNotificationColor}"
+                android:orientation="horizontal">
+
+
+                <TextView
+                  android:id="@+id/asn_txt_app_notification_color"
+                  style="?textTitleColorSettingTheme"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="0dp"
+                  android:layout_height="@dimen/dp48"
+                  android:layout_weight="1"
+                  android:gravity="center_vertical"
+                  android:paddingLeft="@dimen/dp16"
+                  android:paddingRight="@dimen/dp16"
+                  android:paddingTop="@dimen/dp4"
+                  android:text="@string/app_notif_color"
+                  android:textSize="@dimen/dp15"
+                  android:textStyle="normal" />
+
+                <ImageView
+                  android:id="@+id/asn_img_notification_color"
+                  android:layout_width="@dimen/dp24"
+                  android:layout_height="@dimen/dp24"
+                  android:layout_gravity="center_vertical"
+                  android:layout_marginLeft="@dimen/dp16"
+                  android:layout_marginRight="@dimen/dp16"
+                  android:background="@drawable/circle_color_notificatin_setting"
+                  android:gravity="center"
+
+                  />
+
+              </LinearLayout>
+
+              <View
+                style="?lineColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:visibility="gone" />
+
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:onClick="@{fragmentSettingViewModel::onClickToggleBottonColor}"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+
+                <TextView
+                  android:id="@+id/asn_txt_app_toggle_botton_color"
+                  style="?textTitleColorSettingTheme"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="0dp"
+                  android:layout_height="@dimen/dp48"
+                  android:layout_weight="1"
+                  android:gravity="center_vertical"
+                  android:paddingLeft="@dimen/dp16"
+                  android:paddingRight="@dimen/dp16"
+                  android:paddingTop="@dimen/dp4"
+                  android:text="@string/toggle_botton_color"
+                  android:textSize="@dimen/dp15"
+                  android:textStyle="normal" />
+
+                <ImageView
+                  android:id="@+id/asn_img_toggle_botton_color"
+                  android:layout_width="@dimen/dp24"
+                  android:layout_height="@dimen/dp24"
+                  android:layout_gravity="center_vertical"
+                  android:layout_marginLeft="@dimen/dp16"
+                  android:layout_marginRight="@dimen/dp16"
+                  android:background="@drawable/circle_color_notificatin_setting"
+                  android:gravity="center" />
+
+              </LinearLayout>
+
+              <View
+                style="?lineColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:onClick="@{fragmentSettingViewModel::onClickSendAndAttachColor}"
+                android:orientation="horizontal">
+
+
+                <TextView
+                  android:id="@+id/asn_txt_send_and_attach_color"
+                  style="?textTitleColorSettingTheme"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="0dp"
+                  android:layout_height="@dimen/dp48"
+                  android:layout_weight="1"
+                  android:gravity="center_vertical"
+                  android:paddingLeft="@dimen/dp16"
+                  android:paddingRight="@dimen/dp16"
+                  android:paddingTop="@dimen/dp4"
+                  android:text="@string/send_and_attach_botton_color"
+                  android:textSize="@dimen/dp15"
+                  android:textStyle="normal" />
+
+                <ImageView
+                  android:id="@+id/asn_img_send_and_attach_color"
+                  android:layout_width="@dimen/dp24"
+                  android:layout_height="@dimen/dp24"
+                  android:layout_gravity="center_vertical"
+                  android:layout_marginLeft="@dimen/dp16"
+                  android:layout_marginRight="@dimen/dp16"
+                  android:background="@drawable/circle_color_notificatin_setting"
+                  android:gravity="center" />
+
+              </LinearLayout>
+
+              <View
+                style="?lineColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:onClick="@{fragmentSettingViewModel::onClickDefaultHeaderFontColor}"
+                android:orientation="horizontal">
+
+
+                <TextView
+                  android:id="@+id/asn_txt_default_header_font_color"
+                  style="?textTitleColorSettingTheme"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="0dp"
+                  android:layout_height="@dimen/dp48"
+                  android:layout_weight="1"
+                  android:gravity="center_vertical"
+                  android:paddingLeft="@dimen/dp16"
+                  android:paddingRight="@dimen/dp16"
+                  android:paddingTop="@dimen/dp4"
+                  android:text="@string/default_header_font_color"
+                  android:textSize="@dimen/dp15"
+                  android:textStyle="normal" />
+
+                <ImageView
+                  android:id="@+id/asn_img_default_header_font_color"
+                  android:layout_width="@dimen/dp24"
+                  android:layout_height="@dimen/dp24"
+                  android:layout_gravity="center_vertical"
+                  android:layout_marginLeft="@dimen/dp16"
+                  android:layout_marginRight="@dimen/dp16"
+                  android:background="@drawable/circle_color_notificatin_setting"
+                  android:gravity="center" />
+
+              </LinearLayout>
+
+              <View
+                style="?lineColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+
+
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:onClick="@{fragmentSettingViewModel::onClickDefaultProgressColor}"
+                android:orientation="horizontal">
+
+
+                <TextView
+                  android:id="@+id/asn_txt_default_progress_color"
+                  style="?textTitleColorSettingTheme"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="0dp"
+                  android:layout_height="@dimen/dp48"
+                  android:layout_weight="1"
+                  android:gravity="center_vertical"
+                  android:paddingLeft="@dimen/dp16"
+                  android:paddingRight="@dimen/dp16"
+                  android:paddingTop="@dimen/dp4"
+                  android:text="@string/default_progress_color"
+                  android:textSize="@dimen/dp15"
+                  android:textStyle="normal" />
+
+                <ImageView
+                  android:id="@+id/asn_img_default_progress_color"
+                  android:layout_width="@dimen/dp24"
+                  android:layout_height="@dimen/dp24"
+                  android:layout_gravity="center_vertical"
+                  android:layout_marginLeft="@dimen/dp16"
+                  android:layout_marginRight="@dimen/dp16"
+                  android:background="@drawable/circle_color_notificatin_setting"
+                  android:gravity="center" />
+
+              </LinearLayout>
+
+              <View
+                style="?lineColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:onClick="@{fragmentSettingViewModel::onClickSetColorToDefault}"
+                android:orientation="horizontal">
+
+
+                <TextView
+                  android:id="@+id/asn_txt_set_color_to_default"
+                  style="?textTitleColorSettingTheme"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="match_parent"
+                  android:layout_height="@dimen/dp48"
+                  android:gravity="center_vertical"
+                  android:paddingLeft="@dimen/dp16"
+                  android:paddingRight="@dimen/dp16"
+                  android:paddingTop="@dimen/dp4"
+                  android:text="@string/set_color_to_default"
+                  android:textSize="@dimen/dp15"
+                  android:textStyle="normal" />
+
+
+              </LinearLayout>
 
             </LinearLayout>
-
-
           </LinearLayout>
 
 

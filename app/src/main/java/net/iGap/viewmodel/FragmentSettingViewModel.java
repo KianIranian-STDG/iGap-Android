@@ -165,6 +165,7 @@ public class FragmentSettingViewModel {
     public ObservableField<Boolean> isTime = new ObservableField<>();
     public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
     public ObservableField<Integer> isAutoThemeDark = new ObservableField<>(View.GONE);
+    public ObservableField<Integer> isGoneLayoutColor = new ObservableField<>(View.VISIBLE);
 
 
     private static SharedPreferences sharedPreferences;
@@ -1138,16 +1139,34 @@ public class FragmentSettingViewModel {
 
     public static void setLightTheme(SharedPreferences.Editor editor) {
         G.isDarkTheme = false;
+
+        if (sharedPreferences == null) {
+            sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+            editor = sharedPreferences.edit();
+        } else {
+            editor = sharedPreferences.edit();
+        }
+
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, false);
         editor.putBoolean(SHP_SETTING.KEY_DISABLE_TIME_DARK_THEME, true);
         editor.apply();
-        notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
-        headerColorClick(Color.parseColor(Config.default_headerTextColor), false);
-        toggleBottomClick(Color.parseColor(Config.default_toggleButtonColor));
-        sendAndAttachColorClick(Color.parseColor(Config.default_attachmentColor));
-        appBarColorClick(Color.parseColor(Config.default_appBarColor));
-        progressColorClick(Color.parseColor(Config.default_appBarColor), false);
-        menuBackgroundClick(Color.parseColor(Config.default_appBarColor), false);
+
+        String appBarColorClick = sharedPreferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
+        String notificationColorClick = sharedPreferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
+        String toggleBottomClick = sharedPreferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor);
+        String sendAndAttachColorClick = sharedPreferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
+        String headerColorClick = sharedPreferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
+        String progressColorClick = sharedPreferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor);
+        String menuBackgroundClick = sharedPreferences.getString(SHP_SETTING.KEY_MENU_BACKGROUND_COLOR, Config.default_appBarColor);
+
+
+        notificationColorClick(Color.parseColor(notificationColorClick), false);
+        headerColorClick(Color.parseColor(headerColorClick), false);
+        toggleBottomClick(Color.parseColor(toggleBottomClick));
+        sendAndAttachColorClick(Color.parseColor(sendAndAttachColorClick));
+        appBarColorClick(Color.parseColor(appBarColorClick));
+        progressColorClick(Color.parseColor(progressColorClick), false);
+        menuBackgroundClick(Color.parseColor(menuBackgroundClick), false);
         Config.lightThemeColor();
     }
 
@@ -1155,13 +1174,13 @@ public class FragmentSettingViewModel {
         G.isDarkTheme = true;
 
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, true);
-        editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_dark_appBarColor);
-        editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_dark_notificationColor);
-        editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_dark_toggleButtonColor);
-        editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_dark_attachmentColor);
-        editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_dark_headerTextColor);
-        editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_dark_progressColor);
-        editor.putString(SHP_SETTING.KEY_MENU_BACKGROUND_COLOR, Config.default_dark_menuBackgroundColor);
+        editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR_DARK, Config.default_dark_appBarColor);
+        editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR_DARK, Config.default_dark_notificationColor);
+        editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR_DARK, Config.default_dark_toggleButtonColor);
+        editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR_DARK, Config.default_dark_attachmentColor);
+        editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR_DARK, Config.default_dark_headerTextColor);
+        editor.putString(SHP_SETTING.KEY_PROGRES_COLOR_DARK, Config.default_dark_progressColor);
+        editor.putString(SHP_SETTING.KEY_MENU_BACKGROUND_COLOR_DARK, Config.default_dark_menuBackgroundColor);
         editor.apply();
 
         appBarColor = Config.default_dark_appBarColor;
@@ -1619,6 +1638,13 @@ public class FragmentSettingViewModel {
             isAutoThemeDark.set(View.GONE);
         }
 
+        if (G.isDarkTheme) {
+            isGoneLayoutColor.set(View.GONE);
+        } else {
+            isGoneLayoutColor.set(View.VISIBLE);
+        }
+
+
         int checkedAutoGif = sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS);
         isAutoGif.set(getBoolean(checkedAutoGif));
 
@@ -1963,8 +1989,8 @@ public class FragmentSettingViewModel {
             bgShape.setColor(color);
         }
 
-        G.progressColor = "#" + Integer.toHexString(color);
-        editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
+        G.menuBackgroundColor = "#" + Integer.toHexString(color);
+        editor.putString(SHP_SETTING.KEY_MENU_BACKGROUND_COLOR, G.menuBackgroundColor);
         editor.apply();
 
     }

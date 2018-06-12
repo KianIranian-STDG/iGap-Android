@@ -114,6 +114,14 @@ public class SHP_SETTING {
     public static final String KEY_MENU_BACKGROUND_COLOR = "KEY_MENU_BACKGROUND_COLOR";
     public static final String KEY_PROGRES_COLOR = "KEY_PROGRES_COLOR";
 
+    public static final String KEY_APP_BAR_COLOR_DARK = "KEY_APP_BAR_COLOR_DARK";
+    public static final String KEY_NOTIFICATION_COLOR_DARK = "KEY_NOTIFICATION_COLOR_DARK";
+    public static final String KEY_TOGGLE_BOTTON_COLOR_DARK = "KEY_TOGGLE_BOTTON_COLOR_DARK";
+    public static final String KEY_SEND_AND_ATTACH_ICON_COLOR_DARK = "KEY_SEND_AND_ATTACH_ICON_COLOR_DARK";
+    public static final String KEY_FONT_HEADER_COLOR_DARK = "KEY_FONT_HEADER_COLOR_DARK";
+    public static final String KEY_MENU_BACKGROUND_COLOR_DARK = "KEY_MENU_BACKGROUND_COLOR_DARK";
+    public static final String KEY_PROGRES_COLOR_DARK = "KEY_PROGRES_COLOR_DARK";
+
     // ========================================================================================== chat background
 
     public static final String KEY_PATH_CHAT_BACKGROUND = "KEY_PATH_CHAT_BACKGROUND";
