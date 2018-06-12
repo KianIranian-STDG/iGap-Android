@@ -109,8 +109,8 @@ dependencies {
     compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.3'
     compile 'com.google.zxing:core:3.3.0'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
-    compile 'com.google.android.gms:play-services-analytics:15.0.0'
-    compile 'com.google.android.gms:play-services-maps:15.0.0'
+    compile 'com.google.android.gms:play-services-analytics:16.0.0'
+    compile 'com.google.android.gms:play-services-maps:15.0.1'
     compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.4'
     compile 'cat.ereza:customactivityoncrash:2.1.0'
@@ -128,6 +128,8 @@ dependencies {
     compile 'com.github.krokyze:ucropnedit:2.2.2'
     implementation 'info.androidhive:imagefilters:1.0.7'
     compile 'com.mindorks.android:prdownloader:0.3.0'
+    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-messaging:17.0.0'
 }
 
 configurations.all {
@@ -140,3 +142,5 @@ configurations.all {
         }
     }
 }
+
+apply plugin: 'com.google.gms.google-services'
