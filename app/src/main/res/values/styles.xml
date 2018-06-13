@@ -327,7 +327,7 @@
     <item name="android:background">@color/line</item>
   </style>
 
-  <style name="FabButtonDark">
+  <style name="FabButton_dark">
     <item name="backgroundTint">@color/colorOldBlack</item>
     <item name="android:tint">@color/white</item>
     <item name="android:theme">@color/colorOldBlack</item>
@@ -418,9 +418,10 @@
     <item name="android:background">@color/pin_color</item>
   </style>
 
-  <style name="FabButton">
-    <item name="android:backgroundTint">@android:color/white</item>
+  <style name="FabButton_light">
+    <item name="backgroundTint">@color/white</item>
     <item name="android:tint">@color/gray</item>
+    <item name="android:theme">@color/white</item>
   </style>
 
   <style name="backgroundPassCodeLight">
