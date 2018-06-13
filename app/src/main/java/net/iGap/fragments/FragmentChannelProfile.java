@@ -46,6 +46,7 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
+import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestChannelAvatarAdd;
 import net.iGap.request.RequestChannelKickAdmin;
@@ -55,6 +56,7 @@ import net.iGap.viewmodel.FragmentChannelProfileViewModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class FragmentChannelProfile extends BaseFragment implements OnChannelAvatarAdd, OnChannelAvatarDelete {
 
@@ -186,7 +188,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
-            public void result(String path, String message) {
+            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
                 pathSaveImage = null;
                 pathSaveImage = path;
                 long avatarId = SUID.id().get();
@@ -449,10 +451,10 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
-                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, false)).setReplace(false).load();
+                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, false, 0)).setReplace(false).load();
                     } else {
                         ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
-                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false)).setReplace(false).load();
+                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0)).setReplace(false).load();
                     }
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
@@ -460,7 +462,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                         return;
                     }
 //
-                    new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, false)).setReplace(false).load();
+                    new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, false, 0)).setReplace(false).load();
                     break;
             }
         }

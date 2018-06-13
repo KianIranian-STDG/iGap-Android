@@ -12,8 +12,19 @@ package net.iGap.module.structs;
 
 public class StructBottomSheet {
 
+    public int id;
     public boolean isSelected;
     public String path;
+    private String text;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public boolean isSelected() {
         return isSelected;
@@ -29,5 +40,13 @@ public class StructBottomSheet {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }
