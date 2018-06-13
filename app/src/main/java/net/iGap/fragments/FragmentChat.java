@@ -5405,7 +5405,7 @@ public class FragmentChat extends BaseFragment
                     break;
                 case "VIDEO":
                 case "VIDEO_TEXT":
-                    intent.setType("image/*");
+                    intent.setType("video/*");
                     AppUtils.shareItem(intent, messageInfo);
                     chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_video_file);
                     break;
