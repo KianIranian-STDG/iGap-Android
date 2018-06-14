@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ import net.iGap.viewmodel.FragmentSettingViewModel;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import io.realm.Realm;
 
@@ -310,20 +312,32 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
+        if (FragmentEditImage.itemGalleryList != null) FragmentEditImage.itemGalleryList.clear();
+
+
         if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == RESULT_OK) {// result for camera
+
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
-                new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, false, 0)).setReplace(false).load();
+
+                FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
+                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
             } else {
                 ImageHelper.correctRotateImage(pathSaveImage, true); //rotate image
-                new HelperFragment(FragmentEditImage.newInstance(pathSaveImage, false, false, 0)).setReplace(false).load();
+
+                FragmentEditImage.insertItemList(pathSaveImage, false);
+                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
             }
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == RESULT_OK) {// result for gallery
             if (data != null) {
                 if (data.getData() == null) {
                     return;
                 }
-                new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, false, 0)).setReplace(false).load();
+                FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
+                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
             }
         }
     }

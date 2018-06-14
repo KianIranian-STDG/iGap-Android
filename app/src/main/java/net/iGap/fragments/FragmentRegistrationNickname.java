@@ -180,6 +180,11 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+
+            if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
+            if (FragmentEditImage.itemGalleryList != null)
+                FragmentEditImage.itemGalleryList.clear();
+
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
                     String path = "";
@@ -189,8 +194,9 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                         path = AttachFile.imagePath;
                     }
                     ImageHelper.correctRotateImage(path, true); //rotate image
-                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().
-                            add(R.id.ar_layout_root, FragmentEditImage.newInstance(path, false, true, 0))
+
+                    FragmentEditImage.insertItemList(path, false);
+                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, FragmentEditImage.newInstance(path, false, true, 0))
                             .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
 
                     break;
@@ -199,8 +205,10 @@ public class FragmentRegistrationNickname extends BaseFragment implements OnUser
                         if (data.getData() == null) {
                             return;
                         }
+
+                        FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
                         G.fragmentActivity.getSupportFragmentManager().beginTransaction().
-                                add(R.id.ar_layout_root, FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, true, 0))
+                                add(R.id.ar_layout_root, FragmentEditImage.newInstance(null, false, true, 0))
                                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
                     }
                     break;

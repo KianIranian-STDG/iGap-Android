@@ -447,20 +447,27 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
+        if (FragmentEditImage.itemGalleryList != null) FragmentEditImage.itemGalleryList.clear();
+
         if (requestCode == AttachFile.request_code_TAKE_PICTURE && resultCode == Activity.RESULT_OK) {// result for camera
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
-                new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, false, 0)).setReplace(false).load();
+
+                FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
+                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
 
 
             } else {
                 ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
-                new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0)).setReplace(false).load();
+                FragmentEditImage.insertItemList(AttachFile.imagePath, false);
+                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
             }
         } else if (requestCode == request_code_image_from_gallery_single_select && resultCode == Activity.RESULT_OK) {// result for gallery
             if (data != null) {
-                new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, false, 0)).setReplace(false).load();
+                FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
+                new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
             }
         }
     }

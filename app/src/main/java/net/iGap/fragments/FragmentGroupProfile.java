@@ -168,13 +168,20 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         if (resultCode == Activity.RESULT_OK) {
             String filePath = null;
             long avatarId = SUID.id().get();
+
+            if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
+            if (FragmentEditImage.itemGalleryList != null)
+                FragmentEditImage.itemGalleryList.clear();
+
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, false, 0)).setReplace(false).load();
+                        FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
+                        new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
 
                     } else {
+                        FragmentEditImage.insertItemList(AttachFile.imagePath, false);
                         new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0)).setReplace(false).load();
                     }
 
@@ -183,7 +190,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                     if (data.getData() == null) {
                         return;
                     }
-                    new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, false, 0)).setReplace(false).load();
+                    FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
+                    new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
 
                     break;
             }
