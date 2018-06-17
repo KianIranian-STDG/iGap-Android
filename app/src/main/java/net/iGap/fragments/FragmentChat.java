@@ -1611,6 +1611,26 @@ public class FragmentChat extends BaseFragment
         getDraft();
         getUserInfo();
         insertShearedData(HelperGetDataFromOtherApp.messageFileAddress);
+
+
+        FragmentShearedMedia.goToPositionFromShardMedia = new FragmentShearedMedia.GoToPositionFromShardMedia() {
+            @Override
+            public void goToPosition(Long aLong) {
+
+                if (aLong != 0) {
+                    savedScrollMessageId = aLong;
+                    firstVisiblePositionOffset = 0;
+
+                    int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
+                    LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    linearLayout.scrollToPositionWithOffset(position, firstVisiblePositionOffset);
+                    savedScrollMessageId = 0;
+                }
+
+            }
+        };
+
+
     }
 
     private void initPinedMessage() {

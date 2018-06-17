@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
@@ -106,6 +106,7 @@ import static net.iGap.module.AndroidUtils.suitablePath;
 public class FragmentShearedMedia extends BaseFragment {
 
     private static final String ROOM_ID = "RoomId";
+    private static final String USERNAME = "USERNAME";
     public static ArrayList<Long> list = new ArrayList<>();
     private static long countOFImage = 0;
     private static long countOFVIDEO = 0;
@@ -145,6 +146,9 @@ public class FragmentShearedMedia extends BaseFragment {
     private boolean isThereAnyMoreItemToLoad = false;
     private long nextMessageId = 0;
     private long roomId = 0;
+    private MaterialDesignTextView btnGoToPage;
+    public static GoToPositionFromShardMedia goToPositionFromShardMedia;
+    public static boolean goToPosition = false;
 
     public static FragmentShearedMedia newInstance(long roomId) {
         Bundle args = new Bundle();
@@ -346,6 +350,20 @@ public class FragmentShearedMedia extends BaseFragment {
             }
         });
 
+        btnGoToPage = (MaterialDesignTextView) view.findViewById(R.id.asm_btn_goToPage);
+        btnGoToPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                goToPositionFromShardMedia.goToPosition(SelectedList.get(0));
+                goToPosition = true;
+                popBackStackFragment();
+                adapter.resetSelected();
+                popBackStackFragment();
+
+            }
+        });
+
         MaterialDesignTextView btnForwardSelected = (MaterialDesignTextView) view.findViewById(R.id.asm_btn_forward_selected);
         btnForwardSelected.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -462,6 +480,11 @@ public class FragmentShearedMedia extends BaseFragment {
                 if (result) {
                     ll_AppBarSelected.setVisibility(View.VISIBLE);
                     txtNumberOfSelected.setText(number);
+                    if (SelectedList.size() == 1) {
+                        btnGoToPage.setVisibility(View.VISIBLE);
+                    } else {
+                        btnGoToPage.setVisibility(View.GONE);
+                    }
                 } else {
                     ll_AppBarSelected.setVisibility(View.GONE);
                 }
@@ -2146,5 +2169,9 @@ public class FragmentShearedMedia extends BaseFragment {
                 txtLink = (TextView) itemView.findViewById(R.id.smsll_txt_shared_link);
             }
         }
+    }
+
+    public interface GoToPositionFromShardMedia {
+        void goToPosition(Long aLong);
     }
 }
