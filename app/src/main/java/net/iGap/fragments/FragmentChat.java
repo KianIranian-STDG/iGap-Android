@@ -274,8 +274,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
@@ -374,7 +376,7 @@ public class FragmentChat extends BaseFragment
     //  private MaterialDesignTextView btnReplaySelected;
     private RippleView rippleDeleteSelected;
     private RippleView rippleReplaySelected;
-    private ArrayList<String> listPathString;
+    public static ArrayList<String> listPathString;
     private MaterialDesignTextView btnCancelSendingFile;
     private ViewGroup viewGroupLastSeen;
     private CircleImageView imvUserPicture;
@@ -424,7 +426,6 @@ public class FragmentChat extends BaseFragment
     private View viewBottomSheet;
     private View viewBottomSheetForward;
     private Fotoapparat fotoapparatSwitcher;
-    private ArrayList<StructBottomSheet> itemGalleryList = new ArrayList<StructBottomSheet>();
     private RealmRoomMessage firstUnreadMessage;
     private RealmRoomMessage firstUnreadMessageInChat; // when user is in this room received new message
     private RealmRoomMessage voiceLastMessage = null;
@@ -463,7 +464,6 @@ public class FragmentChat extends BaseFragment
     private String userStatus;
     private Boolean isGoingFromUserLink = false;
     private Boolean isNotJoin = false; // this value will be trued when come to this chat with username
-    private boolean isCheckBottomSheet = false;
     private boolean firsInitScrollPosition = false;
     private boolean initHash = false;
     private boolean initAttach = false;
@@ -537,13 +537,7 @@ public class FragmentChat extends BaseFragment
      * get images for show in bottom sheet
      */
     public static ArrayList<StructBottomSheet> getAllShownImagesPath(Activity activity) {
-
         ArrayList<StructBottomSheet> listOfAllImages = new ArrayList<>();
-
-        if (!HelperPermission.grantedUseStorage()) {
-            return listOfAllImages;
-        }
-
         Uri uri;
         Cursor cursor;
         int column_index_data = 0, column_index_folder_name;
@@ -564,14 +558,17 @@ public class FragmentChat extends BaseFragment
             while (cursor.moveToNext()) {
                 absolutePathOfImage = cursor.getString(column_index_data);
 
-                StructBottomSheet item = new StructBottomSheet();
-                item.setPath(absolutePathOfImage);
-                item.isSelected = true;
-                listOfAllImages.add(0, item);
+//                StructBottomSheet item = new StructBottomSheet();
+//                item.setId(listOfAllImages.size());
+//                item.setPath(absolutePathOfImage);
+//                item.isSelected = true;
+//                listOfAllImages.add(0, item);
+
+                listOfAllImages = FragmentEditImage.insertItemList(absolutePathOfImage, true);
+
             }
             cursor.close();
         }
-
         return listOfAllImages;
     }
 
@@ -1104,10 +1101,11 @@ public class FragmentChat extends BaseFragment
                             setDraftMessage(requestCode);
                         } else {
                             compressedPath.put(listPathString.get(0), true);
+                            showDraftLayout();
+                            setDraftMessage(requestCode);
                         }
                     }
-                    showDraftLayout();
-                    setDraftMessage(requestCode);
+
                 } else {
                     /**
                      * set compressed true for use this path
@@ -1152,10 +1150,19 @@ public class FragmentChat extends BaseFragment
                     if (requestCode == AttachFile.requestOpenGalleryForImageMultipleSelect) {
                         if (!listPathString.get(0).toLowerCase().endsWith(".gif")) {
 
+                            if (FragmentEditImage.itemGalleryList == null) {
+                                FragmentEditImage.itemGalleryList = new ArrayList<>();
+                            }
+
+                            FragmentEditImage.itemGalleryList.clear();
+                            FragmentEditImage.textImageList.clear();
+
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
+//                                listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
                                 Uri uri = Uri.parse(listPathString.get(0));
-                                new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(uri, HelperGetDataFromOtherApp.FileType.image), true, false)).setReplace(false).load();
+
+                                FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(uri, HelperGetDataFromOtherApp.FileType.image), true);
+                                new HelperFragment(FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
 
                                 G.handler.post(new Runnable() {
                                     @Override
@@ -1166,9 +1173,11 @@ public class FragmentChat extends BaseFragment
                                     }
                                 });
                             } else {
-                                listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
+//                                listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
                                 Uri uri = Uri.parse(listPathString.get(0));
-                                new HelperFragment(FragmentEditImage.newInstance(uri.toString(), true, false)).setReplace(false).load();
+                                FragmentEditImage.insertItemList(uri.toString(), true);
+
+                                new HelperFragment(FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
 
                                 G.handler.post(new Runnable() {
                                     @Override
@@ -1191,10 +1200,21 @@ public class FragmentChat extends BaseFragment
                         }
                     } else if (requestCode == AttachFile.request_code_TAKE_PICTURE) {
 
+                        if (FragmentEditImage.itemGalleryList == null) {
+                            FragmentEditImage.itemGalleryList = new ArrayList<>();
+                        }
+
+                        FragmentEditImage.itemGalleryList.clear();
+                        FragmentEditImage.textImageList.clear();
+
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
+
                             ImageHelper.correctRotateImage(listPathString.get(0), true);
-                            new HelperFragment(FragmentEditImage.newInstance(listPathString.get(0), true, false)).setReplace(false).load();
+
+                            FragmentEditImage.insertItemList(listPathString.get(0), true);
+
+                            new HelperFragment(FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1205,7 +1225,9 @@ public class FragmentChat extends BaseFragment
                             });
                         } else {
                             ImageHelper.correctRotateImage(listPathString.get(0), true);
-                            new HelperFragment(FragmentEditImage.newInstance(listPathString.get(0), true, false)).setReplace(false).load();
+
+                            FragmentEditImage.insertItemList(listPathString.get(0), true);
+                            new HelperFragment(FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -2687,6 +2709,7 @@ public class FragmentChat extends BaseFragment
         G.openBottomSheetItem = new OpenBottomSheetItem() {
             @Override
             public void openBottomSheet(boolean isNew) {
+                fastItemAdapter.notifyAdapterDataSetChanged();
                 isNewBottomSheet = isNew;
                 imvAttachFileButton.performClick();
             }
@@ -5791,37 +5814,40 @@ public class FragmentChat extends BaseFragment
         ViewGroup video = (ViewGroup) viewBottomSheet.findViewById(R.id.video);
         ViewGroup music = (ViewGroup) viewBottomSheet.findViewById(R.id.music);
         ViewGroup document = (ViewGroup) viewBottomSheet.findViewById(R.id.document);
-        ViewGroup close = (ViewGroup) viewBottomSheet.findViewById(R.id.close);
+        final ViewGroup close = (ViewGroup) viewBottomSheet.findViewById(R.id.close);
         ViewGroup file = (ViewGroup) viewBottomSheet.findViewById(R.id.file);
         ViewGroup paint = (ViewGroup) viewBottomSheet.findViewById(R.id.paint);
         ViewGroup location = (ViewGroup) viewBottomSheet.findViewById(R.id.location);
         ViewGroup contact = (ViewGroup) viewBottomSheet.findViewById(R.id.contact);
 
+
         onPathAdapterBottomSheet = new OnPathAdapterBottomSheet() {
             @Override
-            public void path(String path, boolean isCheck, boolean isEdit) {
-
-                if (isCheck) {
-                    listPathString.add(path);
-                } else {
-                    listPathString.remove(path);
-                }
+            public void path(String path, boolean isCheck, boolean isEdit, StructBottomSheet mList, int id) {
 
                 if (isEdit) {
                     bottomSheetDialog.dismiss();
-                    new HelperFragment(FragmentEditImage.newInstance(path, true, false)).setReplace(false).load();
+//                    FragmentEditImage.itemGalleryList.set(id, mList);
+//                    fastItemAdapter.notifyAdapterDataSetChanged();
+                    new HelperFragment(FragmentEditImage.newInstance(null, true, false, id)).setReplace(false).load();
 //                    new HelperFragment(FragmentFilterImage.newInstance(path)).setReplace(false).load();
                 } else {
-                    listPathString.size();
-                    if (listPathString.size() > 0) {
-                        //send.setText(R.mipmap.send2);
-                        send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-                        isCheckBottomSheet = true;
-                        txtCountItem.setText("" + listPathString.size() + " " + G.fragmentActivity.getResources().getString(item));
+                    if (isCheck) {
+//                        listPathString.add(path);
+
+                        StructBottomSheet item = new StructBottomSheet();
+                        item.setPath(path);
+                        item.setText("");
+                        FragmentEditImage.textImageList.put(path, item);
                     } else {
-                        //send.setImageResource(R.mipmap.ic_close);
+//                        listPathString.remove(path);
+                        FragmentEditImage.textImageList.remove(path);
+                    }
+                    if (FragmentEditImage.textImageList.size() > 0) {
+                        send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
+                        txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + G.fragmentActivity.getResources().getString(item));
+                    } else {
                         send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
-                        isCheckBottomSheet = false;
                         txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
                     }
                 }
@@ -5831,14 +5857,25 @@ public class FragmentChat extends BaseFragment
 
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
-            public void result(String path, String message) {
+            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
                 listPathString = null;
                 listPathString = new ArrayList<>();
-                listPathString.add(path);
-                edtChat.setText(message);
-                latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
-                ll_attach_text.setVisibility(View.VISIBLE);
-                imvSendButton.performClick();
+
+                if (textImageList.size() == 0) {
+                    return;
+                }
+
+                for (Map.Entry<String, StructBottomSheet> items : textImageList.entrySet()) {
+
+                    edtChat.setText(items.getValue().getText());
+                    listPathString.add(items.getValue().getPath());
+                    latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
+                    ll_attach_text.setVisibility(View.VISIBLE);
+                    imvSendButton.performClick();
+                }
+
+//                close.performClick();
+
             }
         };
 
@@ -6096,9 +6133,8 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onClick(View v) {
 
-                if (isCheckBottomSheet) {
+                if (FragmentEditImage.textImageList.size() > 0) {
                     bottomSheetDialog.dismiss();
-
                     fastItemAdapter.clear();
                     //send.setImageResource(R.mipmap.ic_close);
                     send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
@@ -6110,22 +6146,22 @@ public class FragmentChat extends BaseFragment
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-
-                                    if (listPathString.size() == 1) {
-                                        showDraftLayout();
-                                        listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
-                                        setDraftMessage(AttachFile.requestOpenGalleryForImageMultipleSelect);
-                                        latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
-                                        //sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, pathStrings.get(0));
-                                    } else {
-                                        for (String path : listPathString) {
+                                    for (Map.Entry<String, StructBottomSheet> items : FragmentEditImage.textImageList.entrySet()) {
+                                        if (FragmentEditImage.textImageList.size() == 1) {
+                                            showDraftLayout();
+                                            listPathString.set(0, attachFile.saveGalleryPicToLocal(items.getValue().getPath()));
+                                            setDraftMessage(AttachFile.requestOpenGalleryForImageMultipleSelect);
+                                            latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
+                                            //sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, pathStrings.get(0));
+                                        } else {
                                             //if (!path.toLowerCase().endsWith(".gif")) {
-                                            String localPathNew = attachFile.saveGalleryPicToLocal(path);
+                                            String localPathNew = attachFile.saveGalleryPicToLocal(items.getValue().path);
+                                            edtChat.setText(items.getValue().getText());
                                             sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localPathNew);
                                             //}
+
                                         }
                                     }
-
                                 }
                             });
                         }
@@ -6624,11 +6660,18 @@ public class FragmentChat extends BaseFragment
     }
 
     public void itemAdapterBottomSheet() {
-        listPathString.clear();
-        if (isNewBottomSheet) {
+        if (isNewBottomSheet || FragmentEditImage.itemGalleryList.size() == 0) {
+
+            if (listPathString != null) {
+                listPathString.clear();
+            } else {
+                listPathString = new ArrayList<>();
+            }
+
             fastItemAdapter.clear();
-            itemGalleryList.clear();
-            itemGalleryList = getAllShownImagesPath(G.fragmentActivity);
+            FragmentEditImage.itemGalleryList.clear();
+            FragmentEditImage.textImageList.clear();
+            FragmentEditImage.itemGalleryList = getAllShownImagesPath(G.fragmentActivity);
         }
 
         boolean isCameraButtonSheet = sharedPreferences.getBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true);
@@ -6640,8 +6683,8 @@ public class FragmentChat extends BaseFragment
                     public void Allow() throws IOException {
 
                         fastItemAdapter.add(new AdapterCamera("").withIdentifier(99));
-                        for (int i = 0; i < itemGalleryList.size(); i++) {
-                            fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
+                        for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
+                            fastItemAdapter.add(new AdapterBottomSheet(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
                             isPermissionCamera = true;
                         }
                         G.handler.postDelayed(new Runnable() {
@@ -6677,8 +6720,8 @@ public class FragmentChat extends BaseFragment
             G.handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    for (int i = 0; i < itemGalleryList.size(); i++) {
-                        fastItemAdapter.add(new AdapterBottomSheet(itemGalleryList.get(i)).withIdentifier(100 + i));
+                    for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
+                        fastItemAdapter.add(new AdapterBottomSheet(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
                     }
                 }
             });
@@ -6690,6 +6733,17 @@ public class FragmentChat extends BaseFragment
                 if (isAdded()) {
                     bottomSheetDialog.show();
                     fastItemAdapter.notifyDataSetChanged();
+                    if (FragmentEditImage.textImageList != null && FragmentEditImage.textImageList.size() > 0) {
+                        //send.setText(R.mipmap.send2);
+                        send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
+                        txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + G.fragmentActivity.getResources().getString(item));
+                    } else {
+                        //send.setImageResource(R.mipmap.ic_close);
+                        send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
+                        txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
+                    }
+
+
                 }
             }
         }, 100);

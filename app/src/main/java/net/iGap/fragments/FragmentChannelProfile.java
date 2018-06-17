@@ -12,6 +12,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ import net.iGap.module.AttachFile;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
+import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestChannelAvatarAdd;
 import net.iGap.request.RequestChannelKickAdmin;
@@ -55,6 +57,8 @@ import net.iGap.viewmodel.FragmentChannelProfileViewModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FragmentChannelProfile extends BaseFragment implements OnChannelAvatarAdd, OnChannelAvatarDelete {
 
@@ -186,7 +190,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
-            public void result(String path, String message) {
+            public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
                 pathSaveImage = null;
                 pathSaveImage = path;
                 long avatarId = SUID.id().get();
@@ -444,23 +448,32 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
         if (resultCode == Activity.RESULT_OK) {
             String filePath = null;
             long avatarId = SUID.id().get();
+
+            if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
+            if (FragmentEditImage.itemGalleryList != null)
+                FragmentEditImage.itemGalleryList.clear();
+
             switch (requestCode) {
                 case AttachFile.request_code_TAKE_PICTURE:
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true); //rotate image
-                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.mCurrentPhotoPath, false, false)).setReplace(false).load();
+
+                        FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
+                        new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
                     } else {
                         ImageHelper.correctRotateImage(AttachFile.imagePath, true); //rotate image
-                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false)).setReplace(false).load();
+
+                        FragmentEditImage.insertItemList(AttachFile.imagePath, false);
+                        new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0)).setReplace(false).load();
                     }
                     break;
                 case AttachFile.request_code_image_from_gallery_single_select:
                     if (data.getData() == null) {
                         return;
                     }
-//
-                    new HelperFragment(FragmentEditImage.newInstance(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false, false)).setReplace(false).load();
+                    FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
+                    new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
                     break;
             }
         }
