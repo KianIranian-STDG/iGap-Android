@@ -236,6 +236,9 @@ public class HelperFillLookUpClass {
         lookupMap.put(31006, "ProtoGeoGetNearbyCoordinate.GeoGetNearbyCoordinateResponse");
         lookupMap.put(31007, "ProtoGeoGetConfiguration.GeoGetConfigurationResponse");
 
+        //Wallet 90xx
+        lookupMap.put(39000, "ProtoWalletGetAccessToken.WalletGetAccessTokenResponse");
+
         // Push 600xx
         lookupMap.put(60000, "ProtoPushLoginToken.PushLoginTokenResponse");
         lookupMap.put(60001, "ProtoPushTwoStepVerification.PushTwoStepVerificationResponse");
