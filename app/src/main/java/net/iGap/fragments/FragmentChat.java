@@ -478,6 +478,7 @@ public class FragmentChat extends BaseFragment
     private boolean isCloudRoom;
     private boolean isEditMessage = false;
     private long biggestMessageId = 0;
+    private long lastMessageId = 0;
     private long replyToMessageId = 0;
     private long userId;
     private long lastSeen;
@@ -2648,6 +2649,7 @@ public class FragmentChat extends BaseFragment
                             final RealmRoomMessage roomMessage = RealmRoomMessage.makeTextMessage(mRoomId, message, replyMessageId());
                             if (roomMessage != null) {
                                 edtChat.setText("");
+                                lastMessageId = roomMessage.getMessageId();
                                 mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
                                 clearReplyView();
                                 scrollToEnd();
@@ -7325,6 +7327,7 @@ public class FragmentChat extends BaseFragment
                     }
                 } else {
 
+
                     /**
                      * don't allow for add lower messageId to bottom of list
                      */
@@ -7334,6 +7337,13 @@ public class FragmentChat extends BaseFragment
                         }
                     } else {
                         continue;
+                    }
+
+
+                    if (lastMessageId == parseLong(messageInfo.messageID)) {
+                        continue;
+                    } else {
+                        lastMessageId = parseLong(messageInfo.messageID);
                     }
 
                     if (messageInfo.showTime) {
