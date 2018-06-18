@@ -5445,7 +5445,7 @@ public class FragmentChat extends BaseFragment
                         if (mimeType == null || mimeType.length() < 1) {
                             mimeType = "*/*";
                         } else {
-                            mimeType = "application/" + mimeType;
+                            mimeType = "application/*" + mimeType;
                         }
                         intent.setType(mimeType);
                         intent.putExtra(Intent.EXTRA_STREAM, uri);
