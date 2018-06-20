@@ -62,74 +62,80 @@
 
 
   <android.support.v4.widget.NestedScrollView
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-      android:layout_width="@dimen/dp100"
-      android:layout_height="@dimen/dp100"
-      android:layout_gravity="top|center"
-      android:layout_marginTop="@dimen/dp36"
-      android:adjustViewBounds="true"
-      android:foregroundGravity="center"
-      android:src="@mipmap/top"
-      android:visibility="visible" />
-
-    <TextView
-      fontPath="fonts/IRANSansMobile_Bold.ttf"
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/dp32"
-      android:layout_marginRight="@dimen/dp32"
-      android:layout_marginTop="@dimen/dp36"
-      android:text="@string/text_top"
-      android:textAlignment="center" />
+      android:orientation="vertical">
+
+      <ImageView
+        android:layout_width="@dimen/dp100"
+        android:layout_height="@dimen/dp100"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="@dimen/dp36"
+        android:adjustViewBounds="true"
+        android:foregroundGravity="center"
+        android:src="@mipmap/top"
+        android:visibility="visible" />
+
+      <TextView
+        fontPath="fonts/IRANSansMobile_Bold.ttf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp36"
+        android:text="@string/text_top"
+        android:textAlignment="center" />
 
 
-    <TextView
-      fontPath="fonts/IRANSansMobile_Bold.ttf"
-      android:id="@+id/top"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/dp32"
-      android:layout_marginRight="@dimen/dp32"
-      android:layout_marginTop="@dimen/dp10"
-      android:text="@string/install_app"
-      android:textAlignment="center"
-      android:textColor="@color/verify_color" />
+      <TextView
+        android:id="@+id/top"
+        fontPath="fonts/IRANSansMobile_Bold.ttf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp10"
+        android:text="@string/install_app"
+        android:textAlignment="center"
+        android:textColor="@color/verify_color" />
 
 
-    <ImageView
-      android:layout_width="@dimen/dp100"
-      android:layout_height="@dimen/dp100"
-      android:layout_gravity="top|center"
-      android:layout_marginTop="@dimen/dp36"
-      android:adjustViewBounds="true"
-      android:foregroundGravity="center"
-      android:src="@mipmap/paygear"
-      android:visibility="visible" />
+      <ImageView
+        android:layout_width="@dimen/dp100"
+        android:layout_height="@dimen/dp100"
+        android:layout_gravity="top|center"
+        android:layout_marginTop="@dimen/dp36"
+        android:adjustViewBounds="true"
+        android:foregroundGravity="center"
+        android:src="@mipmap/paygear"
+        android:visibility="visible" />
 
-    <TextView
-      fontPath="fonts/IRANSansMobile_Bold.ttf"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/dp32"
-      android:layout_marginRight="@dimen/dp32"
-      android:layout_marginTop="@dimen/dp36"
-      android:text="@string/text_paygear"
-      android:textAlignment="center" />
+      <TextView
+        fontPath="fonts/IRANSansMobile_Bold.ttf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp36"
+        android:text="@string/text_paygear"
+        android:textAlignment="center" />
 
-    <TextView
-      fontPath="fonts/IRANSansMobile_Bold.ttf"
-      android:id="@+id/paygear"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/dp32"
-      android:layout_marginRight="@dimen/dp32"
-      android:layout_marginTop="@dimen/dp10"
-      android:text="@string/install_app"
-      android:textAlignment="center"
-      android:textColor="@color/verify_color" />
+      <TextView
+        android:id="@+id/paygear"
+        fontPath="fonts/IRANSansMobile_Bold.ttf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp32"
+        android:layout_marginRight="@dimen/dp32"
+        android:layout_marginTop="@dimen/dp10"
+        android:text="@string/install_app"
+        android:textAlignment="center"
+        android:textColor="@color/verify_color" />
+    </LinearLayout>
   </android.support.v4.widget.NestedScrollView>
 
 </LinearLayout>
