@@ -69,7 +69,7 @@
     android:adjustViewBounds="true"
     android:foregroundGravity="center"
     android:visibility="visible"
-    android:src="@mipmap/Top" />
+    android:src="@mipmap/top" />
 
   <TextView
     android:layout_width="match_parent"
