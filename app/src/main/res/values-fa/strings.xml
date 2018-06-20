@@ -1186,5 +1186,8 @@
   <string name="automatic_description_theme">حالت شب از 19 تا 8 با انتخاب حالت خودکار فعال شد</string>
   <string name="setting_dark_theme">تنظیمات پوسته تاریک</string>
   <string name="Select_Time">انتخاب زمان</string>
+  <string name="financial_services">خدمات مالی</string>
+  <string name="text_top">برای استفاده از خدمات :کارت به کارت، خرید بلیط اتوبوس ، خرید شارژ، پرداخت قبوض، خرید بسته اینترنتی و سایر خدمات پرداخت، اپلیکیشن تاپ را نصب نمایید.</string>
+
 
 </resources>

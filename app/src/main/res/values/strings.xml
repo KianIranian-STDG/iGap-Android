@@ -1210,5 +1210,7 @@
   <string name="automatic_description_theme">The night mode was activated from 19 to 8 with automatic mode selection</string>
   <string name="setting_dark_theme">Setting Dark Theme</string>
   <string name="Select_Time">Select Time</string>
+  <string name="financial_services">Financial Services</string>
+  <string name="text_top">To use the service: to install the application for the card, buy a bus ticket, purchase a charge, pay bills, buy a package and other payment services.</string>
 
 </resources>

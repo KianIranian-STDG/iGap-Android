@@ -2140,5 +2140,8 @@
   <string name="automatic_description_theme">تم تنشيط الوضع الليلي من 19 إلى 8 عن طريق تحديد الوضع التلقائي</string>
   <string name="setting_dark_theme">إعدادات قذيفة الظلام</string>
   <string name="Select_Time">اختر الوقت</string>
+  <string name="financial_services">الخدمات المالية</string>
+  <string name="text_top">لاستخدام الخدمة: لتثبيت التطبيق للبطاقة ، وشراء تذكرة الحافلة ، وشراء تهمة ، ودفع الفواتير ، وشراء مجموعة وخدمات الدفع الأخرى.</string>
+
 
 </resources>
