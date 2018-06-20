@@ -50,6 +50,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMediaPlayer;
+import net.iGap.fragments.FragmentShowImage;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
@@ -311,8 +312,8 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     }
 
     public static void pauseSound() {
-
-
+        if (FragmentShowImage.focusAudioListener != null)
+            FragmentShowImage.focusAudioListener.audioPlay(false);
         if (!isVoice) {
             try {
                 remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
@@ -367,6 +368,9 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         if (mp.isPlaying()) {
             return;
         }
+
+        if (FragmentShowImage.focusAudioListener != null)
+            FragmentShowImage.focusAudioListener.audioPlay(true);
 
         if (G.onAudioFocusChangeListener != null) {
             G.onAudioFocusChangeListener.onAudioFocusChangeListener(AudioManager.AUDIOFOCUS_GAIN);

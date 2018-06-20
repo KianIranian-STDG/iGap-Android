@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
@@ -101,12 +101,14 @@ public class FragmentShowImage extends BaseFragment {
     private String path;
     private String type = null;
     private boolean isLockScreen = false;
+    private boolean isFocusable = false;
     private Realm realmShowImage;
     private ViewGroup rooShowImage;
     private ViewGroup mainShowImage;
     private ExitFragmentTransition exitFragmentTransition;
     private TouchImageView touchImageViewTmp = null;
     private int lastOrientation = 0;
+    public static FocusAudioListener focusAudioListener;
     ArrayList<TextureView> mTextureViewTmp = new ArrayList<>();
 
     public static FragmentShowImage newInstance() {
@@ -309,6 +311,31 @@ public class FragmentShowImage extends BaseFragment {
         toolbarShowImage = (LinearLayout) view.findViewById(R.id.toolbarShowImage);
 
         initViewPager();
+
+
+        focusAudioListener = new FocusAudioListener() {
+            @Override
+            public void audioPlay(boolean isPlay) {
+
+                if (isPlay) {
+                    if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+                        mMediaPlayer.pause();
+                        isLockScreen = true;
+                        isFocusable = true;
+                    }
+                } else {
+                    if (mMediaPlayer != null && isFocusable) {
+                        int length = mMediaPlayer.getCurrentPosition();
+                        mMediaPlayer.seekTo(length);
+                        mMediaPlayer.start();
+                        isLockScreen = true;
+                        isFocusable = false;
+
+                    }
+                }
+
+            }
+        };
     }
 
     //***************************************************************************************
@@ -554,6 +581,8 @@ public class FragmentShowImage extends BaseFragment {
             videoController.hide();
             videoController = null;
         }
+
+        focusAudioListener = null;
     }
 
     @Override
@@ -563,6 +592,9 @@ public class FragmentShowImage extends BaseFragment {
             mMediaPlayer.pause();
             isLockScreen = true;
         }
+        if (videoController != null && videoController.isShowing()) {
+            videoController.hide();
+        }
     }
 
     @Override
@@ -570,7 +602,6 @@ public class FragmentShowImage extends BaseFragment {
         super.onResume();
 
         if (isLockScreen) {
-
             if (videoController != null) {
                 videoController.show();
             }
@@ -1084,6 +1115,12 @@ public class FragmentShowImage extends BaseFragment {
         lp.width = finalWith;
         lp.height = finalHeight;
         mTextureView.setLayoutParams(lp);
+    }
+
+    public interface FocusAudioListener {
+
+        void audioPlay(boolean isPlay);
+
     }
 
 }
