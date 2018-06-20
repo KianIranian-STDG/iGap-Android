@@ -157,7 +157,7 @@ public class FragmentEditImage extends BaseFragment {
 
         setViewPager();
         setCheckBoxItem();
-        messageBox();
+        messageBox(view);
 
 
 //        G.imageLoader.displayImage(suitablePath(path), imgEditImage);
@@ -252,7 +252,7 @@ public class FragmentEditImage extends BaseFragment {
 
     }
 
-    private void messageBox() {
+    private void messageBox(final View view) {
         if (textImageList.containsKey(itemGalleryList.get((itemGalleryList.size() - selectPosition - 1)).path)) {
             edtChat.setText(textImageList.get(itemGalleryList.get((itemGalleryList.size() - selectPosition - 1)).path).getText());
         } else {
@@ -353,7 +353,7 @@ public class FragmentEditImage extends BaseFragment {
             public void onClick(View v) {
                 if (!initEmoji) {
                     initEmoji = true;
-                    setUpEmojiPopup(v);
+                    setUpEmojiPopup(view);
                 }
 
                 emojiPopup.toggle();
@@ -477,7 +477,7 @@ public class FragmentEditImage extends BaseFragment {
     }
 
     private void setUpEmojiPopup(View view) {
-        emojiPopup = EmojiPopup.Builder.fromRootView(view.findViewById(ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+        emojiPopup = EmojiPopup.Builder.fromRootView(view.findViewById(R.id.ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
 
             @Override
             public void onEmojiBackspaceClick(View v) {

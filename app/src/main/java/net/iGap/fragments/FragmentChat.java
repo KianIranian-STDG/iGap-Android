@@ -5075,7 +5075,7 @@ public class FragmentChat extends BaseFragment
      * emoji initialization
      */
     private void setUpEmojiPopup() {
-        emojiPopup = EmojiPopup.Builder.fromRootView(rootView.findViewById(ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+        emojiPopup = EmojiPopup.Builder.fromRootView(rootView.findViewById(R.id.ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
 
             @Override
             public void onEmojiBackspaceClick(View v) {
