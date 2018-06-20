@@ -68,9 +68,8 @@
     android:layout_marginTop="@dimen/dp36"
     android:adjustViewBounds="true"
     android:foregroundGravity="center"
-    android:scaleType="centerInside"
     android:visibility="visible"
-    app:srcCompat="@drawable/call" />
+    android:src="@mipmap/Top" />
 
   <TextView
     android:layout_width="match_parent"
@@ -101,9 +100,8 @@
     android:layout_marginTop="@dimen/dp36"
     android:adjustViewBounds="true"
     android:foregroundGravity="center"
-    android:scaleType="centerInside"
     android:visibility="visible"
-    app:srcCompat="@drawable/call" />
+    android:src="@mipmap/paygear" />
 
   <TextView
     android:id="@+id/paygear"
