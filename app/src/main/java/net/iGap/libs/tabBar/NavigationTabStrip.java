@@ -214,7 +214,7 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
             } finally {
                 if (titles == null) {
                     if (isInEditMode()) {
-                        titles = new String[new Random().nextInt(5) + 1];
+                        titles = new String[new Random().nextInt(6) + 1];
                         Arrays.fill(titles, PREVIEW_TITLE);
                     } else {
                         titles = new String[0];
