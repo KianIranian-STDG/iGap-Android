@@ -132,6 +132,7 @@
         android:layout_marginLeft="@dimen/dp32"
         android:layout_marginRight="@dimen/dp32"
         android:layout_marginTop="@dimen/dp10"
+        android:layout_marginBottom="@dimen/dp20"
         android:text="@string/install_app"
         android:textAlignment="center"
         android:textColor="@color/verify_color" />

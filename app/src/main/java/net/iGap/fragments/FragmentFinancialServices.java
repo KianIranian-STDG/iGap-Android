@@ -19,11 +19,12 @@ public class FragmentFinancialServices extends BaseFragment {
     public static final String OPEN_IN_FRAGMENT_MAIN = "OPEN_IN_FRAGMENT_MAIN";
     boolean openInMain = false;
 
-    public static FragmentFinancialServices newInstance(boolean openInFragmentMai) {
-        FragmentFinancialServices fragmentCall = new FragmentFinancialServices();
+    public static FragmentFinancialServices newInstance(boolean openInFragmentMain) {
+        FragmentFinancialServices fragmentFinancialServices = new FragmentFinancialServices();
         Bundle bundle = new Bundle();
-        fragmentCall.setArguments(bundle);
-        return fragmentCall;
+        bundle.putBoolean(OPEN_IN_FRAGMENT_MAIN, openInFragmentMain);
+        fragmentFinancialServices.setArguments(bundle);
+        return fragmentFinancialServices;
     }
 
     @Nullable
