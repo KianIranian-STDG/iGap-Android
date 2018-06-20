@@ -76,7 +76,6 @@ public class FragmentFinancialServices extends BaseFragment {
         return fragmentCall;
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,8 +86,7 @@ public class FragmentFinancialServices extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //G.onCallLogClear = this;
-        //openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
+        openInMain = getArguments().getBoolean(OPEN_IN_FRAGMENT_MAIN);
 
         view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));  //set title bar color
 
@@ -127,7 +125,6 @@ public class FragmentFinancialServices extends BaseFragment {
 
 
         if (openInMain) {
-
             view.findViewById(R.id.fc_layot_title).setVisibility(View.GONE);
 
         }

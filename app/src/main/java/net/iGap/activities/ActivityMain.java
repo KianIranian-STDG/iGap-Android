@@ -888,12 +888,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             findViewById(R.id.amr_ripple_search).setVisibility(View.VISIBLE);
             findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
+
             setFabIcon(R.mipmap.plus);
         } else if (adapter.getItem(position) instanceof FragmentCall) {
 
             findViewById(R.id.amr_ripple_search).setVisibility(View.GONE);
             findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
             setFabIcon(R.drawable.ic_call_black_24dp);
+        } else if (adapter.getItem(position) instanceof FragmentFinancialServices) {
+
+            findViewById(R.id.amr_ripple_search).setVisibility(View.GONE);
+            findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
+            arcMenu.setVisibility(View.GONE);
         }
 
         if (arcMenu.isMenuOpened()) {
@@ -931,7 +937,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     if (HelperCalander.isPersianUnicode) {
 
                         if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
-                            index = 4;
+                            index = 5;
                         } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
                             index = 3;
                         } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
@@ -953,7 +959,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
                             index = 3;
                         } else {
-                            index = 4;
+                            index = 5;
                         }
                     }
 
@@ -963,7 +969,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } else {
 
                     if (HelperCalander.isPersianUnicode) {
-                        index = 4;
+                        index = 5;
                     } else {
                         index = 0;
                     }

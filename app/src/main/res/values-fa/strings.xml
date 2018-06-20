@@ -1187,7 +1187,7 @@
   <string name="setting_dark_theme">تنظیمات پوسته تاریک</string>
   <string name="Select_Time">انتخاب زمان</string>
   <string name="financial_services">خدمات مالی</string>
+  <string name="install_app">نصب برنامه</string>
   <string name="text_top">برای استفاده از خدمات :کارت به کارت، خرید بلیط اتوبوس ، خرید شارژ، پرداخت قبوض، خرید بسته اینترنتی و سایر خدمات پرداخت، اپلیکیشن تاپ را نصب نمایید.</string>
-
-
+  <string name="text_paygear">To use the service: to install the application for the card, buy a bus ticket, purchase a charge, pay bills, buy a package and other payment services.</string>
 </resources>
