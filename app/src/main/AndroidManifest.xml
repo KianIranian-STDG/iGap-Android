@@ -38,6 +38,8 @@
   <uses-permission android:name="android.permission.BLUETOOTH" />
   <uses-permission android:name="android.permission.USE_FINGERPRINT" />
   <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+  <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+  <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
   <uses-feature
     android:glEsVersion="0x00020000"
@@ -273,6 +275,25 @@
       android:name="com.yalantis.ucrop.UCropActivity"
       android:screenOrientation="portrait"
       android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+
+    <service
+      android:name=".helper.contact.ContactsSyncAdapterService"
+      android:exported="true"
+      android:process=":contacts">
+
+      <intent-filter>
+        <action android:name="android.content.SyncAdapter" />
+      </intent-filter>
+
+      <meta-data
+        android:name="android.content.SyncAdapter"
+        android:resource="@xml/sync_contacts" />
+      <meta-data
+        android:name="android.provider.CONTACTS_STRUCTURE"
+        android:resource="@xml/contacts" />
+    </service>
+
 
   </application>
 

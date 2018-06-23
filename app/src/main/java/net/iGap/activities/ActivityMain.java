@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.activities;
 
@@ -37,6 +37,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -2520,12 +2521,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         accountType = this.getPackageName();
 
         AccountManager accountManager = AccountManager.get(getApplicationContext());
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
+//            return;
+//        }
+
         Account[] accounts = accountManager.getAccounts();
-        for (int i = 0; i < accounts.length; i++) {
-            if ((accounts[i].type != null) && (accounts[i].type.contentEquals(accountType))) {
+        Log.i("CCCCCCCCCDDD", " ac.length: " + accounts.length);
+        for (Account account1 : accounts) {
+            Log.i("CCCCCCCCCDDD", " ac.type: " + account1.type);
+            Log.i("CCCCCCCCCDDD", " ac.name: " + account1.name);
+
+            if ((account1.type != null) && (account1.type.contentEquals(accountType))) {
                 bereitsAngelegt = true;
             }
         }
