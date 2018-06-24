@@ -1237,6 +1237,9 @@ public class FragmentChat extends BaseFragment
                                 }
                             });
                         }
+                    } else {
+                        showDraftLayout();
+                        setDraftMessage(requestCode);
                     }
                 } else {
 
@@ -1257,6 +1260,10 @@ public class FragmentChat extends BaseFragment
                             }
                         });
                         thread.start();
+                    } else {
+                        showDraftLayout();
+                        setDraftMessage(requestCode);
+
                     }
                 }
             }
@@ -6195,10 +6202,10 @@ public class FragmentChat extends BaseFragment
                                         showDraftLayout();
                                         listPathString.add(itemList.get(0).getPath());
                                         listPathString.set(0, attachFile.saveGalleryPicToLocal(itemList.get(0).getPath()));
-                                            setDraftMessage(AttachFile.requestOpenGalleryForImageMultipleSelect);
-                                            latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
-                                            //sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, pathStrings.get(0));
-                                        } else {
+                                        setDraftMessage(AttachFile.requestOpenGalleryForImageMultipleSelect);
+                                        latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
+                                        //sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, pathStrings.get(0));
+                                    } else {
                                         for (StructBottomSheet items : itemList) {
 
                                             //if (!path.toLowerCase().endsWith(".gif")) {
