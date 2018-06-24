@@ -239,6 +239,10 @@ public class HelperFillLookUpClass {
         //Wallet 90xx
         lookupMap.put(39000, "ProtoWalletGetAccessToken.WalletGetAccessTokenResponse");
 
+        //Mpl 90xx
+        lookupMap.put(39100, "ProtoMplGetBillToken.MplGetBillTokenResponse");
+        lookupMap.put(39101, "ProtoMplGetTopupToken.MplGetTopupTokenResponse");
+
         // Push 600xx
         lookupMap.put(60000, "ProtoPushLoginToken.PushLoginTokenResponse");
         lookupMap.put(60001, "ProtoPushTwoStepVerification.PushTwoStepVerificationResponse");
