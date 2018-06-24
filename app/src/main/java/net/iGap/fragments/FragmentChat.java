@@ -5854,10 +5854,10 @@ public class FragmentChat extends BaseFragment
                 } else {
                     if (isCheck) {
 //                        listPathString.add(path);
-
                         StructBottomSheet item = new StructBottomSheet();
                         item.setPath(path);
                         item.setText("");
+                        item.setId(id);
                         FragmentEditImage.textImageList.put(path, item);
                     } else {
 //                        listPathString.remove(path);
@@ -5885,20 +5885,35 @@ public class FragmentChat extends BaseFragment
                     return;
                 }
 
+                /**
+                 * sort list
+                 */
+                ArrayList<StructBottomSheet> itemList = new ArrayList<StructBottomSheet>();
                 for (Map.Entry<String, StructBottomSheet> items : textImageList.entrySet()) {
+                    itemList.add(items.getValue());
+                }
 
-                    edtChat.setText(items.getValue().getText());
-                    listPathString.add(items.getValue().getPath());
+                Collections.sort(itemList);
+
+                for (StructBottomSheet item : itemList) {
+                    edtChat.setText(item.getText());
+                    listPathString.add(item.getPath());
                     latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
                     ll_attach_text.setVisibility(View.VISIBLE);
                     imvSendButton.performClick();
                 }
+//                for (Map.Entry<String, StructBottomSheet> items : textImageList.entrySet()) {
+//
+//                    edtChat.setText(items.getValue().getText());
+//                    listPathString.add(items.getValue().getPath());
+//                    latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
+//                    ll_attach_text.setVisibility(View.VISIBLE);
+//                    imvSendButton.performClick();
+//                }
 
 //                close.performClick();
-
             }
         };
-
         rcvBottomSheet = (RecyclerView) viewBottomSheet.findViewById(R.id.rcvContent);
         rcvBottomSheet.setLayoutManager(new GridLayoutManager(G.fragmentActivity, 1, GridLayoutManager.HORIZONTAL, false));
         rcvBottomSheet.setItemViewCacheSize(100);
@@ -6160,28 +6175,41 @@ public class FragmentChat extends BaseFragment
                     send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
                     txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
 
+                    /**
+                     * sort list
+                     */
+                    final ArrayList<StructBottomSheet> itemList = new ArrayList<StructBottomSheet>();
+                    for (Map.Entry<String, StructBottomSheet> items : FragmentEditImage.textImageList.entrySet()) {
+                        itemList.add(items.getValue());
+                    }
+                    Collections.sort(itemList);
+
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    for (Map.Entry<String, StructBottomSheet> items : FragmentEditImage.textImageList.entrySet()) {
-                                        if (FragmentEditImage.textImageList.size() == 1) {
+
+                                    if (itemList.size() == 1) {
                                             showDraftLayout();
-                                            listPathString.set(0, attachFile.saveGalleryPicToLocal(items.getValue().getPath()));
+                                        listPathString.add(itemList.get(0).getPath());
+                                        listPathString.set(0, attachFile.saveGalleryPicToLocal(itemList.get(0).getPath()));
                                             setDraftMessage(AttachFile.requestOpenGalleryForImageMultipleSelect);
                                             latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
                                             //sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, pathStrings.get(0));
                                         } else {
+                                        for (StructBottomSheet items : itemList) {
+
                                             //if (!path.toLowerCase().endsWith(".gif")) {
-                                            String localPathNew = attachFile.saveGalleryPicToLocal(items.getValue().path);
-                                            edtChat.setText(items.getValue().getText());
+                                            String localPathNew = attachFile.saveGalleryPicToLocal(items.path);
+                                            edtChat.setText(items.getText());
                                             sendMessage(AttachFile.requestOpenGalleryForImageMultipleSelect, localPathNew);
                                             //}
+                                        }
 
                                         }
-                                    }
+
                                 }
                             });
                         }

@@ -293,6 +293,7 @@ public class FragmentEditImage extends BaseFragment {
                 StructBottomSheet item = new StructBottomSheet();
                 item.setPath(path);
                 item.setText(message);
+                item.setId(itemGalleryList.get(viewPager.getCurrentItem()).getId());
 
                 textImageList.put(path, item);
 //                FragmentChat.listPathString.add(itemGalleryList.get(((itemGalleryList.size() - selectPosition) - 1)).path);
@@ -601,6 +602,7 @@ public class FragmentEditImage extends BaseFragment {
             StructBottomSheet item = new StructBottomSheet();
             item.setText(edtChat.getText().toString());
             item.setPath(itemGalleryList.get(position).path);
+            item.setId(itemGalleryList.get(position).getId());
             textImageList.put(itemGalleryList.get(position).path, item);
             checkBox.setUnCheckColor(G.context.getResources().getColor(R.color.green));
             itemGalleryList.get(position).setSelected(false);
