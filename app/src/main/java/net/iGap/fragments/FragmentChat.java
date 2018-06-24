@@ -1676,7 +1676,7 @@ public class FragmentChat extends BaseFragment
                                 resetMessagingValue();
                                 savedScrollMessageId = pinMessageId;
                                 firstVisiblePositionOffset = 0;
-                                getMessages();
+                                setGapAndGetMessage(pinMessageId);
                             } else {
                                 new RequestClientGetRoomMessage().clientGetRoomMessage(mRoomId, pinMessageId);
                                 G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
@@ -1689,7 +1689,7 @@ public class FragmentChat extends BaseFragment
                                                 resetMessagingValue();
                                                 savedScrollMessageId = pinMessageId;
                                                 firstVisiblePositionOffset = 0;
-                                                getMessages();
+                                                setGapAndGetMessage(pinMessageId);
                                             }
                                         });
 
@@ -6192,7 +6192,7 @@ public class FragmentChat extends BaseFragment
                                 public void run() {
 
                                     if (itemList.size() == 1) {
-                                            showDraftLayout();
+                                        showDraftLayout();
                                         listPathString.add(itemList.get(0).getPath());
                                         listPathString.set(0, attachFile.saveGalleryPicToLocal(itemList.get(0).getPath()));
                                             setDraftMessage(AttachFile.requestOpenGalleryForImageMultipleSelect);
@@ -6208,7 +6208,7 @@ public class FragmentChat extends BaseFragment
                                             //}
                                         }
 
-                                        }
+                                    }
 
                                 }
                             });
@@ -7587,6 +7587,9 @@ public class FragmentChat extends BaseFragment
     private int totalItemCount; // all item in recycler view
     private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
 
+    /**
+     * manage save state , unread message , load from local or need get message from server and finally load message
+     */
     private void getMessages() {
         //+Realm realm = Realm.getDefaultInstance();
 
@@ -7783,6 +7786,16 @@ public class FragmentChat extends BaseFragment
 
         recyclerView.addOnScrollListener(scrollListener);
         //realm.close();
+    }
+
+    /**
+     * first set gap for room message for correctly load message and after than call {@link #getMessages()}
+     *
+     * @param messageId set gap for this message id
+     */
+    private void setGapAndGetMessage(long messageId) {
+        RealmRoomMessage.setGap(messageId);
+        getMessages();
     }
 
     /**

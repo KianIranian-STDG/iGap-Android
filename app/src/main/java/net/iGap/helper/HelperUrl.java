@@ -27,7 +27,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -50,6 +49,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientCheckInviteLink;
 import net.iGap.request.RequestClientJoinByInviteLink;
 import net.iGap.request.RequestClientResolveUsername;
@@ -769,6 +769,9 @@ public class HelperUrl {
         if (userName == null || userName.length() < 1 || isInCurrentChat(userName)) return;
 
         if (G.userLogin) {
+
+            RealmRoomMessage.setGap(messageId);
+
             // this methode check user name and if it is ok go to room
             G.onClientResolveUsername = new OnClientResolveUsername() {
                 @Override

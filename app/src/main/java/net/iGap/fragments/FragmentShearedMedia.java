@@ -354,13 +354,13 @@ public class FragmentShearedMedia extends BaseFragment {
         btnGoToPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                goToPositionFromShardMedia.goToPosition(SelectedList.get(0));
+                long messageId = SelectedList.get(0);
+                RealmRoomMessage.setGap(messageId);
+                goToPositionFromShardMedia.goToPosition(messageId);
                 goToPosition = true;
                 popBackStackFragment();
                 adapter.resetSelected();
                 popBackStackFragment();
-
             }
         });
 
