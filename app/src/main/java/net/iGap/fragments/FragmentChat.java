@@ -1619,22 +1619,30 @@ public class FragmentChat extends BaseFragment
 
         FragmentShearedMedia.goToPositionFromShardMedia = new FragmentShearedMedia.GoToPositionFromShardMedia() {
             @Override
-            public void goToPosition(Long aLong) {
+            public void goToPosition(Long messageId) {
 
-                if (aLong != 0) {
-                    savedScrollMessageId = aLong;
+                if (messageId != 0) {
+                    savedScrollMessageId = messageId;
                     firstVisiblePositionOffset = 0;
 
                     int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
-                    LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
-                    linearLayout.scrollToPositionWithOffset(position, firstVisiblePositionOffset);
-                    savedScrollMessageId = 0;
+                    if (position > 0) {
+                        LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
+                        linearLayout.scrollToPositionWithOffset(position, firstVisiblePositionOffset);
+                        savedScrollMessageId = 0;
+                    } else {
+                        RealmRoomMessage rm = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                        rm = RealmRoomMessage.getFinalMessage(rm);
+                        if (rm != null) {
+                            resetMessagingValue();
+                            savedScrollMessageId = messageId;
+                            firstVisiblePositionOffset = 0;
+                            getMessages();
+                        }
+                    }
                 }
-
             }
         };
-
-
     }
 
     private void initPinedMessage() {
@@ -1680,7 +1688,7 @@ public class FragmentChat extends BaseFragment
                                 resetMessagingValue();
                                 savedScrollMessageId = pinMessageId;
                                 firstVisiblePositionOffset = 0;
-                                setGapAndGetMessage(pinMessageId);
+                                getMessages();
                             } else {
                                 new RequestClientGetRoomMessage().clientGetRoomMessage(mRoomId, pinMessageId);
                                 G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
@@ -8254,6 +8262,7 @@ public class FragmentChat extends BaseFragment
         visibleItemCount = 0;
         totalItemCount = 0;
         unreadCount = 0;
+        biggestMessageId = 0;
     }
 
     @Override

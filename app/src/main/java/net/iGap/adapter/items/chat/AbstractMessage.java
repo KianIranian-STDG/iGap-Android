@@ -19,7 +19,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +44,6 @@ import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IChatItemAttachment;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.interfaces.OnProgressUpdate;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnMessageProgressClick;
@@ -73,7 +71,6 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChannelAddMessageReaction;
-import net.iGap.request.RequestClientGetRoomMessage;
 
 import java.io.File;
 import java.util.List;
@@ -82,7 +79,6 @@ import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
-import static net.iGap.fragments.FragmentChat.messageId;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
 public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
@@ -728,7 +724,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN) {
             if (G.isDarkTheme) {
                 setTextColor(imgTick, R.color.iGapColor);
-            }else {
+            } else {
                 setTextColor(imgTick, R.color.backgroundColorCall2);
             }
 
@@ -736,7 +732,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             // iconHearing.setVisibility(View.VISIBLE);
             if (G.isDarkTheme) {
                 setTextColor(imgTick, R.color.iGapColor);
-            }else {
+            } else {
                 setTextColor(imgTick, R.color.backgroundColorCall2);
             }
 
@@ -898,29 +894,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 public void onClick(View v) {
 
                     if (mMessage.username.length() > 0) {
-
-                        long messageId =(mMessage.forwardedFrom.getMessageId() *(-1));
-
-                        RealmRoomMessage rm = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mMessage.forwardedFrom.getRoomId()).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.forwardedFrom.getMessageId()).findFirst();
-                        rm = RealmRoomMessage.getFinalMessage(rm);
-                        if (rm != null) {
-                            HelperUrl.checkUsernameAndGoToRoomWithMessageId(mMessage.username, HelperUrl.ChatEntry.profile, messageId);
-                        } else {
-                            new RequestClientGetRoomMessage().clientGetRoomMessage(mMessage.roomId, messageId);
-                            G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
-                                @Override
-                                public void onClientGetRoomMessageResponse(final long messageId) {
-                                    G.onClientGetRoomMessage = null;
-                                    G.handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            HelperUrl.checkUsernameAndGoToRoomWithMessageId(mMessage.username, HelperUrl.ChatEntry.profile, messageId);
-                                        }
-                                    });
-
-                                }
-                            };
-                        }
+                        HelperUrl.checkUsernameAndGoToRoomWithMessageId(mMessage.username, HelperUrl.ChatEntry.profile, (mMessage.forwardedFrom.getMessageId() * (-1)));
                     }
                 }
             });

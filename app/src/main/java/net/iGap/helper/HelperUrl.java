@@ -39,6 +39,7 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnClientCheckInviteLink;
+import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.interfaces.OnClientJoinByInviteLink;
 import net.iGap.interfaces.OnClientResolveUsername;
 import net.iGap.module.AndroidUtils;
@@ -50,7 +51,9 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestClientCheckInviteLink;
+import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestClientJoinByInviteLink;
 import net.iGap.request.RequestClientResolveUsername;
 
@@ -758,25 +761,26 @@ public class HelperUrl {
 
 
     /**
-     *
-     * @param userName
-     * @param chatEntery
+     * @param username
+     * @param chatEntry
      * @param messageId // use for detect message position
      */
 
-    public static void checkUsernameAndGoToRoomWithMessageId(final String userName, final ChatEntry chatEntery, final long messageId) {
+    public static void checkUsernameAndGoToRoomWithMessageId(final String username, final ChatEntry chatEntry, final long messageId) {
 
-        if (userName == null || userName.length() < 1 || isInCurrentChat(userName)) return;
+        if (username == null || username.length() < 1 || isInCurrentChat(username)) return;
 
         if (G.userLogin) {
-
-            RealmRoomMessage.setGap(messageId);
 
             // this methode check user name and if it is ok go to room
             G.onClientResolveUsername = new OnClientResolveUsername() {
                 @Override
                 public void onClientResolveUsername(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
-                    openChat(userName, type, user, room, chatEntery , messageId);
+                    if (messageId == 0 || type == ProtoClientResolveUsername.ClientResolveUsernameResponse.Type.USER) {
+                        openChat(username, type, user, room, chatEntry, messageId);
+                    } else {
+                        resolveMessageAndOpenChat(messageId, username, chatEntry, type, user, room);
+                    }
                 }
 
                 @Override
@@ -787,11 +791,34 @@ public class HelperUrl {
 
             showIndeterminateProgressDialog();
 
-            new RequestClientResolveUsername().clientResolveUsername(userName);
+            new RequestClientResolveUsername().clientResolveUsername(username);
         } else {
             closeDialogWaiting();
             HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
         }
+    }
+
+    /**
+     * if message isn't exist in Realm resolve from server and then open chat
+     */
+    private static void resolveMessageAndOpenChat(final long messageId, final String username, final ChatEntry chatEntry, final ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, final ProtoGlobal.RegisteredUser user, final ProtoGlobal.Room room) {
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId()).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+        if (rm != null) {
+            openChat(username, type, user, room, chatEntry, messageId);
+        } else {
+            new RequestClientGetRoomMessage().clientGetRoomMessage(room.getId(), messageId);
+            G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
+                @Override
+                public void onClientGetRoomMessageResponse(final long messageId) {
+                    RealmRoomMessage.setGap(messageId);
+                    G.onClientGetRoomMessage = null;
+                    openChat(username, type, user, room, chatEntry, messageId);
+                }
+            };
+        }
+        realm.close();
     }
 
     public static void closeDialogWaiting() {
@@ -812,10 +839,10 @@ public class HelperUrl {
 
         switch (type) {
             case USER:
-                goToChat(user, chatEntery , messageId);
+                goToChat(user, chatEntery, messageId);
                 break;
             case ROOM:
-                goToRoom(username, room ,messageId);
+                goToRoom(username, room, messageId);
                 break;
         }
     }
@@ -857,7 +884,7 @@ public class HelperUrl {
         if (realmRoom != null) {
             closeDialogWaiting();
 
-            goToActivity(realmRoom.getId(), id, chatEntery ,messageId);
+            goToActivity(realmRoom.getId(), id, chatEntery, messageId);
 
             realm.close();
         } else {
