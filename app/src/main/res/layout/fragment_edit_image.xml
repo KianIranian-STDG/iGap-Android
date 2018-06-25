@@ -120,9 +120,10 @@
       android:id="@+id/layout_caption"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-
       android:gravity="center"
       android:minHeight="@dimen/dp48"
+      android:paddingLeft="@dimen/dp4"
+      android:paddingRight="@dimen/dp4"
       android:orientation="horizontal">
 
       <net.iGap.module.MaterialDesignTextView
@@ -169,7 +170,7 @@
         android:paddingRight="@dimen/dp8"
         android:text="@string/md_check_symbol"
         android:textAppearance="@style/TextIconAppearance.all"
-        android:textColor="@color/colorEmojiPopupCategoryBottomBorder"
+        android:textColor="@color/white"
         android:textSize="@dimen/dp20"
         android:visibility="gone" />
 

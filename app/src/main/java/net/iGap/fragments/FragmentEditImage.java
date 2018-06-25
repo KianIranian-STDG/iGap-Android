@@ -81,6 +81,7 @@ public class FragmentEditImage extends BaseFragment {
     private EmojiPopup emojiPopup;
     private String SAMPLE_CROPPED_IMAGE_NAME;
     private boolean isChatPage = true;
+    private boolean isMultiItem = true;
     private boolean isNicknamePage = false;
     public static CompleteEditImage completeEditImage;
     private int num = 0;
@@ -139,13 +140,19 @@ public class FragmentEditImage extends BaseFragment {
             } else {
                 txtCountImage.setVisibility(View.GONE);
             }
+            if (itemGalleryList != null && itemGalleryList.size() == 1) {
+                checkBox.setVisibility(View.GONE);
+                txtCountImage.setVisibility(View.GONE);
+                isMultiItem = false;
 
+            }
         } else {
             txtSet.setVisibility(View.VISIBLE);
             layoutCaption.setVisibility(View.GONE);
             imvSendButton.setVisibility(View.GONE);
             checkBox.setVisibility(View.GONE);
             txtCountImage.setVisibility(View.GONE);
+            isMultiItem = false;
         }
 
         /**
@@ -297,7 +304,7 @@ public class FragmentEditImage extends BaseFragment {
 
                 textImageList.put(path, item);
 //                FragmentChat.listPathString.add(itemGalleryList.get(((itemGalleryList.size() - selectPosition) - 1)).path);
-                if (textImageList.size() > 0) {
+                if (textImageList.size() > 0 && isMultiItem) {
                     txtCountImage.setVisibility(View.VISIBLE);
                     txtCountImage.setText(textImageList.size() + "");
                 } else {
@@ -368,7 +375,7 @@ public class FragmentEditImage extends BaseFragment {
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setValueCheckBox(viewPager.getCurrentItem());
+                if (isMultiItem) setValueCheckBox(viewPager.getCurrentItem());
             }
         });
 
@@ -575,7 +582,7 @@ public class FragmentEditImage extends BaseFragment {
             imgPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    setValueCheckBox(position);
+                    if (isMultiItem) setValueCheckBox(position);
                 }
             });
             ((ViewGroup) container).addView(layout);
@@ -692,12 +699,13 @@ public class FragmentEditImage extends BaseFragment {
         if (!HelperPermission.grantedUseStorage()) {
             return itemGalleryList;
         }
-
         StructBottomSheet item = new StructBottomSheet();
         item.setId(itemGalleryList.size());
         item.setPath(path);
+        item.setText("");
         item.isSelected = isSelected;
         itemGalleryList.add(0, item);
+        textImageList.put(path, item);
 
         return itemGalleryList;
     }

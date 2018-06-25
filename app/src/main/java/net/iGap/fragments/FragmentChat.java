@@ -558,14 +558,11 @@ public class FragmentChat extends BaseFragment
             while (cursor.moveToNext()) {
                 absolutePathOfImage = cursor.getString(column_index_data);
 
-//                StructBottomSheet item = new StructBottomSheet();
-//                item.setId(listOfAllImages.size());
-//                item.setPath(absolutePathOfImage);
-//                item.isSelected = true;
-//                listOfAllImages.add(0, item);
-
-                listOfAllImages = FragmentEditImage.insertItemList(absolutePathOfImage, true);
-
+                StructBottomSheet item = new StructBottomSheet();
+                item.setId(listOfAllImages.size());
+                item.setPath(absolutePathOfImage);
+                item.isSelected = true;
+                listOfAllImages.add(0, item);
             }
             cursor.close();
         }
@@ -2736,10 +2733,11 @@ public class FragmentChat extends BaseFragment
         G.openBottomSheetItem = new OpenBottomSheetItem() {
             @Override
             public void openBottomSheet(boolean isNew) {
-                fastItemAdapter.notifyAdapterDataSetChanged();
                 isNewBottomSheet = isNew;
                 imvAttachFileButton.performClick();
+                fastItemAdapter.notifyAdapterDataSetChanged();
             }
+
         };
 
         imvAttachFileButton.setOnClickListener(new View.OnClickListener() {
@@ -2752,7 +2750,9 @@ public class FragmentChat extends BaseFragment
                 }
 
                 InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
                 itemAdapterBottomSheet();
             }
         });
@@ -6715,7 +6715,7 @@ public class FragmentChat extends BaseFragment
     }
 
     public void itemAdapterBottomSheet() {
-        if (isNewBottomSheet || FragmentEditImage.itemGalleryList.size() == 0) {
+        if (isNewBottomSheet || FragmentEditImage.itemGalleryList.size() <= 1) {
 
             if (listPathString != null) {
                 listPathString.clear();
@@ -6723,15 +6723,16 @@ public class FragmentChat extends BaseFragment
                 listPathString = new ArrayList<>();
             }
 
-            fastItemAdapter.clear();
             FragmentEditImage.itemGalleryList.clear();
-            FragmentEditImage.textImageList.clear();
+            if (isNewBottomSheet) {
+                FragmentEditImage.textImageList.clear();
+            }
             FragmentEditImage.itemGalleryList = getAllShownImagesPath(G.fragmentActivity);
         }
-
+        fastItemAdapter.clear();
         boolean isCameraButtonSheet = sharedPreferences.getBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true);
 
-        if (isCameraButtonSheet && isNewBottomSheet) {
+        if (isCameraButtonSheet) {
             try {
                 HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                     @Override
@@ -6747,6 +6748,19 @@ public class FragmentChat extends BaseFragment
                             public void run() {
                                 if (isAdded()) {
                                     bottomSheetDialog.show();
+                                    if (FragmentEditImage.textImageList != null && FragmentEditImage.textImageList.size() > 0) {
+                                        //send.setText(R.mipmap.send2);
+                                        if (send != null)
+                                            send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
+                                        if (txtCountItem != null)
+                                            txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + G.fragmentActivity.getResources().getString(item));
+                                    } else {
+                                        //send.setImageResource(R.mipmap.ic_close);
+                                        if (send != null)
+                                            send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
+                                        if (txtCountItem != null)
+                                            txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
+                                    }
                                 }
                             }
                         }, 100);
@@ -6771,23 +6785,20 @@ public class FragmentChat extends BaseFragment
 
     private void loadImageGallery() {
 
-        if (isNewBottomSheet) {
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                        fastItemAdapter.add(new AdapterBottomSheet(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
-                    }
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
+                    fastItemAdapter.add(new AdapterBottomSheet(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
                 }
-            });
-        }
+            }
+        });
 
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (isAdded()) {
                     bottomSheetDialog.show();
-                    fastItemAdapter.notifyDataSetChanged();
                     if (FragmentEditImage.textImageList != null && FragmentEditImage.textImageList.size() > 0) {
                         //send.setText(R.mipmap.send2);
                         send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
