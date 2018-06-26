@@ -1,2 +1,2 @@
-include ':app', ':libwebrtc'
+include ':app', ':libwebrtc', ':pecpayment-release'
 include ':lvl'

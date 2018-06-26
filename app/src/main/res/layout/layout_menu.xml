@@ -307,7 +307,6 @@
           </LinearLayout>
 
 
-
           <LinearLayout
             android:id="@+id/lm_ll_FinancialServices"
             style="@style/NavigationDrawer.Item"
@@ -421,6 +420,41 @@
 
               />
 
+          </LinearLayout>
+
+          <LinearLayout
+            android:id="@+id/lm_ll_payment"
+            style="@style/NavigationDrawer.Item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp6"
+            android:layout_marginTop="@dimen/dp4"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <net.iGap.module.MaterialDesignTextView
+              style="?iconColorMenuTheme"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:minWidth="@dimen/dp32"
+              android:text="@string/md_payment"
+              android:textAppearance="@style/TextIconAppearance.menu"
+              android:textSize="@dimen/dp20" />
+
+            <TextView
+              style="?textColorMenuTheme"
+              fontPath="fonts/IRANSansMobile_Bold.ttf"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/dp4"
+              android:layout_marginStart="@dimen/dp4"
+              android:paddingBottom="@dimen/dp8"
+              android:paddingLeft="@dimen/dp8"
+              android:paddingRight="@dimen/dp8"
+              android:paddingTop="@dimen/dp12"
+              android:text="@string/payment"
+              android:textSize="@dimen/dp14" />
           </LinearLayout>
 
           <LinearLayout

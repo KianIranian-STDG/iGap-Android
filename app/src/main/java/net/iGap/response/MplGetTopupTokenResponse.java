@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoMplGetTopupToken;
 
 public class MplGetTopupTokenResponse extends MessageHandler {
@@ -33,6 +34,10 @@ public class MplGetTopupTokenResponse extends MessageHandler {
         builder.getStatus();
         builder.getToken();
         builder.getExpireTime();
+
+        if (G.onPayment != null) {
+            G.onPayment.onChargeToken(builder.getStatus(), builder.getToken(), builder.getExpireTime());
+        }
     }
 
     @Override

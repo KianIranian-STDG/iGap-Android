@@ -54,7 +54,7 @@
     android:manageSpaceActivity=".activities.ActivityManageSpace"
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
-    tools:replace="allowBackup">
+    tools:replace="allowBackup,supportsRtl">
     <receiver
       android:name=".module.CustomButtonListener"
       android:exported="false" />
@@ -110,6 +110,10 @@
 
     </activity>
 
+    <activity
+      android:name="com.journeyapps.barcodescanner.CaptureActivity"
+      android:screenOrientation="fullSensor"
+      tools:replace="screenOrientation" />
 
     <activity
       android:name=".activities.ActivityMain"

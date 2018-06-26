@@ -62,6 +62,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':libwebrtc')
+    compile project(':pecpayment-release')
     compile('com.afollestad.material-dialogs:core:0.9.4.5') {
         transitive = true
     }
@@ -97,8 +98,8 @@ dependencies {
     compile 'com.hanks.animatecheckbox:library:0.1'
     compile 'org.parceler:parceler-api:1.1.9'
     compile 'com.android.support:gridlayout-v7:27.1.1'
-    compile 'com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.3'
     compile 'com.google.zxing:core:3.3.0'
+    compile('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
     compile 'com.google.android.gms:play-services-analytics:16.0.0'
     compile 'com.google.android.gms:play-services-maps:15.0.1'
@@ -119,15 +120,15 @@ dependencies {
     compile 'com.github.krokyze:ucropnedit:2.2.2'
     implementation 'info.androidhive:imagefilters:1.0.7'
     compile 'com.mindorks.android:prdownloader:0.3.0'
-    implementation ('com.github.RooyeKhat-Media:Compress:1.0.0'){
+    implementation('com.github.RooyeKhat-Media:Compress:1.0.0') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
-    implementation ('com.github.RooyeKhat-Media:VideoTrimmer:1.0.0'){
+    implementation('com.github.RooyeKhat-Media:VideoTrimmer:1.0.0') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
     implementation 'com.github.RooyeKhat-Media:Websocket:1.0.0'
     implementation 'com.github.RooyeKhat-Media:MessageProgress:1.0.0'
-    implementation 'com.github.RooyeKhat-Media:Proto:Build84'
+    implementation 'com.github.RooyeKhat-Media:Proto:Build85'
 }
 
 configurations.all {

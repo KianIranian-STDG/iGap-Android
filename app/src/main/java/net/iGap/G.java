@@ -154,6 +154,7 @@ public class G extends MultiDexApplication {
     public static boolean isLandscape = false;
     public static boolean isAppRtl = false;
     public static boolean isLinkClicked = false;
+    public static boolean isMplActive = false;
     public static boolean isDarkTheme = false;
     public static String selectedTabInMainActivity = "";
     public static int ivSize;
@@ -331,6 +332,7 @@ public class G extends MultiDexApplication {
     public static OnGeoCommentResponse onGeoCommentResponse;
     public static OnGeoGetConfiguration onGeoGetConfiguration;
     public static OnNotifyTime onNotifyTime;
+    public static OnPayment onPayment;
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
     public static ISignalingAccept iSignalingAccept;

@@ -10,7 +10,6 @@
 
 package net.iGap.helper;
 
-import net.iGap.fragments.FragmentQrCodeNewDevice;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
 
@@ -295,7 +294,6 @@ public class HelperFillLookUpClass {
     private static void fillImmovableClasses() {
         generalImmovableClasses.add(FragmentShowAvatars.class.getName());
         generalImmovableClasses.add(FragmentShowImage.class.getName());
-        generalImmovableClasses.add(FragmentQrCodeNewDevice.class.getName());
     }
 
     /**

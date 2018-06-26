@@ -1190,4 +1190,40 @@
   <string name="install_app">نصب برنامه</string>
   <string name="text_top">برای استفاده از خدمات :کارت به کارت، خرید بلیط اتوبوس ، خرید شارژ، پرداخت قبوض، خرید بسته اینترنتی و سایر خدمات پرداخت، اپلیکیشن تاپ را نصب نمایید.</string>
   <string name="text_paygear">پیگیر ، کیف پول همراه شما برداشت و واریز آنی وجه ، پرداخت هدیه ، خرید از فروشگاه ها و پرداخت کرایه تاکسی.</string>
+  <string name="payment">پرداخت</string>
+  <string name="buy_charge">خرید شارژ تلفن همراه</string>
+  <string name="pay_bills">پرداخت قبوض</string>
+  <string name="barcode_reader">بار کد خوان</string>
+  <string name="billing_id">شناسه قبض</string>
+  <string name="enter">وارد کنید</string>
+  <string name="payment_code">شناسه پرداخت</string>
+  <string name="amount">مبلغ(ریال)</string>
+  <string name="buy">خرید</string>
+  <string name="select">انتخاب کنید</string>
+  <string name="hamrahe_aval">همراه اول</string>
+  <string name="irancell">ایرانسل</string>
+  <string name="ritel">رایتل</string>
+  <string name="normal_charge">شارژ معمولی</string>
+  <string name="amazing">شگفت انگیز</string>
+  <string name="wimax_charging">شارژ وایمکس</string>
+  <string name="permanently_charge">شارژ سیم کارت دائمی</string>
+
+  <string name="charge_1">شارژ 10.000 ریالی</string>
+  <string name="charge_2">شارژ 20.000 ریالی</string>
+  <string name="charge_5">شارژ 50.000 ریالی</string>
+  <string name="charge_10">شارژ 100.000 ریالی</string>
+  <string name="charge_20">شارژ 200.000 ریالی</string>
+
+  <string name="charge_1_ir">10.000 ریالی +  9%  ارزش افزوده = 10.900 ریال</string>
+  <string name="charge_2_ir">20.000 ریالی +  9%  ارزش افزوده = 21.180 ریال</string>
+  <string name="charge_5_ir">50.000 ریالی +  9%  ارزش افزوده = 54.500 ریال</string>
+  <string name="charge_10_ir">100.000 ریالی +  9%  ارزش افزوده = 109.000 ریال</string>
+  <string name="charge_20_ir">200.000 ریالی +  9%  ارزش افزوده = 218.000 ریال</string>
+
+  <string name="biling_id_not_valid">شناسه قبض نامعتبر است</string>
+  <string name="pay_id_is_not_valid">شناسه پرداخت نامعتبر است</string>
+  <string name="charge_type">نوع شارژ</string>
+  <string name="operator">اپراتور</string>
+  <string name="trabord">ترابرد</string>
+
 </resources>

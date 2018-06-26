@@ -48,6 +48,7 @@ public class UserLoginResponse extends MessageHandler {
         G.currentServerTime = builder.getResponse().getTimestamp();
         G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod() * 1000;
         G.userLogin = true;
+        G.isMplActive = builder.getMplActive();
 
         /**
          * get Signaling Configuration

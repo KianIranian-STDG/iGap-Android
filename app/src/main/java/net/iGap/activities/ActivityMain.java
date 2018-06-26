@@ -37,6 +37,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -54,6 +55,8 @@ import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -65,7 +68,7 @@ import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
-import net.iGap.fragments.FragmentQrCodeNewDevice;
+import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
@@ -100,6 +103,7 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnMapRegisterStateMain;
+import net.iGap.interfaces.OnPayment;
 import net.iGap.interfaces.OnRefreshActivity;
 import net.iGap.interfaces.OnUnreadChange;
 import net.iGap.interfaces.OnUpdating;
@@ -135,6 +139,7 @@ import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
+import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.viewmodel.ActivityCallViewModel;
 import net.iGap.viewmodel.FragmentSettingViewModel;
 
@@ -144,6 +149,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import ir.pec.mpl.pecpayment.view.PaymentInitiator;
 
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
@@ -151,11 +157,14 @@ import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnUnreadChange, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
-
+    public static final int requestCodePaymentCharge = 1;
+    public static final int requestCodePaymentBill = 2;
+    public static final int requestCodeQrCode = 200;
+    public static final int requestCodeBarcode = 201;
 
     public static boolean isMenuButtonAddShown = false;
     public static boolean isOpenChatBeforeSheare = false;
@@ -731,6 +740,80 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case requestCodePaymentCharge:
+                Log.e("ddd", " requestCodePaymentCharge  " + "requestCode  : " + resultCode + "    resultCode : " + resultCode);
+                Log.e("ddd", " requestCodePaymentCharge   payment charge      " + data);
+                break;
+            case requestCodePaymentBill:
+                Log.e("ddd", " requestCodePaymentBill  " + "requestCode  : " + resultCode + "    resultCode : " + resultCode);
+                Log.e("ddd", " requestCodePaymentBill   payment charge      " + data);
+                break;
+            case requestCodeQrCode:
+                IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
+                if (result.getContents() != null) {
+                    new RequestUserVerifyNewDevice().verifyNewDevice(result.getContents());
+                }
+                break;
+        }
+    }
+
+    private void getPaymentResultCode(int resultCode, Intent data) {
+
+        // errorType
+        // 2  time out error
+        // 1000  no connection error
+        // 1001 server error
+        // 1002 network error
+        // 201  dialog canceled
+
+
+        switch (resultCode) {
+            case 1:
+                // payment ok
+                data.getStringExtra("enData");
+                data.getStringExtra("message");
+                String.valueOf(data.getIntExtra("status", 0));
+                break;
+            case 2:
+                //payment error
+                data.getIntExtra("errorType", 0);
+                String.valueOf(data.getIntExtra("OrderID", 0));
+                break;
+            case 3:
+                //bill payment ok
+                data.getStringExtra("enData");
+                data.getStringExtra("message");
+                String.valueOf(data.getIntExtra("status", 0));
+                break;
+            case 4:
+                //bill payment error
+                String.valueOf(data.getIntExtra("errorType", 0));
+                break;
+            case 5:
+                //internal error payment
+                String.valueOf(data.getIntExtra("errorType", 0));
+                String.valueOf(data.getIntExtra("OrderID", 0));
+                break;
+            case 6:
+                //internal error bill
+                String.valueOf(data.getIntExtra("errorType", 0));
+                break;
+            case 7:
+                break;
+            // charge payment ok
+            case 8:
+                break;
+            // charge payment error
+            case 9:
+                // internal error charge
+                break;
+        }
+    }
 
     //*******************************************************************************************************************************************
 
@@ -1318,6 +1401,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
+        ViewGroup itemNavPayment = (ViewGroup) findViewById(R.id.lm_ll_payment);
+        if (G.isMplActive) {
+            itemNavPayment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new HelperFragment(FragmentPayment.newInstance()).load();
+                    lockNavigation();
+                }
+            });
+        } else {
+            itemNavPayment.setVisibility(View.GONE);
+        }
+
+
         ViewGroup itemNavCall = (ViewGroup) findViewById(R.id.lm_ll_call);
 
         // gone or visible view call
@@ -1387,7 +1484,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     HelperPermission.getCameraPermission(ActivityMain.this, new OnGetPermission() {
                         @Override
                         public void Allow() throws IOException, IllegalStateException {
-                            new HelperFragment(FragmentQrCodeNewDevice.newInstance()).setStateLoss(true).load();
+                            IntentIntegrator integrator = new IntentIntegrator(ActivityMain.this);
+                            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+                            integrator.setRequestCode(requestCodeQrCode);
+                            integrator.setBeepEnabled(false);
+                            integrator.initiateScan();
                         }
 
                         @Override
@@ -2162,6 +2263,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
         G.onUnreadChange = this;
+        G.onPayment = this;
 
         startService(new Intent(this, ServiceContact.class));
 
@@ -2601,6 +2703,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     protected void onStop() {
         super.onStop();
         oldTime = System.currentTimeMillis();
+        G.onPayment = null;
     }
 
     @Override
@@ -2613,6 +2716,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
         });
+    }
+
+    @Override
+    public void onChargeToken(int status, String token, int expireTime) {
+        Intent intent = new Intent(ActivityMain.this, PaymentInitiator.class);
+        intent.putExtra("Type", "3");
+        intent.putExtra("Token", token);
+        startActivityForResult(intent, requestCodePaymentCharge);
+    }
+
+    @Override
+    public void onBillToken(int status, String token, int expireTime) {
+        Intent intent = new Intent(ActivityMain.this, PaymentInitiator.class);
+        intent.putExtra("Type", "2");
+        intent.putExtra("Token", token);
+        startActivityForResult(intent, requestCodePaymentBill);
     }
 
     public enum MainAction {

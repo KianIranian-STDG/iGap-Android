@@ -1214,5 +1214,39 @@
   <string name="install_app">Install App</string>
   <string name="text_top">To use the service: to install the application for the card, buy a bus ticket, purchase a charge, pay bills, buy a package and other payment services.</string>
   <string name="text_paygear">Follow up, pick up your wallet and instant cash deposit, pay your gifts, buy from stores and pay tax limousines.</string>
+  <string name="payment">Payment</string>
+  <string name="buy_charge">Buy a mobile charge</string>
+  <string name="pay_bills">Pay bills</string>
+  <string name="barcode_reader">Barcode reader</string>
+  <string name="billing_id">Billing ID</string>
+  <string name="enter">enter</string>
+  <string name="payment_code">Payment code</string>
+  <string name="amount">Amount(Rial)</string>
+  <string name="buy">Buy</string>
+  <string name="select">Select</string>
+  <string name="hamrahe_aval">Hamrahe Aval</string>
+  <string name="irancell">IranCell</string>
+  <string name="ritel">Ritel</string>
+  <string name="normal_charge">Normal charge</string>
+  <string name="amazing">Amazing charge</string>
+  <string name="wimax_charging">WiMAX charging</string>
+  <string name="permanently_charge">Charge the SIM card permanently</string>
+
+  <string name="charge_1">Charge 10,000 Rials</string>
+  <string name="charge_2">Charge 20,000 Rials</string>
+  <string name="charge_5">Charge 50,000 Rials</string>
+  <string name="charge_10">Charge 100,000 Rials</string>
+  <string name="charge_20">Charge 200,000 Rials</string>
+
+  <string name="charge_1_ir">10,000 Rials + 9% Value Added = 10,900 Rials</string>
+  <string name="charge_2_ir">20,000 Rials + 9% Value Added = 21,180 Rials</string>
+  <string name="charge_5_ir">50,000 Rials + 9% Value Added = 54,500 Rials</string>
+  <string name="charge_10_ir">100,000 Rials + 9% Value Added = 109,000 Rials</string>
+  <string name="charge_20_ir">200,000 Rials + 9% Value Added = 218,000 Rials</string>
+  <string name="biling_id_not_valid">Billing id is not valid</string>
+  <string name="pay_id_is_not_valid">Pay Id is not valid</string>
+  <string name="charge_type">Charge type</string>
+  <string name="operator">operator</string>
+  <string name="trabord">trabord</string>
 
 </resources>
