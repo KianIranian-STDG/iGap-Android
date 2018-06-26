@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
   <style name="Material_blackCustom" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="pageBackgroundTheme">@style/page_background_black</item>
     <item name="textColorTheme">@style/text_style_black</item>
     <item name="textColorMenuTheme">@style/text_style_menu_dark</item>
     <item name="iconColorMenuTheme">@style/icon_style_menu_dark</item>
     <item name="backgroundColorMenuTheme">@style/background_menu_dark</item>
-
     <item name="backgroundColorSettingTheme">@style/background_setting_dark</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_dark</item>
     <item name="textTitleColorSettingTheme">@style/text_title_style_setting_dark</item>
@@ -24,9 +22,7 @@
     <item name="md_dark_theme">true</item>
     <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
     <!--<item name="colorAccent">@color/colorOldBlack</item>-->
-
   </style>
-
 
   <style name="Material_lightCustom" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="pageBackgroundTheme">@style/page_background_light</item>
@@ -34,8 +30,6 @@
     <item name="textColorMenuTheme">@style/text_style_menu_light</item>
     <item name="iconColorMenuTheme">@style/icon_style_menu_light</item>
     <item name="backgroundColorMenuTheme">@style/background_menu_light</item>
-
-
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="textTitleColorSettingTheme">@style/text_title_style_setting_light</item>

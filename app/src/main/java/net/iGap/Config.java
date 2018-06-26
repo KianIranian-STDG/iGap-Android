@@ -1,16 +1,29 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap;
 
+import android.content.SharedPreferences;
 import android.text.format.DateUtils;
+
+import net.iGap.module.SHP_SETTING;
+
+import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.G.appBarColor;
+import static net.iGap.G.attachmentColor;
+import static net.iGap.G.canRunReceiver;
+import static net.iGap.G.context;
+import static net.iGap.G.headerTextColor;
+import static net.iGap.G.isDarkTheme;
+import static net.iGap.G.notificationColor;
+import static net.iGap.G.toggleButtonColor;
 
 public class Config {
 
@@ -71,6 +84,17 @@ public class Config {
     public static final String BASE64_PUBLIC_KEY =
             "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsm4sNLgDVqPf0ZxLWH3vkB1mPzHIkGWIJtNelibcTtzhipRv0iHeS3Z0wzeQpwYcMbkWQ81+WtgJwxUujitPOZnHvBex8qQLJ2JH33DvevWOgLDWPKEnKlfdi3Qg09pfO/Bx7eoWznWhRR6ZNjRgzY+P/2AaW77/f3wq3XHbHldM3jUrqwValwrWrkigIR0MFTkaGkg11T9JCFvO/L/FaZCAybuutje+H1nmNav3r8Xv6eBYS0nSVEm0dm5h46ECQi9PIxOCSMJ1McZMRkb8UaCScCAxh6lkD9fgZrOT5XQa8EOSWOwHx"
                     + "+uQWdR0efHyYbdC3A8zoJZjxBVtvVnDYwIDAQAB";
+
+
+    public static final int CUSTOM = 0;
+    public static final int DEFAULT = 1;
+    public static final int DARK = 2;
+    public static final int RED = 3;
+    public static final int PINK = 4;
+    public static final int PURPLE = 5;
+    public static final int DEEPPURPLE = 6;
+
+
     public static String default_appBarColor = "#00B0BF";
     public static String default_notificationColor = "#e51c23";
     public static String default_toggleButtonColor = "#00B0BF";
@@ -86,24 +110,158 @@ public class Config {
     public static String default_dark_headerTextColor = "#ffffff";
     public static String default_dark_progressColor = "#ffffff";
 
-    public static void darkThemeColor() {
-        G.backgroundTheme = "#151515";
-        G.textTitleTheme = "#ffffff";
-        G.textSubTheme = "#ffffff";
-        G.tintImage = "#ffffff";
-        G.backgroundTheme_2 = "#000000";
-        G.logLineTheme = "#4b4b4b";
-        G.voteIconTheme = "#cacaca";
-    }
+    public static String default_red_appBarColor = "#F44336";
+    public static String default_Pink_appBarColor = "#E91E63";
+    public static String default_purple_appBarColor = "#9C27B0";
+    public static String default_deepPurple_appBarColor = "#673AB7";
+    public static String lineView = "#52afafaf";
 
-    public static void lightThemeColor() {
-        G.backgroundTheme = "#FFFFFF";
-        G.textTitleTheme = "#000000";
-        G.textSubTheme = "#bbbbbb";
-        G.tintImage = "#000000";
-        G.backgroundTheme_2 = "#f9f9f9";
-        G.logLineTheme = "#e9e9e9";
-        G.voteIconTheme = "#696969";
+
+    public static void setThemeColor() {
+
+        SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        G.themeColor = preferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Config.DEFAULT);
+        G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
+
+        switch (G.themeColor) {
+            case CUSTOM:
+                appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
+                notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
+                toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor);
+                attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
+                headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
+                G.progressColor = preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor);
+
+                G.lineBorder = lineView;
+                G.backgroundTheme = "#FFFFFF";
+                G.backgroundTheme_2 = "#f9f9f9";
+                G.textTitleTheme = "#000000";
+                G.textSubTheme = "#bbbbbb";
+                G.tintImage = "#000000";
+                G.logLineTheme = "#e9e9e9";
+                G.voteIconTheme = "#696969";
+
+
+                break;
+            case DEFAULT:
+
+                appBarColor = Config.default_appBarColor;
+                notificationColor = Config.default_notificationColor;
+                toggleButtonColor = Config.default_toggleButtonColor;
+                attachmentColor = Config.default_attachmentColor;
+                headerTextColor = Config.default_headerTextColor;
+                G.progressColor = Config.default_progressColor;
+
+
+                G.lineBorder = lineView;
+                G.backgroundTheme = "#FFFFFF";
+                G.backgroundTheme_2 = "#f9f9f9";
+                G.textTitleTheme = "#000000";
+                G.textSubTheme = "#bbbbbb";
+                G.tintImage = "#000000";
+                G.logLineTheme = "#e9e9e9";
+                G.voteIconTheme = "#696969";
+
+                break;
+            case DARK:
+                appBarColor = Config.default_dark_appBarColor;
+                notificationColor = Config.default_dark_notificationColor;
+                toggleButtonColor = Config.default_dark_toggleButtonColor;
+                attachmentColor = Config.default_dark_attachmentColor;
+                headerTextColor = Config.default_dark_headerTextColor;
+                G.progressColor = Config.default_dark_progressColor;
+
+
+                G.lineBorder = lineView;
+                G.backgroundTheme = "#151515";
+                G.backgroundTheme_2 = "#000000";
+                G.textTitleTheme = "#ffffff";
+                G.textSubTheme = "#ffffff";
+                G.tintImage = "#ffffff";
+                G.logLineTheme = "#4b4b4b";
+                G.voteIconTheme = "#cacaca";
+
+                break;
+            case RED:
+                G.isDarkTheme = false;
+                appBarColor = Config.default_red_appBarColor;
+                notificationColor = default_red_appBarColor;
+                toggleButtonColor = default_red_appBarColor;
+                attachmentColor = default_red_appBarColor;
+                headerTextColor = default_red_appBarColor;
+                G.progressColor = default_red_appBarColor;
+
+
+                G.lineBorder = Config.default_red_appBarColor;
+                G.backgroundTheme = "#FFFFFF";
+                G.backgroundTheme_2 = "#f9f9f9";
+                G.textTitleTheme = "#000000";
+                G.textSubTheme = "#bbbbbb";
+                G.tintImage = "#000000";
+                G.logLineTheme = "#e9e9e9";
+                G.voteIconTheme = "#696969";
+                break;
+
+            case PINK:
+                G.isDarkTheme = false;
+                appBarColor = Config.default_Pink_appBarColor;
+                notificationColor = Config.default_Pink_appBarColor;
+                toggleButtonColor = Config.default_Pink_appBarColor;
+                attachmentColor = Config.default_Pink_appBarColor;
+                headerTextColor = Config.default_Pink_appBarColor;
+                G.progressColor = Config.default_Pink_appBarColor;
+
+
+                G.lineBorder = Config.default_Pink_appBarColor;
+                G.backgroundTheme = "#FFFFFF";
+                G.backgroundTheme_2 = "#f9f9f9";
+                G.textTitleTheme = "#000000";
+                G.textSubTheme = "#bbbbbb";
+                G.tintImage = "#000000";
+                G.logLineTheme = "#e9e9e9";
+                G.voteIconTheme = "#696969";
+                break;
+            case PURPLE:
+                G.isDarkTheme = false;
+                appBarColor = Config.default_purple_appBarColor;
+                notificationColor = Config.default_purple_appBarColor;
+                toggleButtonColor = Config.default_purple_appBarColor;
+                attachmentColor = Config.default_purple_appBarColor;
+                headerTextColor = Config.default_purple_appBarColor;
+                G.progressColor = Config.default_purple_appBarColor;
+
+
+                G.lineBorder = Config.default_purple_appBarColor;
+                G.backgroundTheme = "#FFFFFF";
+                G.backgroundTheme_2 = "#f9f9f9";
+                G.textTitleTheme = "#000000";
+                G.textSubTheme = "#bbbbbb";
+                G.tintImage = "#000000";
+                G.logLineTheme = "#e9e9e9";
+                G.voteIconTheme = "#696969";
+                break;
+            case DEEPPURPLE:
+                G.isDarkTheme = false;
+                appBarColor = Config.default_deepPurple_appBarColor;
+                notificationColor = Config.default_deepPurple_appBarColor;
+                toggleButtonColor = Config.default_deepPurple_appBarColor;
+                attachmentColor = Config.default_deepPurple_appBarColor;
+                headerTextColor = Config.default_deepPurple_appBarColor;
+                G.progressColor = Config.default_deepPurple_appBarColor;
+
+
+                G.lineBorder = Config.default_deepPurple_appBarColor;
+                G.backgroundTheme = "#FFFFFF";
+                G.backgroundTheme_2 = "#f9f9f9";
+                G.textTitleTheme = "#000000";
+                G.textSubTheme = "#bbbbbb";
+                G.tintImage = "#000000";
+                G.logLineTheme = "#e9e9e9";
+                G.voteIconTheme = "#696969";
+                break;
+
+
+        }
 
     }
 

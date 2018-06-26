@@ -450,7 +450,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 editor.apply();
             }
         }
-        SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         if (G.isDarkTheme) {
             this.setTheme(R.style.Material_blackCustom);
         } else {
@@ -1400,30 +1399,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 lockNavigation();
                 closeDrawer();
-            }
-        });
-        final ToggleButton toggleButton = findViewById(R.id.st_txt_st_toggle_theme_dark);
-        ViewGroup rootDarkTheme = (ViewGroup) findViewById(R.id.lt_txt_st_theme_dark);
-        rootDarkTheme.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleButton.performClick();
-            }
-        });
-        boolean checkedThemeDark = sharedPreferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
-
-        toggleButton.setChecked(checkedThemeDark);
-        toggleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                if (toggleButton.isChecked()) {
-                    FragmentSettingViewModel.setDarkTheme(editor);
-                } else {
-                    FragmentSettingViewModel.setLightTheme(editor);
-                }
             }
         });
 

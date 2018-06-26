@@ -121,6 +121,7 @@ public class G extends MultiDexApplication {
     public static String textTitleTheme;
     public static String textSubTheme;
     public static String tintImage;
+    public static String lineBorder;
     public static String menuBackgroundColor;
     public static String authorHash;
     public static String displayName;
@@ -155,6 +156,7 @@ public class G extends MultiDexApplication {
     public static boolean isAppRtl = false;
     public static boolean isLinkClicked = false;
     public static boolean isDarkTheme = false;
+    public static int themeColor;
     public static String selectedTabInMainActivity = "";
     public static int ivSize;
     public static int userTextSize = 0;
