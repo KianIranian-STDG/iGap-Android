@@ -797,7 +797,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         });
 
         fabGps = (FloatingActionButton) view.findViewById(st_fab_gps);
-        fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+        fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        fabGps.setColorFilter(Color.WHITE);
+
         fabGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -811,7 +813,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         });
 
         view.findViewById(R.id.backgroundToolbarMap).setBackgroundColor(Color.parseColor(G.appBarColor));
-        fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
 
         btnBack = (RippleView) view.findViewById(R.id.ripple_back_map);
         btnBack.setOnClickListener(new View.OnClickListener() {

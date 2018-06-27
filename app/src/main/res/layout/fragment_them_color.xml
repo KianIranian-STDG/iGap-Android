@@ -125,16 +125,36 @@
             android:background="@drawable/circle_color_notificatin_setting"
             android:gravity="center" />
 
-          <ImageView
-            android:id="@+id/theme_custom_2"
-            android:layout_width="@dimen/dp20"
-            android:layout_height="@dimen/dp20"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/circle_color_notificatin_setting"
-            android:gravity="center" />
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeDefault}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Default"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
 
           <ImageView
-            android:id="@+id/theme_custom_3"
+            android:id="@+id/theme_default_1"
             android:layout_width="@dimen/dp20"
             android:layout_height="@dimen/dp20"
             android:layout_gravity="center_vertical"
@@ -182,24 +202,6 @@
             android:background="@drawable/circle_color_notificatin_setting"
             android:gravity="center" />
 
-          <ImageView
-            android:id="@+id/theme_dark_2"
-            android:layout_width="@dimen/dp20"
-            android:layout_height="@dimen/dp20"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/circle_color_notificatin_setting"
-            android:gravity="center" />
-
-          <ImageView
-            android:id="@+id/theme_dark_3"
-            android:layout_width="@dimen/dp20"
-            android:layout_height="@dimen/dp20"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp4"
-            android:layout_marginRight="@dimen/dp4"
-            android:background="@drawable/circle_color_notificatin_setting"
-            android:gravity="center" />
-
 
         </LinearLayout>
 
@@ -239,23 +241,7 @@
             android:background="@drawable/circle_color_notificatin_setting"
             android:gravity="center" />
 
-          <ImageView
-            android:id="@+id/theme_red_2"
-            android:layout_width="@dimen/dp20"
-            android:layout_height="@dimen/dp20"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/circle_color_notificatin_setting"
-            android:gravity="center" />
 
-          <ImageView
-            android:id="@+id/theme_red_3"
-            android:layout_width="@dimen/dp20"
-            android:layout_height="@dimen/dp20"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp4"
-            android:layout_marginRight="@dimen/dp4"
-            android:background="@drawable/circle_color_notificatin_setting"
-            android:gravity="center" />
         </LinearLayout>
 
         <View
@@ -295,16 +281,37 @@
             android:background="@drawable/circle_color_notificatin_setting"
             android:gravity="center" />
 
-          <ImageView
-            android:id="@+id/theme_pink_2"
-            android:layout_width="@dimen/dp20"
-            android:layout_height="@dimen/dp20"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/circle_color_notificatin_setting"
-            android:gravity="center" />
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemePurple}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Purple"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
 
           <ImageView
-            android:id="@+id/theme_pink_3"
+            android:id="@+id/theme_Purple_1"
             android:layout_width="@dimen/dp20"
             android:layout_height="@dimen/dp20"
             android:layout_gravity="center_vertical"
@@ -312,12 +319,639 @@
             android:layout_marginRight="@dimen/dp4"
             android:background="@drawable/circle_color_notificatin_setting"
             android:gravity="center" />
+
+
         </LinearLayout>
 
         <View
           style="?lineColorSettingTheme"
           android:layout_width="match_parent"
           android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeDeepPurple}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Deep Purple"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_deep_purple_1"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeIndigo}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Indigo"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_Indigo"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeBlue}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Blue"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_blue"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeLightBlue}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Light Blue"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_light_blue"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeCyan}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Cyan"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_cyan"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeTeal}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Teal"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_teal"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeGreen}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Green"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_green"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeLightGreen}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Light Green"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_light_green"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeLime}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Lime"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_lime"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeYellow}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Yellow"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_yellow"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeAmber}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Amber"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_amber"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeOrange}"
+          android:orientation="horizontal">
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Orange"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_orange"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeDeepOrange}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Deep Orange"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_deep_orange"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeBrown}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Brown"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_brown"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeGrey}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Grey"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_grey"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeBlueGrey}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Blue Grey"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <ImageView
+            android:id="@+id/theme_blue_grey"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
 
       </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

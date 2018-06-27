@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
@@ -31,6 +32,7 @@ import android.widget.TextView;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -710,10 +712,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.RIGHT;
+        LinearLayout root = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer);
 
-        ((LinearLayout.LayoutParams) holder.itemView.findViewById(R.id.contentContainer).getLayoutParams()).gravity = Gravity.RIGHT;
+        ((LinearLayout.LayoutParams) root.getLayoutParams()).gravity = Gravity.RIGHT;
 
-        LinearLayout timeLayout = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer).getParent();
+        LinearLayout timeLayout = (LinearLayout) root.getParent();
         timeLayout.setGravity(Gravity.RIGHT);
 
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
@@ -749,11 +752,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 setTextColor(imgTick, R.color.colorOldBlack);
             }
         }
+
+
         if (G.isDarkTheme) {
             ((View) (holder.itemView.findViewById(R.id.contentContainer)).getParent()).setBackgroundResource(R.drawable.rectangle_send_round_color_dark);
         } else {
             ((View) (holder.itemView.findViewById(R.id.contentContainer)).getParent()).setBackgroundResource(R.drawable.rectangle_send_round_color);
         }
+        GradientDrawable circleDarkColor = (GradientDrawable) ((View) root.getParent()).getBackground();
+        circleDarkColor.setColor(Color.parseColor(G.bubbleChat));
 
         /**
          * add main layout margin to prevent getting match parent completely

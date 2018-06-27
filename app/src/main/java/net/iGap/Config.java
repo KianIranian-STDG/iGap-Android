@@ -93,6 +93,21 @@ public class Config {
     public static final int PINK = 4;
     public static final int PURPLE = 5;
     public static final int DEEPPURPLE = 6;
+    public static final int INDIGO = 7;
+    public static final int BLUE = 8;
+    public static final int LIGHT_BLUE = 9;
+    public static final int CYAN = 10;
+    public static final int TEAL = 11;
+    public static final int GREEN = 12;
+    public static final int LIGHT_GREEN = 13;
+    public static final int LIME = 14;
+    public static final int YELLLOW = 15;
+    public static final int AMBER = 16;
+    public static final int ORANGE = 17;
+    public static final int DEEP_ORANGE = 18;
+    public static final int BROWN = 19;
+    public static final int GREY = 20;
+    public static final int BLUE_GREY = 21;
 
 
     public static String default_appBarColor = "#00B0BF";
@@ -114,6 +129,21 @@ public class Config {
     public static String default_Pink_appBarColor = "#E91E63";
     public static String default_purple_appBarColor = "#9C27B0";
     public static String default_deepPurple_appBarColor = "#673AB7";
+    public static String default_indigo_appBarColor = "#3F51B5";
+    public static String default_blue_appBarColor = "#2196F3";
+    public static String default_lightBlue_appBarColor = "#03A9F4";
+    public static String default_cyan_appBarColor = "#00BCD4";
+    public static String default_teal_appBarColor = "#009688";
+    public static String default_green_appBarColor = "#388E3C";
+    public static String default_lightGreen_appBarColor = "#689F38";
+    public static String default_lime_appBarColor = "#AFB42B";
+    public static String default_yellow_appBarColor = "#FBC02D";
+    public static String default_amber_appBarColor = "#FFA000";
+    public static String default_orange_appBarColor = "#F57C00";
+    public static String default_deepOrange_appBarColor = "#E64A19";
+    public static String default_brown_appBarColor = "#5D4037";
+    public static String default_grey_appBarColor = "#616161";
+    public static String default_blueGrey_appBarColor = "#455A64";
     public static String lineView = "#52afafaf";
 
 
@@ -125,143 +155,477 @@ public class Config {
 
         switch (G.themeColor) {
             case CUSTOM:
-                appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
-                notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
-                toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor);
-                attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
-                headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
-                G.progressColor = preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor);
-
-                G.lineBorder = lineView;
-                G.backgroundTheme = "#FFFFFF";
-                G.backgroundTheme_2 = "#f9f9f9";
-                G.textTitleTheme = "#000000";
-                G.textSubTheme = "#bbbbbb";
-                G.tintImage = "#000000";
-                G.logLineTheme = "#e9e9e9";
-                G.voteIconTheme = "#696969";
-
+                setColor(false,
+                        preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor),
+                        preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor),
+                        toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor),
+                        preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor),
+                        preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor),
+                        preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor),
+                        G.appBarColor,
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        "#e679dde6",
+                        "#00BCD4"
+                );
 
                 break;
             case DEFAULT:
-
-                appBarColor = Config.default_appBarColor;
-                notificationColor = Config.default_notificationColor;
-                toggleButtonColor = Config.default_toggleButtonColor;
-                attachmentColor = Config.default_attachmentColor;
-                headerTextColor = Config.default_headerTextColor;
-                G.progressColor = Config.default_progressColor;
-
-
-                G.lineBorder = lineView;
-                G.backgroundTheme = "#FFFFFF";
-                G.backgroundTheme_2 = "#f9f9f9";
-                G.textTitleTheme = "#000000";
-                G.textSubTheme = "#bbbbbb";
-                G.tintImage = "#000000";
-                G.logLineTheme = "#e9e9e9";
-                G.voteIconTheme = "#696969";
+                setColor(false,
+                        Config.default_appBarColor,
+                        Config.default_notificationColor,
+                        Config.default_toggleButtonColor,
+                        Config.default_attachmentColor,
+                        Config.default_headerTextColor,
+                        Config.default_progressColor,
+                        lineView,
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        "#e679dde6",
+                        "#00BCD4"
+                );
 
                 break;
             case DARK:
-                appBarColor = Config.default_dark_appBarColor;
-                notificationColor = Config.default_dark_notificationColor;
-                toggleButtonColor = Config.default_dark_toggleButtonColor;
-                attachmentColor = Config.default_dark_attachmentColor;
-                headerTextColor = Config.default_dark_headerTextColor;
-                G.progressColor = Config.default_dark_progressColor;
-
-
-                G.lineBorder = lineView;
-                G.backgroundTheme = "#151515";
-                G.backgroundTheme_2 = "#000000";
-                G.textTitleTheme = "#ffffff";
-                G.textSubTheme = "#ffffff";
-                G.tintImage = "#ffffff";
-                G.logLineTheme = "#4b4b4b";
-                G.voteIconTheme = "#cacaca";
+                setColor(true,
+                        Config.default_dark_appBarColor,
+                        Config.default_dark_notificationColor,
+                        Config.default_dark_toggleButtonColor,
+                        Config.default_dark_attachmentColor,
+                        Config.default_dark_headerTextColor,
+                        Config.default_dark_progressColor,
+                        "#313131",
+                        "#151515",
+                        "#000000",
+                        "#ffffff",
+                        "#ffffff",
+                        "#ffffff",
+                        "#4b4b4b",
+                        "#cacaca",
+                        "#151515",
+                        "#9E9E9E"
+                );
 
                 break;
             case RED:
-                G.isDarkTheme = false;
-                appBarColor = Config.default_red_appBarColor;
-                notificationColor = default_red_appBarColor;
-                toggleButtonColor = default_red_appBarColor;
-                attachmentColor = default_red_appBarColor;
-                headerTextColor = default_red_appBarColor;
-                G.progressColor = default_red_appBarColor;
-
-
-                G.lineBorder = Config.default_red_appBarColor;
-                G.backgroundTheme = "#FFFFFF";
-                G.backgroundTheme_2 = "#f9f9f9";
-                G.textTitleTheme = "#000000";
-                G.textSubTheme = "#bbbbbb";
-                G.tintImage = "#000000";
-                G.logLineTheme = "#e9e9e9";
-                G.voteIconTheme = "#696969";
+                setColor(false,
+                        Config.default_red_appBarColor,
+                        Config.default_red_appBarColor,
+                        Config.default_red_appBarColor,
+                        Config.default_red_appBarColor,
+                        Config.default_red_appBarColor,
+                        Config.default_red_appBarColor,
+                        "#ffcdd2",// is set
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_red_appBarColor,
+                        "#FF5252"
+                );
                 break;
-
             case PINK:
-                G.isDarkTheme = false;
-                appBarColor = Config.default_Pink_appBarColor;
-                notificationColor = Config.default_Pink_appBarColor;
-                toggleButtonColor = Config.default_Pink_appBarColor;
-                attachmentColor = Config.default_Pink_appBarColor;
-                headerTextColor = Config.default_Pink_appBarColor;
-                G.progressColor = Config.default_Pink_appBarColor;
-
-
-                G.lineBorder = Config.default_Pink_appBarColor;
-                G.backgroundTheme = "#FFFFFF";
-                G.backgroundTheme_2 = "#f9f9f9";
-                G.textTitleTheme = "#000000";
-                G.textSubTheme = "#bbbbbb";
-                G.tintImage = "#000000";
-                G.logLineTheme = "#e9e9e9";
-                G.voteIconTheme = "#696969";
+                setColor(false,
+                        Config.default_Pink_appBarColor,
+                        Config.default_Pink_appBarColor,
+                        Config.default_Pink_appBarColor,
+                        Config.default_Pink_appBarColor,
+                        Config.default_Pink_appBarColor,
+                        Config.default_Pink_appBarColor,
+                        "#f8bbd0",// is set
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_Pink_appBarColor,
+                        "#FF4081"
+                );
                 break;
             case PURPLE:
-                G.isDarkTheme = false;
-                appBarColor = Config.default_purple_appBarColor;
-                notificationColor = Config.default_purple_appBarColor;
-                toggleButtonColor = Config.default_purple_appBarColor;
-                attachmentColor = Config.default_purple_appBarColor;
-                headerTextColor = Config.default_purple_appBarColor;
-                G.progressColor = Config.default_purple_appBarColor;
-
-
-                G.lineBorder = Config.default_purple_appBarColor;
-                G.backgroundTheme = "#FFFFFF";
-                G.backgroundTheme_2 = "#f9f9f9";
-                G.textTitleTheme = "#000000";
-                G.textSubTheme = "#bbbbbb";
-                G.tintImage = "#000000";
-                G.logLineTheme = "#e9e9e9";
-                G.voteIconTheme = "#696969";
+                setColor(false,
+                        Config.default_purple_appBarColor,
+                        Config.default_purple_appBarColor,
+                        Config.default_purple_appBarColor,
+                        Config.default_purple_appBarColor,
+                        Config.default_purple_appBarColor,
+                        Config.default_purple_appBarColor,
+                        "#e1bee7",// is set
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_purple_appBarColor,
+                        "#E040FB"
+                );
                 break;
             case DEEPPURPLE:
-                G.isDarkTheme = false;
-                appBarColor = Config.default_deepPurple_appBarColor;
-                notificationColor = Config.default_deepPurple_appBarColor;
-                toggleButtonColor = Config.default_deepPurple_appBarColor;
-                attachmentColor = Config.default_deepPurple_appBarColor;
-                headerTextColor = Config.default_deepPurple_appBarColor;
-                G.progressColor = Config.default_deepPurple_appBarColor;
-
-
-                G.lineBorder = Config.default_deepPurple_appBarColor;
-                G.backgroundTheme = "#FFFFFF";
-                G.backgroundTheme_2 = "#f9f9f9";
-                G.textTitleTheme = "#000000";
-                G.textSubTheme = "#bbbbbb";
-                G.tintImage = "#000000";
-                G.logLineTheme = "#e9e9e9";
-                G.voteIconTheme = "#696969";
+                setColor(false,
+                        Config.default_deepPurple_appBarColor,
+                        Config.default_deepPurple_appBarColor,
+                        Config.default_deepPurple_appBarColor,
+                        Config.default_deepPurple_appBarColor,
+                        Config.default_deepPurple_appBarColor,
+                        Config.default_deepPurple_appBarColor,
+                        "#d1c4e9",// is set
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_deepPurple_appBarColor,
+                        "#7C4DFF"
+                );
+                break;
+            case INDIGO:
+                setColor(false,
+                        Config.default_indigo_appBarColor,
+                        Config.default_indigo_appBarColor,
+                        Config.default_indigo_appBarColor,
+                        Config.default_indigo_appBarColor,
+                        Config.default_indigo_appBarColor,
+                        Config.default_indigo_appBarColor,
+                        "#c5cae9",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_indigo_appBarColor,
+                        "#536DFE"//fab bottom
+                );
+                break;
+            case BLUE:
+                setColor(false,
+                        Config.default_blue_appBarColor,
+                        Config.default_blue_appBarColor,
+                        Config.default_blue_appBarColor,
+                        Config.default_blue_appBarColor,
+                        Config.default_blue_appBarColor,
+                        Config.default_blue_appBarColor,
+                        "#bbdefb",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_blue_appBarColor,
+                        "#03A9F4"//fab bottom
+                );
                 break;
 
+            case LIGHT_BLUE:
+                setColor(false,
+                        Config.default_lightBlue_appBarColor,
+                        Config.default_lightBlue_appBarColor,
+                        Config.default_lightBlue_appBarColor,
+                        Config.default_lightBlue_appBarColor,
+                        Config.default_lightBlue_appBarColor,
+                        Config.default_lightBlue_appBarColor,
+                        "#b3e5fc",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_lightBlue_appBarColor,
+                        "#03A9F4"//fab bottom
+                );
+                break;
 
+            case CYAN:
+                setColor(false,
+                        Config.default_cyan_appBarColor,
+                        Config.default_cyan_appBarColor,
+                        Config.default_cyan_appBarColor,
+                        Config.default_cyan_appBarColor,
+                        Config.default_cyan_appBarColor,
+                        Config.default_cyan_appBarColor,
+                        "#b2ebf2",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_cyan_appBarColor,
+                        "#00BCD4"//fab bottom
+                );
+                break;
+            case TEAL:
+                setColor(false,
+                        Config.default_teal_appBarColor,
+                        Config.default_teal_appBarColor,
+                        Config.default_teal_appBarColor,
+                        Config.default_teal_appBarColor,
+                        Config.default_teal_appBarColor,
+                        Config.default_teal_appBarColor,
+                        "#b2dfdb",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_teal_appBarColor,
+                        "#009688"//fab bottom
+                );
+                break;
+            case GREEN:
+                setColor(false,
+                        Config.default_green_appBarColor,
+                        Config.default_green_appBarColor,
+                        Config.default_green_appBarColor,
+                        Config.default_green_appBarColor,
+                        Config.default_green_appBarColor,
+                        Config.default_green_appBarColor,
+                        "#c8e6c9",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_green_appBarColor,
+                        "#4CAF50"//fab bottom
+                );
+                break;
+            case LIGHT_GREEN:
+                setColor(false,
+                        Config.default_lightGreen_appBarColor,
+                        Config.default_lightGreen_appBarColor,
+                        Config.default_lightGreen_appBarColor,
+                        Config.default_lightGreen_appBarColor,
+                        Config.default_lightGreen_appBarColor,
+                        Config.default_lightGreen_appBarColor,
+                        "#dcedc8",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_lightGreen_appBarColor,
+                        "#8BC34A"//fab bottom
+                );
+                break;
+            case LIME:
+                setColor(false,
+                        Config.default_lime_appBarColor,
+                        Config.default_lime_appBarColor,
+                        Config.default_lime_appBarColor,
+                        Config.default_lime_appBarColor,
+                        Config.default_lime_appBarColor,
+                        Config.default_lime_appBarColor,
+                        "#f0f4c3",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_lime_appBarColor,
+                        "#CDDC39"//fab bottom
+                );
+                break;
+
+            case YELLLOW:
+                setColor(false,
+                        Config.default_yellow_appBarColor,
+                        Config.default_yellow_appBarColor,
+                        Config.default_yellow_appBarColor,
+                        Config.default_yellow_appBarColor,
+                        Config.default_yellow_appBarColor,
+                        Config.default_yellow_appBarColor,
+                        "#fff9c4",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_yellow_appBarColor,
+                        "#FFEB3B"//fab bottom
+                );
+                break;
+            case AMBER:
+                setColor(false,
+                        Config.default_amber_appBarColor,
+                        Config.default_amber_appBarColor,
+                        Config.default_amber_appBarColor,
+                        Config.default_amber_appBarColor,
+                        Config.default_amber_appBarColor,
+                        Config.default_amber_appBarColor,
+                        "#ffecb3",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_amber_appBarColor,
+                        "#FFC107"//fab bottom
+                );
+                break;
+            case ORANGE:
+                setColor(false,
+                        Config.default_orange_appBarColor,
+                        Config.default_orange_appBarColor,
+                        Config.default_orange_appBarColor,
+                        Config.default_orange_appBarColor,
+                        Config.default_orange_appBarColor,
+                        Config.default_orange_appBarColor,
+                        "#ffe0b2",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_orange_appBarColor,
+                        "#FFC107"//fab bottom
+                );
+                break;
+
+            case DEEP_ORANGE:
+                setColor(false,
+                        Config.default_deepOrange_appBarColor,
+                        Config.default_deepOrange_appBarColor,
+                        Config.default_deepOrange_appBarColor,
+                        Config.default_deepOrange_appBarColor,
+                        Config.default_deepOrange_appBarColor,
+                        Config.default_deepOrange_appBarColor,
+                        "#ffccbc",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_deepOrange_appBarColor,
+                        "#FF9800"//fab bottom
+                );
+                break;
+
+            case BROWN:
+                setColor(false,
+                        Config.default_brown_appBarColor,
+                        Config.default_brown_appBarColor,
+                        Config.default_brown_appBarColor,
+                        Config.default_brown_appBarColor,
+                        Config.default_brown_appBarColor,
+                        Config.default_brown_appBarColor,
+                        "#d7ccc8",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_brown_appBarColor,
+                        "#795548"//fab bottom
+                );
+                break;
+            case GREY:
+                setColor(false,
+                        Config.default_deepOrange_appBarColor,
+                        Config.default_grey_appBarColor,
+                        Config.default_grey_appBarColor,
+                        Config.default_grey_appBarColor,
+                        Config.default_grey_appBarColor,
+                        Config.default_grey_appBarColor,
+                        "#f5f5f5",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_grey_appBarColor,
+                        "#9E9E9E"//fab bottom
+                );
+                break;
+            case BLUE_GREY:
+                setColor(false,
+                        Config.default_blueGrey_appBarColor,
+                        Config.default_blueGrey_appBarColor,
+                        Config.default_blueGrey_appBarColor,
+                        Config.default_blueGrey_appBarColor,
+                        Config.default_blueGrey_appBarColor,
+                        Config.default_blueGrey_appBarColor,
+                        "#cfd8dc",// line
+                        "#FFFFFF",
+                        "#f9f9f9",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#696969",
+                        Config.default_blueGrey_appBarColor,
+                        "#607D8B"//fab bottom
+                );
+                break;
         }
+    }
+
+    private static void setColor(boolean isDarkTheme, String... color) {
+
+        G.isDarkTheme = isDarkTheme;
+
+        appBarColor = color[0];
+        notificationColor = color[1];
+        toggleButtonColor = color[2];
+        attachmentColor = color[3];
+        headerTextColor = color[4];
+        G.progressColor = color[5];
+
+        G.lineBorder = color[6];// ok
+        G.backgroundTheme = color[7];
+        G.backgroundTheme_2 = color[8];
+        G.textTitleTheme = color[9];
+        G.textSubTheme = color[10];
+        G.tintImage = color[11];
+        G.logLineTheme = color[12];
+        G.voteIconTheme = color[13];
+        G.bubbleChat = color[14];
+        G.fabBottom = color[15];
 
     }
 

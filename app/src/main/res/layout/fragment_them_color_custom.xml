@@ -69,7 +69,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="left|center"
             android:text="@string/app_theme"
             android:textColor="@color/whit_background"
             android:textSize="@dimen/dp18"

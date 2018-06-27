@@ -109,6 +109,8 @@ public class G extends MultiDexApplication {
     public static String selectedLanguage = "en";
     public static String symmetricMethod;
     public static String appBarColor; // default color
+    public static String bubbleChat; // default color
+    public static String fabBottom; // default color
     public static String notificationColor;
     public static String toggleButtonColor;
     public static String attachmentColor;

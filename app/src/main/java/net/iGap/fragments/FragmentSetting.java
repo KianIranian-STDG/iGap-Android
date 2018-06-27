@@ -3,6 +3,7 @@ package net.iGap.fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -147,6 +148,8 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         };
 
 
+        fragmentSettingBinding.stFabSetPic.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        fragmentSettingBinding.stFabSetPic.setColorFilter(Color.WHITE);
 
         fragmentSettingBinding.stFabSetPic.setOnClickListener(new View.OnClickListener() {
             @Override
