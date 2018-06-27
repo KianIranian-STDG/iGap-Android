@@ -306,33 +306,15 @@ public final class StartupActions {
             editor.apply();
         }
 
-        G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
+//        G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
 
         boolean isDisableAutoDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_DISABLE_TIME_DARK_THEME, true);
         if (!isDisableAutoDarkTheme) {
             checkTimeForAutoTheme(preferences);
         }
 
-        if (G.isDarkTheme) {
-            appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR_DARK, Config.default_dark_appBarColor);
-            notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR_DARK, Config.default_dark_notificationColor);
-            toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR_DARK, Config.default_dark_toggleButtonColor);
-            attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR_DARK, Config.default_dark_attachmentColor);
-            headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR_DARK, Config.default_dark_headerTextColor);
-            G.progressColor = preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR_DARK, Config.default_dark_progressColor);
+        Config.setThemeColor();
 
-            Config.darkThemeColor();
-
-        } else {
-            appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
-            notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
-            toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor);
-            attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
-            headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
-            G.progressColor = preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor);
-
-            Config.lightThemeColor();
-        }
         G.multiTab = preferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
 
         // setting for show layout vote in channel

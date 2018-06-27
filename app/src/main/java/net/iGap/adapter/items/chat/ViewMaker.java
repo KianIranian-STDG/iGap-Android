@@ -1774,7 +1774,7 @@ public class ViewMaker {
         linearLayout_849.addView(linearLayout_938);
 
         View textView_186 = new View(G.context);
-        textView_186.setBackgroundColor(Color.parseColor("#52afafaf"));
+        textView_186.setBackgroundColor(Color.parseColor(G.lineBorder));
         LinearLayout.LayoutParams layout_552 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
         textView_186.setLayoutParams(layout_552);
         linearLayout_849.addView(textView_186);

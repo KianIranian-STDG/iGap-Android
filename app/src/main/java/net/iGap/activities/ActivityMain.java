@@ -55,6 +55,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -66,6 +67,7 @@ import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentQrCodeNewDevice;
 import net.iGap.fragments.FragmentSetting;
+import net.iGap.fragments.FragmentThemColor;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
@@ -136,6 +138,7 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.viewmodel.ActivityCallViewModel;
 import net.iGap.viewmodel.FragmentSettingViewModel;
+import net.iGap.viewmodel.FragmentThemColorViewModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -448,7 +451,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 editor.apply();
             }
         }
-        SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         if (G.isDarkTheme) {
             this.setTheme(R.style.Material_blackCustom);
         } else {
@@ -1381,6 +1383,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 closeDrawer();
             }
         });
+
         final ToggleButton toggleButton = findViewById(R.id.st_txt_st_toggle_theme_dark);
         ViewGroup rootDarkTheme = (ViewGroup) findViewById(R.id.lt_txt_st_theme_dark);
         rootDarkTheme.setOnClickListener(new View.OnClickListener() {
@@ -1391,17 +1394,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
         boolean checkedThemeDark = sharedPreferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
 
-        toggleButton.setChecked(checkedThemeDark);
+        toggleButton.setChecked(G.isDarkTheme);
         toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-
                 if (toggleButton.isChecked()) {
-                    FragmentSettingViewModel.setDarkTheme(editor);
+
+                    int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Config.CUSTOM);
+                    editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Config.DARK);
+                    editor.putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeColor);
+                    editor.apply();
+                    Config.setThemeColor();
+                    FragmentThemColorViewModel.resetApp();
                 } else {
-                    FragmentSettingViewModel.setLightTheme(editor);
+                    int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_OLD_THEME_COLOR, Config.CUSTOM);
+
+                    editor.putInt(SHP_SETTING.KEY_THEME_COLOR, themeColor);
+                    editor.apply();
+                    Config.setThemeColor();
+                    FragmentThemColorViewModel.resetApp();
+
                 }
             }
         });

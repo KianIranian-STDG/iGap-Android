@@ -3,7 +3,9 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -241,6 +243,9 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
         });
 
         FloatingActionButton fab = fragmentGroupProfileBinding.agpFabSetPic;
+        fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        fab.setColorFilter(Color.WHITE);
+
         if (fragmentGroupProfileViewModel.role == GroupChatRole.OWNER || fragmentGroupProfileViewModel.role == GroupChatRole.ADMIN) {
             fab.setVisibility(View.VISIBLE);
             //
