@@ -8,76 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:780057141561:android:e932dced2d092311",
-        "android_client_info": {
-          "package_name": "iGap.Plus"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "780057141561-etdtrh2c8au993nmrigoj0jfjoplu3t8.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "780057141561-etdtrh2c8au993nmrigoj0jfjoplu3t8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDJlUADMuvqi9xv4KiGkPqY69ULf8FMmxA"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:780057141561:android:8a619a5df1daefc1",
-        "android_client_info": {
-          "package_name": "nejati.test"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "780057141561-etdtrh2c8au993nmrigoj0jfjoplu3t8.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "780057141561-etdtrh2c8au993nmrigoj0jfjoplu3t8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDJlUADMuvqi9xv4KiGkPqY69ULf8FMmxA"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:780057141561:android:69c59b7595e50096",
         "android_client_info": {
           "package_name": "net.iGap"
@@ -100,7 +30,10 @@
       ],
       "services": {
         "analytics_service": {
-          "status": 1
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-89789834-5"
+          }
         },
         "appinvite_service": {
           "status": 1,
