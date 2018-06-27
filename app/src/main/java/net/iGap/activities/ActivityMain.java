@@ -418,7 +418,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
-        if (userInfo == null) { // user registered before
+        if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
             isNeedToRegister = true;
             Intent intent = new Intent(this, ActivityRegisteration.class);
             startActivity(intent);

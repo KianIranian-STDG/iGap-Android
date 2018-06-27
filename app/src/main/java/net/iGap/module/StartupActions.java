@@ -463,7 +463,7 @@ public final class StartupActions {
 
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
 
-        if (userInfo != null) {
+        if (userInfo != null && userInfo.getUserRegistrationState()) {
 
             userId = userInfo.getUserId();
             G.isPassCode = userInfo.isPassCode();
