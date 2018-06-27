@@ -808,15 +808,21 @@ public class HelperUrl {
         if (rm != null) {
             openChat(username, type, user, room, chatEntry, messageId);
         } else {
-            new RequestClientGetRoomMessage().clientGetRoomMessage(room.getId(), messageId);
-            G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
-                @Override
-                public void onClientGetRoomMessageResponse(final long messageId) {
-                    RealmRoomMessage.setGap(messageId);
-                    G.onClientGetRoomMessage = null;
-                    openChat(username, type, user, room, chatEntry, messageId);
-                }
-            };
+
+            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
+            if (realmRoom == null || realmRoom.isDeleted()) {
+                openChat(username, type, user, room, chatEntry, messageId);
+            } else {
+                new RequestClientGetRoomMessage().clientGetRoomMessage(room.getId(), messageId);
+                G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
+                    @Override
+                    public void onClientGetRoomMessageResponse(final long messageId) {
+                        RealmRoomMessage.setGap(messageId);
+                        G.onClientGetRoomMessage = null;
+                        openChat(username, type, user, room, chatEntry, messageId);
+                    }
+                };
+            }
         }
         realm.close();
     }
