@@ -18,10 +18,8 @@ import net.iGap.module.SHP_SETTING;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.appBarColor;
 import static net.iGap.G.attachmentColor;
-import static net.iGap.G.canRunReceiver;
 import static net.iGap.G.context;
 import static net.iGap.G.headerTextColor;
-import static net.iGap.G.isDarkTheme;
 import static net.iGap.G.notificationColor;
 import static net.iGap.G.toggleButtonColor;
 
@@ -171,7 +169,9 @@ public class Config {
                         "#e9e9e9",
                         "#696969",
                         "#e679dde6",
-                        "#00BCD4"
+                        "#00BCD4",
+                        "FFFFFF",
+                        G.appBarColor
                 );
 
                 break;
@@ -192,6 +192,7 @@ public class Config {
                         "#e9e9e9",
                         "#696969",
                         "#e679dde6",
+                        "#FFFFFF",
                         "#00BCD4"
                 );
 
@@ -213,7 +214,8 @@ public class Config {
                         "#4b4b4b",
                         "#cacaca",
                         "#151515",
-                        "#9E9E9E"
+                        "#c7101010",
+                        "#2A2A2A"
                 );
 
                 break;
@@ -233,7 +235,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_red_appBarColor,
+                        "#D32F2F",
+                        "#FF5252",
                         "#FF5252"
                 );
                 break;
@@ -253,7 +256,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_Pink_appBarColor,
+                        "#C2185B",
+                        "#FF4081",
                         "#FF4081"
                 );
                 break;
@@ -273,7 +277,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_purple_appBarColor,
+                        "#7B1FA2",
+                        "#E040FB",
                         "#E040FB"
                 );
                 break;
@@ -293,7 +298,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_deepPurple_appBarColor,
+                        "#512DA8",
+                        "#7C4DFF",
                         "#7C4DFF"
                 );
                 break;
@@ -313,7 +319,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_indigo_appBarColor,
+                        "#303F9F",
+                        "#536DFE",
                         "#536DFE"//fab bottom
                 );
                 break;
@@ -333,7 +340,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_blue_appBarColor,
+                        "#1976D2",
+                        "#448AFF",
                         "#03A9F4"//fab bottom
                 );
                 break;
@@ -354,7 +362,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_lightBlue_appBarColor,
+                        "#0288D1",
+                        "#03A9F4",
                         "#03A9F4"//fab bottom
                 );
                 break;
@@ -375,7 +384,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_cyan_appBarColor,
+                        "#0097A7",
+                        "#00BCD4",
                         "#00BCD4"//fab bottom
                 );
                 break;
@@ -395,7 +405,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_teal_appBarColor,
+                        "#00796B",
+                        "#009688",
                         "#009688"//fab bottom
                 );
                 break;
@@ -415,7 +426,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_green_appBarColor,
+                        "#388E3C",
+                        "#4CAF50",
                         "#4CAF50"//fab bottom
                 );
                 break;
@@ -435,7 +447,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_lightGreen_appBarColor,
+                        "#689F38",
+                        "#8BC34A",
                         "#8BC34A"//fab bottom
                 );
                 break;
@@ -455,7 +468,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_lime_appBarColor,
+                        "#AFB42B",
+                        "#CDDC39",
                         "#CDDC39"//fab bottom
                 );
                 break;
@@ -476,7 +490,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_yellow_appBarColor,
+                        "#FBC02D",
+                        "#FFEB3B",
                         "#FFEB3B"//fab bottom
                 );
                 break;
@@ -496,7 +511,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_amber_appBarColor,
+                        "#FFA000",
+                        "#FFC107",
                         "#FFC107"//fab bottom
                 );
                 break;
@@ -516,8 +532,9 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_orange_appBarColor,
-                        "#FFC107"//fab bottom
+                        "#F57C00",
+                        "#FF9800",
+                        "#FF9800"//fab bottom
                 );
                 break;
 
@@ -537,8 +554,9 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_deepOrange_appBarColor,
-                        "#FF9800"//fab bottom
+                        "#E64A19",
+                        "#FF5722",
+                        "#FF5722"//fab bottom
                 );
                 break;
 
@@ -558,7 +576,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_brown_appBarColor,
+                        "#5D4037",
+                        "#795548",
                         "#795548"//fab bottom
                 );
                 break;
@@ -578,7 +597,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_grey_appBarColor,
+                        "#616161",
+                        "#9E9E9E",
                         "#9E9E9E"//fab bottom
                 );
                 break;
@@ -598,7 +618,8 @@ public class Config {
                         "#000000",
                         "#e9e9e9",
                         "#696969",
-                        Config.default_blueGrey_appBarColor,
+                        "#455A64",
+                        "#607D8B",
                         "#607D8B"//fab bottom
                 );
                 break;
@@ -624,8 +645,9 @@ public class Config {
         G.tintImage = color[11];
         G.logLineTheme = color[12];
         G.voteIconTheme = color[13];
-        G.bubbleChat = color[14];
-        G.fabBottom = color[15];
+        G.bubbleChatSend = color[14];
+        G.bubbleChatReceive = color[15];
+        G.fabBottom = color[16];
 
     }
 

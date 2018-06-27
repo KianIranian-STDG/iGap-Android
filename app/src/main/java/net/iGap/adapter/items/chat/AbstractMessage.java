@@ -20,7 +20,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,6 @@ import android.widget.TextView;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -84,7 +82,6 @@ import io.realm.Realm;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
-import static net.iGap.fragments.FragmentChat.messageId;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
 public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
@@ -661,7 +658,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
-        LinearLayout timeLayout = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer).getParent();
+
+        LinearLayout root = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer);
+        LinearLayout timeLayout = (LinearLayout) root.getParent();
         timeLayout.setGravity(Gravity.LEFT);
 
         if (messageText != null) {
@@ -678,7 +677,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.LEFT;
 
-        ((LinearLayout.LayoutParams) holder.itemView.findViewById(R.id.contentContainer).getLayoutParams()).gravity = Gravity.LEFT;
+        ((LinearLayout.LayoutParams) root.getLayoutParams()).gravity = Gravity.LEFT;
 
         if (G.isDarkTheme) {
             ((View) (holder.itemView.findViewById(R.id.contentContainer)).getParent()).setBackgroundResource(R.drawable.rectangel_white_round_dark);
@@ -690,6 +689,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * add main layout margin to prevent getting match parent completely
          * set to mainContainer not itemView because of selecting item foreground
          */
+
+        GradientDrawable circleDarkColor = (GradientDrawable) ((View) root.getParent()).getBackground();
+        circleDarkColor.setColor(Color.parseColor(G.bubbleChatReceive));
+
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp10);
         ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
     }
@@ -760,7 +763,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             ((View) (holder.itemView.findViewById(R.id.contentContainer)).getParent()).setBackgroundResource(R.drawable.rectangle_send_round_color);
         }
         GradientDrawable circleDarkColor = (GradientDrawable) ((View) root.getParent()).getBackground();
-        circleDarkColor.setColor(Color.parseColor(G.bubbleChat));
+        circleDarkColor.setColor(Color.parseColor(G.bubbleChatSend));
 
         /**
          * add main layout margin to prevent getting match parent completely
