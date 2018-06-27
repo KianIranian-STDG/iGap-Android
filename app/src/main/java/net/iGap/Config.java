@@ -564,7 +564,7 @@ public class Config {
                 break;
             case GREY:
                 setColor(false,
-                        Config.default_deepOrange_appBarColor,
+                        Config.default_grey_appBarColor,
                         Config.default_grey_appBarColor,
                         Config.default_grey_appBarColor,
                         Config.default_grey_appBarColor,
