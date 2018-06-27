@@ -119,6 +119,8 @@ dependencies {
     compile 'com.github.krokyze:ucropnedit:2.2.2'
     implementation 'info.androidhive:imagefilters:1.0.7'
     compile 'com.mindorks.android:prdownloader:0.3.0'
+    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-messaging:17.0.0'
     implementation ('com.github.RooyeKhat-Media:Compress:1.0.0'){
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
@@ -140,3 +142,5 @@ configurations.all {
         }
     }
 }
+
+apply plugin: 'com.google.gms.google-services'
