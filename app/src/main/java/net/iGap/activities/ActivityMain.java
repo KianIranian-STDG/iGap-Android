@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.activities;
 
@@ -59,7 +59,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentCall;
-import net.iGap.fragments.FragmentFinancialServices;
 import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMain;
@@ -174,7 +173,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public MainInterfaceGetRoomList mainInterfaceGetRoomList;
     public ArcMenu arcMenu;
     FragmentCall fragmentCall;
-    FragmentFinancialServices fragmentFinancialServices;
     FloatingActionButton btnStartNewChat;
     FloatingActionButton btnCreateNewGroup;
     FloatingActionButton btnCreateNewChannel;
@@ -896,11 +894,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
             setFabIcon(R.drawable.ic_call_black_24dp);
             arcMenu.setVisibility(View.VISIBLE);
-        } else if (adapter.getItem(position) instanceof FragmentFinancialServices) {
-
-            findViewById(R.id.amr_ripple_search).setVisibility(View.GONE);
-            findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
-            arcMenu.setVisibility(View.GONE);
         }
 
         if (arcMenu.isMenuOpened()) {
@@ -1007,9 +1000,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (HelperCalander.isPersianUnicode) {
-            navigationTabStrip.setTitles(getString(R.string.md_igap_credit_card), getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
+            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
         } else {
-            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone), getString(R.string.md_igap_credit_card));
+            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
         }
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
@@ -1033,9 +1026,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 public void run() {
 
                     if (G.multiTab) {
-                        fragmentFinancialServices = FragmentFinancialServices.newInstance(true);
-                        pages.add(fragmentFinancialServices);
-
                         fragmentCall = FragmentCall.newInstance(true);
                         pages.add(fragmentCall);
 
@@ -1077,9 +1067,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         fragmentCall = FragmentCall.newInstance(true);
                         pages.add(fragmentCall);
-
-                        fragmentFinancialServices = FragmentFinancialServices.newInstance(true);
-                        pages.add(fragmentFinancialServices);
 
                         mViewPager.getAdapter().notifyDataSetChanged();
 
@@ -1307,14 +1294,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                 lockNavigation();
                 closeDrawer();
-            }
-        });
-
-        ViewGroup itemNavFinancialServices = (ViewGroup) findViewById(R.id.lm_ll_FinancialServices);
-        itemNavFinancialServices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new HelperFragment(FragmentFinancialServices.newInstance(false)).setStateLoss(true).load();
             }
         });
 

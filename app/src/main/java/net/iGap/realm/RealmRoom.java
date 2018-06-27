@@ -1516,9 +1516,9 @@ public class RealmRoom extends RealmObject {
         }
         String ar[];
         if (HelperCalander.isPersianUnicode) {
-            ar = new String[]{"0", "0", channel + "", group + "", chat + "", all + ""};
+            ar = new String[]{"0", channel + "", group + "", chat + "", all + ""};
         } else {
-            ar = new String[]{all + "", chat + "", group + "", channel + "", "0", "0"};
+            ar = new String[]{all + "", chat + "", group + "", channel + "", "0"};
         }
         realm.close();
         return ar;
