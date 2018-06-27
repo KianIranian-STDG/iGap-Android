@@ -127,7 +127,7 @@ dependencies {
     }
     implementation 'com.github.RooyeKhat-Media:Websocket:1.0.0'
     implementation 'com.github.RooyeKhat-Media:MessageProgress:1.0.0'
-    implementation 'com.github.RooyeKhat-Media:Proto:Build84'
+    implementation 'com.github.RooyeKhat-Media:Proto:Build87'
 }
 
 configurations.all {
