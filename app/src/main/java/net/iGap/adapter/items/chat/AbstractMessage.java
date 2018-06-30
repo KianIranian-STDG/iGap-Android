@@ -31,6 +31,7 @@ import android.widget.TextView;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
@@ -352,7 +353,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         TextView txtTime = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
         if (txtTime != null) {
-            txtTime.setTextColor(Color.parseColor(G.textTitleTheme));
+            txtTime.setTextColor(Color.parseColor(G.textBubble));
             txtTime.setText(HelperCalander.getClocktime(mMessage.time, false));
 
             if (HelperCalander.isPersianUnicode) {
@@ -664,7 +665,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         timeLayout.setGravity(Gravity.LEFT);
 
         if (messageText != null) {
-            messageText.setTextColor(Color.parseColor(G.textTitleTheme));
+            messageText.setTextColor(Color.parseColor(G.textBubble));
         }
         //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
@@ -727,14 +728,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         //  TextView iconHearing = (TextView) holder.itemView.findViewById(R.id.cslr_txt_hearing);
 
         if (messageText != null) {
-            messageText.setTextColor(Color.parseColor(G.textTitleTheme));
+            messageText.setTextColor(Color.parseColor(G.textBubble));
         }
         //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
         if (ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status) == ProtoGlobal.RoomMessageStatus.SEEN) {
             if (G.isDarkTheme) {
                 setTextColor(imgTick, R.color.iGapColor);
-            }else {
+            } else {
                 setTextColor(imgTick, R.color.backgroundColorCall2);
             }
 
@@ -742,18 +743,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             // iconHearing.setVisibility(View.VISIBLE);
             if (G.isDarkTheme) {
                 setTextColor(imgTick, R.color.iGapColor);
-            }else {
+            } else {
                 setTextColor(imgTick, R.color.backgroundColorCall2);
             }
 
             imgTick.setVisibility(View.VISIBLE);
         } else {
-
-            if (G.isDarkTheme) {
-                setTextColor(imgTick, R.color.white);
-            } else {
-                setTextColor(imgTick, R.color.colorOldBlack);
-            }
+//            setTextColor(imgTick, Color.parseColor(G.txtIconCheck));
+            imgTick.setColorFilter(Color.parseColor(G.txtIconCheck));
         }
 
 
@@ -834,14 +831,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
                     if (G.isDarkTheme) {
                         replayView.setBackgroundResource(R.drawable.rectangle_reply_sender_round_color_dark);
-                        replyFrom.setTextColor(Color.parseColor(G.textTitleTheme));
-                        replayMessage.setTextColor(Color.parseColor(G.textTitleTheme));
+//                        replyFrom.setTextColor(Color.parseColor(G.textBubble));
+//                        replayMessage.setTextColor(Color.parseColor(G.textBubble));
                     } else {
                         replayView.setBackgroundResource(R.drawable.rectangle_reply_sender_round_color);
-                        replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-                        replayMessage.setTextColor(holder.itemView.getResources().getColor(R.color.replay_message_text));
+//                        replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+//                        replayMessage.setTextColor(holder.itemView.getResources().getColor(R.color.replay_message_text));
                     }
-
+                    replyFrom.setTextColor(Color.parseColor(G.textBubble));
+                    replayMessage.setTextColor(Color.parseColor(G.textBubble));
                     //holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_sendColor));
 
                 } else {
@@ -849,15 +847,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (G.isDarkTheme) {
                         replayView.setBackgroundResource(R.drawable.rectangle_reply_recive_round_color_dark);
                         // holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_receiveColor));
-                        replyFrom.setTextColor(Color.parseColor(G.textTitleTheme));
-                        replayMessage.setTextColor(Color.parseColor(G.textTitleTheme));
+//                        replyFrom.setTextColor(Color.parseColor(G.textBubble));
+//                        replayMessage.setTextColor(Color.parseColor(G.textBubble));
                     } else {
                         replayView.setBackgroundResource(R.drawable.rectangle_reply_recive_round_color);
                         // holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_receiveColor));
-                        replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-                        replayMessage.setTextColor(holder.itemView.getResources().getColor(R.color.replay_message_text));
+//                        replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+//                        replayMessage.setTextColor(holder.itemView.getResources().getColor(R.color.replay_message_text));
                     }
-
+                    replyFrom.setTextColor(Color.parseColor(G.textBubble));
+                    replayMessage.setTextColor(Color.parseColor(G.textBubble));
 
                 }
 
@@ -909,7 +908,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                     if (mMessage.username.length() > 0) {
 
-                        long messageId =(mMessage.forwardedFrom.getMessageId() *(-1));
+                        long messageId = (mMessage.forwardedFrom.getMessageId() * (-1));
 
                         RealmRoomMessage rm = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mMessage.forwardedFrom.getRoomId()).equalTo(RealmRoomMessageFields.MESSAGE_ID, mMessage.forwardedFrom.getMessageId()).findFirst();
                         rm = RealmRoomMessage.getFinalMessage(rm);
@@ -972,7 +971,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (realmRoom != null) {
                     txtForwardFrom.setText(realmRoom.getTitle());
                     if (mMessage.isSenderMe()) {
-                        txtForwardFrom.setTextColor(Color.parseColor(G.textTitleTheme));
+                        txtForwardFrom.setTextColor(Color.parseColor(G.textBubble));
                     } else {
                         txtForwardFrom.setTextColor(G.context.getResources().getColor(R.color.iGapColor));
                     }
@@ -1011,7 +1010,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                         txtForwardFrom.setText(realmRoom1.getTitle());
                         if (mMessage.isSenderMe()) {
-                            txtForwardFrom.setTextColor(Color.parseColor(G.textTitleTheme));
+                            txtForwardFrom.setTextColor(Color.parseColor(G.textBubble));
                         } else {
                             txtForwardFrom.setTextColor(G.context.getResources().getColor(R.color.iGapColor));
                         }

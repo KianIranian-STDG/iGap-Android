@@ -631,7 +631,7 @@
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
               android:text="@{fragmentSettingViewModel.callbackLanguage , default=English}"
-              android:textColor="@color/toolbar_background"
+              android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
               android:textSize="@dimen/dp15"
               android:textStyle="normal"
 
@@ -675,7 +675,7 @@
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
               android:text="@{fragmentSettingViewModel.callbackDataShams , default=Miladi}"
-              android:textColor="@color/toolbar_background"
+              android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
               android:textSize="@dimen/dp15"
               android:textStyle="normal"
 
@@ -867,7 +867,7 @@
               android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@{fragmentSettingViewModel.callbackTextSize , default=16}"
-              android:textColor="@color/toolbar_background"
+              android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
               android:textSize="@dimen/dp15"
               android:textStyle="normal"
 

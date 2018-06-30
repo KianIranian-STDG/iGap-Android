@@ -122,7 +122,8 @@ public class G extends MultiDexApplication {
     public static String logLineTheme;
     public static String voteIconTheme;
     public static String textTitleTheme;
-    public static String textBubbleReceive;
+    public static String textBubble;
+    public static String txtIconCheck;
     public static String textBubbleSend;
     public static String textSubTheme;
     public static String tintImage;

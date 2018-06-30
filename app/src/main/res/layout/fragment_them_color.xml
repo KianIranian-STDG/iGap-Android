@@ -115,6 +115,16 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconCustom"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+
           <ImageView
             android:id="@+id/theme_custom_1"
             android:layout_width="@dimen/dp20"
@@ -152,6 +162,16 @@
             android:text="Default"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
+
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconDefault"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
 
           <ImageView
             android:id="@+id/theme_default_1"
@@ -192,6 +212,15 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconDark"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
           <ImageView
             android:id="@+id/theme_dark_1"
             android:layout_width="@dimen/dp20"
@@ -231,6 +260,15 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconRed"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
           <ImageView
             android:id="@+id/theme_red_1"
             android:layout_width="@dimen/dp20"
@@ -271,6 +309,15 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconPink"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
           <ImageView
             android:id="@+id/theme_pink_1"
             android:layout_width="@dimen/dp20"
@@ -310,6 +357,15 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconPurple"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
           <ImageView
             android:id="@+id/theme_Purple_1"
             android:layout_width="@dimen/dp20"
@@ -349,6 +405,15 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconDeepPurple"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
           <ImageView
             android:id="@+id/theme_deep_purple_1"
             android:layout_width="@dimen/dp20"
@@ -389,6 +454,15 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconIndigo"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
           <ImageView
             android:id="@+id/theme_Indigo"
             android:layout_width="@dimen/dp20"
@@ -427,6 +501,16 @@
             android:text="Blue"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
+
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconBlue"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
 
           <ImageView
             android:id="@+id/theme_blue"
@@ -467,6 +551,16 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconLightBlue"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+
           <ImageView
             android:id="@+id/theme_light_blue"
             android:layout_width="@dimen/dp20"
@@ -505,6 +599,16 @@
             android:text="Cyan"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
+
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconCyan"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
 
           <ImageView
             android:id="@+id/theme_cyan"
@@ -545,6 +649,16 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconTeal"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+
           <ImageView
             android:id="@+id/theme_teal"
             android:layout_width="@dimen/dp20"
@@ -583,6 +697,16 @@
             android:text="Green"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
+
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconGreen"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
 
           <ImageView
             android:id="@+id/theme_green"
@@ -623,6 +747,16 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconLightGreen"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+
           <ImageView
             android:id="@+id/theme_light_green"
             android:layout_width="@dimen/dp20"
@@ -662,6 +796,15 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconLime"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
           <ImageView
             android:id="@+id/theme_lime"
             android:layout_width="@dimen/dp20"
@@ -671,7 +814,6 @@
             android:layout_marginRight="@dimen/dp4"
             android:background="@drawable/circle_color_notificatin_setting"
             android:gravity="center" />
-
 
         </LinearLayout>
 
@@ -700,6 +842,16 @@
             android:text="Yellow"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
+
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconYellow"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
 
           <ImageView
             android:id="@+id/theme_yellow"
@@ -740,6 +892,16 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconAmber"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+
           <ImageView
             android:id="@+id/theme_amber"
             android:layout_width="@dimen/dp20"
@@ -777,6 +939,16 @@
             android:text="Orange"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
+
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconOrange"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
 
           <ImageView
             android:id="@+id/theme_orange"
@@ -817,6 +989,16 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconDeepOrange"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+
           <ImageView
             android:id="@+id/theme_deep_orange"
             android:layout_width="@dimen/dp20"
@@ -855,6 +1037,16 @@
             android:text="Brown"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
+
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconBrown"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
 
           <ImageView
             android:id="@+id/theme_brown"
@@ -895,6 +1087,16 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconGrey"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+
           <ImageView
             android:id="@+id/theme_grey"
             android:layout_width="@dimen/dp20"
@@ -933,6 +1135,16 @@
             android:text="Blue Grey"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
+
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconBlueGrey"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
 
           <ImageView
             android:id="@+id/theme_blue_grey"

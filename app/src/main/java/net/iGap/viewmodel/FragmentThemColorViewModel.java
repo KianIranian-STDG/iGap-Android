@@ -25,6 +25,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.module.SHP_SETTING;
 
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.G.toggleButtonColor;
 
 public class FragmentThemColorViewModel {
 
@@ -266,6 +267,91 @@ public class FragmentThemColorViewModel {
 
             GradientDrawable circleBlueGreyColor = (GradientDrawable) fragmentThemColorBinding.themeBlueGrey.getBackground();
             circleBlueGreyColor.setColor(Color.parseColor(Config.default_blueGrey_appBarColor));
+
+            int itemColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Config.DEFAULT);
+
+            switch (G.themeColor) {
+                case Config.CUSTOM:
+                    fragmentThemColorBinding.iconCustom.setVisibility(View.VISIBLE);
+                    break;
+                case Config.DEFAULT:
+
+                    fragmentThemColorBinding.iconDefault.setVisibility(View.VISIBLE);
+                    break;
+                case Config.DARK:
+                    fragmentThemColorBinding.iconDark.setVisibility(View.VISIBLE);
+                    break;
+                case Config.RED:
+                    fragmentThemColorBinding.iconRed.setVisibility(View.VISIBLE);
+                    break;
+                case Config.PINK:
+                    fragmentThemColorBinding.iconPink.setVisibility(View.VISIBLE);
+                    break;
+                case Config.PURPLE:
+                    fragmentThemColorBinding.iconPurple.setVisibility(View.VISIBLE);
+                    break;
+                case Config.DEEPPURPLE:
+                    fragmentThemColorBinding.iconDeepPurple.setVisibility(View.VISIBLE);
+                    break;
+                case Config.INDIGO:
+                    fragmentThemColorBinding.iconIndigo.setVisibility(View.VISIBLE);
+                    break;
+                case Config.BLUE:
+                    fragmentThemColorBinding.iconBlue.setVisibility(View.VISIBLE);
+                    break;
+
+                case Config.LIGHT_BLUE:
+                    fragmentThemColorBinding.iconLightBlue.setVisibility(View.VISIBLE);
+                    break;
+
+                case Config.CYAN:
+                    fragmentThemColorBinding.iconCyan.setVisibility(View.VISIBLE);
+                    break;
+
+                case Config.TEAL:
+                    fragmentThemColorBinding.iconTeal.setVisibility(View.VISIBLE);
+                    break;
+
+                case Config.GREEN:
+                    fragmentThemColorBinding.iconGreen.setVisibility(View.VISIBLE);
+                    break;
+
+                case Config.LIGHT_GREEN:
+                    fragmentThemColorBinding.iconLightGreen.setVisibility(View.VISIBLE);
+                    break;
+
+                case Config.LIME:
+                    fragmentThemColorBinding.iconLime.setVisibility(View.VISIBLE);
+                    break;
+
+                case Config.YELLLOW:
+                    fragmentThemColorBinding.iconYellow.setVisibility(View.VISIBLE);
+                    break;
+                case Config.AMBER:
+                    fragmentThemColorBinding.iconAmber.setVisibility(View.VISIBLE);
+                    break;
+
+                case Config.ORANGE:
+                    fragmentThemColorBinding.iconOrange.setVisibility(View.VISIBLE);
+                    break;
+
+                case Config.DEEP_ORANGE:
+                    fragmentThemColorBinding.iconDeepOrange.setVisibility(View.VISIBLE);
+                    break;
+
+                case Config.BROWN:
+                    fragmentThemColorBinding.iconBrown.setVisibility(View.VISIBLE);
+
+                    break;
+                case Config.GREY:
+
+                    fragmentThemColorBinding.iconGrey.setVisibility(View.VISIBLE);
+                    break;
+                case Config.BLUE_GREY:
+
+                    fragmentThemColorBinding.iconBlueGrey.setVisibility(View.VISIBLE);
+                    break;
+            }
 
 
         }

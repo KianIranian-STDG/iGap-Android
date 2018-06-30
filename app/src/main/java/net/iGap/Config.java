@@ -156,11 +156,11 @@ public class Config {
                 setColor(false,
                         preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor),
                         preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor),
-                        toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor),
+                        preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor),
                         preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor),
                         preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor),
                         preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor),
-                        G.appBarColor,
+                        lineView,
                         "#FFFFFF",
                         "#f9f9f9",
                         "#000000",
@@ -169,9 +169,10 @@ public class Config {
                         "#e9e9e9",
                         "#696969",
                         "#e679dde6",
-                        "#00BCD4",
-                        "FFFFFF",
-                        G.appBarColor
+                        "#FFFFFF",
+                        preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor),
+                        "#000000",
+                        preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor)
                 );
 
                 break;
@@ -193,7 +194,9 @@ public class Config {
                         "#696969",
                         "#e679dde6",
                         "#FFFFFF",
-                        "#00BCD4"
+                        "#00BCD4",
+                        "#000000",
+                        Config.default_appBarColor
                 );
 
                 break;
@@ -215,7 +218,9 @@ public class Config {
                         "#cacaca",
                         "#151515",
                         "#c7101010",
-                        "#2A2A2A"
+                        "#2A2A2A",
+                        "#ffffff",
+                        "#ffffff"
                 );
 
                 break;
@@ -237,7 +242,9 @@ public class Config {
                         "#696969",
                         "#D32F2F",
                         "#FF5252",
-                        "#FF5252"
+                        "#FF5252",
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
             case PINK:
@@ -258,7 +265,9 @@ public class Config {
                         "#696969",
                         "#C2185B",
                         "#FF4081",
-                        "#FF4081"
+                        "#FF4081",
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
             case PURPLE:
@@ -279,7 +288,9 @@ public class Config {
                         "#696969",
                         "#7B1FA2",
                         "#E040FB",
-                        "#E040FB"
+                        "#E040FB",
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
             case DEEPPURPLE:
@@ -300,7 +311,9 @@ public class Config {
                         "#696969",
                         "#512DA8",
                         "#7C4DFF",
-                        "#7C4DFF"
+                        "#7C4DFF",
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
             case INDIGO:
@@ -321,7 +334,9 @@ public class Config {
                         "#696969",
                         "#303F9F",
                         "#536DFE",
-                        "#536DFE"//fab bottom
+                        "#536DFE",//fab bottom
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
             case BLUE:
@@ -342,7 +357,9 @@ public class Config {
                         "#696969",
                         "#1976D2",
                         "#448AFF",
-                        "#03A9F4"//fab bottom
+                        "#03A9F4",//fab bottom
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
 
@@ -364,7 +381,9 @@ public class Config {
                         "#696969",
                         "#0288D1",
                         "#03A9F4",
-                        "#03A9F4"//fab bottom
+                        "#03A9F4",//fab bottom
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
 
@@ -386,7 +405,9 @@ public class Config {
                         "#696969",
                         "#0097A7",
                         "#00BCD4",
-                        "#00BCD4"//fab bottom
+                        "#00BCD4",//fab bottom
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
             case TEAL:
@@ -407,7 +428,9 @@ public class Config {
                         "#696969",
                         "#00796B",
                         "#009688",
-                        "#009688"//fab bottom
+                        "#009688",//fab bottom
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
             case GREEN:
@@ -428,7 +451,9 @@ public class Config {
                         "#696969",
                         "#388E3C",
                         "#4CAF50",
-                        "#4CAF50"//fab bottom
+                        "#4CAF50",//fab bottom
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
             case LIGHT_GREEN:
@@ -449,7 +474,9 @@ public class Config {
                         "#696969",
                         "#689F38",
                         "#8BC34A",
-                        "#8BC34A"//fab bottom
+                        "#8BC34A",//fab bottom
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
             case LIME:
@@ -470,7 +497,9 @@ public class Config {
                         "#696969",
                         "#AFB42B",
                         "#CDDC39",
-                        "#CDDC39"//fab bottom
+                        "#CDDC39",//fab bottom
+                        "#212121",
+                        "#212121"
                 );
                 break;
 
@@ -492,7 +521,9 @@ public class Config {
                         "#696969",
                         "#FBC02D",
                         "#FFEB3B",
-                        "#FFEB3B"//fab bottom
+                        "#FFEB3B",//fab bottom
+                        "#212121",
+                        "#212121"
                 );
                 break;
             case AMBER:
@@ -513,7 +544,9 @@ public class Config {
                         "#696969",
                         "#FFA000",
                         "#FFC107",
-                        "#FFC107"//fab bottom
+                        "#FFC107",//fab bottom
+                        "#212121",
+                        "#212121"
                 );
                 break;
             case ORANGE:
@@ -534,7 +567,9 @@ public class Config {
                         "#696969",
                         "#F57C00",
                         "#FF9800",
-                        "#FF9800"//fab bottom
+                        "#FF9800",//fab bottom
+                        "#212121",
+                        "#212121"
                 );
                 break;
 
@@ -556,7 +591,9 @@ public class Config {
                         "#696969",
                         "#E64A19",
                         "#FF5722",
-                        "#FF5722"//fab bottom
+                        "#FF5722",//fab bottom
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
 
@@ -578,7 +615,9 @@ public class Config {
                         "#696969",
                         "#5D4037",
                         "#795548",
-                        "#795548"//fab bottom
+                        "#795548",//fab bottom
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
             case GREY:
@@ -599,7 +638,9 @@ public class Config {
                         "#696969",
                         "#616161",
                         "#9E9E9E",
-                        "#9E9E9E"//fab bottom
+                        "#9E9E9E",//fab bottom
+                        "#212121",
+                        "#212121"
                 );
                 break;
             case BLUE_GREY:
@@ -620,7 +661,9 @@ public class Config {
                         "#696969",
                         "#455A64",
                         "#607D8B",
-                        "#607D8B"//fab bottom
+                        "#607D8B",//fab bottom
+                        "#FFFFFF",
+                        "#FFFFFF"
                 );
                 break;
         }
@@ -648,6 +691,8 @@ public class Config {
         G.bubbleChatSend = color[14];
         G.bubbleChatReceive = color[15];
         G.fabBottom = color[16];
+        G.textBubble = color[17];
+        G.txtIconCheck = color[18];
 
     }
 

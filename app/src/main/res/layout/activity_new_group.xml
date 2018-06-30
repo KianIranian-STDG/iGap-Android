@@ -211,7 +211,7 @@
           android:padding="@dimen/dp12"
           android:singleLine="false"
           android:text="@string/chi_NEXT_STEP"
-          android:textColor="@color/toolbar_background"
+          android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
           android:textSize="@dimen/dp15"
           android:textStyle="normal"
 
@@ -230,7 +230,7 @@
           android:onClick="@{fragmentNewGroupVieModel::onClickCancel}"
           android:padding="@dimen/dp12"
           android:text="@string/B_cancel"
-          android:textColor="@color/toolbar_background"
+          android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
           android:textSize="@dimen/dp15"
           android:textStyle="normal" />
       </RelativeLayout>
