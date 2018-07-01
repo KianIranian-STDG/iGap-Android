@@ -64,7 +64,7 @@ public class Config {
     public static final int FETCH_CONTACT_TIME_OUT = (int) (5 * DateUtils.SECOND_IN_MILLIS);
     public static final int LAST_SEEN_TIME_OUT = (int) (60 * DateUtils.MINUTE_IN_MILLIS); // after this time show exactly time instead of minutes
     public static final int DEFAULT_BOTH_CHAT_DELETE_TIME = (int) (2 * DateUtils.HOUR_IN_MILLIS);
-    public static final String URL_WEBSOCKET = "wss://secure.igap.net/hybrid/";
+    public static final String URL_WEBSOCKET = "ws://test3.igap.net:8000";
     public static final String URL_MAP = "https://c.tile.openstreetmap.org/";
     public static final String IGAP_LINK_PREFIX = "https://iGap.net/";
     public static final String PUBLIC_KEY_CLIENT = "-----BEGIN PUBLIC KEY-----\n"
@@ -107,6 +107,9 @@ public class Config {
     public static final int GREY = 20;
     public static final int BLUE_GREY = 21;
     public static final int BLUE_GREY_COMPLETE = 22;
+    public static final int INDIGO_COMPLETE = 23;
+    public static final int BROWN_COMPLETE = 24;
+    public static final int TEAL_COMPLETE = 25;
 
 
     public static String default_appBarColor = "#00B0BF";
@@ -712,6 +715,79 @@ public class Config {
                         "#FFFFFF",
                         "#FFFFFF",
                         "#cfd8dc"
+                );
+                break;
+
+            case INDIGO_COMPLETE:
+                setColor(false,
+                        Config.default_indigo_appBarColor,
+                        Config.default_indigo_appBarColor,
+                        Config.default_indigo_appBarColor,
+                        Config.default_indigo_appBarColor,
+                        Config.default_indigo_appBarColor,
+                        Config.default_indigo_appBarColor,
+                        "#3f51b5",// line
+                        "#C5CAE9",
+                        "#9fa8da",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#FFFFFF",
+                        "#303F9F",
+                        "#3f51b5",
+                        "#3f51b5",//fab bottom
+                        "#FFFFFF",
+                        "#FFFFFF",
+                        "#C5CAE9"
+                );
+                break;
+            case BROWN_COMPLETE:
+                setColor(false,
+                        Config.default_brown_appBarColor,
+                        Config.default_brown_appBarColor,
+                        Config.default_brown_appBarColor,
+                        Config.default_brown_appBarColor,
+                        Config.default_brown_appBarColor,
+                        Config.default_brown_appBarColor,
+                        "#795548",// line
+                        "#D7CCC8",
+                        "#bcaaa4",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#FFFFFF",
+                        "#5D4037",
+                        "#795548",
+                        "#795548",//fab bottom
+                        "#FFFFFF",
+                        "#FFFFFF",
+                        "#D7CCC8"
+                );
+                break;
+            case TEAL_COMPLETE:
+                setColor(false,
+                        Config.default_teal_appBarColor,
+                        Config.default_teal_appBarColor,
+                        Config.default_teal_appBarColor,
+                        Config.default_teal_appBarColor,
+                        Config.default_teal_appBarColor,
+                        Config.default_teal_appBarColor,
+                        "#009688",// line
+                        "#B2DFDB",
+                        "#80cbc4",
+                        "#000000",
+                        "#bbbbbb",
+                        "#000000",
+                        "#e9e9e9",
+                        "#FFFFFF",
+                        "#00796B",
+                        "#009688",
+                        "#009688",//fab bottom
+                        "#FFFFFF",
+                        "#FFFFFF",
+                        "#B2DFDB"
                 );
                 break;
         }

@@ -178,6 +178,23 @@ public class FragmentThemColorViewModel {
         resetApp();
     }
 
+    public void onClickThemeIndigoComplete(View v) {
+        setSetting(Config.INDIGO_COMPLETE, false);
+        Config.setThemeColor();
+        resetApp();
+    }
+
+    public void onClickThemeBrownComplete(View v) {
+        setSetting(Config.BROWN_COMPLETE, false);
+        Config.setThemeColor();
+        resetApp();
+    }
+
+    public void onClickThemeTealComplete(View v) {
+        setSetting(Config.TEAL_COMPLETE, false);
+        Config.setThemeColor();
+        resetApp();
+    }
 
 
     private void setSetting(int config, boolean isDark) {
@@ -276,6 +293,15 @@ public class FragmentThemColorViewModel {
             GradientDrawable circleBlueGreyCompleteColor = (GradientDrawable) fragmentThemColorBinding.themeBlueGreyComplete.getBackground();
             circleBlueGreyCompleteColor.setColor(Color.parseColor(Config.default_blueGrey_appBarColor));
 
+            GradientDrawable circleIndigoCompleteColor = (GradientDrawable) fragmentThemColorBinding.themeIndigoComplete.getBackground();
+            circleIndigoCompleteColor.setColor(Color.parseColor(Config.default_indigo_appBarColor));
+
+            GradientDrawable circleBrownCompleteColor = (GradientDrawable) fragmentThemColorBinding.themeBrownComplete.getBackground();
+            circleBrownCompleteColor.setColor(Color.parseColor(Config.default_brown_appBarColor));
+
+            GradientDrawable circleTealCompleteColor = (GradientDrawable) fragmentThemColorBinding.themeTealComplete.getBackground();
+            circleTealCompleteColor.setColor(Color.parseColor(Config.default_teal_appBarColor));
+
 
             switch (G.themeColor) {
                 case Config.CUSTOM:
@@ -358,8 +384,15 @@ public class FragmentThemColorViewModel {
 
                     fragmentThemColorBinding.iconBlueGrey.setVisibility(View.VISIBLE);
                     break;
-                case Config.BLUE_GREY_COMPLETE:
-                    fragmentThemColorBinding.iconBlueGreyComplete.setVisibility(View.VISIBLE);
+                case Config.INDIGO_COMPLETE:
+                    fragmentThemColorBinding.iconIndigoComplete.setVisibility(View.VISIBLE);
+                    break;
+
+                case Config.BROWN_COMPLETE:
+                    fragmentThemColorBinding.iconBrownComplete.setVisibility(View.VISIBLE);
+                    break;
+                case Config.TEAL_COMPLETE:
+                    fragmentThemColorBinding.iconTealComplete.setVisibility(View.VISIBLE);
                     break;
             }
 

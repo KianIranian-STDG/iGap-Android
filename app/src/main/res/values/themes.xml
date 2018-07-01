@@ -80,6 +80,97 @@
   </style>
 
 
+  <style name="Material_indigoComplete" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorAccent">#303F9F</item>
+    <item name="colorPrimary">#303F9F</item>
+    <item name="pageBackgroundTheme">@style/page_background_black</item>
+    <item name="textColorTheme">@style/text_style_black</item>
+
+    <item name="textColorMenuTheme">@style/text_style_menu_indigoComplete</item>
+    <item name="iconColorMenuTheme">@style/icon_style_menu_indigoComplete</item>
+    <item name="backgroundColorMenuTheme">@style/background_settingindigoComplete</item>
+
+    <item name="backgroundColorSettingTheme">@style/background_settingindigoComplete</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_indigoComplete</item>
+
+    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_indigoComplete</item>
+    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_indigoComplete</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_indigoComplete</item>
+    <item name="hintColorSettingTheme">@style/hint_style_setting_indigoComplete</item>
+
+    <item name="textBackgroundColor_2">@style/line_style_setting_indigoComplete</item>
+    <item name="textBackgroundColor">@style/line_style_setting_indigoComplete</item>
+
+    <item name="textSecurityColor">@style/text_title_security_dark</item>
+    <item name="emojiChat">@style/emojiColorChat_indigoComplete</item>
+    <item name="backgroundColorCall">@style/backgroundColorCallindigoComplete</item>
+    <item name="backgroundSubChatTheme">@style/backgroundSubChat_indigoComplete</item>
+    <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
+    <item name="md_background_color">#c5cae9</item>
+    <!--<item name="colorAccent">@color/white</item>-->
+  </style>
+
+  <style name="Material_BrownComplete" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorAccent">#5D4037</item>
+    <item name="colorPrimary">#5D4037</item>
+    <item name="pageBackgroundTheme">@style/page_background_black</item>
+    <item name="textColorTheme">@style/text_style_black</item>
+
+    <item name="textColorMenuTheme">@style/text_style_menu_BrownComplete</item>
+    <item name="iconColorMenuTheme">@style/icon_style_menu_BrownComplete</item>
+    <item name="backgroundColorMenuTheme">@style/background_settingBrownComplete</item>
+
+    <item name="backgroundColorSettingTheme">@style/background_settingBrownComplete</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_BrownComplete</item>
+
+    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_BrownComplete</item>
+    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_BrownComplete</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_BrownComplete</item>
+    <item name="hintColorSettingTheme">@style/hint_style_setting_BrownComplete</item>
+
+    <item name="textBackgroundColor_2">@style/line_style_setting_BrownComplete</item>
+    <item name="textBackgroundColor">@style/line_style_setting_BrownComplete</item>
+
+    <item name="textSecurityColor">@style/text_title_security_dark</item>
+    <item name="emojiChat">@style/emojiColorChat_BrownComplete</item>
+    <item name="backgroundColorCall">@style/backgroundColorCallBrownComplete</item>
+    <item name="backgroundSubChatTheme">@style/backgroundSubChat_BrownComplete</item>
+    <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
+    <item name="md_background_color">#d7ccc8</item>
+    <!--<item name="colorAccent">@color/white</item>-->
+  </style>
+
+  <style name="Material_TealComplete" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorAccent">#00796b</item>
+    <item name="colorPrimary">#00796b</item>
+    <item name="pageBackgroundTheme">@style/page_background_black</item>
+    <item name="textColorTheme">@style/text_style_black</item>
+
+    <item name="textColorMenuTheme">@style/text_style_menu_TealComplete</item>
+    <item name="iconColorMenuTheme">@style/icon_style_menu_TealComplete</item>
+    <item name="backgroundColorMenuTheme">@style/background_settingTealComplete</item>
+
+    <item name="backgroundColorSettingTheme">@style/background_settingTealComplete</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_TealComplete</item>
+
+    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_TealComplete</item>
+    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_TealComplete</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_TealComplete</item>
+    <item name="hintColorSettingTheme">@style/hint_style_setting_TealComplete</item>
+
+    <item name="textBackgroundColor_2">@style/line_style_setting_TealComplete</item>
+    <item name="textBackgroundColor">@style/line_style_setting_TealComplete</item>
+
+    <item name="textSecurityColor">@style/text_title_security_dark</item>
+    <item name="emojiChat">@style/emojiColorChat_TealComplete</item>
+    <item name="backgroundColorCall">@style/backgroundColorCallTealComplete</item>
+    <item name="backgroundSubChatTheme">@style/backgroundSubChat_TealComplete</item>
+    <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
+    <item name="md_background_color">#b2dfdb</item>
+    <!--<item name="colorAccent">@color/white</item>-->
+  </style>
+
+
   <style name="Material_red" parent="Theme.AppCompat.Light.NoActionBar">
 
     <item name="colorAccent">#F44336</item>
