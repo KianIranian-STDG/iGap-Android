@@ -127,13 +127,13 @@
 
           <net.iGap.module.MaterialDesignTextView
             style="?iconColorMenuTheme"
-            android:layout_width="@dimen/dp36"
-            android:layout_height="@dimen/dp36"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:minWidth="@dimen/dp32"
             android:text="@string/md_settings_cogwheel_button"
             android:textAppearance="@style/TextIconAppearance.menu"
-            android:textSize="@dimen/dp20" />
+            android:textSize="@dimen/dp16" />
 
           <ImageView
             android:id="@+id/theme_custom_1"
@@ -234,13 +234,13 @@
 
           <net.iGap.module.MaterialDesignTextView
             style="?iconColorMenuTheme"
-            android:layout_width="@dimen/dp36"
-            android:layout_height="@dimen/dp36"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:minWidth="@dimen/dp32"
             android:text="@string/md_settings_cogwheel_button"
             android:textAppearance="@style/TextIconAppearance.menu"
-            android:textSize="@dimen/dp20" />
+            android:textSize="@dimen/dp16" />
 
           <ImageView
             android:id="@+id/theme_dark_1"
