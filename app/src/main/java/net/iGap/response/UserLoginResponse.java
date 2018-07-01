@@ -63,6 +63,7 @@ public class UserLoginResponse extends MessageHandler {
         WebSocketClient.waitingForReconnecting = false;
         WebSocketClient.allowForReconnecting = true;
         G.onUserLogin.onLogin();
+        RealmUserInfo.sendPushNotificationToServer();
     }
 
     @Override
