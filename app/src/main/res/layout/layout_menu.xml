@@ -193,7 +193,7 @@
             android:layout_marginTop="@dimen/dp4"
             android:orientation="horizontal">
 
-            <TextView
+            <net.iGap.module.MaterialDesignTextView
               android:id="@+id/lm_txt_icon_channel"
               style="?iconColorMenuTheme"
               fontPath="fonts/iGap-Fontico.ttf"
@@ -202,6 +202,7 @@
               android:gravity="center"
               android:minWidth="@dimen/dp32"
               android:text="@string/md_channel_icon"
+              android:textAppearance="@style/TextIconAppearance.menu"
               android:textSize="@dimen/dp20"
 
               />
@@ -240,7 +241,7 @@
               android:gravity="center"
               android:minWidth="@dimen/dp32"
               android:text="@string/md_searching_magnifying_glass"
-              android:textAppearance="@style/TextIconAppearance_toolbar"
+              android:textAppearance="@style/TextIconAppearance.menu"
               android:textSize="@dimen/dp20" />
 
 
