@@ -3,6 +3,7 @@ package net.iGap.adapter.items.chat;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatImageView;
@@ -780,11 +781,12 @@ public class ViewMaker {
         LinearLayout lyt_vote_sub = new LinearLayout(context);
         lyt_vote_sub.setOrientation(VERTICAL);
         lyt_vote_sub.setId(R.id.lyt_vote_sub);
-        if (G.isDarkTheme) {
-            lyt_vote_sub.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.rectangel_white_round_vote_dark));
-        } else {
-            lyt_vote_sub.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.rectangel_white_round));
-        }
+
+        lyt_vote_sub.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.rectangel_white_round));
+
+
+        GradientDrawable circleDarkColor = (GradientDrawable) lyt_vote_sub.getBackground();
+        circleDarkColor.setColor(Color.parseColor(G.appBarColor));
 
         LinearLayout.LayoutParams layout_35644 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_35644.leftMargin = i_Dp(R.dimen.dp2);
@@ -822,11 +824,12 @@ public class ViewMaker {
         lyt_vote_sub.addView(lyt_vote_up);
 
         LinearLayout lyt_vote_down = new LinearLayout(context);
-        if (G.isDarkTheme) {
-            lyt_vote_down.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.rectangel_white_round_vote_dark));
-        } else {
-            lyt_vote_down.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.rectangel_white_round));
-        }
+
+        lyt_vote_down.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.rectangel_white_round));
+
+        GradientDrawable circleDarkColor_2 = (GradientDrawable) lyt_vote_down.getBackground();
+        circleDarkColor_2.setColor(Color.parseColor(G.appBarColor));
+
         lyt_vote_down.setId(R.id.lyt_vote_down);
         lyt_vote_down.setPadding(0, i_Dp(R.dimen.dp6), 0, 0);
         lyt_vote_down.setGravity(CENTER);
@@ -866,11 +869,12 @@ public class ViewMaker {
         lyt_vote_forward.setGravity(CENTER);
         lyt_vote_forward.setOrientation(VERTICAL);
 
-        if (G.isDarkTheme) {
-            lyt_vote_forward.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.circle_white_dark));
-        } else {
-            lyt_vote_forward.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.circle_white));
-        }
+
+        lyt_vote_forward.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.circle_white));
+
+        GradientDrawable circleDarkColor = (GradientDrawable) lyt_vote_forward.getBackground();
+        circleDarkColor.setColor(Color.parseColor(G.appBarColor));
+
         LinearLayout.LayoutParams layout_799_f = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32));
         layout_799_f.topMargin = i_Dp(R.dimen.dp8);
         layout_799_f.bottomMargin = i_Dp(R.dimen.dp16);

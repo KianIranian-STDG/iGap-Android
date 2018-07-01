@@ -125,14 +125,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
     public void onCreate(Bundle savedInstanceState) {
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
-
-        SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false)) {
-            this.setTheme(R.style.Material_blackCustom);
-        } else {
-            this.setTheme(R.style.Material_lightCustom);
-        }
-
         super.onCreate(savedInstanceState);
 
         if (isGoingfromApp) {

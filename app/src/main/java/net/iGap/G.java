@@ -112,6 +112,7 @@ public class G extends MultiDexApplication {
     public static String bubbleChatSend; // default color
     public static String bubbleChatReceive; // default color
     public static String fabBottom; // default color
+    public static String bubbleChatMusic; // default color
     public static String notificationColor;
     public static String toggleButtonColor;
     public static String attachmentColor;

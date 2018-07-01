@@ -428,4 +428,48 @@
     <item name="android:background">@color/green</item>
   </style>
 
+
+  <!--==================================Blue grey complete==================================-->
+  <style name="background_settingBlueGreyComplete">
+    <item name="android:background">#CFD8DC</item>
+  </style>
+
+  <style name="background_2_setting_BlueGreyComplete">
+    <item name="android:background">#CFD8DC</item>
+  </style>
+
+  <style name="page_background_BlueGreyComplete">
+    <item name="android:background">#CFD8DC</item>
+  </style>
+
+  <style name="backgroundSubChat_BlueGreyComplete">
+    <item name="android:background">#CFD8DC</item>
+  </style>
+
+  <style name="text_style_menu_BlueGreyComplete">
+    <item name="android:textColor">#455A64</item>
+  </style>
+
+  <style name="icon_style_menu_BlueGreyComplete">
+    <item name="android:textColor">#455A64</item>
+  </style>
+
+  <style name="text_title_style_setting_BlueGreyComplete">
+    <item name="android:textColor">#212121</item>
+  </style>
+
+  <style name="text_sub_style_setting_BlueGreyComplete">
+    <item name="android:textColor">#212121</item>
+  </style>
+
+  <style name="line_style_setting_BlueGreyComplete">
+    <item name="android:background">#CFD8DC</item>
+  </style>
+
+  <style name="hint_style_setting_BlueGreyComplete">
+    <item name="android:textColorHint">#757575</item>
+    <item name="android:textColor">#212121</item>
+  </style>
+
+
 </resources>

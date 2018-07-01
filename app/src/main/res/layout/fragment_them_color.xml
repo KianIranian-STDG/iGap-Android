@@ -242,6 +242,54 @@
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:onClick="@{fragmentThemColorViewModel::onClickThemeBlueGreyComplete}"
+          android:orientation="horizontal">
+
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp48"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp16"
+            android:paddingRight="@dimen/dp16"
+            android:paddingTop="@dimen/dp4"
+            android:text="Blue Grey Complete"
+            android:textSize="@dimen/dp15"
+            android:textStyle="normal" />
+
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/iconBlueGreyComplete"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_check_symbol"
+            android:visibility="gone"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+
+          <ImageView
+            android:id="@+id/theme_BlueGreyComplete"
+            android:layout_width="@dimen/dp20"
+            android:layout_height="@dimen/dp20"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp4"
+            android:layout_marginRight="@dimen/dp4"
+            android:background="@drawable/circle_color_notificatin_setting"
+            android:gravity="center" />
+
+
+        </LinearLayout>
+        <View
+          style="?lineColorSettingTheme"
+          android:layout_width="match_parent"
+          android:layout_height="1dp" />
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
           android:onClick="@{fragmentThemColorViewModel::onClickThemeRed}"
           android:orientation="horizontal">
 

@@ -829,32 +829,22 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 ((EmojiTextViewE) replayView.findViewById(R.id.chslr_txt_replay_message)).setText(forwardMessage);
 
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
-                    if (G.isDarkTheme) {
-                        replayView.setBackgroundResource(R.drawable.rectangle_reply_sender_round_color_dark);
-//                        replyFrom.setTextColor(Color.parseColor(G.textBubble));
-//                        replayMessage.setTextColor(Color.parseColor(G.textBubble));
-                    } else {
-                        replayView.setBackgroundResource(R.drawable.rectangle_reply_sender_round_color);
-//                        replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-//                        replayMessage.setTextColor(holder.itemView.getResources().getColor(R.color.replay_message_text));
-                    }
+
+                    replayView.setBackgroundResource(R.drawable.rectangle_reply_sender_round_color);
+//
+                    GradientDrawable circleDarkColor = (GradientDrawable) replayView.getBackground();
+                    circleDarkColor.setColor(Color.parseColor(G.backgroundTheme_2));
+
                     replyFrom.setTextColor(Color.parseColor(G.textBubble));
                     replayMessage.setTextColor(Color.parseColor(G.textBubble));
-                    //holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_sendColor));
 
                 } else {
 
-                    if (G.isDarkTheme) {
-                        replayView.setBackgroundResource(R.drawable.rectangle_reply_recive_round_color_dark);
-                        // holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_receiveColor));
-//                        replyFrom.setTextColor(Color.parseColor(G.textBubble));
-//                        replayMessage.setTextColor(Color.parseColor(G.textBubble));
-                    } else {
-                        replayView.setBackgroundResource(R.drawable.rectangle_reply_recive_round_color);
-                        // holder.itemView.findViewById(R.id.verticalLine).setBackgroundColor(holder.itemView.getContext().getResources().getColor(R.color.messageBox_receiveColor));
-//                        replyFrom.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-//                        replayMessage.setTextColor(holder.itemView.getResources().getColor(R.color.replay_message_text));
-                    }
+                    replayView.setBackgroundResource(R.drawable.rectangle_reply_recive_round_color);
+
+                    GradientDrawable circleDarkColor = (GradientDrawable) replayView.getBackground();
+                    circleDarkColor.setColor(Color.parseColor(G.backgroundTheme_2));
+
                     replyFrom.setTextColor(Color.parseColor(G.textBubble));
                     replayMessage.setTextColor(Color.parseColor(G.textBubble));
 

@@ -434,7 +434,10 @@ public class FragmentSettingViewModel {
         layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_nickname)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                new MaterialDialog.Builder(G.fragmentActivity)
+                        .title(G.fragmentActivity.getResources().getString(R.string.st_nickname))
+                        .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).customView(layoutNickname, true)
+                        .widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -488,7 +491,7 @@ public class FragmentSettingViewModel {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+                    viewFirstName.setBackgroundColor(Color.parseColor(G.appBarColor));
                 } else {
                     viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
@@ -499,7 +502,7 @@ public class FragmentSettingViewModel {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+                    viewLastName.setBackgroundColor(Color.parseColor(G.appBarColor));
                 } else {
                     viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
@@ -597,7 +600,7 @@ public class FragmentSettingViewModel {
         layoutUserName.addView(inputUserName, layoutParams);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -716,7 +719,7 @@ public class FragmentSettingViewModel {
                     @Override
                     public void onFocusChange(View view, boolean b) {
                         if (b) {
-                            viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+                            viewUserName.setBackgroundColor(Color.parseColor(G.appBarColor));
                         } else {
                             viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                         }
@@ -823,7 +826,7 @@ public class FragmentSettingViewModel {
         layoutEmail.addView(inputEmail, layoutParams);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_email)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutEmail, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_email)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutEmail, true).widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -866,7 +869,7 @@ public class FragmentSettingViewModel {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewEmail.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+                    viewEmail.setBackgroundColor(Color.parseColor(G.appBarColor));
                 } else {
                     viewEmail.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }

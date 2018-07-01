@@ -30,6 +30,7 @@ import android.view.WindowManager;
 
 import net.iGap.Config;
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
@@ -84,6 +85,9 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
 
+        setThemeSetting();
+
+
         checkFont();
 
         IntentFilter screenStateFilter = new IntentFilter();
@@ -125,6 +129,90 @@ public class ActivityEnhanced extends AppCompatActivity {
         }
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
+    private void setThemeSetting() {
+        switch (G.themeColor) {
+            case Config.CUSTOM:
+                this.setTheme(R.style.Material_lightCustom);
+                break;
+            case Config.DEFAULT:
+                this.setTheme(R.style.Material_lightCustom);
+                break;
+            case Config.DARK:
+                this.setTheme(R.style.Material_blackCustom);
+                break;
+            case Config.RED:
+                this.setTheme(R.style.Material_red);
+                break;
+            case Config.PINK:
+                this.setTheme(R.style.Material_pink);
+                break;
+            case Config.PURPLE:
+                this.setTheme(R.style.Material_purple);
+                break;
+            case Config.DEEPPURPLE:
+                this.setTheme(R.style.Material_deepPurple);
+                break;
+            case Config.INDIGO:
+                this.setTheme(R.style.Material_indigo);
+                break;
+            case Config.BLUE:
+                this.setTheme(R.style.Material_blue);
+                break;
+
+            case Config.LIGHT_BLUE:
+                this.setTheme(R.style.Material_lightBlue);
+                break;
+
+            case Config.CYAN:
+                this.setTheme(R.style.Material_cyan);
+                break;
+
+            case Config.TEAL:
+                this.setTheme(R.style.Material_teal);
+                break;
+
+            case Config.GREEN:
+                this.setTheme(R.style.Material_green);
+                break;
+
+            case Config.LIGHT_GREEN:
+                this.setTheme(R.style.Material_lightGreen);
+                break;
+
+            case Config.LIME:
+                this.setTheme(R.style.Material_lime);
+                break;
+
+            case Config.YELLLOW:
+                this.setTheme(R.style.Material_yellow);
+                break;
+            case Config.AMBER:
+                this.setTheme(R.style.Material_amber);
+                break;
+
+            case Config.ORANGE:
+                this.setTheme(R.style.Material_orange);
+                break;
+
+            case Config.DEEP_ORANGE:
+                this.setTheme(R.style.Material_deepOrange);
+                break;
+            case Config.BROWN:
+                this.setTheme(R.style.Material_brown);
+                break;
+            case Config.GREY:
+                this.setTheme(R.style.Material_grey);
+                break;
+            case Config.BLUE_GREY:
+                this.setTheme(R.style.Material_blueGrey);
+                break;
+            case Config.BLUE_GREY_COMPLETE:
+                this.setTheme(R.style.Material_blueGreyComplete);
+                break;
+        }
+
     }
 
     @Override

@@ -17,14 +17,6 @@ public class ActivityManageSpace extends ActivityEnhanced {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
-        SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (G.isDarkTheme) {
-            this.setTheme(R.style.Material_blackCustom);
-        } else {
-            this.setTheme(R.style.Material_lightCustom);
-        }
-
         super.onCreate(savedInstanceState);
         ActivityManageSpaceBinding activityManageSpaceBinding = DataBindingUtil.setContentView(this, R.layout.activity_manage_space);
         ActivityManageSpaceViewModel activityManageSpaceViewModel = new ActivityManageSpaceViewModel(this);

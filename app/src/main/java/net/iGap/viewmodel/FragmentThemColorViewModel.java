@@ -18,14 +18,12 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.databinding.FragmentThemColorBinding;
 import net.iGap.fragments.FragmentDarkTheme;
-import net.iGap.fragments.FragmentNotificationAndSound;
 import net.iGap.fragments.FragmentThemColor;
 import net.iGap.fragments.FragmentThemColorCustom;
 import net.iGap.helper.HelperFragment;
 import net.iGap.module.SHP_SETTING;
 
 import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.G.toggleButtonColor;
 
 public class FragmentThemColorViewModel {
 
@@ -174,6 +172,13 @@ public class FragmentThemColorViewModel {
         resetApp();
     }
 
+    public void onClickThemeBlueGreyComplete(View v) {
+        setSetting(Config.BLUE_GREY_COMPLETE, false);
+        Config.setThemeColor();
+        resetApp();
+    }
+
+
 
     private void setSetting(int config, boolean isDark) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -268,7 +273,9 @@ public class FragmentThemColorViewModel {
             GradientDrawable circleBlueGreyColor = (GradientDrawable) fragmentThemColorBinding.themeBlueGrey.getBackground();
             circleBlueGreyColor.setColor(Color.parseColor(Config.default_blueGrey_appBarColor));
 
-            int itemColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Config.DEFAULT);
+            GradientDrawable circleBlueGreyCompleteColor = (GradientDrawable) fragmentThemColorBinding.themeBlueGreyComplete.getBackground();
+            circleBlueGreyCompleteColor.setColor(Color.parseColor(Config.default_blueGrey_appBarColor));
+
 
             switch (G.themeColor) {
                 case Config.CUSTOM:
@@ -350,6 +357,9 @@ public class FragmentThemColorViewModel {
                 case Config.BLUE_GREY:
 
                     fragmentThemColorBinding.iconBlueGrey.setVisibility(View.VISIBLE);
+                    break;
+                case Config.BLUE_GREY_COMPLETE:
+                    fragmentThemColorBinding.iconBlueGreyComplete.setVisibility(View.VISIBLE);
                     break;
             }
 
