@@ -582,7 +582,7 @@ public class ViewMaker {
         txt_signature.setText("");
         txt_signature.setSingleLine(true);
         //  txt_signature.setFilters();
-        txt_signature.setTextColor(context.getResources().getColor(R.color.room_message_gray));
+        txt_signature.setTextColor(Color.parseColor(G.textBubble));
         txt_signature.setTextAppearance(context, R.style.ChatMessages_Time);
         LinearLayout.LayoutParams layout_266 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, i_Dp(R.dimen.dp18));
         txt_signature.setLayoutParams(layout_266);
@@ -598,7 +598,7 @@ public class ViewMaker {
         setTypeFace(txt_views_label);
 
         txt_views_label.setPadding(0, dpToPixel(2), 0, 0);
-        txt_views_label.setTextColor(context.getResources().getColor(R.color.room_message_gray));
+        txt_views_label.setTextColor(Color.parseColor(G.textBubble));
         LinearLayout.LayoutParams layout_959 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, i_Dp(R.dimen.dp16));
         txt_views_label.setLayoutParams(layout_959);
         lyt_see.addView(txt_views_label);
@@ -606,7 +606,7 @@ public class ViewMaker {
         MaterialDesignTextView img_eye = new MaterialDesignTextView(context);
         img_eye.setId(R.id.img_eye);
         img_eye.setText(context.getResources().getString(R.string.md_visibility));
-        img_eye.setTextColor(context.getResources().getColor(R.color.gray_6c));
+        img_eye.setTextColor(Color.parseColor(G.textBubble));
         setTextSize(img_eye, R.dimen.dp12);
         // img_eye.setPadding(0, dpToPixel(2), 0, 0);
         img_eye.setSingleLine(true);
@@ -1706,7 +1706,7 @@ public class ViewMaker {
         MaterialDesignTextView cs_txt_mute = new MaterialDesignTextView(G.context);
         cs_txt_mute.setId(R.id.cs_txt_mute);
         cs_txt_mute.setText(G.fragmentActivity.getResources().getString(R.string.md_muted));
-        cs_txt_mute.setTextColor(G.context.getResources().getColor(R.color.grayNew));
+        cs_txt_mute.setTextColor(Color.parseColor(G.textTitleTheme));
         setTextSize(cs_txt_mute, R.dimen.dp13);
         LinearLayout.LayoutParams layout_152s = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_152s.leftMargin = i_Dp(R.dimen.dp4);
@@ -1733,7 +1733,7 @@ public class ViewMaker {
         cs_txt_contact_time.setId(R.id.cs_txt_contact_time);
         cs_txt_contact_time.setSingleLine(true);
         cs_txt_contact_time.setText("time");
-        cs_txt_contact_time.setTextColor(G.context.getResources().getColor(R.color.gray));
+        cs_txt_contact_time.setTextColor(Color.parseColor(G.textTitleTheme));
         setTextSize(cs_txt_contact_time, R.dimen.dp12);
         LinearLayout.LayoutParams layout_574 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout_574.gravity = Gravity.CENTER;
@@ -1763,7 +1763,7 @@ public class ViewMaker {
         cs_txt_pinned_message.setId(R.id.cs_txt_pinned_message);
         cs_txt_pinned_message.setGravity(CENTER);
         cs_txt_pinned_message.setText(G.fragmentActivity.getResources().getString(R.string.md_circlePin));
-        cs_txt_pinned_message.setTextColor(Color.parseColor(G.textSubTheme));
+        cs_txt_pinned_message.setTextColor(Color.parseColor(G.textTitleTheme));
         cs_txt_pinned_message.setTextSize(i_Dp(R.dimen.dp20));
         setTextSize(cs_txt_pinned_message, R.dimen.dp20);
         LinearLayout.LayoutParams layout_175 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

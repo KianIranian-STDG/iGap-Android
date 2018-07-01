@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
   <style name="Material_blackCustom" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="pageBackgroundTheme">@style/page_background_black</item>
     <item name="textColorTheme">@style/text_style_black</item>
@@ -70,107 +71,181 @@
     <item name="textBackgroundColor">@style/line_style_setting_BlueGreyComplete</item>
 
     <item name="textSecurityColor">@style/text_title_security_dark</item>
-    <item name="emojiChat">@style/line_style_setting_BlueGreyComplete</item>
-    <item name="backgroundColorCall">@style/backgroundColorCallDark</item>
+    <item name="emojiChat">@style/emojiColorChat_BlueGreyComplete</item>
+    <item name="backgroundColorCall">@style/backgroundColorCallBlueGreyComplete</item>
     <item name="backgroundSubChatTheme">@style/backgroundSubChat_BlueGreyComplete</item>
     <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
+    <item name="md_background_color">#CFD8DC</item>
     <!--<item name="colorAccent">@color/white</item>-->
   </style>
 
 
   <style name="Material_red" parent="Theme.AppCompat.Light.NoActionBar">
+
     <item name="colorAccent">#F44336</item>
     <item name="colorPrimary">#F44336</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_pink" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#E91E63</item>
     <item name="colorPrimary">#E91E63</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_purple" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#9C27B0</item>
     <item name="colorPrimary">#9C27B0</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_deepPurple" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#673AB7</item>
     <item name="colorPrimary">#673AB7</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_indigo" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#3F51B5</item>
     <item name="colorPrimary">#3F51B5</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_blue" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#2196F3</item>
     <item name="colorPrimary">#2196F3</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_lightBlue" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#03A9F4</item>
     <item name="colorPrimary">#03A9F4</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_cyan" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#00BCD4</item>
     <item name="colorPrimary">#00BCD4</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_teal" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#009688</item>
     <item name="colorPrimary">#009688</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_green" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#388E3C</item>
     <item name="colorPrimary">#388E3C</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_lightGreen" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#689F38</item>
     <item name="colorPrimary">#689F38</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_lime" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#AFB42B</item>
     <item name="colorPrimary">#AFB42B</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_yellow" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#FBC02D</item>
     <item name="colorPrimary">#FBC02D</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_amber" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#FFA000</item>
     <item name="colorPrimary">#FFA000</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_orange" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#F57C00</item>
     <item name="colorPrimary">#F57C00</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+
   </style>
 
   <style name="Material_deepOrange" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#E64A19</item>
     <item name="colorPrimary">#E64A19</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
   </style>
 
   <style name="Material_brown" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#5D4037</item>
     <item name="colorPrimary">#5D4037</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
   </style>
 
   <style name="Material_grey" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#616161</item>
     <item name="colorPrimary">#616161</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
   </style>
 
   <style name="Material_blueGrey" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorAccent">#455A64</item>
     <item name="colorPrimary">#455A64</item>
+    <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
   </style>
 
 

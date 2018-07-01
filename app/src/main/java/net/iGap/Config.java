@@ -249,7 +249,7 @@ public class Config {
                         "#FF5252",
                         "#FFFFFF",
                         "#FFFFFF",
-                        "##ffcdd2"
+                        "#ffcdd2"
                 );
                 break;
             case PINK:
