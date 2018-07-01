@@ -12,10 +12,15 @@ package net.iGap.viewmodel;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.View;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.Config;
 import net.iGap.G;
+import net.iGap.R;
 import net.iGap.databinding.FragmentThemColorBinding;
 import net.iGap.fragments.FragmentDarkTheme;
 import net.iGap.fragments.FragmentThemColor;
@@ -49,8 +54,7 @@ public class FragmentThemColorViewModel {
 
     public void onClickThemeDefault(View v) {
         setSetting(Config.DEFAULT, false);
-        Config.setThemeColor();
-        resetApp();
+
     }
 
     public void onClickThemeDark(View v) {
@@ -60,148 +64,134 @@ public class FragmentThemColorViewModel {
 
     public void onClickThemeRed(View v) {
         setSetting(Config.RED, false);
-        Config.setThemeColor();
-        resetApp();
+
     }
 
     public void onClickThemePink(View v) {
         setSetting(Config.PINK, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemePurple(View v) {
         setSetting(Config.PURPLE, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemeDeepPurple(View v) {
         setSetting(Config.DEEPPURPLE, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemeIndigo(View v) {
         setSetting(Config.INDIGO, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemeBlue(View v) {
         setSetting(Config.BLUE, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemeLightBlue(View v) {
         setSetting(Config.LIGHT_BLUE, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemeCyan(View v) {
         setSetting(Config.CYAN, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemeTeal(View v) {
         setSetting(Config.TEAL, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemeGreen(View v) {
         setSetting(Config.GREEN, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemeLightGreen(View v) {
         setSetting(Config.LIGHT_GREEN, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemeLime(View v) {
         setSetting(Config.LIME, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemeYellow(View v) {
         setSetting(Config.YELLLOW, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemeAmber(View v) {
         setSetting(Config.AMBER, false);
-        Config.setThemeColor();
-        resetApp();
+        ;
     }
 
     public void onClickThemeOrange(View v) {
         setSetting(Config.ORANGE, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemeDeepOrange(View v) {
         setSetting(Config.DEEP_ORANGE, false);
-        Config.setThemeColor();
-        resetApp();
     }
 
     public void onClickThemeBrown(View v) {
         setSetting(Config.BROWN, false);
-        Config.setThemeColor();
-        resetApp();
+
     }
 
     public void onClickThemeGrey(View v) {
         setSetting(Config.GREY, false);
-        Config.setThemeColor();
-        resetApp();
+
     }
 
     public void onClickThemeBlueGrey(View v) {
         setSetting(Config.BLUE_GREY, false);
-        Config.setThemeColor();
-        resetApp();
+
     }
 
     public void onClickThemeBlueGreyComplete(View v) {
         setSetting(Config.BLUE_GREY_COMPLETE, false);
-        Config.setThemeColor();
-        resetApp();
+
     }
 
     public void onClickThemeIndigoComplete(View v) {
         setSetting(Config.INDIGO_COMPLETE, false);
-        Config.setThemeColor();
-        resetApp();
+
     }
 
     public void onClickThemeBrownComplete(View v) {
         setSetting(Config.BROWN_COMPLETE, false);
-        Config.setThemeColor();
-        resetApp();
+
     }
 
     public void onClickThemeTealComplete(View v) {
         setSetting(Config.TEAL_COMPLETE, false);
-        Config.setThemeColor();
-        resetApp();
+
     }
 
+    private void setSetting(final int config, final boolean isDark) {
 
-    private void setSetting(int config, boolean isDark) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(SHP_SETTING.KEY_THEME_COLOR, config);
-        editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, isDark);
-        editor.apply();
+        new MaterialDialog.Builder(G.currentActivity)
+                .title(R.string.customization)
+                .positiveText(R.string.ok)
+                .negativeText(R.string.cansel)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(SHP_SETTING.KEY_THEME_COLOR, config);
+                        editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, isDark);
+                        editor.apply();
+                        Config.setThemeColor();
+                        if (dialog.isPromptCheckBoxChecked()) {
+                            editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
+                            editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
+                            editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
+                            editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, G.attachmentColor);
+                            editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
+                            editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
+                            editor.apply();
+                        }
+                        resetApp();
+                    }
+                })
+                .checkBoxPromptRes(R.string.Apply_colors_to_customize, false, null)
+                .show();
+
     }
 
     public static void resetApp() {
@@ -383,6 +373,10 @@ public class FragmentThemColorViewModel {
                 case Config.BLUE_GREY:
 
                     fragmentThemColorBinding.iconBlueGrey.setVisibility(View.VISIBLE);
+                    break;
+                case Config.BLUE_GREY_COMPLETE:
+
+                    fragmentThemColorBinding.iconBlueGreyComplete.setVisibility(View.VISIBLE);
                     break;
                 case Config.INDIGO_COMPLETE:
                     fragmentThemColorBinding.iconIndigoComplete.setVisibility(View.VISIBLE);

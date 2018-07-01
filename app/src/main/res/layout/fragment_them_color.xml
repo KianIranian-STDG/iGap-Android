@@ -125,6 +125,16 @@
             android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
 
+          <net.iGap.module.MaterialDesignTextView
+            style="?iconColorMenuTheme"
+            android:layout_width="@dimen/dp36"
+            android:layout_height="@dimen/dp36"
+            android:gravity="center"
+            android:minWidth="@dimen/dp32"
+            android:text="@string/md_settings_cogwheel_button"
+            android:textAppearance="@style/TextIconAppearance.menu"
+            android:textSize="@dimen/dp20" />
+
           <ImageView
             android:id="@+id/theme_custom_1"
             android:layout_width="@dimen/dp20"
@@ -221,6 +231,17 @@
             android:visibility="gone"
             android:textAppearance="@style/TextIconAppearance_toolbar"
             android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}" />
+
+          <net.iGap.module.MaterialDesignTextView
+            style="?iconColorMenuTheme"
+            android:layout_width="@dimen/dp36"
+            android:layout_height="@dimen/dp36"
+            android:gravity="center"
+            android:minWidth="@dimen/dp32"
+            android:text="@string/md_settings_cogwheel_button"
+            android:textAppearance="@style/TextIconAppearance.menu"
+            android:textSize="@dimen/dp20" />
+
           <ImageView
             android:id="@+id/theme_dark_1"
             android:layout_width="@dimen/dp20"
@@ -256,7 +277,7 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
-            android:text="Blue Grey Complete"
+            android:text="Blue Grey (Full Set)"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
@@ -304,7 +325,7 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
-            android:text="Indigo Complete"
+            android:text="Indigo (Full Set)"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
@@ -353,7 +374,7 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
-            android:text="Brown Complete"
+            android:text="Brown (Full Set)"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 
@@ -402,7 +423,7 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp4"
-            android:text="Teal Grey Complete"
+            android:text="Teal (Full Set)"
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
 

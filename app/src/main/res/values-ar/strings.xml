@@ -2144,6 +2144,7 @@
   <string name="install_app">ثبّت التطبيق</string>
   <string name="text_top">لاستخدام الخدمة: لتثبيت التطبيق للبطاقة ، وشراء تذكرة الحافلة ، وشراء تهمة ، ودفع الفواتير ، وشراء مجموعة وخدمات الدفع الأخرى.</string>
   <string name="text_paygear">لاستخدام الخدمة: لتثبيت التطبيق للبطاقة ، وشراء تذكرة الحافلة ، وشراء تهمة ، ودفع الفواتير ، وشراء مجموعة وخدمات الدفع الأخرى.</string>
-
+  <string name="customization">التخصيص</string>
+  <string name="Apply_colors_to_customize">تطبيق الألوان لتخصيصها</string>
 
 </resources>

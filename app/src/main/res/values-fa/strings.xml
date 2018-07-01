@@ -1190,4 +1190,6 @@
   <string name="install_app">نصب برنامه</string>
   <string name="text_top">برای استفاده از خدمات :کارت به کارت، خرید بلیط اتوبوس ، خرید شارژ، پرداخت قبوض، خرید بسته اینترنتی و سایر خدمات پرداخت، اپلیکیشن تاپ را نصب نمایید.</string>
   <string name="text_paygear">پیگیر ، کیف پول همراه شما برداشت و واریز آنی وجه ، پرداخت هدیه ، خرید از فروشگاه ها و پرداخت کرایه تاکسی.</string>
+  <string name="customization">سفارشی سازی</string>
+  <string name="Apply_colors_to_customize">اعمال رنگ ها برای سفارشی سازی</string>
 </resources>

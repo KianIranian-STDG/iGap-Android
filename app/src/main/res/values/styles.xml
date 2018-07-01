@@ -578,7 +578,7 @@
   </style>
 
   <style name="backgroundColorCallBrownComplete">
-    <item name="android:background">@drawable/background_call_fragment_blue_grey</item>
+    <item name="android:background">@drawable/background_call_fragment_brown</item>
   </style>
 
   <style name="emojiColorChat_BrownComplete">
@@ -630,7 +630,7 @@
   </style>
 
   <style name="backgroundColorCallTealComplete">
-    <item name="android:background">@drawable/background_call_fragment_blue_grey</item>
+    <item name="android:background">@drawable/background_call_fragment_teal</item>
   </style>
 
   <style name="emojiColorChat_TealComplete">
