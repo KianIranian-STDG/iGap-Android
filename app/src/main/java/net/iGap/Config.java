@@ -241,7 +241,7 @@ public class Config {
                         Config.default_red_appBarColor,
                         "#ffcdd2",// is set
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#ef9a9a",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -265,7 +265,7 @@ public class Config {
                         Config.default_Pink_appBarColor,
                         "#f8bbd0",// is set
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#f48fb1",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -289,7 +289,7 @@ public class Config {
                         Config.default_purple_appBarColor,
                         "#e1bee7",// is set
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#ce93d8",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -313,7 +313,7 @@ public class Config {
                         Config.default_deepPurple_appBarColor,
                         "#d1c4e9",// is set
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#b39ddb",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -337,7 +337,7 @@ public class Config {
                         Config.default_indigo_appBarColor,
                         "#c5cae9",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#9fa8da",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -361,7 +361,7 @@ public class Config {
                         Config.default_blue_appBarColor,
                         "#bbdefb",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#90caf9",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -386,7 +386,7 @@ public class Config {
                         Config.default_lightBlue_appBarColor,
                         "#b3e5fc",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#81d4fa",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -411,7 +411,7 @@ public class Config {
                         Config.default_cyan_appBarColor,
                         "#b2ebf2",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#81d4fa",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -435,7 +435,7 @@ public class Config {
                         Config.default_teal_appBarColor,
                         "#b2dfdb",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#80cbc4",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -459,7 +459,7 @@ public class Config {
                         Config.default_green_appBarColor,
                         "#c8e6c9",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#a5d6a7",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -483,7 +483,7 @@ public class Config {
                         Config.default_lightGreen_appBarColor,
                         "#dcedc8",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#c5e1a5",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -507,7 +507,7 @@ public class Config {
                         Config.default_lime_appBarColor,
                         "#f0f4c3",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#e6ee9c",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -532,7 +532,7 @@ public class Config {
                         Config.default_yellow_appBarColor,
                         "#fff9c4",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#fff59d",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -556,7 +556,7 @@ public class Config {
                         Config.default_amber_appBarColor,
                         "#ffecb3",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#ffe082",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -580,7 +580,7 @@ public class Config {
                         Config.default_orange_appBarColor,
                         "#ffe0b2",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#ffcc80",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -605,7 +605,7 @@ public class Config {
                         Config.default_deepOrange_appBarColor,
                         "#ffccbc",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#ffab91",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -630,7 +630,7 @@ public class Config {
                         Config.default_brown_appBarColor,
                         "#d7ccc8",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#bcaaa4",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -654,7 +654,7 @@ public class Config {
                         Config.default_grey_appBarColor,
                         "#f5f5f5",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#e0e0e0",
                         "#000000",
                         "#bbbbbb",
                         "#000000",
@@ -679,7 +679,7 @@ public class Config {
                         Config.default_blueGrey_appBarColor,
                         "#cfd8dc",// line
                         "#FFFFFF",
-                        "#f9f9f9",
+                        "#b0bec5",
                         "#000000",
                         "#bbbbbb",
                         "#000000",

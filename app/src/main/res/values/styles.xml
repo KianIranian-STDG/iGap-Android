@@ -525,7 +525,7 @@
   </style>
 
   <style name="backgroundColorCallindigoComplete">
-    <item name="android:background">@drawable/background_call_fragment_blue_grey</item>
+    <item name="android:background">@drawable/background_call_fragment_indigo</item>
   </style>
 
   <style name="emojiColorChat_indigoComplete">
