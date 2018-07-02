@@ -35,6 +35,7 @@ public class RealmContacts extends RealmObject {
     private boolean mutual;
     private RealmAvatar avatar;
     private boolean blockUser = false;
+    private boolean isAddAcount = false;
 
     public static void putOrUpdate(Realm realm, ProtoGlobal.RegisteredUser registerUser) {
         RealmContacts listResponse = realm.createObject(RealmContacts.class);
@@ -251,5 +252,13 @@ public class RealmContacts extends RealmObject {
 
     public void setMutual(boolean mutual) {
         this.mutual = mutual;
+    }
+
+    public boolean isAddAcount() {
+        return isAddAcount;
+    }
+
+    public void setAddAcount(boolean addAcount) {
+        isAddAcount = addAcount;
     }
 }
