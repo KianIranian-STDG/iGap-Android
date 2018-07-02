@@ -713,6 +713,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         slidingUpPanelLayout = view.findViewById(R.id.sliding_layout);
         vgSlideUp = view.findViewById(R.id.vgSlideUp);
         iconSlide = view.findViewById(R.id.ml_user_on_map);
+        iconSlide.setTextColor(Color.parseColor(G.appBarColor));
 
         slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
