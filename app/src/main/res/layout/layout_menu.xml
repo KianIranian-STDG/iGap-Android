@@ -10,6 +10,7 @@
   android:fitsSystemWindows="true"
   android:orientation="vertical"
   tools:ignore="MissingPrefix">
+
   <ScrollView
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
@@ -306,7 +307,6 @@
               android:textSize="@dimen/dp14" />
 
           </LinearLayout>
-
 
 
           <LinearLayout

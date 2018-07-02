@@ -10,10 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.iGap.R;
-import net.iGap.databinding.FragmentThemColorBinding;
 import net.iGap.databinding.FragmentThemColorCustomBinding;
 import net.iGap.viewmodel.FragmentThemColorCustomViewModel;
-import net.iGap.viewmodel.FragmentThemColorViewModel;
 
 
 /**

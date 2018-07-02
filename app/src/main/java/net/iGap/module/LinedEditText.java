@@ -20,7 +20,6 @@ import android.os.Build;
 import android.util.AttributeSet;
 
 import net.iGap.G;
-import net.iGap.R;
 
 public class LinedEditText extends android.support.v7.widget.AppCompatEditText {
 

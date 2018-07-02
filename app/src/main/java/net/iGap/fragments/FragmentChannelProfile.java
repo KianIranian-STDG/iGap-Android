@@ -14,7 +14,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +59,6 @@ import net.iGap.viewmodel.FragmentChannelProfileViewModel;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class FragmentChannelProfile extends BaseFragment implements OnChannelAvatarAdd, OnChannelAvatarDelete {
 

@@ -64,7 +64,6 @@ import net.iGap.interfaces.OnChannelCheckUsername;
 import net.iGap.interfaces.OnChannelDelete;
 import net.iGap.interfaces.OnChannelEdit;
 import net.iGap.interfaces.OnChannelKickAdmin;
-import net.iGap.interfaces.OnChannelKickMember;
 import net.iGap.interfaces.OnChannelKickModerator;
 import net.iGap.interfaces.OnChannelLeft;
 import net.iGap.interfaces.OnChannelRemoveUsername;

@@ -10,18 +10,7 @@
 
 package net.iGap;
 
-import android.content.SharedPreferences;
 import android.text.format.DateUtils;
-
-import net.iGap.module.SHP_SETTING;
-
-import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.G.appBarColor;
-import static net.iGap.G.attachmentColor;
-import static net.iGap.G.context;
-import static net.iGap.G.headerTextColor;
-import static net.iGap.G.notificationColor;
-import static net.iGap.G.toggleButtonColor;
 
 public class Config {
 
@@ -82,8 +71,6 @@ public class Config {
     public static final String BASE64_PUBLIC_KEY =
             "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsm4sNLgDVqPf0ZxLWH3vkB1mPzHIkGWIJtNelibcTtzhipRv0iHeS3Z0wzeQpwYcMbkWQ81+WtgJwxUujitPOZnHvBex8qQLJ2JH33DvevWOgLDWPKEnKlfdi3Qg09pfO/Bx7eoWznWhRR6ZNjRgzY+P/2AaW77/f3wq3XHbHldM3jUrqwValwrWrkigIR0MFTkaGkg11T9JCFvO/L/FaZCAybuutje+H1nmNav3r8Xv6eBYS0nSVEm0dm5h46ECQi9PIxOCSMJ1McZMRkb8UaCScCAxh6lkD9fgZrOT5XQa8EOSWOwHx"
                     + "+uQWdR0efHyYbdC3A8zoJZjxBVtvVnDYwIDAQAB";
-
-
 
 
 }

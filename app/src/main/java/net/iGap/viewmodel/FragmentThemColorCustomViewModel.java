@@ -21,9 +21,9 @@ import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
 
-import net.iGap.Theme;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.databinding.FragmentThemColorCustomBinding;
 import net.iGap.fragments.FragmentThemColorCustom;
 import net.iGap.module.SHP_SETTING;

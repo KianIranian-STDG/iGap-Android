@@ -121,7 +121,7 @@ dependencies {
     compile 'com.mindorks.android:prdownloader:0.3.0'
     implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.google.firebase:firebase-messaging:17.0.0'
-    implementation ('com.github.RooyeKhat-Media:Compress:1.0.0'){
+    implementation('com.github.RooyeKhat-Media:Compress:1.0.0') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
     implementation('com.github.RooyeKhat-Media:VideoTrimmer:1.0.0') {

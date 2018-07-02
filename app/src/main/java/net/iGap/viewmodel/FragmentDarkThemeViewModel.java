@@ -1,27 +1,16 @@
 package net.iGap.viewmodel;
 
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
 import android.databinding.ObservableField;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.widget.TimePicker;
 
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.fragments.FragmentDarkTheme;
 import net.iGap.module.SHP_SETTING;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.viewmodel.FragmentThemColorViewModel.resetApp;

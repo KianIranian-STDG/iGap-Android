@@ -16,7 +16,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.databinding.ObservableField;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,11 +39,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.larswerkman.holocolorpicker.ColorPicker;
-import com.larswerkman.holocolorpicker.OpacityBar;
-import com.larswerkman.holocolorpicker.SVBar;
 
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityManageSpace;
@@ -52,7 +47,6 @@ import net.iGap.databinding.FragmentSettingBinding;
 import net.iGap.fragments.FragmentBio;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChatBackground;
-import net.iGap.fragments.FragmentDarkTheme;
 import net.iGap.fragments.FragmentData;
 import net.iGap.fragments.FragmentDeleteAccount;
 import net.iGap.fragments.FragmentLanguage;
@@ -105,13 +99,8 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
 
 import static android.content.Context.MODE_PRIVATE;
-import static net.iGap.G.appBarColor;
-import static net.iGap.G.attachmentColor;
 import static net.iGap.G.context;
-import static net.iGap.G.headerTextColor;
-import static net.iGap.G.notificationColor;
 import static net.iGap.G.onRefreshActivity;
-import static net.iGap.G.toggleButtonColor;
 import static net.iGap.R.string.log_out;
 
 public class FragmentSettingViewModel {

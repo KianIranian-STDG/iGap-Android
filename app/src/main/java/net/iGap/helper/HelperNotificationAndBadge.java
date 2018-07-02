@@ -100,6 +100,7 @@ public class HelperNotificationAndBadge {
     private String mContent = "";
     private Bitmap mBitmapIcon = null;
     String CHANNEL_ID = "iGap_channel_01";
+
     public HelperNotificationAndBadge() {
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         remoteViews = new RemoteViews(context.getPackageName(), R.layout.layout_notification_small);

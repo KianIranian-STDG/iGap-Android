@@ -14,7 +14,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -40,13 +39,10 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.MaterialDesignTextView;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.ActivityCallViewModel;
 import net.iGap.webrtc.WebRTC;
 
 import java.io.IOException;
-
-import static net.iGap.G.context;
 
 public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView {
 

@@ -57,7 +57,6 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
@@ -70,7 +69,6 @@ import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentSetting;
-import net.iGap.fragments.FragmentThemColor;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
@@ -142,7 +140,6 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.viewmodel.ActivityCallViewModel;
-import net.iGap.viewmodel.FragmentSettingViewModel;
 import net.iGap.viewmodel.FragmentThemColorViewModel;
 
 import java.io.File;

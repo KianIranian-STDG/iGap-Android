@@ -9,18 +9,13 @@ package net.iGap.activities;
  * All rights reserved.
 */
 
-import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityEnterPassCodeBinding;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.ActivityEnterPassCodeViewModel;
-
-import static net.iGap.G.context;
 
 public class ActivityEnterPassCode extends ActivityEnhanced {
 
