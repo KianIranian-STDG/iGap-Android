@@ -22,6 +22,8 @@
     <item name="fabButtoniGap">@style/FabButton_dark</item>
     <item name="md_dark_theme">true</item>
     <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
     <!--<item name="colorAccent">@color/colorOldBlack</item>-->
   </style>
 
@@ -46,6 +48,8 @@
     <item name="fabButtoniGap">@style/FabButton_light</item>
     <item name="md_dark_theme">false</item>C
     <item name="backgroundPassCode">@style/backgroundPassCodeLight</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
     <!--<item name="colorAccent">@color/white</item>-->
   </style>
 
@@ -76,6 +80,8 @@
     <item name="backgroundSubChatTheme">@style/backgroundSubChat_BlueGreyComplete</item>
     <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
     <item name="md_background_color">#CFD8DC</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
     <!--<item name="colorAccent">@color/white</item>-->
   </style>
 
@@ -107,6 +113,8 @@
     <item name="backgroundSubChatTheme">@style/backgroundSubChat_indigoComplete</item>
     <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
     <item name="md_background_color">#c5cae9</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
     <!--<item name="colorAccent">@color/white</item>-->
   </style>
 
@@ -137,6 +145,8 @@
     <item name="backgroundSubChatTheme">@style/backgroundSubChat_BrownComplete</item>
     <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
     <item name="md_background_color">#d7ccc8</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
     <!--<item name="colorAccent">@color/white</item>-->
   </style>
 
@@ -167,6 +177,8 @@
     <item name="backgroundSubChatTheme">@style/backgroundSubChat_TealComplete</item>
     <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
     <item name="md_background_color">#b2dfdb</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
     <!--<item name="colorAccent">@color/white</item>-->
   </style>
 
@@ -178,6 +190,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -187,7 +201,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
-
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
   </style>
 
   <style name="Material_purple" parent="Theme.AppCompat.Light.NoActionBar">
@@ -196,6 +211,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -205,6 +222,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -214,6 +233,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -223,6 +244,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -232,6 +255,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -241,6 +266,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -250,6 +277,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -259,6 +288,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -268,6 +299,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -277,6 +310,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -286,6 +321,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -295,6 +332,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -304,6 +343,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
 
   </style>
 
@@ -313,6 +354,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
   </style>
 
   <style name="Material_brown" parent="Theme.AppCompat.Light.NoActionBar">
@@ -321,6 +364,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
   </style>
 
   <style name="Material_grey" parent="Theme.AppCompat.Light.NoActionBar">
@@ -329,6 +374,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
   </style>
 
   <style name="Material_blueGrey" parent="Theme.AppCompat.Light.NoActionBar">
@@ -337,6 +384,8 @@
     <item name="backgroundColorSettingTheme">@style/background_setting_light</item>
     <item name="backgroundColorSettingTheme_2">@style/background_2_setting_light</item>
     <item name="lineColorSettingTheme">@style/line_style_setting_light</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
   </style>
 
 
