@@ -185,11 +185,12 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                if (G.isDarkTheme) {
-                    ds.linkColor = LinkColorDark;
-                } else {
-                    ds.linkColor = LinkColor;
-                }
+//                if (G.isDarkTheme) {
+//                    ds.linkColor = LinkColorDark;
+//                } else {
+//                    ds.linkColor = LinkColor;
+//                }
+                ds.linkColor = Color.parseColor(G.linkColor);
 
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
@@ -253,11 +254,14 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                if (G.isDarkTheme) {
-                    ds.linkColor = LinkColorDark;
-                } else {
-                    ds.linkColor = LinkColor;
-                }
+//                if (G.isDarkTheme) {
+//                    ds.linkColor = LinkColorDark;
+//                } else {
+//                    ds.linkColor = LinkColor;
+//                }
+
+                ds.linkColor = Color.parseColor(G.linkColor);
+
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -289,12 +293,12 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                if (G.isDarkTheme) {
-                    ds.linkColor = LinkColorDark;
-                } else {
-                    ds.linkColor = LinkColor;
-                }
-
+//                if (G.isDarkTheme) {
+//                    ds.linkColor = LinkColorDark;
+//                } else {
+//                    ds.linkColor = LinkColor;
+//                }
+                ds.linkColor = Color.parseColor(G.linkColor);
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -362,11 +366,13 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                if (G.isDarkTheme) {
-                    ds.linkColor = LinkColorDark;
-                } else {
-                    ds.linkColor = LinkColor;
-                }
+//                if (G.isDarkTheme) {
+//                    ds.linkColor = LinkColorDark;
+//                } else {
+//                    ds.linkColor = LinkColor;
+//                }
+                ds.linkColor = Color.parseColor(G.linkColor);
+
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }
@@ -438,11 +444,13 @@ public class HelperUrl {
 
             @Override
             public void updateDrawState(TextPaint ds) {
-                if (G.isDarkTheme) {
-                    ds.linkColor = LinkColorDark;
-                } else {
-                    ds.linkColor = LinkColor;
-                }
+//                if (G.isDarkTheme) {
+//                    ds.linkColor = LinkColorDark;
+//                } else {
+//                    ds.linkColor = LinkColor;
+//                }
+                ds.linkColor = Color.parseColor(G.linkColor);
+
                 super.updateDrawState(ds);
                 ds.setUnderlineText(false);
             }

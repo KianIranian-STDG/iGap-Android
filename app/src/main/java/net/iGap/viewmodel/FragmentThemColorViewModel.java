@@ -163,6 +163,11 @@ public class FragmentThemColorViewModel {
 
     }
 
+    public void onClickThemeGreyComplete(View v) {
+        setSetting(Config.GREY_COMPLETE, false);
+
+    }
+
     private void setSetting(final int config, final boolean isDark) {
 
         new MaterialDialog.Builder(G.currentActivity)
@@ -292,6 +297,9 @@ public class FragmentThemColorViewModel {
             GradientDrawable circleTealCompleteColor = (GradientDrawable) fragmentThemColorBinding.themeTealComplete.getBackground();
             circleTealCompleteColor.setColor(Color.parseColor(Config.default_teal_appBarColor));
 
+            GradientDrawable circleGreyCompleteColor = (GradientDrawable) fragmentThemColorBinding.themeGreyComplete.getBackground();
+            circleGreyCompleteColor.setColor(Color.parseColor(Config.default_grey_appBarColor));
+
 
             switch (G.themeColor) {
                 case Config.CUSTOM:
@@ -387,6 +395,10 @@ public class FragmentThemColorViewModel {
                     break;
                 case Config.TEAL_COMPLETE:
                     fragmentThemColorBinding.iconTealComplete.setVisibility(View.VISIBLE);
+                    break;
+
+                case Config.GREY_COMPLETE:
+                    fragmentThemColorBinding.iconGreyComplete.setVisibility(View.VISIBLE);
                     break;
             }
 

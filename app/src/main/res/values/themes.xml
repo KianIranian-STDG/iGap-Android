@@ -182,6 +182,38 @@
     <!--<item name="colorAccent">@color/white</item>-->
   </style>
 
+  <style name="Material_GreyComplete" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorAccent">#616161</item>
+    <item name="colorPrimary">#616161</item>
+    <item name="pageBackgroundTheme">@style/page_background_black</item>
+    <item name="textColorTheme">@style/text_style_black</item>
+
+    <item name="textColorMenuTheme">@style/text_style_menu_GreyComplete</item>
+    <item name="iconColorMenuTheme">@style/icon_style_menu_GreyComplete</item>
+    <item name="backgroundColorMenuTheme">@style/background_settingGreyComplete</item>
+
+    <item name="backgroundColorSettingTheme">@style/background_settingGreyComplete</item>
+    <item name="backgroundColorSettingTheme_2">@style/background_2_setting_GreyComplete</item>
+
+    <item name="textTitleColorSettingTheme">@style/text_title_style_setting_GreyComplete</item>
+    <item name="textSubColorSettingTheme">@style/text_sub_style_setting_GreyComplete</item>
+    <item name="lineColorSettingTheme">@style/line_style_setting_GreyComplete</item>
+    <item name="hintColorSettingTheme">@style/hint_style_setting_GreyComplete</item>
+
+    <item name="textBackgroundColor_2">@style/line_style_setting_GreyComplete</item>
+    <item name="textBackgroundColor">@style/line_style_setting_GreyComplete</item>
+
+    <item name="textSecurityColor">@style/text_title_security_dark</item>
+    <item name="emojiChat">@style/emojiColorChat_GreyComplete</item>
+    <item name="backgroundColorCall">@style/backgroundColorCallGreyComplete</item>
+    <item name="backgroundSubChatTheme">@style/backgroundSubChat_GreyComplete</item>
+    <item name="backgroundPassCode">@style/backgroundPassCodeDark</item>
+    <item name="md_background_color">#f5f5f5</item>
+    <item name="md_medium_font">IRANSansMobile.ttf</item>
+    <item name="md_regular_font">IRANSansMobile.ttf</item>
+    <!--<item name="colorAccent">@color/white</item>-->
+  </style>
+
 
   <style name="Material_red" parent="Theme.AppCompat.Light.NoActionBar">
 

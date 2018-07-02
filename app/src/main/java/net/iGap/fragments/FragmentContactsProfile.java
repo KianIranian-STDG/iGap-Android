@@ -268,7 +268,7 @@ public class FragmentContactsProfile extends BaseFragment {
                     final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.pu_nikname_profileUser))
                             .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok))
                             .customView(layoutNickname, true)
-                            .widgetColor(G.context.getResources().getColor(R.color.toolbar_background))
+                            .widgetColor(Color.parseColor(G.appBarColor))
                             .negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel))
                             .build();
 
@@ -279,7 +279,7 @@ public class FragmentContactsProfile extends BaseFragment {
                         @Override
                         public void onFocusChange(View view, boolean b) {
                             if (b) {
-                                viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+                                viewFirstName.setBackgroundColor(Color.parseColor(G.appBarColor));
                             } else {
                                 viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                             }
@@ -290,7 +290,7 @@ public class FragmentContactsProfile extends BaseFragment {
                         @Override
                         public void onFocusChange(View view, boolean b) {
                             if (b) {
-                                viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+                                viewLastName.setBackgroundColor(Color.parseColor(G.appBarColor));
                             } else {
                                 viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                             }

@@ -220,6 +220,9 @@ public class ActivityEnhanced extends AppCompatActivity {
             case Config.TEAL_COMPLETE:
                 this.setTheme(R.style.Material_TealComplete);
                 break;
+            case Config.GREY_COMPLETE:
+                this.setTheme(R.style.Material_GreyComplete);
+                break;
 
         }
 

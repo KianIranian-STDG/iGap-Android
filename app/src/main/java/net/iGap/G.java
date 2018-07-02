@@ -124,6 +124,7 @@ public class G extends MultiDexApplication {
     public static String voteIconTheme;
     public static String textTitleTheme;
     public static String textBubble;
+    public static String linkColor;
     public static String txtIconCheck;
     public static String textBubbleSend;
     public static String textSubTheme;
