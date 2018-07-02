@@ -21,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.databinding.FragmentThemColorBinding;
 import net.iGap.fragments.FragmentDarkTheme;
 import net.iGap.fragments.FragmentThemColor;
@@ -53,7 +54,7 @@ public class FragmentThemColorViewModel {
     }
 
     public void onClickThemeDefault(View v) {
-        setSetting(Config.DEFAULT, false);
+        setSetting(Theme.DEFAULT, false);
 
     }
 
@@ -63,108 +64,108 @@ public class FragmentThemColorViewModel {
     }
 
     public void onClickThemeRed(View v) {
-        setSetting(Config.RED, false);
+        setSetting(Theme.RED, false);
 
     }
 
     public void onClickThemePink(View v) {
-        setSetting(Config.PINK, false);
+        setSetting(Theme.PINK, false);
     }
 
     public void onClickThemePurple(View v) {
-        setSetting(Config.PURPLE, false);
+        setSetting(Theme.PURPLE, false);
     }
 
     public void onClickThemeDeepPurple(View v) {
-        setSetting(Config.DEEPPURPLE, false);
+        setSetting(Theme.DEEPPURPLE, false);
     }
 
     public void onClickThemeIndigo(View v) {
-        setSetting(Config.INDIGO, false);
+        setSetting(Theme.INDIGO, false);
     }
 
     public void onClickThemeBlue(View v) {
-        setSetting(Config.BLUE, false);
+        setSetting(Theme.BLUE, false);
     }
 
     public void onClickThemeLightBlue(View v) {
-        setSetting(Config.LIGHT_BLUE, false);
+        setSetting(Theme.LIGHT_BLUE, false);
     }
 
     public void onClickThemeCyan(View v) {
-        setSetting(Config.CYAN, false);
+        setSetting(Theme.CYAN, false);
     }
 
     public void onClickThemeTeal(View v) {
-        setSetting(Config.TEAL, false);
+        setSetting(Theme.TEAL, false);
     }
 
     public void onClickThemeGreen(View v) {
-        setSetting(Config.GREEN, false);
+        setSetting(Theme.GREEN, false);
     }
 
     public void onClickThemeLightGreen(View v) {
-        setSetting(Config.LIGHT_GREEN, false);
+        setSetting(Theme.LIGHT_GREEN, false);
     }
 
     public void onClickThemeLime(View v) {
-        setSetting(Config.LIME, false);
+        setSetting(Theme.LIME, false);
     }
 
     public void onClickThemeYellow(View v) {
-        setSetting(Config.YELLLOW, false);
+        setSetting(Theme.YELLLOW, false);
     }
 
     public void onClickThemeAmber(View v) {
-        setSetting(Config.AMBER, false);
+        setSetting(Theme.AMBER, false);
         ;
     }
 
     public void onClickThemeOrange(View v) {
-        setSetting(Config.ORANGE, false);
+        setSetting(Theme.ORANGE, false);
     }
 
     public void onClickThemeDeepOrange(View v) {
-        setSetting(Config.DEEP_ORANGE, false);
+        setSetting(Theme.DEEP_ORANGE, false);
     }
 
     public void onClickThemeBrown(View v) {
-        setSetting(Config.BROWN, false);
+        setSetting(Theme.BROWN, false);
 
     }
 
     public void onClickThemeGrey(View v) {
-        setSetting(Config.GREY, false);
+        setSetting(Theme.GREY, false);
 
     }
 
     public void onClickThemeBlueGrey(View v) {
-        setSetting(Config.BLUE_GREY, false);
+        setSetting(Theme.BLUE_GREY, false);
 
     }
 
     public void onClickThemeBlueGreyComplete(View v) {
-        setSetting(Config.BLUE_GREY_COMPLETE, false);
+        setSetting(Theme.BLUE_GREY_COMPLETE, false);
 
     }
 
     public void onClickThemeIndigoComplete(View v) {
-        setSetting(Config.INDIGO_COMPLETE, false);
+        setSetting(Theme.INDIGO_COMPLETE, false);
 
     }
 
     public void onClickThemeBrownComplete(View v) {
-        setSetting(Config.BROWN_COMPLETE, false);
+        setSetting(Theme.BROWN_COMPLETE, false);
 
     }
 
     public void onClickThemeTealComplete(View v) {
-        setSetting(Config.TEAL_COMPLETE, false);
+        setSetting(Theme.TEAL_COMPLETE, false);
 
     }
 
     public void onClickThemeGreyComplete(View v) {
-        setSetting(Config.GREY_COMPLETE, false);
+        setSetting(Theme.GREY_COMPLETE, false);
 
     }
 
@@ -181,7 +182,7 @@ public class FragmentThemColorViewModel {
                         editor.putInt(SHP_SETTING.KEY_THEME_COLOR, config);
                         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, isDark);
                         editor.apply();
-                        Config.setThemeColor();
+                        Theme.setThemeColor();
                         if (dialog.isPromptCheckBoxChecked()) {
                             editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
                             editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
@@ -217,187 +218,187 @@ public class FragmentThemColorViewModel {
     private void getInfo() {
         sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        String appBarColor = sharedPreferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
+        String appBarColor = sharedPreferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Theme.default_appBarColor);
         if (fragmentThemColor != null) {
             GradientDrawable circleCustomColor = (GradientDrawable) fragmentThemColorBinding.themeCustom1.getBackground();
             circleCustomColor.setColor(Color.parseColor(appBarColor));
 
             GradientDrawable circleDefaultColor = (GradientDrawable) fragmentThemColorBinding.themeDefault1.getBackground();
-            circleDefaultColor.setColor(Color.parseColor(Config.default_appBarColor));
+            circleDefaultColor.setColor(Color.parseColor(Theme.default_appBarColor));
 
             GradientDrawable circleDarkColor = (GradientDrawable) fragmentThemColorBinding.themeDark1.getBackground();
-            circleDarkColor.setColor(Color.parseColor(Config.default_dark_appBarColor));
+            circleDarkColor.setColor(Color.parseColor(Theme.default_dark_appBarColor));
 
             GradientDrawable circleRedColor = (GradientDrawable) fragmentThemColorBinding.themeRed1.getBackground();
-            circleRedColor.setColor(Color.parseColor(Config.default_red_appBarColor));
+            circleRedColor.setColor(Color.parseColor(Theme.default_red_appBarColor));
 
             GradientDrawable circlePinkColor = (GradientDrawable) fragmentThemColorBinding.themePink1.getBackground();
-            circlePinkColor.setColor(Color.parseColor(Config.default_Pink_appBarColor));
+            circlePinkColor.setColor(Color.parseColor(Theme.default_Pink_appBarColor));
 
             GradientDrawable circlePurpleColor = (GradientDrawable) fragmentThemColorBinding.themePurple1.getBackground();
-            circlePurpleColor.setColor(Color.parseColor(Config.default_purple_appBarColor));
+            circlePurpleColor.setColor(Color.parseColor(Theme.default_purple_appBarColor));
 
             GradientDrawable circleDeepPurpleColor = (GradientDrawable) fragmentThemColorBinding.themeDeepPurple1.getBackground();
-            circleDeepPurpleColor.setColor(Color.parseColor(Config.default_deepPurple_appBarColor));
+            circleDeepPurpleColor.setColor(Color.parseColor(Theme.default_deepPurple_appBarColor));
 
             GradientDrawable circleDeepIndigoColor = (GradientDrawable) fragmentThemColorBinding.themeIndigo.getBackground();
-            circleDeepIndigoColor.setColor(Color.parseColor(Config.default_indigo_appBarColor));
+            circleDeepIndigoColor.setColor(Color.parseColor(Theme.default_indigo_appBarColor));
 
             GradientDrawable circleBlueColor = (GradientDrawable) fragmentThemColorBinding.themeBlue.getBackground();
-            circleBlueColor.setColor(Color.parseColor(Config.default_blue_appBarColor));
+            circleBlueColor.setColor(Color.parseColor(Theme.default_blue_appBarColor));
 
             GradientDrawable circleLightBlueColor = (GradientDrawable) fragmentThemColorBinding.themeLightBlue.getBackground();
-            circleLightBlueColor.setColor(Color.parseColor(Config.default_lightBlue_appBarColor));
+            circleLightBlueColor.setColor(Color.parseColor(Theme.default_lightBlue_appBarColor));
 
             GradientDrawable circleCyanColor = (GradientDrawable) fragmentThemColorBinding.themeCyan.getBackground();
-            circleCyanColor.setColor(Color.parseColor(Config.default_cyan_appBarColor));
+            circleCyanColor.setColor(Color.parseColor(Theme.default_cyan_appBarColor));
 
             GradientDrawable circleTealColor = (GradientDrawable) fragmentThemColorBinding.themeTeal.getBackground();
-            circleTealColor.setColor(Color.parseColor(Config.default_teal_appBarColor));
+            circleTealColor.setColor(Color.parseColor(Theme.default_teal_appBarColor));
 
             GradientDrawable circleGreenColor = (GradientDrawable) fragmentThemColorBinding.themeGreen.getBackground();
-            circleGreenColor.setColor(Color.parseColor(Config.default_green_appBarColor));
+            circleGreenColor.setColor(Color.parseColor(Theme.default_green_appBarColor));
 
             GradientDrawable circleLightGreenColor = (GradientDrawable) fragmentThemColorBinding.themeLightGreen.getBackground();
-            circleLightGreenColor.setColor(Color.parseColor(Config.default_lightGreen_appBarColor));
+            circleLightGreenColor.setColor(Color.parseColor(Theme.default_lightGreen_appBarColor));
 
             GradientDrawable circleLimeColor = (GradientDrawable) fragmentThemColorBinding.themeLime.getBackground();
-            circleLimeColor.setColor(Color.parseColor(Config.default_lime_appBarColor));
+            circleLimeColor.setColor(Color.parseColor(Theme.default_lime_appBarColor));
 
             GradientDrawable circleYellowColor = (GradientDrawable) fragmentThemColorBinding.themeYellow.getBackground();
-            circleYellowColor.setColor(Color.parseColor(Config.default_yellow_appBarColor));
+            circleYellowColor.setColor(Color.parseColor(Theme.default_yellow_appBarColor));
 
             GradientDrawable circleAmberColor = (GradientDrawable) fragmentThemColorBinding.themeAmber.getBackground();
-            circleAmberColor.setColor(Color.parseColor(Config.default_amber_appBarColor));
+            circleAmberColor.setColor(Color.parseColor(Theme.default_amber_appBarColor));
 
             GradientDrawable circleOrangeColor = (GradientDrawable) fragmentThemColorBinding.themeOrange.getBackground();
-            circleOrangeColor.setColor(Color.parseColor(Config.default_orange_appBarColor));
+            circleOrangeColor.setColor(Color.parseColor(Theme.default_orange_appBarColor));
 
             GradientDrawable circleDeepOrangeColor = (GradientDrawable) fragmentThemColorBinding.themeDeepOrange.getBackground();
-            circleDeepOrangeColor.setColor(Color.parseColor(Config.default_deepOrange_appBarColor));
+            circleDeepOrangeColor.setColor(Color.parseColor(Theme.default_deepOrange_appBarColor));
 
             GradientDrawable circleBrownColor = (GradientDrawable) fragmentThemColorBinding.themeBrown.getBackground();
-            circleBrownColor.setColor(Color.parseColor(Config.default_brown_appBarColor));
+            circleBrownColor.setColor(Color.parseColor(Theme.default_brown_appBarColor));
 
             GradientDrawable circleGreyColor = (GradientDrawable) fragmentThemColorBinding.themeGrey.getBackground();
-            circleGreyColor.setColor(Color.parseColor(Config.default_grey_appBarColor));
+            circleGreyColor.setColor(Color.parseColor(Theme.default_grey_appBarColor));
 
             GradientDrawable circleBlueGreyColor = (GradientDrawable) fragmentThemColorBinding.themeBlueGrey.getBackground();
-            circleBlueGreyColor.setColor(Color.parseColor(Config.default_blueGrey_appBarColor));
+            circleBlueGreyColor.setColor(Color.parseColor(Theme.default_blueGrey_appBarColor));
 
             GradientDrawable circleBlueGreyCompleteColor = (GradientDrawable) fragmentThemColorBinding.themeBlueGreyComplete.getBackground();
-            circleBlueGreyCompleteColor.setColor(Color.parseColor(Config.default_blueGrey_appBarColor));
+            circleBlueGreyCompleteColor.setColor(Color.parseColor(Theme.default_blueGrey_appBarColor));
 
             GradientDrawable circleIndigoCompleteColor = (GradientDrawable) fragmentThemColorBinding.themeIndigoComplete.getBackground();
-            circleIndigoCompleteColor.setColor(Color.parseColor(Config.default_indigo_appBarColor));
+            circleIndigoCompleteColor.setColor(Color.parseColor(Theme.default_indigo_appBarColor));
 
             GradientDrawable circleBrownCompleteColor = (GradientDrawable) fragmentThemColorBinding.themeBrownComplete.getBackground();
-            circleBrownCompleteColor.setColor(Color.parseColor(Config.default_brown_appBarColor));
+            circleBrownCompleteColor.setColor(Color.parseColor(Theme.default_brown_appBarColor));
 
             GradientDrawable circleTealCompleteColor = (GradientDrawable) fragmentThemColorBinding.themeTealComplete.getBackground();
-            circleTealCompleteColor.setColor(Color.parseColor(Config.default_teal_appBarColor));
+            circleTealCompleteColor.setColor(Color.parseColor(Theme.default_teal_appBarColor));
 
             GradientDrawable circleGreyCompleteColor = (GradientDrawable) fragmentThemColorBinding.themeGreyComplete.getBackground();
-            circleGreyCompleteColor.setColor(Color.parseColor(Config.default_grey_appBarColor));
+            circleGreyCompleteColor.setColor(Color.parseColor(Theme.default_grey_appBarColor));
 
 
             switch (G.themeColor) {
-                case Config.CUSTOM:
+                case Theme.CUSTOM:
                     fragmentThemColorBinding.iconCustom.setVisibility(View.VISIBLE);
                     break;
-                case Config.DEFAULT:
+                case Theme.DEFAULT:
 
                     fragmentThemColorBinding.iconDefault.setVisibility(View.VISIBLE);
                     break;
-                case Config.DARK:
+                case Theme.DARK:
                     fragmentThemColorBinding.iconDark.setVisibility(View.VISIBLE);
                     break;
-                case Config.RED:
+                case Theme.RED:
                     fragmentThemColorBinding.iconRed.setVisibility(View.VISIBLE);
                     break;
-                case Config.PINK:
+                case Theme.PINK:
                     fragmentThemColorBinding.iconPink.setVisibility(View.VISIBLE);
                     break;
-                case Config.PURPLE:
+                case Theme.PURPLE:
                     fragmentThemColorBinding.iconPurple.setVisibility(View.VISIBLE);
                     break;
-                case Config.DEEPPURPLE:
+                case Theme.DEEPPURPLE:
                     fragmentThemColorBinding.iconDeepPurple.setVisibility(View.VISIBLE);
                     break;
-                case Config.INDIGO:
+                case Theme.INDIGO:
                     fragmentThemColorBinding.iconIndigo.setVisibility(View.VISIBLE);
                     break;
-                case Config.BLUE:
+                case Theme.BLUE:
                     fragmentThemColorBinding.iconBlue.setVisibility(View.VISIBLE);
                     break;
 
-                case Config.LIGHT_BLUE:
+                case Theme.LIGHT_BLUE:
                     fragmentThemColorBinding.iconLightBlue.setVisibility(View.VISIBLE);
                     break;
 
-                case Config.CYAN:
+                case Theme.CYAN:
                     fragmentThemColorBinding.iconCyan.setVisibility(View.VISIBLE);
                     break;
 
-                case Config.TEAL:
+                case Theme.TEAL:
                     fragmentThemColorBinding.iconTeal.setVisibility(View.VISIBLE);
                     break;
 
-                case Config.GREEN:
+                case Theme.GREEN:
                     fragmentThemColorBinding.iconGreen.setVisibility(View.VISIBLE);
                     break;
 
-                case Config.LIGHT_GREEN:
+                case Theme.LIGHT_GREEN:
                     fragmentThemColorBinding.iconLightGreen.setVisibility(View.VISIBLE);
                     break;
 
-                case Config.LIME:
+                case Theme.LIME:
                     fragmentThemColorBinding.iconLime.setVisibility(View.VISIBLE);
                     break;
 
-                case Config.YELLLOW:
+                case Theme.YELLLOW:
                     fragmentThemColorBinding.iconYellow.setVisibility(View.VISIBLE);
                     break;
-                case Config.AMBER:
+                case Theme.AMBER:
                     fragmentThemColorBinding.iconAmber.setVisibility(View.VISIBLE);
                     break;
 
-                case Config.ORANGE:
+                case Theme.ORANGE:
                     fragmentThemColorBinding.iconOrange.setVisibility(View.VISIBLE);
                     break;
 
-                case Config.DEEP_ORANGE:
+                case Theme.DEEP_ORANGE:
                     fragmentThemColorBinding.iconDeepOrange.setVisibility(View.VISIBLE);
                     break;
 
-                case Config.BROWN:
+                case Theme.BROWN:
                     fragmentThemColorBinding.iconBrown.setVisibility(View.VISIBLE);
 
                     break;
-                case Config.GREY:
+                case Theme.GREY:
 
                     fragmentThemColorBinding.iconGrey.setVisibility(View.VISIBLE);
                     break;
-                case Config.BLUE_GREY:
+                case Theme.BLUE_GREY:
 
                     fragmentThemColorBinding.iconBlueGrey.setVisibility(View.VISIBLE);
                     break;
-                case Config.BLUE_GREY_COMPLETE:
+                case Theme.BLUE_GREY_COMPLETE:
 
                     fragmentThemColorBinding.iconBlueGreyComplete.setVisibility(View.VISIBLE);
                     break;
-                case Config.INDIGO_COMPLETE:
+                case Theme.INDIGO_COMPLETE:
                     fragmentThemColorBinding.iconIndigoComplete.setVisibility(View.VISIBLE);
                     break;
 
-                case Config.BROWN_COMPLETE:
+                case Theme.BROWN_COMPLETE:
                     fragmentThemColorBinding.iconBrownComplete.setVisibility(View.VISIBLE);
                     break;
-                case Config.TEAL_COMPLETE:
+                case Theme.TEAL_COMPLETE:
                     fragmentThemColorBinding.iconTealComplete.setVisibility(View.VISIBLE);
                     break;
 
-                case Config.GREY_COMPLETE:
+                case Theme.GREY_COMPLETE:
                     fragmentThemColorBinding.iconGreyComplete.setVisibility(View.VISIBLE);
                     break;
             }

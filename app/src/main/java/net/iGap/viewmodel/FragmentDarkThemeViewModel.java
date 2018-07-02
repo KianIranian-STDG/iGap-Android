@@ -14,6 +14,7 @@ import android.widget.TimePicker;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.fragments.FragmentDarkTheme;
 import net.iGap.module.SHP_SETTING;
 
@@ -93,11 +94,11 @@ public class FragmentDarkThemeViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-        editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Config.DARK);
+        editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK);
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, true);
         editor.apply();
 
-        Config.setThemeColor();
+        Theme.setThemeColor();
         resetApp();
 
     }

@@ -18,6 +18,7 @@ import com.vanniktech.emoji.one.EmojiOneProvider;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.WebSocketClient;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentiGapMap;
@@ -313,7 +314,7 @@ public final class StartupActions {
             checkTimeForAutoTheme(preferences);
         }
 
-        Config.setThemeColor();
+        Theme.setThemeColor();
 
         G.multiTab = preferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
 
@@ -363,20 +364,20 @@ public final class StartupActions {
 
                 //checkes whether the current time is between 14:49:00 and 20:11:13.
                 G.isDarkTheme = true;
-                appBarColor = Config.default_dark_appBarColor;
-                notificationColor = Config.default_dark_notificationColor;
-                toggleButtonColor = Config.default_dark_toggleButtonColor;
-                attachmentColor = Config.default_dark_attachmentColor;
-                headerTextColor = Config.default_dark_headerTextColor;
-                G.progressColor = Config.default_dark_progressColor;
+                appBarColor = Theme.default_dark_appBarColor;
+                notificationColor = Theme.default_dark_notificationColor;
+                toggleButtonColor = Theme.default_dark_toggleButtonColor;
+                attachmentColor = Theme.default_dark_attachmentColor;
+                headerTextColor = Theme.default_dark_headerTextColor;
+                G.progressColor = Theme.default_dark_progressColor;
             } else {
                 G.isDarkTheme = false;
-                appBarColor = Config.default_appBarColor;
-                notificationColor = Config.default_notificationColor;
-                toggleButtonColor = Config.default_toggleButtonColor;
-                attachmentColor = Config.default_attachmentColor;
-                headerTextColor = Config.default_headerTextColor;
-                G.progressColor = Config.default_progressColor;
+                appBarColor = Theme.default_appBarColor;
+                notificationColor = Theme.default_notificationColor;
+                toggleButtonColor = Theme.default_toggleButtonColor;
+                attachmentColor = Theme.default_attachmentColor;
+                headerTextColor = Theme.default_headerTextColor;
+                G.progressColor = Theme.default_progressColor;
             }
         } catch (ParseException e) {
             e.printStackTrace();

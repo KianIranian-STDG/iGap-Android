@@ -31,6 +31,7 @@ import android.view.WindowManager;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
@@ -133,94 +134,94 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     private void setThemeSetting() {
         switch (G.themeColor) {
-            case Config.CUSTOM:
+            case Theme.CUSTOM:
                 this.setTheme(R.style.Material_lightCustom);
                 break;
-            case Config.DEFAULT:
+            case Theme.DEFAULT:
                 this.setTheme(R.style.Material_lightCustom);
                 break;
-            case Config.DARK:
+            case Theme.DARK:
                 this.setTheme(R.style.Material_blackCustom);
                 break;
-            case Config.RED:
+            case Theme.RED:
                 this.setTheme(R.style.Material_red);
                 break;
-            case Config.PINK:
+            case Theme.PINK:
                 this.setTheme(R.style.Material_pink);
                 break;
-            case Config.PURPLE:
+            case Theme.PURPLE:
                 this.setTheme(R.style.Material_purple);
                 break;
-            case Config.DEEPPURPLE:
+            case Theme.DEEPPURPLE:
                 this.setTheme(R.style.Material_deepPurple);
                 break;
-            case Config.INDIGO:
+            case Theme.INDIGO:
                 this.setTheme(R.style.Material_indigo);
                 break;
-            case Config.BLUE:
+            case Theme.BLUE:
                 this.setTheme(R.style.Material_blue);
                 break;
 
-            case Config.LIGHT_BLUE:
+            case Theme.LIGHT_BLUE:
                 this.setTheme(R.style.Material_lightBlue);
                 break;
 
-            case Config.CYAN:
+            case Theme.CYAN:
                 this.setTheme(R.style.Material_cyan);
                 break;
 
-            case Config.TEAL:
+            case Theme.TEAL:
                 this.setTheme(R.style.Material_teal);
                 break;
 
-            case Config.GREEN:
+            case Theme.GREEN:
                 this.setTheme(R.style.Material_green);
                 break;
 
-            case Config.LIGHT_GREEN:
+            case Theme.LIGHT_GREEN:
                 this.setTheme(R.style.Material_lightGreen);
                 break;
 
-            case Config.LIME:
+            case Theme.LIME:
                 this.setTheme(R.style.Material_lime);
                 break;
 
-            case Config.YELLLOW:
+            case Theme.YELLLOW:
                 this.setTheme(R.style.Material_yellow);
                 break;
-            case Config.AMBER:
+            case Theme.AMBER:
                 this.setTheme(R.style.Material_amber);
                 break;
 
-            case Config.ORANGE:
+            case Theme.ORANGE:
                 this.setTheme(R.style.Material_orange);
                 break;
 
-            case Config.DEEP_ORANGE:
+            case Theme.DEEP_ORANGE:
                 this.setTheme(R.style.Material_deepOrange);
                 break;
-            case Config.BROWN:
+            case Theme.BROWN:
                 this.setTheme(R.style.Material_brown);
                 break;
-            case Config.GREY:
+            case Theme.GREY:
                 this.setTheme(R.style.Material_grey);
                 break;
-            case Config.BLUE_GREY:
+            case Theme.BLUE_GREY:
                 this.setTheme(R.style.Material_blueGrey);
                 break;
-            case Config.BLUE_GREY_COMPLETE:
+            case Theme.BLUE_GREY_COMPLETE:
                 this.setTheme(R.style.Material_blueGreyComplete);
                 break;
-            case Config.INDIGO_COMPLETE:
+            case Theme.INDIGO_COMPLETE:
                 this.setTheme(R.style.Material_indigoComplete);
                 break;
-            case Config.BROWN_COMPLETE:
+            case Theme.BROWN_COMPLETE:
                 this.setTheme(R.style.Material_BrownComplete);
                 break;
-            case Config.TEAL_COMPLETE:
+            case Theme.TEAL_COMPLETE:
                 this.setTheme(R.style.Material_TealComplete);
                 break;
-            case Config.GREY_COMPLETE:
+            case Theme.GREY_COMPLETE:
                 this.setTheme(R.style.Material_GreyComplete);
                 break;
 

@@ -58,6 +58,7 @@ import com.google.android.gms.analytics.Tracker;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentIgapSearch;
@@ -1397,18 +1398,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 if (toggleButton.isChecked()) {
 
-                    int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Config.CUSTOM);
-                    editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Config.DARK);
+                    int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.CUSTOM);
+                    editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK);
                     editor.putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeColor);
                     editor.apply();
-                    Config.setThemeColor();
+                    Theme.setThemeColor();
                     FragmentThemColorViewModel.resetApp();
                 } else {
-                    int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_OLD_THEME_COLOR, Config.CUSTOM);
+                    int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_OLD_THEME_COLOR, Theme.CUSTOM);
 
                     editor.putInt(SHP_SETTING.KEY_THEME_COLOR, themeColor);
                     editor.apply();
-                    Config.setThemeColor();
+                    Theme.setThemeColor();
                     FragmentThemColorViewModel.resetApp();
 
                 }

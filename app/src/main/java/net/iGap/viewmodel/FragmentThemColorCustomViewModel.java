@@ -21,7 +21,7 @@ import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.SVBar;
 
-import net.iGap.Config;
+import net.iGap.Theme;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentThemColorCustomBinding;
@@ -58,11 +58,11 @@ public class FragmentThemColorCustomViewModel {
         } else {
             editor = sharedPreferences.edit();
         }
-        editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Config.CUSTOM);
+        editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.CUSTOM);
         editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, false);
         editor.apply();
 
-        Config.setThemeColor();
+        Theme.setThemeColor();
         resetApp();
 
     }
@@ -203,12 +203,12 @@ public class FragmentThemColorCustomViewModel {
     private void getInfo() {
         sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
-        String appBarColor = sharedPreferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
-        String notificationColor = sharedPreferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
-        String toggleButtonColor = sharedPreferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor);
-        String attachmentColor = sharedPreferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
-        String headerTextColor = sharedPreferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
-        String progressColor = sharedPreferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor);
+        String appBarColor = sharedPreferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Theme.default_appBarColor);
+        String notificationColor = sharedPreferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Theme.default_notificationColor);
+        String toggleButtonColor = sharedPreferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Theme.default_toggleButtonColor);
+        String attachmentColor = sharedPreferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Theme.default_attachmentColor);
+        String headerTextColor = sharedPreferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Theme.default_headerTextColor);
+        String progressColor = sharedPreferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Theme.default_progressColor);
 
         //***********************
         GradientDrawable bgShape = (GradientDrawable) fragmentThemColorCustomBinding.asnImgTitleBarColor.getBackground();
