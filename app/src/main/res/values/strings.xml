@@ -1216,5 +1216,6 @@
   <string name="text_paygear">Follow up, pick up your wallet and instant cash deposit, pay your gifts, buy from stores and pay tax limousines.</string>
   <string name="customization">customization</string>
   <string name="Apply_colors_to_customize">Apply colors to customize</string>
+  <string name="channel_name_notification">iGap Notification</string>
 
 </resources>
