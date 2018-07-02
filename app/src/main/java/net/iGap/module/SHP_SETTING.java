@@ -106,6 +106,10 @@ public class SHP_SETTING {
     public static final String KEY_KEEP_MEDIA_NEW = "KEY_KEEP_MEDIA_NEW";
 
     // default color
+
+
+    public static final String KEY_THEME_COLOR = "KEY_THEME_COLOR";
+
     public static final String KEY_APP_BAR_COLOR = "KEY_APP_BAR_COLOR";
     public static final String KEY_NOTIFICATION_COLOR = "KEY_NOTIFICATION_COLOR";
     public static final String KEY_TOGGLE_BOTTON_COLOR = "KEY_TOGGLE_BOTTON_COLOR";
@@ -114,6 +118,7 @@ public class SHP_SETTING {
     public static final String KEY_MENU_BACKGROUND_COLOR = "KEY_MENU_BACKGROUND_COLOR";
     public static final String KEY_PROGRES_COLOR = "KEY_PROGRES_COLOR";
 
+    public static final String KEY_OLD_THEME_COLOR = "KEY_OLD_THEME_COLOR";
     public static final String KEY_APP_BAR_COLOR_DARK = "KEY_APP_BAR_COLOR_DARK";
     public static final String KEY_NOTIFICATION_COLOR_DARK = "KEY_NOTIFICATION_COLOR_DARK";
     public static final String KEY_TOGGLE_BOTTON_COLOR_DARK = "KEY_TOGGLE_BOTTON_COLOR_DARK";

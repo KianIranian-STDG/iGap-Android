@@ -713,6 +713,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         slidingUpPanelLayout = view.findViewById(R.id.sliding_layout);
         vgSlideUp = view.findViewById(R.id.vgSlideUp);
         iconSlide = view.findViewById(R.id.ml_user_on_map);
+        iconSlide.setTextColor(Color.parseColor(G.appBarColor));
 
         slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
@@ -797,7 +798,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         });
 
         fabGps = (FloatingActionButton) view.findViewById(st_fab_gps);
-        fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+        fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        fabGps.setColorFilter(Color.WHITE);
+
         fabGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -811,7 +814,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         });
 
         view.findViewById(R.id.backgroundToolbarMap).setBackgroundColor(Color.parseColor(G.appBarColor));
-        fabGps.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
 
         btnBack = (RippleView) view.findViewById(R.id.ripple_back_map);
         btnBack.setOnClickListener(new View.OnClickListener() {

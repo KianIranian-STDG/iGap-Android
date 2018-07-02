@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.activities;
 
@@ -57,11 +57,12 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentCall;
-import net.iGap.fragments.FragmentFinancialServices;
 import net.iGap.fragments.FragmentIgapSearch;
 import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMain;
@@ -69,6 +70,7 @@ import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentSetting;
+import net.iGap.fragments.FragmentThemColor;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
@@ -141,6 +143,7 @@ import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.viewmodel.ActivityCallViewModel;
 import net.iGap.viewmodel.FragmentSettingViewModel;
+import net.iGap.viewmodel.FragmentThemColorViewModel;
 
 import java.io.File;
 import java.io.IOException;
@@ -182,7 +185,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public MainInterfaceGetRoomList mainInterfaceGetRoomList;
     public ArcMenu arcMenu;
     FragmentCall fragmentCall;
-    FragmentFinancialServices fragmentFinancialServices;
     FloatingActionButton btnStartNewChat;
     FloatingActionButton btnCreateNewGroup;
     FloatingActionButton btnCreateNewChannel;
@@ -426,7 +428,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
-        if (userInfo == null) { // user registered before
+        if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
             isNeedToRegister = true;
             Intent intent = new Intent(this, ActivityRegisteration.class);
             startActivity(intent);
@@ -457,12 +459,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 editor.putBoolean(SHP_SETTING.DELETE_FOLDER_BACKGROUND, false);
                 editor.apply();
             }
-        }
-        SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (G.isDarkTheme) {
-            this.setTheme(R.style.Material_blackCustom);
-        } else {
-            this.setTheme(R.style.Material_lightCustom);
         }
         setContentView(R.layout.activity_main);
 
@@ -999,11 +995,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
             setFabIcon(R.drawable.ic_call_black_24dp);
             arcMenu.setVisibility(View.VISIBLE);
-        } else if (adapter.getItem(position) instanceof FragmentFinancialServices) {
-
-            findViewById(R.id.amr_ripple_search).setVisibility(View.GONE);
-            findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
-            arcMenu.setVisibility(View.GONE);
         }
 
         if (arcMenu.isMenuOpened()) {
@@ -1110,9 +1101,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (HelperCalander.isPersianUnicode) {
-            navigationTabStrip.setTitles(getString(R.string.md_igap_credit_card), getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
+            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
         } else {
-            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone), getString(R.string.md_igap_credit_card));
+            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
         }
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
@@ -1136,9 +1127,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 public void run() {
 
                     if (G.multiTab) {
-                        fragmentFinancialServices = FragmentFinancialServices.newInstance(true);
-                        pages.add(fragmentFinancialServices);
-
                         fragmentCall = FragmentCall.newInstance(true);
                         pages.add(fragmentCall);
 
@@ -1180,9 +1168,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         fragmentCall = FragmentCall.newInstance(true);
                         pages.add(fragmentCall);
-
-                        fragmentFinancialServices = FragmentFinancialServices.newInstance(true);
-                        pages.add(fragmentFinancialServices);
 
                         mViewPager.getAdapter().notifyDataSetChanged();
 
@@ -1413,14 +1398,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        ViewGroup itemNavFinancialServices = (ViewGroup) findViewById(R.id.lm_ll_FinancialServices);
-        itemNavFinancialServices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new HelperFragment(FragmentFinancialServices.newInstance(false)).setStateLoss(true).load();
-            }
-        });
-
         ViewGroup itemNavPayment = (ViewGroup) findViewById(R.id.lm_ll_payment);
         itemNavPayment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1525,6 +1502,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 closeDrawer();
             }
         });
+
         final ToggleButton toggleButton = findViewById(R.id.st_txt_st_toggle_theme_dark);
         ViewGroup rootDarkTheme = (ViewGroup) findViewById(R.id.lt_txt_st_theme_dark);
         rootDarkTheme.setOnClickListener(new View.OnClickListener() {
@@ -1535,17 +1513,28 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
         boolean checkedThemeDark = sharedPreferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
 
-        toggleButton.setChecked(checkedThemeDark);
+        toggleButton.setChecked(G.isDarkTheme);
         toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-
                 if (toggleButton.isChecked()) {
-                    FragmentSettingViewModel.setDarkTheme(editor);
+
+                    int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_THEME_COLOR, Theme.CUSTOM);
+                    editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK);
+                    editor.putInt(SHP_SETTING.KEY_OLD_THEME_COLOR, themeColor);
+                    editor.apply();
+                    Theme.setThemeColor();
+                    FragmentThemColorViewModel.resetApp();
                 } else {
-                    FragmentSettingViewModel.setLightTheme(editor);
+                    int themeColor = sharedPreferences.getInt(SHP_SETTING.KEY_OLD_THEME_COLOR, Theme.CUSTOM);
+
+                    editor.putInt(SHP_SETTING.KEY_THEME_COLOR, themeColor);
+                    editor.apply();
+                    Theme.setThemeColor();
+                    FragmentThemColorViewModel.resetApp();
+
                 }
             }
         });

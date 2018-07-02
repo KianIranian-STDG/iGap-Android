@@ -52,7 +52,6 @@ import net.iGap.realm.RealmRoomMessageFields;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -657,7 +656,8 @@ public final class AppUtils {
     }
 
     public static long makeRandomId() {
-        return Math.abs(UUID.randomUUID().getLeastSignificantBits());
+        return SUID.id().get();
+        // return Math.abs(UUID.randomUUID().getLeastSignificantBits());
     }
 
 }

@@ -18,6 +18,7 @@ import com.vanniktech.emoji.one.EmojiOneProvider;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.WebSocketClient;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentiGapMap;
@@ -306,33 +307,15 @@ public final class StartupActions {
             editor.apply();
         }
 
-        G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
+//        G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
 
         boolean isDisableAutoDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_DISABLE_TIME_DARK_THEME, true);
         if (!isDisableAutoDarkTheme) {
             checkTimeForAutoTheme(preferences);
         }
 
-        if (G.isDarkTheme) {
-            appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR_DARK, Config.default_dark_appBarColor);
-            notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR_DARK, Config.default_dark_notificationColor);
-            toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR_DARK, Config.default_dark_toggleButtonColor);
-            attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR_DARK, Config.default_dark_attachmentColor);
-            headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR_DARK, Config.default_dark_headerTextColor);
-            G.progressColor = preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR_DARK, Config.default_dark_progressColor);
+        Theme.setThemeColor();
 
-            Config.darkThemeColor();
-
-        } else {
-            appBarColor = preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
-            notificationColor = preferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
-            toggleButtonColor = preferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor);
-            attachmentColor = preferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
-            headerTextColor = preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
-            G.progressColor = preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor);
-
-            Config.lightThemeColor();
-        }
         G.multiTab = preferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
 
         // setting for show layout vote in channel
@@ -381,20 +364,20 @@ public final class StartupActions {
 
                 //checkes whether the current time is between 14:49:00 and 20:11:13.
                 G.isDarkTheme = true;
-                appBarColor = Config.default_dark_appBarColor;
-                notificationColor = Config.default_dark_notificationColor;
-                toggleButtonColor = Config.default_dark_toggleButtonColor;
-                attachmentColor = Config.default_dark_attachmentColor;
-                headerTextColor = Config.default_dark_headerTextColor;
-                G.progressColor = Config.default_dark_progressColor;
+                appBarColor = Theme.default_dark_appBarColor;
+                notificationColor = Theme.default_dark_notificationColor;
+                toggleButtonColor = Theme.default_dark_toggleButtonColor;
+                attachmentColor = Theme.default_dark_attachmentColor;
+                headerTextColor = Theme.default_dark_headerTextColor;
+                G.progressColor = Theme.default_dark_progressColor;
             } else {
                 G.isDarkTheme = false;
-                appBarColor = Config.default_appBarColor;
-                notificationColor = Config.default_notificationColor;
-                toggleButtonColor = Config.default_toggleButtonColor;
-                attachmentColor = Config.default_attachmentColor;
-                headerTextColor = Config.default_headerTextColor;
-                G.progressColor = Config.default_progressColor;
+                appBarColor = Theme.default_appBarColor;
+                notificationColor = Theme.default_notificationColor;
+                toggleButtonColor = Theme.default_toggleButtonColor;
+                attachmentColor = Theme.default_attachmentColor;
+                headerTextColor = Theme.default_headerTextColor;
+                G.progressColor = Theme.default_progressColor;
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -463,7 +446,7 @@ public final class StartupActions {
 
         RealmUserInfo userInfo = realm.where(RealmUserInfo.class).findFirst();
 
-        if (userInfo != null) {
+        if (userInfo != null && userInfo.getUserRegistrationState()) {
 
             userId = userInfo.getUserId();
             G.isPassCode = userInfo.isPassCode();

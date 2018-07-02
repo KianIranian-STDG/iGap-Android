@@ -319,9 +319,9 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             public void onFocusChange(View view, boolean b) {
 
                 if (b) {
-                    ViewGroupName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+                    ViewGroupName.setBackgroundColor(Color.parseColor(G.appBarColor));
                 } else {
-                    ViewGroupName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+                    ViewGroupName.setBackgroundColor(Color.parseColor(G.lineBorder));
                 }
             }
         });

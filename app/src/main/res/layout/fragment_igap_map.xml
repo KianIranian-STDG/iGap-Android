@@ -335,7 +335,6 @@
         android:gravity="center"
         android:text="@string/md_igap_chevron_double_up"
         android:textAppearance="@style/TextIconAppearance.all"
-        android:textColor="@color/green"
         android:textSize="@dimen/dp26"
         android:visibility="visible" />
     </RelativeLayout>
@@ -352,7 +351,7 @@
         android:fadeScrollbars="false"
         android:overScrollMode="never"
         android:scrollbarSize="5dp"
-        android:scrollbarThumbVertical="@color/toolbar_background"
+        android:scrollbarThumbVertical="@color/gray_6c"
         android:scrollbars="vertical" />
 
       <ProgressBar

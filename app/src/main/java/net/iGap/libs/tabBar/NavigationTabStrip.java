@@ -116,7 +116,7 @@ public class NavigationTabStrip extends View implements ViewPager.OnPageChangeLi
 
     // NTS titles
     private String[] mTitles;
-    private String[] mTitlesBadge = {"0", "0", "0", "0", "0", "0"};
+    private String[] mTitlesBadge = {"0", "0", "0", "0", "0"};
 
     // Variables for ViewPager
     private ViewPager mViewPager;

@@ -3,7 +3,9 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -105,6 +107,10 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
 
 
         FloatingActionButton fab = fragmentProfileChannelBinding.pchFabAddToChannel;
+
+        fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        fab.setColorFilter(Color.WHITE);
+
         prgWait = fragmentProfileChannelBinding.agpPrgWaiting;
         AppUtils.setProgresColler(prgWait);
 

@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TimePicker;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.fragments.FragmentDarkTheme;
 import net.iGap.module.SHP_SETTING;
 
@@ -22,6 +24,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.viewmodel.FragmentThemColorViewModel.resetApp;
 
 /*
  * This is the source code of iGap for Android
@@ -80,6 +83,23 @@ public class FragmentDarkThemeViewModel {
             }
         }
 
+
+    }
+
+    public void onClickSetTheme(View view) {
+        SharedPreferences.Editor editor;
+        if (sharedPreferences == null) {
+            SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+            editor = sharedPreferences.edit();
+        } else {
+            editor = sharedPreferences.edit();
+        }
+        editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Theme.DARK);
+        editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, true);
+        editor.apply();
+
+        Theme.setThemeColor();
+        resetApp();
 
     }
 
@@ -161,4 +181,6 @@ public class FragmentDarkThemeViewModel {
         mTimePicker.show();
 
     }
+
+
 }

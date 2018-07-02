@@ -109,6 +109,10 @@ public class G extends MultiDexApplication {
     public static String selectedLanguage = "en";
     public static String symmetricMethod;
     public static String appBarColor; // default color
+    public static String bubbleChatSend; // default color
+    public static String bubbleChatReceive; // default color
+    public static String fabBottom; // default color
+    public static String bubbleChatMusic; // default color
     public static String notificationColor;
     public static String toggleButtonColor;
     public static String attachmentColor;
@@ -119,8 +123,13 @@ public class G extends MultiDexApplication {
     public static String logLineTheme;
     public static String voteIconTheme;
     public static String textTitleTheme;
+    public static String textBubble;
+    public static String linkColor;
+    public static String txtIconCheck;
+    public static String textBubbleSend;
     public static String textSubTheme;
     public static String tintImage;
+    public static String lineBorder;
     public static String menuBackgroundColor;
     public static String authorHash;
     public static String displayName;
@@ -156,6 +165,7 @@ public class G extends MultiDexApplication {
     public static boolean isLinkClicked = false;
     public static boolean isMplActive = false;
     public static boolean isDarkTheme = false;
+    public static int themeColor;
     public static String selectedTabInMainActivity = "";
     public static int ivSize;
     public static int userTextSize = 0;
@@ -423,7 +433,7 @@ public class G extends MultiDexApplication {
     synchronized public Tracker getDefaultTracker() {
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mTracker = analytics.newTracker(R.xml.global_tracker);
+            mTracker = analytics.newTracker(R.xml.global_track);
         }
         return mTracker;
     }

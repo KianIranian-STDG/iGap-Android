@@ -61,6 +61,7 @@ import net.iGap.fragments.FragmentNotificationAndSound;
 import net.iGap.fragments.FragmentPrivacyAndSecurity;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentShowAvatars;
+import net.iGap.fragments.FragmentThemColor;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -433,7 +434,10 @@ public class FragmentSettingViewModel {
         layoutNickname.addView(inputLastName, lastNameLayoutParams);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_nickname)).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).customView(layoutNickname, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                new MaterialDialog.Builder(G.fragmentActivity)
+                        .title(G.fragmentActivity.getResources().getString(R.string.st_nickname))
+                        .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).customView(layoutNickname, true)
+                        .widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -487,7 +491,7 @@ public class FragmentSettingViewModel {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+                    viewFirstName.setBackgroundColor(Color.parseColor(G.appBarColor));
                 } else {
                     viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
@@ -498,7 +502,7 @@ public class FragmentSettingViewModel {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+                    viewLastName.setBackgroundColor(Color.parseColor(G.appBarColor));
                 } else {
                     viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
@@ -596,7 +600,7 @@ public class FragmentSettingViewModel {
         layoutUserName.addView(inputUserName, layoutParams);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_username)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutUserName, true).widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -715,7 +719,7 @@ public class FragmentSettingViewModel {
                     @Override
                     public void onFocusChange(View view, boolean b) {
                         if (b) {
-                            viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+                            viewUserName.setBackgroundColor(Color.parseColor(G.appBarColor));
                         } else {
                             viewUserName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                         }
@@ -822,7 +826,7 @@ public class FragmentSettingViewModel {
         layoutEmail.addView(inputEmail, layoutParams);
 
         final MaterialDialog dialog =
-                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_email)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutEmail, true).widgetColor(G.context.getResources().getColor(R.color.toolbar_background)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+                new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.st_email)).positiveText(G.fragmentActivity.getResources().getString(R.string.save)).customView(layoutEmail, true).widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
         final View positive = dialog.getActionButton(DialogAction.POSITIVE);
         positive.setEnabled(false);
@@ -865,7 +869,7 @@ public class FragmentSettingViewModel {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewEmail.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
+                    viewEmail.setBackgroundColor(Color.parseColor(G.appBarColor));
                 } else {
                     viewEmail.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
@@ -1117,126 +1121,9 @@ public class FragmentSettingViewModel {
         }
     }
 
-    public void onClickThemeDark(View view) {
-        isThemeDark.set(!isThemeDark.get());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        if (isThemeDark.get()) {
-            isAutoThemeDark.set(View.VISIBLE);
-            setDarkTheme(editor);
-        } else {
-            isAutoThemeDark.set(View.GONE);
-            setLightTheme(editor);
-        }
-    }
 
-//    public boolean isDarkTheme() {
-//        return isThemeDark.get();
-//    }
-
-    public void onClickAutoTimeDarkTheme(View v) {
-        new HelperFragment(FragmentDarkTheme.newInstance()).setReplace(false).load();
-    }
-
-    public static void setLightTheme(SharedPreferences.Editor editor) {
-        G.isDarkTheme = false;
-
-        if (sharedPreferences == null) {
-            sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-            editor = sharedPreferences.edit();
-        } else {
-            editor = sharedPreferences.edit();
-        }
-
-        editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, false);
-        editor.putBoolean(SHP_SETTING.KEY_DISABLE_TIME_DARK_THEME, true);
-        editor.apply();
-
-        String appBarColorClick = sharedPreferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, Config.default_appBarColor);
-        String notificationColorClick = sharedPreferences.getString(SHP_SETTING.KEY_NOTIFICATION_COLOR, Config.default_notificationColor);
-        String toggleBottomClick = sharedPreferences.getString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, Config.default_toggleButtonColor);
-        String sendAndAttachColorClick = sharedPreferences.getString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, Config.default_attachmentColor);
-        String headerColorClick = sharedPreferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, Config.default_headerTextColor);
-        String progressColorClick = sharedPreferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, Config.default_progressColor);
-        String menuBackgroundClick = sharedPreferences.getString(SHP_SETTING.KEY_MENU_BACKGROUND_COLOR, Config.default_appBarColor);
-
-
-        notificationColorClick(Color.parseColor(notificationColorClick), false);
-        headerColorClick(Color.parseColor(headerColorClick), false);
-        toggleBottomClick(Color.parseColor(toggleBottomClick));
-        sendAndAttachColorClick(Color.parseColor(sendAndAttachColorClick));
-        appBarColorClick(Color.parseColor(appBarColorClick));
-        progressColorClick(Color.parseColor(progressColorClick), false);
-        menuBackgroundClick(Color.parseColor(menuBackgroundClick), false);
-        Config.lightThemeColor();
-    }
-
-    public static void setDarkTheme(SharedPreferences.Editor editor) {
-        G.isDarkTheme = true;
-
-        editor.putBoolean(SHP_SETTING.KEY_THEME_DARK, true);
-        editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR_DARK, Config.default_dark_appBarColor);
-        editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR_DARK, Config.default_dark_notificationColor);
-        editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR_DARK, Config.default_dark_toggleButtonColor);
-        editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR_DARK, Config.default_dark_attachmentColor);
-        editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR_DARK, Config.default_dark_headerTextColor);
-        editor.putString(SHP_SETTING.KEY_PROGRES_COLOR_DARK, Config.default_dark_progressColor);
-        editor.putString(SHP_SETTING.KEY_MENU_BACKGROUND_COLOR_DARK, Config.default_dark_menuBackgroundColor);
-        editor.apply();
-
-        appBarColor = Config.default_dark_appBarColor;
-        notificationColor = Config.default_dark_notificationColor;
-        toggleButtonColor = Config.default_dark_toggleButtonColor;
-        attachmentColor = Config.default_dark_attachmentColor;
-        headerTextColor = Config.default_dark_headerTextColor;
-        G.progressColor = Config.default_dark_progressColor;
-
-        Config.darkThemeColor();
-
-        G.isUpdateNotificaionColorMain = true;
-        G.isUpdateNotificaionColorChannel = true;
-        G.isUpdateNotificaionColorGroup = true;
-        G.isUpdateNotificaionColorChat = true;
-        G.fragmentActivity.recreate();
-
-        if (G.onRefreshActivity != null) {
-            G.isRestartActivity = true;
-            G.onRefreshActivity.refresh("");
-        }
-    }
-
-    public void onCheckedChangedThemeDark(boolean isChecked) {
-
-    }
-
-    public void onClickTitleBarColor(View view) {
-        showSelectAppColorDialog(R.string.app_theme);
-    }
-
-    public void onClickNotificationColor(View view) {
-        showSelectAppColorDialog(R.string.app_notif_color);
-    }
-
-    public void onClickToggleBottonColor(View view) {
-        showSelectAppColorDialog(R.string.toggle_botton_color);
-    }
-
-    public void onClickSendAndAttachColor(View view) {
-        showSelectAppColorDialog(R.string.send_and_attach_botton_color);
-    }
-
-    public void onClickDefaultHeaderFontColor(View view) {
-
-        showSelectAppColorDialog(R.string.default_header_font_color);
-    }
-
-    public void onClickDefaultProgressColor(View view) {
-        showSelectAppColorDialog(R.string.default_progress_color);
-    }
-
-    public void onClickSetColorToDefault(View view) {
-
-        showSetDefaultColorDialog();
-
+    public void onClickThemeColor(View v) {
+        new HelperFragment(new FragmentThemColor()).setReplace(false).load();
     }
 
     public void onClickAutoDownloadData(View view) {
@@ -1811,249 +1698,39 @@ public class FragmentSettingViewModel {
         return true;
     }
 
-    private void showSelectAppColorDialog(final int title) {
 
-        boolean wrapInScrollView = true;
-
-        String titleMessage = G.fragmentActivity.getResources().getString(title);
-
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.stns_popup_colorpicer, wrapInScrollView).positiveText(G.fragmentActivity.getResources().getString(R.string.set)).negativeText(G.fragmentActivity.getResources().getString(R.string.DISCARD)).title(titleMessage).onNegative(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-            }
-        }).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-            }
-        }).build();
-
-        View view1 = dialog.getCustomView();
-        assert view1 != null;
-        final ColorPicker picker = (ColorPicker) view1.findViewById(R.id.picker);
-        SVBar svBar = (SVBar) view1.findViewById(R.id.svbar);
-        OpacityBar opacityBar = (OpacityBar) view1.findViewById(R.id.opacitybar);
-        picker.addSVBar(svBar);
-        picker.addOpacityBar(opacityBar);
-
-        dialog.getActionButton(DialogAction.POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                dialog.dismiss();
-
-                try {
-
-                    String _strColor = "#" + Integer.toHexString(picker.getColor());
-                    int _color = Color.parseColor(_strColor); // if can not parae selected color do not set selected color
-
-                    switch (title) {
-
-                        case R.string.app_theme:
-                            appBarColorClick(picker.getColor());
-                            break;
-                        case R.string.app_notif_color:
-                            notificationColorClick(picker.getColor(), true);
-                            break;
-                        case R.string.toggle_botton_color:
-                            toggleBottomClick(picker.getColor());
-                            break;
-                        case R.string.send_and_attach_botton_color:
-                            sendAndAttachColorClick(picker.getColor());
-                            break;
-                        case R.string.default_header_font_color:
-                            headerColorClick(picker.getColor(), true);
-                            break;
-                        case R.string.default_progress_color:
-                            progressColorClick(picker.getColor(), true);
-                            break;
-
-                    }
-                } catch (IllegalArgumentException e) {
-
-                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.selected_color_can_not_set_on_yout_device).cancelable(true).show();
-                }
-            }
-        });
-
-        dialog.show();
-    }
-
-    private void showSetDefaultColorDialog() {
-
-        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.set_color_to_default).content(R.string.color_default).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                notificationColorClick(Color.parseColor(Config.default_notificationColor), false);
-                headerColorClick(Color.parseColor(Config.default_headerTextColor), false);
-                toggleBottomClick(Color.parseColor(Config.default_toggleButtonColor));
-                sendAndAttachColorClick(Color.parseColor(Config.default_attachmentColor));
-                appBarColorClick(Color.parseColor(Config.default_appBarColor));
-                progressColorClick(Color.parseColor(Config.default_appBarColor), false);
-            }
-        }).negativeText(R.string.st_dialog_reset_all_notification_no).onNegative(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-            }
-        }).show();
-    }
-
-    public static void appBarColorClick(int color) {
-
-        SharedPreferences.Editor editor;
-        if (sharedPreferences == null) {
-            SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-            editor = sharedPreferences.edit();
-        } else {
-            editor = sharedPreferences.edit();
-        }
-        if (fragmentSettingBinding != null) {
-            GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgTitleBarColor.getBackground();
-            bgShape.setColor(color);
-        }
-
-        G.appBarColor = "#" + Integer.toHexString(color);
-        editor.putString(SHP_SETTING.KEY_APP_BAR_COLOR, G.appBarColor);
-        editor.apply();
-
-        // G.fragmentActivity.recreate();
-        if (G.onRefreshActivity != null) {
-            G.isRestartActivity = true;
-            G.onRefreshActivity.refresh("");
-        }
-    }
-
-    public static void notificationColorClick(int color, boolean updateUi) {
-        SharedPreferences.Editor editor;
-        if (sharedPreferences == null) {
-            SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-            editor = sharedPreferences.edit();
-        } else {
-            editor = sharedPreferences.edit();
-        }
-        if (fragmentSettingBinding != null) {
-            GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgNotificationColor.getBackground();
-            bgShape.setColor(color);
-        }
-        G.notificationColor = "#" + Integer.toHexString(color);
-        editor.putString(SHP_SETTING.KEY_NOTIFICATION_COLOR, G.notificationColor);
-        editor.apply();
-
-        G.isUpdateNotificaionColorMain = true;
-        G.isUpdateNotificaionColorChannel = true;
-        G.isUpdateNotificaionColorGroup = true;
-        G.isUpdateNotificaionColorChat = true;
-
-        //if (updateUi && G.onRefreshActivity != null) {
-        //    G.onRefreshActivity.refresh("");
-        //}
-    }
-
-    public static void progressColorClick(int color, boolean updateUi) {
-
-        SharedPreferences.Editor editor;
-        if (sharedPreferences == null) {
-            SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-            editor = sharedPreferences.edit();
-        } else {
-            editor = sharedPreferences.edit();
-        }
-
-        if (fragmentSettingBinding != null) {
-            GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgDefaultProgressColor.getBackground();
-            bgShape.setColor(color);
-        }
-
-        G.progressColor = "#" + Integer.toHexString(color);
-        editor.putString(SHP_SETTING.KEY_PROGRES_COLOR, G.progressColor);
-        editor.apply();
-
-        //if (updateUi && G.onRefreshActivity != null) {
-        //    G.onRefreshActivity.refresh("");
-        //}
-    }
-
-    public static void menuBackgroundClick(int color, boolean updateUi) {
-
-        SharedPreferences.Editor editor;
-        if (sharedPreferences == null) {
-            SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-            editor = sharedPreferences.edit();
-        } else {
-            editor = sharedPreferences.edit();
-        }
-        if (fragmentSettingBinding != null) {
-            GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgDefaultProgressColor.getBackground();
-            bgShape.setColor(color);
-        }
-
-        G.menuBackgroundColor = "#" + Integer.toHexString(color);
-        editor.putString(SHP_SETTING.KEY_MENU_BACKGROUND_COLOR, G.menuBackgroundColor);
-        editor.apply();
-
-    }
-
-    public static void toggleBottomClick(int color) {
-        SharedPreferences.Editor editor;
-        if (sharedPreferences == null) {
-            SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-            editor = sharedPreferences.edit();
-        } else {
-            editor = sharedPreferences.edit();
-        }
-
-        if (fragmentSettingBinding != null) {
-            GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgToggleBottonColor.getBackground();
-            bgShape.setColor(color);
-        }
-        G.toggleButtonColor = "#" + Integer.toHexString(color);
-        editor.putString(SHP_SETTING.KEY_TOGGLE_BOTTON_COLOR, G.toggleButtonColor);
-        editor.apply();
-    }
-
-    public static void headerColorClick(int color, boolean updateUi) {
-        SharedPreferences.Editor editor;
-        if (sharedPreferences == null) {
-            SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-            editor = sharedPreferences.edit();
-        } else {
-            editor = sharedPreferences.edit();
-        }
-
-        if (fragmentSettingBinding != null) {
-            GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgDefaultHeaderFontColor.getBackground();
-            bgShape.setColor(color);
-        }
-
-
-        G.headerTextColor = "#" + Integer.toHexString(color);
-        editor.putString(SHP_SETTING.KEY_FONT_HEADER_COLOR, G.headerTextColor);
-        editor.apply();
-
-        if (updateUi) {
-            G.isRestartActivity = true;
-            G.fragmentActivity.recreate();
-        }
-    }
-
-    public static void sendAndAttachColorClick(int color) {
-        SharedPreferences.Editor editor;
-        if (sharedPreferences == null) {
-            SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-            editor = sharedPreferences.edit();
-        } else {
-            editor = sharedPreferences.edit();
-        }
-        if (fragmentSettingBinding != null) {
-            GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgSendAndAttachColor.getBackground();
-            bgShape.setColor(color);
-        }
-        G.attachmentColor = "#" + Integer.toHexString(color);
-        editor.putString(SHP_SETTING.KEY_SEND_AND_ATTACH_ICON_COLOR, G.attachmentColor);
-        editor.apply();
-    }
+//    private void showSetDefaultColorDialog() {
+//
+//        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.set_color_to_default).content(R.string.color_default).positiveText(R.string.st_dialog_reset_all_notification_yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+//            @Override
+//            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//
+//                SharedPreferences.Editor editor;
+//                if (sharedPreferences == null) {
+//                    SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+//                    editor = sharedPreferences.edit();
+//                } else {
+//                    editor = sharedPreferences.edit();
+//
+//                }
+//                editor.putInt(SHP_SETTING.KEY_THEME_COLOR, Config.DEFAULT);
+//                editor.apply();
+//
+//                Config.setThemeColor();
+//
+//                if (G.onRefreshActivity != null) {
+//                    G.isRestartActivity = true;
+//                    G.onRefreshActivity.refresh("");
+//                }
+//
+//            }
+//        }).negativeText(R.string.st_dialog_reset_all_notification_no).onNegative(new MaterialDialog.SingleButtonCallback() {
+//            @Override
+//            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+//
+//            }
+//        }).show();
+//    }
 
     private String getAppVersion() {
 

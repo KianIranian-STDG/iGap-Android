@@ -29,13 +29,6 @@ public class ActivityEnterPassCode extends ActivityEnhanced {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-        if (G.isDarkTheme) {
-            this.setTheme(R.style.Material_blackCustom);
-        } else {
-            this.setTheme(R.style.Material_lightCustom);
-        }
-
         super.onCreate(savedInstanceState);
         ActivityEnterPassCodeBinding activityEnterPassCodeBinding = DataBindingUtil.setContentView(this, R.layout.activity_enter_pass_code);
         activityManageSpaceViewModel = new ActivityEnterPassCodeViewModel(this, activityEnterPassCodeBinding.getRoot());

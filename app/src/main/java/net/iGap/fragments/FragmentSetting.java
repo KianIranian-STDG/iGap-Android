@@ -3,6 +3,7 @@ package net.iGap.fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -146,37 +147,9 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             }
         };
 
-        //***********************
-        GradientDrawable bgShape = (GradientDrawable) fragmentSettingBinding.asnImgTitleBarColor.getBackground();
-        bgShape.setColor(Color.parseColor(G.appBarColor));
 
-        //***********************
-
-        GradientDrawable bgShapeNotification = (GradientDrawable) fragmentSettingBinding.asnImgNotificationColor.getBackground();
-        bgShapeNotification.setColor(Color.parseColor(G.notificationColor));
-
-        //***********************
-
-        GradientDrawable bgShapeToggleBottomColor = (GradientDrawable) fragmentSettingBinding.asnImgToggleBottonColor.getBackground();
-        bgShapeToggleBottomColor.setColor(Color.parseColor(G.toggleButtonColor));
-
-         /*
-          page for show all image user
-         */
-        GradientDrawable bgShapeSendAndAttachColor = (GradientDrawable) fragmentSettingBinding.asnImgSendAndAttachColor.getBackground();
-        bgShapeSendAndAttachColor.setColor(Color.parseColor(G.attachmentColor));
-
-
-        //***********************
-
-        GradientDrawable bgShapeHeaderTextColor = (GradientDrawable) fragmentSettingBinding.asnImgDefaultHeaderFontColor.getBackground();
-        bgShapeHeaderTextColor.setColor(Color.parseColor(G.headerTextColor));
-
-        //***********************
-
-        GradientDrawable bgShapeProgressColor = (GradientDrawable) fragmentSettingBinding.asnImgDefaultProgressColor.getBackground();
-        bgShapeProgressColor.setColor(Color.parseColor(G.progressColor));
-
+        fragmentSettingBinding.stFabSetPic.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        fragmentSettingBinding.stFabSetPic.setColorFilter(Color.WHITE);
 
         fragmentSettingBinding.stFabSetPic.setOnClickListener(new View.OnClickListener() {
             @Override
