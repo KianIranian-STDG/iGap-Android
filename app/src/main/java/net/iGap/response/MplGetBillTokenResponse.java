@@ -31,12 +31,9 @@ public class MplGetBillTokenResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoMplGetBillToken.MplGetBillTokenResponse.Builder builder = (ProtoMplGetBillToken.MplGetBillTokenResponse.Builder) message;
-        builder.getStatus();
-        builder.getToken();
-        builder.getExpireTime();
 
         if (G.onPayment != null) {
-            G.onPayment.onBillToken(builder.getStatus(), builder.getToken(), builder.getExpireTime());
+            G.onPayment.onBillToken(builder.getStatus(), builder.getToken(), builder.getExpireTime(), builder.getMessage());
         }
     }
 

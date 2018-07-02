@@ -2179,5 +2179,13 @@
   <string name="charge_type">Charge type</string>
   <string name="operator">operator</string>
   <string name="trabord">trabord</string>
+  <string name="time_out_error">time out error</string>
+  <string name="connection_error">no connection error</string>
+  <string name="server_error">server error</string>
+  <string name="network_error">network error</string>
+  <string name="dialog_canceled">dialog canceled</string>
+  <string name="device_root">device root</string>
+  <string name="phone_number_is_not_valid">phone number is not valid</string>
+  <string name="please_select_operator">please select operator</string>
 
 </resources>

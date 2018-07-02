@@ -31,12 +31,9 @@ public class MplGetTopupTokenResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoMplGetTopupToken.MplGetTopupTokenResponse.Builder builder = (ProtoMplGetTopupToken.MplGetTopupTokenResponse.Builder) message;
-        builder.getStatus();
-        builder.getToken();
-        builder.getExpireTime();
 
         if (G.onPayment != null) {
-            G.onPayment.onChargeToken(builder.getStatus(), builder.getToken(), builder.getExpireTime());
+            G.onPayment.onChargeToken(builder.getStatus(), builder.getToken(), builder.getExpireTime(), builder.getMessage());
         }
     }
 

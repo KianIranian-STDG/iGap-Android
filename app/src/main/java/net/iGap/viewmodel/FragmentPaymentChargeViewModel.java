@@ -171,14 +171,14 @@ public class FragmentPaymentChargeViewModel {
         String phoneNumber = fragmentPaymentChargeBinding.fpcEditTextPhoneNumber.getText().toString();
 
         if (phoneNumber.length() != 11) {
-            Toast.makeText(G.currentActivity, "phone number is not valid", Toast.LENGTH_SHORT).show();
+            Toast.makeText(G.currentActivity, R.string.phone_number_is_not_valid, Toast.LENGTH_SHORT).show();
             return;
         }
 
         ProtoMplGetTopupToken.MplGetTopupToken.Type type = null;
 
         if (operatorType == null) {
-            Toast.makeText(G.currentActivity, "please select operator", Toast.LENGTH_SHORT).show();
+            Toast.makeText(G.currentActivity, R.string.please_select_operator, Toast.LENGTH_SHORT).show();
             return;
         }
 

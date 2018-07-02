@@ -1225,5 +1225,13 @@
   <string name="charge_type">نوع شارژ</string>
   <string name="operator">اپراتور</string>
   <string name="trabord">ترابرد</string>
+  <string name="time_out_error">خطای زمان پردازش</string>
+  <string name="connection_error">خطای اتصال</string>
+  <string name="server_error">خطای سرور</string>
+  <string name="network_error">خطای شبکه</string>
+  <string name="dialog_canceled">لغو درخواست</string>
+  <string name="device_root">دستگاه روت شده است</string>
+  <string name="phone_number_is_not_valid">شماره تلفن معتبر نیست</string>
+  <string name="please_select_operator">اپراتور را انتخاب کنید</string>
 
 </resources>

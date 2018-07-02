@@ -37,7 +37,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -606,6 +605,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         initComponent();
 
+        G.onPayment = this;
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         boolean isGetContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT, false);
         /**
@@ -746,12 +746,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         switch (requestCode) {
             case requestCodePaymentCharge:
-                Log.e("ddd", " requestCodePaymentCharge  " + "requestCode  : " + resultCode + "    resultCode : " + resultCode);
-                Log.e("ddd", " requestCodePaymentCharge   payment charge      " + data);
-                break;
             case requestCodePaymentBill:
-                Log.e("ddd", " requestCodePaymentBill  " + "requestCode  : " + resultCode + "    resultCode : " + resultCode);
-                Log.e("ddd", " requestCodePaymentBill   payment charge      " + data);
+                getPaymentResultCode(resultCode, data);
                 break;
             case requestCodeQrCode:
                 IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
@@ -764,56 +760,80 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void getPaymentResultCode(int resultCode, Intent data) {
 
-        // errorType
-        // 2  time out error
-        // 1000  no connection error
-        // 1001 server error
-        // 1002 network error
-        // 201  dialog canceled
-
+        String enData = "", message = "", status = "0";
+        int errorType = 0, orderId = 0;
 
         switch (resultCode) {
-            case 1:
-                // payment ok
-                data.getStringExtra("enData");
-                data.getStringExtra("message");
-                String.valueOf(data.getIntExtra("status", 0));
+            case 1:// payment ok
+                enData = data.getStringExtra("enData");
+                message = data.getStringExtra("message");
+                status = String.valueOf(data.getIntExtra("status", 0));
                 break;
-            case 2:
-                //payment error
-                data.getIntExtra("errorType", 0);
-                String.valueOf(data.getIntExtra("OrderID", 0));
+            case 2://payment error
+                errorType = data.getIntExtra("errorType", 0);
+                orderId = data.getIntExtra("OrderID", 0);
                 break;
-            case 3:
-                //bill payment ok
-                data.getStringExtra("enData");
-                data.getStringExtra("message");
-                String.valueOf(data.getIntExtra("status", 0));
+            case 3://bill payment ok
+                enData = data.getStringExtra("enData");
+                message = data.getStringExtra("message");
+                status = String.valueOf(data.getIntExtra("status", 0));
                 break;
-            case 4:
-                //bill payment error
-                String.valueOf(data.getIntExtra("errorType", 0));
+            case 4://bill payment error
+                errorType = data.getIntExtra("errorType", 0);
                 break;
-            case 5:
-                //internal error payment
-                String.valueOf(data.getIntExtra("errorType", 0));
-                String.valueOf(data.getIntExtra("OrderID", 0));
+            case 5://internal error payment
+                errorType = data.getIntExtra("errorType", 0);
+                orderId = data.getIntExtra("OrderID", 0);
                 break;
-            case 6:
-                //internal error bill
-                String.valueOf(data.getIntExtra("errorType", 0));
+            case 6://internal error bill
+                errorType = data.getIntExtra("errorType", 0);
                 break;
-            case 7:
+            case 7:// charge payment ok
+                enData = data.getStringExtra("enData");
+                message = data.getStringExtra("message");
+                status = String.valueOf(data.getIntExtra("status", 0));
                 break;
-            // charge payment ok
-            case 8:
+            case 8: // charge payment error
+                errorType = data.getIntExtra("errorType", 0);
                 break;
-            // charge payment error
-            case 9:
-                // internal error charge
+            case 9:// internal error charge
+                errorType = data.getIntExtra("errorType", 0);
                 break;
         }
+
+        if (errorType != 0) {
+            showErrorTypeMpl(errorType);
+        }
     }
+
+    private void showErrorTypeMpl(int errorType) {
+        String message = "";
+        switch (errorType) {
+            case 2:
+                message = getString(R.string.time_out_error);
+                break;
+            case 1000:
+                message = getString(R.string.connection_error);
+                break;
+            case 1001:
+                message = getString(R.string.server_error);
+                break;
+            case 1002:
+                message = getString(R.string.network_error);
+                break;
+            case 201:
+                message = getString(R.string.dialog_canceled);
+                break;
+            case 2334:
+                message = getString(R.string.device_root);
+                break;
+        }
+
+        if (message.length() > 0) {
+            HelperError.showSnackMessage(message, false);
+        }
+    }
+
 
     //*******************************************************************************************************************************************
 
@@ -1402,14 +1422,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
         ViewGroup itemNavPayment = (ViewGroup) findViewById(R.id.lm_ll_payment);
+        itemNavPayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new HelperFragment(FragmentPayment.newInstance()).load();
+                lockNavigation();
+            }
+        });
+
         if (G.isMplActive) {
-            itemNavPayment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new HelperFragment(FragmentPayment.newInstance()).load();
-                    lockNavigation();
-                }
-            });
+            itemNavPayment.setVisibility(View.VISIBLE);
         } else {
             itemNavPayment.setVisibility(View.GONE);
         }
@@ -2719,19 +2741,41 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onChargeToken(int status, String token, int expireTime) {
-        Intent intent = new Intent(ActivityMain.this, PaymentInitiator.class);
-        intent.putExtra("Type", "3");
-        intent.putExtra("Token", token);
-        startActivityForResult(intent, requestCodePaymentCharge);
+    public void onChargeToken(int status, String token, int expireTime, String message) {
+        if (status == 0) {
+            Intent intent = new Intent(ActivityMain.this, PaymentInitiator.class);
+            intent.putExtra("Type", "3");
+            intent.putExtra("Token", token);
+            startActivityForResult(intent, requestCodePaymentCharge);
+        } else {
+            HelperError.showSnackMessage(message, false);
+        }
     }
 
     @Override
-    public void onBillToken(int status, String token, int expireTime) {
-        Intent intent = new Intent(ActivityMain.this, PaymentInitiator.class);
-        intent.putExtra("Type", "2");
-        intent.putExtra("Token", token);
-        startActivityForResult(intent, requestCodePaymentBill);
+    public void onBillToken(int status, String token, int expireTime, String message) {
+        if (status == 0) {
+            Intent intent = new Intent(ActivityMain.this, PaymentInitiator.class);
+            intent.putExtra("Type", "2");
+            intent.putExtra("Token", token);
+            startActivityForResult(intent, requestCodePaymentBill);
+        } else {
+            HelperError.showSnackMessage(message, false);
+        }
+    }
+
+    @Override
+    public void onMplEnable(final boolean isMplActive) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (isMplActive) {
+                    findViewById(R.id.lm_ll_payment).setVisibility(View.VISIBLE);
+                } else {
+                    findViewById(R.id.lm_ll_payment).setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     public enum MainAction {

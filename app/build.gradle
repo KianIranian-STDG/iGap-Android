@@ -62,7 +62,6 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':libwebrtc')
-    compile project(':pecpayment-release')
     compile('com.afollestad.material-dialogs:core:0.9.4.5') {
         transitive = true
     }
@@ -128,7 +127,9 @@ dependencies {
     }
     implementation 'com.github.RooyeKhat-Media:Websocket:1.0.0'
     implementation 'com.github.RooyeKhat-Media:MessageProgress:1.0.0'
-    implementation 'com.github.RooyeKhat-Media:Proto:Build85'
+    implementation 'com.github.RooyeKhat-Media:Proto:Build88'
+    implementation project(':pecpayment-release')
+    implementation 'com.mcxiaoke.volley:library:1.0.19'
 }
 
 configurations.all {

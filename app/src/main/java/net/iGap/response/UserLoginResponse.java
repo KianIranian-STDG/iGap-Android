@@ -50,6 +50,9 @@ public class UserLoginResponse extends MessageHandler {
         G.userLogin = true;
         G.isMplActive = builder.getMplActive();
 
+        if (G.onPayment != null) {
+            G.onPayment.onMplEnable(builder.getMplActive());
+        }
         /**
          * get Signaling Configuration
          * (( hint : call following request after set G.userLogin=true ))

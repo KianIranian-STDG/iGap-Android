@@ -10,7 +10,9 @@ package net.iGap.interfaces;
 */
 
 public interface OnPayment {
-    void onChargeToken(int status, String token, int expireTime);
+    void onChargeToken(int status, String token, int expireTime, String Message);
 
-    void onBillToken(int status, String token, int expireTime);
+    void onBillToken(int status, String token, int expireTime, String Message);
+
+    void onMplEnable(boolean active);
 }
