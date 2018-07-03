@@ -1031,7 +1031,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     if (HelperCalander.isPersianUnicode) {
 
                         if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
-                            index = 5;
+                            index = 4;
                         } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
                             index = 3;
                         } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
@@ -1053,7 +1053,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
                             index = 3;
                         } else {
-                            index = 5;
+                            index = 4;
                         }
                     }
 
@@ -1063,7 +1063,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } else {
 
                     if (HelperCalander.isPersianUnicode) {
-                        index = 5;
+                        index = 4;
                     } else {
                         index = 0;
                     }
@@ -1112,7 +1112,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (G.multiTab) {
             navigationTabStrip.setVisibility(View.VISIBLE);
-            mViewPager.setOffscreenPageLimit(6);
+            mViewPager.setOffscreenPageLimit(5);
         } else {
             navigationTabStrip.setVisibility(View.GONE);
             mViewPager.setOffscreenPageLimit(1);

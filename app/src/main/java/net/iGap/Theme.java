@@ -116,7 +116,7 @@ public class Theme {
                         "#FFFFFF",
                         preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, default_appBarColor),
                         "#000000",
-                        preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, default_appBarColor),
+                        "#2A2A2A",
                         "#bfefef",
                         "#303F9F"
 
@@ -143,7 +143,7 @@ public class Theme {
                         "#FFFFFF",
                         "#00BCD4",
                         "#000000",
-                        default_appBarColor,
+                        "#2A2A2A",
                         "#bfefef",
                         "#303F9F"
                 );
