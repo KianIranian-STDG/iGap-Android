@@ -338,9 +338,9 @@ public class HelperNotificationAndBadge {
 
     public void checkAlert(boolean updateNotification, ProtoGlobal.Room.Type type, long roomId) {
 
-        if (G.isAppInFg || AttachFile.isInAttach) {
-            return;
-        }
+//        if (G.isAppInFg || AttachFile.isInAttach) {
+//            return;
+//        }
 
         idRoom = roomId;
         int vipCheck = checkSpecialNotification(updateNotification, type, roomId);
