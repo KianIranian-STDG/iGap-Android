@@ -1,5 +1,7 @@
 package net.iGap.module;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -91,7 +93,7 @@ public final class StartupActions {
         ConnectionManager.manageConnection();
         configDownloadManager();
         manageTime();
-
+        getiGapAccountInstance();
 
         new CallObserver();
         /**
@@ -229,6 +231,36 @@ public final class StartupActions {
         }
         new File(selectedStorage).mkdirs();
         return selectedStorage;
+    }
+
+    /**
+     * if iGap Account not created yet, create otherwise just detect and return
+     */
+    public static Account getiGapAccountInstance() {
+
+        if (G.iGapAccount != null) {
+            return G.iGapAccount;
+        }
+
+        AccountManager accountManager = AccountManager.get(G.context);
+        if (accountManager.getAccounts().length != 0) {
+            for (Account account : accountManager.getAccounts()) {
+                if (account.type.equals(G.context.getPackageName())) {
+                    G.iGapAccount = account;
+                    return G.iGapAccount;
+                }
+            }
+        }
+
+        G.iGapAccount = new Account(Config.iGapAccount, G.context.getPackageName());
+        String password = "net.iGap";
+        try {
+            accountManager.addAccountExplicitly(G.iGapAccount, password, null);
+        } catch (Exception e1) {
+            e1.getMessage();
+        }
+
+        return G.iGapAccount;
     }
 
     public static File getCacheDir() {

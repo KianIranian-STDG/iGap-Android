@@ -10,6 +10,7 @@
 
 package net.iGap.module;
 
+import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -20,8 +21,14 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 
+import net.iGap.G;
+import net.iGap.realm.RealmRegisteredInfo;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+
+import static net.iGap.G.context;
 
 public final class ContactUtils {
     private Context mContext;
@@ -111,5 +118,70 @@ public final class ContactUtils {
         }
 
         return contactName;
+    }
+
+    public static void addContactToPhoneBook(RealmRegisteredInfo contact) {
+
+        String accountName = StartupActions.getiGapAccountInstance().name;
+        String accountType = StartupActions.getiGapAccountInstance().type;
+
+        ContentResolver contentResolver = context.getContentResolver();
+        try {
+            Uri rawContactUri = ContactsContract.RawContacts.CONTENT_URI.buildUpon().appendQueryParameter(ContactsContract.CALLER_IS_SYNCADAPTER, "true").appendQueryParameter(ContactsContract.RawContacts.ACCOUNT_NAME, accountName).appendQueryParameter(ContactsContract.RawContacts.ACCOUNT_TYPE, accountType).build();
+            contentResolver.delete(rawContactUri, ContactsContract.RawContacts.SYNC2 + " = " + contact.getId(), null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<ContentProviderOperation> query = new ArrayList<>();
+
+        ContentProviderOperation.Builder builder = ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI);
+        builder.withValue(ContactsContract.RawContacts.ACCOUNT_NAME, accountName);
+        builder.withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, accountType);
+        builder.withValue(ContactsContract.RawContacts.SYNC1, contact.getPhoneNumber());
+        builder.withValue(ContactsContract.RawContacts.SYNC2, contact.getId());
+        query.add(builder.build());
+
+        query.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, contact.getPhoneNumber())
+                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                .build());
+
+        builder = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
+        builder.withValueBackReference(ContactsContract.CommonDataKinds.StructuredName.RAW_CONTACT_ID, 0);
+        builder.withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
+
+        builder.withValue(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, contact.getFirstName());
+        builder.withValue(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME, contact.getLastName());
+        query.add(builder.build());
+
+        /*final String IM_LABEL = "iGap protocol";
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ContactsContract.Data.RAW_CONTACT_ID, 0);
+        contentValues.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Im.CONTENT_ITEM_TYPE);
+        contentValues.put(ContactsContract.CommonDataKinds.Im.TYPE, ContactsContract.CommonDataKinds.Im.TYPE_CUSTOM);
+        contentValues.put(ContactsContract.CommonDataKinds.Im.LABEL, IM_LABEL);
+        contentValues.put(ContactsContract.CommonDataKinds.Im.PROTOCOL, ContactsContract.CommonDataKinds.Im.PROTOCOL_CUSTOM);
+        contentValues.put(ContactsContract.CommonDataKinds.Im.CUSTOM_PROTOCOL, IM_LABEL);
+        contentValues.put(ContactsContract.CommonDataKinds.Im.DATA, currentAccount.name);
+        builder = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
+        builder.withValues(contentValues);
+        query.add(builder.build());*/
+
+        builder = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
+        builder.withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0);
+        builder.withValue(ContactsContract.Data.MIMETYPE, "vnd.android.cursor.item/vnd.net.iGap.profile");
+        builder.withValue(ContactsContract.Data.DATA1, contact.getId());
+        builder.withValue(ContactsContract.Data.DATA2, "iGap Profile");
+        builder.withValue(ContactsContract.Data.DATA3, "+" + contact.getPhoneNumber());
+        builder.withValue(ContactsContract.Data.DATA4, contact.getId());
+        query.add(builder.build());
+        try {
+            G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -497,7 +497,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
     }
 
-
     private void hideProgress() {
 
         G.handler.post(new Runnable() {
@@ -996,10 +995,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                                     @Override
                                     public void complete() {
                                         hideProgress();
-                                        //  G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
-
                                         popBackStackFragment();
-
                                     }
                                 }, new HelperPublicMethod.OnError() {
                                     @Override
@@ -1104,17 +1100,17 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                             .content(G.fragmentActivity.getResources().getString(R.string.invite_friend))
                             .positiveText(G.fragmentActivity.getResources().getString(R.string.ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.cancel))
                             .onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            Intent sendIntent = new Intent();
-                            sendIntent.setAction(Intent.ACTION_SEND);
-                            sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you!");
-                            sendIntent.setType("text/plain");
-                            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            G.context.startActivity(sendIntent);
-                        }
-                    }).show();
+                                    Intent sendIntent = new Intent();
+                                    sendIntent.setAction(Intent.ACTION_SEND);
+                                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you!");
+                                    sendIntent.setType("text/plain");
+                                    sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    G.context.startActivity(sendIntent);
+                                }
+                            }).show();
 
 
                 }
