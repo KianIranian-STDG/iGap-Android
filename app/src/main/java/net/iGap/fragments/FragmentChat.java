@@ -6725,6 +6725,9 @@ public class FragmentChat extends BaseFragment
     }
 
     public void itemAdapterBottomSheet() {
+
+        if (fastItemAdapter != null) fastItemAdapter.clear();
+
         if (isNewBottomSheet || FragmentEditImage.itemGalleryList.size() <= 1) {
 
             if (listPathString != null) {
@@ -6737,44 +6740,57 @@ public class FragmentChat extends BaseFragment
             if (isNewBottomSheet) {
                 FragmentEditImage.textImageList.clear();
             }
-            FragmentEditImage.itemGalleryList = getAllShownImagesPath(G.fragmentActivity);
-        }
-        fastItemAdapter.clear();
-        boolean isCameraButtonSheet = sharedPreferences.getBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true);
 
+            try {
+                HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
+                    @Override
+                    public void Allow() throws IOException {
+                        FragmentEditImage.itemGalleryList = getAllShownImagesPath(G.fragmentActivity);
+                        if (rcvBottomSheet != null) rcvBottomSheet.setVisibility(View.VISIBLE);
+                        checkCameraAndLoadImage();
+                    }
+
+                    @Override
+                    public void deny() {
+                        loadImageGallery();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            checkCameraAndLoadImage();
+        }
+
+
+    }
+
+    private void checkCameraAndLoadImage() {
+        boolean isCameraButtonSheet = sharedPreferences.getBoolean(SHP_SETTING.KEY_CAMERA_BUTTON_SHEET, true);
         if (isCameraButtonSheet) {
             try {
                 HelperPermission.getCameraPermission(G.fragmentActivity, new OnGetPermission() {
                     @Override
                     public void Allow() throws IOException {
 
-                        fastItemAdapter.add(new AdapterCamera("").withIdentifier(99));
-                        for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                            fastItemAdapter.add(new AdapterBottomSheet(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
-                            isPermissionCamera = true;
-                        }
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                fastItemAdapter.add(new AdapterCamera("").withIdentifier(99));
+                                for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
+                                    fastItemAdapter.add(new AdapterBottomSheet(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
+                                }
+                                isPermissionCamera = true;
+                            }
+                        });
                         G.handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 if (isAdded()) {
-                                    bottomSheetDialog.show();
-                                    if (FragmentEditImage.textImageList != null && FragmentEditImage.textImageList.size() > 0) {
-                                        //send.setText(R.mipmap.send2);
-                                        if (send != null)
-                                            send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-                                        if (txtCountItem != null)
-                                            txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + G.fragmentActivity.getResources().getString(item));
-                                    } else {
-                                        //send.setImageResource(R.mipmap.ic_close);
-                                        if (send != null)
-                                            send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
-                                        if (txtCountItem != null)
-                                            txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
-                                    }
+                                    showBottomSheet();
                                 }
                             }
                         }, 100);
-
                     }
 
                     @Override
@@ -6790,7 +6806,23 @@ public class FragmentChat extends BaseFragment
         } else {
             loadImageGallery();
         }
+    }
 
+    private void showBottomSheet() {
+        bottomSheetDialog.show();
+        if (FragmentEditImage.textImageList != null && FragmentEditImage.textImageList.size() > 0) {
+            //send.setText(R.mipmap.send2);
+            if (send != null)
+                send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
+            if (txtCountItem != null)
+                txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + G.fragmentActivity.getResources().getString(item));
+        } else {
+            //send.setImageResource(R.mipmap.ic_close);
+            if (send != null)
+                send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
+            if (txtCountItem != null)
+                txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
+        }
     }
 
     private void loadImageGallery() {
@@ -6808,18 +6840,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void run() {
                 if (isAdded()) {
-                    bottomSheetDialog.show();
-                    if (FragmentEditImage.textImageList != null && FragmentEditImage.textImageList.size() > 0) {
-                        //send.setText(R.mipmap.send2);
-                        send.setText(G.fragmentActivity.getResources().getString(R.string.md_send_button));
-                        txtCountItem.setText("" + FragmentEditImage.textImageList.size() + " " + G.fragmentActivity.getResources().getString(item));
-                    } else {
-                        //send.setImageResource(R.mipmap.ic_close);
-                        send.setText(G.fragmentActivity.getResources().getString(R.string.igap_chevron_double_down));
-                        txtCountItem.setText(G.fragmentActivity.getResources().getString(R.string.navigation_drawer_close));
-                    }
-
-
+                    showBottomSheet();
                 }
             }
         }, 100);
