@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.one.EmojiOneProvider;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
