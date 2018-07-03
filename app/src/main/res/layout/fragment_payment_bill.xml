@@ -14,6 +14,10 @@
     <variable
       name="fragmentPaymentBillViewModel"
       type="net.iGap.viewmodel.FragmentPaymentBillViewModel" />
+
+    <variable
+      name="backHandler"
+      type="net.iGap.interfaces.IBackHandler" />
   </data>
 
   <LinearLayout
@@ -47,7 +51,7 @@
             rv_centered="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{fragmentPaymentBillViewModel::onClickRippleBack}"
+            android:onClick="@{()-> backHandler.onBack()}"
             app:rv_alpha="200"
             app:rv_centered="true"
             app:rv_rippleDuration="0"
@@ -89,15 +93,36 @@
         android:layout_margin="@dimen/dp12"
         android:orientation="vertical">
 
-        <Button
+
+        <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_margin="@dimen/dp20"
-          android:textColor="@color/green"
-          android:textSize="@dimen/dp18"
+          android:layout_margin="@dimen/dp12"
+          android:background="@color/md_blue_50"
           android:onClick="@{fragmentPaymentBillViewModel.onClickBarCode}"
-          android:text="@string/barcode_reader"
-          android:background="@color/md_blue_50" />
+          android:orientation="horizontal">
+
+          <net.iGap.module.MaterialDesignTextView
+            style="?iconColorMenuTheme"
+            android:layout_width="@dimen/dp80"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/md_barcode_scan"
+            android:textAppearance="@style/TextIconAppearance.menu"
+            android:textSize="@dimen/dp20" />
+
+          <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="@dimen/dp12"
+            android:text="@string/barcode_reader"
+            android:textColor="@color/green"
+            android:textSize="@dimen/dp18" />
+
+        </LinearLayout>
+
 
         <LinearLayout
           android:layout_width="match_parent"

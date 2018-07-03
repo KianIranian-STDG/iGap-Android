@@ -12,7 +12,6 @@ package net.iGap.viewmodel;
 import android.os.Bundle;
 import android.view.View;
 
-import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentCharge;
 import net.iGap.helper.HelperFragment;
@@ -24,22 +23,12 @@ public class FragmentPaymentViewModel {
 
     }
 
-    public void onClickRippleBack(View v) {
-        if (FragmentPayment.onBackFragment != null) {
-            FragmentPayment.onBackFragment.onBack();
-        }
-    }
-
-
     public void onClickCharge(View v) {
         new HelperFragment(FragmentPaymentCharge.newInstance()).setReplace(false).load();
     }
 
     public void onClickBill(View v) {
-
-
         new HelperFragment(FragmentPaymentBill.newInstance()).setReplace(false).load();
-
     }
 
 }

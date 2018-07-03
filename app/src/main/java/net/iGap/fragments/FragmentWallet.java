@@ -10,32 +10,30 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.iGap.R;
-import net.iGap.databinding.FragmentPaymentBinding;
+import net.iGap.databinding.FragmentWalletBinding;
 import net.iGap.interfaces.IBackHandler;
-import net.iGap.viewmodel.FragmentPaymentViewModel;
+import net.iGap.viewmodel.FragmentWalletViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentPayment extends BaseFragment {
+public class FragmentWallet extends BaseFragment {
 
-    private FragmentPaymentViewModel fragmentPaymentViewModel;
-    private FragmentPaymentBinding fragmentPaymentBinding;
+    private FragmentWalletBinding fragmentWalletBinding;
 
-
-    public static FragmentPayment newInstance() {
-        return new FragmentPayment();
+    public static FragmentWallet newInstance() {
+        return new FragmentWallet();
     }
 
-    public FragmentPayment() {
+    public FragmentWallet() {
         // Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        fragmentPaymentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_payment, container, false);
-        return attachToSwipeBack(fragmentPaymentBinding.getRoot());
+        fragmentWalletBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_wallet, container, false);
+        return attachToSwipeBack(fragmentWalletBinding.getRoot());
     }
 
     @Override
@@ -45,9 +43,8 @@ public class FragmentPayment extends BaseFragment {
     }
 
     private void initDataBinding(Bundle arguments) {
-
-        fragmentPaymentViewModel = new FragmentPaymentViewModel(arguments);
-        fragmentPaymentBinding.setFragmentPaymentViewModel(fragmentPaymentViewModel);
+        FragmentWalletViewModel fragmentWalletViewModel = new FragmentWalletViewModel(arguments);
+        fragmentWalletBinding.setFragmentWalletViewModel(fragmentWalletViewModel);
 
         IBackHandler iBackHandler = new IBackHandler() {
             @Override
@@ -56,7 +53,6 @@ public class FragmentPayment extends BaseFragment {
             }
         };
 
-        fragmentPaymentBinding.setBackHandler(iBackHandler);
-
+        fragmentWalletBinding.setBackHandler(iBackHandler);
     }
 }

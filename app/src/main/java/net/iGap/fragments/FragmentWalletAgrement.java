@@ -10,32 +10,29 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.iGap.R;
-import net.iGap.databinding.FragmentPaymentBinding;
+import net.iGap.databinding.FragmentWalletAgrementBinding;
 import net.iGap.interfaces.IBackHandler;
-import net.iGap.viewmodel.FragmentPaymentViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentPayment extends BaseFragment {
+public class FragmentWalletAgrement extends BaseFragment {
 
-    private FragmentPaymentViewModel fragmentPaymentViewModel;
-    private FragmentPaymentBinding fragmentPaymentBinding;
+    private FragmentWalletAgrementBinding fragmentWalletAgrementBinding;
 
-
-    public static FragmentPayment newInstance() {
-        return new FragmentPayment();
+    public static FragmentWalletAgrement newInstance() {
+        return new FragmentWalletAgrement();
     }
 
-    public FragmentPayment() {
+    public FragmentWalletAgrement() {
         // Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        fragmentPaymentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_payment, container, false);
-        return attachToSwipeBack(fragmentPaymentBinding.getRoot());
+        fragmentWalletAgrementBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_wallet_agrement, container, false);
+        return attachToSwipeBack(fragmentWalletAgrementBinding.getRoot());
     }
 
     @Override
@@ -45,10 +42,6 @@ public class FragmentPayment extends BaseFragment {
     }
 
     private void initDataBinding(Bundle arguments) {
-
-        fragmentPaymentViewModel = new FragmentPaymentViewModel(arguments);
-        fragmentPaymentBinding.setFragmentPaymentViewModel(fragmentPaymentViewModel);
-
         IBackHandler iBackHandler = new IBackHandler() {
             @Override
             public void onBack() {
@@ -56,7 +49,6 @@ public class FragmentPayment extends BaseFragment {
             }
         };
 
-        fragmentPaymentBinding.setBackHandler(iBackHandler);
-
+        fragmentWalletAgrementBinding.setBackHandler(iBackHandler);
     }
 }

@@ -14,6 +14,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentBillBinding;
+import net.iGap.interfaces.IBackHandler;
 import net.iGap.viewmodel.FragmentPaymentBillViewModel;
 
 import static net.iGap.activities.ActivityMain.requestCodeBarcode;
@@ -22,7 +23,6 @@ import static net.iGap.viewmodel.FragmentPaymentBillViewModel.getCompany;
 
 public class FragmentPaymentBill extends BaseFragment {
 
-    public static FragmentPaymentBill.OnBackFragment onBackFragment;
     private FragmentPaymentBillBinding fragmentPaymentBillBinding;
 
     public static FragmentPaymentBill newInstance() {
@@ -44,23 +44,21 @@ public class FragmentPaymentBill extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initDataBinding(getArguments());
-
-        onBackFragment = new FragmentPaymentBill.OnBackFragment() {
-            @Override
-            public void onBack() {
-                popBackStackFragment();
-            }
-        };
     }
 
     private void initDataBinding(Bundle arguments) {
         FragmentPaymentBillViewModel fragmentPaymentBillViewModel = new FragmentPaymentBillViewModel(FragmentPaymentBill.this, fragmentPaymentBillBinding);
         fragmentPaymentBillBinding.setFragmentPaymentBillViewModel(fragmentPaymentBillViewModel);
-    }
 
+        IBackHandler iBackHandler = new IBackHandler() {
+            @Override
+            public void onBack() {
+                popBackStackFragment();
+            }
+        };
 
-    public interface OnBackFragment {
-        void onBack();
+        fragmentPaymentBillBinding.setBackHandler(iBackHandler);
+
     }
 
 

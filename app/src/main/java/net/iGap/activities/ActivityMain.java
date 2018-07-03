@@ -69,6 +69,8 @@ import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentSetting;
+import net.iGap.fragments.FragmentWallet;
+import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
@@ -1395,6 +1397,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
+
+        ViewGroup itemNavWallet = (ViewGroup) findViewById(R.id.lm_ll_wallet);
+        itemNavWallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (G.isWalletRegister) {
+                    new HelperFragment(FragmentWallet.newInstance()).load();
+                } else {
+                    new HelperFragment(FragmentWalletAgrement.newInstance()).load();
+                }
+                lockNavigation();
+            }
+        });
+
+
         ViewGroup itemNavPayment = (ViewGroup) findViewById(R.id.lm_ll_payment);
         itemNavPayment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1403,12 +1420,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 lockNavigation();
             }
         });
-
-        if (G.isMplActive) {
-            itemNavPayment.setVisibility(View.VISIBLE);
-        } else {
-            itemNavPayment.setVisibility(View.GONE);
-        }
 
 
         ViewGroup itemNavCall = (ViewGroup) findViewById(R.id.lm_ll_call);
@@ -2296,6 +2307,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             iconLock.setVisibility(View.GONE);
         }
 
+        onFinance(G.isMplActive, G.isWalletActive);
+
     }
 
     private void enterPassword() {
@@ -2751,15 +2764,29 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     @Override
-    public void onMplEnable(final boolean isMplActive) {
+    public void onFinance(final boolean mplActive, final boolean walletActive) {
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (isMplActive) {
+                if (mplActive) {
                     findViewById(R.id.lm_ll_payment).setVisibility(View.VISIBLE);
                 } else {
                     findViewById(R.id.lm_ll_payment).setVisibility(View.GONE);
                 }
+
+                if (walletActive) {
+                    findViewById(R.id.lm_ll_wallet).setVisibility(View.VISIBLE);
+                } else {
+                    findViewById(R.id.lm_ll_wallet).setVisibility(View.GONE);
+                }
+
+                if (!G.isMplActive && !G.isWalletActive) {
+                    findViewById(R.id.lm_view_Line).setVisibility(View.GONE);
+                } else {
+                    findViewById(R.id.lm_view_Line).setVisibility(View.VISIBLE);
+                }
+
             }
         });
     }

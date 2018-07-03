@@ -18,7 +18,6 @@ import android.widget.Toast;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentChargeBinding;
-import net.iGap.fragments.FragmentPaymentCharge;
 import net.iGap.proto.ProtoMplGetTopupToken;
 import net.iGap.request.RequestMplGetTopupToken;
 
@@ -74,11 +73,6 @@ public class FragmentPaymentChargeViewModel {
         this.fragmentPaymentChargeBinding = fragmentPaymentChargeBinding;
     }
 
-    public void onClickRippleBack(View v) {
-        if (FragmentPaymentCharge.onBackFragment != null) {
-            FragmentPaymentCharge.onBackFragment.onBack();
-        }
-    }
 
     //****************************************************************************************
 
@@ -253,7 +247,7 @@ public class FragmentPaymentChargeViewModel {
         RequestMplGetTopupToken requestMplGetTopupToken = new RequestMplGetTopupToken();
         requestMplGetTopupToken.mplGetTopupToken(Long.parseLong(phoneNumber), price, type);
 
-        onClickRippleBack(null);
+        fragmentPaymentChargeBinding.getBackHandler().onBack();
 
     }
 

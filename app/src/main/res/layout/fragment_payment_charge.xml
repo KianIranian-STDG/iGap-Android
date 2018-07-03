@@ -14,6 +14,10 @@
     <variable
       name="fragmentPaymentChargeViewModel"
       type="net.iGap.viewmodel.FragmentPaymentChargeViewModel" />
+
+    <variable
+      name="backHandler"
+      type="net.iGap.interfaces.IBackHandler" />
   </data>
 
   <LinearLayout
@@ -47,7 +51,7 @@
             rv_centered="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{fragmentPaymentChargeViewModel::onClickRippleBack}"
+            android:onClick="@{()-> backHandler.onBack()}"
             app:rv_alpha="200"
             app:rv_centered="true"
             app:rv_rippleDuration="0"

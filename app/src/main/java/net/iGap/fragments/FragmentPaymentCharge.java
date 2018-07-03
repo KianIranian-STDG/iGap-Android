@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentChargeBinding;
+import net.iGap.interfaces.IBackHandler;
 import net.iGap.viewmodel.FragmentPaymentChargeViewModel;
 
 /**
@@ -18,7 +19,6 @@ import net.iGap.viewmodel.FragmentPaymentChargeViewModel;
  */
 public class FragmentPaymentCharge extends BaseFragment {
 
-    public static FragmentPaymentCharge.OnBackFragment onBackFragment;
     private FragmentPaymentChargeViewModel fragmentPaymentChargeViewModel;
     private FragmentPaymentChargeBinding fragmentPaymentChargeBinding;
 
@@ -41,13 +41,6 @@ public class FragmentPaymentCharge extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initDataBinding(getArguments());
-
-        onBackFragment = new FragmentPaymentCharge.OnBackFragment() {
-            @Override
-            public void onBack() {
-                popBackStackFragment();
-            }
-        };
     }
 
     private void initDataBinding(Bundle arguments) {
@@ -55,10 +48,14 @@ public class FragmentPaymentCharge extends BaseFragment {
         fragmentPaymentChargeViewModel = new FragmentPaymentChargeViewModel(fragmentPaymentChargeBinding);
         fragmentPaymentChargeBinding.setFragmentPaymentChargeViewModel(fragmentPaymentChargeViewModel);
 
-    }
+        IBackHandler iBackHandler = new IBackHandler() {
+            @Override
+            public void onBack() {
+                popBackStackFragment();
+            }
+        };
 
+        fragmentPaymentChargeBinding.setBackHandler(iBackHandler);
 
-    public interface OnBackFragment {
-        void onBack();
     }
 }

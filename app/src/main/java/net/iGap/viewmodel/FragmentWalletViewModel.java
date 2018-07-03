@@ -1,4 +1,4 @@
-package net.iGap.interfaces;
+package net.iGap.viewmodel;
 /*
  * This is the source code of iGap for Android
  * It is licensed under GNU AGPL v3.0
@@ -9,11 +9,12 @@ package net.iGap.interfaces;
  * All rights reserved.
 */
 
-public interface OnPayment {
-    void onChargeToken(int status, String token, int expireTime, String Message);
+import android.os.Bundle;
 
-    void onBillToken(int status, String token, int expireTime, String Message);
 
-    void onFinance(boolean mplActive, boolean walletActive);
+public class FragmentWalletViewModel {
 
+    public FragmentWalletViewModel(Bundle arguments) {
+
+    }
 }

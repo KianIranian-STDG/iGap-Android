@@ -12,12 +12,10 @@
     <import type="net.iGap.G" />
 
     <variable
-      name="fragmentPaymentViewModel"
-      type="net.iGap.viewmodel.FragmentPaymentViewModel" />
-
-    <variable
       name="backHandler"
       type="net.iGap.interfaces.IBackHandler" />
+
+
   </data>
 
   <LinearLayout
@@ -71,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/financial_services"
+            android:text="Wallet agrement"
             android:textColor="@color/whit_background"
             android:textSize="@dimen/dp18"
             android:textStyle="normal"
@@ -81,62 +79,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <LinearLayout
+    <ScrollView
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin="@dimen/dp6"
-      android:background="@color/md_blue_50"
-      android:onClick="@{fragmentPaymentViewModel::onClickCharge}"
-      android:orientation="horizontal">
+      android:layout_height="match_parent">
 
-      <net.iGap.module.MaterialDesignTextView
-        style="?iconColorMenuTheme"
-        android:layout_width="@dimen/dp80"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/md_igap_credit_card"
-        android:textAppearance="@style/TextIconAppearance.menu"
-        android:textSize="@dimen/dp20" />
+      <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-      <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:padding="@dimen/dp12"
-        android:text="@string/buy_charge"
-        android:textColor="@color/green"
-        android:textSize="@dimen/dp18" />
-    </LinearLayout>
 
-    <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin="@dimen/dp6"
-      android:background="@color/md_blue_50"
-      android:onClick="@{fragmentPaymentViewModel::onClickBill}"
-      android:orientation="horizontal">
-
-      <net.iGap.module.MaterialDesignTextView
-        style="?iconColorMenuTheme"
-        android:layout_width="@dimen/dp80"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/md_newspaper"
-        android:textAppearance="@style/TextIconAppearance.menu"
-        android:textSize="@dimen/dp20" />
-
-      <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:padding="@dimen/dp12"
-        android:text="@string/pay_bills"
-        android:textColor="@color/green"
-        android:textSize="@dimen/dp18" />
-    </LinearLayout>
+      </ScrollView>
+    </ScrollView>
 
 
   </LinearLayout>

@@ -39,11 +39,6 @@ public class FragmentPaymentBillViewModel {
         this.fragmentPaymentBillBinding = fragmentPaymentBillBinding;
     }
 
-    public void onClickRippleBack(View v) {
-        if (FragmentPaymentBill.onBackFragment != null) {
-            FragmentPaymentBill.onBackFragment.onBack();
-        }
-    }
 
     public void onTextChangedBillId(CharSequence s, int start, int before, int count) {
         if (s.length() == 13) {
@@ -97,7 +92,7 @@ public class FragmentPaymentBillViewModel {
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
         requestMplGetBillToken.mplGetBillToken(Long.parseLong(billId), Long.parseLong(payId));
 
-        onClickRippleBack(null);
+        fragmentPaymentBillBinding.getBackHandler().onBack();
 
     }
 
