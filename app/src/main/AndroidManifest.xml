@@ -191,6 +191,19 @@
 
         <data android:mimeType="*/*" />
       </intent-filter>
+
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="vnd.android.cursor.item/vnd.net.iGap.profile" />
+      </intent-filter>
+
+      <intent-filter>
+        <action android:name="android.intent.action.CALL_PRIVILEGED" />
+        <category android:name="android.intent.category.LAUNCHER" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:scheme="tel" />
+      </intent-filter>
       <!-- this part add app logo to list of share -->
     </activity>
 
@@ -224,7 +237,8 @@
 
     <service
       android:name="net.iGap.module.AuthenticatorService"
-      android:label="@string/app_name">
+      android:exported="true"
+      android:process=":auth">
       <intent-filter>
         <action android:name="android.accounts.AccountAuthenticator" />
       </intent-filter>

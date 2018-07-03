@@ -10,19 +10,13 @@
 
 package net.iGap.fragments;
 
-import android.accounts.Account;
-import android.content.ContentProviderOperation;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -34,7 +28,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -324,8 +317,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
         results = getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
 
-        addContactSyncAccount(results);
-
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -505,104 +496,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         });
 
     }
-
-    private void addContactSyncAccount(RealmResults<RealmContacts> results) {
-
-        for (final RealmContacts item : results) {
-
-            if (!item.isAddAcount()) {
-                boolean isOk = updateContactList(G.context, item.getDisplay_name(), item.getPhone());
-
-                if (isOk) {
-                    Log.i("DDDDDDDDDDDDDD", "getDisplay_name: " + item.getDisplay_name());
-
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            item.setAddAcount(true);
-                        }
-                    });
-
-                }
-            }
-        }
-
-    }
-
-    private boolean updateContactList(Context context, String name, long phoneNumber) {
-
-        ContentResolver contentResolver = context.getContentResolver();
-        String contactId = null;
-        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode("" + phoneNumber));
-
-        String[] projection = new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID};
-
-        Cursor cursor =
-                contentResolver.query(
-                        uri,
-                        projection,
-                        null,
-                        null,
-                        null);
-
-
-        try {
-            if (cursor != null && cursor.moveToFirst()) {
-
-                contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
-                String nc = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.DISPLAY_NAME));
-                Log.i("DDDDDDDDDDDDDD", "e.333(): " + name + ": " + contactId + "         nc:       " + nc);
-                ArrayList<ContentProviderOperation> ops = new ArrayList<>();
-                final Account account = new Account("" + phoneNumber, G.context.getPackageName());
-
-                ops.add(ContentProviderOperation.newInsert(addCallerIsSyncAdapterParameter(ContactsContract.Data.CONTENT_URI, true))
-                        .withValue(ContactsContract.Data.RAW_CONTACT_ID, contactId)
-                        .withValue(ContactsContract.Data.MIMETYPE,
-                                ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                        .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, account.type)
-                        .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, account.name)
-                        .build());
-
-                ops.add(ContentProviderOperation
-                        .newInsert(addCallerIsSyncAdapterParameter(ContactsContract.Data.CONTENT_URI, true))
-                        .withValue(ContactsContract.Data.RAW_CONTACT_ID, contactId)
-                        .withValue(ContactsContract.Data.MIMETYPE,
-                                ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                        .withValue(ContactsContract.Data.DATA1, phoneNumber)
-                        .withValue(ContactsContract.Data.DATA2, "iGap Profile")
-                        .withValue(ContactsContract.Data.DATA3, phoneNumber)
-                        .build());
-
-
-                try {
-                    context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-                    return true;
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.i("DDDDDDDDDDDDDDFFF", "e.printStackTrace(): " + e.getMessage());
-                    return false;
-                }
-
-
-            }
-        } finally {
-            if (cursor != null)
-                cursor.close();
-        }
-
-        return false;
-
-
-    }
-
-    private static Uri addCallerIsSyncAdapterParameter(Uri uri, boolean isSyncOperation) {
-        if (isSyncOperation) {
-            return uri.buildUpon().appendQueryParameter(ContactsContract.CALLER_IS_SYNCADAPTER, "true").build();
-        }
-        return uri;
-    }
-
 
     private void hideProgress() {
 
@@ -1102,10 +995,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                                     @Override
                                     public void complete() {
                                         hideProgress();
-                                        //  G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(RegisteredContactsFragment.this).commit();
-
                                         popBackStackFragment();
-
                                     }
                                 }, new HelperPublicMethod.OnError() {
                                     @Override

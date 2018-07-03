@@ -15,11 +15,10 @@
 -->
 <ContactsSource xmlns:android="http://schemas.android.com/apk/res/android">
   <ContactsDataKind
+    android:detailColumn="data3"
     android:icon="@mipmap/icon"
     android:mimeType="vnd.android.cursor.item/vnd.net.iGap.profile"
-    android:summaryColumn="data2"
-    android:detailColumn="data3"
-    android:detailSocialSummary="true" />
+    android:summaryColumn="data2" />
 </ContactsSource>
 
 
