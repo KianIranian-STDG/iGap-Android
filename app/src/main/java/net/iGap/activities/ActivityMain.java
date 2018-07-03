@@ -10,23 +10,19 @@
 
 package net.iGap.activities;
 
-import android.Manifest;
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -68,7 +64,6 @@ import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentQrCodeNewDevice;
 import net.iGap.fragments.FragmentSetting;
-import net.iGap.fragments.FragmentThemColor;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
@@ -84,6 +79,7 @@ import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ServiceContact;
 import net.iGap.interfaces.FinishActivity;
@@ -116,6 +112,7 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.libs.tabBar.NavigationTabStrip;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.ContactUtils;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUtils;
 import net.iGap.module.LoginActions;
@@ -138,7 +135,6 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.viewmodel.ActivityCallViewModel;
-import net.iGap.viewmodel.FragmentSettingViewModel;
 import net.iGap.viewmodel.FragmentThemColorViewModel;
 
 import java.io.File;
@@ -348,6 +344,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         new HelperGetDataFromOtherApp(intent);
 
+        if (intent.getAction() != null && intent.getAction().equals("net.iGap.activities.OPEN_ACCOUNT")) {
+            new HelperFragment(new FragmentSetting()).load();
+        }
+
         Bundle extras = intent.getExtras();
         if (extras != null) {
 
@@ -503,7 +503,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             lp.height = size;
 
 
-            desighnLayout(chatLayoutMode.none);
+            designLayout(chatLayoutMode.none);
 
             frameFragmentBack.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -516,7 +516,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             G.iTowPanModDesinLayout = new ITowPanModDesinLayout() {
                 @Override
                 public void onLayout(chatLayoutMode mode) {
-                    desighnLayout(mode);
+                    designLayout(mode);
                 }
 
                 @Override
@@ -664,8 +664,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         initDrawerMenu();
 
-        verifyAccount();
-
         checkKeepMedia();
 
 
@@ -744,7 +742,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             if (beforeState != G.isLandscape) {
-                desighnLayout(chatLayoutMode.none);
+                designLayout(chatLayoutMode.none);
             }
 
 
@@ -2067,7 +2065,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }
 
-            desighnLayout(chatLayoutMode.none);
+            designLayout(chatLayoutMode.none);
         }
     }
 
@@ -2100,7 +2098,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        desighnLayout(chatLayoutMode.none);
+        designLayout(chatLayoutMode.none);
 
 
         if (contentLoading != null) {
@@ -2154,7 +2152,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         startService(new Intent(this, ServiceContact.class));
 
-        HelperUrl.getLinkinfo(getIntent(), ActivityMain.this);
+        Intent intent = getIntent();
+        String appLinkAction = intent.getAction();
+        Uri appLinkData = intent.getData();
+        if (Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null && appLinkData.getHost() != null && appLinkData.getHost().equals("com.android.contacts")) {
+            ContactUtils contactUtils = new ContactUtils(G.context, appLinkData);
+            String userId = contactUtils.retrieveNumber(); // we set retrieveNumber as userId
+            HelperPublicMethod.goToChatRoom(Long.parseLong(userId), null, null);
+        } else {
+            HelperUrl.getLinkinfo(intent, ActivityMain.this);
+        }
         getIntent().setData(null);
         setDrawerInfo(false);
         if (drawer != null) {
@@ -2504,36 +2511,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     //*************************************************************
 
-    public void verifyAccount() {
-        boolean bereitsAngelegt = false;
-        String accountType;
-        accountType = this.getPackageName();
-
-        AccountManager accountManager = AccountManager.get(getApplicationContext());
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Account[] accounts = accountManager.getAccounts();
-        for (int i = 0; i < accounts.length; i++) {
-            if ((accounts[i].type != null) && (accounts[i].type.contentEquals(accountType))) {
-                bereitsAngelegt = true;
-            }
-        }
-
-        if (!bereitsAngelegt) {
-            AccountManager accMgr = AccountManager.get(this);
-            String password = "";
-
-            final Account account = new Account("" + phoneNumber, accountType);
-            try {
-                accMgr.addAccountExplicitly(account, password, null);
-            } catch (Exception e1) {
-                e1.getMessage();
-            }
-        }
-    } // end of
-
-    public void desighnLayout(final chatLayoutMode mode) {
+    public void designLayout(final chatLayoutMode mode) {
 
         G.handler.post(new Runnable() {
             @Override

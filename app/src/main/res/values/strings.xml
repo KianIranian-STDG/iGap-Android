@@ -642,6 +642,7 @@
   <string name="members">Members</string>
   <string name="skip">Skip</string>
   <string name="settings">Settings</string>
+  <string name="iGap_settings">iGap Account Settings</string>
   <string name="please_write_your_message">Please type your message!</string>
   <string name="share_audio_file">Shared Audios</string>
   <string name="share_image">Shared Images</string>
