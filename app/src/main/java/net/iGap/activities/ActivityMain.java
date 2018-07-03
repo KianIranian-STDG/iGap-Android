@@ -2292,7 +2292,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null && appLinkData.getHost() != null && appLinkData.getHost().equals("com.android.contacts")) {
             ContactUtils contactUtils = new ContactUtils(G.context, appLinkData);
             String userId = contactUtils.retrieveNumber(); // we set retrieveNumber as userId
-            HelperPublicMethod.goToChatRoom(Long.parseLong(userId), null, null);
+            try {
+                HelperPublicMethod.goToChatRoom(Long.parseLong(userId), null, null);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         } else {
             HelperUrl.getLinkinfo(intent, ActivityMain.this);
         }
