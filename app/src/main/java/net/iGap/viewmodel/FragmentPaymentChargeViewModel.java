@@ -99,6 +99,11 @@ public class FragmentPaymentChargeViewModel {
 
     public void onItemSelecteSpinerOperator(AdapterView<?> parent, View view, int position, long id) {
         switch (position) {
+            case 0:
+                operatorType = null;
+                fragmentPaymentChargeBinding.fpcSpinnerChargeType.setAdapter(null);
+                fragmentPaymentChargeBinding.fpcSpinnerPrice.setAdapter(null);
+                break;
             case 1:
                 setAdapterValue(OperatorType.HAMRAH_AVAL);
                 break;
@@ -114,14 +119,14 @@ public class FragmentPaymentChargeViewModel {
     //******************************************************************************************************
 
     private void setOperator(String phone) {
-
-        String s = phone.substring(0, 4);
-
-        OperatorType opt = phoneMap.get(s);
-        if (opt != null) {
-            setAdapterValue(opt);
-        } else {
-            observeTarabord.set(View.VISIBLE);
+        if (phone.length() == 11) {
+            String s = phone.substring(0, 4);
+            OperatorType opt = phoneMap.get(s);
+            if (opt != null) {
+                setAdapterValue(opt);
+            } else {
+                observeTarabord.set(View.VISIBLE);
+            }
         }
     }
 
