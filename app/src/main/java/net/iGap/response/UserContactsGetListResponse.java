@@ -10,8 +10,11 @@
 
 package net.iGap.response;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.content.ContextCompat;
 
 import net.iGap.G;
 import net.iGap.helper.HelperTimeOut;
@@ -22,6 +25,8 @@ import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmRegisteredInfo;
 
 import io.realm.Realm;
+
+import static net.iGap.G.context;
 
 public class UserContactsGetListResponse extends MessageHandler {
 
@@ -62,9 +67,16 @@ public class UserContactsGetListResponse extends MessageHandler {
 
                             realm.delete(RealmContacts.class);
 
-                            for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
-                                ContactUtils.addContactToPhoneBook(RealmRegisteredInfo.putOrUpdate(realm, registerUser));
-                                RealmContacts.putOrUpdate(realm, registerUser);
+                            if ((ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED)) {
+                                for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
+                                    ContactUtils.addContactToPhoneBook(RealmRegisteredInfo.putOrUpdate(realm, registerUser));
+                                    RealmContacts.putOrUpdate(realm, registerUser);
+                                }
+                            } else {
+                                for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
+                                    RealmRegisteredInfo.putOrUpdate(realm, registerUser);
+                                    RealmContacts.putOrUpdate(realm, registerUser);
+                                }
                             }
                         }
                     }, new Realm.Transaction.OnSuccess() {
