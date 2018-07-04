@@ -1266,4 +1266,10 @@
   <string name="accept_the_terms">Accept the terms</string>
   <string name="wallet_agrement">Wallet agrement</string>
 
+  <string name="SendMoney">Send Money</string>
+  <string name="transfer_amount_hint">Enter the transfer amount below :</string>
+  <string name="amount_in_rial">Amount in Rial :</string>
+  <string name="pay">pay</string>
+  <string name="transfer_to_dialog">Transfer to :</string>
+  <string name="am_money">money</string>
 </resources>
