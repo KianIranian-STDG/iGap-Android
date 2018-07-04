@@ -244,6 +244,8 @@ public class HelperFillLookUpClass {
         //Mpl 90xx
         lookupMap.put(39100, "ProtoMplGetBillToken.MplGetBillTokenResponse");
         lookupMap.put(39101, "ProtoMplGetTopupToken.MplGetTopupTokenResponse");
+        lookupMap.put(39200, "ProtoBillInquiryMci.BillInquiryMciResponse");
+        lookupMap.put(39201, "ProtoBillInquiryTelecom.BillInquiryTelecomResponse");
 
         // Push 600xx
         lookupMap.put(60000, "ProtoPushLoginToken.PushLoginTokenResponse");
