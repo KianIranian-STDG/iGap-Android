@@ -18,7 +18,7 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '26.0.3'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "net.iGap"
@@ -129,8 +129,15 @@ dependencies {
     implementation 'com.github.RooyeKhat-Media:Proto:Build90'
     implementation project(':pecpayment-release')
     implementation 'com.mcxiaoke.volley:library:1.0.19'
+
     implementation project(':paygearsdk')
     implementation project(':raadcore')
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
 }
 
 configurations.all {
