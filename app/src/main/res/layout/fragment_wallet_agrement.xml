@@ -15,6 +15,10 @@
       name="backHandler"
       type="net.iGap.interfaces.IBackHandler" />
 
+    <variable
+      name="fragmentWalletAgreementViewModel"
+      type="net.iGap.viewmodel.FragmentWalletAgreementViewModel" />
+
 
   </data>
 
@@ -69,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="Wallet agrement"
+            android:text="@string/wallet_agrement"
             android:textColor="@color/whit_background"
             android:textSize="@dimen/dp18"
             android:textStyle="normal"
@@ -83,12 +87,38 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-      <ScrollView
+      <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
 
-      </ScrollView>
+        <TextView
+          android:id="@+id/txtAgreement_register"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_margin="@dimen/dp8"
+          android:fadeScrollbars="false"
+          android:lineSpacingExtra="@dimen/dp4"
+          android:overScrollMode="always"
+          android:padding="@dimen/dp4"
+
+          android:scrollbarSize="@dimen/dp6"
+          android:scrollbarStyle="outsideInset"
+          android:scrollbarThumbVertical="@color/gray_5c"
+          android:scrollbars="vertical"
+          android:text="@{fragmentWalletAgreementViewModel.callbackTxtAgreement , default = @string/loading_wallet_agreement}"
+          android:textSize="@dimen/dp14" />
+
+        <CheckBox
+          android:id="@+id/fpc_checkBox_trabord"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="start"
+          android:onCheckedChanged="@{fragmentWalletAgreementViewModel.checkBoxAgreement}"
+          android:text="@string/i_agree_with_the_terms" />
+
+      </LinearLayout>
     </ScrollView>
 
 

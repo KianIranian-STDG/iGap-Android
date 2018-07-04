@@ -49,7 +49,7 @@ public class UserLoginResponse extends MessageHandler {
         G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod() * 1000;
         G.userLogin = true;
         G.isMplActive = builder.getMplActive();
-        //  G.isWalletActive = builder.getWalletActive();
+        G.isWalletActive = builder.getWalletActive();
         G.isWalletRegister = builder.getWalletAgreementAccepted();
 
         if (G.onPayment != null) {

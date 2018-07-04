@@ -9,9 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentWalletAgrementBinding;
 import net.iGap.interfaces.IBackHandler;
+import net.iGap.interfaces.OnReceivePageInfoWalletAgreement;
+import net.iGap.request.RequestInfoPage;
+import net.iGap.viewmodel.FragmentWalletAgreementViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,5 +54,19 @@ public class FragmentWalletAgrement extends BaseFragment {
         };
 
         fragmentWalletAgrementBinding.setBackHandler(iBackHandler);
+
+        FragmentWalletAgreementViewModel fragmentWalletAgreementViewModel = new FragmentWalletAgreementViewModel(fragmentWalletAgrementBinding);
+        fragmentWalletAgrementBinding.setFragmentWalletAgreementViewModel(fragmentWalletAgreementViewModel);
+
+
+        G.onReceivePageInfoWalletAgreement = new OnReceivePageInfoWalletAgreement() {
+            @Override
+            public void onReceivePageInfo(String body) {
+                fragmentWalletAgrementBinding.getFragmentWalletAgreementViewModel().callbackTxtAgreement.set(body);
+            }
+        };
+
+        new RequestInfoPage().infoPage("WALLET_AGREEMENT");
+
     }
 }

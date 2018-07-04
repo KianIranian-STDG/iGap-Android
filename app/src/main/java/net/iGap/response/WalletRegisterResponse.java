@@ -10,6 +10,9 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
+import net.iGap.fragments.FragmentWallet;
+import net.iGap.helper.HelperFragment;
 import net.iGap.proto.ProtoWalletRegister;
 
 public class WalletRegisterResponse extends MessageHandler {
@@ -30,6 +33,8 @@ public class WalletRegisterResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoWalletRegister.WalletRegisterResponse.Builder builder = (ProtoWalletRegister.WalletRegisterResponse.Builder) message;
+        G.isWalletRegister = true;
+        new HelperFragment(FragmentWallet.newInstance()).load();
     }
 
     @Override
