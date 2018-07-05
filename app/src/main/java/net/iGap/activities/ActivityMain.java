@@ -1416,6 +1416,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
+        TextView itemCash = (TextView) findViewById(R.id.cash);
+        itemCash.setTextColor(Color.parseColor(G.appBarColor));
+
+        if (G.isWalletActive && G.isWalletRegister) {
+            itemCash.setVisibility(View.VISIBLE);
+        } else {
+            itemCash.setVisibility(View.GONE);
+        }
 
         ViewGroup itemNavPayment = (ViewGroup) findViewById(R.id.lm_ll_payment);
         itemNavPayment.setOnClickListener(new View.OnClickListener() {

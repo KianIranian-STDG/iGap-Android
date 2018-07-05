@@ -308,7 +308,8 @@
             <TextView
               style="?textColorMenuTheme"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
-              android:layout_width="wrap_content"
+              android:layout_width="0dp"
+              android:layout_weight="1"
               android:layout_height="wrap_content"
               android:layout_marginLeft="@dimen/dp4"
               android:layout_marginStart="@dimen/dp4"
@@ -317,6 +318,23 @@
               android:paddingRight="@dimen/dp8"
               android:paddingTop="@dimen/dp8"
               android:text="@string/wallet"
+              android:textSize="@dimen/dp14" />
+
+            <TextView
+
+              android:id="@+id/cash"
+              fontPath="fonts/IRANSansMobile_Bold.ttf"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/dp36"
+              android:layout_marginStart="@dimen/dp36"
+              android:paddingBottom="@dimen/dp8"
+              android:paddingLeft="@dimen/dp8"
+              android:paddingRight="@dimen/dp8"
+              android:paddingTop="@dimen/dp8"
+              android:text="$100"
+              android:layout_marginEnd="@dimen/dp36"
+              android:layout_marginRight="@dimen/dp36"
               android:textSize="@dimen/dp14" />
 
           </LinearLayout>
