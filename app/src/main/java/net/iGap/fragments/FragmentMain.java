@@ -351,6 +351,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                     @Override
                     public void onError(int majorCode, int minorCode) {
 
+                        isSendRequestForLoading = false;
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -378,6 +379,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                                 progressBar.setVisibility(View.GONE);
                                 firstTimeEnterToApp = false;
                                 getChatsList();
+                                isSendRequestForLoading = false;
                                 swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                             }
                         });
