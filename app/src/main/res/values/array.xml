@@ -297,6 +297,11 @@
     <item> @string/ritel</item>
   </string-array>
 
+  <string-array name="bill_type">
+    <item> @string/hamrahe_aval</item>
+    <item> @string/telecom</item>
+  </string-array>
+
   <string-array name="charge_type_irancell">
     <item>@string/normal_charge</item>
     <item>@string/amazing</item>

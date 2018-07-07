@@ -119,7 +119,7 @@
             android:inputType="phone"
             android:maxLength="11"
             android:minHeight="@dimen/dp44"
-            android:onTextChanged="@{fragmentPaymentChargeViewModel.onTextChanged}" />
+            android:onTextChanged="@{fragmentPaymentChargeViewModel::onTextChanged}" />
 
 
         </LinearLayout>
@@ -129,7 +129,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="start"
-          android:onCheckedChanged="@{fragmentPaymentChargeViewModel.checkBoxTarabordChanged}"
+          android:onCheckedChanged="@{fragmentPaymentChargeViewModel::checkBoxTarabordChanged}"
           android:text="@string/trabord" />
 
         <LinearLayout
@@ -210,7 +210,7 @@
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/dp20"
           android:background="@color/md_blue_50"
-          android:onClick="@{fragmentPaymentChargeViewModel.onBuyClick}"
+          android:onClick="@{fragmentPaymentChargeViewModel::onBuyClick}"
           android:text="@string/buy"
           android:textColor="@color/green"
           android:textSize="@dimen/dp18" />

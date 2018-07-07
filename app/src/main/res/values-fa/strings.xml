@@ -1241,5 +1241,17 @@
   <string name="i_agree_with_the_terms">با شرایط موافقم</string>
   <string name="accept_the_terms">پذیرش شرایط</string>
   <string name="wallet_agrement">توافق کیف پول</string>
+  <string name="bills_inquiry">استعلام قبوض همراه اول و تلفن ثابت</string>
+  <string name="bills_inquiry_title">استعلام قبوض</string>
+  <string name="bill_type">نوع قبض</string>
+  <string name="telecom">تلفن ثابت</string>
+  <string name="phone">شماره تلفن</string>
+  <string name="area_code">پیش شماره</string>
+  <string name="inquiry">استعلام</string>
+  <string name="mci_opreator_check">این شماره از اپراتور همراه اول نیست</string>
+  <string name="mid_term">میان دوره</string>
+  <string name="intermediate_payment">پرداخت میان دوره</string>
+  <string name="last_term">پایان دوره</string>
+  <string name="last_term_payment">پرداخت پایان دوره</string>
 
 </resources>

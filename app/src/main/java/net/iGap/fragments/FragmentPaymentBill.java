@@ -92,7 +92,7 @@ public class FragmentPaymentBill extends BaseFragment {
 
     }
 
-    private String addCommasToNumericString(String digits) {
+    public static String addCommasToNumericString(String digits) {
         String result = "";
         int len = digits.length();
         int nDigits = 0;

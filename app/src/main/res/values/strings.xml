@@ -141,7 +141,7 @@
   <string name="am_music">Music</string>
   <string name="am_paint">Paint</string>
   <string name="am_picture">Picture</string>
-  <string name="am_document">Document</string>
+  <string name="am_document">Document</string>G
   <string name="am_location">Location</string>
   <string name="am_video">Video</string>
   <string name="am_file">File</string>
@@ -1265,5 +1265,17 @@
   <string name="i_agree_with_the_terms">I agree with the terms</string>
   <string name="accept_the_terms">Accept the terms</string>
   <string name="wallet_agrement">Wallet agrement</string>
+  <string name="bills_inquiry">Bills inquiry mci and telecom</string>
+  <string name="bills_inquiry_title">Bills inquiry</string>
+  <string name="bill_type">Bill Type</string>
+  <string name="telecom">Telecom</string>
+  <string name="phone">phone</string>
+  <string name="area_code">area code</string>
+  <string name="inquiry">Inquiry</string>
+  <string name="mci_opreator_check">This number is not in mci operator</string>
+  <string name="mid_term">mid term</string>
+  <string name="intermediate_payment">Intermediate payment</string>
+  <string name="last_term">last term</string>
+  <string name="last_term_payment">last term payment</string>
 
 </resources>

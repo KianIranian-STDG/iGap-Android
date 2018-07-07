@@ -99,7 +99,7 @@
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/dp12"
           android:background="@color/md_blue_50"
-          android:onClick="@{fragmentPaymentBillViewModel.onClickBarCode}"
+          android:onClick="@{fragmentPaymentBillViewModel::onClickBarCode}"
           android:orientation="horizontal">
 
           <net.iGap.module.MaterialDesignTextView
@@ -148,7 +148,7 @@
             android:background="@android:color/transparent"
             android:hint="@string/enter"
             android:inputType="number"
-            android:onTextChanged="@{fragmentPaymentBillViewModel.onTextChangedBillId}"
+            android:onTextChanged="@{fragmentPaymentBillViewModel::onTextChangedBillId}"
             android:minHeight="@dimen/dp44" />
 
 
@@ -226,7 +226,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:background="@color/md_blue_50"
-          android:onClick="@{fragmentPaymentBillViewModel.onPayBillClick}"
+          android:onClick="@{fragmentPaymentBillViewModel::onPayBillClick}"
           android:layout_margin="@dimen/dp20"
           android:textColor="@color/green"
           android:textSize="@dimen/dp18"

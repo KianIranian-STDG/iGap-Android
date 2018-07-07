@@ -10,7 +10,7 @@
 
 package net.iGap.response;
 
-import net.iGap.proto.ProtoBillInquiryTelecom;
+import net.iGap.G;
 
 public class BillInquiryTelecomResponse extends MessageHandler {
 
@@ -29,20 +29,10 @@ public class BillInquiryTelecomResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoBillInquiryTelecom.BillInquiryTelecomResponse.Builder builder = (ProtoBillInquiryTelecom.BillInquiryTelecomResponse.Builder) message;
 
-//        uint32 status = 2;
-//        string message = 3;
-//
-//        message BillInfo {
-//            uint64 bill_id = 1;
-//            uint64 pay_id = 2;
-//            uint64 amount = 3;
-//        }
-//
-//        BillInfo mid_term = 4;
-//        BillInfo last_term = 5;
-
+        if (G.onInquiry != null) {
+            G.onInquiry.OnInquiryResult(message);
+        }
 
     }
 
@@ -54,5 +44,9 @@ public class BillInquiryTelecomResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+
+        if (G.onInquiry != null) {
+            G.onInquiry.OnInquiryError();
+        }
     }
 }

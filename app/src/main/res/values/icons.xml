@@ -137,6 +137,7 @@
   <string name="md_payment">\uf72c</string>
   <string name="md_barcode_scan">\uf072</string>
   <string name="md_newspaper">\uf395</string>
+  <string name="md_deskphone">\uf1c3</string>
 
 
 </resources>

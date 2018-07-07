@@ -14,6 +14,7 @@ import android.view.View;
 
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentCharge;
+import net.iGap.fragments.FragmentPaymentInquiry;
 import net.iGap.helper.HelperFragment;
 
 
@@ -29,6 +30,10 @@ public class FragmentPaymentViewModel {
 
     public void onClickBill(View v) {
         new HelperFragment(FragmentPaymentBill.newInstance()).setReplace(false).load();
+    }
+
+    public void onClickInquiry(View v) {
+        new HelperFragment(FragmentPaymentInquiry.newInstance()).setReplace(false).load();
     }
 
 }
