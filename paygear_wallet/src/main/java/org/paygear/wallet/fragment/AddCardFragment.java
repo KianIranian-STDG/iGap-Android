@@ -5,8 +5,10 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -67,6 +69,15 @@ public class AddCardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_card, container, false);
+        ViewGroup rootView = view.findViewById(R.id.rootView);
+        ViewGroup rootCardView = view.findViewById(R.id.rootCardView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+            rootCardView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
+        }
+
+
+
         appBar = view.findViewById(R.id.app_bar);
         appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
         appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
@@ -83,8 +94,16 @@ public class AddCardFragment extends Fragment {
         TextView yearTitle = view.findViewById(R.id.year_title);
         defaultCardSwitch = view.findViewById(R.id.default_card_switch);
         button = view.findViewById(R.id.button);
+        Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.button_green_selector_24dp);
+        if (mDrawableSkip != null) {
+            mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                button.setBackground(mDrawableSkip);
+            }
+        }
+
         progressBar = view.findViewById(R.id.progress);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.darkPrimaryColor), PorterDuff.Mode.SRC_IN);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColor), PorterDuff.Mode.SRC_IN);
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, cardNumberTitle, monthTitle, yearTitle, defaultCardTitle, button);
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, cardNumberText, monthText, yearText);
 

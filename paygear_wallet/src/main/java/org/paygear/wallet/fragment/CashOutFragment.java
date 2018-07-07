@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -61,6 +62,11 @@ public class CashOutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_cash_out, container, false);
+
+        ViewGroup rootView = view.findViewById(R.id.rootView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+        }
         appBar = view.findViewById(R.id.app_bar);
         appBar.setTitle(getString(isCashOut ? R.string.cash_out_paygear : R.string.charge_paygear));
         appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);

@@ -5,10 +5,12 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -97,6 +99,10 @@ public class CardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_card, container, false);
+        ViewGroup rootView = view.findViewById(R.id.rootView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+        }
         appBar = view.findViewById(R.id.app_bar);
         appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
         appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
@@ -108,13 +114,22 @@ public class CardFragment extends Fragment {
         }
 
         cardView = view.findViewById(R.id.card_view);
+        ViewGroup rootCarView = view.findViewById(R.id.rootCardView);
+        rootCarView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         TextView defaultCardTitle = view.findViewById(R.id.default_card_title);
         defaultCardSwitch = view.findViewById(R.id.default_card_switch);
         button = view.findViewById(R.id.button);
+        Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.button_green_selector_24dp);
+        if (mDrawableSkip != null) {
+            mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                button.setBackground(mDrawableSkip);
+            }
+        }
         progressBar = view.findViewById(R.id.progress);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.darkPrimaryColor), PorterDuff.Mode.SRC_IN);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColor), PorterDuff.Mode.SRC_IN);
         defaultCardProgress = view.findViewById(R.id.default_card_progress);
-        defaultCardProgress.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.darkPrimaryColor), PorterDuff.Mode.SRC_IN);
+        defaultCardProgress.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColor), PorterDuff.Mode.SRC_IN);
 
         TextView paymentPriceText = view.findViewById(R.id.payment_price);
 

@@ -416,6 +416,10 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
                 .inflate(R.layout.fragment_cards_paygear, cardsLayout, false);
         cardsLayout.addView(view);
 
+        ViewGroup rootView = view.findViewById(R.id.rootView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+        }
         ImageView logo = view.findViewById(R.id.paygear_image);
         TextView balanceTitle = view.findViewById(R.id.balance_title);
         ImageView history = view.findViewById(R.id.history);
@@ -549,6 +553,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
                 RelativeLayout.LayoutParams.MATCH_PARENT, cardHeight);
         params.setMargins(dp16, 0, dp16, dp16);
         cardView.setLayoutParams(params);
+        cardView.setCardBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         cardView.setPreventCornerOverlap(false);
         cardView.setCardElevation(RaadCommonUtils.getPx(6, context));
         cardView.setRadius(RaadCommonUtils.getPx(8, context));
@@ -561,7 +566,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         textViewParams.gravity = Gravity.CENTER;
         textView.setLayoutParams(textViewParams);
         textView.setGravity(Gravity.CENTER);
-        textView.setTextColor(Color.parseColor("#2196f3"));
+        textView.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         textView.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_REGULAR));
         textView.setText(R.string.click_here_for_adding_card);

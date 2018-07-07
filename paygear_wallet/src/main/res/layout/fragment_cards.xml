@@ -1,11 +1,21 @@
 <layout>
 
+  <data>
+
+    <import type="android.view.View" />
+
+    <import type="android.graphics.Color" />
+
+    <import type="org.paygear.wallet.WalletActivity" />
+
+
+  </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/fragment_back"
+      android:background="@{Color.parseColor(WalletActivity.backgroundTheme),default=@color/fragment_back}"
         android:orientation="vertical"
         tools:context=".fragment.CardsFragment">
 

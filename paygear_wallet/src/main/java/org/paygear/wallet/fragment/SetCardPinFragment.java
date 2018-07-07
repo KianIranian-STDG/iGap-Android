@@ -5,8 +5,10 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -53,11 +55,18 @@ public class SetCardPinFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_set_card_pin, container, false);
+        ViewGroup rootView = view.findViewById(R.id.rootView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+        }
         appBar = view.findViewById(R.id.app_bar);
         appBar.setTitle(getString(R.string.paygear_card_pin));
         appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
         appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
         appBar.showBack();
+
+        ViewGroup root_current = view.findViewById(R.id.root_current);
+        root_current.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
 
         TextView currentPassTitle = view.findViewById(R.id.current_pass_title);
         TextView newPassTitle = view.findViewById(R.id.new_pass_title);
@@ -68,10 +77,16 @@ public class SetCardPinFragment extends Fragment {
         confirmPass = view.findViewById(R.id.confirm_pass);
 
         button = view.findViewById(R.id.button);
+        Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.button_green_selector_24dp);
+        if (mDrawableSkip != null) {
+            mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                button.setBackground(mDrawableSkip);
+            }
+        }
         progressBar = view.findViewById(R.id.progress);
 
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.darkPrimaryColor), PorterDuff.Mode.SRC_IN);
-
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColor), PorterDuff.Mode.SRC_IN);
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, currentPassTitle, newPassTitle, confirmPassTitle, button);
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, currentPass, newPass, confirmPass);
 

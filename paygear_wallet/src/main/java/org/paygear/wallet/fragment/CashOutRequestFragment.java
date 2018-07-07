@@ -3,6 +3,9 @@ package org.paygear.wallet.fragment;
 
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -118,6 +121,11 @@ public class CashOutRequestFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_cash_out_request, container, false);
 
+        ViewGroup rootView = view.findViewById(R.id.rootView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+        }
+        
         progress = view.findViewById(R.id.progress);
         progress.setOnRetryButtonListener(new View.OnClickListener() {
             @Override
@@ -127,8 +135,15 @@ public class CashOutRequestFragment extends Fragment {
         });
 
         progressBar = view.findViewById(R.id.progress_bar);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.darkPrimaryColor), PorterDuff.Mode.SRC_IN);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColor), PorterDuff.Mode.SRC_IN);
         button = view.findViewById(R.id.button);
+        Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.button_green_selector_24dp);
+        if (mDrawableSkip != null) {
+            mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                button.setBackground(mDrawableSkip);
+            }
+        }
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,6 +187,8 @@ public class CashOutRequestFragment extends Fragment {
         limitTextView2 = view.findViewById(R.id.limit2);
 
         priceTitle = view.findViewById(R.id.price_title);
+        ViewGroup rootPrice = view.findViewById(R.id.rootPrice);
+        rootPrice.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         priceText = view.findViewById(R.id.price);
 
         numberTitle = view.findViewById(R.id.number_title);

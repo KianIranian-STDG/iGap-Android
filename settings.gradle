@@ -1,2 +1,2 @@
-include ':app', ':libwebrtc', ':pecpayment-release', ':paygearsdk', ':raadcore', ':paygear_wallet'
+include ':app', ':libwebrtc', ':pecpayment-release', ':raadcore', ':paygear_wallet'
 include ':lvl'

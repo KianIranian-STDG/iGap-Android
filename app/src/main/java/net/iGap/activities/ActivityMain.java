@@ -2899,7 +2899,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public void getUserCredit() {
 
-        Log.i("CCCCCCCCC", "getUserCredit: ");
         WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
         if (Auth.getCurrentAuth() != null) {
             Web.getInstance().getWebService().getCredit(Auth.getCurrentAuth().getId()).enqueue(new Callback<ArrayList<Card>>() {
@@ -2912,15 +2911,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         if (selectedCard != null) {
                             itemCash.setVisibility(View.VISIBLE);
                             itemCash.setText("اعتبار شما : " + String.valueOf(selectedCard.cashOutBalance) + " ریال ");
-                            itemCash.setOnClickListener(new View.OnClickListener() {
+                            itemNavWallet.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     Intent intent = new Intent(ActivityMain.this, WalletActivity.class);
                                     intent.putExtra("Language", "fa");
                                     intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
-                                    intent.putExtra("PrimaryColor", "#f69228");
-                                    intent.putExtra("DarkPrimaryColor", "#f99228");
-                                    intent.putExtra("AccentColor", "#cdcbcb");
+                                    intent.putExtra("PrimaryColor", G.appBarColor);
+                                    intent.putExtra("DarkPrimaryColor", G.appBarColor);
+                                    intent.putExtra("AccentColor", G.appBarColor);
+                                    intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+                                    intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+                                    intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+                                    intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
+                                    intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+                                    intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
                                     startActivity(intent);
                                 }
                             });
@@ -2939,7 +2944,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void receivedMessage(int id, Object... message) {
 
-        Log.i("CCCCCCCCC", "2 receivedMessage: " + id);
         switch (id) {
             case EventManager.ON_ACCESS_TOKEN_RECIVE:
                 int response = (int) message[0];

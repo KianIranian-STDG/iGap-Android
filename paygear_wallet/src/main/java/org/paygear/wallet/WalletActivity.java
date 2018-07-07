@@ -31,9 +31,21 @@ public class WalletActivity extends NavigationBarActivity {
 
     public static String token;
     public static Intent intent;
-    public static String primaryColor="#f69228";
-    public static String darkPrimaryColor="#37a9a1";
-    public static String accentColor="00B0Bf";
+    public static String primaryColor = "#f69228";
+    public static String darkPrimaryColor = "#37a9a1";
+    public static String accentColor = "00B0Bf";
+    public static String progressColor = "00B0Bf";
+    public static String lineBorder = "00B0Bf";
+    public static String backgroundTheme = "00B0Bf";
+    public static String backgroundTheme_2 = "00B0Bf";
+    public static String textTitleTheme = "00B0Bf";
+    public static String textSubTheme = "00B0Bf";
+    public static String PROGRESSBAR = "PROGRESSBAR";
+    public static String LINE_BORDER = "LINE_BORDER";
+    public static String BACKGROUND = "BACKGROUND";
+    public static String BACKGROUND_2 = "BACKGROUND_2";
+    public static String TEXT_TITLE = "TEXT_TITLE";
+    public static String TEXT_SUB_TITLE = "TEXT_SUB_TITLE";
 
 
     @Override
@@ -41,7 +53,6 @@ public class WalletActivity extends NavigationBarActivity {
         super.onCreate(savedInstanceState);
         RelativeLayout navBarView = findViewById(R.id.nav_bar);
         navBarView.setVisibility(View.GONE);
-
 
         WebBase.apiKey = Web.API_KEY;
         WebBase.isDebug = true;
@@ -59,14 +70,19 @@ public class WalletActivity extends NavigationBarActivity {
         };
 
         Raad.init(getApplicationContext());
-        intent=getIntent();
+        intent = getIntent();
         String phone = intent.getStringExtra("Mobile");
         String language = intent.getStringExtra("Language");
         boolean isP2P = intent.getBooleanExtra("IsP2P", false);
-        Payment payment=(Payment) intent.getSerializableExtra("Payment");
-        primaryColor=intent.getStringExtra("PrimaryColor");
-        darkPrimaryColor=intent.getStringExtra("DarkPrimaryColor");
-        accentColor=intent.getStringExtra("AccentColor");
+        Payment payment = (Payment) intent.getSerializableExtra("Payment");
+        primaryColor = intent.getStringExtra("PrimaryColor");
+        darkPrimaryColor = intent.getStringExtra("DarkPrimaryColor");
+        progressColor = intent.getStringExtra(PROGRESSBAR);
+        lineBorder = intent.getStringExtra(LINE_BORDER);
+        backgroundTheme = intent.getStringExtra(BACKGROUND);
+        backgroundTheme_2 = intent.getStringExtra(BACKGROUND_2);
+        textTitleTheme = intent.getStringExtra(TEXT_TITLE);
+        textSubTheme = intent.getStringExtra(TEXT_SUB_TITLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -80,14 +96,14 @@ public class WalletActivity extends NavigationBarActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
         if (isP2P && payment != null) {
-            ft.add(R.id.content_container,  CardsFragment.newInstance(payment));
+            ft.add(R.id.content_container, CardsFragment.newInstance(payment));
 
         } else {
             ft.add(R.id.content_container, new CardsFragment());
         }
         ft.commit();
     }
-    
+
     @Override
     protected boolean isNavBarShowingOnSwitchFragment(String fragmentName) {
         return false;

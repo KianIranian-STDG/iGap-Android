@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -67,7 +68,12 @@ public class OrderInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_order_info, container, false);
+        ViewGroup rootView = view.findViewById(R.id.rootView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+        }
         RaadToolBar appBar = view.findViewById(R.id.app_bar);
         appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
         appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
@@ -77,6 +83,7 @@ public class OrderInfoFragment extends Fragment {
         mOrderView = view.findViewById(R.id.order_view);
 
         mList = view.findViewById(R.id.list);
+        mList.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
         progress = view.findViewById(R.id.progress);
         progress.setOnRetryButtonListener(new View.OnClickListener() {
             @Override

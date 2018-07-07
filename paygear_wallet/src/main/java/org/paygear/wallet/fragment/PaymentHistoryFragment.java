@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -69,6 +70,11 @@ public class PaymentHistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_payment_history, container, false);
+
+        ViewGroup rootView = view.findViewById(R.id.rootView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+        }
         RaadToolBar appBar = view.findViewById(R.id.app_bar);
         appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
         appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
@@ -78,6 +84,7 @@ public class PaymentHistoryFragment extends Fragment {
             appBar.hide();
 
         mList = view.findViewById(R.id.list);
+        mList.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         DividerItemDecoration divider = new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL);
         divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.list_divider));
