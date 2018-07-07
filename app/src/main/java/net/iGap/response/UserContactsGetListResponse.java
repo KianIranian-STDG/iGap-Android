@@ -67,7 +67,7 @@ public class UserContactsGetListResponse extends MessageHandler {
 
                             realm.delete(RealmContacts.class);
 
-                            if ((ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED)) {
+                            if (android.os.Build.VERSION.SDK_INT <= 24 && (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED)) {
                                 for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
                                     ContactUtils.addContactToPhoneBook(RealmRegisteredInfo.putOrUpdate(realm, registerUser));
                                     RealmContacts.putOrUpdate(realm, registerUser);
