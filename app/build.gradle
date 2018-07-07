@@ -129,8 +129,6 @@ dependencies {
     implementation 'com.github.RooyeKhat-Media:Proto:Build90'
     implementation project(':pecpayment-release')
     implementation 'com.mcxiaoke.volley:library:1.0.19'
-
-    implementation project(':paygearsdk')
     implementation project(':raadcore')
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
