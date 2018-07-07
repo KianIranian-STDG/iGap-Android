@@ -1,6 +1,7 @@
 package net.iGap.eventbus;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
@@ -131,6 +132,9 @@ public class EventManager {
     }
 
     public void postEvent(final int eventNum, final Object... message) {
+
+        Log.i("CCCCCCCCC", "3 receivedMessage: " + eventNum);
+
 
         final List<EventListener> eventListeners = eventListenerMap.get(eventNum);
         if (eventListeners == null || eventListeners.size() == 0) {

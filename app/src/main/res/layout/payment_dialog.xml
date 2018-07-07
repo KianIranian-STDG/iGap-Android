@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+  <data>
+
+    <import type="android.graphics.Color" />
+
+    <import type="net.iGap.G" />
+  </data>
+
   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -21,14 +28,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-
         android:orientation="vertical">
 
         <RelativeLayout
           android:id="@+id/dialog_header"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:background="#31bdb6"
+          android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
           android:padding="@dimen/dp8">
 
           <LinearLayout
@@ -121,7 +127,7 @@
           android:layout_height="wrap_content"
           android:layout_marginBottom="@dimen/dp10"
           android:layout_marginTop="@dimen/dp32"
-          android:background="@color/green"
+          android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
           android:paddingBottom="@dimen/dp12"
           android:paddingLeft="@dimen/dp36"
           android:paddingRight="@dimen/dp36"

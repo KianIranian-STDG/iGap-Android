@@ -20,6 +20,7 @@ import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserLogin;
+import net.iGap.request.RequestWalletGetAccessToken;
 
 import io.realm.Realm;
 
@@ -70,6 +71,7 @@ public class UserLoginResponse extends MessageHandler {
         WebSocketClient.allowForReconnecting = true;
         G.onUserLogin.onLogin();
         RealmUserInfo.sendPushNotificationToServer();
+        new RequestWalletGetAccessToken().walletGetAccessToken();
     }
 
     @Override
