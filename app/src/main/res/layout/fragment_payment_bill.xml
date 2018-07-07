@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/pay_bills"
+            android:text="@{fragmentPaymentBillViewModel.observeTitleToolbar}"
             android:textColor="@color/whit_background"
             android:textSize="@dimen/dp18"
             android:textStyle="normal"

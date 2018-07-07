@@ -25,8 +25,12 @@ public class FragmentPaymentBill extends BaseFragment {
 
     private FragmentPaymentBillBinding fragmentPaymentBillBinding;
 
-    public static FragmentPaymentBill newInstance() {
-        return new FragmentPaymentBill();
+    public static FragmentPaymentBill newInstance(int resTitleId) {
+        Bundle args = new Bundle();
+        args.putInt("title", resTitleId);
+        FragmentPaymentBill fragmentPaymentBill = new FragmentPaymentBill();
+        fragmentPaymentBill.setArguments(args);
+        return fragmentPaymentBill;
     }
 
     public FragmentPaymentBill() {
@@ -43,11 +47,10 @@ public class FragmentPaymentBill extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initDataBinding(getArguments());
-    }
 
-    private void initDataBinding(Bundle arguments) {
-        FragmentPaymentBillViewModel fragmentPaymentBillViewModel = new FragmentPaymentBillViewModel(FragmentPaymentBill.this, fragmentPaymentBillBinding);
+        int resTitleId = getArguments().getInt("title");
+
+        FragmentPaymentBillViewModel fragmentPaymentBillViewModel = new FragmentPaymentBillViewModel(FragmentPaymentBill.this, fragmentPaymentBillBinding, resTitleId);
         fragmentPaymentBillBinding.setFragmentPaymentBillViewModel(fragmentPaymentBillViewModel);
 
         IBackHandler iBackHandler = new IBackHandler() {
@@ -58,7 +61,6 @@ public class FragmentPaymentBill extends BaseFragment {
         };
 
         fragmentPaymentBillBinding.setBackHandler(iBackHandler);
-
     }
 
 

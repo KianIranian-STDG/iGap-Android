@@ -1196,6 +1196,7 @@
   <string name="payment">پرداخت</string>
   <string name="buy_charge">خرید شارژ تلفن همراه</string>
   <string name="pay_bills">پرداخت قبوض</string>
+  <string name="pay_bills_crime">پرداخت قبوض  راهنمایی و رانندگی</string>
   <string name="barcode_reader">بار کد خوان</string>
   <string name="billing_id">شناسه قبض</string>
   <string name="enter">وارد کنید</string>
@@ -1242,6 +1243,8 @@
   <string name="accept_the_terms">پذیرش شرایط</string>
   <string name="wallet_agrement">توافق کیف پول</string>
   <string name="bills_inquiry">استعلام قبوض همراه اول و تلفن ثابت</string>
+  <string name="bills_inquiry_mci">استعلام قبوض همراه اول </string>
+  <string name="bills_inquiry_telecom">استعلام قبوض تلفن ثابت</string>
   <string name="bills_inquiry_title">استعلام قبوض</string>
   <string name="bill_type">نوع قبض</string>
   <string name="telecom">تلفن ثابت</string>

@@ -22,8 +22,15 @@ public class FragmentPaymentInquiry extends BaseFragment {
     private FragmentPaymentInquiryBinding fragmentPaymentInquiryBinding;
 
 
-    public static FragmentPaymentInquiry newInstance() {
-        return new FragmentPaymentInquiry();
+    public static FragmentPaymentInquiry newInstance(FragmentPaymentInquiryViewModel.OperatorType type) {
+
+        Bundle args = new Bundle();
+        args.putSerializable("type", type);
+
+        FragmentPaymentInquiry fragmentPaymentInquiry = new FragmentPaymentInquiry();
+        fragmentPaymentInquiry.setArguments(args);
+
+        return fragmentPaymentInquiry;
     }
 
     public FragmentPaymentInquiry() {
@@ -40,11 +47,10 @@ public class FragmentPaymentInquiry extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initDataBinding();
-    }
 
-    private void initDataBinding() {
-        FragmentPaymentInquiryViewModel fragmentPaymentInquiryViewModel = new FragmentPaymentInquiryViewModel(fragmentPaymentInquiryBinding);
+        FragmentPaymentInquiryViewModel.OperatorType type = (FragmentPaymentInquiryViewModel.OperatorType) getArguments().getSerializable("type");
+
+        FragmentPaymentInquiryViewModel fragmentPaymentInquiryViewModel = new FragmentPaymentInquiryViewModel(fragmentPaymentInquiryBinding, type);
         fragmentPaymentInquiryBinding.setFragmentPaymentInquiryViewModel(fragmentPaymentInquiryViewModel);
 
         IBackHandler iBackHandler = new IBackHandler() {
@@ -55,4 +61,6 @@ public class FragmentPaymentInquiry extends BaseFragment {
         };
         fragmentPaymentInquiryBinding.setBackHandler(iBackHandler);
     }
+
+
 }

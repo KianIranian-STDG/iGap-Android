@@ -12,6 +12,7 @@ package net.iGap.viewmodel;
 import android.os.Bundle;
 import android.view.View;
 
+import net.iGap.R;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentCharge;
 import net.iGap.fragments.FragmentPaymentInquiry;
@@ -29,11 +30,19 @@ public class FragmentPaymentViewModel {
     }
 
     public void onClickBill(View v) {
-        new HelperFragment(FragmentPaymentBill.newInstance()).setReplace(false).load();
+        new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills)).setReplace(false).load();
     }
 
-    public void onClickInquiry(View v) {
-        new HelperFragment(FragmentPaymentInquiry.newInstance()).setReplace(false).load();
+    public void onClickBillTraffic(View v) {
+        new HelperFragment(FragmentPaymentBill.newInstance(R.string.pay_bills_crime)).setReplace(false).load();
+    }
+
+    public void onClickInquiryMci(View v) {
+        new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.mci)).setReplace(false).load();
+    }
+
+    public void onClickInquiryTelecom(View v) {
+        new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.telecome)).setReplace(false).load();
     }
 
 }

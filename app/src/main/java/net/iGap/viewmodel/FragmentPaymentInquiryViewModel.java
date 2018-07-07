@@ -62,6 +62,7 @@ public class FragmentPaymentInquiryViewModel {
     public ObservableBoolean observeInquiry = new ObservableBoolean(false);
     public ObservableBoolean observableLastTermMessage = new ObservableBoolean(false);
     public ObservableBoolean observableMidTermMessage = new ObservableBoolean(false);
+    public ObservableField<String> observeTitleToolbar = new ObservableField<>("");
 
     public ObservableField<String> lastTermBillId = new ObservableField<>("");
     public ObservableField<String> lastTermPayId = new ObservableField<>("");
@@ -74,11 +75,25 @@ public class FragmentPaymentInquiryViewModel {
     public ObservableField<String> midTermMessage = new ObservableField<>("");
 
 
-    private OperatorType operatorType = OperatorType.mci;
+    private OperatorType operatorType;
     private FragmentPaymentInquiryBinding fragmentPaymentInquiryBinding;
 
-    public FragmentPaymentInquiryViewModel(FragmentPaymentInquiryBinding fragmentPaymentInquiryBinding) {
+    public FragmentPaymentInquiryViewModel(FragmentPaymentInquiryBinding fragmentPaymentInquiryBinding, OperatorType operatorType) {
         this.fragmentPaymentInquiryBinding = fragmentPaymentInquiryBinding;
+        this.operatorType = operatorType;
+
+        switch (operatorType) {
+            case mci:
+                observeMci.set(View.VISIBLE);
+                observeTelecom.set(View.GONE);
+                observeTitleToolbar.set(G.context.getString(R.string.bills_inquiry_mci));
+                break;
+            case telecome:
+                observeMci.set(View.GONE);
+                observeTelecom.set(View.VISIBLE);
+                observeTitleToolbar.set(G.context.getString(R.string.bills_inquiry_telecom));
+                break;
+        }
     }
 
     public void onItemSelectBillType(AdapterView<?> parent, View view, int position, long id) {

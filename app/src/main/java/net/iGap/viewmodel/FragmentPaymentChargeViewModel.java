@@ -18,6 +18,7 @@ import android.widget.Toast;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentChargeBinding;
+import net.iGap.helper.HelperError;
 import net.iGap.proto.ProtoMplGetTopupToken;
 import net.iGap.request.RequestMplGetTopupToken;
 
@@ -166,6 +167,11 @@ public class FragmentPaymentChargeViewModel {
 
 
     public void onBuyClick(View v) {
+
+        if (!G.userLogin) {
+            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+            return;
+        }
 
         String phoneNumber = fragmentPaymentChargeBinding.fpcEditTextPhoneNumber.getText().toString();
 

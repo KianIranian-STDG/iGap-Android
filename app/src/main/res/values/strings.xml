@@ -1221,6 +1221,7 @@
   <string name="payment">Payment</string>
   <string name="buy_charge">Buy a mobile charge</string>
   <string name="pay_bills">Pay bills</string>
+  <string name="pay_bills_crime">Paying bills for traffic offenses</string>
   <string name="barcode_reader">Barcode reader</string>
   <string name="billing_id">Billing ID</string>
   <string name="enter">enter</string>
@@ -1265,7 +1266,8 @@
   <string name="i_agree_with_the_terms">I agree with the terms</string>
   <string name="accept_the_terms">Accept the terms</string>
   <string name="wallet_agrement">Wallet agrement</string>
-  <string name="bills_inquiry">Bills inquiry mci and telecom</string>
+  <string name="bills_inquiry_mci">Bills inquiry mci </string>
+  <string name="bills_inquiry_telecom">Bills inquiry telecom</string>
   <string name="bills_inquiry_title">Bills inquiry</string>
   <string name="bill_type">Bill Type</string>
   <string name="telecom">Telecom</string>

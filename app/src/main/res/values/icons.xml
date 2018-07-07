@@ -138,6 +138,7 @@
   <string name="md_barcode_scan">\uf072</string>
   <string name="md_newspaper">\uf395</string>
   <string name="md_deskphone">\uf1c3</string>
-
+  <string name="md_beaker">\uf68f</string>
+  <string name="md_cell_phone">\uf121</string>
 
 </resources>

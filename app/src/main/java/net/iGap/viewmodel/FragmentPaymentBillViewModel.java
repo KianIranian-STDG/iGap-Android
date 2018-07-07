@@ -9,6 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
+import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.view.View;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentBillBinding;
 import net.iGap.fragments.FragmentPaymentBill;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.request.RequestMplGetBillToken;
@@ -33,10 +35,12 @@ public class FragmentPaymentBillViewModel {
     private FragmentPaymentBill fragmentPaymentBill;
     private FragmentPaymentBillBinding fragmentPaymentBillBinding;
     public ObservableInt observeCompany = new ObservableInt(View.GONE);
+    public ObservableField<String> observeTitleToolbar = new ObservableField<>("");
 
-    public FragmentPaymentBillViewModel(FragmentPaymentBill fragmentPaymentBill, FragmentPaymentBillBinding fragmentPaymentBillBinding) {
+    public FragmentPaymentBillViewModel(FragmentPaymentBill fragmentPaymentBill, FragmentPaymentBillBinding fragmentPaymentBillBinding, int resTitleId) {
         this.fragmentPaymentBill = fragmentPaymentBill;
         this.fragmentPaymentBillBinding = fragmentPaymentBillBinding;
+        observeTitleToolbar.set(G.context.getString(resTitleId));
     }
 
 
@@ -74,6 +78,11 @@ public class FragmentPaymentBillViewModel {
     }
 
     public void onPayBillClick(View v) {
+
+        if (!G.userLogin) {
+            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+            return;
+        }
 
         String billId = fragmentPaymentBillBinding.fpbEdtBillId.getText().toString();
 
