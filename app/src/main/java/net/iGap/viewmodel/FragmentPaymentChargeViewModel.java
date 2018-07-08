@@ -9,7 +9,11 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
+import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -68,10 +72,15 @@ public class FragmentPaymentChargeViewModel {
     private OperatorType operatorType;
 
     public ObservableInt observeTarabord = new ObservableInt(View.GONE);
+    public ObservableField<Drawable> observeBackGround = new ObservableField<>();
 
 
     public FragmentPaymentChargeViewModel(FragmentPaymentChargeBinding fragmentPaymentChargeBinding) {
         this.fragmentPaymentChargeBinding = fragmentPaymentChargeBinding;
+
+        Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green);
+        myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
+        observeBackGround.set(myIcon);
     }
 
 

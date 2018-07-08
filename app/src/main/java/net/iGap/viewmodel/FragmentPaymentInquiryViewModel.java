@@ -13,6 +13,9 @@ import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -59,6 +62,7 @@ public class FragmentPaymentInquiryViewModel {
     public ObservableInt observeMci = new ObservableInt(View.GONE);
     public ObservableInt observeTelecom = new ObservableInt(View.GONE);
     public ObservableInt observeProgress = new ObservableInt(View.GONE);
+    public ObservableInt observeMidTerm = new ObservableInt(View.VISIBLE);
     public ObservableBoolean observeInquiry = new ObservableBoolean(false);
     public ObservableBoolean observableLastTermMessage = new ObservableBoolean(false);
     public ObservableBoolean observableMidTermMessage = new ObservableBoolean(false);
@@ -74,6 +78,7 @@ public class FragmentPaymentInquiryViewModel {
     public ObservableField<String> midTermAmount = new ObservableField<>("");
     public ObservableField<String> midTermMessage = new ObservableField<>("");
 
+    public ObservableField<Drawable> observeBackGround = new ObservableField<>();
 
     private OperatorType operatorType;
     private FragmentPaymentInquiryBinding fragmentPaymentInquiryBinding;
@@ -82,16 +87,23 @@ public class FragmentPaymentInquiryViewModel {
         this.fragmentPaymentInquiryBinding = fragmentPaymentInquiryBinding;
         this.operatorType = operatorType;
 
+        Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green);
+        myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
+        observeBackGround.set(myIcon);
+
         switch (operatorType) {
             case mci:
                 observeMci.set(View.VISIBLE);
                 observeTelecom.set(View.GONE);
                 observeTitleToolbar.set(G.context.getString(R.string.bills_inquiry_mci));
+                fragmentPaymentInquiryBinding.fpiEdtMci.requestFocus();
+
                 break;
             case telecome:
                 observeMci.set(View.GONE);
                 observeTelecom.set(View.VISIBLE);
                 observeTitleToolbar.set(G.context.getString(R.string.bills_inquiry_telecom));
+                fragmentPaymentInquiryBinding.fpiEdtTelecomArea.requestFocus();
                 break;
         }
     }
@@ -246,6 +258,10 @@ public class FragmentPaymentInquiryViewModel {
                 observableMidTermMessage.set(false);
             } else {
                 observableMidTermMessage.set(true);
+
+                if (midTerm.getMessage().length() == 0) {
+                    observeMidTerm.set(View.GONE);
+                }
             }
 
 
@@ -286,6 +302,7 @@ public class FragmentPaymentInquiryViewModel {
                 observableMidTermMessage.set(false);
             } else {
                 observableMidTermMessage.set(true);
+                observeMidTerm.set(View.GONE);
             }
 
         } else {
@@ -306,7 +323,6 @@ public class FragmentPaymentInquiryViewModel {
         });
     }
 
-
     public void onLastTermPayment(View v) {
 
         if (!G.userLogin) {
@@ -318,7 +334,6 @@ public class FragmentPaymentInquiryViewModel {
         requestMplGetBillToken.mplGetBillToken(Long.parseLong(lastTermBillId.get()), Long.parseLong(lastTermPayId.get()));
         fragmentPaymentInquiryBinding.getBackHandler().onBack();
     }
-
 
     public void onMidTermPayment(View v) {
 

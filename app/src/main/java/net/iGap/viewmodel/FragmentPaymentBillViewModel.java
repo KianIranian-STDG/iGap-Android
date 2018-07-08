@@ -11,6 +11,9 @@ package net.iGap.viewmodel;
 
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.Toast;
 
@@ -36,11 +39,16 @@ public class FragmentPaymentBillViewModel {
     private FragmentPaymentBillBinding fragmentPaymentBillBinding;
     public ObservableInt observeCompany = new ObservableInt(View.GONE);
     public ObservableField<String> observeTitleToolbar = new ObservableField<>("");
+    public ObservableField<Drawable> observeBackGround = new ObservableField<>();
 
     public FragmentPaymentBillViewModel(FragmentPaymentBill fragmentPaymentBill, FragmentPaymentBillBinding fragmentPaymentBillBinding, int resTitleId) {
         this.fragmentPaymentBill = fragmentPaymentBill;
         this.fragmentPaymentBillBinding = fragmentPaymentBillBinding;
         observeTitleToolbar.set(G.context.getString(resTitleId));
+
+        Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green);
+        myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
+        observeBackGround.set(myIcon);
     }
 
 

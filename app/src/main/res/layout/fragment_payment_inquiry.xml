@@ -104,13 +104,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <TextView
               android:layout_width="@dimen/dp100"
               android:layout_height="wrap_content"
               android:gravity="start"
+              android:textSize="@dimen/dp16"
               android:text="@string/bill_type"
               android:textColor="@color/green" />
 
@@ -137,7 +138,8 @@
               android:gravity="start"
               android:minHeight="@dimen/dp44"
               android:text="@string/phone"
-              android:textColor="@color/green" />
+              android:textColor="@{Color.parseColor(G.headerTextColor)}"
+              android:textSize="@dimen/dp16" />
 
             <EditText
               android:id="@+id/fpi_edt_mci"
@@ -148,6 +150,7 @@
               android:background="@android:color/transparent"
               android:gravity="center"
               android:hint="09xxxxxxxxx"
+              android:textSize="@dimen/dp16"
               android:inputType="phone"
               android:maxLength="11"
               android:minHeight="@dimen/dp44" />
@@ -172,7 +175,8 @@
                 android:gravity="start"
                 android:minHeight="@dimen/dp44"
                 android:text="@string/area_code"
-                android:textColor="@color/green" />
+                android:textColor="@{Color.parseColor(G.headerTextColor)}"
+                android:textSize="@dimen/dp16" />
 
               <EditText
                 android:id="@+id/fpi_edt_telecom_area"
@@ -183,6 +187,7 @@
                 android:background="@android:color/transparent"
                 android:gravity="center"
                 android:hint="XXXX"
+                android:textSize="@dimen/dp16"
                 android:inputType="phone"
                 android:maxLength="4"
                 android:minHeight="@dimen/dp44" />
@@ -200,7 +205,8 @@
                 android:gravity="start"
                 android:minHeight="@dimen/dp44"
                 android:text="@string/phone"
-                android:textColor="@color/green" />
+                android:textColor="@{Color.parseColor(G.headerTextColor)}"
+                android:textSize="@dimen/dp16" />
 
               <EditText
                 android:id="@+id/fpi_edt_telecom"
@@ -212,6 +218,7 @@
                 android:gravity="center"
                 android:hint="XXXXXXXX"
                 android:inputType="phone"
+                android:textSize="@dimen/dp16"
                 android:maxLength="8"
                 android:minHeight="@dimen/dp44" />
 
@@ -224,10 +231,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp20"
-            android:background="@color/md_blue_50"
             android:onClick="@{fragmentPaymentInquiryViewModel::onInquiryClick}"
             android:text="@string/inquiry"
-            android:textColor="@color/green"
+            android:background="@{fragmentPaymentInquiryViewModel.observeBackGround}"
+            android:textColor="@color/whit_background"
             android:textSize="@dimen/dp18" />
 
           <ProgressBar
@@ -259,12 +266,14 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center"
+              android:textSize="@dimen/dp16"
               android:text="@string/last_term" />
 
             <TextView
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center"
+              android:textSize="@dimen/dp16"
               android:text="@{fragmentPaymentInquiryViewModel.lastTermMessage}"
               android:visibility="@{fragmentPaymentInquiryViewModel.observableLastTermMessage ?   View.VISIBLE  : View.GONE }" />
 
@@ -284,12 +293,14 @@
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
-                  android:text="@string/billing_id" />
+                  android:text="@string/billing_id"
+                  android:textSize="@dimen/dp16" />
 
                 <TextView
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
+                  android:textSize="@dimen/dp16"
                   android:gravity="start"
                   android:text="@{fragmentPaymentInquiryViewModel.lastTermBillId}" />
               </LinearLayout>
@@ -305,12 +316,14 @@
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
-                  android:text="@string/payment_code" />
+                  android:text="@string/payment_code"
+                  android:textSize="@dimen/dp16" />
 
                 <TextView
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
+                  android:textSize="@dimen/dp16"
                   android:gravity="start"
                   android:text="@{fragmentPaymentInquiryViewModel.lastTermPayId}" />
               </LinearLayout>
@@ -325,12 +338,14 @@
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
-                  android:text="@string/amount" />
+                  android:text="@string/amount"
+                  android:textSize="@dimen/dp16" />
 
                 <TextView
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
+                  android:textSize="@dimen/dp16"
                   android:gravity="start"
                   android:text="@{fragmentPaymentInquiryViewModel.lastTermAmount}" />
               </LinearLayout>
@@ -339,10 +354,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp20"
-                android:background="@color/md_blue_50"
-                android:text="@string/last_term_payment"
                 android:onClick="@{fragmentPaymentInquiryViewModel::onLastTermPayment}"
-                android:textColor="@color/green"
+                android:text="@string/last_term_payment"
+                android:background="@{fragmentPaymentInquiryViewModel.observeBackGround}"
+                android:textColor="@color/whit_background"
                 android:textSize="@dimen/dp18" />
 
 
@@ -356,17 +371,20 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp10"
             android:background="#f5f5f5"
+            android:visibility="@{fragmentPaymentInquiryViewModel.observeMidTerm}"
             android:orientation="vertical">
 
             <TextView
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center"
+              android:textSize="@dimen/dp16"
               android:text="@string/mid_term" />
 
             <TextView
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:textSize="@dimen/dp16"
               android:gravity="center"
               android:text="@{fragmentPaymentInquiryViewModel.midTermMessage}"
               android:visibility="@{fragmentPaymentInquiryViewModel.observableMidTermMessage ? View.VISIBLE : View.GONE }" />
@@ -387,12 +405,14 @@
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
-                  android:text="@string/billing_id" />
+                  android:text="@string/billing_id"
+                  android:textSize="@dimen/dp16" />
 
                 <TextView
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
+                  android:textSize="@dimen/dp16"
                   android:gravity="start"
                   android:text="@{fragmentPaymentInquiryViewModel.midTermBillId}" />
               </LinearLayout>
@@ -407,12 +427,14 @@
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
-                  android:text="@string/payment_code" />
+                  android:text="@string/payment_code"
+                  android:textSize="@dimen/dp16" />
 
                 <TextView
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
+                  android:textSize="@dimen/dp16"
                   android:gravity="start"
                   android:text="@{fragmentPaymentInquiryViewModel.midTermPayId}" />
               </LinearLayout>
@@ -427,6 +449,7 @@
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
+                  android:textSize="@dimen/dp16"
                   android:text="@string/amount" />
 
                 <TextView
@@ -434,6 +457,7 @@
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
                   android:gravity="start"
+                  android:textSize="@dimen/dp16"
                   android:text="@{fragmentPaymentInquiryViewModel.midTermAmount}" />
               </LinearLayout>
 
@@ -441,10 +465,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp20"
-                android:background="@color/md_blue_50"
-                android:text="@string/intermediate_payment"
-                android:textColor="@color/green"
                 android:onClick="@{fragmentPaymentInquiryViewModel::onMidTermPayment}"
+                android:text="@string/intermediate_payment"
+                android:background="@{fragmentPaymentInquiryViewModel.observeBackGround}"
+                android:textColor="@color/whit_background"
                 android:textSize="@dimen/dp18" />
 
             </LinearLayout>

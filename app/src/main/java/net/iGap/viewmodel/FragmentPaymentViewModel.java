@@ -9,9 +9,14 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
+import android.databinding.ObservableField;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentCharge;
@@ -21,8 +26,13 @@ import net.iGap.helper.HelperFragment;
 
 public class FragmentPaymentViewModel {
 
+    public ObservableField<Drawable> observeBackGround = new ObservableField<>();
+
     public FragmentPaymentViewModel(Bundle arguments) {
 
+        Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green);
+        myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
+        observeBackGround.set(myIcon);
     }
 
     public void onClickCharge(View v) {

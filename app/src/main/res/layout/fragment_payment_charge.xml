@@ -100,12 +100,13 @@
           android:orientation="horizontal">
 
           <TextView
-            android:layout_width="@dimen/dp100"
+            android:layout_width="@dimen/dp110"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:textSize="@dimen/dp16"
             android:minHeight="@dimen/dp44"
             android:text="@string/phone_number"
-            android:textColor="@color/green" />
+            android:textColor="@{Color.parseColor(G.headerTextColor)}" />
 
           <EditText
             android:id="@+id/fpc_editText_phone_number"
@@ -113,13 +114,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
             android:background="@android:color/transparent"
+            android:gravity="center"
             android:hint="09xxxxxxxxx"
+            android:textSize="@dimen/dp16"
             android:inputType="phone"
             android:maxLength="11"
             android:minHeight="@dimen/dp44"
-            android:onTextChanged="@{fragmentPaymentChargeViewModel::onTextChanged}" />
+            android:onTextChanged="@{fragmentPaymentChargeViewModel::onTextChanged}">
+
+            <requestFocus />
+          </EditText>
 
 
         </LinearLayout>
@@ -128,6 +133,7 @@
           android:id="@+id/fpc_checkBox_trabord"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:textColor="@{Color.parseColor(G.headerTextColor)}"
           android:layout_gravity="start"
           android:onCheckedChanged="@{fragmentPaymentChargeViewModel::checkBoxTarabordChanged}"
           android:text="@string/trabord" />
@@ -140,11 +146,12 @@
           android:visibility="@{fragmentPaymentChargeViewModel.observeTarabord , default = gone}">
 
           <TextView
-            android:layout_width="@dimen/dp100"
+            android:layout_width="@dimen/dp110"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:textSize="@dimen/dp16"
             android:text="@string/operator"
-            android:textColor="@color/green" />
+            android:textColor="@{Color.parseColor(G.headerTextColor)}" />
 
           <Spinner
             android:id="@+id/fpc_spinner_operator"
@@ -165,11 +172,12 @@
           android:orientation="horizontal">
 
           <TextView
-            android:layout_width="@dimen/dp100"
+            android:layout_width="@dimen/dp110"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:textSize="@dimen/dp16"
             android:text="@string/charge_type"
-            android:textColor="@color/green" />
+            android:textColor="@{Color.parseColor(G.headerTextColor)}" />
 
           <Spinner
             android:id="@+id/fpc_spinner_ChargeType"
@@ -188,11 +196,12 @@
           android:orientation="horizontal">
 
           <TextView
-            android:layout_width="@dimen/dp100"
+            android:layout_width="@dimen/dp110"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:textSize="@dimen/dp16"
             android:text="@string/price"
-            android:textColor="@color/green" />
+            android:textColor="@{Color.parseColor(G.headerTextColor)}" />
 
           <Spinner
             android:id="@+id/fpc_spinner_price"
@@ -209,10 +218,10 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/dp20"
-          android:background="@color/md_blue_50"
+          android:background="@{fragmentPaymentChargeViewModel.observeBackGround}"
           android:onClick="@{fragmentPaymentChargeViewModel::onBuyClick}"
           android:text="@string/buy"
-          android:textColor="@color/green"
+          android:textColor="@color/whit_background"
           android:textSize="@dimen/dp18" />
 
 
