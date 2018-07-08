@@ -1495,6 +1495,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
                             integrator.setRequestCode(requestCodeQrCode);
                             integrator.setBeepEnabled(false);
+                            integrator.setPrompt("");
                             integrator.initiateScan();
                         }
 

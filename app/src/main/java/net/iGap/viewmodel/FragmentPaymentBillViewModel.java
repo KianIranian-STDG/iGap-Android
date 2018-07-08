@@ -72,6 +72,7 @@ public class FragmentPaymentBillViewModel {
                     integrator.setDesiredBarcodeFormats(IntentIntegrator.CODE_128);
                     integrator.setRequestCode(requestCodeBarcode);
                     integrator.setBeepEnabled(false);
+                    integrator.setPrompt("");
                     integrator.initiateScan();
                 }
 
