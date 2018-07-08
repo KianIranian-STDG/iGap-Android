@@ -39,12 +39,21 @@ public class FragmentPaymentBillViewModel {
     private FragmentPaymentBillBinding fragmentPaymentBillBinding;
     public ObservableInt observeCompany = new ObservableInt(View.GONE);
     public ObservableField<String> observeTitleToolbar = new ObservableField<>("");
+    public ObservableInt observeImagePolice = new ObservableInt(View.GONE);
     public ObservableField<Drawable> observeBackGround = new ObservableField<>();
+
+    private boolean isPolice = false;
 
     public FragmentPaymentBillViewModel(FragmentPaymentBill fragmentPaymentBill, FragmentPaymentBillBinding fragmentPaymentBillBinding, int resTitleId) {
         this.fragmentPaymentBill = fragmentPaymentBill;
         this.fragmentPaymentBillBinding = fragmentPaymentBillBinding;
         observeTitleToolbar.set(G.context.getString(resTitleId));
+
+        isPolice = resTitleId == R.string.pay_bills_crime;
+
+        if (isPolice) {
+            observeImagePolice.set(View.VISIBLE);
+        }
 
         Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green);
         myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
@@ -53,6 +62,9 @@ public class FragmentPaymentBillViewModel {
 
 
     public void onTextChangedBillId(CharSequence s, int start, int before, int count) {
+        if (isPolice) {
+            return;
+        }
         if (s.length() == 13) {
             observeCompany.set(View.VISIBLE);
             fragmentPaymentBillBinding.fpbImvCompany.setImageResource(getCompany(s.toString().substring(11, 12)));

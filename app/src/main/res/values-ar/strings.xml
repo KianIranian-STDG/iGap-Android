@@ -2210,5 +2210,9 @@
   <string name="intermediate_payment">Intermediate payment</string>
   <string name="last_term">last term</string>
   <string name="last_term_payment">last term payment</string>
+  <string name="responsible_for_all_financial_services">Responsible for all financial services</string>
+  <string name="parsian_e_commerce_company_top">Parsian e-commerce company (top)</string>
+  <string name="is_empty">is</string>
+  <string name="customer_response_center_021_2318">Customer Response Center: 021-2318</string>
 
 </resources>

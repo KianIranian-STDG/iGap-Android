@@ -108,6 +108,7 @@
             android:visibility="gone">
 
             <TextView
+              fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="@dimen/dp100"
               android:layout_height="wrap_content"
               android:gravity="start"
@@ -133,6 +134,7 @@
             android:visibility="@{fragmentPaymentInquiryViewModel.observeMci}">
 
             <TextView
+              fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="@dimen/dp100"
               android:layout_height="wrap_content"
               android:gravity="start"
@@ -143,6 +145,7 @@
 
             <EditText
               android:id="@+id/fpi_edt_mci"
+              android:textDirection="ltr"
               style="?hintColorSettingTheme"
               android:layout_width="0dp"
               android:layout_height="wrap_content"
@@ -170,6 +173,7 @@
               android:orientation="horizontal">
 
               <TextView
+                fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="@dimen/dp100"
                 android:layout_height="wrap_content"
                 android:gravity="start"
@@ -181,6 +185,7 @@
               <EditText
                 android:id="@+id/fpi_edt_telecom_area"
                 style="?hintColorSettingTheme"
+                android:textDirection="ltr"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -200,6 +205,7 @@
               android:orientation="horizontal">
 
               <TextView
+                fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="@dimen/dp100"
                 android:layout_height="wrap_content"
                 android:gravity="start"
@@ -217,6 +223,7 @@
                 android:background="@android:color/transparent"
                 android:gravity="center"
                 android:hint="XXXXXXXX"
+                android:textDirection="ltr"
                 android:inputType="phone"
                 android:textSize="@dimen/dp16"
                 android:maxLength="8"
@@ -263,6 +270,7 @@
             android:orientation="vertical">
 
             <TextView
+              fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center"
@@ -270,6 +278,7 @@
               android:text="@string/last_term" />
 
             <TextView
+              fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center"
@@ -290,6 +299,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                  fontPath="fonts/IRANSansMobile.ttf"
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
@@ -297,6 +307,7 @@
                   android:textSize="@dimen/dp16" />
 
                 <TextView
+                  fontPath="fonts/IRANSansMobile.ttf"
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
@@ -313,6 +324,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                  fontPath="fonts/IRANSansMobile.ttf"
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
@@ -320,6 +332,7 @@
                   android:textSize="@dimen/dp16" />
 
                 <TextView
+                  fontPath="fonts/IRANSansMobile.ttf"
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
@@ -335,6 +348,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                  fontPath="fonts/IRANSansMobile.ttf"
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
@@ -342,6 +356,7 @@
                   android:textSize="@dimen/dp16" />
 
                 <TextView
+                  fontPath="fonts/IRANSansMobile.ttf"
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
@@ -375,6 +390,7 @@
             android:orientation="vertical">
 
             <TextView
+              fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center"
@@ -382,6 +398,7 @@
               android:text="@string/mid_term" />
 
             <TextView
+              fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:textSize="@dimen/dp16"
@@ -402,6 +419,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                  fontPath="fonts/IRANSansMobile.ttf"
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
@@ -424,6 +442,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                  fontPath="fonts/IRANSansMobile.ttf"
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
@@ -431,6 +450,7 @@
                   android:textSize="@dimen/dp16" />
 
                 <TextView
+                  fontPath="fonts/IRANSansMobile.ttf"
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
@@ -446,6 +466,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                  fontPath="fonts/IRANSansMobile.ttf"
                   android:layout_width="@dimen/dp110"
                   android:layout_height="wrap_content"
                   android:gravity="start"
@@ -453,6 +474,7 @@
                   android:text="@string/amount" />
 
                 <TextView
+                  fontPath="fonts/IRANSansMobile.ttf"
                   android:layout_width="0dp"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
