@@ -2252,12 +2252,13 @@ public class FragmentChat extends BaseFragment
                 if (RealmRoom.isNotificationServices(mRoomId)) {
                     root7.setVisibility(View.GONE);
                 }
-                root8.setVisibility(View.VISIBLE);
-//                if (G.isWalletActive && G.isWalletRegister) {
-//                    root8.setVisibility(View.VISIBLE);
-//                }else {
-//                    root8.setVisibility(View.GONE);
-//                }
+
+
+                if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom) {
+                    root8.setVisibility(View.VISIBLE);
+                } else {
+                    root8.setVisibility(View.GONE);
+                }
 
                 //realm.close();
 
@@ -2407,12 +2408,11 @@ public class FragmentChat extends BaseFragment
         imvMicButton = (MaterialDesignTextView) rootView.findViewById(R.id.chl_imv_mic_button);
 
         sendMoney = (MaterialDesignTextView) rootView.findViewById(R.id.chl_imv_sendMoney_button);
-        sendMoney.setVisibility(View.VISIBLE);
-//        if (G.isWalletRegister && G.isWalletActive){
-//            sendMoney.setVisibility(View.VISIBLE);
-//        }else {
-//            sendMoney.setVisibility(View.GONE);
-//        }
+        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom) {
+            sendMoney.setVisibility(View.VISIBLE);
+        } else {
+            sendMoney.setVisibility(View.GONE);
+        }
 
         mAdapter = new MessagesAdapter<>(this, this, this);
 

@@ -44,6 +44,7 @@ import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
 import net.iGap.request.RequestWrapper;
 
+import org.paygear.wallet.model.Card;
 import org.paygear.wallet.utils.Utils;
 
 import java.io.File;
@@ -375,6 +376,7 @@ public class G extends MultiDexApplication {
     public static FragmentManager fragmentManager;
     private Tracker mTracker;
     public static Account iGapAccount;
+    public static Card selectedCard = null;
 
 
     @Override

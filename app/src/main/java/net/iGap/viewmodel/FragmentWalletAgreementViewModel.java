@@ -43,6 +43,7 @@ public class FragmentWalletAgreementViewModel {
                             if (G.userLogin) {
                                 new RequestWalletRegister().walletRegister();
                                 fragmentWalletAgrementBinding.getBackHandler().onBack();
+
                             } else {
                                 HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                             }

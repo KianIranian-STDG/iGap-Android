@@ -10,19 +10,19 @@
 
   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/outside"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/transparent"
-    android:clickable="true"
-    android:id="@+id/outside">
+    android:clickable="true">
 
     <android.support.v7.widget.CardView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
       android:background="@color/whit_background"
-      app:cardElevation="4dp"
-      android:clickable="true">
+      android:clickable="true"
+      app:cardElevation="4dp">
 
       <LinearLayout
         android:layout_width="match_parent"
@@ -54,20 +54,47 @@
               android:layout_marginStart="@dimen/dp8"
               android:orientation="vertical">
 
-              <net.iGap.module.CustomTextViewMedium
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical|start"
-                android:singleLine="true"
-                android:text="@string/transfer_to_dialog"
-                android:textColor="#fff"
-                android:textSize="@dimen/dp16"
-                android:textStyle="bold" />
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <net.iGap.module.CustomTextViewMedium
+                  android:id="@+id/title"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_vertical|start"
+                  android:singleLine="true"
+                  android:text="@string/transfer_to_dialog"
+                  android:textColor="#fff"
+                  android:textSize="@dimen/dp16"
+                  android:textStyle="bold" />
+
+                <View
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="1" />
+
+                <TextView
+                  android:id="@+id/amountCard"
+                  style="?textTitleColorSettingTheme"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="right|center"
+                  android:gravity="center|right"
+                  android:singleLine="true"
+                  android:text="@string/user_name"
+                  android:textColor="#fff"
+                  android:textSize="@dimen/dp13"
+                  android:textStyle="normal" />
+
+              </LinearLayout>
 
               <net.iGap.module.CustomTextViewMedium
                 android:id="@+id/subtitle"
+                fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -75,7 +102,7 @@
                 android:singleLine="true"
                 android:text="@string/user_name"
                 android:textColor="#fff"
-                android:textSize="@dimen/dp14"
+                android:textSize="@dimen/dp13"
                 android:textStyle="normal" />
 
               <View
@@ -87,10 +114,12 @@
             </LinearLayout>
           </LinearLayout>
 
+
         </RelativeLayout>
 
         <TextView
           android:id="@+id/pu_txt_title_desc"
+          fontPath="fonts/IRANSansMobile.ttf"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginLeft="@dimen/dp52"
@@ -103,6 +132,7 @@
 
         <net.iGap.module.EditTextAdjustPan
           android:id="@+id/amount"
+          fontPath="fonts/IRANSansMobile.ttf"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginEnd="@dimen/dp32"
@@ -111,18 +141,19 @@
           android:background="@android:color/transparent"
           android:gravity="center"
           android:hint="@string/amount_in_rial"
+          android:inputType="numberDecimal"
           android:lines="1"
           android:maxLines="1"
           android:singleLine="true"
           android:textColor="@color/black_register"
           android:textColorHint="@color/pu_edtHintText"
           android:textSize="@dimen/dp14"
-          app:errorTextAppearance="@style/remove_error_appearance"
-          android:inputType="numberDecimal" />
+          app:errorTextAppearance="@style/remove_error_appearance" />
 
 
         <Button
           android:id="@+id/pay_button"
+          fontPath="fonts/IRANSansMobile.ttf"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginBottom="@dimen/dp10"

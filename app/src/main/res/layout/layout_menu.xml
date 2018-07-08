@@ -69,21 +69,6 @@
             android:text="+98 9123456789"
             android:textColor="#f8f4df"
             android:textSize="@dimen/dp12" />
-
-
-          <TextView
-            android:id="@+id/lm_txt_wallet_credit"
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="@dimen/dp16"
-            android:layout_marginStart="@dimen/dp16"
-            android:layout_marginTop="8dp"
-            android:singleLine="true"
-            android:text="موجودی کیف پول شما : 0 ریال"
-            android:textColor="#f8f4df"
-            android:textSize="12sp" />
         </LinearLayout>
 
         <net.iGap.module.MaterialDesignTextView

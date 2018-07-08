@@ -445,15 +445,13 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         logo.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
 
         Drawable mDrawable = getResources().getDrawable(R.drawable.button_blue_selector_24dp);
-        mDrawable.setColorFilter(new
-                PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+        mDrawable.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+
+        Drawable mDrawable_charge = getResources().getDrawable(R.drawable.button_green_selector_24dp);
+        mDrawable_charge.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
 
         view.findViewById(R.id.charge_layout).setBackgroundResource(R.drawable.button_green_selector_24dp);
         view.findViewById(R.id.cashout_layout).setBackgroundResource(R.drawable.button_blue_selector_24dp);
-
-
-
-
 
 
         history.setOnClickListener(new View.OnClickListener() {

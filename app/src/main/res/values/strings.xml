@@ -484,6 +484,21 @@
   <string name="E_658">You have already sent report.</string>
   <string name="E_659">You are forbidden to send a report.</string>
 
+  <string name="E_9000">WALLET_GET_ACCESS_TOKEN_BAD_PAYLOAD</string>
+  <string name="E_9001">WALLET_GET_ACCESS_TOKEN_INTERNAL_SERVER_ERROR</string>
+  <string name="E_9002">WALLET_GET_ACCESS_TOKEN_BAD_GATEWAY</string>
+  <string name="E_9003">WALLET_GET_ACCESS_TOKEN_FORBIDDEN</string>
+  <string name="E_9004">WALLET_PAYMENT_INIT_BAD_PAYLOAD</string>
+  <string name="E_9005">WALLET_PAYMENT_INIT_INTERNAL_SERVER_ERROR</string>
+  <string name="E_9006">WALLET_PAYMENT_INIT_BAD_GATEWAY</string>
+  <string name="E_9007">WALLET_PAYMENT_INIT_FORBIDDEN</string>
+  <string name="E_9008">WALLET_PAYMENT_INIT_RECIPIENT_FORBIDDEN</string>
+  <string name="E_9009">WALLET_PAYMENT_INIT_GATEWAY_ERROR</string>
+  <string name="E_9010">WALLET_PAYMENT_INIT_RECIPIENT_NOT_REGISTERED</string>
+  <string name="E_9011">WALLET_REGISTER_BAD_PAYLOAD</string>
+  <string name="E_9012">WALLET_REGISTER_INTERNAL_SERVER_ERROR</string>
+  <string name="E_9013">WALLET_REGISTER_FORBIDDEN</string>
+
   <string name="E_10108">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_BAD_PAYLOAD</string>
   <string name="E_10109">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_INTERNAL_SERVER_ERROR</string>
   <string name="E_10110">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_MAX_TRY_LOCK</string>

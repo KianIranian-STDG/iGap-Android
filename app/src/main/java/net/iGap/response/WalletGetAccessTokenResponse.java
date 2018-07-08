@@ -42,6 +42,7 @@ public class WalletGetAccessTokenResponse extends MessageHandler {
         builder.getAccessToken();
         builder.getExpiresIn();
 
+
         Auth auth = new Auth(builder.getAccessToken(), "bearer");
         if (auth.getJWT() == null) {
             return;

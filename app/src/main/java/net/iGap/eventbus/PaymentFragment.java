@@ -12,18 +12,23 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.PaymentDialogBinding;
+import net.iGap.helper.HelperError;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoWalletPaymentInit;
+import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletPaymentInit;
 
 import org.paygear.wallet.RaadApp;
@@ -47,7 +52,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.app.Activity.RESULT_OK;
 import static net.iGap.G.context;
+import static net.iGap.G.fragmentActivity;
 import static org.paygear.wallet.utils.RSAUtils.getRSA;
 
 public class PaymentFragment extends DialogFragment implements EventListener {
@@ -58,7 +65,10 @@ public class PaymentFragment extends DialogFragment implements EventListener {
     Card selectedCard = null;
     long userId = 0;
     final String[] mPrice = {""};
-
+    public static final int requestCodePaymentCharge = 1;
+    public static final int requestCodePaymentBill = 2;
+    public static final int requestCodeQrCode = 200;
+    public static final int requestCodeBarcode = 201;
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -89,9 +99,20 @@ public class PaymentFragment extends DialogFragment implements EventListener {
             paymentDialogBinding.imageView.setImageDrawable(userPicture);
         if (userName != null)
             paymentDialogBinding.subtitle.setText(userName);
+        if (G.selectedCard != null) {
+            paymentDialogBinding.amountCard.setText("اعتبار شما : " + String.valueOf(G.selectedCard.cashOutBalance) + " ریال ");
+        } else {
+            paymentDialogBinding.amountCard.setVisibility(View.GONE);
+        }
         paymentDialogBinding.payButton.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
         paymentDialogBinding.dialogHeader.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
 
+        paymentDialogBinding.outside.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                G.fragmentActivity.onBackPressed();
+            }
+        });
 
         paymentDialogBinding.amount.addTextChangedListener(new TextWatcher() {
             boolean isSettingText;
@@ -123,8 +144,8 @@ public class PaymentFragment extends DialogFragment implements EventListener {
         paymentDialogBinding.payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new RequestWalletPaymentInit().walletPaymentInit(ProtoGlobal.Language.FA_IR, Auth.getCurrentAuth().accessToken, userId, Long.parseLong(mPrice[0]), "");
-
+                if (mPrice[0] != null && !mPrice[0].isEmpty())
+                    new RequestWalletPaymentInit().walletPaymentInit(ProtoGlobal.Language.FA_IR, Auth.getCurrentAuth().accessToken, userId, Long.parseLong(mPrice[0]), "");
 
             }
         });
@@ -152,9 +173,9 @@ public class PaymentFragment extends DialogFragment implements EventListener {
                                             selectedCard = response.body().get(0);
                                         if (selectedCard != null) {
                                             if (selectedCard.cashOutBalance > Long.parseLong(mPrice[0])) {
-                                                if (!selectedCard.isProtected)
+                                                if (!selectedCard.isProtected) {
                                                     showSetPinConfirm();
-                                                else {
+                                                } else {
 
                                                     PaymentAuth paymentAuth = new PaymentAuth();
                                                     paymentAuth.publicKey = initPayResponse.getPublicKey();
@@ -176,13 +197,15 @@ public class PaymentFragment extends DialogFragment implements EventListener {
                                                 intent.putExtra("Mobile", "0" + String.valueOf(G.userId));
                                                 intent.putExtra("IsP2P", true);
                                                 intent.putExtra("Payment", payment);
-//                                                intent.putExtra("PrimaryColor", G.appBarColor);
-//                                                intent.putExtra("DarkPrimaryColor", G.progressColor);
-//                                                intent.putExtra("AccentColor", G.menuBackgroundColor);
-
-                                                intent.putExtra("PrimaryColor", "#da2128");
-                                                intent.putExtra("DarkPrimaryColor", "#c50028");
-                                                intent.putExtra("AccentColor", "#ff0a0a");
+                                                intent.putExtra("PrimaryColor", G.appBarColor);
+                                                intent.putExtra("DarkPrimaryColor", G.appBarColor);
+                                                intent.putExtra("AccentColor", G.appBarColor);
+                                                intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+                                                intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+                                                intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+                                                intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
+                                                intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+                                                intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
                                                 startActivityForResult(intent, 66);
                                             }
 
@@ -305,7 +328,7 @@ public class PaymentFragment extends DialogFragment implements EventListener {
                                 public void onFailure(Call<ArrayList<Card>> call, Throwable t) {
                                     DialogMaker.disMissDialog();
                                     PaymentFragment.this.dismiss();
-                                    Toast.makeText(context, "PayGear is unavailable", Toast.LENGTH_SHORT).show();
+                                    HelperError.showSnackMessage("PayGear is unavailable", false);
                                 }
                             });
 
@@ -323,7 +346,7 @@ public class PaymentFragment extends DialogFragment implements EventListener {
                             @Override
                             public void run() {
                                 dismiss();
-                                Toast.makeText(getContext(), "پرداخت موفقیت آمیز بود اطلاعات بیشتر در قسمت تاریخچه کیف پول", Toast.LENGTH_LONG).show();
+                                HelperError.showSnackMessage("پرداخت موفقیت آمیز بود اطلاعات بیشتر در قسمت تاریخچه کیف پول", false);
                             }
                         });
 
@@ -334,8 +357,7 @@ public class PaymentFragment extends DialogFragment implements EventListener {
                             @Override
                             public void run() {
                                 dismiss();
-                                Toast.makeText(getContext(), "پرداخت ناموفق بود", Toast.LENGTH_LONG).show();
-
+                                HelperError.showSnackMessage("پرداخت ناموفق بود", false);
                             }
                         });
                         break;
@@ -345,7 +367,8 @@ public class PaymentFragment extends DialogFragment implements EventListener {
                             @Override
                             public void run() {
                                 dismiss();
-                                Toast.makeText(getContext(), "نتیجه پرداخت مشخص نیست به تاریخجه کیف پول مراجع یا با پشتیبانی تماس بگیرید", Toast.LENGTH_LONG).show();
+                                HelperError.showSnackMessage("نتیجه پرداخت مشخص نیست به تاریخجه کیف پول مراجع یا با پشتیبانی تماس بگیرید", false);
+
                             }
                         });
                         break;
@@ -368,7 +391,6 @@ public class PaymentFragment extends DialogFragment implements EventListener {
                 DialogMaker.disMissDialog();
                 if (response.errorBody() == null && response.body() != null) {
                     PaymentResult paymentResult = response.body();
-
                     final PaymentResultDialog dialog = PaymentResultDialog.newInstance(paymentResult);
                     dialog.setListener(new View.OnClickListener() {
                         @Override
@@ -376,6 +398,7 @@ public class PaymentFragment extends DialogFragment implements EventListener {
 
                             RaadApp.cards = null;
                             dialog.dismiss();
+                            fragmentActivity.onBackPressed();
                         }
                     });
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
@@ -415,6 +438,35 @@ public class PaymentFragment extends DialogFragment implements EventListener {
         }
 
         return getRSA(publicKey, cardInfoJson);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("CCCCCCCCCC", "onActivityResult: " + requestCode);
+
+        switch (requestCode) {
+
+            case 66:
+                if (resultCode == RESULT_OK) {
+                    PaymentResult paymentResult = (PaymentResult) data.getSerializableExtra("result");
+                    if (paymentResult != null) {
+                        HelperError.showSnackMessage("trace number:" + String.valueOf(paymentResult.traceNumber) + "amount :" + String.valueOf(paymentResult.amount), false);
+                        EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedSuccess);
+                    } else {
+                        HelperError.showSnackMessage("ناموفق", false);
+                        EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedFailed);
+
+                    }
+                } else {
+
+                    HelperError.showSnackMessage("payment is canceled", false);
+                    EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultNotRecieved);
+                }
+                break;
+        }
+
+
     }
 
 }

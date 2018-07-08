@@ -44,7 +44,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -756,43 +755,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.i("CCCCCCCCC", "3 receivedMessage: ");
 
-        switch (requestCode) {
-            case requestCodePaymentCharge:
-            case requestCodePaymentBill:
-                getPaymentResultCode(resultCode, data);
-                break;
-            case requestCodeQrCode:
-                IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
-                if (result.getContents() != null) {
-                    new RequestUserVerifyNewDevice().verifyNewDevice(result.getContents());
-                }
-                break;
-
-            case 66:
-                if (resultCode == RESULT_OK) {
-                    PaymentResult paymentResult = (PaymentResult) data.getSerializableExtra("result");
-                    if (paymentResult != null) {
-                        Toast.makeText(this, "trace number:" + String.valueOf(paymentResult.traceNumber) + "amount :" + String.valueOf(paymentResult.amount), Toast.LENGTH_SHORT).show();
-                        EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedSuccess);
-                    } else {
-                        Toast.makeText(this, "ناموفق", Toast.LENGTH_SHORT).show();
-                        EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedFailed);
-
-                    }
-                } else {
-                    Toast.makeText(this, "payment is canceled", Toast.LENGTH_SHORT).show();
-                    EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultNotRecieved);
-                }
-                break;
-        }
-
-
-    }
 
     private void getPaymentResultCode(int resultCode, Intent data) {
 
@@ -1440,24 +1403,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
 
         itemNavWallet = (ViewGroup) findViewById(R.id.lm_ll_wallet);
-//        itemNavWallet.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (G.isWalletRegister) {
-//                    Intent intent = new Intent(ActivityMain.this, WalletActivity.class);
-//                    intent.putExtra("Language", "fa");
-//                    intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
-//                    intent.putExtra("PrimaryColor", "#f69228");
-//                    intent.putExtra("DarkPrimaryColor", "#f99228");
-//                    intent.putExtra("AccentColor", "#cdcbcb");
-//                    startActivity(intent);
-//
-//                } else {
-//                    new HelperFragment(FragmentWalletAgrement.newInstance()).load();
-//                }
-//                lockNavigation();
-//            }
-//        });
+        itemNavWallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!G.isWalletRegister) {
+                    new HelperFragment(FragmentWalletAgrement.newInstance()).load();
+                    lockNavigation();
+                }
+            }
+        });
 
         itemCash = (TextView) findViewById(R.id.cash);
         itemCash.setTextColor(Color.parseColor(G.appBarColor));
@@ -2173,28 +2127,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             txtNavName.setText(username);
             txtNavPhone.setText(phoneNumber);
 
-
-            TextView txtNavwalletCredit = (TextView) findViewById(R.id.lm_txt_wallet_credit);
-            txtNavwalletCredit.setVisibility(View.VISIBLE);
-            final String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MzY0ODg5MzgsImlkIjoiNTlhYmZlY2ZiMTY0NjgxZGQ4Mzc5YWY2IiwidW5pcXVlX25hbWUiOiJ1bmtub3duKDIpIiwiYXBwIjoiNTliZWMzZmEwZWNhODEwMDAxY2VlYjg2IiwibmFtZWlkIjoiMiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QvIiwibmJmIjoxNTI4NzEyOTM4LCJ1c2VybmFtZSI6InNhZWVkIiwic3ZjIjp7ImRlbGl2ZXJ5Ijp7InBlcm0iOjB9LCJnYW1pZmljYXRpb24iOnsicGVybSI6MH0sInN5bmMiOnsicGVybSI6MH0sInBheW1lbnQiOnsicGVybSI6MH0sIm1lc3NhZ2luZyI6eyJwZXJtIjowfSwiY2x1YiI6eyJwZXJtIjowfSwiZ2VvIjp7InBlcm0iOjB9LCJmaWxlIjp7InBlcm0iOjB9LCJzZWFyY2giOnsicGVybSI6MH0sInFyIjp7InBlcm0iOjB9LCJ0cmFuc3BvcnQiOnsicGVybSI6MH0sImFjY291bnQiOnsicGVybSI6MH0sInByb2R1Y3QiOnsicGVybSI6MH0sImNhc2hpZXIiOnsicGVybSI6MH0sInNvY2lhbCI6eyJwZXJtIjowfSwiY291cG9uIjp7InBlcm0iOjB9LCJldmVudCI6eyJwZXJtIjowfSwiY3JlZGl0Ijp7InBlcm0iOjB9LCJwdXNoIjp7InBlcm0iOjB9fSwic3ViIjoidW5rbm93bigyKSIsImF1ZCI6ImI5ZGM3MTJjOTUyYjRhYWZiNDgxYWJlZGUwZmVjNGQ4IiwibWVyY2hhbnRfcm9sZXMiOnsiNWFlZWE5MzQxNmE4NjgwMDBiYWQyYzQ2IjpbImFkbWluIl0sIjU5YWJmZjM3YjE2NDY4MWRkODM3ZDExMCI6WyJhZG1pbiIsImNhc2hpZXIiXX19.0qKJsJoaHu68TrWcVWgNeq2uF9qGxuo_70ZklCbq_ZE";
-            txtNavwalletCredit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Raad.init(getApplicationContext());
-                    Auth auth = new Auth(token, "bearer");
-                    if (auth.getJWT() == null) {
-                        Toast.makeText(ActivityMain.this, R.string.authorization_not_valid, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    auth.save();
-                    Intent intent = new Intent(ActivityMain.this, WalletActivity.class);
-                    intent.putExtra("Language", "fa");
-                    intent.putExtra("Mobile", "09332399949");
-                    startActivity(intent);
-                }
-            });
-
-
             if (HelperCalander.isPersianUnicode) {
                 txtNavPhone.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavPhone.getText().toString()));
                 txtNavName.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavName.getText().toString()));
@@ -2905,12 +2837,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 @Override
                 public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
                     if (response.body() != null) {
-                        Card selectedCard = null;
+
                         if (response.body().size() > 0)
-                            selectedCard = response.body().get(0);
-                        if (selectedCard != null) {
+                            G.selectedCard = response.body().get(0);
+                        if (G.selectedCard != null) {
                             itemCash.setVisibility(View.VISIBLE);
-                            itemCash.setText("اعتبار شما : " + String.valueOf(selectedCard.cashOutBalance) + " ریال ");
+                            itemCash.setText("اعتبار شما : " + String.valueOf(G.selectedCard.cashOutBalance) + " ریال ");
                             itemNavWallet.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

@@ -80,7 +80,6 @@ public class PaymentResultDialog extends DialogFragment {
 
         receiptLayout = view.findViewById(R.id.receipt);
         View statusView = view.findViewById(R.id.status_view);
-        statusView.setBackgroundColor(Color.parseColor(WalletActivity.progressColor));
 
         TextView statusTitle = view.findViewById(R.id.status_title);
         statusTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));

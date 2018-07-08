@@ -71,7 +71,11 @@ public class UserLoginResponse extends MessageHandler {
         WebSocketClient.allowForReconnecting = true;
         G.onUserLogin.onLogin();
         RealmUserInfo.sendPushNotificationToServer();
-        new RequestWalletGetAccessToken().walletGetAccessToken();
+
+        if (G.isWalletActive && G.isWalletRegister) {
+            new RequestWalletGetAccessToken().walletGetAccessToken();
+        }
+
     }
 
     @Override
