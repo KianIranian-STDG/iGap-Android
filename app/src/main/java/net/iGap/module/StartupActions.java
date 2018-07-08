@@ -84,7 +84,7 @@ public final class StartupActions {
     public StartupActions() {
 
         detectDeviceType();
-        EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
+      //  EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
         initializeGlobalVariables();
         realmConfiguration();
         mainUserInfo();

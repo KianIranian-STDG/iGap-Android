@@ -1,10 +1,17 @@
 package net.iGap;
 
+import android.app.Application;
 import android.content.SharedPreferences;
+import android.support.v7.app.AppCompatDelegate;
+
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.one.EmojiOneProvider;
 
 import net.iGap.module.SHP_SETTING;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.support.v7.app.AppCompatDelegate.MODE_NIGHT_AUTO;
+import static android.support.v7.app.AppCompatDelegate.MODE_NIGHT_YES;
 import static net.iGap.G.appBarColor;
 import static net.iGap.G.attachmentColor;
 import static net.iGap.G.context;
@@ -21,7 +28,7 @@ import static net.iGap.G.toggleButtonColor;
  * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
  * All rights reserved.
  */
-public class Theme {
+public class Theme extends Application {
 
     public static final int CUSTOM = 0;
     public static final int DEFAULT = 1;
@@ -91,6 +98,10 @@ public class Theme {
 
     public static void setThemeColor() {
 
+        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO);
+
+        EmojiManager.install(new EmojiOneProvider());
+
         SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         G.themeColor = preferences.getInt(SHP_SETTING.KEY_THEME_COLOR, DEFAULT);
         G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
@@ -150,6 +161,9 @@ public class Theme {
 
                 break;
             case DARK:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+
+                EmojiManager.install(new EmojiOneProvider());
                 setColor(true,
                         default_dark_appBarColor,
                         default_dark_notificationColor,
