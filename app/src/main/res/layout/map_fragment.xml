@@ -1,27 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  style="?backgroundColorSettingTheme"
-  android:clickable="true"
-  android:orientation="vertical">
-
-
-  <FrameLayout
-    android:id="@+id/mf_fragment_map_view"
+    style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"></FrameLayout>
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:orientation="vertical">
 
 
-  <Button
-    android:id="@+id/mf_btn_send_position"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/iGapColor"
-    android:text="@string/send_position"
-    android:textColor="@color/white"
-    android:textSize="@dimen/dp18" />
+    <FrameLayout
+        android:id="@+id/mf_fragment_map_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"></FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/mf_btn_open_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:background="@color/iGapColor"
+            android:text="@string/open_map"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp18"
+
+            />
+
+        <Button
+            android:id="@+id/mf_btn_send_position"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:background="@color/iGapColor"
+            android:text="@string/send_position"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp18" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

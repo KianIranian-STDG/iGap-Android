@@ -1,21 +1,23 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -52,7 +54,7 @@ import java.io.OutputStream;
 
 import static net.iGap.R.id.mf_fragment_map_view;
 
-public class FragmentMap extends BaseFragment implements OnMapReadyCallback {
+public class FragmentMap extends BaseFragment implements OnMapReadyCallback, View.OnClickListener {
 
     public static String Latitude = "latitude";
     public static String Longitude = "longitude";
@@ -63,6 +65,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback {
     private Double latitude;
     private Double longitude;
     private Mode mode;
+    private Button btnOPenMap,btnSendPosition;
 
     public static FragmentMap getInctance(Double latitude, Double longitude, Mode mode) {
 
@@ -160,59 +163,17 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback {
 
         mapFragment.getMapAsync(FragmentMap.this);
 
-        Button btnSendPosition = (Button) view.findViewById(R.id.mf_btn_send_position);
+        btnSendPosition  = (Button) view.findViewById(R.id.mf_btn_send_position);
+        btnOPenMap = btnSendPosition = (Button) view.findViewById(R.id.mf_btn_open_map);
+
+
         btnSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (mode == Mode.sendPosition) {
+            btnSendPosition.setOnClickListener(this);
+            btnOPenMap.setOnClickListener(this);
 
-            btnSendPosition.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    if (latitude == null || longitude == null) {
-
-                        G.currentActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.set_position), false);
-
-                            }
-                        });
-                    } else {
-
-                        try {
-                            mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
-                                @Override
-                                public void onSnapshotReady(Bitmap bitmap) {
-
-                                    String path = saveBitmapToFile(bitmap);
-
-                                    close();
-
-                                    if (path.length() > 0) {
-                                        //ActivityChat activity = (ActivityChat) mActivity;
-                                        //activity.sendPosition(latitude, longitude, path);
-
-                                        if (G.iSendPositionChat != null) {
-                                            G.iSendPositionChat.send(latitude, longitude, path);
-                                        }
-
-                                    }
-                                }
-                            });
-                        } catch (Exception e) {
-                            close();
-                            //ActivityChat activity = (ActivityChat) mActivity;
-                            //activity.sendPosition(latitude, longitude, null);
-
-                            if (G.iSendPositionChat != null) {
-                                G.iSendPositionChat.send(latitude, longitude, null);
-                            }
-                        }
-                    }
-                }
-            });
         } else if (mode == Mode.seePosition) {
             btnSendPosition.setVisibility(View.GONE);
         }
@@ -221,8 +182,8 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback {
     //****************************************************************************************************
 
     /**
-     * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
+     * Manipulates the map once available.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
      * we just add a marker near Sydney, Australia.
      * If Google Play services is not installed on the device, the user will be prompted to install
@@ -338,40 +299,99 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback {
         }
     }
 
-    public enum Mode {
-        sendPosition, seePosition;
-    }
+    @Override
+    public void onClick(View view) {
+        if (latitude == null || longitude == null) {
 
-    public interface OnGetPicture {
+            G.currentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
 
-        void getBitmap(Bitmap bitmap);
-    }
+                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.set_position), false);
 
-    private static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        OnGetPicture listener;
+                }
+            });
+        } else {
 
-        public DownloadImageTask(OnGetPicture listener) {
-            this.listener = listener;
-        }
+            switch (view.getId()) {
+                case R.id.mf_btn_send_position:
+                    try {
+                        mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
+                            @Override
+                            public void onSnapshotReady(Bitmap bitmap) {
 
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
+                                String path = saveBitmapToFile(bitmap);
+
+                                close();
+
+                                if (path.length() > 0) {
+                                    //ActivityChat activity = (ActivityChat) mActivity;
+                                    //activity.sendPosition(latitude, longitude, path);
+
+                                    if (G.iSendPositionChat != null) {
+                                        G.iSendPositionChat.send(latitude, longitude, path);
+                                    }
+
+                                }
+                            }
+                        });
+                    } catch (Exception e) {
+                        close();
+                        //ActivityChat activity = (ActivityChat) mActivity;
+                        //activity.sendPosition(latitude, longitude, null);
+
+                        if (G.iSendPositionChat != null) {
+                            G.iSendPositionChat.send(latitude, longitude, null);
+                        }
+                    }
+
+                    break;
+
+                case R.id.mf_btn_open_map:
+                    Uri gmmIntentUri = Uri.parse("geo:" + latitude + "," + longitude + "?q=" + latitude + "," + longitude + "(im here)");
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
+                    break;
+
             }
-            return mIcon11;
+
+        }
+    }
+        public enum Mode {
+            sendPosition, seePosition;
         }
 
-        protected void onPostExecute(Bitmap result) {
+        public interface OnGetPicture {
 
-            if (listener != null) {
-                listener.getBitmap(result);
+            void getBitmap(Bitmap bitmap);
+        }
+
+        private static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+            OnGetPicture listener;
+
+            public DownloadImageTask(OnGetPicture listener) {
+                this.listener = listener;
+            }
+
+            protected Bitmap doInBackground(String... urls) {
+                String urldisplay = urls[0];
+                Bitmap mIcon11 = null;
+                try {
+                    InputStream in = new java.net.URL(urldisplay).openStream();
+                    mIcon11 = BitmapFactory.decodeStream(in);
+                } catch (Exception e) {
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                }
+                return mIcon11;
+            }
+
+            protected void onPostExecute(Bitmap result) {
+
+                if (listener != null) {
+                    listener.getBitmap(result);
+                }
             }
         }
     }
-}

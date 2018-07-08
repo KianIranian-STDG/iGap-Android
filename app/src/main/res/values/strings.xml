@@ -141,7 +141,7 @@
   <string name="am_music">Music</string>
   <string name="am_paint">Paint</string>
   <string name="am_picture">Picture</string>
-  <string name="am_document">Document</string>G
+  <string name="am_document">Document</string>
   <string name="am_location">Location</string>
   <string name="am_video">Video</string>
   <string name="am_file">File</string>
@@ -1277,5 +1277,6 @@
   <string name="intermediate_payment">Intermediate payment</string>
   <string name="last_term">last term</string>
   <string name="last_term_payment">last term payment</string>
+  <string name="open_map">open in Gmap</string>
 
 </resources>
