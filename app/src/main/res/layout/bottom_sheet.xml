@@ -5,7 +5,7 @@
   android:id="@+id/cardView"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  style="?textColorMenuTheme"
+  style="?backgroundColorSettingTheme"
   android:clickable="true"
   android:layoutDirection="ltr"
   android:orientation="vertical"

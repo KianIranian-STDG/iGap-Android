@@ -24,8 +24,8 @@ android {
         applicationId "net.iGap"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 70
-        versionName "0.7.3"
+        versionCode 71
+        versionName "0.8.0"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
 
@@ -51,6 +51,8 @@ android {
     }
 
     lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
         disable 'MissingTranslation'
     }
 
