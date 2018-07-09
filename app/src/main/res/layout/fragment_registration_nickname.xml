@@ -178,6 +178,7 @@
                 android:gravity="center"
                 android:hint="@{fragmentRegistrationNicknameViewModel.edtNikeNameHint , default = @string/pu_nikname_profileUser}"
                 android:lines="1"
+                android:inputType="textNoSuggestions"
                 android:maxLength="20"
                 android:maxLines="1"
                 android:minWidth="104dp"

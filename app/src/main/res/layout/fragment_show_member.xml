@@ -93,6 +93,7 @@
         android:hint="@string/search"
         android:paddingEnd="@dimen/dp8"
         android:paddingLeft="@dimen/dp8"
+        android:inputType="textNoSuggestions"
         android:paddingRight="@dimen/dp8"
         android:paddingStart="@dimen/dp8"
         android:textColor="@color/white"

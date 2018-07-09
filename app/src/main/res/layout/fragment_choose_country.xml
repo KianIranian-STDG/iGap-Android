@@ -56,6 +56,7 @@
           android:layout_weight="1"
           android:autoText="false"
           android:background="@null"
+          android:inputType="textNoSuggestions"
           android:hint="@string/search"
           android:paddingEnd="@dimen/dp8"
           android:paddingLeft="@dimen/dp8"

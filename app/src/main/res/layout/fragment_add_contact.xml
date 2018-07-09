@@ -127,6 +127,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp4"
+        android:inputType="textNoSuggestions"
         android:layout_marginTop="@dimen/dp8"
         android:background="@android:color/transparent"
         android:hint="@string/fac_First_Name"
@@ -155,6 +156,7 @@
         android:id="@+id/ac_edt_lastName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textNoSuggestions"
         android:background="@android:color/transparent"
         android:hint="@string/fac_Last_Name"
         android:singleLine="true"
@@ -214,8 +216,7 @@
           android:singleLine="true"
           android:text="+98"
           android:textSize="@dimen/dp15"
-          style="?textTitleColorSettingTheme"
-          />
+          style="?textTitleColorSettingTheme" />
 
         <View
           android:layout_width="match_parent"

@@ -137,6 +137,7 @@
           android:background="@android:color/transparent"
           android:hint="@string/st_bio"
           style="?hintColorSettingTheme"
+          android:inputType="textNoSuggestions"
           android:minHeight="@dimen/dp44"
           android:onTextChanged="@{fragmentBioViewModel.onTextChanged}"
           android:paddingEnd="@dimen/dp32"

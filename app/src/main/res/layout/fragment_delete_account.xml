@@ -126,6 +126,7 @@
       android:layout_height="match_parent"
       android:background="@android:color/transparent"
       android:gravity="center"
+      android:inputType="textNoSuggestions"
       android:hint="@string/Enter_Code"
       android:maxLength="10"
       android:singleLine="true"

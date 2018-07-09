@@ -114,6 +114,7 @@
         android:id="@+id/edtReport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textNoSuggestions"
         android:background="@android:color/transparent"
         android:hint="@string/desc"
         style="?hintColorSettingTheme"

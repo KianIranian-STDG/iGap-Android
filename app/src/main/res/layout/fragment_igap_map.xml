@@ -159,6 +159,7 @@
                     android:lineSpacingMultiplier=".8"
                     android:maxLength="255"
                     android:maxLines="4"
+                    android:inputType="textNoSuggestions"
                     android:minHeight="@dimen/dp52"
                     android:paddingEnd="@dimen/dp10"
                     android:paddingLeft="@dimen/dp10"
