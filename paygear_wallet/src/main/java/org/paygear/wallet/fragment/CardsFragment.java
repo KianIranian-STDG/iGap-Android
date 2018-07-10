@@ -131,7 +131,6 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
                 }
             });
         }
-
         mRefreshLayout = view.findViewById(R.id.refresh_layout);
         mRefreshLayout.setOnRefreshListener(new RecyclerRefreshLayout.OnRefreshListener() {
             @Override
