@@ -934,6 +934,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                     if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
                         rippleMoreMap.setVisibility(View.VISIBLE);
                         fabGps.setVisibility(View.VISIBLE);
+                        fabOpenMap.setVisibility(View.VISIBLE);
+                        fabSwitcher.setVisibility(View.VISIBLE);
                     }
                     if (!isBackPress) {
                         //getActivity().getSupportFragmentManager().popBackStack();
@@ -986,6 +988,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         public void onClick(View view) {
                             dialog.dismiss();
                             fabGps.setVisibility(View.GONE);
+                            fabOpenMap.setVisibility(View.GONE);
+                            fabSwitcher.setVisibility(View.GONE);
                             rippleMoreMap.setVisibility(View.GONE);
                             page = pageUserList;
                             try {
@@ -1424,6 +1428,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             if (mapRegistrationStatus) {
                 rootTurnOnGps.setVisibility(View.GONE);
                 fabGps.setVisibility(View.VISIBLE);
+                fabOpenMap.setVisibility(View.VISIBLE);
+                fabSwitcher.setVisibility(View.VISIBLE);
                 vgMessageGps.setVisibility(View.VISIBLE);
                 rippleMoreMap.setVisibility(View.VISIBLE);
                 GPSTracker.getGpsTrackerInstance().detectLocation();
@@ -1440,6 +1446,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     private void visibleViewAttention(String text, boolean b) {
         rootTurnOnGps.setVisibility(View.VISIBLE);
         fabGps.setVisibility(View.GONE);
+        fabOpenMap.setVisibility(View.GONE);
+        fabSwitcher.setVisibility(View.GONE);
         toggleGps.setChecked(false);
         vgMessageGps.setVisibility(View.GONE);
         rippleMoreMap.setVisibility(View.GONE);
