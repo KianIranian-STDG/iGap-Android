@@ -39,6 +39,7 @@ public class EventManager {
 
     public static final int ON_ACCESS_TOKEN_RECIVE = 1;
     public static final int ON_INIT_PAY = 2;
+    public static final int ON_INIT_PAY_ERROR = 4;
     public static final int ON_PAYMENT_RESULT_RECIEVED = 3;
 
 
@@ -132,9 +133,6 @@ public class EventManager {
     }
 
     public void postEvent(final int eventNum, final Object... message) {
-
-        Log.i("CCCCCCCCC", "3 receivedMessage: " + eventNum);
-
 
         final List<EventListener> eventListeners = eventListenerMap.get(eventNum);
         if (eventListeners == null || eventListeners.size() == 0) {

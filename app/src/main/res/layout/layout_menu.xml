@@ -304,11 +304,16 @@
               android:text="@string/wallet"
               android:textSize="@dimen/dp14" />
 
+            <View
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="1" />
+
             <TextView
 
               android:id="@+id/cash"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
-              android:layout_width="0dp"
+              android:layout_width="wrap_content"
               android:layout_weight="1"
               android:layout_height="wrap_content"
               android:layout_marginLeft="@dimen/dp10"
@@ -318,6 +323,7 @@
               android:paddingRight="@dimen/dp4"
               android:paddingTop="@dimen/dp8"
               android:layout_gravity="center|end"
+              android:gravity="end"
               android:text="$100"
               android:layout_marginEnd="@dimen/dp10"
               android:layout_marginRight="@dimen/dp10"

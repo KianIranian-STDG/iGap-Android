@@ -54,23 +54,4 @@
 
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/image_layout"
-        android:layout_width="65dp"
-        android:layout_height="65dp">
-
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside" />
-
-        <View
-            android:id="@+id/image_border"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/image_border"/>
-
-    </FrameLayout>
-
 </LinearLayout>

@@ -6,18 +6,25 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -25,15 +32,21 @@ import com.google.zxing.integration.android.IntentResult;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.PaymentDialogBinding;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
+import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
+import net.iGap.module.EmojiEditTextE;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoWalletPaymentInit;
+import net.iGap.realm.RealmRoom;
+import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletPaymentInit;
 
 import org.paygear.wallet.RaadApp;
 import org.paygear.wallet.WalletActivity;
 import org.paygear.wallet.fragment.PaymentResultDialog;
+import org.paygear.wallet.fragment.SetCardPinFragment;
 import org.paygear.wallet.model.Card;
 import org.paygear.wallet.model.Payment;
 import org.paygear.wallet.model.PaymentAuth;
@@ -55,9 +68,10 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.G.context;
 import static net.iGap.G.fragmentActivity;
+import static net.iGap.G.smsNumbers;
 import static org.paygear.wallet.utils.RSAUtils.getRSA;
 
-public class PaymentFragment extends DialogFragment implements EventListener {
+public class PaymentFragment extends BaseFragment implements EventListener {
 
     private Drawable userPicture;
     private String userName;
@@ -69,6 +83,7 @@ public class PaymentFragment extends DialogFragment implements EventListener {
     public static final int requestCodePaymentBill = 2;
     public static final int requestCodeQrCode = 200;
     public static final int requestCodeBarcode = 201;
+    MaterialDialog progressDialog;
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -144,8 +159,11 @@ public class PaymentFragment extends DialogFragment implements EventListener {
         paymentDialogBinding.payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mPrice[0] != null && !mPrice[0].isEmpty())
+                if (mPrice[0] != null && !mPrice[0].isEmpty()) {
+                    showProgress();
                     new RequestWalletPaymentInit().walletPaymentInit(ProtoGlobal.Language.FA_IR, Auth.getCurrentAuth().accessToken, userId, Long.parseLong(mPrice[0]), "");
+
+                }
 
             }
         });
@@ -157,16 +175,18 @@ public class PaymentFragment extends DialogFragment implements EventListener {
     public void receivedMessage(int id, Object... message) {
         switch (id) {
             case EventManager.ON_INIT_PAY:
+                if (message == null) {
+                    if (progressDialog != null) progressDialog.dismiss();
+                }
                 final ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder initPayResponse = (ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder) message[0];
                 if (initPayResponse != null) {
                     new android.os.Handler(getContext().getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            DialogMaker.makeDialog(getActivity()).showDialog();
                             Web.getInstance().getWebService().getCredit(Auth.getCurrentAuth().getId()).enqueue(new Callback<ArrayList<Card>>() {
                                 @Override
                                 public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
-                                    DialogMaker.disMissDialog();
+                                    if (progressDialog != null) progressDialog.dismiss();
                                     if (response.body() != null) {
                                         selectedCard = null;
                                         if (response.body().size() > 0)
@@ -174,13 +194,14 @@ public class PaymentFragment extends DialogFragment implements EventListener {
                                         if (selectedCard != null) {
                                             if (selectedCard.cashOutBalance > Long.parseLong(mPrice[0])) {
                                                 if (!selectedCard.isProtected) {
-                                                    showSetPinConfirm();
+                                                    setNewPassword();
                                                 } else {
 
                                                     PaymentAuth paymentAuth = new PaymentAuth();
                                                     paymentAuth.publicKey = initPayResponse.getPublicKey();
                                                     paymentAuth.token = initPayResponse.getToken();
-                                                    showPinConfirm(paymentAuth);
+//                                                    showPinConfirm(paymentAuth);
+                                                    setConfirmPassword(paymentAuth);
                                                 }
                                             } else {
                                                 Payment payment = new Payment();
@@ -213,140 +234,31 @@ public class PaymentFragment extends DialogFragment implements EventListener {
                                     }
                                 }
 
-                                private void showPinConfirm(final PaymentAuth paymentAuth) {
-                                    new AlertDialog()
-                                            .setMode(AlertDialog.MODE_INPUT)
-                                            .setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD)
-                                            .setTitle(getString(org.paygear.wallet.R.string.paygear_card_pin))
-                                            .setPositiveAction(getString(org.paygear.wallet.R.string.ok))
-                                            .setNegativeAction(getString(org.paygear.wallet.R.string.cancel))
-                                            .setOnActionListener(new AlertDialog.OnAlertActionListener() {
-                                                @Override
-                                                public boolean onAction(int i, Object o) {
-                                                    if (i == 1) {
-                                                        String pin = (String) o;
-                                                        if (!TextUtils.isEmpty(pin.trim())) {
-                                                            startPay(paymentAuth, pin);
-                                                        }
-                                                    }
-                                                    return true;
-                                                }
-
-                                            }).show(getActivity().getSupportFragmentManager());
-                                }
-
-                                private void showSetPinConfirm() {
-                                    new AlertDialog()
-                                            .setTitle(getString(org.paygear.wallet.R.string.set_card_pin))
-                                            .setMessage(getString(org.paygear.wallet.R.string.credit_card_set_pin_confirm))
-                                            .setPositiveAction(getString(org.paygear.wallet.R.string.yes))
-                                            .setNegativeAction(getString(org.paygear.wallet.R.string.no))
-                                            .setOnActionListener(new AlertDialog.OnAlertActionListener() {
-                                                @Override
-                                                public boolean onAction(int i, Object o) {
-                                                    if (i == 1) {
-//                                                         getActivity().getSupportFragmentManager(.beginTransaction();
-                                                    }
-                                                    return true;
-                                                }
-                                            })
-                                            .show(getActivity().getSupportFragmentManager());
-
-                                }
-
-                                //                                private void initPay(final Payment payment, final String pin) {
-//                                    DialogMaker.makeDialog(getContext()).showDialog();
-//                                    Web.getInstance().getWebService().initPayment(payment.getRequestBody()).enqueue(new Callback<PaymentAuth>() {
-//                                        @Override
-//                                        public void onResponse(Call<PaymentAuth> call, Response<PaymentAuth> response) {
-//                                            DialogMaker.disMissDialog();
-//                                            if (response != null)
-//                                                if (response.errorBody() == null && response.body() != null) {
-//                                                    payment.paymentAuth = response.body();
-//                                                    if (pin == null) {
-//
-//                                                        Intent intent = new Intent(context, WalletActivity.class);
-//                                                        intent.putExtra("Language", "fa");
-//                                                        intent.putExtra("Mobile", "0" + String.valueOf(G.userId));
-//                                                        intent.putExtra("IsP2P", true);
-//                                                        intent.putExtra("Payment", payment);
-//                                                        startActivityForResult(intent, 66);
-//                                                    } else {
-//                                                        String cardDataRSA = RSAUtils.getCardDataRSA(payment, selectedCard, pin, null);
-//                                                        startPay(cardDataRSA, payment.paymentAuth.token);
-//                                                    }
-//
-//                                                }
-//
-//                                        }
-//
-//                                        private void startPay(String encryptedCardData, String token) {
-//
-//                                            Map<String, String> finalInfoMap = new HashMap<>();
-//                                            finalInfoMap.put("token", token);
-//                                            finalInfoMap.put("card_info", encryptedCardData);
-//                                            DialogMaker.makeDialog(getContext()).showDialog();
-//                                            Web.getInstance().getWebService().pay(PostRequest.getRequestBody(finalInfoMap)).enqueue(new Callback<PaymentResult>() {
-//                                                @Override
-//                                                public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
-//
-//                                                    DialogMaker.disMissDialog();
-//                                                    if (response.errorBody() == null && response.body() != null) {
-//                                                        PaymentResult paymentResult = response.body();
-//
-//                                                        final PaymentResultDialog dialog = PaymentResultDialog.newInstance(paymentResult);
-//                                                        dialog.setListener(new View.OnClickListener() {
-//                                                            @Override
-//                                                            public void onClick(View v) {
-//
-//                                                                RaadApp.cards = null;
-//                                                                dialog.dismiss();
-//                                                            }
-//                                                        });
-//                                                        dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
-//                                                    }
-//
-//                                                }
-//
-//                                                @Override
-//                                                public void onFailure(Call<PaymentResult> call, Throwable t) {
-//                                                    DialogMaker.disMissDialog();
-//                                                }
-//                                            });
-//                                        }
-//
-//                                        @Override
-//                                        public void onFailure(Call<PaymentAuth> call, Throwable t) {
-//                                            DialogMaker.disMissDialog();
-//
-//                                            Toast.makeText(context, "initPay failed", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    });
-//                                }
-//
                                 @Override
                                 public void onFailure(Call<ArrayList<Card>> call, Throwable t) {
-                                    DialogMaker.disMissDialog();
-                                    PaymentFragment.this.dismiss();
-                                    HelperError.showSnackMessage("PayGear is unavailable", false);
+                                    if (progressDialog != null) progressDialog.dismiss();
+                                    fragmentActivity.onBackPressed();
+                                    HelperError.showSnackMessage(getResources().getString(R.string.PayGear_unavailable), false);
                                 }
                             });
-
 
                         }
                     });
                 } else {
+                    if (progressDialog != null) progressDialog.dismiss();
 //                        new RequestWalletPaymentInit().walletPaymentInit();
                 }
             case EventManager.ON_PAYMENT_RESULT_RECIEVED:
+
+                if (progressDialog != null) progressDialog.dismiss();
                 int response = (int) message[0];
                 switch (response) {
                     case socketMessages.PaymentResultRecievedSuccess:
                         new android.os.Handler(getContext().getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                dismiss();
-                                HelperError.showSnackMessage("پرداخت موفقیت آمیز بود اطلاعات بیشتر در قسمت تاریخچه کیف پول", false);
+                                fragmentActivity.onBackPressed();
+                                HelperError.showSnackMessage(getResources().getString(R.string.result_4), false);
                             }
                         });
 
@@ -356,8 +268,8 @@ public class PaymentFragment extends DialogFragment implements EventListener {
                         new android.os.Handler(getContext().getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                dismiss();
-                                HelperError.showSnackMessage("پرداخت ناموفق بود", false);
+                                fragmentActivity.onBackPressed();
+                                HelperError.showSnackMessage(getResources().getString(R.string.not_success_2), false);
                             }
                         });
                         break;
@@ -366,36 +278,42 @@ public class PaymentFragment extends DialogFragment implements EventListener {
                         new android.os.Handler(getContext().getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                dismiss();
-                                HelperError.showSnackMessage("نتیجه پرداخت مشخص نیست به تاریخجه کیف پول مراجع یا با پشتیبانی تماس بگیرید", false);
+                                fragmentActivity.onBackPressed();
+                                HelperError.showSnackMessage(getResources().getString(R.string.result_3), false);
 
                             }
                         });
                         break;
                 }
+
+            case EventManager.ON_INIT_PAY_ERROR:
+                if (progressDialog != null) progressDialog.dismiss();
+                break;
         }
         // backthread
 
     }
 
     private void startPay(PaymentAuth paymentAuth, String pin) {
+
         String cardDataRSA = getCardDataRSA(paymentAuth, selectedCard, pin, null);
         Map<String, String> finalInfoMap = new HashMap<>();
         finalInfoMap.put("token", paymentAuth.token);
         finalInfoMap.put("card_info", cardDataRSA);
-        DialogMaker.makeDialog(getContext()).showDialog();
+//        DialogMaker.makeDialog(getContext()).showDialog();
+        showProgress();
         Web.getInstance().getWebService().pay(PostRequest.getRequestBody(finalInfoMap)).enqueue(new Callback<PaymentResult>() {
             @Override
             public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
 
-                DialogMaker.disMissDialog();
+                if (progressDialog != null) progressDialog.dismiss();
+//                DialogMaker.disMissDialog();
                 if (response.errorBody() == null && response.body() != null) {
                     PaymentResult paymentResult = response.body();
                     final PaymentResultDialog dialog = PaymentResultDialog.newInstance(paymentResult);
                     dialog.setListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
                             RaadApp.cards = null;
                             dialog.dismiss();
                             fragmentActivity.onBackPressed();
@@ -408,7 +326,8 @@ public class PaymentFragment extends DialogFragment implements EventListener {
 
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
-                DialogMaker.disMissDialog();
+//                DialogMaker.disMissDialog();
+                if (progressDialog != null) progressDialog.dismiss();
             }
         });
 
@@ -443,30 +362,257 @@ public class PaymentFragment extends DialogFragment implements EventListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("CCCCCCCCCC", "onActivityResult: " + requestCode);
-
         switch (requestCode) {
 
             case 66:
                 if (resultCode == RESULT_OK) {
                     PaymentResult paymentResult = (PaymentResult) data.getSerializableExtra("result");
                     if (paymentResult != null) {
-                        HelperError.showSnackMessage("trace number:" + String.valueOf(paymentResult.traceNumber) + "amount :" + String.valueOf(paymentResult.amount), false);
+                        HelperError.showSnackMessage(getResources().getString(R.string.trace_number) + String.valueOf(paymentResult.traceNumber) + getResources().getString(R.string.amount_2) + String.valueOf(paymentResult.amount), false);
                         EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedSuccess);
                     } else {
-                        HelperError.showSnackMessage("ناموفق", false);
+                        HelperError.showSnackMessage(getResources().getString(R.string.not_success), false);
                         EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultRecievedFailed);
 
                     }
                 } else {
 
-                    HelperError.showSnackMessage("payment is canceled", false);
+                    HelperError.showSnackMessage(getResources().getString(R.string.payment_canceled), false);
                     EventManager.getInstance().postEvent(EventManager.ON_PAYMENT_RESULT_RECIEVED, socketMessages.PaymentResultNotRecieved);
                 }
                 break;
         }
 
+    }
 
+    public void setNewPassword() {
+
+        final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
+        layoutNickname.setOrientation(LinearLayout.VERTICAL);
+
+        final View viewFirstName = new View(G.fragmentActivity);
+        viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+        TextInputLayout inputFirstName = new TextInputLayout(G.fragmentActivity);
+        final EmojiEditTextE newPassWord = new EmojiEditTextE(G.fragmentActivity);
+        newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
+        newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        newPassWord.setTypeface(G.typeface_IRANSansMobile);
+        newPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
+        newPassWord.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
+        newPassWord.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
+        newPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        newPassWord.setPadding(0, 8, 0, 8);
+        newPassWord.setSingleLine(true);
+        inputFirstName.addView(newPassWord);
+        inputFirstName.addView(viewFirstName, viewParams);
+        final View viewLastName = new View(G.fragmentActivity);
+        viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            newPassWord.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
+        }
+
+        TextInputLayout inputLastName = new TextInputLayout(G.fragmentActivity);
+        final EmojiEditTextE confirmPassWord = new EmojiEditTextE(G.fragmentActivity);
+        confirmPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_re_enter_your_password));
+        confirmPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        confirmPassWord.setTypeface(G.typeface_IRANSansMobile);
+        confirmPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
+        confirmPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        confirmPassWord.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
+        confirmPassWord.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
+        confirmPassWord.setPadding(0, 8, 0, 8);
+        confirmPassWord.setSingleLine(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            confirmPassWord.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
+        }
+        inputLastName.addView(confirmPassWord);
+        inputLastName.addView(viewLastName, viewParams);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, 0, 0, 15);
+        LinearLayout.LayoutParams lastNameLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lastNameLayoutParams.setMargins(0, 15, 0, 10);
+
+        layoutNickname.addView(inputFirstName, layoutParams);
+        layoutNickname.addView(inputLastName, lastNameLayoutParams);
+
+        final MaterialDialog dialog =
+                new MaterialDialog.Builder(G.fragmentActivity)
+                        .title(G.fragmentActivity.getResources().getString(R.string.please_set_password))
+                        .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).customView(layoutNickname, true)
+                        .widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+
+        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+
+        newPassWord.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    viewFirstName.setBackgroundColor(Color.parseColor(G.appBarColor));
+                } else {
+                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+                }
+            }
+        });
+
+        confirmPassWord.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    viewLastName.setBackgroundColor(Color.parseColor(G.appBarColor));
+                } else {
+                    viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+                }
+            }
+        });
+
+        positive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startSavePin(newPassWord.getText().toString(), confirmPassWord.getText().toString());
+                dialog.dismiss();
+
+            }
+        });
+
+        dialog.show();
+    }
+
+    /**
+     * set new password for wallet
+     *
+     * @param newPassword
+     * @param confirmPassword
+     */
+
+    private void startSavePin(String newPassword, String confirmPassword) {
+        String[] data = new String[]{newPassword,
+                confirmPassword,};
+        if ((RaadApp.paygearCard.isProtected && TextUtils.isEmpty(data[0])) || TextUtils.isEmpty(data[1])) {
+            HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password), true);
+            return;
+        }
+
+        if (!data[0].equals(data[1])) {
+            HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.Password_dose_not_match), true);
+            return;
+        }
+
+        Map<String, String> map = new HashMap<>();
+        if (RaadApp.paygearCard.isProtected)
+            map.put("old_password", data[0]);
+        map.put("new_password", data[1]);
+
+        Web.getInstance().getWebService().setCreditCardPin(RaadApp.paygearCard.token, PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Boolean success = Web.checkResponse(PaymentFragment.this, call, response);
+                if (success == null)
+                    return;
+
+                if (success) {
+                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.card_pin_saved), false);
+                    RaadApp.paygearCard.isProtected = true;
+                    fragmentActivity.onBackPressed();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                if (Web.checkFailureResponse(PaymentFragment.this, call, t)) {
+                }
+            }
+        });
+    }
+
+
+    /**
+     * confirm password
+     */
+
+    public void setConfirmPassword(final PaymentAuth paymentAuth) {
+
+        final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
+        layoutNickname.setOrientation(LinearLayout.VERTICAL);
+
+        final View viewFirstName = new View(G.fragmentActivity);
+        viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+        LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+
+        TextInputLayout inputFirstName = new TextInputLayout(G.fragmentActivity);
+        final EmojiEditTextE newPassWord = new EmojiEditTextE(G.fragmentActivity);
+        newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
+        newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        newPassWord.setTypeface(G.typeface_IRANSansMobile);
+        newPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
+        newPassWord.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
+        newPassWord.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
+        newPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        newPassWord.setPadding(0, 8, 0, 8);
+        newPassWord.setSingleLine(true);
+        inputFirstName.addView(newPassWord);
+        inputFirstName.addView(viewFirstName, viewParams);
+        final View viewLastName = new View(G.fragmentActivity);
+        viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            newPassWord.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
+        }
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, 0, 0, 15);
+        LinearLayout.LayoutParams lastNameLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lastNameLayoutParams.setMargins(0, 15, 0, 10);
+
+        layoutNickname.addView(inputFirstName, layoutParams);
+
+        final MaterialDialog dialog =
+                new MaterialDialog.Builder(G.fragmentActivity)
+                        .title(G.fragmentActivity.getResources().getString(R.string.your_password))
+                        .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).customView(layoutNickname, true)
+                        .widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
+
+        final View positive = dialog.getActionButton(DialogAction.POSITIVE);
+
+        newPassWord.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    viewFirstName.setBackgroundColor(Color.parseColor(G.appBarColor));
+                } else {
+                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+                }
+            }
+        });
+
+
+        positive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!TextUtils.isEmpty(newPassWord.getText().toString().trim())) {
+                    startPay(paymentAuth, newPassWord.getText().toString());
+                    dialog.dismiss();
+                } else {
+                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password), true);
+                }
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void showProgress() {
+        progressDialog = new MaterialDialog.Builder(fragmentActivity)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .cancelable(false)
+                .canceledOnTouchOutside(false)
+                .autoDismiss(false)
+                .build();
+
+        progressDialog.show();
     }
 
 }

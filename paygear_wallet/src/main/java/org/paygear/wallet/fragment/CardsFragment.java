@@ -116,13 +116,20 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
 
 //        appBar.setToolBarColorRes();
 
-
-
         if (mPayment != null) {
             appBar.showBack();
             appBar.setTitle(getString(R.string.select_card));
         } else {
             setAppBar();
+            appBar.addRightButton(R.drawable.ic_action_settings, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() instanceof NavigationBarActivity) {
+                        ((NavigationBarActivity) getActivity()).replaceFragment(
+                                new SetCardPinFragment(), "SetCardPinFragment", true);
+                    }
+                }
+            });
         }
 
         mRefreshLayout = view.findViewById(R.id.refresh_layout);
@@ -144,7 +151,6 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
             }
         });
 
-        updateAppBar();
         mCards = RaadApp.cards;
         if (mCards != null) {
             setAdapter();
@@ -205,6 +211,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         //appBarTitle.setGravity(Gravity.CENTER);
         appBarTitle.setTextColor(Color.WHITE);
+        appBarTitle.setText(getResources().getString(R.string.wallet));
         appBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
         appBarTitle.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
         titleLayout.addView(appBarTitle);
@@ -212,11 +219,10 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         titleLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //((NavigationBarActivity) getActivity()).pushFullFragment(
-                //        new EditProfileFragment(), "EditProfileFragment");
+//                ((NavigationBarActivity) getActivity()).pushFullFragment(
+//                        new EditProfileFragment(), "EditProfileFragment");
             }
         });
-
     }
 
     private void load() {
@@ -343,46 +349,6 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
 
     }
 
-    private void loadMyAccount() {
-        Web.getInstance().getWebService().getAccountInfo(Auth.getCurrentAuth().getId(), 1).enqueue(new Callback<Account>() {
-            @Override
-            public void onResponse(Call<Account> call, Response<Account> response) {
-                Boolean success = Web.checkResponse(CardsFragment.this, call, response);
-                if (success == null)
-                    return;
-
-                if (success) {
-                    RaadApp.me = response.body();
-                    updateAppBar();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Account> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void updateAppBar() {
-        if (RaadApp.me == null || mPayment != null)
-            return;
-
-        Account me = RaadApp.me;
-        if (!TextUtils.isEmpty(me.name)) {
-            appBarTitle.setText(me.name);
-        } else {
-            appBarTitle.setText(R.string.paygear_user);
-        }
-        Picasso.with(getContext())
-                .load(RaadCommonUtils.getImageUrl(me.profilePicture))
-                .transform(new CircleImageTransform())
-                .error(R.drawable.profile_white_back)
-                .placeholder(R.drawable.profile_white_back)
-                .fit()
-                .into(appBarImage);
-    }
-
     private void setAdapter() {
         cardsLayout.removeAllViews();
         viewItems = new ArrayList<>();
@@ -420,7 +386,6 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
         }
-        ImageView logo = view.findViewById(R.id.paygear_image);
         TextView balanceTitle = view.findViewById(R.id.balance_title);
         ImageView history = view.findViewById(R.id.history);
 
@@ -441,17 +406,20 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, unit, cashableTitle, cashableBalance, giftTitle, giftBalance);
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, balanceTitle, balance, cashout, charge);
 
-        ViewCompat.setBackground(logo, RaadCommonUtils.getRectShape(getContext(), R.color.add_card_plus_back, 20, 0));
-        logo.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
+//        ViewCompat.setBackground(logo, RaadCommonUtils.getRectShape(getContext(), R.color.add_card_plus_back, 20, 0));
+//        logo.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
 
         Drawable mDrawable = getResources().getDrawable(R.drawable.button_blue_selector_24dp);
         mDrawable.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
 
-        Drawable mDrawable_charge = getResources().getDrawable(R.drawable.button_green_selector_24dp);
-        mDrawable_charge.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+//        Drawable mDrawable_charge = getResources().getDrawable(R.drawable.button_green_selector_24dp);
+//        mDrawable_charge.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
 
-        view.findViewById(R.id.charge_layout).setBackgroundResource(R.drawable.button_green_selector_24dp);
-        view.findViewById(R.id.cashout_layout).setBackgroundResource(R.drawable.button_blue_selector_24dp);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            view.findViewById(R.id.cashout_layout).setBackground(mDrawable);
+            view.findViewById(R.id.charge_layout).setBackground(mDrawable);
+        }
 
 
         history.setOnClickListener(new View.OnClickListener() {

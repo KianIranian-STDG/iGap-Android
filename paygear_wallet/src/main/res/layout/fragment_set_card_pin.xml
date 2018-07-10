@@ -13,7 +13,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="0dp"
+      app:cardCornerRadius="1dp"
         app:cardPreventCornerOverlap="false"
         app:cardMaxElevation="0dp"
         app:cardElevation="@dimen/app_bar_card_view_elevation"

@@ -101,7 +101,7 @@
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:padding="@dimen/dp8"
-          android:text="@string/igap_cash_usd"
+          android:text="@string/md_payment"
           android:textAppearance="@style/TextIconAppearance.all"
           android:textSize="@dimen/dp20" />
 

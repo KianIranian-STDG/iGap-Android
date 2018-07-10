@@ -35,13 +35,13 @@ public class WalletPaymentInitResponse extends MessageHandler {
         ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder builder = (ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder) message;
         builder.getToken();
         builder.getPublicKey();
-
         EventManager.getInstance().postEvent(EventManager.ON_INIT_PAY, builder);
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        EventManager.getInstance().postEvent(EventManager.ON_INIT_PAY, null);
     }
 
     @Override

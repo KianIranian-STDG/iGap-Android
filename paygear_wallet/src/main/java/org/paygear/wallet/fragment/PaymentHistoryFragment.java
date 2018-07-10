@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -188,8 +189,8 @@ public class PaymentHistoryFragment extends Fragment {
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
             LinearLayout root = new LinearLayout(getContext());
-            root.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            root.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
+            root.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             root.setOrientation(LinearLayout.VERTICAL);
 
             OrderView orderView = new OrderView(getContext());
@@ -248,16 +249,16 @@ public class PaymentHistoryFragment extends Fragment {
                 orderView = view.findViewWithTag("OrderView");
                 progress = view.findViewWithTag("Progress");
 
-                orderView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (getActivity() instanceof NavigationBarActivity) {
-                            Order order = orderList.items.get(getAdapterPosition());
-                            ((NavigationBarActivity) getActivity()).replaceFullFragment(
-                                    OrderInfoFragment.newInstance(order.id), "OrderInfoFragment", true);
-                        }
-                    }
-                });
+//                orderView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        if (getActivity() instanceof NavigationBarActivity) {
+//                            Order order = orderList.items.get(getAdapterPosition());
+//                            ((NavigationBarActivity) getActivity()).replaceFullFragment(
+//                                    OrderInfoFragment.newInstance(order.id), "OrderInfoFragment", true);
+//                        }
+//                    }
+//                });
             }
         }
 

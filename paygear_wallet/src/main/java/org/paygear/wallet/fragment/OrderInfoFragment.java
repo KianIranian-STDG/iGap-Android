@@ -83,7 +83,6 @@ public class OrderInfoFragment extends Fragment {
         mOrderView = view.findViewById(R.id.order_view);
 
         mList = view.findViewById(R.id.list);
-        mList.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
         progress = view.findViewById(R.id.progress);
         progress.setOnRetryButtonListener(new View.OnClickListener() {
             @Override

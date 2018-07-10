@@ -1287,4 +1287,17 @@
   <string name="pay">pay</string>
   <string name="transfer_to_dialog">Transfer to :</string>
   <string name="am_money">money</string>
+
+
+  <string name="trace_number">Trace Number</string>
+  <string name="amount_2">amount :</string>
+  <string name="not_success">ناموفق</string>
+  <string name="not_success_2">"پرداخت ناموفق بود"</string>
+  <string name="payment_canceled">payment is canceled</string>
+  <string name="PayGear_unavailable">PayGear is unavailable</string>
+
+  <string name="result_3">نتیجه پرداخت مشخص نیست به تاریخجه کیف پول مراجع یا با پشتیبانی تماس بگیرید</string>
+  <string name="result_4">پرداخت موفقیت آمیز بود اطلاعات بیشتر در قسمت تاریخچه کیف پول</string>
+
+
 </resources>

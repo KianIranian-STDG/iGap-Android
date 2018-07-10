@@ -5,14 +5,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/fragment_back"
+  android:background="@color/disabled_text_light"
     android:clickable="true"
     tools:context=".fragment.PaymentHistoryFragment">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="0dp"
+      app:cardCornerRadius="1dp"
         app:cardPreventCornerOverlap="false"
         app:cardMaxElevation="0dp"
         app:cardElevation="@dimen/app_bar_card_view_elevation"

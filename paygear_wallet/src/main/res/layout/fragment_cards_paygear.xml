@@ -16,13 +16,6 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
-        <ImageView
-            android:id="@+id/paygear_image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_action_rial"
-            android:padding="8dp"/>
-
         <TextView
             android:id="@+id/balance_title"
             android:layout_weight="1"
@@ -31,7 +24,6 @@
             android:textColor="#de000000"
             android:textSize="22sp"
             android:text="@string/paygear_balance"
-            android:paddingLeft="8dp"
             android:paddingRight="8dp"/>
 
         <ImageView
@@ -161,7 +153,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
-                android:drawableRight="@drawable/ic_wallet_in"
                 android:drawablePadding="4dp"
                 android:textSize="16sp"
                 android:textColor="@android:color/white"
@@ -181,7 +172,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
-                android:drawableRight="@drawable/ic_wallet_out"
                 android:drawablePadding="4dp"
                 android:textSize="16sp"
                 android:textColor="@android:color/white"

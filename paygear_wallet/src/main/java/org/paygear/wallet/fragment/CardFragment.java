@@ -178,8 +178,9 @@ public class CardFragment extends Fragment {
 
         } else {
             button.setText(R.string.delete_card);
-            ViewCompat.setBackground(button, RaadCommonUtils.getSelector(getContext(),
-                    R.color.remove_card_button_normal, R.color.remove_card_button_selected, 0, 24, 0));
+            button.setBackgroundColor(Color.parseColor(WalletActivity.primaryColor));
+            button.setTextColor(Color.WHITE);
+//            ViewCompat.setBackground(button, RaadCommonUtils.getSelector(getContext(), R.color.remove_card_button_normal, R.color.remove_card_button_selected, 0, 24, 0));
             defaultCardSwitch.setChecked(mCard.isDefault);
             defaultCardSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

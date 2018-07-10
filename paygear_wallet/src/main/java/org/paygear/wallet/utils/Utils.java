@@ -66,15 +66,15 @@ public class Utils {
     public static void setLocale(Context context, String lan) {
         Raad.language = lan;
         Raad.isFA = lan.toLowerCase().equals("fa");
-        Resources res = context.getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        android.content.res.Configuration conf = res.getConfiguration();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            conf.setLocale(new Locale(lan.toLowerCase())); // API 17+ only.}
-        } else {
-            conf.locale = new Locale(lan.toLowerCase());
-        }
-        res.updateConfiguration(conf, dm);
+//        Resources res = context.getResources();
+//        DisplayMetrics dm = res.getDisplayMetrics();
+//        android.content.res.Configuration conf = res.getConfiguration();
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//            conf.setLocale(new Locale(lan.toLowerCase())); // API 17+ only.}
+//        } else {
+//            conf.locale = new Locale(lan.toLowerCase());
+//        }
+//        res.updateConfiguration(conf, dm);
     }
 
     public static void setShadow(View view, Drawable sd) {

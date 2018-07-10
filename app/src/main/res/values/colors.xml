@@ -149,5 +149,5 @@
   <color name="backgroundColorCall">#00B0BF</color>
   <color name="backgroundColorCall2">#0098cc</color>
   <color name="colorEditImageBlack">#87000000</color>
-
+  <color name="background_payment">#b7000000</color>
 </resources>

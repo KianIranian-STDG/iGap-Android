@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -31,7 +32,6 @@ import static ir.radsense.raadcore.utils.RaadCommonUtils.getPx;
 
 public class OrderView extends LinearLayout {
 
-    public ImageView image;
     public TextView title;
     public TextView subtitle;
     public TextView date;
@@ -61,25 +61,6 @@ public class OrderView extends LinearLayout {
         int dp10 = getPx(10, context);
         int dp8 = getPx(8, context);
         setPadding(dp10, dp10, dp10, dp10);
-
-        FrameLayout imageFrame = new FrameLayout(context);
-        int dp65 = RaadCommonUtils.getPx(65, context);
-        LayoutParams imageFrameParams = new LayoutParams(dp65, dp65);
-        imageFrameParams.gravity = Gravity.CENTER_VERTICAL;
-        imageFrame.setLayoutParams(imageFrameParams);
-        addView(imageFrame);
-
-        image = new ImageView(context);
-        image.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        imageFrame.addView(image);
-
-        View borderView = new View(context);
-        borderView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        borderView.setBackgroundResource(R.drawable.image_border);
-        imageFrame.addView(borderView);
-
 
         LinearLayout textsLayout = new LinearLayout(context);
         LayoutParams textsLayoutParams = new LayoutParams(
@@ -147,7 +128,6 @@ public class OrderView extends LinearLayout {
                 title.setCompoundDrawablesWithIntrinsicBounds(0, 0,
                         order.isPaid ? R.drawable.ic_payment_out : R.drawable.ic_payment_pending, 0);
                 subtitle.setText(R.string.paygear_card);
-                imgRes = R.drawable.paygear_logo;
                 price.setTextColor(ContextCompat.getColor(getContext(), order.isPaid ? R.color.primary_text : R.color.disabled_text));
             } else if (order.orderType == Order.ORDER_TYPE_CHARGE_CREDIT
                     && order.receiver.id.equals(Auth.getCurrentAuth().getId())) {
@@ -155,7 +135,6 @@ public class OrderView extends LinearLayout {
                 title.setText(R.string.charge_wallet);
                 title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 subtitle.setText(R.string.paygear_card);
-                imgRes = R.drawable.paygear_logo;
                 price.setTextColor(ContextCompat.getColor(getContext(), R.color.primary_text));
             } else {
                 if (order.transactionType == Order.TRANSACTION_TYPE_DIRECT_CARD) {
@@ -174,9 +153,9 @@ public class OrderView extends LinearLayout {
                 }
 
                 title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_out, 0);
-                subtitle.setText(order.receiver.getName());
-                img = order.receiver.profilePicture;
+                subtitle.setText(order.receiver.name);
                 price.setTextColor(ContextCompat.getColor(getContext(), R.color.primary_text));
+
             }
         } else { //daryafti
             if (order.sender != null) {
@@ -206,23 +185,8 @@ public class OrderView extends LinearLayout {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(order.createdMicroTime);
         date.setText(RaadCommonUtils.getLocaleFullDateTime(calendar));
-
-
         price.setText(RaadCommonUtils.formatPrice(order.amount, true, "\n"));
 
-        if (imgRes > 0) {
-            Picasso.with(getContext())
-                    .load(imgRes)
-                    .fit()
-                    .centerCrop()
-                    .into(image);
-        } else {
-            Picasso.with(getContext())
-                    .load(RaadCommonUtils.getImageUrl(img))
-                    .fit()
-                    .centerCrop()
-                    .into(image);
-        }
 
     }
     

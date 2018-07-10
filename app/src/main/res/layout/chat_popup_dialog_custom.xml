@@ -298,7 +298,7 @@
       android:layout_height="match_parent"
       android:layout_gravity="center"
       android:gravity="center"
-      android:text="@string/igap_cash_usd"
+      android:text="@string/md_payment"
       android:textAppearance="@style/TextIconAppearance.all"
       style="?textSubColorSettingTheme"
       android:textSize="@dimen/dp18" />
