@@ -481,7 +481,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
         /**
          * to first enter to app , client first compute clientCondition then
          * getRoomList and finally send condition that before get clientCondition;
-         * in else state compute new client condition with latest messaging state
+         * in else changeState compute new client condition with latest messaging changeState
          */
         if (firstTimeEnterToApp) {
             firstTimeEnterToApp = false;

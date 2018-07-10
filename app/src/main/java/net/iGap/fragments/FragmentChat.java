@@ -744,7 +744,7 @@ public class FragmentChat extends BaseFragment
                     public void onSuccess() {
                         /**
                          * hint: should use from this method here because we need checkAction
-                         * state after set members count for avoid from hide action if exist
+                         * changeState after set members count for avoid from hide action if exist
                          */
                         checkAction();
 
@@ -1817,7 +1817,7 @@ public class FragmentChat extends BaseFragment
     }
 
     /**
-     * get settings state and change view
+     * get settings changeState and change view
      */
     private void pageSettings() {
         /**
@@ -4582,10 +4582,10 @@ public class FragmentChat extends BaseFragment
     }
 
     /**
-     * show current state for user if this room is chat
+     * show current changeState for user if this room is chat
      *
-     * @param status current state
-     * @param time   if state is not online set latest online time
+     * @param status current changeState
+     * @param time   if changeState is not online set latest online time
      */
     private void setUserStatus(final String status, final long time) {
         if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
@@ -5329,7 +5329,7 @@ public class FragmentChat extends BaseFragment
     private void insertShearedData(final ArrayList<String> pathList) {
         /**
          * run this method with delay , because client get local message with delay
-         * for show messages with async state and before run getLocalMessage this shared
+         * for show messages with async changeState and before run getLocalMessage this shared
          * item added to realm and view, and after that getLocalMessage called and new item
          * got from realm and add to view again but in this time from getLocalMessage method
          */
@@ -7634,8 +7634,8 @@ public class FragmentChat extends BaseFragment
     private long gapMessageIdDown; // messageId that maybe lost in local
     private long reachMessageIdUp; // messageId that will be checked after getHistory for detect reached to that or no
     private long reachMessageIdDown; // messageId that will be checked after getHistory for detect reached to that or no
-    private long startFutureMessageIdUp; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
-    private long startFutureMessageIdDown; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
+    private long startFutureMessageIdUp; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this changeState messageId for get history won't be detected.
+    private long startFutureMessageIdDown; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this changeState messageId for get history won't be detected.
     private long progressIdentifierUp = 0; // store identifier for Up progress item and use it if progress not removed from view after check 'instanceOf' in 'progressItem' method
     private long progressIdentifierDown = 0; // store identifier for Down progress item and use it if progress not removed from view after check 'instanceOf' in 'progressItem' method
     private int firstVisiblePosition; // difference between start of adapter item and items that Showing.
@@ -7645,7 +7645,7 @@ public class FragmentChat extends BaseFragment
     private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
 
     /**
-     * manage save state , unread message , load from local or need get message from server and finally load message
+     * manage save changeState , unread message , load from local or need get message from server and finally load message
      */
     private void getMessages() {
         //+Realm realm = Realm.getDefaultInstance();
@@ -7711,7 +7711,7 @@ public class FragmentChat extends BaseFragment
         if (direction == DOWN) {
             resultsUp = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().sort(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
-             * if for UP state client have message detect gap otherwise try for get online message
+             * if for UP changeState client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
              */
             if (resultsUp.size() > 1) {
@@ -7783,7 +7783,7 @@ public class FragmentChat extends BaseFragment
         } else {
             /** send request to server for get message.
              * if direction is DOWN check again realmRoomMessage for detection
-             * that exist any message without checking deleted state and if
+             * that exist any message without checking deleted changeState and if
              * exist use from that messageId instead of zero for getOnlineMessage
              */
             long oldMessageId = 0;
@@ -7929,7 +7929,7 @@ public class FragmentChat extends BaseFragment
         } else if (gapMessageId > 0) {
             /**
              * detect old messageId that should get history from server with that
-             * (( hint : in scroll state never should get online message with messageId = 0
+             * (( hint : in scroll changeState never should get online message with messageId = 0
              * in some cases maybe startFutureMessageIdUp Equal to zero , so i used from this if.))
              */
             if (startFutureMessageId != 0) {
@@ -8034,7 +8034,7 @@ public class FragmentChat extends BaseFragment
                         gapDetection(realmRoomMessages, direction);
                     } else if ((direction == UP && isReachedToTopView()) || direction == DOWN && isReachedToBottomView()) {
                         /**
-                         * check this state because if user is near to top view and not scroll get top message from server
+                         * check this changeState because if user is near to top view and not scroll get top message from server
                          */
                         //getOnlineMessage(startFutureMessageId, directionEnum);
                     }
@@ -8182,7 +8182,7 @@ public class FragmentChat extends BaseFragment
     }
 
     /**
-     * check that this room has saved state or no
+     * check that this room has saved changeState or no
      */
     private boolean hasSavedState() {
         return savedScrollMessageId > 0;
@@ -8196,9 +8196,9 @@ public class FragmentChat extends BaseFragment
     }
 
     /**
-     * manage progress state in adapter
+     * manage progress changeState in adapter
      *
-     * @param progressState SHOW or HIDE state detect with enum
+     * @param progressState SHOW or HIDE changeState detect with enum
      * @param direction     define direction for show progress in UP or DOWN
      */
     private void progressItem(final ProgressState progressState, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
