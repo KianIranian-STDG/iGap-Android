@@ -179,8 +179,6 @@ public class FragmentPaymentInquiryViewModel {
                     new RequestBillInquiryMci().billInquiryMci(Long.parseLong(phoneMci));
 
                     observeProgress.set(View.VISIBLE);
-                    fragmentPaymentInquiryBinding.fpiEdtMci.setText("");
-
 
                 } else {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
@@ -216,8 +214,6 @@ public class FragmentPaymentInquiryViewModel {
 
                     new RequestBillInquiryTelecom().billInquiryTelecom(Integer.parseInt(phoneTelecomArea), Integer.parseInt(phoneTelecom));
                     observeProgress.set(View.VISIBLE);
-                    fragmentPaymentInquiryBinding.fpiEdtTelecom.setText("");
-                    fragmentPaymentInquiryBinding.fpiEdtTelecomArea.setText("");
                 } else {
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                 }

@@ -140,6 +140,9 @@
   <string name="md_deskphone">\uf1c3</string>
   <string name="md_beaker">\uf68f</string>
   <string name="md_cell_phone">\uf121</string>
+  <string name="md_currency_usd">\uf1b3</string>
+  <string name="md_format_list_bulleted">\uf279</string>
+  <string name="md_dialpad">\uf61c</string>
 
 
 

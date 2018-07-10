@@ -9,14 +9,17 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
+import android.content.Context;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import net.iGap.G;
@@ -26,7 +29,9 @@ import net.iGap.helper.HelperError;
 import net.iGap.proto.ProtoMplGetTopupToken;
 import net.iGap.request.RequestMplGetTopupToken;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class FragmentPaymentChargeViewModel {
@@ -74,6 +79,9 @@ public class FragmentPaymentChargeViewModel {
     public ObservableInt observeTarabord = new ObservableInt(View.GONE);
     public ObservableField<Drawable> observeBackGround = new ObservableField<>();
 
+    public ObservableInt observeChargeTypeHint = new ObservableInt(View.VISIBLE);
+    public ObservableInt observePriceHint = new ObservableInt(View.VISIBLE);
+
 
     public FragmentPaymentChargeViewModel(FragmentPaymentChargeBinding fragmentPaymentChargeBinding) {
         this.fragmentPaymentChargeBinding = fragmentPaymentChargeBinding;
@@ -81,6 +89,7 @@ public class FragmentPaymentChargeViewModel {
         Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green);
         myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
         observeBackGround.set(myIcon);
+        setAdapterOperatorType();
     }
 
 
@@ -113,6 +122,8 @@ public class FragmentPaymentChargeViewModel {
                 operatorType = null;
                 fragmentPaymentChargeBinding.fpcSpinnerChargeType.setAdapter(null);
                 fragmentPaymentChargeBinding.fpcSpinnerPrice.setAdapter(null);
+                observeChargeTypeHint.set(View.VISIBLE);
+                observePriceHint.set(View.VISIBLE);
                 break;
             case 1:
                 setAdapterValue(OperatorType.HAMRAH_AVAL);
@@ -161,17 +172,26 @@ public class FragmentPaymentChargeViewModel {
     }
 
     private void onOpereatorChange(int arrayId) {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(G.context, arrayId, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(G.context, arrayId, R.layout.spinner_item_custom);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fragmentPaymentChargeBinding.fpcSpinnerChargeType.setAdapter(adapter);
         fragmentPaymentChargeBinding.fpcSpinnerChargeType.setSelection(0);
+        observeChargeTypeHint.set(View.GONE);
     }
 
     private void onPriceChange(int arrayId) {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(G.context, arrayId, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(G.context, arrayId, R.layout.spinner_item_custom);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fragmentPaymentChargeBinding.fpcSpinnerPrice.setAdapter(adapter);
         fragmentPaymentChargeBinding.fpcSpinnerPrice.setSelection(0);
+        observePriceHint.set(View.GONE);
+    }
+
+    private void setAdapterOperatorType() {
+        MySpinnerAdapter adapter = new MySpinnerAdapter(G.context, R.layout.spinner_item_custom, Arrays.asList(G.context.getResources().getTextArray(R.array.phone_operator)));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        fragmentPaymentChargeBinding.fpcSpinnerOperator.setAdapter(adapter);
+        fragmentPaymentChargeBinding.fpcSpinnerOperator.setSelection(0);
     }
 
 
@@ -269,6 +289,36 @@ public class FragmentPaymentChargeViewModel {
 
         fragmentPaymentChargeBinding.getBackHandler().onBack();
 
+    }
+
+
+    private static class MySpinnerAdapter extends ArrayAdapter<CharSequence> {
+
+        private MySpinnerAdapter(Context context, int resource, List<CharSequence> items) {
+            super(context, resource, items);
+        }
+
+        // Affects default (closed) state of the spinner
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView view = (TextView) super.getView(position, convertView, parent);
+            view.setTypeface(G.typeface_IRANSansMobile);
+
+            if (position == 0) {
+                view.setTextColor(G.context.getResources().getColor(R.color.gray));
+            }
+
+            return view;
+        }
+
+        // Affects opened state of the spinner
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            TextView view = (TextView) super.getDropDownView(position, convertView, parent);
+            view.setTypeface(G.typeface_IRANSansMobile);
+            view.setTextColor(G.context.getResources().getColor(R.color.gray_4c));
+            return view;
+        }
     }
 
 }

@@ -9,6 +9,8 @@
 
     <import type="android.graphics.Color" />
 
+    <import type="android.view.View" />
+
     <import type="net.iGap.G" />
 
     <variable
@@ -97,40 +99,42 @@
           android:layout_width="@dimen/dp68"
           android:layout_height="@dimen/dp68"
           android:layout_gravity="center"
-          android:layout_margin="@dimen/dp20"
-          android:visibility="@{fragmentPaymentBillViewModel.observeImagePolice}"
+          android:layout_marginBottom="@dimen/dp20"
+          android:visibility="@{fragmentPaymentBillViewModel.observePolice? View.VISIBLE : View.GONE}"
           app:srcCompat="@mipmap/trafic_police" />
 
         <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="@dimen/dp60"
+          android:gravity="center"
           android:orientation="horizontal">
 
-          <TextView
-            fontPath="fonts/IRANSansMobile.ttf"
-            android:layout_width="@dimen/dp110"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:minHeight="@dimen/dp44"
-            android:text="@string/billing_id"
-            android:textColor="@{Color.parseColor(G.headerTextColor)}"
-            android:textSize="@dimen/dp16" />
+          <net.iGap.module.MaterialDesignTextView
+            style="?iconColorMenuTheme"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_format_list_bulleted"
+            android:textAppearance="@style/TextIconAppearance.menu"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textSize="@dimen/dp22"
+            android:textStyle="bold" />
 
           <EditText
             android:id="@+id/fpb_edt_bill_id"
-            android:textDirection="ltr"
             style="?hintColorSettingTheme"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp44"
             android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:gravity="start"
-            android:hint="@string/enter"
+            android:background="@drawable/oval_gray"
+            android:hint="@string/billing_id"
             android:inputType="number"
             android:maxLength="13"
             android:maxLines="1"
             android:minHeight="@dimen/dp44"
             android:onTextChanged="@{fragmentPaymentBillViewModel::onTextChangedBillId}"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
             android:textSize="@dimen/dp16">
 
             <requestFocus />
@@ -142,33 +146,36 @@
 
         <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="@dimen/dp60"
+          android:gravity="center"
           android:orientation="horizontal">
 
-          <TextView
-            fontPath="fonts/IRANSansMobile.ttf"
-            android:layout_width="@dimen/dp110"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:minHeight="@dimen/dp44"
-            android:text="@string/payment_code"
-            android:textColor="@{Color.parseColor(G.headerTextColor)}"
-            android:textSize="@dimen/dp16" />
+
+          <net.iGap.module.MaterialDesignTextView
+            style="?iconColorMenuTheme"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_format_list_bulleted"
+            android:textAppearance="@style/TextIconAppearance.menu"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textSize="@dimen/dp22"
+            android:textStyle="bold" />
 
           <EditText
             android:id="@+id/fpb_edt_pay_id"
             style="?hintColorSettingTheme"
-            android:textDirection="ltr"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp44"
             android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:gravity="start"
-            android:hint="@string/enter"
+            android:background="@drawable/oval_gray"
+            android:hint="@string/payment_code"
             android:inputType="number"
-            android:maxLines="1"
             android:maxLength="13"
+            android:maxLines="1"
             android:minHeight="@dimen/dp44"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
             android:textSize="@dimen/dp16" />
 
 
@@ -177,31 +184,37 @@
 
         <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="@dimen/dp60"
+          android:visibility="@{fragmentPaymentBillViewModel.observePolice? View.GONE: View.VISIBLE }"
+          android:gravity="center"
           android:orientation="horizontal">
 
-          <TextView
-            fontPath="fonts/IRANSansMobile.ttf"
-            android:layout_width="@dimen/dp110"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:minHeight="@dimen/dp44"
-            android:text="@string/amount"
-            android:textColor="@{Color.parseColor(G.headerTextColor)}" />
+          <net.iGap.module.MaterialDesignTextView
+            style="?iconColorMenuTheme"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_currency_usd"
+            android:textAppearance="@style/TextIconAppearance.menu"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textSize="@dimen/dp22"
+            android:textStyle="bold" />
+
 
           <EditText
             android:id="@+id/fpb_edt_price"
-            android:textDirection="ltr"
             style="?hintColorSettingTheme"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp44"
             android:layout_weight="1"
-            android:background="@android:color/transparent"
+            android:background="@drawable/oval_gray"
             android:enabled="false"
-            android:gravity="start"
+            android:hint="@string/amount"
             android:inputType="number"
             android:maxLines="1"
             android:minHeight="@dimen/dp44"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10"
             android:textSize="@dimen/dp16" />
 
 
@@ -215,24 +228,30 @@
           android:visibility="@{fragmentPaymentBillViewModel.observeCompany , default = gone}" />
 
         <Button
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_width="@dimen/dp180"
+          android:layout_height="@dimen/dp40"
+          android:layout_gravity="center"
           android:layout_marginTop="@dimen/dp20"
           android:background="@{fragmentPaymentBillViewModel.observeBackGround}"
           android:onClick="@{fragmentPaymentBillViewModel::onPayBillClick}"
           android:text="@string/payment"
+          android:textAllCaps="false"
           android:textColor="@color/whit_background"
-          android:textSize="@dimen/dp18" />
+          android:textSize="@dimen/dp16" />
 
         <Button
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="@dimen/dp20"
+          android:layout_width="@dimen/dp180"
+          android:layout_height="@dimen/dp40"
+          android:layout_gravity="center"
+          android:layout_marginTop="@dimen/dp8"
+          android:layout_marginBottom="@dimen/dp40"
           android:background="@{fragmentPaymentBillViewModel.observeBackGround}"
           android:onClick="@{fragmentPaymentBillViewModel::onClickBarCode}"
           android:text="@string/barcode_reader"
+          android:visibility="@{fragmentPaymentBillViewModel.observePolice? View.GONE: View.VISIBLE }"
+          android:textAllCaps="false"
           android:textColor="@color/whit_background"
-          android:textSize="@dimen/dp18" />
+          android:textSize="@dimen/dp16" />
 
       </LinearLayout>
 

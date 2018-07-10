@@ -9,6 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.graphics.Color;
@@ -39,7 +40,8 @@ public class FragmentPaymentBillViewModel {
     private FragmentPaymentBillBinding fragmentPaymentBillBinding;
     public ObservableInt observeCompany = new ObservableInt(View.GONE);
     public ObservableField<String> observeTitleToolbar = new ObservableField<>("");
-    public ObservableInt observeImagePolice = new ObservableInt(View.GONE);
+    public ObservableBoolean observePolice = new ObservableBoolean(false);
+
     public ObservableField<Drawable> observeBackGround = new ObservableField<>();
 
     private boolean isPolice = false;
@@ -52,7 +54,7 @@ public class FragmentPaymentBillViewModel {
         isPolice = resTitleId == R.string.pay_bills_crime;
 
         if (isPolice) {
-            observeImagePolice.set(View.VISIBLE);
+            observePolice.set(true);
         }
 
         Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green);
@@ -107,17 +109,36 @@ public class FragmentPaymentBillViewModel {
 
         String billId = fragmentPaymentBillBinding.fpbEdtBillId.getText().toString();
 
-        if (billId.length() != 13) {
-            Toast.makeText(G.currentActivity, R.string.biling_id_not_valid, Toast.LENGTH_SHORT).show();
-            return;
+        if (isPolice) {
+            if (billId.length() == 0) {
+                Toast.makeText(G.currentActivity, R.string.biling_id_not_valid, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+        } else {
+            if (billId.length() != 13) {
+                Toast.makeText(G.currentActivity, R.string.biling_id_not_valid, Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
+
+
 
         String payId = fragmentPaymentBillBinding.fpbEdtPayId.getText().toString();
 
-        if (payId.length() > 13 || payId.length() < 5) {
-            Toast.makeText(G.currentActivity, R.string.pay_id_is_not_valid, Toast.LENGTH_SHORT).show();
-            return;
+        if (isPolice) {
+            if (payId.length() == 0) {
+                Toast.makeText(G.currentActivity, R.string.pay_id_is_not_valid, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } else {
+            if (payId.length() > 13 || payId.length() < 5) {
+                Toast.makeText(G.currentActivity, R.string.pay_id_is_not_valid, Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
+
+
 
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
         requestMplGetBillToken.mplGetBillToken(Long.parseLong(billId), Long.parseLong(payId));
