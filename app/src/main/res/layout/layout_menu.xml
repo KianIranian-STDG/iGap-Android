@@ -85,7 +85,7 @@
               android:layout_marginStart="@dimen/dp16"
               android:gravity="center"
               android:minWidth="@dimen/dp32"
-              android:text="@string/md_igap_credit_card"
+              android:text="@string/md_twitch"
               android:textAppearance="@style/TextIconAppearance.menu"
               android:textColor="#f8f4df"
               android:textSize="@dimen/dp20"
