@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +31,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -41,6 +41,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -48,6 +49,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -64,6 +67,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
@@ -150,7 +154,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     public static RippleView btnBack;
     public static RippleView rippleMoreMap;
     public static boolean isBackPress = false;
-    public static FloatingActionButton fabGps, fabSwitcher, fabOpenMap;
+    public static FloatingActionButton fabGps, fabStateSwitcher;
     public static Location mineStaticLocation;
     public static boolean mapRegistrationStatus;
     public static int page;
@@ -452,37 +456,130 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         startMap(view);
         //clickDrawMarkActive();
 
-        fabOpenMap = (FloatingActionButton) view.findViewById(R.id.st_fab_openMap);
 
-        fabOpenMap.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
-        fabOpenMap.setColorFilter(Color.WHITE);
+        fabStateSwitcher = (FloatingActionButton) view.findViewById(R.id.st_fab_state);
 
-        fabOpenMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    Uri gmmIntentUri = Uri.parse("geo:" + location.getLatitude() + "," + location.getLongitude()
-                            + "?q=" + location.getLatitude() + "," + location.getLongitude() + "(im here)");
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivity(mapIntent);
-                } catch (Exception e) {
-                }
-                ;
+        fabStateSwitcher.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        fabStateSwitcher.setColorFilter(Color.WHITE);
 
-
-            }
-        });
-
-        fabSwitcher = (FloatingActionButton) view.findViewById(R.id.st_fab_state);
-
-        fabSwitcher.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
-        fabSwitcher.setColorFilter(Color.WHITE);
-
-        fabSwitcher.setOnClickListener(new View.OnClickListener() {
+        fabStateSwitcher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                deleteMapFileCash();
+
+                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+                View v = dialog.getCustomView();
+               /* DialogAnimation.animationUp(dialog);*/
+                dialog.getWindow().setLayout(ViewMaker.dpToPixel(220),WindowManager.LayoutParams.WRAP_CONTENT);
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int height = displayMetrics.heightPixels;
+                int width = displayMetrics.widthPixels;
+
+                WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+
+                wmlp.gravity = Gravity.TOP | Gravity.LEFT;
+
+                wmlp.x = ViewMaker.dpToPixel(118);   //x position
+                wmlp.y =  ViewMaker.dpToPixel(420) ;   //y
+
+                dialog.show();
+
+
+
+
+                ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
+                ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
+                ViewGroup root3 = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
+
+                root1.setVisibility(View.GONE);
+                root2.setVisibility(View.VISIBLE);
+                root3.setVisibility(View.VISIBLE);
+
+                TextView txtItem1 = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
+                TextView icon1 = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
+                txtItem1.setText(G.fragmentActivity.getResources().getString(R.string.satellite_view));
+                icon1.setText(G.fragmentActivity.getResources().getString(R.string.md_nearby));
+
+                TextView txtItem2 = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
+                TextView icon2 = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
+                txtItem2.setText(G.fragmentActivity.getResources().getString(R.string.default_view));
+                icon2.setText(G.fragmentActivity.getResources().getString(R.string.md_map));
+
+
+                TextView txtItem3 = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
+                TextView icon3 = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
+                txtItem3.setText(G.fragmentActivity.getResources().getString(R.string.satellite_view));
+                icon3.setText(G.fragmentActivity.getResources().getString(R.string.md_satellite_variant));
+
+                root1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        fabGps.setVisibility(View.GONE);
+                        rippleMoreMap.setVisibility(View.GONE);
+                        page = pageUserList;
+                        try {
+                            new HelperFragment(FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer_main).setReplace(false).load();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+                    }
+                });
+
+                root2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+
+                        deleteMapFileCash();
+                        if (isAdded()) {
+                            changeState = getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE)
+                                    .getBoolean("state", false);
+
+
+                            if (changeState){
+                                getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE).edit().putBoolean("state",false).apply();
+
+                                new HelperFragment(FragmentiGapMap.getInstance()).remove();
+
+                                new HelperFragment(FragmentiGapMap.getInstance()).load();
+                            }
+
+                        }
+
+                    }
+                });
+
+                root3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+
+                        dialog.dismiss();
+
+                        deleteMapFileCash();
+                        if (isAdded()) {
+                            changeState = getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE)
+                                    .getBoolean("state", false);
+
+
+                            if (!changeState){
+                                getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE).edit().putBoolean("state",true).apply();
+
+                                new HelperFragment(FragmentiGapMap.getInstance()).remove();
+
+                                new HelperFragment(FragmentiGapMap.getInstance()).load();
+                            }
+
+                        }
+                    }
+                });
+
+
+
+
+
+
 
                /* SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
                 //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
@@ -500,22 +597,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
                 startMap(view);*/
 
-                if (isAdded()) {
-                    changeState = getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE)
-                            .getBoolean("state", false);
-
-
-                if (changeState)
-                    changeState = false;
-                else
-                    changeState = true;
-
-                getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE).edit().putBoolean("state",changeState).apply();
-
-                new HelperFragment(FragmentiGapMap.getInstance()).remove();
-
-                new HelperFragment(FragmentiGapMap.getInstance()).load();
-                }
 
                 // setTile(false);
 
@@ -568,9 +649,12 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             /**
              * Compass
              */
-            CompassOverlay mCompassOverlay = new CompassOverlay(getContext(), new InternalCompassOrientationProvider(getContext()), map);
+         CompassOverlay mCompassOverlay = new CompassOverlay(getContext(), new InternalCompassOrientationProvider(getContext()), map);
+
             mCompassOverlay.enableCompass();
+
             map.getOverlays().add(mCompassOverlay);
+
 
             /**
              * Set Zoom Value
@@ -934,8 +1018,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                     if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
                         rippleMoreMap.setVisibility(View.VISIBLE);
                         fabGps.setVisibility(View.VISIBLE);
-                        fabOpenMap.setVisibility(View.VISIBLE);
-                        fabSwitcher.setVisibility(View.VISIBLE);
                     }
                     if (!isBackPress) {
                         //getActivity().getSupportFragmentManager().popBackStack();
@@ -988,8 +1070,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         public void onClick(View view) {
                             dialog.dismiss();
                             fabGps.setVisibility(View.GONE);
-                            fabOpenMap.setVisibility(View.GONE);
-                            fabSwitcher.setVisibility(View.GONE);
                             rippleMoreMap.setVisibility(View.GONE);
                             page = pageUserList;
                             try {
@@ -1428,8 +1508,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             if (mapRegistrationStatus) {
                 rootTurnOnGps.setVisibility(View.GONE);
                 fabGps.setVisibility(View.VISIBLE);
-                fabOpenMap.setVisibility(View.VISIBLE);
-                fabSwitcher.setVisibility(View.VISIBLE);
                 vgMessageGps.setVisibility(View.VISIBLE);
                 rippleMoreMap.setVisibility(View.VISIBLE);
                 GPSTracker.getGpsTrackerInstance().detectLocation();
@@ -1446,8 +1524,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     private void visibleViewAttention(String text, boolean b) {
         rootTurnOnGps.setVisibility(View.VISIBLE);
         fabGps.setVisibility(View.GONE);
-        fabOpenMap.setVisibility(View.GONE);
-        fabSwitcher.setVisibility(View.GONE);
         toggleGps.setChecked(false);
         vgMessageGps.setVisibility(View.GONE);
         rippleMoreMap.setVisibility(View.GONE);

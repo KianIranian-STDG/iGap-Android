@@ -292,7 +292,7 @@
             />
 
           <android.support.design.widget.FloatingActionButton
-              android:id="@+id/st_fab_openMap"
+              android:id="@+id/st_fab_state"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_alignParentBottom="true"
@@ -305,27 +305,11 @@
               app:fabSize="mini"
               app:layout_anchor="@+id/replace"
               app:layout_anchorGravity="top|right|end"
-              app:srcCompat="@drawable/ic_gps_open_map"
-              app:tint="@color/white" />
-
-
-
-          <android.support.design.widget.FloatingActionButton
-              android:id="@+id/st_fab_state"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_alignParentTop="true"
-              android:layout_alignStart="@+id/st_fab_gps"
-              android:layout_marginTop="71dp"
-              android:background="@android:color/holo_blue_bright"
-              android:clickable="true"
-              app:backgroundTint="@color/white"
-              app:fabSize="mini"
-
-              app:layout_anchor="@+id/replace"
-              app:layout_anchorGravity="top|right|end"
               app:srcCompat="@drawable/ic_gps_layer"
               app:tint="@color/white" />
+
+
+
 
 
         </RelativeLayout>

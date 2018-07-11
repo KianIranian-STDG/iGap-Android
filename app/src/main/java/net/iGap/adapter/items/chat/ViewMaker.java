@@ -1,5 +1,6 @@
 package net.iGap.adapter.items.chat;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -10,6 +11,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -1425,12 +1427,20 @@ public class ViewMaker {
     /**
      * ***************** Common Methods *****************
      */
-    private static int dpToPixel(int dp) {
+    public static int dpToPixel(int dp) {
         Resources r = context.getResources();
         int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
         return px;
 
         //  (2/getApplicationContext().getResources().getDisplayMetrics().density)
+    }
+
+
+    public static float pixelsToDp(float px, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return dp;
     }
 
     public static int i_Dp(int dpSrc) {
