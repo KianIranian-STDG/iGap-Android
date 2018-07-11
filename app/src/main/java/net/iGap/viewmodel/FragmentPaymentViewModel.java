@@ -48,11 +48,11 @@ public class FragmentPaymentViewModel {
     }
 
     public void onClickInquiryMci(View v) {
-        new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.mci)).setReplace(false).load();
+        new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.mci, null)).setReplace(false).load();
     }
 
     public void onClickInquiryTelecom(View v) {
-        new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.telecome)).setReplace(false).load();
+        new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.telecome, null)).setReplace(false).load();
     }
 
 }

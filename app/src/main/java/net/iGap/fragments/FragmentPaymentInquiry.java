@@ -22,10 +22,14 @@ public class FragmentPaymentInquiry extends BaseFragment {
     private FragmentPaymentInquiryBinding fragmentPaymentInquiryBinding;
 
 
-    public static FragmentPaymentInquiry newInstance(FragmentPaymentInquiryViewModel.OperatorType type) {
+    public static FragmentPaymentInquiry newInstance(FragmentPaymentInquiryViewModel.OperatorType type, String phone) {
 
         Bundle args = new Bundle();
         args.putSerializable("type", type);
+
+        if (phone != null && phone.length() > 0) {
+            args.putString("phone", phone);
+        }
 
         FragmentPaymentInquiry fragmentPaymentInquiry = new FragmentPaymentInquiry();
         fragmentPaymentInquiry.setArguments(args);
@@ -60,6 +64,12 @@ public class FragmentPaymentInquiry extends BaseFragment {
             }
         };
         fragmentPaymentInquiryBinding.setBackHandler(iBackHandler);
+
+        String phone = getArguments().getString("phone");
+        if (phone != null && phone.length() > 0) {
+            fragmentPaymentInquiryBinding.fpiEdtMci.setText(phone);
+            fragmentPaymentInquiryViewModel.onInquiryClick(null);
+        }
     }
 
 

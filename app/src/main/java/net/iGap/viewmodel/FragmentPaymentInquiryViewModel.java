@@ -42,7 +42,7 @@ public class FragmentPaymentInquiryViewModel {
         mci, telecome;
     }
 
-    HashMap<String, OperatorType> MCI = new HashMap<String, OperatorType>() {
+    public static HashMap<String, OperatorType> MCI = new HashMap<String, OperatorType>() {
         {
             put("0910", OperatorType.mci);
             put("0911", OperatorType.mci);
@@ -128,9 +128,12 @@ public class FragmentPaymentInquiryViewModel {
 
     }
 
-    public void onInquiryClick(View v) {
+    public void onInquiryClick(View view) {
 
-        closeKeyboard(v);
+        if (view != null) {
+            closeKeyboard(view);
+        }
+
 
         if (observeProgress.get() == View.VISIBLE) {
             HelperError.showSnackMessage(G.context.getString(R.string.just_wait_en), false);

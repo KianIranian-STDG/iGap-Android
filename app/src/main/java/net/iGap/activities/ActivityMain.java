@@ -64,6 +64,7 @@ import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentPayment;
+import net.iGap.fragments.FragmentPaymentInquiry;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentWallet;
 import net.iGap.fragments.FragmentWalletAgrement;
@@ -140,6 +141,7 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.viewmodel.ActivityCallViewModel;
+import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 import net.iGap.viewmodel.FragmentThemColorViewModel;
 
 import java.io.File;
@@ -2117,6 +2119,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             TextView txtNavPhone = (TextView) findViewById(R.id.lm_txt_phone_number);
             txtNavName.setText(username);
             txtNavPhone.setText(phoneNumber);
+            setPhoneInquiry(phoneNumber);
 
             if (HelperCalander.isPersianUnicode) {
                 txtNavPhone.setText(HelperCalander.convertToUnicodeFarsiNumber(txtNavPhone.getText().toString()));
@@ -2126,6 +2129,46 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 //getUserInfo(realmUserInfo);
             }
             setImage();
+        }
+    }
+
+    private void setPhoneInquiry(String phone) {
+
+        if (phone == null || phone.length() == 0) {
+            return;
+        }
+
+        if (phone.startsWith("+98")) {
+            phone = phone.replace("+98", "0");
+        }
+
+        if (phone.startsWith("98")) {
+            phone = phone.replace("98", "0");
+        }
+
+        if (!phone.startsWith("0")) {
+            phone = "0" + phone;
+        }
+
+        if (phone.length() < 5) {
+            return;
+        }
+
+        FragmentPaymentInquiryViewModel.OperatorType operatorType = FragmentPaymentInquiryViewModel.MCI.get(phone.substring(0, 4));
+
+        if (operatorType != null) {
+
+            TextView txtPhoneInquiry = findViewById(R.id.lm_txt_icon_phone_number_inquiry);
+            txtPhoneInquiry.setVisibility(View.VISIBLE);
+
+            final String finalPhone = phone;
+            txtPhoneInquiry.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new HelperFragment(FragmentPaymentInquiry.newInstance(FragmentPaymentInquiryViewModel.OperatorType.mci, finalPhone)).setReplace(false).load();
+                    lockNavigation();
+                }
+            });
         }
     }
 

@@ -3,9 +3,9 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/rootMenu"
+  style="?backgroundColorSettingTheme"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  style="?backgroundColorSettingTheme"
   android:clickable="true"
   android:fitsSystemWindows="true"
   android:orientation="vertical"
@@ -58,17 +58,39 @@
             android:textSize="@dimen/dp22"
             app:emojiSize="@dimen/dp14" />
 
-          <TextView
-            android:id="@+id/lm_txt_phone_number"
-            fontPath="fonts/IRANSansMobile_Bold.ttf"
-            android:layout_width="wrap_content"
+          <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp16"
-            android:layout_marginStart="@dimen/dp16"
-            android:singleLine="true"
-            android:text="+98 9123456789"
-            android:textColor="#f8f4df"
-            android:textSize="@dimen/dp12" />
+            android:orientation="horizontal">
+
+            <TextView
+              android:id="@+id/lm_txt_phone_number"
+              fontPath="fonts/IRANSansMobile_Bold.ttf"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/dp16"
+              android:layout_marginStart="@dimen/dp16"
+              android:singleLine="true"
+              android:text="+98 9123456789"
+              android:textColor="#f8f4df"
+              android:textSize="@dimen/dp12" />
+
+            <net.iGap.module.MaterialDesignTextView
+              android:id="@+id/lm_txt_icon_phone_number_inquiry"
+              style="?iconColorMenuTheme"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginLeft="@dimen/dp16"
+              android:layout_marginStart="@dimen/dp16"
+              android:gravity="center"
+              android:minWidth="@dimen/dp32"
+              android:text="@string/md_user_account_box"
+              android:textAppearance="@style/TextIconAppearance.menu"
+              android:textColor="#f8f4df"
+              android:textSize="@dimen/dp20"
+              android:textStyle="bold"
+              android:visibility="gone" />
+          </LinearLayout>
         </LinearLayout>
 
         <net.iGap.module.MaterialDesignTextView
