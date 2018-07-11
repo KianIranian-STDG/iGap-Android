@@ -233,6 +233,11 @@ public class FragmentEditImage extends BaseFragment {
             @Override
             public void onClick(View v) {
                 new HelperFragment(FragmentEditImage.this).remove();
+
+                if (textImageList.size() == 0) {
+                    setValueCheckBox(viewPager.getCurrentItem());
+                }
+
                 completeEditImage.result("", edtChat.getText().toString(), textImageList);
                 AndroidUtils.closeKeyboard(v);
             }
