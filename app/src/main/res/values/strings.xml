@@ -55,7 +55,7 @@
   <string name="verify_time_out_message">iGap recognizes the code automatically; if not, enter it manually. (Please ask the app to resend the verification code if you have not received it yet)</string>
   <string name="verify_invalid_code_message">Unfortunately; the verification code is invalid , Please enter the correct one manually.</string>
   <string name="resend_message">Resending the verification code</string>
-  <string name="phone_number">Phone Number</string>
+  <string name="phone_number">Phone number</string>
   <string name="Re_Phone_Verification">Verifying the entered phone number</string>
 
   <!-- Toast -->
@@ -1219,7 +1219,7 @@
   <string name="Apply_colors_to_customize">Apply colors to customize</string>
   <string name="channel_name_notification">iGap Notification</string>
   <string name="payment">Payment</string>
-  <string name="buy_charge">top up SIM card</string>
+  <string name="buy_charge">Top up SIM card</string>
   <string name="pay_bills">Pay bills</string>
   <string name="pay_bills_crime">Pay traffic tickets </string>
   <string name="barcode_reader">Barcode reader</string>
@@ -1252,7 +1252,7 @@
   <string name="pay_id_is_not_valid">Payment Id is not valid</string>
   <string name="charge_type">Charge type</string>
   <string name="operator">operator</string>
-  <string name="trabord">ported subscriber</string>
+  <string name="trabord">Ported subscriber</string>
   <string name="time_out_error">time out error</string>
   <string name="connection_error">no connection error</string>
   <string name="server_error">server error</string>
@@ -1271,8 +1271,8 @@
   <string name="bills_inquiry_title">Bills inquiry</string>
   <string name="bill_type">Bill Type</string>
   <string name="telecom">home phone</string>
-  <string name="phone">phone number</string>
-  <string name="area_code">area code</string>
+  <string name="phone">Phone number</string>
+  <string name="area_code">Area code</string>
   <string name="inquiry">Inquiry</string>
   <string name="mci_opreator_check">This number is not an mci subscriber</string>
   <string name="mid_term">mid term</string>
@@ -1283,5 +1283,8 @@
   <string name="parsian_e_commerce_company_top">Parsian e-commerce company (top)</string>
   <string name="is_empty"></string>
   <string name="customer_response_center_021_2318">Customer Support Center: 021-2318</string>
+  <string name="ex_mobile_phone">Ex : 09123456789</string>
+  <string name="ex_area">Ex : 021</string>
+  <string name="ex_phone">Ex : 44567899</string>
 
 </resources>

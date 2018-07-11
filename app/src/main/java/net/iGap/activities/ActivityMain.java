@@ -162,8 +162,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
-    public static final int requestCodePaymentCharge = 1;
-    public static final int requestCodePaymentBill = 2;
+    public static final int requestCodePaymentCharge = 198;
+    public static final int requestCodePaymentBill = 199;
     public static final int requestCodeQrCode = 200;
     public static final int requestCodeBarcode = 201;
 
@@ -756,6 +756,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void getPaymentResultCode(int resultCode, Intent data) {
+
+        if (G.onMplResult != null) {
+            G.onMplResult.onResult(false);
+        }
 
         String enData = "", message = "", status = "0";
         int errorType = 0, orderId = 0;
@@ -2775,6 +2779,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             intent.putExtra("Token", token);
             startActivityForResult(intent, requestCodePaymentCharge);
         } else {
+            if (G.onMplResult != null) {
+                G.onMplResult.onResult(true);
+            }
             HelperError.showSnackMessage(message, false);
         }
     }
@@ -2787,6 +2794,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             intent.putExtra("Token", token);
             startActivityForResult(intent, requestCodePaymentBill);
         } else {
+            if (G.onMplResult != null) {
+                G.onMplResult.onResult(true);
+            }
             HelperError.showSnackMessage(message, false);
         }
     }

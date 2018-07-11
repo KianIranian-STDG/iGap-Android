@@ -2215,5 +2215,8 @@
   <string name="parsian_e_commerce_company_top">شركة پارسیان للتجارة الإلكترونية (تاپ)</string>
   <string name="is_empty">is</string>
   <string name="customer_response_center_021_2318">مركز استجابة العملاء: 021-2318</string>
+  <string name="ex_mobile_phone">مثال : 09123456789</string>
+  <string name="ex_area">مثال : 021</string>
+  <string name="ex_phone">مثال : 44567899</string>
 
 </resources>

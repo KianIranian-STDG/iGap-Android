@@ -61,6 +61,7 @@
           <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
@@ -84,7 +85,7 @@
               android:layout_marginStart="@dimen/dp16"
               android:gravity="center"
               android:minWidth="@dimen/dp32"
-              android:text="@string/md_user_account_box"
+              android:text="@string/md_igap_credit_card"
               android:textAppearance="@style/TextIconAppearance.menu"
               android:textColor="#f8f4df"
               android:textSize="@dimen/dp20"

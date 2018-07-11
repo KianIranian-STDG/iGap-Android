@@ -22,7 +22,6 @@ import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 
 import com.crashlytics.android.Crashlytics;
@@ -30,8 +29,6 @@ import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.one.EmojiOneProvider;
 
 import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityMain;
@@ -60,8 +57,6 @@ import javax.crypto.spec.SecretKeySpec;
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.fabric.sdk.android.Fabric;
 
-import static android.support.v7.app.AppCompatDelegate.MODE_NIGHT_AUTO;
-import static android.support.v7.app.AppCompatDelegate.MODE_NIGHT_YES;
 import static net.iGap.Config.DEFAULT_BOTH_CHAT_DELETE_TIME;
 
 public class G extends MultiDexApplication {
@@ -353,6 +348,7 @@ public class G extends MultiDexApplication {
     public static OnGeoGetConfiguration onGeoGetConfiguration;
     public static OnNotifyTime onNotifyTime;
     public static OnPayment onPayment;
+    public static OnMplResult onMplResult;
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
     public static ISignalingAccept iSignalingAccept;
@@ -382,7 +378,6 @@ public class G extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
 
 
         G.firstTimeEnterToApp = true;

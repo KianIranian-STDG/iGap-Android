@@ -10,6 +10,7 @@ package net.iGap.viewmodel;
 */
 
 import android.content.Context;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentChargeBinding;
 import net.iGap.helper.HelperError;
+import net.iGap.interfaces.OnMplResult;
 import net.iGap.proto.ProtoMplGetTopupToken;
 import net.iGap.request.RequestMplGetTopupToken;
 
@@ -78,6 +80,7 @@ public class FragmentPaymentChargeViewModel {
 
     public ObservableInt observeTarabord = new ObservableInt(View.GONE);
     public ObservableField<Drawable> observeBackGround = new ObservableField<>();
+    public ObservableBoolean observeEnabledPayment = new ObservableBoolean(true);
 
     public ObservableInt observeChargeTypeHint = new ObservableInt(View.VISIBLE);
     public ObservableInt observePriceHint = new ObservableInt(View.VISIBLE);
@@ -284,11 +287,23 @@ public class FragmentPaymentChargeViewModel {
                 break;
         }
 
+        G.onMplResult = new OnMplResult() {
+            @Override
+            public void onResult(boolean error) {
+
+                if (error) {
+                    observeEnabledPayment.set(true);
+                } else {
+                    fragmentPaymentChargeBinding.getBackHandler().onBack();
+                }
+
+            }
+        };
+
         RequestMplGetTopupToken requestMplGetTopupToken = new RequestMplGetTopupToken();
         requestMplGetTopupToken.mplGetTopupToken(Long.parseLong(phoneNumber), price, type);
 
-        fragmentPaymentChargeBinding.getBackHandler().onBack();
-
+        observeEnabledPayment.set(false);
     }
 
 

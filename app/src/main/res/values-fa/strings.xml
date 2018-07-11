@@ -1259,7 +1259,10 @@
   <string name="responsible_for_all_financial_services">مسئولیت کلیه خدمات مالی بر عهده</string>
   <string name="parsian_e_commerce_company_top">شرکت تجارت الکترونیک پارسیان ( تاپ )</string>
   <string name="is_empty">می باشد</string>
-  <string name="customer_response_center_021_2318">مرکز پاسخگویی مشتریان  : 021-2318</string>
+  <string name="customer_response_center_021_2318">مرکز پاسخگویی مشتریان  :  2318-021 </string>
+  <string name="ex_mobile_phone">مثال : 09123456789</string>
+  <string name="ex_area">مثال : 021</string>
+  <string name="ex_phone">مثال : 44567899</string>
 
 
 </resources>

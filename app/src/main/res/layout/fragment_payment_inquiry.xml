@@ -129,15 +129,14 @@
 
           <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp60"
-            android:gravity="center"
+            android:layout_height="@dimen/dp68"
             android:orientation="horizontal"
             android:visibility="@{fragmentPaymentInquiryViewModel.observeMci}">
 
             <net.iGap.module.MaterialDesignTextView
               style="?iconColorMenuTheme"
-              android:layout_width="@dimen/dp48"
-              android:layout_height="match_parent"
+              android:layout_width="@dimen/dp44"
+              android:layout_height="@dimen/dp44"
               android:gravity="center"
               android:text="@string/md_dialpad"
               android:textAppearance="@style/TextIconAppearance.menu"
@@ -145,20 +144,37 @@
               android:textSize="@dimen/dp22"
               android:textStyle="bold" />
 
-            <EditText
-              android:id="@+id/fpi_edt_mci"
-              style="?hintColorSettingTheme"
-              android:layout_width="0dp"
-              android:layout_height="@dimen/dp44"
-              android:layout_weight="1"
-              android:background="@drawable/oval_gray"
-              android:hint="@string/phone"
-              android:inputType="phone"
-              android:maxLength="11"
-              android:minHeight="@dimen/dp44"
-              android:paddingLeft="@dimen/dp10"
-              android:paddingRight="@dimen/dp10"
-              android:textSize="@dimen/dp16" />
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:layout_height="match_parent">
+
+              <EditText
+                android:id="@+id/fpi_edt_mci"
+                style="?hintColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp44"
+                android:background="@drawable/oval_gray"
+                android:hint="@string/phone"
+                android:inputType="phone"
+                android:maxLength="11"
+                android:minHeight="@dimen/dp44"
+                android:paddingLeft="@dimen/dp10"
+                android:paddingRight="@dimen/dp10"
+                android:textSize="@dimen/dp16" />
+
+              <TextView
+                fontPath="fonts/IRANSansMobile.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dp10"
+                android:paddingRight="@dimen/dp10"
+                android:gravity="start"
+                android:text="@string/ex_mobile_phone"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/dp10" />
+
+            </LinearLayout>
 
 
           </LinearLayout>
@@ -171,14 +187,13 @@
 
             <LinearLayout
               android:layout_width="match_parent"
-              android:layout_height="@dimen/dp60"
-              android:gravity="center"
+              android:layout_height="@dimen/dp68"
               android:orientation="horizontal">
 
               <net.iGap.module.MaterialDesignTextView
                 style="?iconColorMenuTheme"
-                android:layout_width="@dimen/dp48"
-                android:layout_height="match_parent"
+                android:layout_width="@dimen/dp44"
+                android:layout_height="@dimen/dp44"
                 android:gravity="center"
                 android:text="@string/md_format_list_bulleted"
                 android:textAppearance="@style/TextIconAppearance.menu"
@@ -186,32 +201,49 @@
                 android:textSize="@dimen/dp22"
                 android:textStyle="bold" />
 
-              <EditText
-                android:id="@+id/fpi_edt_telecom_area"
-                style="?hintColorSettingTheme"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp44"
-                android:layout_weight="1"
-                android:background="@drawable/oval_gray"
-                android:hint="@string/area_code"
-                android:inputType="phone"
-                android:maxLength="4"
-                android:minHeight="@dimen/dp44"
-                android:paddingLeft="@dimen/dp10"
-                android:paddingRight="@dimen/dp10"
-                android:textSize="@dimen/dp16" />
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+
+                <EditText
+                  android:id="@+id/fpi_edt_telecom_area"
+                  style="?hintColorSettingTheme"
+                  android:layout_width="match_parent"
+                  android:layout_height="@dimen/dp44"
+                  android:background="@drawable/oval_gray"
+                  android:hint="@string/area_code"
+                  android:inputType="phone"
+                  android:maxLength="4"
+                  android:minHeight="@dimen/dp44"
+                  android:paddingLeft="@dimen/dp10"
+                  android:paddingRight="@dimen/dp10"
+                  android:textSize="@dimen/dp16" />
+
+                <TextView
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:paddingLeft="@dimen/dp10"
+                  android:paddingRight="@dimen/dp10"
+                  android:gravity="start"
+                  android:text="@string/ex_area"
+                  android:textColor="@color/gray"
+                  android:textSize="@dimen/dp10" />
+
+
+              </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
               android:layout_width="match_parent"
-              android:layout_height="@dimen/dp60"
-              android:gravity="center"
+              android:layout_height="@dimen/dp68"
               android:orientation="horizontal">
 
               <net.iGap.module.MaterialDesignTextView
                 style="?iconColorMenuTheme"
-                android:layout_width="@dimen/dp48"
-                android:layout_height="match_parent"
+                android:layout_width="@dimen/dp44"
+                android:layout_height="@dimen/dp44"
                 android:gravity="center"
                 android:text="@string/md_dialpad"
                 android:textAppearance="@style/TextIconAppearance.menu"
@@ -219,20 +251,37 @@
                 android:textSize="@dimen/dp22"
                 android:textStyle="bold" />
 
-              <EditText
-                android:id="@+id/fpi_edt_telecom"
-                style="?hintColorSettingTheme"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp44"
-                android:layout_weight="1"
-                android:background="@drawable/oval_gray"
-                android:hint="@string/phone"
-                android:inputType="phone"
-                android:maxLength="8"
-                android:minHeight="@dimen/dp44"
-                android:paddingLeft="@dimen/dp10"
-                android:paddingRight="@dimen/dp10"
-                android:textSize="@dimen/dp16" />
+              <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+
+                <EditText
+                  android:id="@+id/fpi_edt_telecom"
+                  style="?hintColorSettingTheme"
+                  android:layout_width="match_parent"
+                  android:layout_height="@dimen/dp44"
+                  android:background="@drawable/oval_gray"
+                  android:hint="@string/phone"
+                  android:inputType="phone"
+                  android:maxLength="8"
+                  android:minHeight="@dimen/dp44"
+                  android:paddingLeft="@dimen/dp10"
+                  android:paddingRight="@dimen/dp10"
+                  android:textSize="@dimen/dp16" />
+
+                <TextView
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:paddingLeft="@dimen/dp10"
+                  android:paddingRight="@dimen/dp10"
+                  android:gravity="start"
+                  android:text="@string/ex_phone"
+                  android:textColor="@color/gray"
+                  android:textSize="@dimen/dp10" />
+
+              </LinearLayout>
 
 
             </LinearLayout>

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentBillBinding;
 import net.iGap.interfaces.IBackHandler;
@@ -87,6 +88,8 @@ public class FragmentPaymentBill extends BaseFragment {
                     fragmentPaymentBillBinding.fpbEdtPrice.setText(addCommasToNumericString((Integer.parseInt(price) * 1000) + ""));
                     fragmentPaymentBillBinding.fpbImvCompany.setImageResource(getCompany(company_type));
 
+                    fragmentPaymentBillBinding.getFragmentPaymentBillViewModel().observeAmount.set(true);
+
                 }
             }
         }
@@ -107,6 +110,12 @@ public class FragmentPaymentBill extends BaseFragment {
             }
         }
         return (result);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        G.onMplResult = null;
     }
 
 }

@@ -185,7 +185,7 @@
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp60"
-          android:visibility="@{fragmentPaymentBillViewModel.observePolice? View.GONE: View.VISIBLE }"
+          android:visibility="@{fragmentPaymentBillViewModel.observeAmount? View.VISIBLE : View.GONE }"
           android:gravity="center"
           android:orientation="horizontal">
 
@@ -227,11 +227,21 @@
           android:layout_gravity="center"
           android:visibility="@{fragmentPaymentBillViewModel.observeCompany , default = gone}" />
 
+        <ProgressBar
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_gravity="center"
+          android:indeterminate="true"
+          android:visibility="@{fragmentPaymentBillViewModel.observeEnabledPayment ? View.GONE :View.VISIBLE}" />
+
+
         <Button
           android:layout_width="@dimen/dp180"
           android:layout_height="@dimen/dp40"
           android:layout_gravity="center"
           android:layout_marginTop="@dimen/dp20"
+          android:enabled="@{fragmentPaymentBillViewModel.observeEnabledPayment}"
           android:background="@{fragmentPaymentBillViewModel.observeBackGround}"
           android:onClick="@{fragmentPaymentBillViewModel::onPayBillClick}"
           android:text="@string/payment"
@@ -244,6 +254,7 @@
           android:layout_height="@dimen/dp40"
           android:layout_gravity="center"
           android:layout_marginTop="@dimen/dp8"
+          android:enabled="@{fragmentPaymentBillViewModel.observeEnabledPayment}"
           android:layout_marginBottom="@dimen/dp40"
           android:background="@{fragmentPaymentBillViewModel.observeBackGround}"
           android:onClick="@{fragmentPaymentBillViewModel::onClickBarCode}"

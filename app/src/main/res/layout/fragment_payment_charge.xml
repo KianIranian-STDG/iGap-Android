@@ -9,6 +9,8 @@
 
     <import type="android.graphics.Color" />
 
+    <import type="android.view.View" />
+
     <import type="net.iGap.G" />
 
     <variable
@@ -96,14 +98,13 @@
 
         <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="@dimen/dp60"
-          android:gravity="center"
+          android:layout_height="@dimen/dp68"
           android:orientation="horizontal">
 
           <net.iGap.module.MaterialDesignTextView
             style="?iconColorMenuTheme"
             android:layout_width="@dimen/dp48"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/dp44"
             android:gravity="center"
             android:text="@string/md_dialpad"
             android:textAppearance="@style/TextIconAppearance.menu"
@@ -111,25 +112,41 @@
             android:textSize="@dimen/dp22"
             android:textStyle="bold" />
 
-          <EditText
-            android:id="@+id/fpc_editText_phone_number"
-            style="?hintColorSettingTheme"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dp48"
-            android:layout_weight="1"
-            android:background="@drawable/oval_gray"
-            android:hint="@string/phone_number"
-            android:inputType="phone"
-            android:maxLength="11"
-            android:minHeight="@dimen/dp44"
-            android:onTextChanged="@{fragmentPaymentChargeViewModel::onTextChanged}"
-            android:paddingLeft="@dimen/dp10"
-            android:paddingRight="@dimen/dp10"
-            android:textSize="@dimen/dp16">
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
 
-            <requestFocus />
-          </EditText>
+            <EditText
+              android:id="@+id/fpc_editText_phone_number"
+              style="?hintColorSettingTheme"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp44"
+              android:background="@drawable/oval_gray"
+              android:hint="@string/phone_number"
+              android:inputType="phone"
+              android:maxLength="11"
+              android:minHeight="@dimen/dp44"
+              android:onTextChanged="@{fragmentPaymentChargeViewModel::onTextChanged}"
+              android:paddingLeft="@dimen/dp10"
+              android:paddingRight="@dimen/dp10"
+              android:textSize="@dimen/dp16">
 
+              <requestFocus />
+            </EditText>
+
+            <TextView
+              fontPath="fonts/IRANSansMobile.ttf"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingLeft="@dimen/dp10"
+              android:paddingRight="@dimen/dp10"
+              android:gravity="start"
+              android:text="@string/ex_mobile_phone"
+              android:textColor="@color/gray"
+              android:textSize="@dimen/dp10" />
+
+          </LinearLayout>
 
         </LinearLayout>
 
@@ -277,6 +294,14 @@
 
         </LinearLayout>
 
+        <ProgressBar
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_gravity="center"
+          android:indeterminate="true"
+          android:visibility="@{fragmentPaymentChargeViewModel.observeEnabledPayment ? View.GONE :View.VISIBLE}" />
+
         <Button
           android:layout_width="@dimen/dp180"
           android:layout_height="@dimen/dp40"
@@ -284,6 +309,7 @@
           android:layout_marginTop="@dimen/dp20"
           android:textAllCaps="false"
           android:layout_marginBottom="@dimen/dp40"
+          android:enabled="@{fragmentPaymentChargeViewModel.observeEnabledPayment}"
           android:background="@{fragmentPaymentChargeViewModel.observeBackGround}"
           android:onClick="@{fragmentPaymentChargeViewModel::onBuyClick}"
           android:text="@string/buy"

@@ -27,6 +27,7 @@ import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.interfaces.OnMplResult;
 import net.iGap.request.RequestMplGetBillToken;
 
 import java.io.IOException;
@@ -41,6 +42,8 @@ public class FragmentPaymentBillViewModel {
     public ObservableInt observeCompany = new ObservableInt(View.GONE);
     public ObservableField<String> observeTitleToolbar = new ObservableField<>("");
     public ObservableBoolean observePolice = new ObservableBoolean(false);
+    public ObservableBoolean observeEnabledPayment = new ObservableBoolean(true);
+    public ObservableBoolean observeAmount = new ObservableBoolean(false);
 
     public ObservableField<Drawable> observeBackGround = new ObservableField<>();
 
@@ -55,6 +58,7 @@ public class FragmentPaymentBillViewModel {
 
         if (isPolice) {
             observePolice.set(true);
+            observeAmount.set(false);
         }
 
         Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green);
@@ -123,7 +127,6 @@ public class FragmentPaymentBillViewModel {
         }
 
 
-
         String payId = fragmentPaymentBillBinding.fpbEdtPayId.getText().toString();
 
         if (isPolice) {
@@ -139,12 +142,23 @@ public class FragmentPaymentBillViewModel {
         }
 
 
+        G.onMplResult = new OnMplResult() {
+            @Override
+            public void onResult(boolean error) {
+
+                if (error) {
+                    observeEnabledPayment.set(true);
+                } else {
+                    fragmentPaymentBillBinding.getBackHandler().onBack();
+                }
+
+            }
+        };
 
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
         requestMplGetBillToken.mplGetBillToken(Long.parseLong(billId), Long.parseLong(payId));
 
-        fragmentPaymentBillBinding.getBackHandler().onBack();
-
+        observeEnabledPayment.set(false);
     }
 
 
