@@ -468,8 +468,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
                 final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
                 View v = dialog.getCustomView();
-               /* DialogAnimation.animationUp(dialog);*/
-                dialog.getWindow().setLayout(ViewMaker.dpToPixel(220),WindowManager.LayoutParams.WRAP_CONTENT);
+                /* DialogAnimation.animationUp(dialog);*/
+                dialog.getWindow().setLayout(ViewMaker.dpToPixel(220), WindowManager.LayoutParams.WRAP_CONTENT);
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int height = displayMetrics.heightPixels;
@@ -479,12 +479,14 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
                 wmlp.gravity = Gravity.TOP | Gravity.LEFT;
 
-                wmlp.x = ViewMaker.dpToPixel(118);   //x position
-                wmlp.y =  ViewMaker.dpToPixel(420) ;   //y
+                if (G.selectedLanguage.equals("en"))
+                    wmlp.x = ViewMaker.dpToPixel(20);   //x position
+                else
+                    wmlp.x = ViewMaker.dpToPixel(118);   //x position
+
+                wmlp.y = ViewMaker.dpToPixel(400);   //y
 
                 dialog.show();
-
-
 
 
                 ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
@@ -531,14 +533,15 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                     public void onClick(View view) {
                         dialog.dismiss();
 
-                        deleteMapFileCash();
+
                         if (isAdded()) {
                             changeState = getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE)
                                     .getBoolean("state", false);
 
 
-                            if (changeState){
-                                getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE).edit().putBoolean("state",false).apply();
+                            if (changeState) {
+                                deleteMapFileCash();
+                                getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE).edit().putBoolean("state", false).apply();
 
                                 new HelperFragment(FragmentiGapMap.getInstance()).remove();
 
@@ -563,8 +566,9 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                                     .getBoolean("state", false);
 
 
-                            if (!changeState){
-                                getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE).edit().putBoolean("state",true).apply();
+                            if (!changeState) {
+                                deleteMapFileCash();
+                                getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE).edit().putBoolean("state", true).apply();
 
                                 new HelperFragment(FragmentiGapMap.getInstance()).remove();
 
@@ -649,7 +653,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             /**
              * Compass
              */
-         CompassOverlay mCompassOverlay = new CompassOverlay(getContext(), new InternalCompassOrientationProvider(getContext()), map);
+            CompassOverlay mCompassOverlay = new CompassOverlay(getContext(), new InternalCompassOrientationProvider(getContext()), map);
 
             mCompassOverlay.enableCompass();
 
