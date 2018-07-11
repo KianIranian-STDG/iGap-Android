@@ -54,7 +54,6 @@
         android:layout_weight="1"
         android:background="@null"
         android:gravity="bottom"
-        android:inputType="textNoSuggestions"
         android:hint="@string/type_message"
         android:imeOptions="flagNoExtractUi"
         android:maxLines="4"
