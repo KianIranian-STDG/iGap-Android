@@ -12,6 +12,7 @@ package net.iGap.fragments;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -21,6 +22,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.Display;
@@ -53,6 +55,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static net.iGap.R.id.mf_fragment_map_view;
+import static net.iGap.R.id.st_fab_gps;
 
 public class FragmentMap extends BaseFragment implements OnMapReadyCallback, View.OnClickListener {
 
@@ -65,7 +68,8 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     private Double latitude;
     private Double longitude;
     private Mode mode;
-    private Button btnOPenMap,btnSendPosition;
+    private Button btnSendPosition;
+    private FloatingActionButton fabOpenMap;
 
     public static FragmentMap getInctance(Double latitude, Double longitude, Mode mode) {
 
@@ -119,6 +123,11 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     public void onViewCreated(View view, @Nullable Bundle saveInctanceState) {
         super.onViewCreated(view, saveInctanceState);
 
+
+        fabOpenMap = (FloatingActionButton) view.findViewById(R.id.mf_fab_openMap);
+        fabOpenMap.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
+        fabOpenMap.setColorFilter(Color.WHITE);
+
         Bundle bundle = getArguments();
 
         if (bundle != null) {
@@ -163,15 +172,15 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
         mapFragment.getMapAsync(FragmentMap.this);
 
-        btnSendPosition  = (Button) view.findViewById(R.id.mf_btn_send_position);
-        btnOPenMap = btnSendPosition = (Button) view.findViewById(R.id.mf_btn_open_map);
+        btnSendPosition = (Button) view.findViewById(R.id.mf_btn_send_position);
+
 
 
         btnSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (mode == Mode.sendPosition) {
             btnSendPosition.setOnClickListener(this);
-            btnOPenMap.setOnClickListener(this);
+            fabOpenMap.setOnClickListener(this);
 
 
         } else if (mode == Mode.seePosition) {
@@ -347,7 +356,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
                     break;
 
-                case R.id.mf_btn_open_map:
+                case R.id.mf_fab_openMap:
                     Uri gmmIntentUri = Uri.parse("geo:" + latitude + "," + longitude + "?q=" + latitude + "," + longitude + "(im here)");
                     Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                     mapIntent.setPackage("com.google.android.apps.maps");
@@ -358,40 +367,41 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
         }
     }
-        public enum Mode {
-            sendPosition, seePosition;
+
+    public enum Mode {
+        sendPosition, seePosition;
+    }
+
+    public interface OnGetPicture {
+
+        void getBitmap(Bitmap bitmap);
+    }
+
+    private static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        OnGetPicture listener;
+
+        public DownloadImageTask(OnGetPicture listener) {
+            this.listener = listener;
         }
 
-        public interface OnGetPicture {
-
-            void getBitmap(Bitmap bitmap);
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
         }
 
-        private static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-            OnGetPicture listener;
+        protected void onPostExecute(Bitmap result) {
 
-            public DownloadImageTask(OnGetPicture listener) {
-                this.listener = listener;
-            }
-
-            protected Bitmap doInBackground(String... urls) {
-                String urldisplay = urls[0];
-                Bitmap mIcon11 = null;
-                try {
-                    InputStream in = new java.net.URL(urldisplay).openStream();
-                    mIcon11 = BitmapFactory.decodeStream(in);
-                } catch (Exception e) {
-                    Log.e("Error", e.getMessage());
-                    e.printStackTrace();
-                }
-                return mIcon11;
-            }
-
-            protected void onPostExecute(Bitmap result) {
-
-                if (listener != null) {
-                    listener.getBitmap(result);
-                }
+            if (listener != null) {
+                listener.getBitmap(result);
             }
         }
     }
+}

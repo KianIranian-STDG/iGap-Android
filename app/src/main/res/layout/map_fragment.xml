@@ -1,48 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
     android:orientation="vertical">
 
-
-    <FrameLayout
-        android:id="@+id/mf_fragment_map_view"
+    <!--    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">-->
+    <RelativeLayout
+        android:id="@+id/rv"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"></FrameLayout>
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <FrameLayout
+            android:id="@+id/mf_fragment_map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"></FrameLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/mf_fab_openMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="62dp"
+            android:layout_marginStart="19dp"
+
+            android:background="@android:color/white"
+            android:clickable="true"
+            app:backgroundTint="@android:color/white"
+            app:fabSize="normal"
+            app:layout_anchor="@+id/replace"
+            app:layout_anchorGravity="right|end"
+            app:srcCompat="@drawable/ic_gps_fixed_black_24px"
+            app:tint="@color/white" />
 
 
-    <LinearLayout
+    </RelativeLayout>
+    <Button
+        android:id="@+id/mf_btn_send_position"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
 
-        <Button
-            android:id="@+id/mf_btn_open_map"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:background="@color/iGapColor"
-            android:text="@string/open_map"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dp18"
+        android:background="@color/iGapColor"
+        android:text="@string/send_position"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dp18"
 
-            />
-
-        <Button
-            android:id="@+id/mf_btn_send_position"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:background="@color/iGapColor"
-            android:text="@string/send_position"
-            android:textColor="@color/white"
-            android:textSize="@dimen/dp18" />
-
-    </LinearLayout>
+        android:layout_alignParentBottom="true"/>
 
 
-</LinearLayout>
+    <!--</LinearLayout>-->
+
+
+</RelativeLayout>
