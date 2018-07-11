@@ -10,7 +10,6 @@
 
 package net.iGap.fragments;
 
-import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -49,7 +48,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -518,6 +516,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                     public void onClick(View view) {
                         dialog.dismiss();
                         fabGps.setVisibility(View.GONE);
+                        fabStateSwitcher.setVisibility(View.GONE);
                         rippleMoreMap.setVisibility(View.GONE);
                         page = pageUserList;
                         try {
@@ -1022,6 +1021,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                     if (rippleMoreMap.getVisibility() == View.GONE || fabGps.getVisibility() == View.GONE) {
                         rippleMoreMap.setVisibility(View.VISIBLE);
                         fabGps.setVisibility(View.VISIBLE);
+                        fabStateSwitcher.setVisibility(View.VISIBLE);
                     }
                     if (!isBackPress) {
                         //getActivity().getSupportFragmentManager().popBackStack();
@@ -1074,6 +1074,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         public void onClick(View view) {
                             dialog.dismiss();
                             fabGps.setVisibility(View.GONE);
+                            fabStateSwitcher.setVisibility(View.GONE);
                             rippleMoreMap.setVisibility(View.GONE);
                             page = pageUserList;
                             try {
@@ -1512,6 +1513,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             if (mapRegistrationStatus) {
                 rootTurnOnGps.setVisibility(View.GONE);
                 fabGps.setVisibility(View.VISIBLE);
+                fabStateSwitcher.setVisibility(View.VISIBLE);
                 vgMessageGps.setVisibility(View.VISIBLE);
                 rippleMoreMap.setVisibility(View.VISIBLE);
                 GPSTracker.getGpsTrackerInstance().detectLocation();
@@ -1528,6 +1530,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     private void visibleViewAttention(String text, boolean b) {
         rootTurnOnGps.setVisibility(View.VISIBLE);
         fabGps.setVisibility(View.GONE);
+        fabStateSwitcher.setVisibility(View.GONE);
         toggleGps.setChecked(false);
         vgMessageGps.setVisibility(View.GONE);
         rippleMoreMap.setVisibility(View.GONE);
