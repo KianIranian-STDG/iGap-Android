@@ -2218,5 +2218,5 @@
   <string name="ex_mobile_phone">مثال : 09123456789</string>
   <string name="ex_area">مثال : 021</string>
   <string name="ex_phone">مثال : 44567899</string>
-
+  <string name="sync_contact">اتصالات المزامنة</string>
 </resources>

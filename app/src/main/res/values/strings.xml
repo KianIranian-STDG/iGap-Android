@@ -1288,5 +1288,5 @@
   <string name="ex_phone">Ex : 44567899</string>
   <string name="satellite_view">Satellite View</string>
   <string name="default_view">Default View</string>
-
+  <string name="sync_contact">Sync Contact</string>
 </resources>

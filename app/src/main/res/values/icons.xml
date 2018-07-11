@@ -146,7 +146,6 @@
   <string name="md_format_list_bulleted">\uf279</string>
   <string name="md_dialpad">\uf61c</string>
   <string name="md_twitch">\uf543</string>
-
-
+  <string name="md_igap_sync">\uf4e6</string>
 
 </resources>
