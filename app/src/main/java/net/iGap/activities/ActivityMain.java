@@ -859,6 +859,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         super.onConfigurationChanged(newConfig);
+        G.rotationState = newConfig.orientation;
     }
 
     //*******************************************************************************************************************************************

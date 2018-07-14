@@ -296,14 +296,16 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_alignParentBottom="true"
-              android:layout_alignStart="@+id/st_fab_gps"
-              android:layout_marginBottom="105dp"
+              android:layout_marginLeft="@dimen/dp24"
+              android:layout_marginRight="@dimen/dp24"
+
+              android:layout_marginBottom="102dp"
               android:background="@android:color/holo_blue_bright"
               android:clickable="true"
-
               app:backgroundTint="@color/white"
               app:fabSize="mini"
               app:layout_anchor="@+id/replace"
+
               app:layout_anchorGravity="top|right|end"
               app:srcCompat="@drawable/ic_gps_layer"
               app:tint="@color/white" />

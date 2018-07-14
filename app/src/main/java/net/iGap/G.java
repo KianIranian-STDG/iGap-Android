@@ -374,6 +374,8 @@ public class G extends MultiDexApplication {
     private Tracker mTracker;
     public static Account iGapAccount;
 
+    public static int rotationState;
+
 
     @Override
     public void onCreate() {

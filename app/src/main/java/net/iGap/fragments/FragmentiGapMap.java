@@ -30,6 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.ThumbnailUtils;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -207,6 +208,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     private boolean isSendRequestGeoCoordinate = false;
     private String url;
     static boolean changeState = false;
+    private int orientation =G.rotationState;
+    private MaterialDialog dialog;
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -464,7 +467,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             @Override
             public void onClick(final View view) {
 
-                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+                dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
                 View v = dialog.getCustomView();
                 /* DialogAnimation.animationUp(dialog);*/
                 dialog.getWindow().setLayout(ViewMaker.dpToPixel(220), WindowManager.LayoutParams.WRAP_CONTENT);
@@ -475,14 +478,35 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
                 WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
 
-                wmlp.gravity = Gravity.TOP | Gravity.LEFT;
 
-                if (G.selectedLanguage.equals("en"))
-                    wmlp.x = ViewMaker.dpToPixel(20);   //x position
-                else
-                    wmlp.x = ViewMaker.dpToPixel(118);   //x position
+                if (G.selectedLanguage.equals("en")) {
+                    wmlp.gravity = Gravity.TOP | Gravity.LEFT;
 
-                wmlp.y = ViewMaker.dpToPixel(400);   //y
+                    wmlp.x = ViewMaker.dpToPixel(10);   //x position
+                } else {
+                    wmlp.gravity = Gravity.TOP | Gravity.RIGHT;
+                    wmlp.x = ViewMaker.dpToPixel(10);   //x position
+                }
+
+
+                int s = getActivity().getChangingConfigurations();
+
+
+              /*  if (orientation==0){
+                   if (G.isLandscape)
+                       wmlp.y = ViewMaker.dpToPixel(160);
+                       else
+                       wmlp.y = ViewMaker.dpToPixel(400);
+
+                }else */
+                    if (orientation == 1) {
+                    //Do some stuff
+                    wmlp.y = ViewMaker.dpToPixel(400);   //y
+
+                }else if (orientation == 2) {
+                    //Do some stuff
+                    wmlp.y = ViewMaker.dpToPixel(160);   //y
+                }
 
                 dialog.show();
 
@@ -611,6 +635,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         new RequestGeoGetComment().getComment(userId);
     }
 
+
     private void attentionDialog() {
 
         SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
@@ -631,6 +656,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
 
     }
+
 
     private void startMap(View view) {
         //  map = (MapView) view.findViewById(R.id.map);  // map = new MapView(this); //constructor
@@ -1558,6 +1584,15 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     @Override
     public void onConfigurationChanged(android.content.res.Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+
+        try {
+            dialog.dismiss();
+        } catch (Exception e) {
+        }
+
+        orientation = newConfig.orientation;
+
+
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -1852,4 +1887,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
             }
         }
     }
+
+
 }
