@@ -1247,6 +1247,8 @@ public class FragmentChat extends BaseFragment
                             @Override
                             public void run() {
                                 ImageHelper.correctRotateImage(listPathString.get(0), true);
+                                showDraftLayout();
+                                setDraftMessage(requestCode);
                             }
                         });
                         thread.start();
@@ -1255,6 +1257,8 @@ public class FragmentChat extends BaseFragment
                             @Override
                             public void run() {
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
+                                showDraftLayout();
+                                setDraftMessage(requestCode);
                             }
                         });
                         thread.start();
