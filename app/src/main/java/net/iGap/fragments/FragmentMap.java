@@ -30,6 +30,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -68,7 +70,10 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     private Double latitude;
     private Double longitude;
     private Mode mode;
-    private Button btnSendPosition;
+    private TextView accuracy;
+
+
+    private RelativeLayout rvSendPosition,rvSeePosition;
     private FloatingActionButton fabOpenMap;
 
     public static FragmentMap getInctance(Double latitude, Double longitude, Mode mode) {
@@ -123,6 +128,10 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     public void onViewCreated(View view, @Nullable Bundle saveInctanceState) {
         super.onViewCreated(view, saveInctanceState);
 
+        accuracy=(TextView) view.findViewById(R.id.mf_txt_accuracy);
+
+        rvSendPosition=(RelativeLayout) view.findViewById(R.id.mf_rv_see_position);
+
 
         fabOpenMap = (FloatingActionButton) view.findViewById(R.id.mf_fab_openMap);
         fabOpenMap.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
@@ -134,6 +143,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
             latitude = bundle.getDouble(FragmentMap.Latitude);
             longitude = bundle.getDouble(FragmentMap.Longitude);
+
             mode = (Mode) bundle.getSerializable(PosoitionMode);
             if (G.onHelperSetAction != null) {
                 G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
@@ -172,19 +182,23 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
         mapFragment.getMapAsync(FragmentMap.this);
 
-        btnSendPosition = (Button) view.findViewById(R.id.mf_btn_send_position);
+
+        rvSendPosition = (RelativeLayout) view.findViewById(R.id.mf_rv_send_position);
 
 
 
-        btnSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
+        rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (mode == Mode.sendPosition) {
-            btnSendPosition.setOnClickListener(this);
-            fabOpenMap.setOnClickListener(this);
+            fabOpenMap.setVisibility(View.GONE);
+            rvSendPosition.setOnClickListener(this);
 
 
         } else if (mode == Mode.seePosition) {
-            btnSendPosition.setVisibility(View.GONE);
+
+            rvSendPosition.setVisibility(View.GONE);
+            fabOpenMap.setOnClickListener(this);
+
         }
     }
 
@@ -253,6 +267,8 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                         LatLng mapCenter = mMap.getProjection().fromScreenLocation(new Point(size.x / 2, size.y / 2));
                         latitude = mapCenter.latitude;
                         longitude = mapCenter.longitude;
+
+                        accuracy.setText(latitude+",  ,"+longitude);
 
                         if (marker != null) {
                             marker.remove();
@@ -323,7 +339,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         } else {
 
             switch (view.getId()) {
-                case R.id.mf_btn_send_position:
+                case R.id.mf_rv_send_position:
                     try {
                         mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
                             @Override
