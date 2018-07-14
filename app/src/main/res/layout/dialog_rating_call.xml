@@ -33,7 +33,6 @@
       android:minHeight="@dimen/dp60"
       android:hint="@string/please_write_your_reasons"
       android:textSize="@dimen/dp13"
-      android:inputType="textNoSuggestions"
       android:maxLines="2"
       android:textColor="@color/black90"
       android:textColorHint="@color/gray"

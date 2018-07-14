@@ -219,7 +219,6 @@
                 android:afterTextChanged="@{fragmentCreateChannelViewModel.afterTextChanged}"
                 android:enabled="@{fragmentCreateChannelViewModel.edtSetLinkEnable}"
                 android:hint="@string/your_link"
-                android:inputType="textNoSuggestions"
                 android:layoutDirection="ltr"
                 android:singleLine="true"
                 android:text="@={fragmentCreateChannelViewModel.edtSetLink}"

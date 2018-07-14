@@ -153,7 +153,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@null"
-        android:inputType="textNoSuggestions"
         android:hint="@string/type_message"
         android:maxLines="4"
         android:paddingRight="@dimen/dp4"

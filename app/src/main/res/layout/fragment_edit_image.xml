@@ -149,7 +149,6 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:background="@null"
-        android:inputType="textNoSuggestions"
         android:gravity="bottom"
         android:hint="@string/type_message"
         android:imeOptions="flagNoExtractUi"
