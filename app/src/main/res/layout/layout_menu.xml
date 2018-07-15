@@ -34,7 +34,6 @@
           android:layout_width="0dp"
           android:layout_height="match_parent"
           android:layout_weight="1"
-          android:background="#7f7f7f"
           android:orientation="vertical">
 
 
@@ -65,22 +64,6 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <net.iGap.module.MaterialDesignTextView
-              android:id="@+id/lm_txt_icon_phone_number_inquiry"
-              style="?iconColorMenuTheme"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginLeft="@dimen/dp16"
-              android:layout_marginStart="@dimen/dp16"
-              android:gravity="center"
-              android:minWidth="@dimen/dp32"
-              android:text="@string/md_twitch"
-              android:textAppearance="@style/TextIconAppearance.menu"
-              android:textColor="#f8f4df"
-              android:textSize="@dimen/dp18"
-              android:textStyle="bold"
-              android:visibility="visible" />
-
             <TextView
               android:id="@+id/lm_txt_phone_number"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
@@ -93,23 +76,54 @@
               android:textColor="#f8f4df"
               android:textSize="@dimen/dp12" />
 
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:gravity="center_vertical"
+              android:orientation="horizontal" />
+
           </LinearLayout>
         </LinearLayout>
 
-        <net.iGap.module.MaterialDesignTextView
-          android:id="@+id/lm_txt_cloud"
+        <LinearLayout
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="bottom"
-          android:layout_marginBottom="@dimen/dp8"
           android:layout_marginEnd="@dimen/dp16"
           android:layout_marginRight="@dimen/dp16"
-          android:padding="4dp"
-          android:singleLine="true"
-          android:text="@string/md_cloud"
-          android:textAppearance="@style/TextIconAppearance_toolbar"
-          android:textColor="#adffffff"
-          android:textSize="28sp" />
+          android:gravity="center"
+          android:orientation="vertical"
+          android:padding="4dp">
+
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/lm_txt_cloud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="4dp"
+            android:singleLine="true"
+            android:text="@string/md_cloud"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
+            android:textColor="#adffffff"
+            android:textSize="28sp" />
+
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/lm_txt_icon_phone_number_inquiry"
+            style="?iconColorMenuTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="4dp"
+            android:singleLine="true"
+            android:text="@string/md_twitch"
+            android:textColor="#f8f4df"
+            android:textSize="@dimen/dp18"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+        </LinearLayout>
+
+
       </LinearLayout>
 
 
