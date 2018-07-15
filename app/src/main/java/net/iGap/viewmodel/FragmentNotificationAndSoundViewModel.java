@@ -64,6 +64,11 @@ public class FragmentNotificationAndSoundViewModel {
     private int modeGroup;
     private int poRbDialogSoundMessageGroup;
     private String soundMessageGroup;
+    private String soundMessageSelected = "";
+    private String soundMessageGroupSelected = "";
+    private int soundMessageWhich = 0;
+    private int soundMessageGroupWhich = 0;
+
 
 
     public FragmentNotificationAndSoundViewModel(FragmentNotificationAndSoundBinding fragmentNotificationAndSoundBinding) {
@@ -483,15 +488,23 @@ public class FragmentNotificationAndSoundViewModel {
                         break;
                 }
 
-                callbackSoundMessage.set(text.toString());
-                poRbDialogSoundMessage = which;
-                editor.putInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, which);
-                editor.putString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, text.toString());
-                editor.apply();
+                soundMessageSelected = text.toString();
+                soundMessageWhich = which;
 
                 return true;
             }
-        }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).show();
+        }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                callbackSoundMessage.set(soundMessageSelected);
+                poRbDialogSoundMessage = soundMessageWhich;
+                editor.putInt(SHP_SETTING.KEY_STNS_SOUND_MESSAGE_POSITION, soundMessageWhich);
+                editor.putString(SHP_SETTING.KEY_STNS_SOUND_MESSAGE, soundMessageSelected);
+                editor.apply();
+
+            }
+        }).show();
 
 
     }
@@ -662,15 +675,24 @@ public class FragmentNotificationAndSoundViewModel {
                         break;
                 }
 
-                callBackSoundGroup.set(text.toString());
-                poRbDialogSoundMessageGroup = which;
+                soundMessageGroupSelected = text.toString();
+                soundMessageGroupWhich = which;
 
-                editor.putString(SHP_SETTING.KEY_STNS_SOUND_GROUP, text.toString());
-                editor.putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, which);
-                editor.apply();
                 return true;
             }
-        }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).show();
+        }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                callBackSoundGroup.set(soundMessageGroupSelected);
+                poRbDialogSoundMessageGroup = soundMessageGroupWhich;
+
+                editor.putString(SHP_SETTING.KEY_STNS_SOUND_GROUP, soundMessageGroupSelected);
+                editor.putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, soundMessageGroupWhich);
+                editor.apply();
+
+            }
+        }).show();
     }
 
     public void onClickInAppSound(View view) {
