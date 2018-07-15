@@ -9,6 +9,8 @@
 
     <import type="android.graphics.Color" />
 
+    <import type="android.view.View" />
+
     <import type="net.iGap.G" />
 
     <variable
@@ -89,38 +91,62 @@
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/dp12"
+        android:layout_margin="@dimen/dp16"
         android:layoutDirection="locale"
         android:orientation="vertical">
 
 
         <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="@dimen/dp68"
           android:orientation="horizontal">
 
-          <TextView
-            android:layout_width="@dimen/dp100"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:minHeight="@dimen/dp44"
-            android:text="@string/phone_number"
-            android:textColor="@color/green" />
-
-          <EditText
-            android:id="@+id/fpc_editText_phone_number"
-            style="?hintColorSettingTheme"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+          <net.iGap.module.MaterialDesignTextView
+            style="?iconColorMenuTheme"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp44"
             android:gravity="center"
-            android:background="@android:color/transparent"
-            android:hint="09xxxxxxxxx"
-            android:inputType="phone"
-            android:maxLength="11"
-            android:minHeight="@dimen/dp44"
-            android:onTextChanged="@{fragmentPaymentChargeViewModel.onTextChanged}" />
+            android:text="@string/md_dialpad"
+            android:textAppearance="@style/TextIconAppearance.menu"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textSize="@dimen/dp22"
+            android:textStyle="bold" />
 
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <EditText
+              android:id="@+id/fpc_editText_phone_number"
+              style="?hintColorSettingTheme"
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp44"
+              android:background="@drawable/oval_gray"
+              android:hint="@string/phone_number"
+              android:inputType="phone"
+              android:maxLength="11"
+              android:minHeight="@dimen/dp44"
+              android:onTextChanged="@{fragmentPaymentChargeViewModel::onTextChanged}"
+              android:paddingLeft="@dimen/dp10"
+              android:paddingRight="@dimen/dp10"
+              android:textSize="@dimen/dp16">
+
+              <requestFocus />
+            </EditText>
+
+            <TextView
+              fontPath="fonts/IRANSansMobile.ttf"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingLeft="@dimen/dp10"
+              android:paddingRight="@dimen/dp10"
+              android:gravity="start"
+              android:text="@string/ex_mobile_phone"
+              android:textColor="@color/gray"
+              android:textSize="@dimen/dp10" />
+
+          </LinearLayout>
 
         </LinearLayout>
 
@@ -129,90 +155,165 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="start"
-          android:onCheckedChanged="@{fragmentPaymentChargeViewModel.checkBoxTarabordChanged}"
-          android:text="@string/trabord" />
+          android:layout_marginLeft="@dimen/dp8"
+          android:layout_marginTop="@dimen/dp4"
+          android:layout_marginBottom="@dimen/dp4"
+          android:layout_marginRight="@dimen/dp8"
+          android:onCheckedChanged="@{fragmentPaymentChargeViewModel::checkBoxTarabordChanged}"
+          android:text="@string/trabord"
+          android:textColor="@color/gray_4c"
+          android:textSize="@dimen/dp16" />
+
 
         <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="@dimen/dp52"
+          android:layout_marginBottom="@dimen/dp6"
           android:gravity="center"
           android:orientation="horizontal"
           android:visibility="@{fragmentPaymentChargeViewModel.observeTarabord , default = gone}">
 
-          <TextView
-            android:layout_width="@dimen/dp100"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/operator"
-            android:textColor="@color/green" />
+          <net.iGap.module.MaterialDesignTextView
+            style="?iconColorMenuTheme"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_format_list_bulleted"
+            android:textAppearance="@style/TextIconAppearance.menu"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textSize="@dimen/dp26"
+            android:textStyle="bold" />
 
-          <Spinner
-            android:id="@+id/fpc_spinner_operator"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:entries="@array/phone_operator"
-            android:minHeight="@dimen/dp44"
-            android:onItemSelected="@{fragmentPaymentChargeViewModel.onItemSelecteSpinerOperator}" />
+          <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/oval_gray"
+            android:gravity="center">
 
+            <Spinner
+              android:id="@+id/fpc_spinner_operator"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:minHeight="@dimen/dp44"
+              android:onItemSelected="@{fragmentPaymentChargeViewModel.onItemSelecteSpinerOperator}" />
 
-        </LinearLayout>
-
-        <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:gravity="center"
-          android:orientation="horizontal">
-
-          <TextView
-            android:layout_width="@dimen/dp100"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/charge_type"
-            android:textColor="@color/green" />
-
-          <Spinner
-            android:id="@+id/fpc_spinner_ChargeType"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:minHeight="@dimen/dp44" />
+          </LinearLayout>
 
 
         </LinearLayout>
 
         <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
+          android:layout_height="@dimen/dp52"
+          android:layout_marginBottom="@dimen/dp6"
           android:gravity="center"
           android:orientation="horizontal">
 
-          <TextView
-            android:layout_width="@dimen/dp100"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/price"
-            android:textColor="@color/green" />
+          <net.iGap.module.MaterialDesignTextView
+            style="?iconColorMenuTheme"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_format_list_bulleted"
+            android:textAppearance="@style/TextIconAppearance.menu"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textSize="@dimen/dp22"
+            android:textStyle="bold" />
 
-          <Spinner
-            android:id="@+id/fpc_spinner_price"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:minHeight="@dimen/dp44" />
+
+          <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/oval_gray">
+
+            <TextView
+              fontPath="fonts/IRANSansMobile.ttf"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:padding="@dimen/dp4"
+              android:text="@string/charge_type"
+              android:textColor="@color/gray"
+              android:textSize="@dimen/dp16"
+              android:visibility="@{fragmentPaymentChargeViewModel.observeChargeTypeHint}" />
+
+            <Spinner
+              android:id="@+id/fpc_spinner_ChargeType"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:minHeight="@dimen/dp44" />
+          </FrameLayout>
 
 
         </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/dp52"
+          android:layout_marginBottom="@dimen/dp6"
+          android:gravity="center"
+          android:orientation="horizontal">
+
+          <net.iGap.module.MaterialDesignTextView
+            style="?iconColorMenuTheme"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/md_currency_usd"
+            android:textAppearance="@style/TextIconAppearance.menu"
+            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textSize="@dimen/dp22"
+            android:textStyle="bold" />
+
+          <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/oval_gray">
+
+            <TextView
+              fontPath="fonts/IRANSansMobile.ttf"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:padding="@dimen/dp4"
+              android:textColor="@color/gray"
+              android:text="@string/price"
+              android:textSize="@dimen/dp16"
+              android:visibility="@{fragmentPaymentChargeViewModel.observePriceHint}" />
+
+            <Spinner
+              android:id="@+id/fpc_spinner_price"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:minHeight="@dimen/dp44" />
+
+          </FrameLayout>
+
+        </LinearLayout>
+
+        <ProgressBar
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_gravity="center"
+          android:indeterminate="true"
+          android:visibility="@{fragmentPaymentChargeViewModel.observeEnabledPayment ? View.GONE :View.VISIBLE}" />
 
         <Button
-          android:id="@+id/button"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="@dimen/dp20"
-          android:background="@color/md_blue_50"
-          android:onClick="@{fragmentPaymentChargeViewModel.onBuyClick}"
+          android:layout_width="@dimen/dp180"
+          android:layout_height="@dimen/dp40"
+          android:layout_gravity="center"
+          android:layout_marginTop="@dimen/dp20"
+          android:textAllCaps="false"
+          android:layout_marginBottom="@dimen/dp40"
+          android:enabled="@{fragmentPaymentChargeViewModel.observeEnabledPayment}"
+          android:background="@{fragmentPaymentChargeViewModel.observeBackGround}"
+          android:onClick="@{fragmentPaymentChargeViewModel::onBuyClick}"
           android:text="@string/buy"
-          android:textColor="@color/green"
+          android:textColor="@color/whit_background"
           android:textSize="@dimen/dp18" />
 
 

@@ -210,6 +210,7 @@ public class G extends MultiDexApplication {
     public static OnUserContactDelete onUserContactdelete;
     public static OnClientGetRoomListResponse onClientGetRoomListResponse;
     public static OnClientGetRoomResponse onClientGetRoomResponse;
+    public static OnInquiry onInquiry;
     public static OnSecuring onSecuring;
     public static OnChatGetRoom onChatGetRoom;
     public static OnChatEditMessageResponse onChatEditMessageResponse;
@@ -352,6 +353,7 @@ public class G extends MultiDexApplication {
     public static OnGeoGetConfiguration onGeoGetConfiguration;
     public static OnNotifyTime onNotifyTime;
     public static OnPayment onPayment;
+    public static OnMplResult onMplResult;
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
     public static ISignalingAccept iSignalingAccept;
@@ -378,10 +380,13 @@ public class G extends MultiDexApplication {
     public static Account iGapAccount;
     public static Card selectedCard = null;
 
+    public static int rotationState;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
+
 
         G.firstTimeEnterToApp = true;
 

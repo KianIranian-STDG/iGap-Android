@@ -182,8 +182,7 @@
           android:textSize="@dimen/dp14"
           android:textStyle="normal"
           android:visibility="visible"
-          style="?textTitleColorSettingTheme"
-          />
+          style="?textTitleColorSettingTheme" />
 
         <View
           android:layout_width="match_parent"
@@ -227,8 +226,7 @@
           style="?textTitleColorSettingTheme"
           android:textSize="@dimen/dp14"
           android:textStyle="normal"
-          android:visibility="visible"
-          />
+          android:visibility="visible" />
 
         <View
           android:layout_width="match_parent"

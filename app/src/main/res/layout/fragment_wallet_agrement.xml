@@ -102,7 +102,6 @@
           android:lineSpacingExtra="@dimen/dp4"
           android:overScrollMode="always"
           android:padding="@dimen/dp4"
-
           android:scrollbarSize="@dimen/dp6"
           android:scrollbarStyle="outsideInset"
           android:scrollbarThumbVertical="@color/gray_5c"
@@ -115,6 +114,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="start"
+          android:textSize="@dimen/dp14"
           android:onCheckedChanged="@{fragmentWalletAgreementViewModel.checkBoxAgreement}"
           android:text="@string/i_agree_with_the_terms" />
 

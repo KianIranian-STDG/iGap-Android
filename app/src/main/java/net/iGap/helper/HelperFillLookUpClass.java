@@ -239,17 +239,20 @@ public class HelperFillLookUpClass {
         lookupMap.put(39000, "ProtoWalletGetAccessToken.WalletGetAccessTokenResponse");
         lookupMap.put(39001, "ProtoWalletPaymentInit.WalletPaymentInitResponse");
         lookupMap.put(39002, "ProtoWalletRegister.WalletRegisterResponse");
-
+        lookupMap.put(39003, "ProtoWalletIdMapping.WalletIdMappingResponse");
 
         //Mpl 90xx
         lookupMap.put(39100, "ProtoMplGetBillToken.MplGetBillTokenResponse");
         lookupMap.put(39101, "ProtoMplGetTopupToken.MplGetTopupTokenResponse");
+        lookupMap.put(39200, "ProtoBillInquiryMci.BillInquiryMciResponse");
+        lookupMap.put(39201, "ProtoBillInquiryTelecom.BillInquiryTelecomResponse");
 
         // Push 600xx
         lookupMap.put(60000, "ProtoPushLoginToken.PushLoginTokenResponse");
         lookupMap.put(60001, "ProtoPushTwoStepVerification.PushTwoStepVerificationResponse");
         lookupMap.put(60002, "ProtoPushUserInfoExpired.PushUserInfoExpiredResponse");
         lookupMap.put(60003, "ProtoPushRateSignaling.PushRateSignalingResponse");
+        lookupMap.put(60004, "ProtoPushWalletPaymentVerified.PushWalletPaymentVerifiedResponse");
 
     }
 

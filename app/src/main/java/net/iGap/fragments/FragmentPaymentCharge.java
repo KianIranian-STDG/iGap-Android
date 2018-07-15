@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentChargeBinding;
 import net.iGap.interfaces.IBackHandler;
@@ -57,5 +58,11 @@ public class FragmentPaymentCharge extends BaseFragment {
 
         fragmentPaymentChargeBinding.setBackHandler(iBackHandler);
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        G.onMplResult = null;
     }
 }

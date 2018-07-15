@@ -49,7 +49,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
-import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.module.AndroidUtils.closeKeyboard;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
@@ -234,6 +233,11 @@ public class FragmentEditImage extends BaseFragment {
             @Override
             public void onClick(View v) {
                 new HelperFragment(FragmentEditImage.this).remove();
+
+                if (textImageList.size() == 0) {
+                    setValueCheckBox(viewPager.getCurrentItem());
+                }
+
                 completeEditImage.result("", edtChat.getText().toString(), textImageList);
                 AndroidUtils.closeKeyboard(v);
             }
@@ -577,7 +581,9 @@ public class FragmentEditImage extends BaseFragment {
             LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.adapter_viewpager_edittext, (ViewGroup) container, false);
             final ImageView imgPlay = (ImageView) layout.findViewById(R.id.img_editImage);
-            G.imageLoader.displayImage(suitablePath(itemGalleryList.get(position).path), imgPlay);
+            if (itemGalleryList.get(position).path != null) {
+                G.imageLoader.displayImage(suitablePath(itemGalleryList.get(position).path), imgPlay);
+            }
 
             imgPlay.setOnClickListener(new View.OnClickListener() {
                 @Override

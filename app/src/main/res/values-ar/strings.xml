@@ -2149,52 +2149,74 @@
   <string name="customization">التخصيص</string>
   <string name="Apply_colors_to_customize">تطبيق الألوان لتخصيصها</string>
 
-  <string name="payment">Payment</string>
-  <string name="buy_charge">Buy a mobile charge</string>
-  <string name="pay_bills">Pay bills</string>
-  <string name="barcode_reader">Barcode reader</string>
-  <string name="billing_id">Billing ID</string>
-  <string name="enter">enter</string>
-  <string name="payment_code">Payment code</string>
-  <string name="amount">Amount</string>
-  <string name="buy">Buy</string>
-  <string name="select">select</string>
-  <string name="hamrahe_aval">hamrahe aval</string>
-  <string name="irancell">irancell</string>
-  <string name="ritel">ritel</string>
-  <string name="normal_charge">Normal charge</string>
-  <string name="amazing">Amazing charge</string>
-  <string name="wimax_charging">WiMAX charging</string>
-  <string name="permanently_charge">Charge the SIM card permanently</string>
+  <string name="payment">دفع</string>
+  <string name="buy_charge">شراء رسوم المحمول</string>
+  <string name="pay_bills">ادفع الفواتير</string>
+  <string name="pay_bills_crime">دفع فواتير مخالفات المرور</string>
+  <string name="barcode_reader">قارئ الباركود</string>
+  <string name="billing_id">معرف الفواتير</string>
+  <string name="enter">أدخل</string>
+  <string name="payment_code">رمز الدفع</string>
+  <string name="amount">قدر</string>
+  <string name="buy">يشترى</string>
+  <string name="select">انتخب</string>
+  <string name="hamrahe_aval">همراه اول</string>
+  <string name="irancell">ایرانسل</string>
+  <string name="ritel">رایتل</string>
+  <string name="normal_charge">شحنة عادية</string>
+  <string name="amazing">تهمة مذهلة</string>
+  <string name="wimax_charging">شحن وایمکس</string>
+  <string name="permanently_charge">قم بشحن بطاقة  بشكل دائم</string>
 
-  <string name="charge_1"> 10,000 Rials</string>
-  <string name="charge_2"> 20,000 Rials</string>
-  <string name="charge_5"> 50,000 Rials</string>
-  <string name="charge_10"> 100,000 Rials</string>
-  <string name="charge_20"> 200,000 Rials</string>
+  <string name="charge_1"> 10.000 ریالی</string>
+  <string name="charge_2"> 20.000 ریالی</string>
+  <string name="charge_5"> 50.000 ریالی</string>
+  <string name="charge_10"> 100.000 ریالی</string>
+  <string name="charge_20"> 200.000 ریالی</string>
 
-  <string name="charge_1_ir">10,000 Rials + 9% Value Added = 10,900 Rials</string>
-  <string name="charge_2_ir">20,000 Rials + 9% Value Added = 21,180 Rials</string>
-  <string name="charge_5_ir">50,000 Rials + 9% Value Added = 54,500 Rials</string>
-  <string name="charge_10_ir">100,000 Rials + 9% Value Added = 109,000 Rials</string>
-  <string name="charge_20_ir">200,000 Rials + 9% Value Added = 218,000 Rials</string>
-  <string name="biling_id_not_valid">Billing id is not valid</string>
-  <string name="pay_id_is_not_valid">Pay Id is not valid</string>
-  <string name="charge_type">Charge type</string>
-  <string name="operator">operator</string>
-  <string name="trabord">trabord</string>
-  <string name="time_out_error">time out error</string>
-  <string name="connection_error">no connection error</string>
-  <string name="server_error">server error</string>
-  <string name="network_error">network error</string>
-  <string name="dialog_canceled">dialog canceled</string>
-  <string name="device_root">device root</string>
-  <string name="phone_number_is_not_valid">phone number is not valid</string>
-  <string name="please_select_operator">please select operator</string>
-  <string name="wallet">Wallet</string>
-  <string name="loading_wallet_agreement">Loading wallet agreement</string>
-  <string name="i_agree_with_the_terms">I agree with the terms</string>
-  <string name="accept_the_terms">Accept the terms</string>
-  <string name="wallet_agrement">Wallet agrement</string>
+  <string name="charge_1_ir">10.000 ریالی +  9%  القيمة المضافة = 10.900 ریال</string>
+  <string name="charge_2_ir">20.000 ریالی +  9%  القيمة المضافة = 21.180 ریال</string>
+  <string name="charge_5_ir">50.000 ریالی +  9%  القيمة المضافة = 54.500 ریال</string>
+  <string name="charge_10_ir">100.000 ریالی +  9%  القيمة المضافة = 109.000 ریال</string>
+  <string name="charge_20_ir">200.000 ریالی +  9%  القيمة المضافة = 218.000 ریال</string>
 
+  <string name="biling_id_not_valid">معرف الفوترة غير صالح</string>
+  <string name="pay_id_is_not_valid">معرف الدفع غير صالح</string>
+  <string name="charge_type">نوع التهمة</string>
+  <string name="operator">عامل</string>
+  <string name="trabord">ترابرد</string>
+  <string name="time_out_error">مهلة خطأ</string>
+  <string name="connection_error">لا يوجد خطأ اتصال</string>
+  <string name="server_error">خطأ في الخادم</string>
+  <string name="network_error">خطأ في الشبكة</string>
+  <string name="dialog_canceled">الحوار الملغى</string>
+  <string name="device_root">جذر الجهاز</string>
+  <string name="phone_number_is_not_valid">رقم الهاتف غير صالح</string>
+  <string name="please_select_operator">يرجى اختيار المشغل</string>
+  <string name="wallet">محفظة</string>
+  <string name="loading_wallet_agreement">تحميل اتفاقية المحفظة</string>
+  <string name="i_agree_with_the_terms">أنا أتفق مع الشروط</string>
+  <string name="accept_the_terms">اقبل الشروط</string>
+  <string name="wallet_agrement">اتفاقية المحفظة</string>
+  <string name="bills_inquiry_mci">فواتير استفسار همراه اول </string>
+  <string name="bills_inquiry_telecom">فواتير استفسار ثائق الهاتف </string>
+  <string name="bills_inquiry_title">فواتير التحقيق</string>
+  <string name="bill_type">نوع الفاتورة</string>
+  <string name="telecom">ثائق الهاتف</string>
+  <string name="phone">هاتف</string>
+  <string name="area_code">رمز المنطقة</string>
+  <string name="inquiry">استعلام</string>
+  <string name="mci_opreator_check">هذا الرقم ليس في مشغل همراه اول</string>
+  <string name="mid_term">منتصف المدة</string>
+  <string name="intermediate_payment">الدفعة المتوسطة</string>
+  <string name="last_term">الفصل الأخير</string>
+  <string name="last_term_payment">دفعة الاخيرة</string>
+  <string name="responsible_for_all_financial_services">مسؤول عن جميع الخدمات المالية</string>
+  <string name="parsian_e_commerce_company_top">شركة پارسیان للتجارة الإلكترونية (تاپ)</string>
+  <string name="is_empty">is</string>
+  <string name="customer_response_center_021_2318">مركز استجابة العملاء: 021-2318</string>
+  <string name="ex_mobile_phone">مثال : 09123456789</string>
+  <string name="ex_area">مثال : 021</string>
+  <string name="ex_phone">مثال : 44567899</string>
+  <string name="sync_contact">اتصالات المزامنة</string>
 </resources>
