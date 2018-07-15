@@ -134,7 +134,7 @@ dependencies {
     }
     implementation 'com.github.RooyeKhat-Media:Websocket:1.0.0'
     implementation 'com.github.RooyeKhat-Media:MessageProgress:1.0.0'
-    implementation 'com.github.RooyeKhat-Media:Proto:Build90'
+    implementation 'com.github.RooyeKhat-Media:Proto:Build91'
     implementation project(':pecpayment-release')
     implementation 'com.mcxiaoke.volley:library:1.0.19'
 }
