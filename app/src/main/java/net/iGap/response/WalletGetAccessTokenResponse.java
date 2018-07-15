@@ -49,14 +49,11 @@ public class WalletGetAccessTokenResponse extends MessageHandler {
         }
         auth.save();
         EventManager.getInstance().postEvent(EventManager.ON_ACCESS_TOKEN_RECIVE, socketMessages.SUCCESS);
-        Log.i("CCCCCCCCC", "4 handler: builder.getTokenType():" + builder.getTokenType() + "   ||   builder.getAccessToken(): " + builder.getAccessToken() + "   ||   builder.getExpiresIn():" + builder.getExpiresIn());
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        Log.i("CCCCCCCCC", "4 timeOut: ");
-
         EventManager.getInstance().postEvent(EventManager.ON_ACCESS_TOKEN_RECIVE, socketMessages.FAILED);
     }
 
@@ -67,8 +64,6 @@ public class WalletGetAccessTokenResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
         EventManager.getInstance().postEvent(EventManager.ON_ACCESS_TOKEN_RECIVE, socketMessages.FAILED);
-        Log.i("CCCCCCCCC", "4 error: " + majorCode);
-
     }
 }
 

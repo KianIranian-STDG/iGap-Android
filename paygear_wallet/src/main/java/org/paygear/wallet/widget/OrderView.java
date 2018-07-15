@@ -175,7 +175,7 @@ public class OrderView extends LinearLayout {
             } else {
                 title.setText(R.string.payment_pending);
                 title.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-                        order.isPaid ? R.drawable.ic_payment_out : R.drawable.ic_payment_pending, 0);
+                        order.isVerified ? R.drawable.ic_payment_out : R.drawable.ic_payment_pending, 0);
                 subtitle.setText("-");
                 imgRes = R.drawable.ic_money;
                 price.setTextColor(ContextCompat.getColor(getContext(), R.color.disabled_text));

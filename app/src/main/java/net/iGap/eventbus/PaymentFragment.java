@@ -42,6 +42,9 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestUserProfileSetNickname;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletPaymentInit;
+import net.iGap.webservice.APIService;
+import net.iGap.webservice.ApiUtils;
+import net.iGap.webservice.Post;
 
 import org.paygear.wallet.RaadApp;
 import org.paygear.wallet.WalletActivity;
@@ -61,6 +64,8 @@ import java.util.Map;
 import ir.radsense.raadcore.app.AlertDialog;
 import ir.radsense.raadcore.model.Auth;
 import ir.radsense.raadcore.web.PostRequest;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,6 +89,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
     public static final int requestCodeQrCode = 200;
     public static final int requestCodeBarcode = 201;
     MaterialDialog progressDialog;
+    private APIService mAPIService;
 
     public PaymentFragment() {
         // Required empty public constructor
@@ -294,7 +300,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
 
     }
 
-    private void startPay(PaymentAuth paymentAuth, String pin) {
+    private void startPay(final PaymentAuth paymentAuth, String pin) {
 
         String cardDataRSA = getCardDataRSA(paymentAuth, selectedCard, pin, null);
         Map<String, String> finalInfoMap = new HashMap<>();
@@ -304,7 +310,8 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         showProgress();
         Web.getInstance().getWebService().pay(PostRequest.getRequestBody(finalInfoMap)).enqueue(new Callback<PaymentResult>() {
             @Override
-            public void onResponse(Call<PaymentResult> call, Response<PaymentResult> response) {
+            public void onResponse(Call<PaymentResult> call, final Response<PaymentResult> response) {
+
 
                 if (progressDialog != null) progressDialog.dismiss();
 //                DialogMaker.disMissDialog();
@@ -317,6 +324,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                             RaadApp.cards = null;
                             dialog.dismiss();
                             fragmentActivity.onBackPressed();
+                            sendPost(response.body().callbackUrl);
                         }
                     });
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
@@ -613,6 +621,30 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                 .build();
 
         progressDialog.show();
+    }
+
+    public void sendPost(String body) {
+        Map<String, String> finalInfoMap = new HashMap<>();
+        finalInfoMap.put("token", body);
+        mAPIService = ApiUtils.getAPIService();
+        mAPIService.sendToken(getRequestBody(finalInfoMap)).enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (response.isSuccessful()) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+            }
+        });
+
+    }
+
+    public static RequestBody getRequestBody(Object object) {
+        Gson gson = new Gson();
+        String json = gson.toJson(object);
+        return RequestBody.create(MediaType.parse("application/json"), json);
     }
 
 }

@@ -18,5 +18,8 @@ public class PaymentResult implements Serializable {
     public long invoiceNumber;
     public long amount;
     public KeyValue[] result;
-
+    @SerializedName("callback_url")
+    public String callbackUrl;
 }
+
+

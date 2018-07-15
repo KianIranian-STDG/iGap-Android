@@ -71,6 +71,9 @@ public class Order implements Serializable {
     @SerializedName("transaction_type")
     public int transactionType;
 
+    @SerializedName("is_verified")
+    public boolean isVerified;
+
     public Account receiver;
     public Account sender;
 

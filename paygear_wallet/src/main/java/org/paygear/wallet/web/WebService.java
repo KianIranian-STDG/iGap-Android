@@ -109,6 +109,9 @@ public interface WebService {
     @POST("payment/v3/pay")
     Call<PaymentResult> pay(@Body RequestBody cardInfoJsonBody);
 
+//    @POST("payment/v3/pay")
+//    Call<PaymentResult> pay(@Body RequestBody cardInfoJsonBody);
+
     @GET("payment/v3/accounts/{account_id}/orders")
     Call<PaginateList<Order>> getOrders(@Path("account_id") String accountId,
                                         @Query("mode") int mode,
