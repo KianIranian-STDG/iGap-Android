@@ -1278,6 +1278,6 @@
   <string name="last_term">last term</string>
   <string name="last_term_payment">last term payment</string>
   <string name="open_map">open in Gmap</string>
-    <string name="send_location_text">Send your current location</string>
+    <string name="send_location_text">Send selected location</string>
 
 </resources>

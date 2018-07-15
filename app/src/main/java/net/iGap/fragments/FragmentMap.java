@@ -17,19 +17,25 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,11 +50,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
+import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.module.AndroidUtils;
+import net.iGap.module.MaterialDesignTextView;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
+import net.iGap.realm.RealmRoom;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -56,25 +69,58 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import io.realm.Realm;
+
 import static net.iGap.R.id.mf_fragment_map_view;
-import static net.iGap.R.id.st_fab_gps;
 
 public class FragmentMap extends BaseFragment implements OnMapReadyCallback, View.OnClickListener {
 
     public static String Latitude = "latitude";
     public static String Longitude = "longitude";
     public static String PosoitionMode = "positionMode";
+
+
     public static String flagFragmentMap = "FragmentMap";
     Marker marker;
     private GoogleMap mMap;
     private Double latitude;
     private Double longitude;
     private Mode mode;
-    private TextView accuracy;
+    private TextView accuracy, txtTitle, txtUserName, txtDistance;
+    private ImageView imgProfile;
 
-
-    private RelativeLayout rvSendPosition,rvSeePosition;
+    private RelativeLayout rvSendPosition, rvSeePosition;
     private FloatingActionButton fabOpenMap;
+    private Bundle bundle;
+    private RelativeLayout rvIcon;
+    private net.iGap.module.MaterialDesignTextView itemIcon;
+     /*       Realm realm = Realm.getDefaultInstance();
+        ProtoGlobal.Room.Type type=  RealmRoom.detectType(mMessage.roomId);
+        if (type== ProtoGlobal.Room.Type.CHAT|| type== ProtoGlobal.Room.Type.GROUP)
+        {
+
+
+            RealmRegisteredInfo realmRegisteredInfo =  realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID,12342).findFirst();
+        }else{
+
+        }*/
+
+    public static FragmentMap getInctance(Double latitude, Double longitude, Mode mode, int type, long roomId, String senderID) {
+
+        FragmentMap fragmentMap = new FragmentMap();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", type);
+        bundle.putLong("roomId", roomId);
+        bundle.putString("senderId", senderID);
+
+        bundle.putDouble(FragmentMap.Latitude, latitude);
+        bundle.putDouble(FragmentMap.Longitude, longitude);
+        bundle.putSerializable(PosoitionMode, mode);
+
+        fragmentMap.setArguments(bundle);
+        return fragmentMap;
+    }
 
     public static FragmentMap getInctance(Double latitude, Double longitude, Mode mode) {
 
@@ -86,7 +132,6 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         bundle.putSerializable(PosoitionMode, mode);
 
         fragmentMap.setArguments(bundle);
-
         return fragmentMap;
     }
 
@@ -128,16 +173,47 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     public void onViewCreated(View view, @Nullable Bundle saveInctanceState) {
         super.onViewCreated(view, saveInctanceState);
 
-        accuracy=(TextView) view.findViewById(R.id.mf_txt_accuracy);
 
-        rvSendPosition=(RelativeLayout) view.findViewById(R.id.mf_rv_see_position);
+        /* *//**//* itemIcon = (MaterialDesignTextView) view.findViewById(R.id.mf_icon);*/
 
+
+        rvIcon = (RelativeLayout) view.findViewById(R.id.rv_icon);
+
+        Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.ic_circle_shape);
+        if (mDrawableSkip != null) {
+            mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                rvIcon.setBackground(mDrawableSkip);
+            }
+        }
+
+
+        imgProfile = (ImageView) view.findViewById(R.id.mf_imgProfile);
+
+        rvSendPosition = (RelativeLayout) view.findViewById(R.id.mf_rv_send_position);
+        rvSeePosition = (RelativeLayout) view.findViewById(R.id.mf_rv_see_position);
+
+        accuracy = (TextView) view.findViewById(R.id.mf_txt_accuracy);
+        txtTitle = (TextView) view.findViewById(R.id.mf_txt_message);
+
+        txtUserName = (TextView) view.findViewById(R.id.mf_txt_userName);
+        txtDistance = (TextView) view.findViewById(R.id.mf_txt_distance);
+
+
+        txtUserName.setTextColor(Color.parseColor(G.appBarColor));
+
+        accuracy.setTextColor(Color.parseColor(G.textSubTheme));
+        txtDistance.setTextColor(Color.parseColor(G.textSubTheme));
+
+
+        //rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
+        txtTitle.setTextColor(Color.parseColor(G.appBarColor));
 
         fabOpenMap = (FloatingActionButton) view.findViewById(R.id.mf_fab_openMap);
         fabOpenMap.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
         fabOpenMap.setColorFilter(Color.WHITE);
 
-        Bundle bundle = getArguments();
+        bundle = getArguments();
 
         if (bundle != null) {
 
@@ -149,7 +225,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                 G.onHelperSetAction.onAction(ProtoGlobal.ClientAction.SENDING_LOCATION);
             }
 
-            initComponent(view);
+            initComponent(view, bundle.getInt("type", 0), bundle.getLong("roomId", 00), bundle.getString("senderId", null));
         } else {
             close();
         }
@@ -168,7 +244,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         popBackStackFragment();
     }
 
-    private void initComponent(View view) {
+    private void initComponent(View view, int type, long roomId, String senderId) {
 
         SupportMapFragment mapFragment = new SupportMapFragment();
 
@@ -186,20 +262,75 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         rvSendPosition = (RelativeLayout) view.findViewById(R.id.mf_rv_send_position);
 
 
-
-        rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
+        //  rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (mode == Mode.sendPosition) {
             fabOpenMap.setVisibility(View.GONE);
+            rvSendPosition.setVisibility(View.VISIBLE);
+            rvSeePosition.setVisibility(View.GONE);
             rvSendPosition.setOnClickListener(this);
 
 
         } else if (mode == Mode.seePosition) {
-
+            rvSeePosition.setVisibility(View.VISIBLE);
+            fabOpenMap.setVisibility(View.VISIBLE);
             rvSendPosition.setVisibility(View.GONE);
             fabOpenMap.setOnClickListener(this);
 
+            Realm realm = Realm.getDefaultInstance();
+
+            if (type == ProtoGlobal.Room.Type.CHAT.getNumber() || type == ProtoGlobal.Room.Type.GROUP.getNumber()) {
+
+                RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(senderId)).findFirst();
+                txtUserName.setText(realmRegisteredInfo.getDisplayName());
+
+                setAvatar(Long.parseLong(senderId));
+
+
+            } else {
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRegisteredInfoFields.ID, roomId).findFirst();
+                txtUserName.setText(realmRoom.getTitle());
+
+                setAvatar(roomId);
+
+            }
+
+            realm.close();
+            //  HelperAvatar.
+
+
         }
+    }
+
+    private void setAvatar(long id) {
+
+        HelperAvatar.getAvatar(id, HelperAvatar.AvatarType.ROOM, true, new OnAvatarGet() {
+            @Override
+            public void onAvatarGet(final String avatarPath, long ownerId) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        //   if (!isCloudRoom) {
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgProfile);
+                        //     }
+                    }
+                });
+            }
+
+            @Override
+            public void onShowInitials(final String initials, final String color) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        //   if (!isCloudRoom && imvUserPicture != null) {
+                        imgProfile.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color));
+                        //    }
+                    }
+                });
+            }
+        });
+
     }
 
     //****************************************************************************************************
@@ -268,7 +399,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                         latitude = mapCenter.latitude;
                         longitude = mapCenter.longitude;
 
-                        accuracy.setText(latitude+",  ,"+longitude);
+                        accuracy.setText("( " + String.format("%.6f", latitude) + " , " + String.format("%.6f", longitude) + " )");
 
                         if (marker != null) {
                             marker.remove();
