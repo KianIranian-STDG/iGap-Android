@@ -305,7 +305,7 @@ public final class ContactUtils {
                                 public void run() {
                                     dialog[0].dismiss();
                                 }
-                            },500);
+                            }, 500);
                         }
                     }, new Realm.Transaction.OnSuccess() {
                         @Override

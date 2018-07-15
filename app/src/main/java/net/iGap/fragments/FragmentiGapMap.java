@@ -208,7 +208,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     private boolean isSendRequestGeoCoordinate = false;
     private String url;
     static boolean changeState = false;
-    private int orientation =G.rotationState;
+    private int orientation = G.rotationState;
     private MaterialDialog dialog;
 
     public static FragmentiGapMap getInstance() {
@@ -499,11 +499,11 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                        wmlp.y = ViewMaker.dpToPixel(400);
 
                 }else */
-                    if (orientation == 1) {
+                if (orientation == 1) {
                     //Do some stuff
                     wmlp.y = ViewMaker.dpToPixel(400);   //y
 
-                }else if (orientation == 2) {
+                } else if (orientation == 2) {
                     //Do some stuff
                     wmlp.y = ViewMaker.dpToPixel(160);   //y
                 }
