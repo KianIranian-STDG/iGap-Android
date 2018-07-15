@@ -491,7 +491,6 @@
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_general"
-            android:textColor="@color/green"
             android:textSize="@dimen/dp18"
             android:textStyle="bold"
 
@@ -667,6 +666,7 @@
               android:textStyle="normal" />
 
             <TextView
+              style="?textTitleColorSettingTheme"
               android:id="@+id/st_txt_data"
               fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="wrap_content"
@@ -830,7 +830,6 @@
             android:paddingBottom="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_message"
-            android:textColor="@color/green"
             android:textSize="@dimen/dp18"
             android:textStyle="normal" />
 
@@ -858,6 +857,7 @@
 
 
             <TextView
+              style="?textTitleColorSettingTheme"
               android:id="@+id/st_txt_messageTextSize_number"
               fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="wrap_content"
@@ -1508,7 +1508,6 @@
             android:paddingBottom="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_support"
-            android:textColor="@color/green"
             android:textSize="@dimen/dp18"
             android:textStyle="normal" />
 

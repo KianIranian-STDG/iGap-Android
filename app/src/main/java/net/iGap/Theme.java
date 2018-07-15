@@ -124,7 +124,7 @@ public class Theme extends Application {
                         "#bbbbbb",
                         "#000000",
                         "#e9e9e9",
-                        "#696969",
+                        "#FFFFFF",
                         "#e679dde6",
                         "#FFFFFF",
                         preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, default_appBarColor),
@@ -151,7 +151,7 @@ public class Theme extends Application {
                         "#bbbbbb",
                         "#000000",
                         "#e9e9e9",
-                        "#696969",
+                        "#FFFFFF",
                         "#e679dde6",
                         "#FFFFFF",
                         "#00BCD4",
@@ -210,7 +210,7 @@ public class Theme extends Application {
                         "#FFFFFF",
                         "#FFFFFF",
                         "#ffcdd2",
-                        "#303F9F"
+                        "#283593"
                 );
                 break;
             case PINK:
@@ -235,7 +235,7 @@ public class Theme extends Application {
                         "#FFFFFF",
                         "#FFFFFF",
                         "#f8bbd0",
-                        "#303F9F"
+                        "#283593"
                 );
                 break;
             case PURPLE:
@@ -335,7 +335,7 @@ public class Theme extends Application {
                         "#FFFFFF",
                         "#FFFFFF",
                         "#bbdefb",
-                        "#303F9F"
+                        "#283593"
                 );
                 break;
 
@@ -361,7 +361,7 @@ public class Theme extends Application {
                         "#FFFFFF",
                         "#FFFFFF",
                         "#b3e5fc",
-                        "#303F9F"
+                        "#283593"
                 );
                 break;
 
@@ -387,7 +387,7 @@ public class Theme extends Application {
                         "#FFFFFF",
                         "#FFFFFF",
                         "#b2ebf2",
-                        "#303F9F"
+                        "#283593"
                 );
                 break;
             case TEAL:
@@ -437,7 +437,7 @@ public class Theme extends Application {
                         "#FFFFFF",
                         "#FFFFFF",
                         "#c8e6c9",
-                        "#303F9F"
+                        "#283593"
                 );
                 break;
             case LIGHT_GREEN:
@@ -462,7 +462,7 @@ public class Theme extends Application {
                         "#FFFFFF",
                         "#FFFFFF",
                         "#dcedc8",
-                        "#536DFE"
+                        "#283593"
                 );
                 break;
             case LIME:
@@ -487,7 +487,7 @@ public class Theme extends Application {
                         "#212121",
                         "#212121",
                         "#f0f4c3",
-                        "#00BCD4"
+                        "#283593"
                 );
                 break;
 
@@ -538,7 +538,7 @@ public class Theme extends Application {
                         "#212121",
                         "#212121",
                         "#ffecb3",
-                        "#00BCD4"
+                        "#283593"
                 );
                 break;
             case ORANGE:
@@ -563,7 +563,7 @@ public class Theme extends Application {
                         "#212121",
                         "#212121",
                         "#ffe0b2",
-                        "#00BCD4"
+                        "#283593"
                 );
                 break;
 
@@ -638,7 +638,7 @@ public class Theme extends Application {
                         "#616161",
                         "#9E9E9E",
                         "#9E9E9E",//fab bottom
-                        "#212121",
+                        "#ffffff",
                         "#212121",
                         "#f5f5f5",
                         "#536DFE"
@@ -692,7 +692,7 @@ public class Theme extends Application {
                         "#FFFFFF",
                         "#FFFFFF",
                         "#cfd8dc",
-                        "#303F9F"
+                        "#00bcd4"
                 );
                 break;
 
@@ -744,7 +744,7 @@ public class Theme extends Application {
                         "#FFFFFF",
                         "#FFFFFF",
                         "#D7CCC8",
-                        "#303F9F"
+                        "#00bcd4"
                 );
                 break;
             case TEAL_COMPLETE:
@@ -792,11 +792,10 @@ public class Theme extends Application {
                         "#616161",
                         "#9E9E9E",
                         "#9E9E9E",//fab bottom
-                        "#212121",
+                        "#ffffff",
                         "#212121",
                         "#F5F5F5",
-                        "#536DFE"
-
+                        "#2196f3"
                 );
                 break;
         }
