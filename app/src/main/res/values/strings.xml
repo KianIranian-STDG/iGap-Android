@@ -1279,5 +1279,17 @@
   <string name="last_term_payment">last term payment</string>
   <string name="open_map">open in Gmap</string>
     <string name="send_location_text">Send selected location</string>
+    <string name="map_distance">m away</string>
 
+
+  <string name="responsible_for_all_financial_services">Responsible for all financial services</string>
+  <string name="parsian_e_commerce_company_top">Parsian e-commerce company (top)</string>
+  <string name="is_empty"></string>
+  <string name="customer_response_center_021_2318">Customer Support Center: 021-2318</string>
+  <string name="ex_mobile_phone">Ex : 09123456789</string>
+  <string name="ex_area">Ex : 021</string>
+  <string name="ex_phone">Ex : 44567899</string>
+  <string name="satellite_view">Satellite View</string>
+  <string name="default_view">Default View</string>
+  <string name="sync_contact">Sync Contact</string>
 </resources>
