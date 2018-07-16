@@ -966,7 +966,7 @@ public class ViewMaker {
         fileSize.setSingleLine(true);
         fileSize.setText("3.2 mb");
         fileSize.setAllCaps(TRUE);
-        fileSize.setTextColor(Color.parseColor(G.textBubble));
+        fileSize.setTextColor(Color.parseColor(G.textChatMusic));
         setTextSize(fileSize, R.dimen.dp12);
         setTypeFace(fileSize);
         LinearLayout.LayoutParams layout_996 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -987,7 +987,7 @@ public class ViewMaker {
         fileName.setTextAppearance(context, android.R.style.TextAppearance_Medium);
         fileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
         fileName.setText("file_name.ext");
-        fileName.setTextColor(Color.parseColor(G.textBubble));
+        fileName.setTextColor(Color.parseColor(G.textChatMusic));
         setTextSize(fileName, R.dimen.dp14);
         fileName.setTypeface(G.typeface_IRANSansMobile_Bold);
         LinearLayout.LayoutParams layout_298 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -1000,7 +1000,7 @@ public class ViewMaker {
         songArtist.setSingleLine(true);
         songArtist.setText("Artist");
         setTypeFace(songArtist);
-        songArtist.setTextColor(Color.parseColor(G.textBubble));
+        songArtist.setTextColor(Color.parseColor(G.textChatMusic));
         LinearLayout.LayoutParams layout_757 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         songArtist.setLayoutParams(layout_757);
         linearLayout_222.addView(songArtist);
