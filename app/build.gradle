@@ -129,7 +129,7 @@ dependencies {
     compile 'com.sothree.slidinguppanel:library:3.4.0'
     compile 'com.github.krokyze:ucropnedit:2.2.2'
     implementation 'info.androidhive:imagefilters:1.0.7'
-    compile 'com.mindorks.android:prdownloader:0.3.0'
+    implementation 'com.mindorks.android:prdownloader:0.4.0'
     implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.google.firebase:firebase-messaging:17.0.0'
     implementation('com.github.RooyeKhat-Media:Compress:1.0.0') {

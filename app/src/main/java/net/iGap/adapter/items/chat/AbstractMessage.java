@@ -1043,7 +1043,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     private void checkAutoDownload(final VH holder, final RealmAttachment attachment, Context context, HelperCheckInternetConnection.ConnectivityType connectionMode) {
 
-        if (HelperDownloadFile.manuallyStoppedDownload.contains(attachment.getCacheId())) { // for avoid from reDownload in autoDownload state , after that user manually stopped download.
+        if (HelperDownloadFile.getInstance().manuallyStoppedDownload.contains(attachment.getCacheId())) { // for avoid from reDownload in autoDownload state , after that user manually stopped download.
             return;
         }
 
@@ -1358,8 +1358,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             } else {
                 messageClickListener.onUploadOrCompressCancel(progress, mMessage, holder.getAdapterPosition(), SendingStep.UPLOADING);
             }
-        } else if (HelperDownloadFile.isDownLoading(attachment.getCacheId())) {
-            HelperDownloadFile.stopDownLoad(attachment.getCacheId());
+        } else if (HelperDownloadFile.getInstance().isDownLoading(attachment.getCacheId())) {
+            HelperDownloadFile.getInstance().stopDownLoad(attachment.getCacheId());
         } else {
             if (thumbnail != null) {
                 thumbnail.setVisibility(View.VISIBLE);
@@ -1424,7 +1424,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (token != null && token.length() > 0 && size > 0) {
 
-            HelperDownloadFile.startDownload(mMessage.messageID, token, url, attachment.getCacheId(), name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.getInstance().startDownload(mMessage.messageID, token, url, attachment.getCacheId(), name, size, selector, "", 4, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, int progress) {
 
@@ -1461,7 +1461,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             return;
         }
 
-        boolean _isDownloading = HelperDownloadFile.isDownLoading(attachment.getCacheId());
+        boolean _isDownloading = HelperDownloadFile.getInstance().isDownLoading(attachment.getCacheId());
 
         final MessageProgress progressBar = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         AppUtils.setProgresColor(progressBar.progressBar);
@@ -1483,7 +1483,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             progressBar.withDrawable(R.drawable.ic_cancel, false);
 
 
-            HelperDownloadFile.startDownload(mMessage.messageID, token, url, attachment.getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.getInstance().startDownload(mMessage.messageID, token, url, attachment.getCacheId(), name, size, selector, _path, priority, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(final String path, final int progress) {
 
@@ -1661,7 +1661,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         AppUtils.setProgresColor(progress.progressBar);
 
-        if (HelperDownloadFile.isDownLoading(attachment.getCacheId())) {
+        if (HelperDownloadFile.getInstance().isDownLoading(attachment.getCacheId())) {
             hideThumbnailIf(holder);
 
             downLoadFile(holder, attachment, 0);

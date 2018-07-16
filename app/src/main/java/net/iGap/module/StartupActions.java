@@ -14,8 +14,6 @@ import com.downloader.PRDownloaderConfig;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.one.EmojiOneProvider;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -25,7 +23,6 @@ import net.iGap.WebSocketClient;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFillLookUpClass;
 import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.helper.HelperPermission;
@@ -100,7 +97,6 @@ public final class StartupActions {
         /**
          * initialize download and upload listeners
          */
-        new HelperDownloadFile();
         new HelperUploadFile();
     }
 

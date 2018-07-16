@@ -1220,7 +1220,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                         result = true;
 
-                        HelperDownloadFile.startDownload(rm.getMessageId() + "", _token, _url, _cacheId, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
+                        HelperDownloadFile.getInstance().startDownload(rm.getMessageId() + "", _token, _url, _cacheId, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(String path, int progress) {
                                 if (progress == 100) {
