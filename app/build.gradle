@@ -35,10 +35,16 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
         javaCompileOptions {
+
             annotationProcessorOptions {
                 includeCompileClasspath true
             }
         }
+    }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 
     dataBinding {
