@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -20,7 +21,10 @@ import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -38,9 +42,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -57,6 +63,7 @@ import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.GPSTracker;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -71,9 +78,10 @@ import java.io.OutputStream;
 
 import io.realm.Realm;
 
+import static net.iGap.R.id.location;
 import static net.iGap.R.id.mf_fragment_map_view;
 
-public class FragmentMap extends BaseFragment implements OnMapReadyCallback, View.OnClickListener {
+public class FragmentMap extends BaseFragment implements OnMapReadyCallback, View.OnClickListener, LocationListener {
 
     public static String Latitude = "latitude";
     public static String Longitude = "longitude";
@@ -279,6 +287,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
             Realm realm = Realm.getDefaultInstance();
 
+
             if (type == ProtoGlobal.Room.Type.CHAT.getNumber() || type == ProtoGlobal.Room.Type.GROUP.getNumber()) {
 
                 RealmRegisteredInfo realmRegisteredInfo = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, Long.parseLong(senderId)).findFirst();
@@ -294,6 +303,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                 setAvatar(roomId);
 
             }
+
 
             realm.close();
             //  HelperAvatar.
@@ -363,7 +373,19 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         marker = mMap.addMarker(new MarkerOptions().position(latLng).title("position"));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
 
-        if (mode == Mode.sendPosition) {
+
+        LocationManager locationManager=(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        // Define the criteria how to select the locatioin provider -> use
+        // default
+        Criteria criteria = new Criteria();
+        String provider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(provider);
+        locationManager.requestLocationUpdates(provider,1000,10,this);
+        onLocationChanged(location);
+
+
+
+     if (mode == Mode.sendPosition) {
 
             mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
                 @Override
@@ -513,6 +535,48 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             }
 
         }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+try{
+    if (mode==Mode.seePosition){
+        Location loc1 = new Location("");
+        loc1.setLatitude(marker.getPosition().latitude);
+        loc1.setLongitude(marker.getPosition().longitude);
+
+        Location loc2 = new Location("");
+        loc2.setLatitude(location.getLatitude());
+        loc2.setLongitude(location.getLongitude());
+
+
+        txtDistance.setText(String.format("%.1f",loc1.distanceTo(loc2))+" "+getResources().getString(R.string.map_distance)+" ");
+
+
+
+    }
+
+}catch (Exception e){}
+
+
+
+
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
     }
 
     public enum Mode {
