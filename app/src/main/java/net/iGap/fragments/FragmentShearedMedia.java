@@ -1695,7 +1695,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
         private void playVideo(int position, View itemView) {
             SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-            if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 0) == 1) {
+            if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1) == 0) {
                 openVideoByDefaultApp(position);
             } else {
                 long selectedFileToken = mNewList.get(position).messageId;
