@@ -3604,7 +3604,7 @@ public class FragmentChat extends BaseFragment
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT) {
             showImage(message, view);
         } else if (messageType == VIDEO || messageType == VIDEO_TEXT) {
-            if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 0) == 1) {
+            if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1) == 0) {
                 openMessage(message);
             } else {
                 showImage(message, view);
@@ -5908,6 +5908,49 @@ public class FragmentChat extends BaseFragment
         ViewGroup paint = (ViewGroup) viewBottomSheet.findViewById(R.id.paint);
         ViewGroup location = (ViewGroup) viewBottomSheet.findViewById(R.id.location);
         ViewGroup contact = (ViewGroup) viewBottomSheet.findViewById(R.id.contact);
+
+
+        TextView txtCamera = (TextView) viewBottomSheet.findViewById(R.id.txtCamera);
+        TextView textPicture = (TextView) viewBottomSheet.findViewById(R.id.textPicture);
+        TextView txtVideo = (TextView) viewBottomSheet.findViewById(R.id.txtVideo);
+        TextView txtMusic = (TextView) viewBottomSheet.findViewById(R.id.txtMusic);
+        TextView txtDocument = (TextView) viewBottomSheet.findViewById(R.id.txtDocument);
+        TextView txtFile = (TextView) viewBottomSheet.findViewById(R.id.txtFile);
+        TextView txtPaint = (TextView) viewBottomSheet.findViewById(R.id.txtPaint);
+        TextView txtLocation = (TextView) viewBottomSheet.findViewById(R.id.txtLocation);
+        TextView txtContact = (TextView) viewBottomSheet.findViewById(R.id.txtContact);
+        TextView txtCamera2 = (TextView) viewBottomSheet.findViewById(R.id.txtCamera2);
+        TextView textPicture2 = (TextView) viewBottomSheet.findViewById(R.id.textPicture2);
+        TextView txtVideo2 = (TextView) viewBottomSheet.findViewById(R.id.txtVideo2);
+        TextView txtMusic2 = (TextView) viewBottomSheet.findViewById(R.id.txtMusic2);
+        TextView txtDocument2 = (TextView) viewBottomSheet.findViewById(R.id.txtDocument2);
+        TextView txtFile2 = (TextView) viewBottomSheet.findViewById(R.id.txtFile2);
+        TextView txtPaint2 = (TextView) viewBottomSheet.findViewById(R.id.txtPaint2);
+        TextView txtLocation2 = (TextView) viewBottomSheet.findViewById(R.id.txtLocation2);
+        TextView txtContact2 = (TextView) viewBottomSheet.findViewById(R.id.txtContact2);
+        send = (TextView) viewBottomSheet.findViewById(R.id.txtSend);
+
+        txtCamera.setTextColor(Color.parseColor(G.attachmentColor));
+        textPicture.setTextColor(Color.parseColor(G.attachmentColor));
+        txtVideo.setTextColor(Color.parseColor(G.attachmentColor));
+        txtMusic.setTextColor(Color.parseColor(G.attachmentColor));
+        txtDocument.setTextColor(Color.parseColor(G.attachmentColor));
+        txtFile.setTextColor(Color.parseColor(G.attachmentColor));
+        txtPaint.setTextColor(Color.parseColor(G.attachmentColor));
+        txtLocation.setTextColor(Color.parseColor(G.attachmentColor));
+        txtContact.setTextColor(Color.parseColor(G.attachmentColor));
+        send.setTextColor(Color.parseColor(G.attachmentColor));
+        txtCountItem.setTextColor(Color.parseColor(G.attachmentColor));
+
+        txtCamera2.setTextColor(Color.parseColor(G.attachmentColor));
+        textPicture2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtVideo2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtMusic2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtDocument2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtFile2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtPaint2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtLocation2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtContact2.setTextColor(Color.parseColor(G.attachmentColor));
 
 
         onPathAdapterBottomSheet = new OnPathAdapterBottomSheet() {

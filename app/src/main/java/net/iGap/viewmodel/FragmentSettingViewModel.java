@@ -1531,7 +1531,7 @@ public class FragmentSettingViewModel {
         int checkedEnableTrim = sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1);
         isTrim.set(getBoolean(checkedEnableTrim));
 
-        int checkedEnableDefaultPlayer = sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 0);
+        int checkedEnableDefaultPlayer = sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1);
         isDefaultPlayer.set(getBoolean(checkedEnableDefaultPlayer));
 
         callbackVersionApp.set(G.fragmentActivity.getResources().getString(R.string.iGap_version) + " " + getAppVersion());

@@ -213,13 +213,22 @@
             app:srcCompat="@mipmap/parsian" />
 
           <TextView
+            style="?textTitleColorSettingTheme"
             fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="@dimen/dp14"
-            android:text="@string/responsible_for_all_financial_services"
-            android:textColor="@color/black" />
+            android:text="@string/responsible_for_all_financial_services" />
+
+          <TextView
+            style="?textTitleColorSettingTheme"
+            fontPath="fonts/IRANSansMobile.ttf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/dp14"
+            android:text="@string/parsian_e_commerce_company_top" />
 
           <TextView
             fontPath="fonts/IRANSansMobile.ttf"
@@ -227,26 +236,16 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="@dimen/dp14"
-            android:text="@string/parsian_e_commerce_company_top"
-            android:textColor="@color/black" />
+            android:text="@string/is_empty" />
 
           <TextView
+            style="?textTitleColorSettingTheme"
             fontPath="fonts/IRANSansMobile.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="@dimen/dp14"
-            android:text="@string/is_empty"
-            android:textColor="@color/black" />
-
-          <TextView
-            fontPath="fonts/IRANSansMobile.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="@dimen/dp14"
-            android:text="@string/customer_response_center_021_2318"
-            android:textColor="@color/black" />
+            android:text="@string/customer_response_center_021_2318" />
 
         </LinearLayout>
 

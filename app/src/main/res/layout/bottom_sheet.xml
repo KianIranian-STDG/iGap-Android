@@ -68,15 +68,15 @@
           android:layout_gravity="center_horizontal"
           android:gravity="center"
           android:text="@string/icon_folder"
-          style="?textColorMenuTheme"
           android:textSize="@dimen/dp20" />
 
         <TextView
+          android:id="@+id/txtDocument2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:text="@string/am_document"
-          style="?textColorMenuTheme"
+
           android:textSize="@dimen/dp10" />
       </LinearLayout>
 
@@ -100,16 +100,17 @@
           android:layout_gravity="center_horizontal"
           android:gravity="center"
           android:text="@string/icon_music"
-          style="?textColorMenuTheme"
+
           android:textSize="@dimen/dp20" />
 
         <TextView
+          android:id="@+id/txtMusic2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:singleLine="true"
           android:text="@string/am_music"
-          style="?textColorMenuTheme"
+
           android:textSize="@dimen/dp10" />
       </LinearLayout>
 
@@ -133,15 +134,15 @@
           android:layout_gravity="center_horizontal"
           android:gravity="center"
           android:text="@string/md_videocam"
-          style="?textColorMenuTheme"
+
           android:textSize="@dimen/dp20" />
 
         <TextView
+          android:id="@+id/txtVideo2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:text="@string/am_video"
-          style="?textColorMenuTheme"
           android:textSize="@dimen/dp10" />
       </LinearLayout>
 
@@ -164,16 +165,17 @@
           android:layout_gravity="center_horizontal"
           android:gravity="center"
           android:text="@string/md_igap_folder_image"
-          style="?textColorMenuTheme"
+
           android:textSize="@dimen/dp20" />
 
         <TextView
+          android:id="@+id/textPicture2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:singleLine="true"
           android:text="@string/am_picture"
-          style="?textColorMenuTheme"
+
           android:textSize="@dimen/dp10" />
       </LinearLayout>
 
@@ -197,17 +199,17 @@
           android:layout_gravity="center_horizontal"
           android:gravity="center"
           android:text="@string/md_camera_alt"
-          style="?textColorMenuTheme"
+
           android:textSize="@dimen/dp20" />
 
         <TextView
-          android:id="@+id/textView5"
+          android:id="@+id/txtCamera2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:singleLine="true"
           android:text="@string/am_camera"
-          style="?textColorMenuTheme"
+
           android:textSize="@dimen/dp10" />
       </LinearLayout>
 
@@ -240,15 +242,15 @@
           android:layout_gravity="center_horizontal"
           android:gravity="center"
           android:text="@string/md_user_account_box"
-          style="?textColorMenuTheme"
+
           android:textSize="@dimen/dp20" />
 
         <TextView
+          android:id="@+id/txtContact2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:text="@string/am_contact"
-          style="?textColorMenuTheme"
           android:textSize="@dimen/dp10" />
       </LinearLayout>
 
@@ -272,16 +274,17 @@
           android:layout_gravity="center_horizontal"
           android:gravity="center"
           android:text="@string/md_room"
-          style="?textColorMenuTheme"
+
           android:textSize="@dimen/dp20" />
 
         <TextView
+          android:id="@+id/txtLocation2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:singleLine="true"
           android:text="@string/am_location"
-          style="?textColorMenuTheme"
+
           android:textSize="@dimen/dp10" />
       </LinearLayout>
 
@@ -304,16 +307,16 @@
           android:layout_gravity="center_horizontal"
           android:gravity="center"
           android:text="@string/md_brush"
-          style="?textColorMenuTheme"
+
           android:textSize="@dimen/dp20" />
 
         <TextView
+          android:id="@+id/txtPaint2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:singleLine="true"
           android:text="@string/am_paint"
-          style="?textColorMenuTheme"
           android:textSize="@dimen/dp10" />
       </LinearLayout>
 
@@ -336,15 +339,15 @@
           android:layout_gravity="center_horizontal"
           android:gravity="center"
           android:text="@string/md_igap_file"
-          style="?textColorMenuTheme"
+
           android:textSize="@dimen/dp20" />
 
         <TextView
+          android:id="@+id/txtFile2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:text="@string/am_file"
-          style="?textColorMenuTheme"
           android:textSize="@dimen/dp10" />
       </LinearLayout>
 
@@ -368,7 +371,6 @@
           android:gravity="center"
           android:paddingTop="2dp"
           android:text="@string/igap_chevron_double_down"
-          style="?textColorMenuTheme"
           android:textSize="@dimen/dp20" />
 
         <TextView
@@ -377,7 +379,6 @@
           android:layout_height="wrap_content"
           android:layout_gravity="center_horizontal"
           android:text="@string/navigation_drawer_close"
-          style="?textColorMenuTheme"
           android:textSize="@dimen/dp10" />
       </LinearLayout>
 
