@@ -68,7 +68,7 @@ public class Theme extends Application {
     public static String default_dark_appBarColor = "#000000";
     public static String default_dark_notificationColor = "#000000";
     public static String default_dark_toggleButtonColor = "#000000";
-    public static String default_dark_attachmentColor = "#000000";
+    public static String default_dark_attachmentColor = "#ffffff";
     public static String default_dark_menuBackgroundColor = "#000000";
     public static String default_dark_headerTextColor = "#ffffff";
     public static String default_dark_progressColor = "#ffffff";
@@ -131,7 +131,8 @@ public class Theme extends Application {
                         "#000000",
                         "#2A2A2A",
                         "#bfefef",
-                        "#303F9F"
+                        "#303F9F",
+                        "#212121"
 
                 );
 
@@ -158,7 +159,8 @@ public class Theme extends Application {
                         "#000000",
                         "#2A2A2A",
                         "#bfefef",
-                        "#303F9F"
+                        "#303F9F",
+                        "#212121"
                 );
 
                 break;
@@ -184,7 +186,8 @@ public class Theme extends Application {
                         "#ffffff",
                         "#ffffff",
                         "#313131",
-                        "#00BCD4"
+                        "#00BCD4",
+                        "#ffffff"
                 );
 
                 break;
@@ -851,7 +854,7 @@ public class Theme extends Application {
         G.txtIconCheck = color[18];
         G.bubbleChatMusic = color[19];
         G.linkColor = color[20];
-        G.textChatMusic = color[20];
+        G.textChatMusic = color[21];
 
     }
 
