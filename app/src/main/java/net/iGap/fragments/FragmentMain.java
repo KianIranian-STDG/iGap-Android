@@ -1225,7 +1225,12 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
                 holder.lastMessageSender.setVisibility(View.VISIBLE);
                 holder.lastMessageSender.setText(R.string.txt_draft);
-                holder.lastMessageSender.setTextColor(Color.parseColor(G.appBarColor));
+                if (G.isDarkTheme) {
+                    holder.lastMessageSender.setTextColor(Color.parseColor(G.textSubTheme));
+                } else {
+                    holder.lastMessageSender.setTextColor(Color.parseColor(G.appBarColor));
+                }
+
                 holder.lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
             } else {
 
@@ -1286,7 +1291,12 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                             holder.lastMessageSender.setVisibility(View.VISIBLE);
 
                             holder.lastMessageSender.setText(lastMessageSender);
-                            holder.lastMessageSender.setTextColor(Color.parseColor(G.appBarColor));
+                            if (G.isDarkTheme) {
+                                holder.lastMessageSender.setTextColor(Color.parseColor(G.textSubTheme));
+                            } else {
+                                holder.lastMessageSender.setTextColor(Color.parseColor(G.appBarColor));
+                            }
+
                         } else {
                             holder.lastMessageSender.setVisibility(View.GONE);
                         }
