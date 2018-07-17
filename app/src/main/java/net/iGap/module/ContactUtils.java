@@ -207,6 +207,7 @@ public final class ContactUtils {
             e.printStackTrace();
         }
 
+
         ArrayList<ContentProviderOperation> query = new ArrayList<>();
 
         ContentProviderOperation.Builder builder = ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI);
@@ -214,6 +215,7 @@ public final class ContactUtils {
         builder.withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, accountType);
         builder.withValue(ContactsContract.RawContacts.SYNC1, contact.getPhone());
         builder.withValue(ContactsContract.RawContacts.SYNC2, contact.getId());
+
         query.add(builder.build());
 
         query.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
@@ -222,6 +224,31 @@ public final class ContactUtils {
                 .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, contact.getPhone())
                 .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
                 .build());
+
+        builder = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                /*
+                 * Sets the value of the raw contact id column to the new raw contact ID returned
+                 * by the first operation in the batch.
+                 */
+                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+
+                // Sets the data row's MIME type to Phone
+                .withValue(ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE)
+
+
+                // Sets the phone number and type
+                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, contact.getPhone())
+                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_WORK_MOBILE)
+                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_HOME);
+
+
+        // Builds the operation and adds it to the array of operations
+        query.add(builder.build());
+
 
         builder = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
         builder.withValueBackReference(ContactsContract.CommonDataKinds.StructuredName.RAW_CONTACT_ID, 0);
@@ -248,10 +275,24 @@ public final class ContactUtils {
         builder.withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0);
         builder.withValue(ContactsContract.Data.MIMETYPE, "vnd.android.cursor.item/vnd.net.iGap.profile");
         builder.withValue(ContactsContract.Data.DATA1, contact.getId());
-        builder.withValue(ContactsContract.Data.DATA2, "iGap Profile");
-        builder.withValue(ContactsContract.Data.DATA3, "+" + contact.getPhone());
+       // builder.withValue(ContactsContract.Data.DATA2, "iGap Profile");
+        builder.withValue(ContactsContract.Data.DATA2, "Call via my app");
+        builder.withValue(ContactsContract.Data.DATA3, "message to : "+ contact.getPhone());
+        builder.withValue(ContactsContract.Data.DATA4, contact.getId());
+
+        query.add(builder.build());
+
+
+        builder = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
+        builder.withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0);
+        builder.withValue(ContactsContract.Data.MIMETYPE, "vnd.android.cursor.item/vnd.net.iGap.call");
+        builder.withValue(ContactsContract.Data.DATA1, contact.getId());
+        // builder.withValue(ContactsContract.Data.DATA2, "iGap Profile");
+        builder.withValue(ContactsContract.Data.DATA2, "Call via my app");
+        builder.withValue(ContactsContract.Data.DATA3, "Call to : "+ contact.getPhone());
         builder.withValue(ContactsContract.Data.DATA4, contact.getId());
         query.add(builder.build());
+
         try {
             G.context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, query);
         } catch (Exception e) {

@@ -13,12 +13,18 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<ContactsSource xmlns:android="http://schemas.android.com/apk/res/android">
+<ContactsAccountType  xmlns:android="http://schemas.android.com/apk/res/android" >
   <ContactsDataKind
-    android:detailColumn="data3"
-    android:icon="@mipmap/icon"
-    android:mimeType="vnd.android.cursor.item/vnd.net.iGap.profile"
-    android:summaryColumn="data2" />
-</ContactsSource>
+      android:detailColumn="data3"
+      android:icon="@mipmap/icon"
+      android:mimeType="vnd.android.cursor.item/vnd.net.iGap.call"
+      android:summaryColumn="data2" />
+
+  <ContactsDataKind
+      android:detailColumn="data3"
+      android:icon="@mipmap/icon"
+      android:mimeType="vnd.android.cursor.item/vnd.net.iGap.profile"
+      android:summaryColumn="data2" />
+</ContactsAccountType >
 
 
