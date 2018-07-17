@@ -72,7 +72,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':libwebrtc')
-    compile('com.afollestad.material-dialogs:core:0.9.4.5') {
+    compile('com.afollestad.material-dialogs:core:0.9.6.0') {
         transitive = true
     }
     compile('com.crashlytics.sdk.android:crashlytics:2.9.3@aar') {

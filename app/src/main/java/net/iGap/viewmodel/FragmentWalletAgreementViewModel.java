@@ -9,6 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
+import android.content.Intent;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -18,9 +19,12 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentWalletAgrementBinding;
 import net.iGap.helper.HelperError;
 import net.iGap.request.RequestWalletRegister;
+
+import org.paygear.wallet.WalletActivity;
 
 public class FragmentWalletAgreementViewModel {
 
@@ -41,9 +45,7 @@ public class FragmentWalletAgreementViewModel {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             if (G.userLogin) {
-                                new RequestWalletRegister().walletRegister();
-                                fragmentWalletAgrementBinding.getBackHandler().onBack();
-
+                                G.currentActivity.onBackPressed();
                             } else {
                                 HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                             }

@@ -4,7 +4,6 @@ package org.paygear.wallet.fragment;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +16,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+
 import org.paygear.wallet.R;
+import org.paygear.wallet.RaadApp;
 import org.paygear.wallet.WalletActivity;
 import org.paygear.wallet.model.Order;
 import org.paygear.wallet.web.Web;
@@ -37,11 +41,11 @@ import retrofit2.Response;
 public class PaymentHistoryFragment extends Fragment {
 
     RecyclerView mList;
-    ProgressLayout progress;
+    ProgressLayout mProgress;
     ListItemAdapter adapter;
 
     PaginateList<Order> orderList;
-
+    MaterialDialog progressDialog;
     private int mOrderType;
     private boolean mShowAppBar = true;
 
@@ -64,6 +68,23 @@ public class PaymentHistoryFragment extends Fragment {
             mOrderType = getArguments().getInt("OrderType");
             mShowAppBar = getArguments().getBoolean("ShowAppBar");
         }
+
+
+        RaadApp.paygearHistoryCloseWallet = new PaygearHistoryCloseWallet() {
+            @Override
+            public void closeWallet() {
+                if (progressDialog != null) progressDialog.dismiss();
+                getActivity().getFragmentManager().popBackStack();
+            }
+
+            @Override
+            public void error() {
+                if (progressDialog != null) progressDialog.dismiss();
+                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+
+            }
+        };
+
     }
 
 
@@ -77,8 +98,8 @@ public class PaymentHistoryFragment extends Fragment {
             rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
         }
         RaadToolBar appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
+        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
+        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
         appBar.setTitle(getString(R.string.payment_history));
         appBar.showBack();
         if (!mShowAppBar)
@@ -91,8 +112,8 @@ public class PaymentHistoryFragment extends Fragment {
         divider.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.list_divider));
         mList.addItemDecoration(divider);
 
-        progress = view.findViewById(R.id.progress);
-        progress.setOnRetryButtonListener(new View.OnClickListener() {
+        mProgress = view.findViewById(R.id.progress);
+        mProgress.setOnRetryButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 load(false);
@@ -115,10 +136,10 @@ public class PaymentHistoryFragment extends Fragment {
 
     private void load(final boolean loadMore) {
         if (!loadMore)
-            progress.setStatus(0);
+            mProgress.setStatus(0);
 
         String lastId = loadMore && orderList != null && orderList.hasItems() ? orderList.items.get(orderList.items.size() - 1).id : null;
-        Web.getInstance().getWebService().getOrders(Auth.getCurrentAuth().getId(), 0, mOrderType != 0 ? String.valueOf(mOrderType) : null, true,  lastId, 40).enqueue(new Callback<PaginateList<Order>>() {
+        Web.getInstance().getWebService().getOrders(Auth.getCurrentAuth().getId(), 0, mOrderType != 0 ? String.valueOf(mOrderType) : null, true, lastId, 40).enqueue(new Callback<PaginateList<Order>>() {
             @Override
             public void onResponse(Call<PaginateList<Order>> call, Response<PaginateList<Order>> response) {
                 Boolean success = Web.checkResponse(PaymentHistoryFragment.this, call, response);
@@ -140,7 +161,7 @@ public class PaymentHistoryFragment extends Fragment {
                     }
                 } else {
                     if (orderList == null || !orderList.hasItems())
-                        progress.setStatus(-1, getString(R.string.server_error));
+                        mProgress.setStatus(-1, getString(R.string.server_error));
 
                     if (adapter != null)
                         adapter.finishLoading(false);
@@ -151,7 +172,7 @@ public class PaymentHistoryFragment extends Fragment {
             public void onFailure(Call<PaginateList<Order>> call, Throwable t) {
                 if (Web.checkFailureResponse(PaymentHistoryFragment.this, call, t)) {
                     if (orderList == null || !orderList.hasItems())
-                        progress.setStatus(-1, getString(R.string.network_error));
+                        mProgress.setStatus(-1, getString(R.string.network_error));
                     if (adapter != null)
                         adapter.finishLoading(false);
                 }
@@ -164,9 +185,9 @@ public class PaymentHistoryFragment extends Fragment {
             adapter = new ListItemAdapter();
         mList.setAdapter(adapter);
         if (orderList == null || !orderList.hasItems())
-            progress.setStatus(2, getString(R.string.no_item));
+            mProgress.setStatus(2, getString(R.string.no_item));
         else
-            progress.setStatus(1);
+            mProgress.setStatus(1);
     }
 
     class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHolder> {
@@ -249,21 +270,48 @@ public class PaymentHistoryFragment extends Fragment {
                 orderView = view.findViewWithTag("OrderView");
                 progress = view.findViewWithTag("Progress");
 
-//                orderView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        if (getActivity() instanceof NavigationBarActivity) {
-//                            Order order = orderList.items.get(getAdapterPosition());
-//                            ((NavigationBarActivity) getActivity()).replaceFullFragment(
-//                                    OrderInfoFragment.newInstance(order.id), "OrderInfoFragment", true);
-//                        }
-//                    }
-//                });
+                orderView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (getActivity() instanceof NavigationBarActivity) {
+                            Order order = orderList.items.get(getAdapterPosition());
+                            RaadApp.paygearHistoryOpenChat.paygearId(order.id);
+                            Log.i("CCCCCCCCC", "0 rderId: " + order.orderId);
+                            Log.i("CCCCCCCCC", "1 order.id: " + order.id);
+                            showProgress();
+                        }
+                    }
+                });
             }
         }
 
 
     }
+
+    private void showProgress() {
+        progressDialog = new MaterialDialog.Builder(getContext())
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .cancelable(false)
+                .canceledOnTouchOutside(false)
+                .autoDismiss(false)
+                .build();
+
+        progressDialog.show();
+    }
+
+    public interface PaygearHistoryOpenChat {
+
+        void paygearId(String id);
+
+    }
+
+    public interface PaygearHistoryCloseWallet {
+        void closeWallet();
+
+        void error();
+    }
+
 
 }
 

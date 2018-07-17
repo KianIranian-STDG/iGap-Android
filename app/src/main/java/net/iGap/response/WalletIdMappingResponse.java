@@ -10,8 +10,13 @@
 
 package net.iGap.response;
 
+import android.util.Log;
+
+import net.iGap.helper.HelperPublicMethod;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoWalletIdMapping;
+
+import org.paygear.wallet.RaadApp;
 
 public class WalletIdMappingResponse extends MessageHandler {
 
@@ -34,11 +39,29 @@ public class WalletIdMappingResponse extends MessageHandler {
 
         ProtoWalletIdMapping.WalletIdMappingResponse.Builder builder = (ProtoWalletIdMapping.WalletIdMappingResponse.Builder) message;
         builder.getUserId();
+
+        HelperPublicMethod.goToChatRoom(builder.getUserId(), new HelperPublicMethod.OnComplete() {
+            @Override
+            public void complete() {
+
+                if (RaadApp.paygearHistoryCloseWallet != null)
+                    RaadApp.paygearHistoryCloseWallet.closeWallet();
+
+            }
+        }, new HelperPublicMethod.OnError() {
+            @Override
+            public void error() {
+
+            }
+        });
+        Log.i("CCCCCCCCC", "4 handler:+ " + builder.getUserId());
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        Log.i("CCCCCCCCC", "6 majorCode:+ ");
+        if (RaadApp.paygearHistoryCloseWallet != null) RaadApp.paygearHistoryCloseWallet.error();
     }
 
     @Override
@@ -47,6 +70,8 @@ public class WalletIdMappingResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
+        Log.i("CCCCCCCCC", "5 majorCode:+ " + majorCode);
+        if (RaadApp.paygearHistoryCloseWallet != null) RaadApp.paygearHistoryCloseWallet.error();
     }
 }
 

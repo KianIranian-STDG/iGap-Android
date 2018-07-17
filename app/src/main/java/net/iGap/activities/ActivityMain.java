@@ -145,11 +145,14 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
+import net.iGap.request.RequestWalletIdMapping;
 import net.iGap.viewmodel.ActivityCallViewModel;
 import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 import net.iGap.viewmodel.FragmentThemColorViewModel;
 
+import org.paygear.wallet.RaadApp;
 import org.paygear.wallet.WalletActivity;
+import org.paygear.wallet.fragment.PaymentHistoryFragment;
 import org.paygear.wallet.model.Card;
 import org.paygear.wallet.model.PaymentResult;
 import org.paygear.wallet.web.Web;
@@ -416,6 +419,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //isOnGetPermission = true;
         //}
         super.onCreate(savedInstanceState);
+
+        RaadApp.paygearHistoryOpenChat = new PaymentHistoryFragment.PaygearHistoryOpenChat() {
+            @Override
+            public void paygearId(String id) {
+
+                Log.i("CCCCCCCCC", "2 paygearId: " + id);
+                new RequestWalletIdMapping().walletIdMapping(id);
+            }
+        };
 
         EventManager.getInstance().addEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
 
@@ -756,7 +768,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }, 5000);
         }
     }
-
 
 
     private void getPaymentResultCode(int resultCode, Intent data) {

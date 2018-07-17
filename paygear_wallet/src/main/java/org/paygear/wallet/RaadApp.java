@@ -2,6 +2,8 @@ package org.paygear.wallet;
 
 import android.app.Application;
 import android.content.Context;
+
+import org.paygear.wallet.fragment.PaymentHistoryFragment;
 import org.paygear.wallet.model.Card;
 import org.paygear.wallet.web.Web;
 
@@ -28,6 +30,8 @@ public class RaadApp extends Application {
     public static final int NOTIFICATION_TYPE_DELIVERY = 6;
     public static final int NOTIFICATION_TYPE_FOLLOW = 7;
     public static final int NOTIFICATION_TYPE_CLUB = 9;
+    public static PaymentHistoryFragment.PaygearHistoryOpenChat paygearHistoryOpenChat;
+    public static PaymentHistoryFragment.PaygearHistoryCloseWallet paygearHistoryCloseWallet;
 
     public static final String BROADCAST_INTENT_NEW_MESSAGE = "NEW_MESSAGE";
 

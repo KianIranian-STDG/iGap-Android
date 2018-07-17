@@ -32,6 +32,8 @@ public class PushWalletPaymentVerifiedResponse extends MessageHandler {
         super.handler();
         ProtoPushWalletPaymentVerified.PushWalletPaymentVerifiedResponse.Builder builder = (ProtoPushWalletPaymentVerified.PushWalletPaymentVerifiedResponse.Builder) message;
         builder.getToken();
+
+
     }
 
     @Override
