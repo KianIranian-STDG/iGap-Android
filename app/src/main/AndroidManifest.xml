@@ -9,6 +9,9 @@
   <uses-feature android:name="android.hardware.camera" />
   <uses-feature android:name="android.hardware.camera.autofocus" />
 
+
+  <uses-permission android:name="android.permission.MANAGE_OWN_CALLS"/>
+
   <uses-permission android:name="android.permission.CAMERA" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -101,6 +104,16 @@
       android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale"
       android:excludeFromRecents="true"
       android:launchMode="singleInstance">
+
+
+
+
+
+<!--      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="vnd.android.cursor.item/vnd.net.iGap.profile" />
+      </intent-filter>-->
 
       <!--
       <intent-filter>
@@ -200,8 +213,12 @@
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="vnd.android.cursor.item/vnd.net.iGap.call" />
         <data android:mimeType="vnd.android.cursor.item/vnd.net.iGap.profile" />
+
+
       </intent-filter>
+
 
       <intent-filter>
         <action android:name="android.intent.action.CALL_PRIVILEGED" />
@@ -321,9 +338,15 @@
       <meta-data
         android:name="android.content.SyncAdapter"
         android:resource="@xml/sync_contacts" />
+  <!--    <meta-data
+        android:name="android.provider.CONTACTS_STRUCTURE"
+        android:resource="@xml/contacts" />-->
+
       <meta-data
         android:name="android.provider.CONTACTS_STRUCTURE"
         android:resource="@xml/contacts" />
+
+
     </service>
 
 

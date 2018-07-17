@@ -2341,11 +2341,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (Intent.ACTION_VIEW.equals(appLinkAction) && appLinkData != null && appLinkData.getHost() != null && appLinkData.getHost().equals("com.android.contacts")) {
             ContactUtils contactUtils = new ContactUtils(G.context, appLinkData);
             String userId = contactUtils.retrieveNumber(); // we set retrieveNumber as userId
-            try {
-                HelperPublicMethod.goToChatRoom(Long.parseLong(userId), null, null);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
+
+            if (intent.getType().equalsIgnoreCase("vnd.android.cursor.item/vnd.net.iGap.call")) {
+
+                try {
+                    check(Long.parseLong(userId));
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    HelperPublicMethod.goToChatRoom(Long.parseLong(userId), null, null);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
             }
+
         } else {
             HelperUrl.getLinkinfo(intent, ActivityMain.this);
         }
@@ -2412,6 +2423,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
+
+
     @Override
     public void onChatClearMessage(final long roomId, long clearId) {
         //empty
@@ -2462,6 +2475,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     //}
 
     //******* GroupAvatar and ChannelAvatar
+
+    private void check(final long userId){
+        if (G.userLogin){
+            FragmentCall.call(userId,false);
+        } else {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    check(userId);
+                }
+            },1000);
+        }
+
+    }
 
     public void setImage() {
         HelperAvatar.getAvatar(G.userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
