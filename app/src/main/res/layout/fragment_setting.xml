@@ -491,7 +491,6 @@
             android:paddingRight="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_general"
-            android:textColor="@color/green"
             android:textSize="@dimen/dp18"
             android:textStyle="bold"
 
@@ -623,6 +622,7 @@
               android:textStyle="normal" />
 
             <TextView
+              style="?textSubColorSettingTheme"
               android:id="@+id/st_txt_language"
               fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="wrap_content"
@@ -631,7 +631,6 @@
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
               android:text="@{fragmentSettingViewModel.callbackLanguage , default=English}"
-              android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
               android:textSize="@dimen/dp15"
               android:textStyle="normal"
 
@@ -667,6 +666,7 @@
               android:textStyle="normal" />
 
             <TextView
+              style="?textSubColorSettingTheme"
               android:id="@+id/st_txt_data"
               fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="wrap_content"
@@ -675,7 +675,6 @@
               android:paddingLeft="@dimen/dp16"
               android:paddingRight="@dimen/dp16"
               android:text="@{fragmentSettingViewModel.callbackDataShams , default=Miladi}"
-              android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
               android:textSize="@dimen/dp15"
               android:textStyle="normal"
 
@@ -830,7 +829,6 @@
             android:paddingBottom="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_message"
-            android:textColor="@color/green"
             android:textSize="@dimen/dp18"
             android:textStyle="normal" />
 
@@ -858,6 +856,7 @@
 
 
             <TextView
+              style="?textSubColorSettingTheme"
               android:id="@+id/st_txt_messageTextSize_number"
               fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="wrap_content"
@@ -867,7 +866,6 @@
               android:paddingRight="@dimen/dp16"
               android:paddingTop="@dimen/dp4"
               android:text="@{fragmentSettingViewModel.callbackTextSize , default=16}"
-              android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
               android:textSize="@dimen/dp15"
               android:textStyle="normal"
 
@@ -1508,7 +1506,6 @@
             android:paddingBottom="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
             android:text="@string/st_title_support"
-            android:textColor="@color/green"
             android:textSize="@dimen/dp18"
             android:textStyle="normal" />
 

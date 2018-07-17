@@ -478,6 +478,15 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             String beforeMessageId = MusicPlayer.messageId;
             selectedMedia--;
             if (selectedMedia < 0) {
+
+                if (isVoice) { // avoid from return to first voice
+                    if (btnPlayMusic != null) {
+                        btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
+                    }
+                    stopSound();
+                    return;
+                }
+
                 selectedMedia = mediaList.size() - 1;
             }
             RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(mediaList.get(selectedMedia));
@@ -543,13 +552,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             selectedMedia++;
 
             if (selectedMedia >= mediaList.size()) {
-                if (isVoice) { // avoid from return to first voice
-                    if (btnPlayMusic != null) {
-                        btnPlayMusic.setText(context.getString(R.string.md_play_arrow));
-                    }
-                    stopSound();
-                    return;
-                }
                 selectedMedia = 0;
             }
             RealmRoomMessage roomMessage = null;
@@ -1218,7 +1220,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
                         result = true;
 
-                        HelperDownloadFile.startDownload(rm.getMessageId() + "", _token, _url, _cacheId, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
+                        HelperDownloadFile.getInstance().startDownload(rm.getMessageId() + "", _token, _url, _cacheId, _name, _size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(String path, int progress) {
                                 if (progress == 100) {

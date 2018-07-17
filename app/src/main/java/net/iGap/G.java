@@ -114,9 +114,11 @@ public class G extends MultiDexApplication {
     public static String bubbleChatReceive; // default color
     public static String fabBottom; // default color
     public static String bubbleChatMusic; // default color
+    public static String textChatMusic;
     public static String notificationColor;
     public static String toggleButtonColor;
     public static String attachmentColor;
+    public static String iconColorBottomSheet;
     public static String progressColor;
     public static String headerTextColor;
     public static String backgroundTheme;
@@ -348,6 +350,7 @@ public class G extends MultiDexApplication {
     public static OnGeoGetConfiguration onGeoGetConfiguration;
     public static OnNotifyTime onNotifyTime;
     public static OnPayment onPayment;
+    public static OnMplResult onMplResult;
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
     public static ISignalingAccept iSignalingAccept;
@@ -373,10 +376,13 @@ public class G extends MultiDexApplication {
     private Tracker mTracker;
     public static Account iGapAccount;
 
+    public static int rotationState;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
+
 
         G.firstTimeEnterToApp = true;
 

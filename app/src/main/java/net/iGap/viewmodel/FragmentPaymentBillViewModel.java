@@ -9,7 +9,12 @@ package net.iGap.viewmodel;
  * All rights reserved.
 */
 
+import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,8 +24,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentBillBinding;
 import net.iGap.fragments.FragmentPaymentBill;
+import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.interfaces.OnMplResult;
 import net.iGap.request.RequestMplGetBillToken;
 
 import java.io.IOException;
@@ -33,14 +40,37 @@ public class FragmentPaymentBillViewModel {
     private FragmentPaymentBill fragmentPaymentBill;
     private FragmentPaymentBillBinding fragmentPaymentBillBinding;
     public ObservableInt observeCompany = new ObservableInt(View.GONE);
+    public ObservableField<String> observeTitleToolbar = new ObservableField<>("");
+    public ObservableBoolean observePolice = new ObservableBoolean(false);
+    public ObservableBoolean observeEnabledPayment = new ObservableBoolean(true);
+    public ObservableBoolean observeAmount = new ObservableBoolean(false);
 
-    public FragmentPaymentBillViewModel(FragmentPaymentBill fragmentPaymentBill, FragmentPaymentBillBinding fragmentPaymentBillBinding) {
+    public ObservableField<Drawable> observeBackGround = new ObservableField<>();
+
+    private boolean isPolice = false;
+
+    public FragmentPaymentBillViewModel(FragmentPaymentBill fragmentPaymentBill, FragmentPaymentBillBinding fragmentPaymentBillBinding, int resTitleId) {
         this.fragmentPaymentBill = fragmentPaymentBill;
         this.fragmentPaymentBillBinding = fragmentPaymentBillBinding;
+        observeTitleToolbar.set(G.context.getString(resTitleId));
+
+        isPolice = resTitleId == R.string.pay_bills_crime;
+
+        if (isPolice) {
+            observePolice.set(true);
+            observeAmount.set(false);
+        }
+
+        Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green);
+        myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
+        observeBackGround.set(myIcon);
     }
 
 
     public void onTextChangedBillId(CharSequence s, int start, int before, int count) {
+        if (isPolice) {
+            return;
+        }
         if (s.length() == 13) {
             observeCompany.set(View.VISIBLE);
             fragmentPaymentBillBinding.fpbImvCompany.setImageResource(getCompany(s.toString().substring(11, 12)));
@@ -60,6 +90,7 @@ public class FragmentPaymentBillViewModel {
                     integrator.setDesiredBarcodeFormats(IntentIntegrator.CODE_128);
                     integrator.setRequestCode(requestCodeBarcode);
                     integrator.setBeepEnabled(false);
+                    integrator.setPrompt("");
                     integrator.initiateScan();
                 }
 
@@ -75,25 +106,59 @@ public class FragmentPaymentBillViewModel {
 
     public void onPayBillClick(View v) {
 
-        String billId = fragmentPaymentBillBinding.fpbEdtBillId.getText().toString();
-
-        if (billId.length() != 13) {
-            Toast.makeText(G.currentActivity, R.string.biling_id_not_valid, Toast.LENGTH_SHORT).show();
+        if (!G.userLogin) {
+            HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
             return;
         }
+
+        String billId = fragmentPaymentBillBinding.fpbEdtBillId.getText().toString();
+
+        if (isPolice) {
+            if (billId.length() == 0) {
+                Toast.makeText(G.currentActivity, R.string.biling_id_not_valid, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+        } else {
+            if (billId.length() != 13) {
+                Toast.makeText(G.currentActivity, R.string.biling_id_not_valid, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
 
         String payId = fragmentPaymentBillBinding.fpbEdtPayId.getText().toString();
 
-        if (payId.length() > 13 || payId.length() < 5) {
-            Toast.makeText(G.currentActivity, R.string.pay_id_is_not_valid, Toast.LENGTH_SHORT).show();
-            return;
+        if (isPolice) {
+            if (payId.length() == 0) {
+                Toast.makeText(G.currentActivity, R.string.pay_id_is_not_valid, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } else {
+            if (payId.length() > 13 || payId.length() < 5) {
+                Toast.makeText(G.currentActivity, R.string.pay_id_is_not_valid, Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
+
+
+        G.onMplResult = new OnMplResult() {
+            @Override
+            public void onResult(boolean error) {
+
+                if (error) {
+                    observeEnabledPayment.set(true);
+                } else {
+                    fragmentPaymentBillBinding.getBackHandler().onBack();
+                }
+
+            }
+        };
 
         RequestMplGetBillToken requestMplGetBillToken = new RequestMplGetBillToken();
         requestMplGetBillToken.mplGetBillToken(Long.parseLong(billId), Long.parseLong(payId));
 
-        fragmentPaymentBillBinding.getBackHandler().onBack();
-
+        observeEnabledPayment.set(false);
     }
 
 

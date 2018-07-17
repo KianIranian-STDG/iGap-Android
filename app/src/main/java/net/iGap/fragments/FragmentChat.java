@@ -744,7 +744,7 @@ public class FragmentChat extends BaseFragment
                     public void onSuccess() {
                         /**
                          * hint: should use from this method here because we need checkAction
-                         * state after set members count for avoid from hide action if exist
+                         * changeState after set members count for avoid from hide action if exist
                          */
                         checkAction();
 
@@ -1247,6 +1247,8 @@ public class FragmentChat extends BaseFragment
                             @Override
                             public void run() {
                                 ImageHelper.correctRotateImage(listPathString.get(0), true);
+                                showDraftLayout();
+                                setDraftMessage(requestCode);
                             }
                         });
                         thread.start();
@@ -1255,6 +1257,8 @@ public class FragmentChat extends BaseFragment
                             @Override
                             public void run() {
                                 listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
+                                showDraftLayout();
+                                setDraftMessage(requestCode);
                             }
                         });
                         thread.start();
@@ -1817,7 +1821,7 @@ public class FragmentChat extends BaseFragment
     }
 
     /**
-     * get settings state and change view
+     * get settings changeState and change view
      */
     private void pageSettings() {
         /**
@@ -3552,7 +3556,7 @@ public class FragmentChat extends BaseFragment
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT) {
             showImage(message, view);
         } else if (messageType == VIDEO || messageType == VIDEO_TEXT) {
-            if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 0) == 1) {
+            if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1) == 0) {
                 openMessage(message);
             } else {
                 showImage(message, view);
@@ -4080,7 +4084,7 @@ public class FragmentChat extends BaseFragment
 
                     final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
                     if (fileToken != null && fileToken.length() > 0 && size > 0) {
-                        HelperDownloadFile.startDownload(message.messageID, fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
+                        HelperDownloadFile.getInstance().startDownload(message.messageID, fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(String path, int progress) {
 
@@ -4582,10 +4586,10 @@ public class FragmentChat extends BaseFragment
     }
 
     /**
-     * show current state for user if this room is chat
+     * show current changeState for user if this room is chat
      *
-     * @param status current state
-     * @param time   if state is not online set latest online time
+     * @param status current changeState
+     * @param time   if changeState is not online set latest online time
      */
     private void setUserStatus(final String status, final long time) {
         if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
@@ -5329,7 +5333,7 @@ public class FragmentChat extends BaseFragment
     private void insertShearedData(final ArrayList<String> pathList) {
         /**
          * run this method with delay , because client get local message with delay
-         * for show messages with async state and before run getLocalMessage this shared
+         * for show messages with async changeState and before run getLocalMessage this shared
          * item added to realm and view, and after that getLocalMessage called and new item
          * got from realm and add to view again but in this time from getLocalMessage method
          */
@@ -5856,6 +5860,49 @@ public class FragmentChat extends BaseFragment
         ViewGroup paint = (ViewGroup) viewBottomSheet.findViewById(R.id.paint);
         ViewGroup location = (ViewGroup) viewBottomSheet.findViewById(R.id.location);
         ViewGroup contact = (ViewGroup) viewBottomSheet.findViewById(R.id.contact);
+
+
+        TextView txtCamera = (TextView) viewBottomSheet.findViewById(R.id.txtCamera);
+        TextView textPicture = (TextView) viewBottomSheet.findViewById(R.id.textPicture);
+        TextView txtVideo = (TextView) viewBottomSheet.findViewById(R.id.txtVideo);
+        TextView txtMusic = (TextView) viewBottomSheet.findViewById(R.id.txtMusic);
+        TextView txtDocument = (TextView) viewBottomSheet.findViewById(R.id.txtDocument);
+        TextView txtFile = (TextView) viewBottomSheet.findViewById(R.id.txtFile);
+        TextView txtPaint = (TextView) viewBottomSheet.findViewById(R.id.txtPaint);
+        TextView txtLocation = (TextView) viewBottomSheet.findViewById(R.id.txtLocation);
+        TextView txtContact = (TextView) viewBottomSheet.findViewById(R.id.txtContact);
+        TextView txtCamera2 = (TextView) viewBottomSheet.findViewById(R.id.txtCamera2);
+        TextView textPicture2 = (TextView) viewBottomSheet.findViewById(R.id.textPicture2);
+        TextView txtVideo2 = (TextView) viewBottomSheet.findViewById(R.id.txtVideo2);
+        TextView txtMusic2 = (TextView) viewBottomSheet.findViewById(R.id.txtMusic2);
+        TextView txtDocument2 = (TextView) viewBottomSheet.findViewById(R.id.txtDocument2);
+        TextView txtFile2 = (TextView) viewBottomSheet.findViewById(R.id.txtFile2);
+        TextView txtPaint2 = (TextView) viewBottomSheet.findViewById(R.id.txtPaint2);
+        TextView txtLocation2 = (TextView) viewBottomSheet.findViewById(R.id.txtLocation2);
+        TextView txtContact2 = (TextView) viewBottomSheet.findViewById(R.id.txtContact2);
+        send = (TextView) viewBottomSheet.findViewById(R.id.txtSend);
+
+        txtCamera.setTextColor(Color.parseColor(G.attachmentColor));
+        textPicture.setTextColor(Color.parseColor(G.attachmentColor));
+        txtVideo.setTextColor(Color.parseColor(G.attachmentColor));
+        txtMusic.setTextColor(Color.parseColor(G.attachmentColor));
+        txtDocument.setTextColor(Color.parseColor(G.attachmentColor));
+        txtFile.setTextColor(Color.parseColor(G.attachmentColor));
+        txtPaint.setTextColor(Color.parseColor(G.attachmentColor));
+        txtLocation.setTextColor(Color.parseColor(G.attachmentColor));
+        txtContact.setTextColor(Color.parseColor(G.attachmentColor));
+        send.setTextColor(Color.parseColor(G.attachmentColor));
+        txtCountItem.setTextColor(Color.parseColor(G.attachmentColor));
+
+        txtCamera2.setTextColor(Color.parseColor(G.attachmentColor));
+        textPicture2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtVideo2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtMusic2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtDocument2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtFile2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtPaint2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtLocation2.setTextColor(Color.parseColor(G.attachmentColor));
+        txtContact2.setTextColor(Color.parseColor(G.attachmentColor));
 
 
         onPathAdapterBottomSheet = new OnPathAdapterBottomSheet() {
@@ -7634,8 +7681,8 @@ public class FragmentChat extends BaseFragment
     private long gapMessageIdDown; // messageId that maybe lost in local
     private long reachMessageIdUp; // messageId that will be checked after getHistory for detect reached to that or no
     private long reachMessageIdDown; // messageId that will be checked after getHistory for detect reached to that or no
-    private long startFutureMessageIdUp; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
-    private long startFutureMessageIdDown; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this state messageId for get history won't be detected.
+    private long startFutureMessageIdUp; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this changeState messageId for get history won't be detected.
+    private long startFutureMessageIdDown; // for get history from local or online in next step use from this param, ( hint : don't use from adapter items, because maybe this item was deleted and in this changeState messageId for get history won't be detected.
     private long progressIdentifierUp = 0; // store identifier for Up progress item and use it if progress not removed from view after check 'instanceOf' in 'progressItem' method
     private long progressIdentifierDown = 0; // store identifier for Down progress item and use it if progress not removed from view after check 'instanceOf' in 'progressItem' method
     private int firstVisiblePosition; // difference between start of adapter item and items that Showing.
@@ -7645,7 +7692,7 @@ public class FragmentChat extends BaseFragment
     private int scrollEnd = 80; // (hint: It should be less than MessageLoader.LOCAL_LIMIT ) to determine the limits to get to the bottom or top of the list
 
     /**
-     * manage save state , unread message , load from local or need get message from server and finally load message
+     * manage save changeState , unread message , load from local or need get message from server and finally load message
      */
     private void getMessages() {
         //+Realm realm = Realm.getDefaultInstance();
@@ -7711,7 +7758,7 @@ public class FragmentChat extends BaseFragment
         if (direction == DOWN) {
             resultsUp = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).lessThanOrEqualTo(RealmRoomMessageFields.MESSAGE_ID, fetchMessageId).notEqualTo(RealmRoomMessageFields.CREATE_TIME, 0).equalTo(RealmRoomMessageFields.DELETED, false).equalTo(RealmRoomMessageFields.SHOW_MESSAGE, true).findAll().sort(RealmRoomMessageFields.CREATE_TIME, Sort.DESCENDING);
             /**
-             * if for UP state client have message detect gap otherwise try for get online message
+             * if for UP changeState client have message detect gap otherwise try for get online message
              * because maybe client have message but not exist in Realm yet
              */
             if (resultsUp.size() > 1) {
@@ -7783,7 +7830,7 @@ public class FragmentChat extends BaseFragment
         } else {
             /** send request to server for get message.
              * if direction is DOWN check again realmRoomMessage for detection
-             * that exist any message without checking deleted state and if
+             * that exist any message without checking deleted changeState and if
              * exist use from that messageId instead of zero for getOnlineMessage
              */
             long oldMessageId = 0;
@@ -7929,7 +7976,7 @@ public class FragmentChat extends BaseFragment
         } else if (gapMessageId > 0) {
             /**
              * detect old messageId that should get history from server with that
-             * (( hint : in scroll state never should get online message with messageId = 0
+             * (( hint : in scroll changeState never should get online message with messageId = 0
              * in some cases maybe startFutureMessageIdUp Equal to zero , so i used from this if.))
              */
             if (startFutureMessageId != 0) {
@@ -8034,7 +8081,7 @@ public class FragmentChat extends BaseFragment
                         gapDetection(realmRoomMessages, direction);
                     } else if ((direction == UP && isReachedToTopView()) || direction == DOWN && isReachedToBottomView()) {
                         /**
-                         * check this state because if user is near to top view and not scroll get top message from server
+                         * check this changeState because if user is near to top view and not scroll get top message from server
                          */
                         //getOnlineMessage(startFutureMessageId, directionEnum);
                     }
@@ -8182,7 +8229,7 @@ public class FragmentChat extends BaseFragment
     }
 
     /**
-     * check that this room has saved state or no
+     * check that this room has saved changeState or no
      */
     private boolean hasSavedState() {
         return savedScrollMessageId > 0;
@@ -8196,9 +8243,9 @@ public class FragmentChat extends BaseFragment
     }
 
     /**
-     * manage progress state in adapter
+     * manage progress changeState in adapter
      *
-     * @param progressState SHOW or HIDE state detect with enum
+     * @param progressState SHOW or HIDE changeState detect with enum
      * @param direction     define direction for show progress in UP or DOWN
      */
     private void progressItem(final ProgressState progressState, final ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {

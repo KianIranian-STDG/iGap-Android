@@ -49,7 +49,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
-import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.module.AndroidUtils.closeKeyboard;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
@@ -173,17 +172,7 @@ public class FragmentEditImage extends BaseFragment {
             @Override
             public void result(String pathImageFilter) {
 
-                StructBottomSheet item = new StructBottomSheet();
-
-                int po = (viewPager.getCurrentItem());
-                item.setId(itemGalleryList.get(po).getId());
-                item.setPath(pathImageFilter);
-                item.setSelected(itemGalleryList.get(po).isSelected());
-
-                if (!itemGalleryList.get(po).isSelected()) {
-                    textImageList.put(itemGalleryList.get(po).getPath(), item);
-                }
-                itemGalleryList.set(viewPager.getCurrentItem(), item);
+                serCropAndFilterImage(pathImageFilter);
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -234,6 +223,7 @@ public class FragmentEditImage extends BaseFragment {
             @Override
             public void onClick(View v) {
                 new HelperFragment(FragmentEditImage.this).remove();
+
                 completeEditImage.result("", edtChat.getText().toString(), textImageList);
                 AndroidUtils.closeKeyboard(v);
             }
@@ -437,42 +427,14 @@ public class FragmentEditImage extends BaseFragment {
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             final Uri resultUri = UCrop.getOutput(data);
             path = AttachFile.getFilePathFromUri(resultUri);
-//            G.imageLoader.displayImage(path, imgEditImage);
-//            imgEditImage.setImageURI(Uri.parse(path));
 
-            StructBottomSheet item = new StructBottomSheet();
-
-            int po = (viewPager.getCurrentItem());
-            item.setId(itemGalleryList.get(po).getId());
-            item.setPath(path);
-            item.setSelected(itemGalleryList.get(po).isSelected());
-
-            if (!itemGalleryList.get(po).isSelected()) {
-                textImageList.put(itemGalleryList.get(po).getPath(), item);
-            }
-            itemGalleryList.set(viewPager.getCurrentItem(), item);
-            mAdapter.notifyDataSetChanged();
-
+            serCropAndFilterImage(path);
 
         } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) { // result for crop
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 path = result.getUri().getPath();
-                StructBottomSheet item = new StructBottomSheet();
-
-                int po = (viewPager.getCurrentItem());
-                item.setId(itemGalleryList.get(po).getId());
-                item.setPath(path);
-                item.setSelected(itemGalleryList.get(po).isSelected());
-
-                if (!itemGalleryList.get(po).isSelected()) {
-                    textImageList.put(itemGalleryList.get(po).getPath(), item);
-                }
-
-                itemGalleryList.set(viewPager.getCurrentItem(), item);
-                mAdapter.notifyDataSetChanged();
-
-//                imgEditImage.setImageURI(Uri.parse(path));
+                serCropAndFilterImage(path);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
 //                Exception error = result.getError();
             }
@@ -577,7 +539,9 @@ public class FragmentEditImage extends BaseFragment {
             LayoutInflater inflater = LayoutInflater.from(G.fragmentActivity);
             ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.adapter_viewpager_edittext, (ViewGroup) container, false);
             final ImageView imgPlay = (ImageView) layout.findViewById(R.id.img_editImage);
-            G.imageLoader.displayImage(suitablePath(itemGalleryList.get(position).path), imgPlay);
+            if (itemGalleryList.get(position).path != null) {
+                G.imageLoader.displayImage(suitablePath(itemGalleryList.get(position).path), imgPlay);
+            }
 
             imgPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -708,6 +672,21 @@ public class FragmentEditImage extends BaseFragment {
         textImageList.put(path, item);
 
         return itemGalleryList;
+    }
+
+    private void serCropAndFilterImage(String path) {
+
+        int po = (viewPager.getCurrentItem());
+
+        if (textImageList.containsKey(itemGalleryList.get(po).getPath())) {
+            textImageList.get(itemGalleryList.get(po).getPath()).setPath(path);
+        }
+        itemGalleryList.get(viewPager.getCurrentItem()).setPath(path);
+
+
+        mAdapter.notifyDataSetChanged();
+
+
     }
 
 }

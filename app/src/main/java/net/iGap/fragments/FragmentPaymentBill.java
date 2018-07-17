@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentPaymentBillBinding;
 import net.iGap.interfaces.IBackHandler;
@@ -25,8 +26,12 @@ public class FragmentPaymentBill extends BaseFragment {
 
     private FragmentPaymentBillBinding fragmentPaymentBillBinding;
 
-    public static FragmentPaymentBill newInstance() {
-        return new FragmentPaymentBill();
+    public static FragmentPaymentBill newInstance(int resTitleId) {
+        Bundle args = new Bundle();
+        args.putInt("title", resTitleId);
+        FragmentPaymentBill fragmentPaymentBill = new FragmentPaymentBill();
+        fragmentPaymentBill.setArguments(args);
+        return fragmentPaymentBill;
     }
 
     public FragmentPaymentBill() {
@@ -43,11 +48,10 @@ public class FragmentPaymentBill extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initDataBinding(getArguments());
-    }
 
-    private void initDataBinding(Bundle arguments) {
-        FragmentPaymentBillViewModel fragmentPaymentBillViewModel = new FragmentPaymentBillViewModel(FragmentPaymentBill.this, fragmentPaymentBillBinding);
+        int resTitleId = getArguments().getInt("title");
+
+        FragmentPaymentBillViewModel fragmentPaymentBillViewModel = new FragmentPaymentBillViewModel(FragmentPaymentBill.this, fragmentPaymentBillBinding, resTitleId);
         fragmentPaymentBillBinding.setFragmentPaymentBillViewModel(fragmentPaymentBillViewModel);
 
         IBackHandler iBackHandler = new IBackHandler() {
@@ -58,7 +62,6 @@ public class FragmentPaymentBill extends BaseFragment {
         };
 
         fragmentPaymentBillBinding.setBackHandler(iBackHandler);
-
     }
 
 
@@ -85,6 +88,8 @@ public class FragmentPaymentBill extends BaseFragment {
                     fragmentPaymentBillBinding.fpbEdtPrice.setText(addCommasToNumericString((Integer.parseInt(price) * 1000) + ""));
                     fragmentPaymentBillBinding.fpbImvCompany.setImageResource(getCompany(company_type));
 
+                    fragmentPaymentBillBinding.getFragmentPaymentBillViewModel().observeAmount.set(true);
+
                 }
             }
         }
@@ -105,6 +110,12 @@ public class FragmentPaymentBill extends BaseFragment {
             }
         }
         return (result);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        G.onMplResult = null;
     }
 
 }

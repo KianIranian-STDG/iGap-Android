@@ -170,6 +170,9 @@ public class SHP_SETTING {
     public static final String KEY_SELECTED_MINUTE_TO = "KEY_SELECTED_MINUTE_TO";
     public static final String KEY_SELECTED_MILISECOND_TO = "KEY_SELECTED_MILISECOND_TO";
 
+    public static final String KEY_SWITCH_MAP_STATE = "KEY_SWITCH_MAP_STATE";
+
+
     public static class Defaults {
         public static final int KEY_AUTOPLAY_GIFS = 1;
     }

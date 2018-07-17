@@ -1,5 +1,6 @@
 package net.iGap.adapter.items.chat;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -10,6 +11,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -964,7 +966,7 @@ public class ViewMaker {
         fileSize.setSingleLine(true);
         fileSize.setText("3.2 mb");
         fileSize.setAllCaps(TRUE);
-        fileSize.setTextColor(Color.parseColor(G.textBubble));
+        fileSize.setTextColor(Color.parseColor(G.textChatMusic));
         setTextSize(fileSize, R.dimen.dp12);
         setTypeFace(fileSize);
         LinearLayout.LayoutParams layout_996 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -985,7 +987,7 @@ public class ViewMaker {
         fileName.setTextAppearance(context, android.R.style.TextAppearance_Medium);
         fileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
         fileName.setText("file_name.ext");
-        fileName.setTextColor(Color.parseColor(G.textBubble));
+        fileName.setTextColor(Color.parseColor(G.textChatMusic));
         setTextSize(fileName, R.dimen.dp14);
         fileName.setTypeface(G.typeface_IRANSansMobile_Bold);
         LinearLayout.LayoutParams layout_298 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -998,7 +1000,7 @@ public class ViewMaker {
         songArtist.setSingleLine(true);
         songArtist.setText("Artist");
         setTypeFace(songArtist);
-        songArtist.setTextColor(Color.parseColor(G.textBubble));
+        songArtist.setTextColor(Color.parseColor(G.textChatMusic));
         LinearLayout.LayoutParams layout_757 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         songArtist.setLayoutParams(layout_757);
         linearLayout_222.addView(songArtist);
@@ -1425,12 +1427,20 @@ public class ViewMaker {
     /**
      * ***************** Common Methods *****************
      */
-    private static int dpToPixel(int dp) {
+    public static int dpToPixel(int dp) {
         Resources r = context.getResources();
         int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
         return px;
 
         //  (2/getApplicationContext().getResources().getDisplayMetrics().density)
+    }
+
+
+    public static float pixelsToDp(float px, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float dp = px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return dp;
     }
 
     public static int i_Dp(int dpSrc) {

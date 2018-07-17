@@ -728,7 +728,7 @@ public class RealmRoomMessage extends RealmObject {
 
                         // stop download
                         if (roomMessage.getAttachment() != null) {
-                            HelperDownloadFile.stopDownLoad(roomMessage.getAttachment().getCacheId());
+                            HelperDownloadFile.getInstance().stopDownLoad(roomMessage.getAttachment().getCacheId());
                         }
                     }
 

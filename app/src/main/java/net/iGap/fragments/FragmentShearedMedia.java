@@ -1129,7 +1129,7 @@ public class FragmentShearedMedia extends BaseFragment {
                     holder1.messageProgress.setTag(mList.get(position).messageId);
                     holder1.messageProgress.withDrawable(R.drawable.ic_download, true);
 
-                    if (HelperDownloadFile.isDownLoading(mList.get(position).item.getAttachment().getCacheId())) {
+                    if (HelperDownloadFile.getInstance().isDownLoading(mList.get(position).item.getAttachment().getCacheId())) {
                         startDownload(position, holder1.messageProgress);
                     }
                 }
@@ -1240,7 +1240,7 @@ public class FragmentShearedMedia extends BaseFragment {
                 }
             });
 
-            HelperDownloadFile.startDownload(mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.getInstance().startDownload(mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(String path, final int progress) {
 
@@ -1305,12 +1305,12 @@ public class FragmentShearedMedia extends BaseFragment {
 
         private void stopDownload(int position) {
 
-            HelperDownloadFile.stopDownLoad(mList.get(position).item.getAttachment().getCacheId());
+            HelperDownloadFile.getInstance().stopDownLoad(mList.get(position).item.getAttachment().getCacheId());
         }
 
         private void downloadFile(int position, MessageProgress messageProgress) {
 
-            if (HelperDownloadFile.isDownLoading(mList.get(position).item.getAttachment().getCacheId())) {
+            if (HelperDownloadFile.getInstance().isDownLoading(mList.get(position).item.getAttachment().getCacheId())) {
                 stopDownload(position);
             } else {
                 startDownload(position, messageProgress);
@@ -1480,7 +1480,7 @@ public class FragmentShearedMedia extends BaseFragment {
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
 
-                            HelperDownloadFile.startDownload(mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
+                            HelperDownloadFile.getInstance().startDownload(mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
                                 @Override
                                 public void OnProgress(final String path, int progress) {
 
@@ -1616,7 +1616,7 @@ public class FragmentShearedMedia extends BaseFragment {
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
 
-                            HelperDownloadFile.startDownload(mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
+                            HelperDownloadFile.getInstance().startDownload(mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
                                 @Override
                                 public void OnProgress(final String path, int progress) {
 
@@ -1695,7 +1695,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
         private void playVideo(int position, View itemView) {
             SharedPreferences sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
-            if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 0) == 1) {
+            if (sharedPreferences.getInt(SHP_SETTING.KEY_DEFAULT_PLAYER, 1) == 0) {
                 openVideoByDefaultApp(position);
             } else {
                 long selectedFileToken = mNewList.get(position).messageId;
@@ -1932,7 +1932,7 @@ public class FragmentShearedMedia extends BaseFragment {
                         if (at.getSmallThumbnail() != null) {
                             if (at.getSmallThumbnail().getSize() > 0) {
 
-                                HelperDownloadFile.startDownload(mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
+                                HelperDownloadFile.getInstance().startDownload(mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
                                     @Override
                                     public void OnProgress(final String path, int progress) {
 

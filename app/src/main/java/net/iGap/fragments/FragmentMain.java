@@ -481,7 +481,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
         /**
          * to first enter to app , client first compute clientCondition then
          * getRoomList and finally send condition that before get clientCondition;
-         * in else state compute new client condition with latest messaging state
+         * in else changeState compute new client condition with latest messaging changeState
          */
         if (firstTimeEnterToApp) {
             firstTimeEnterToApp = false;
@@ -1225,7 +1225,12 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
 
                 holder.lastMessageSender.setVisibility(View.VISIBLE);
                 holder.lastMessageSender.setText(R.string.txt_draft);
-                holder.lastMessageSender.setTextColor(Color.parseColor(G.appBarColor));
+                if (G.isDarkTheme) {
+                    holder.lastMessageSender.setTextColor(Color.parseColor(G.textSubTheme));
+                } else {
+                    holder.lastMessageSender.setTextColor(Color.parseColor(G.appBarColor));
+                }
+
                 holder.lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
             } else {
 
@@ -1286,7 +1291,12 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                             holder.lastMessageSender.setVisibility(View.VISIBLE);
 
                             holder.lastMessageSender.setText(lastMessageSender);
-                            holder.lastMessageSender.setTextColor(Color.parseColor(G.appBarColor));
+                            if (G.isDarkTheme) {
+                                holder.lastMessageSender.setTextColor(Color.parseColor(G.textSubTheme));
+                            } else {
+                                holder.lastMessageSender.setTextColor(Color.parseColor(G.appBarColor));
+                            }
+
                         } else {
                             holder.lastMessageSender.setVisibility(View.GONE);
                         }

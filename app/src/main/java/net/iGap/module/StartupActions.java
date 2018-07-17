@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
@@ -14,8 +15,6 @@ import com.downloader.PRDownloaderConfig;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.one.EmojiOneProvider;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -25,7 +24,6 @@ import net.iGap.WebSocketClient;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFillLookUpClass;
 import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.helper.HelperPermission;
@@ -84,7 +82,7 @@ public final class StartupActions {
     public StartupActions() {
 
         detectDeviceType();
-        EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
+        //  EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
         initializeGlobalVariables();
         realmConfiguration();
         mainUserInfo();
@@ -100,7 +98,6 @@ public final class StartupActions {
         /**
          * initialize download and upload listeners
          */
-        new HelperDownloadFile();
         new HelperUploadFile();
     }
 
@@ -195,7 +192,7 @@ public final class StartupActions {
             DIR_AUDIOS = rootPath + G.AUDIOS;
             DIR_DOCUMENT = rootPath + G.DOCUMENT;
         } else {
-            String selectedStorage = getSelectedStoragePath();
+            String selectedStorage = getSelectedStoragePath(rootPath);
             DIR_IMAGES = selectedStorage + G.IMAGES;
             DIR_VIDEOS = selectedStorage + G.VIDEOS;
             DIR_AUDIOS = selectedStorage + G.AUDIOS;
@@ -207,24 +204,48 @@ public final class StartupActions {
         DIR_IMAGE_USER = rootPath + G.IMAGE_USER;
     }
 
-    private static String getSelectedStoragePath() {
-        String selectedStorage = G.DIR_APP;
+    private static String getSelectedStoragePath(String cashPath) {
+
         SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+        boolean canWrite = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+        String selectedStorage = "";
+
+        if (canWrite) {
+            selectedStorage = G.DIR_APP;
+        } else {
+            selectedStorage = cashPath;
+        }
 
         if (sharedPreferences.getInt(SHP_SETTING.KEY_SDK_ENABLE, 0) == 1) {
             if (G.DIR_SDCARD_EXTERNAL.equals("")) {
                 List<String> storageList = FileUtils.getSdCardPathList();
                 if (storageList.size() > 0) {
-                    G.DIR_SDCARD_EXTERNAL = storageList.get(0);
-                    selectedStorage = G.DIR_SDCARD_EXTERNAL + IGAP;
+                    String sdPath = "";
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                        sdPath = storageList.get(0) + IGAP;
+                    } else {
+                        File exFile = G.context.getExternalFilesDir(null);
+                        if (exFile != null) {
+                            sdPath = storageList.get(0) + exFile.getAbsolutePath().substring(exFile.getAbsolutePath().indexOf("/Android"));
+                        }
+                    }
+                    File sdFile = new File(sdPath);
+                    if ((sdFile.exists() && sdFile.canWrite()) || sdFile.mkdirs()) {
+                        G.DIR_SDCARD_EXTERNAL = selectedStorage = sdPath;
+                    } else {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt(SHP_SETTING.KEY_SDK_ENABLE, 0);
+                        editor.apply();
+                    }
                 } else {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putInt(SHP_SETTING.KEY_SDK_ENABLE, 0);
                     editor.apply();
                 }
             } else {
-                if (new File(G.DIR_SDCARD_EXTERNAL).exists()) {
-                    selectedStorage = G.DIR_SDCARD_EXTERNAL + IGAP;
+                File sdFile = new File(G.DIR_SDCARD_EXTERNAL);
+                if ((sdFile.exists() && sdFile.canWrite()) || sdFile.mkdirs()) {
+                    selectedStorage = G.DIR_SDCARD_EXTERNAL;
                 } else {
                     G.DIR_SDCARD_EXTERNAL = "";
                 }

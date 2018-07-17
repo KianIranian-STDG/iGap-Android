@@ -1196,6 +1196,7 @@
   <string name="payment">پرداخت</string>
   <string name="buy_charge">خرید شارژ تلفن همراه</string>
   <string name="pay_bills">پرداخت قبوض</string>
+  <string name="pay_bills_crime">پرداخت قبوض  راهنمایی و رانندگی</string>
   <string name="barcode_reader">بار کد خوان</string>
   <string name="billing_id">شناسه قبض</string>
   <string name="enter">وارد کنید</string>
@@ -1242,6 +1243,8 @@
   <string name="accept_the_terms">پذیرش شرایط</string>
   <string name="wallet_agrement">توافق کیف پول</string>
   <string name="bills_inquiry">استعلام قبوض همراه اول و تلفن ثابت</string>
+  <string name="bills_inquiry_mci">استعلام قبوض همراه اول</string>
+  <string name="bills_inquiry_telecom">استعلام قبوض تلفن ثابت</string>
   <string name="bills_inquiry_title">استعلام قبوض</string>
   <string name="bill_type">نوع قبض</string>
   <string name="telecom">تلفن ثابت</string>
@@ -1253,5 +1256,13 @@
   <string name="intermediate_payment">پرداخت میان دوره</string>
   <string name="last_term">پایان دوره</string>
   <string name="last_term_payment">پرداخت پایان دوره</string>
+  <string name="responsible_for_all_financial_services">مسئولیت کلیه خدمات مالی بر عهده</string>
+  <string name="parsian_e_commerce_company_top">شرکت تجارت الکترونیک پارسیان ( تاپ )</string>
+  <string name="is_empty">می باشد</string>
+  <string name="customer_response_center_021_2318">مرکز پاسخگویی مشتریان  :  2318-021 </string>
+  <string name="ex_mobile_phone">مثال : 09123456789</string>
+  <string name="ex_area">مثال : 021</string>
+  <string name="ex_phone">مثال : 44567899</string>
+  <string name="sync_contact">همگام سازی مخاطبین</string>
 
 </resources>
