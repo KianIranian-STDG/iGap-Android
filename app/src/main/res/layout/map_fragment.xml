@@ -5,15 +5,14 @@
     style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
-   >
+    android:clickable="true">
 
     <RelativeLayout
         android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-       >
+        >
 
         <FrameLayout
             android:id="@+id/mf_fragment_map_view"
@@ -45,14 +44,13 @@
             app:tint="@color/white" />
 
 
-
         <RelativeLayout
             android:id="@+id/mf_rv_send_position"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="#FAFAFA"
-            android:gravity="left|bottom"
+            android:gravity="bottom"
             android:text="@string/send_position"
             android:textColor="@color/white"
             android:textSize="@dimen/dp18"
@@ -63,21 +61,18 @@
                 android:id="@+id/rv_icon"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:gravity="center"
-                android:layout_marginLeft="@dimen/dp8"
-                android:layout_margin="@dimen/dp4"
-                android:layout_alignParentLeft="true"
 
+                android:layout_margin="@dimen/dp4"
+                android:layout_marginLeft="@dimen/dp8"
                 android:background="@drawable/ic_circle_shape"
-                >
+
+                android:gravity="center">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_location"
-                    android:layout_alignParentLeft="true"
-                    />
 
+                    app:srcCompat="@drawable/ic_location" />
 
 
             </RelativeLayout>
@@ -87,10 +82,10 @@
                 fontPath="fonts/IRANSansMobile.ttf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp8"
-
-                android:layout_toRightOf="@+id/rv_icon"
-                android:gravity="left"
+                android:layout_marginLeft="@dimen/dp52"
+                android:layout_marginRight="@dimen/dp52"
+                android:paddingLeft="@dimen/dp6"
+                android:paddingRight="@dimen/dp6"
                 android:text="@string/send_location_text"
                 android:textSize="@dimen/dp18" />
 
@@ -101,10 +96,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/mf_txt_message"
-                android:layout_marginLeft="@dimen/dp8"
-
-                android:layout_toRightOf="@+id/rv_icon"
-                android:textSize="@dimen/dp15" />
+                android:layout_marginBottom="@dimen/dp2"
+                android:layout_marginLeft="@dimen/dp52"
+                android:layout_marginRight="@dimen/dp52"
+                android:paddingLeft="@dimen/dp6"
+                android:paddingRight="@dimen/dp6"
+                android:textSize="@dimen/dp14" />
 
         </RelativeLayout>
 
@@ -161,16 +158,16 @@
                 android:layout_below="@+id/mf_txt_userName"
                 android:layout_marginLeft="@dimen/dp8"
                 android:layout_marginRight="@dimen/dp8"
+                android:layout_marginBottom="@dimen/dp2"
 
 
                 android:layout_toRightOf="@+id/mf_imgProfile"
                 android:gravity="left"
-                android:textSize="@dimen/dp18" />
+                android:textSize="@dimen/dp16" />
 
         </RelativeLayout>
 
     </RelativeLayout>
-
 
 
     <!--</LinearLayout>-->

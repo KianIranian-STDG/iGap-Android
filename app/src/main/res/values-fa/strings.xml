@@ -1265,4 +1265,11 @@
   <string name="ex_phone">مثال : 44567899</string>
   <string name="sync_contact">همگام سازی مخاطبین</string>
 
+  <string name="send_location_text">ارسال موقعیت </string>
+
+  <string name="map_distance">فاصله به متر</string>
+  <string name="get_location_data">در حال دریافت اطلاعات</string>
+  <string name="calculation">در حال محاسبه.. </string>
+
+
 </resources>

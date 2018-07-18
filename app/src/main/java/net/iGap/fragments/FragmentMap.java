@@ -10,6 +10,7 @@
 
 package net.iGap.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -57,6 +58,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperAvatar;
+import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperSetAction;
@@ -97,11 +99,15 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     private TextView accuracy, txtTitle, txtUserName, txtDistance;
     private ImageView imgProfile;
 
+    private boolean showGPS = false;
+
     private RelativeLayout rvSendPosition, rvSeePosition;
     private FloatingActionButton fabOpenMap;
     private Bundle bundle;
     private RelativeLayout rvIcon;
     private net.iGap.module.MaterialDesignTextView itemIcon;
+    private Location location;
+
      /*       Realm realm = Realm.getDefaultInstance();
         ProtoGlobal.Room.Type type=  RealmRoom.detectType(mMessage.roomId);
         if (type== ProtoGlobal.Room.Type.CHAT|| type== ProtoGlobal.Room.Type.GROUP)
@@ -202,15 +208,19 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         rvSeePosition = (RelativeLayout) view.findViewById(R.id.mf_rv_see_position);
 
         accuracy = (TextView) view.findViewById(R.id.mf_txt_accuracy);
+        accuracy.setText(getResources().getString(R.string.get_location_data));
+
+
         txtTitle = (TextView) view.findViewById(R.id.mf_txt_message);
 
         txtUserName = (TextView) view.findViewById(R.id.mf_txt_userName);
         txtDistance = (TextView) view.findViewById(R.id.mf_txt_distance);
 
+        txtDistance.setText(getResources().getString(R.string.calculation));
 
         txtUserName.setTextColor(Color.parseColor(G.appBarColor));
 
-        accuracy.setTextColor(Color.parseColor(G.textSubTheme));
+        accuracy.setTextColor(Color.parseColor(G.textTitleTheme));
         txtDistance.setTextColor(Color.parseColor(G.textSubTheme));
 
 
@@ -287,6 +297,18 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
             Realm realm = Realm.getDefaultInstance();
 
+  /*          RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) fabOpenMap.getLayoutParams();
+            RelativeLayout.LayoutParams textParam = (RelativeLayout.LayoutParams) txtUserName.getLayoutParams();
+
+            if (HelperCalander.isPersianUnicode) {
+                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                textParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+
+            } else {
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                textParam.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+
+            }*/
 
             if (type == ProtoGlobal.Room.Type.CHAT.getNumber() || type == ProtoGlobal.Room.Type.GROUP.getNumber()) {
 
@@ -365,8 +387,13 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
             return;
         }
+        if (mode == Mode.seePosition) {
+            mMap.setMyLocationEnabled(true);
+        } else {
+            mMap.setMyLocationEnabled(true);
 
-        mMap.setMyLocationEnabled(true);
+        }
+
 
         LatLng latLng = new LatLng(latitude, longitude);
 
@@ -374,22 +401,24 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
 
 
-        LocationManager locationManager=(LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         // Define the criteria how to select the locatioin provider -> use
         // default
         Criteria criteria = new Criteria();
         String provider = locationManager.getBestProvider(criteria, false);
-        Location location = locationManager.getLastKnownLocation(provider);
-        locationManager.requestLocationUpdates(provider,1000,10,this);
+        location = locationManager.getLastKnownLocation(provider);
+        locationManager.requestLocationUpdates(provider, 60, 10, this);
         onLocationChanged(location);
 
 
+        if (mode == Mode.sendPosition) {
 
-     if (mode == Mode.sendPosition) {
 
             mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
-                @Override
+
+                @SuppressLint("MissingPermission")
                 public void onMyLocationChange(Location location) {
+
 
                     updatePosition[0] = false;
                     latitude = location.getLatitude();
@@ -404,11 +433,20 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                     marker = mMap.addMarker(new MarkerOptions().position(la).title("position"));
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(la, 16));
 
+                    try {
+                        accuracy.setText("( " + String.format("%.6f", latitude) + " , " + String.format("%.6f", longitude) + " )");
+                    } catch (Exception e) {
+                    }
+
+
+                    Log.i("peyman", "log");
                     mMap.setOnMyLocationChangeListener(null);
                 }
             });
 
+
             mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                @SuppressLint("MissingPermission")
                 @Override
                 public void onCameraChange(CameraPosition cameraPosition) {
 
@@ -421,13 +459,24 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                         latitude = mapCenter.latitude;
                         longitude = mapCenter.longitude;
 
+
+                        mMap.getUiSettings().setCompassEnabled(true);
+
+
                         accuracy.setText("( " + String.format("%.6f", latitude) + " , " + String.format("%.6f", longitude) + " )");
 
                         if (marker != null) {
                             marker.remove();
+
                         }
 
                         marker = mMap.addMarker(new MarkerOptions().position(mapCenter).title("position"));
+           /*             if (marker.getPosition().latitude == fixLat && marker.getPosition().longitude == fixLong) {
+                            mMap.setMyLocationEnabled(false);
+                        } else {
+                            mMap.setMyLocationEnabled(true);
+                        }*/
+
                     } else {
                         updatePosition[0] = true;
                     }
@@ -435,8 +484,9 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             });
 
             mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
+
                 public void onMapClick(LatLng latLng) {
+
 
                     updatePosition[0] = false;
                     latitude = latLng.latitude;
@@ -446,11 +496,14 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                         marker.remove();
                     }
                     marker = mMap.addMarker(new MarkerOptions().position(latLng).title("position"));
+
+
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                 }
             });
 
             mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                @SuppressLint("MissingPermission")
                 @Override
                 public boolean onMyLocationButtonClick() {
 
@@ -471,7 +524,10 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                     marker = mMap.addMarker(new MarkerOptions().position(la).title("position"));
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(la, 16));
 
+
                     return false;
+
+
                 }
             });
         }
@@ -540,26 +596,25 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     @Override
     public void onLocationChanged(Location location) {
 
-try{
-    if (mode==Mode.seePosition){
-        Location loc1 = new Location("");
-        loc1.setLatitude(marker.getPosition().latitude);
-        loc1.setLongitude(marker.getPosition().longitude);
 
-        Location loc2 = new Location("");
-        loc2.setLatitude(location.getLatitude());
-        loc2.setLongitude(location.getLongitude());
+        try {
+            if (mode == Mode.seePosition) {
+                Location loc1 = new Location("");
+                loc1.setLatitude(marker.getPosition().latitude);
+                loc1.setLongitude(marker.getPosition().longitude);
 
-
-        txtDistance.setText(String.format("%.1f",loc1.distanceTo(loc2))+" "+getResources().getString(R.string.map_distance)+" ");
+                Location loc2 = new Location("");
+                loc2.setLatitude(location.getLatitude());
+                loc2.setLongitude(location.getLongitude());
 
 
-
-    }
-
-}catch (Exception e){}
+                txtDistance.setText(String.format("%.1f", loc1.distanceTo(loc2)) + " " + getResources().getString(R.string.map_distance) + " ");
 
 
+            }
+
+        } catch (Exception e) {
+        }
 
 
     }

@@ -2219,4 +2219,9 @@
   <string name="ex_area">مثال : 021</string>
   <string name="ex_phone">مثال : 44567899</string>
   <string name="sync_contact">اتصالات المزامنة</string>
+  <string name="send_location_text">إرسال الموقع المحدد</string>
+  <string name="map_distance">متر بعيدا</string>
+  <string name="calculation">حساب ...</string>
+  <string name="get_location_data">الحصول على البيانات</string>
+
 </resources>
