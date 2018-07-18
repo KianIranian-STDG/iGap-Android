@@ -1292,4 +1292,6 @@
   <string name="satellite_view">Satellite View</string>
   <string name="default_view">Default View</string>
   <string name="sync_contact">Sync Contact</string>
+    <string name="calculation">calculating...</string>
+    <string name="get_location_data">getting data</string>
 </resources>

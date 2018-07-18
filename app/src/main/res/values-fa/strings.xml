@@ -1254,4 +1254,8 @@
   <string name="last_term">پایان دوره</string>
   <string name="last_term_payment">پرداخت پایان دوره</string>
 
+  <string name="send_location_text">ارسال موقعیت </string>
+  <string name="map_distance">متر فاصله</string>
+  <string name="get_location_data">در حال دریافت اطلاعات</string>
+
 </resources>
