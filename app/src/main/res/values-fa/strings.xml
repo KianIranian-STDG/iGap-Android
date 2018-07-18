@@ -1264,5 +1264,6 @@
   <string name="ex_area">مثال : 021</string>
   <string name="ex_phone">مثال : 44567899</string>
   <string name="sync_contact">همگام سازی مخاطبین</string>
-
+  <string name="satellite_view">حالت ماهواره</string>
+  <string name="default_view">حالت پیش فرض</string>
 </resources>

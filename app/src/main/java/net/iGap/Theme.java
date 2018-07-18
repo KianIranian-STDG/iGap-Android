@@ -2,15 +2,12 @@ package net.iGap;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatDelegate;
 
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.one.EmojiOneProvider;
 
 import net.iGap.module.SHP_SETTING;
 
-import static android.support.v7.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static android.support.v7.app.AppCompatDelegate.MODE_NIGHT_YES;
 import static net.iGap.G.appBarColor;
 import static net.iGap.G.attachmentColor;
 import static net.iGap.G.context;
@@ -101,11 +98,11 @@ public class Theme extends Application {
         G.themeColor = preferences.getInt(SHP_SETTING.KEY_THEME_COLOR, DEFAULT);
         G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
 
-        if (G.themeColor == DARK) {
-            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+        /*if (G.themeColor == DARK) {
+            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-        }
+        }*/
         EmojiManager.install(new EmojiOneProvider());
 
         switch (G.themeColor) {

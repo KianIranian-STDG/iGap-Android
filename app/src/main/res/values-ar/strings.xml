@@ -2219,4 +2219,6 @@
   <string name="ex_area">مثال : 021</string>
   <string name="ex_phone">مثال : 44567899</string>
   <string name="sync_contact">اتصالات المزامنة</string>
+  <string name="satellite_view">عرض القمر الصناعي</string>
+  <string name="default_view">العرض الافتراضي</string>
 </resources>
