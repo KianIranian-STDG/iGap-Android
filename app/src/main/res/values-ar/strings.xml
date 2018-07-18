@@ -2209,4 +2209,9 @@
   <string name="last_term">last term</string>
   <string name="last_term_payment">last term payment</string>
 
+  <string name="send_location_text">إرسال الموقع المحدد</string>
+  <string name="map_distance">متر بعيدا</string>
+  <string name="calculation">حساب ...</string>
+  <string name="get_location_data">الحصول على البيانات</string>
+
 </resources>
