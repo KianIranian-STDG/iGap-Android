@@ -37,6 +37,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -297,18 +298,20 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
             Realm realm = Realm.getDefaultInstance();
 
-  /*          RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) fabOpenMap.getLayoutParams();
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) fabOpenMap.getLayoutParams();
             RelativeLayout.LayoutParams textParam = (RelativeLayout.LayoutParams) txtUserName.getLayoutParams();
 
             if (HelperCalander.isPersianUnicode) {
                 params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                textParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                txtUserName.setGravity(Gravity.RIGHT);
+                ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
             } else {
                 params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                textParam.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+               txtUserName.setGravity(Gravity.LEFT);
+                ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 
-            }*/
+            }
 
             if (type == ProtoGlobal.Room.Type.CHAT.getNumber() || type == ProtoGlobal.Room.Type.GROUP.getNumber()) {
 
