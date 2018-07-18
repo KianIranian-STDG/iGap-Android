@@ -102,7 +102,7 @@ public class Theme extends Application {
         G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
 
         if (G.themeColor == DARK) {
-            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
         } else {
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
         }

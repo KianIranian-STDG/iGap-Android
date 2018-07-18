@@ -110,7 +110,6 @@
 
           <net.iGap.module.MaterialDesignTextView
             android:id="@+id/lm_txt_icon_phone_number_inquiry"
-            style="?iconColorMenuTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -120,6 +119,7 @@
             android:textColor="#f8f4df"
             android:textSize="@dimen/dp18"
             android:textStyle="bold"
+            android:textAppearance="@style/TextIconAppearance_toolbar"
             android:visibility="invisible" />
         </LinearLayout>
 
