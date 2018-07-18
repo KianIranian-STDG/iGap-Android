@@ -215,8 +215,8 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
         txtUserName.setTextColor(Color.parseColor(G.appBarColor));
 
-        accuracy.setTextColor(Color.parseColor(G.textTitleTheme));
-        txtDistance.setTextColor(Color.parseColor(G.textSubTheme));
+        accuracy.setTextColor(Color.parseColor(G.appBarColor));
+        txtDistance.setTextColor(Color.parseColor(G.appBarColor));
 
 
         //rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
