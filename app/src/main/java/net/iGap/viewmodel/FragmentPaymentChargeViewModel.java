@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -208,14 +207,14 @@ public class FragmentPaymentChargeViewModel {
         String phoneNumber = fragmentPaymentChargeBinding.fpcEditTextPhoneNumber.getText().toString();
 
         if (phoneNumber.length() != 11) {
-            Toast.makeText(G.currentActivity, R.string.phone_number_is_not_valid, Toast.LENGTH_SHORT).show();
+            HelperError.showSnackMessage(G.context.getResources().getString(R.string.phone_number_is_not_valid), false);
             return;
         }
 
         ProtoMplGetTopupToken.MplGetTopupToken.Type type = null;
 
         if (operatorType == null) {
-            Toast.makeText(G.currentActivity, R.string.please_select_operator, Toast.LENGTH_SHORT).show();
+            HelperError.showSnackMessage(G.context.getResources().getString(R.string.please_select_operator), false);
             return;
         }
 

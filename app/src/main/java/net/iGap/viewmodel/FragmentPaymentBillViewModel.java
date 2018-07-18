@@ -16,7 +16,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
@@ -115,13 +114,13 @@ public class FragmentPaymentBillViewModel {
 
         if (isPolice) {
             if (billId.length() == 0) {
-                Toast.makeText(G.currentActivity, R.string.biling_id_not_valid, Toast.LENGTH_SHORT).show();
+                HelperError.showSnackMessage(G.context.getResources().getString(R.string.biling_id_not_valid), false);
                 return;
             }
 
         } else {
             if (billId.length() != 13) {
-                Toast.makeText(G.currentActivity, R.string.biling_id_not_valid, Toast.LENGTH_SHORT).show();
+                HelperError.showSnackMessage(G.context.getResources().getString(R.string.biling_id_not_valid), false);
                 return;
             }
         }
@@ -131,12 +130,12 @@ public class FragmentPaymentBillViewModel {
 
         if (isPolice) {
             if (payId.length() == 0) {
-                Toast.makeText(G.currentActivity, R.string.pay_id_is_not_valid, Toast.LENGTH_SHORT).show();
+                HelperError.showSnackMessage(G.context.getResources().getString(R.string.pay_id_is_not_valid), false);
                 return;
             }
         } else {
             if (payId.length() > 13 || payId.length() < 5) {
-                Toast.makeText(G.currentActivity, R.string.pay_id_is_not_valid, Toast.LENGTH_SHORT).show();
+                HelperError.showSnackMessage(G.context.getResources().getString(R.string.pay_id_is_not_valid), false);
                 return;
             }
         }

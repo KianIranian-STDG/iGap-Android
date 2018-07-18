@@ -19,7 +19,6 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -151,13 +150,13 @@ public class FragmentPaymentInquiryViewModel {
                 String phoneMci = fragmentPaymentInquiryBinding.fpiEdtMci.getText().toString();
 
                 if (phoneMci.length() < 11) {
-                    Toast.makeText(G.currentActivity, R.string.phone_number_is_not_valid, Toast.LENGTH_SHORT).show();
+                    HelperError.showSnackMessage(G.context.getResources().getString(R.string.phone_number_is_not_valid), false);
                     return;
                 }
 
                 OperatorType opt = MCI.get(phoneMci.substring(0, 4));
                 if (opt == null) {
-                    Toast.makeText(G.currentActivity, R.string.mci_opreator_check, Toast.LENGTH_SHORT).show();
+                    HelperError.showSnackMessage(G.context.getResources().getString(R.string.mci_opreator_check), false);
                     return;
                 }
 
@@ -194,7 +193,7 @@ public class FragmentPaymentInquiryViewModel {
                 String phoneTelecomArea = fragmentPaymentInquiryBinding.fpiEdtTelecomArea.getText().toString();
 
                 if (phoneTelecom.length() < 8 || phoneTelecomArea.length() < 3) {
-                    Toast.makeText(G.currentActivity, R.string.phone_number_is_not_valid, Toast.LENGTH_SHORT).show();
+                    HelperError.showSnackMessage(G.context.getResources().getString(R.string.phone_number_is_not_valid), false);
                     return;
                 }
 
