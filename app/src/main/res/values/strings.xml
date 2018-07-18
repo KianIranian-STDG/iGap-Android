@@ -55,7 +55,7 @@
   <string name="verify_time_out_message">iGap recognizes the code automatically; if not, enter it manually. (Please ask the app to resend the verification code if you have not received it yet)</string>
   <string name="verify_invalid_code_message">Unfortunately; the verification code is invalid , Please enter the correct one manually.</string>
   <string name="resend_message">Resending the verification code</string>
-  <string name="phone_number">Phone number</string>
+  <string name="phone_number">Phone Number</string>
   <string name="Re_Phone_Verification">Verifying the entered phone number</string>
 
   <!-- Toast -->
@@ -141,7 +141,7 @@
   <string name="am_music">Music</string>
   <string name="am_paint">Paint</string>
   <string name="am_picture">Picture</string>
-  <string name="am_document">Document</string>G
+  <string name="am_document">Document</string>
   <string name="am_location">Location</string>
   <string name="am_video">Video</string>
   <string name="am_file">File</string>
@@ -1219,23 +1219,22 @@
   <string name="Apply_colors_to_customize">Apply colors to customize</string>
   <string name="channel_name_notification">iGap Notification</string>
   <string name="payment">Payment</string>
-  <string name="buy_charge">Top up SIM card</string>
+  <string name="buy_charge">Buy a mobile charge</string>
   <string name="pay_bills">Pay bills</string>
-  <string name="pay_bills_crime">Pay traffic tickets </string>
   <string name="barcode_reader">Barcode reader</string>
   <string name="billing_id">Billing ID</string>
   <string name="enter">enter</string>
   <string name="payment_code">Payment code</string>
   <string name="amount">Amount(Rial)</string>
-  <string name="buy">pay</string>
+  <string name="buy">Buy</string>
   <string name="select">Select</string>
   <string name="hamrahe_aval">Hamrahe Aval</string>
   <string name="irancell">IranCell</string>
   <string name="ritel">Ritel</string>
   <string name="normal_charge">Normal charge</string>
   <string name="amazing">Amazing charge</string>
-  <string name="wimax_charging">WiMAX charge</string>
-  <string name="permanently_charge">Charge permanent SIM cards</string>
+  <string name="wimax_charging">WiMAX charging</string>
+  <string name="permanently_charge">Charge the SIM card permanently</string>
 
   <string name="charge_1"> 10,000 Rials</string>
   <string name="charge_2"> 20,000 Rials</string>
@@ -1249,15 +1248,15 @@
   <string name="charge_10_ir">100,000 Rials + 9% Value Added = 109,000 Rials</string>
   <string name="charge_20_ir">200,000 Rials + 9% Value Added = 218,000 Rials</string>
   <string name="biling_id_not_valid">Billing id is not valid</string>
-  <string name="pay_id_is_not_valid">Payment Id is not valid</string>
+  <string name="pay_id_is_not_valid">Pay Id is not valid</string>
   <string name="charge_type">Charge type</string>
   <string name="operator">operator</string>
-  <string name="trabord">Ported subscriber</string>
+  <string name="trabord">trabord</string>
   <string name="time_out_error">time out error</string>
   <string name="connection_error">no connection error</string>
   <string name="server_error">server error</string>
   <string name="network_error">network error</string>
-  <string name="dialog_canceled">Request canceled</string>
+  <string name="dialog_canceled">dialog canceled</string>
   <string name="device_root">device root</string>
   <string name="phone_number_is_not_valid">phone number is not valid</string>
   <string name="please_select_operator">please select operator</string>
@@ -1265,20 +1264,19 @@
   <string name="loading_wallet_agreement">Loading wallet agreement …</string>
   <string name="i_agree_with_the_terms">I agree with the terms</string>
   <string name="accept_the_terms">Accept the terms</string>
-  <string name="wallet_agrement">Wallet agreement</string>
-  <string name="bills_inquiry_mci">MCI subscribers bill enquiry </string>
-  <string name="bills_inquiry_telecom">Home phones bill enquiry</string>
+  <string name="wallet_agrement">Wallet agrement</string>
+  <string name="bills_inquiry">Bills inquiry mci and telecom</string>
   <string name="bills_inquiry_title">Bills inquiry</string>
   <string name="bill_type">Bill Type</string>
-  <string name="telecom">home phone</string>
-  <string name="phone">Phone number</string>
-  <string name="area_code">Area code</string>
+  <string name="telecom">Telecom</string>
+  <string name="phone">phone</string>
+  <string name="area_code">area code</string>
   <string name="inquiry">Inquiry</string>
-  <string name="mci_opreator_check">This number is not an mci subscriber</string>
+  <string name="mci_opreator_check">This number is not in mci operator</string>
   <string name="mid_term">mid term</string>
-  <string name="intermediate_payment">mid-term payment</string>
+  <string name="intermediate_payment">Intermediate payment</string>
   <string name="last_term">last term</string>
-  <string name="last_term_payment">last-term payment</string>
+  <string name="last_term_payment">last term payment</string>
   <string name="responsible_for_all_financial_services">Responsible for all financial services</string>
   <string name="parsian_e_commerce_company_top">Parsian e-commerce company (top)</string>
   <string name="is_empty"></string>
@@ -1286,7 +1284,12 @@
   <string name="ex_mobile_phone">Ex : 09123456789</string>
   <string name="ex_area">Ex : 021</string>
   <string name="ex_phone">Ex : 44567899</string>
-  <string name="sync_contact">Sync Contact</string>
   <string name="satellite_view">Satellite View</string>
   <string name="default_view">Default View</string>
+  <string name="sync_contact">Sync Contact</string>
+  <string name="send_location_text">Send selected location</string>
+  <string name="map_distance">m away</string>
+  <string name="calculation">Calculating...</string>
+  <string name="get_location_data">Getting data</string>
+
 </resources>

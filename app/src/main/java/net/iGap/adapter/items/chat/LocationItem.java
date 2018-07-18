@@ -25,6 +25,9 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
+import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessageLocation;
 
 import java.io.File;
@@ -113,13 +116,18 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                 public void onClick(View v) {
                     try {
                         HelperPermission.getLocationPermission(G.currentActivity, new OnGetPermission() {
+
                             @Override
                             public void Allow() {
                                 G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition);
+
+                                        FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition,
+                                                RealmRoom.detectType(mMessage.roomId).getNumber(),mMessage.roomId,mMessage.senderID);
                                         new HelperFragment(fragment).setReplace(false).load();
+
+
                                     }
                                 });
                             }

@@ -2221,4 +2221,9 @@
   <string name="sync_contact">اتصالات المزامنة</string>
   <string name="satellite_view">عرض القمر الصناعي</string>
   <string name="default_view">العرض الافتراضي</string>
+  <string name="send_location_text">إرسال الموقع المحدد</string>
+  <string name="map_distance">متر بعيدا</string>
+  <string name="calculation">حساب ...</string>
+  <string name="get_location_data">الحصول على البيانات</string>
+
 </resources>
