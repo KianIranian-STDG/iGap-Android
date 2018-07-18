@@ -34,7 +34,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -44,11 +43,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -66,8 +63,6 @@ import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.GPSTracker;
-import net.iGap.module.MaterialDesignTextView;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
@@ -81,7 +76,6 @@ import java.io.OutputStream;
 
 import io.realm.Realm;
 
-import static net.iGap.R.id.location;
 import static net.iGap.R.id.mf_fragment_map_view;
 
 public class FragmentMap extends BaseFragment implements OnMapReadyCallback, View.OnClickListener, LocationListener {
@@ -299,7 +293,6 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             Realm realm = Realm.getDefaultInstance();
 
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) fabOpenMap.getLayoutParams();
-            RelativeLayout.LayoutParams textParam = (RelativeLayout.LayoutParams) txtUserName.getLayoutParams();
 
             if (HelperCalander.isPersianUnicode) {
                 params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
@@ -308,7 +301,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
             } else {
                 params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-               txtUserName.setGravity(Gravity.LEFT);
+                txtUserName.setGravity(Gravity.LEFT);
                 ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 
             }
