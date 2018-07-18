@@ -110,13 +110,12 @@
           android:orientation="horizontal">
 
           <net.iGap.module.MaterialDesignTextView
-            style="?iconColorMenuTheme"
             android:layout_width="@dimen/dp48"
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/md_format_list_bulleted"
             android:textAppearance="@style/TextIconAppearance.menu"
-            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
             android:textSize="@dimen/dp22"
             android:textStyle="bold" />
 
@@ -152,13 +151,12 @@
 
 
           <net.iGap.module.MaterialDesignTextView
-            style="?iconColorMenuTheme"
             android:layout_width="@dimen/dp48"
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/md_format_list_bulleted"
             android:textAppearance="@style/TextIconAppearance.menu"
-            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
             android:textSize="@dimen/dp22"
             android:textStyle="bold" />
 
@@ -190,13 +188,12 @@
           android:orientation="horizontal">
 
           <net.iGap.module.MaterialDesignTextView
-            style="?iconColorMenuTheme"
             android:layout_width="@dimen/dp48"
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/md_currency_usd"
             android:textAppearance="@style/TextIconAppearance.menu"
-            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
             android:textSize="@dimen/dp22"
             android:textStyle="bold" />
 

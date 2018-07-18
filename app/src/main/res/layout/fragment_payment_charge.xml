@@ -108,14 +108,14 @@
             android:gravity="center"
             android:text="@string/md_dialpad"
             android:textAppearance="@style/TextIconAppearance.menu"
-            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
             android:textSize="@dimen/dp22"
             android:textStyle="bold" />
 
           <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <EditText
               android:id="@+id/fpc_editText_phone_number"
@@ -139,9 +139,9 @@
               fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
+              android:gravity="start"
               android:paddingLeft="@dimen/dp10"
               android:paddingRight="@dimen/dp10"
-              android:gravity="start"
               android:text="@string/ex_mobile_phone"
               android:textColor="@color/gray"
               android:textSize="@dimen/dp10" />
@@ -155,13 +155,14 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="start"
-          android:layout_marginLeft="@dimen/dp8"
-          android:layout_marginTop="@dimen/dp4"
           android:layout_marginBottom="@dimen/dp4"
+          android:layout_marginLeft="@dimen/dp8"
           android:layout_marginRight="@dimen/dp8"
+          android:layout_marginTop="@dimen/dp4"
           android:onCheckedChanged="@{fragmentPaymentChargeViewModel::checkBoxTarabordChanged}"
           android:text="@string/trabord"
-          android:textColor="@color/gray_4c"
+          android:textColor="@{G.isDarkTheme ?Color.WHITE:@color/gray_4c,default=@color/gray_4c}"
+          android:buttonTint="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
           android:textSize="@dimen/dp16" />
 
 
@@ -180,7 +181,7 @@
             android:gravity="center"
             android:text="@string/md_format_list_bulleted"
             android:textAppearance="@style/TextIconAppearance.menu"
-            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
             android:textSize="@dimen/dp26"
             android:textStyle="bold" />
 
@@ -217,7 +218,7 @@
             android:gravity="center"
             android:text="@string/md_format_list_bulleted"
             android:textAppearance="@style/TextIconAppearance.menu"
-            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
             android:textSize="@dimen/dp22"
             android:textStyle="bold" />
 
@@ -263,7 +264,7 @@
             android:gravity="center"
             android:text="@string/md_currency_usd"
             android:textAppearance="@style/TextIconAppearance.menu"
-            android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+            android:textColor="@{G.isDarkTheme ?Color.WHITE:Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
             android:textSize="@dimen/dp22"
             android:textStyle="bold" />
 
@@ -278,8 +279,8 @@
               android:layout_height="wrap_content"
               android:layout_gravity="center"
               android:padding="@dimen/dp4"
-              android:textColor="@color/gray"
               android:text="@string/price"
+              android:textColor="@color/gray"
               android:textSize="@dimen/dp16"
               android:visibility="@{fragmentPaymentChargeViewModel.observePriceHint}" />
 
@@ -306,13 +307,13 @@
           android:layout_width="@dimen/dp180"
           android:layout_height="@dimen/dp40"
           android:layout_gravity="center"
-          android:layout_marginTop="@dimen/dp20"
-          android:textAllCaps="false"
           android:layout_marginBottom="@dimen/dp40"
-          android:enabled="@{fragmentPaymentChargeViewModel.observeEnabledPayment}"
+          android:layout_marginTop="@dimen/dp20"
           android:background="@{fragmentPaymentChargeViewModel.observeBackGround}"
+          android:enabled="@{fragmentPaymentChargeViewModel.observeEnabledPayment}"
           android:onClick="@{fragmentPaymentChargeViewModel::onBuyClick}"
           android:text="@string/buy"
+          android:textAllCaps="false"
           android:textColor="@color/whit_background"
           android:textSize="@dimen/dp18" />
 
