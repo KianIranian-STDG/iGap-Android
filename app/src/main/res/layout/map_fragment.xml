@@ -29,8 +29,8 @@
 
             android:layout_marginBottom="32dp"
 
-            android:layout_marginRight="13dp"
             android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
 
 
             android:background="@android:color/white"
@@ -62,10 +62,10 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
 
+                android:layout_centerVertical="true"
                 android:layout_margin="@dimen/dp4"
                 android:layout_marginLeft="@dimen/dp8"
                 android:background="@drawable/ic_circle_shape"
-
                 android:gravity="center">
 
                 <ImageView
@@ -96,11 +96,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/mf_txt_message"
-                android:layout_marginBottom="@dimen/dp2"
+                android:layout_marginBottom="@dimen/dp8"
                 android:layout_marginLeft="@dimen/dp52"
                 android:layout_marginRight="@dimen/dp52"
+                android:gravity="top"
                 android:paddingLeft="@dimen/dp6"
                 android:paddingRight="@dimen/dp6"
+
+                android:text="sfsaasdfasdf"
                 android:textSize="@dimen/dp14" />
 
         </RelativeLayout>

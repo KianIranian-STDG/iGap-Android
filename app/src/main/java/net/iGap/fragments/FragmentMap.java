@@ -372,6 +372,8 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -386,8 +388,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         if (mode == Mode.seePosition) {
             mMap.setMyLocationEnabled(true);
         } else {
-            mMap.setMyLocationEnabled(true);
-
+            mMap.setMyLocationEnabled(false);
         }
 
 
@@ -401,7 +402,15 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         // Define the criteria how to select the locatioin provider -> use
         // default
         Criteria criteria = new Criteria();
-        String provider = locationManager.getBestProvider(criteria, false);
+
+        String provider;
+        try {
+            criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            provider = locationManager.getBestProvider(criteria, true);
+        } catch (Exception e) {
+            provider = locationManager.getBestProvider(criteria, false);
+        }
+
         location = locationManager.getLastKnownLocation(provider);
         locationManager.requestLocationUpdates(provider, 60, 10, this);
         onLocationChanged(location);
@@ -523,6 +532,34 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
                     return false;
 
+
+                }
+            });
+
+            mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+                @SuppressLint("MissingPermission")
+                @Override
+                public void onCameraIdle() {
+                    try {
+                        if (mode == Mode.sendPosition) {
+
+                            Location loc1 = new Location("");
+                            loc1.setLatitude(marker.getPosition().latitude);
+                            loc1.setLongitude(marker.getPosition().longitude);
+
+                            Location loc2 = new Location("");
+                            loc2.setLatitude(location.getLatitude());
+                            loc2.setLongitude(location.getLongitude());
+
+                            if (loc1.distanceTo(loc2) > 35) {
+                                mMap.setMyLocationEnabled(true);
+                            } else {
+                                mMap.setMyLocationEnabled(false);
+                            }
+                        }
+                    } catch (Exception e) {
+                        mMap.setMyLocationEnabled(true);
+                    }
 
                 }
             });
