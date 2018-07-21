@@ -7,7 +7,7 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
  * All rights reserved.
-*/
+ */
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -1095,6 +1095,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         });
                     } else if (majorCode == 102 && minorCode == 2) {
                         //empty
+                    } else if (majorCode == 10) {
+                        if (time != 0) dialogWaitTimeVerifyPassword(time);
                     } else if (majorCode == 103) {
                         //empty
                     } else if (majorCode == 104) {
