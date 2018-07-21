@@ -111,6 +111,8 @@ import net.iGap.adapter.items.chat.VideoItem;
 import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
+import net.iGap.databinding.PaymentDialogBinding;
+import net.iGap.eventbus.PaymentFragment;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -373,6 +375,7 @@ public class FragmentChat extends BaseFragment
     private MaterialDesignTextView imvSendButton;
     private MaterialDesignTextView imvAttachFileButton;
     private MaterialDesignTextView imvMicButton;
+    private MaterialDesignTextView sendMoney;
     //  private MaterialDesignTextView btnReplaySelected;
     private RippleView rippleDeleteSelected;
     private RippleView rippleReplaySelected;
@@ -507,6 +510,8 @@ public class FragmentChat extends BaseFragment
     private ArrayList<StructBottomSheetForward> mListForwardNotExict = new ArrayList<>();
     private String messageEdit = "";
     private boolean isNewBottomSheet = true;
+    PaymentDialogBinding paymentDialogBinding;
+    PaymentFragment paymentDialog;
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -2146,6 +2151,7 @@ public class FragmentChat extends BaseFragment
                 ViewGroup root5 = (ViewGroup) v.findViewById(R.id.dialog_root_item5_notification);
                 ViewGroup root6 = (ViewGroup) v.findViewById(R.id.dialog_root_item6_notification);
                 ViewGroup root7 = (ViewGroup) v.findViewById(R.id.dialog_root_item7_notification);
+                ViewGroup root8 = (ViewGroup) v.findViewById(R.id.dialog_root_item10_sendMoney);
 
                 TextView txtSearch = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
                 TextView txtClearHistory = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
@@ -2154,6 +2160,7 @@ public class FragmentChat extends BaseFragment
                 TextView txtChatToGroup = (TextView) v.findViewById(R.id.dialog_text_item5_notification);
                 TextView txtCleanUp = (TextView) v.findViewById(R.id.dialog_text_item6_notification);
                 TextView txtReport = (TextView) v.findViewById(R.id.dialog_text_item7_notification);
+                TextView txtSendMoney = (TextView) v.findViewById(R.id.dialog_text_item10_sendMoney);
 
                 TextView iconSearch = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
                 iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_searching_magnifying_glass));
@@ -2175,12 +2182,17 @@ public class FragmentChat extends BaseFragment
                 TextView iconReport = (TextView) v.findViewById(R.id.dialog_icon_item7_notification);
                 iconReport.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_alert_box));
 
+
+                TextView iconSendMoney = (TextView) v.findViewById(R.id.dialog_icon_item10_sendMoney);
+                iconSendMoney.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_alert_box));
+
                 root1.setVisibility(View.VISIBLE);
                 root2.setVisibility(View.VISIBLE);
                 root3.setVisibility(View.VISIBLE);
                 root4.setVisibility(View.VISIBLE);
                 root5.setVisibility(View.VISIBLE);
                 root6.setVisibility(View.VISIBLE);
+                root8.setVisibility(View.GONE);
 
                 txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.Search));
                 txtClearHistory.setText(G.fragmentActivity.getResources().getString(R.string.clear_history));
@@ -2189,6 +2201,7 @@ public class FragmentChat extends BaseFragment
                 txtChatToGroup.setText(G.fragmentActivity.getResources().getString(R.string.chat_to_group));
                 txtCleanUp.setText(G.fragmentActivity.getResources().getString(R.string.clean_up));
                 txtReport.setText(G.fragmentActivity.getResources().getString(R.string.report));
+                txtSendMoney.setText(G.fragmentActivity.getResources().getString(R.string.SendMoney));
 
                 if (chatType == CHAT) {
                     root3.setVisibility(View.VISIBLE);
@@ -2242,6 +2255,13 @@ public class FragmentChat extends BaseFragment
 
                 if (RealmRoom.isNotificationServices(mRoomId)) {
                     root7.setVisibility(View.GONE);
+                }
+
+
+                if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom) {
+                    root8.setVisibility(View.VISIBLE);
+                } else {
+                    root8.setVisibility(View.GONE);
                 }
 
                 //realm.close();
@@ -2347,6 +2367,19 @@ public class FragmentChat extends BaseFragment
                         dialogReport(false, 0);
                     }
                 });
+
+
+                /**
+                 * send Money
+                 */
+                root8.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        showPaymentDialog();
+
+                    }
+                });
             }
         });
 
@@ -2377,6 +2410,13 @@ public class FragmentChat extends BaseFragment
         layoutAttachBottom = (LinearLayout) rootView.findViewById(R.id.layoutAttachBottom);
 
         imvMicButton = (MaterialDesignTextView) rootView.findViewById(R.id.chl_imv_mic_button);
+
+        sendMoney = (MaterialDesignTextView) rootView.findViewById(R.id.chl_imv_sendMoney_button);
+        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom) {
+            sendMoney.setVisibility(View.VISIBLE);
+        } else {
+            sendMoney.setVisibility(View.GONE);
+        }
 
         mAdapter = new MessagesAdapter<>(this, this, this);
 
@@ -2770,6 +2810,14 @@ public class FragmentChat extends BaseFragment
                 itemAdapterBottomSheet();
             }
         });
+
+        sendMoney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPaymentDialog();
+            }
+        });
+
 
         imvMicButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -8698,5 +8746,20 @@ public class FragmentChat extends BaseFragment
 
     }
 
+    private void showPaymentDialog() {
+        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom != null) {
+            chatType = realmRoom.getType();
+            if (chatType == CHAT) {
+                chatPeerId = realmRoom.getChatRoom().getPeerId();
+                if (imvUserPicture != null && txtName != null) {
+                    paymentDialog = PaymentFragment.newInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
+//                    paymentDialog.show(getFragmentManager(), "payment_dialog");
+                    new HelperFragment(paymentDialog).setReplace(false).load();
+                }
+            }
+        }
+
+    }
 
 }

@@ -20,6 +20,7 @@ import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestUserLogin;
+import net.iGap.request.RequestWalletGetAccessToken;
 
 import io.realm.Realm;
 
@@ -49,7 +50,7 @@ public class UserLoginResponse extends MessageHandler {
         G.bothChatDeleteTime = builder.getChatDeleteMessageForBothPeriod() * 1000;
         G.userLogin = true;
         G.isMplActive = builder.getMplActive();
-        //G.isWalletActive = builder.getWalletActive();
+        G.isWalletActive = builder.getWalletActive();
         G.isWalletRegister = builder.getWalletAgreementAccepted();
 
         if (G.onPayment != null) {
@@ -70,6 +71,11 @@ public class UserLoginResponse extends MessageHandler {
         WebSocketClient.allowForReconnecting = true;
         G.onUserLogin.onLogin();
         RealmUserInfo.sendPushNotificationToServer();
+
+        if (G.isWalletActive && G.isWalletRegister) {
+            new RequestWalletGetAccessToken().walletGetAccessToken();
+        }
+
     }
 
     @Override

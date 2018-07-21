@@ -484,6 +484,21 @@
   <string name="E_658">You have already sent report.</string>
   <string name="E_659">You are forbidden to send a report.</string>
 
+  <string name="E_9000">WALLET_GET_ACCESS_TOKEN_BAD_PAYLOAD</string>
+  <string name="E_9001">WALLET_GET_ACCESS_TOKEN_INTERNAL_SERVER_ERROR</string>
+  <string name="E_9002">WALLET_GET_ACCESS_TOKEN_BAD_GATEWAY</string>
+  <string name="E_9003">WALLET_GET_ACCESS_TOKEN_FORBIDDEN</string>
+  <string name="E_9004">WALLET_PAYMENT_INIT_BAD_PAYLOAD</string>
+  <string name="E_9005">WALLET_PAYMENT_INIT_INTERNAL_SERVER_ERROR</string>
+  <string name="E_9006">WALLET_PAYMENT_INIT_BAD_GATEWAY</string>
+  <string name="E_9007">WALLET_PAYMENT_INIT_FORBIDDEN</string>
+  <string name="E_9008">WALLET_PAYMENT_INIT_RECIPIENT_FORBIDDEN</string>
+  <string name="E_9009">WALLET_PAYMENT_INIT_GATEWAY_ERROR</string>
+  <string name="E_9010">WALLET_PAYMENT_INIT_RECIPIENT_NOT_REGISTERED</string>
+  <string name="E_9011">WALLET_REGISTER_BAD_PAYLOAD</string>
+  <string name="E_9012">WALLET_REGISTER_INTERNAL_SERVER_ERROR</string>
+  <string name="E_9013">WALLET_REGISTER_FORBIDDEN</string>
+
   <string name="E_10108">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_BAD_PAYLOAD</string>
   <string name="E_10109">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_INTERNAL_SERVER_ERROR</string>
   <string name="E_10110">USER_TWO_STEP_VERIFICATION_VERIFY_RECOVERY_EMAIL_MAX_TRY_LOCK</string>
@@ -1219,7 +1234,7 @@
   <string name="Apply_colors_to_customize">Apply colors to customize</string>
   <string name="channel_name_notification">iGap Notification</string>
   <string name="payment">Payment</string>
-  <string name="buy_charge">Buy a mobile charge</string>
+  <string name="buy_charge">Top up SIM card</string>
   <string name="pay_bills">Pay bills</string>
   <string name="pay_bills_crime">Pay traffic tickets</string>
   <string name="barcode_reader">Barcode reader</string>
@@ -1227,15 +1242,15 @@
   <string name="enter">enter</string>
   <string name="payment_code">Payment code</string>
   <string name="amount">Amount(Rial)</string>
-  <string name="buy">Buy</string>
+  <string name="buy">pay</string>
   <string name="select">Select</string>
   <string name="hamrahe_aval">Hamrahe Aval</string>
   <string name="irancell">IranCell</string>
   <string name="ritel">Ritel</string>
   <string name="normal_charge">Normal charge</string>
   <string name="amazing">Amazing charge</string>
-  <string name="wimax_charging">WiMAX charging</string>
-  <string name="permanently_charge">Charge the SIM card permanently</string>
+  <string name="wimax_charging">WiMAX charge</string>
+  <string name="permanently_charge">Charge permanent SIM cards</string>
 
   <string name="charge_1"> 10,000 Rials</string>
   <string name="charge_2"> 20,000 Rials</string>
@@ -1249,7 +1264,7 @@
   <string name="charge_10_ir">100,000 Rials + 9% Value Added = 109,000 Rials</string>
   <string name="charge_20_ir">200,000 Rials + 9% Value Added = 218,000 Rials</string>
   <string name="biling_id_not_valid">Billing id is not valid</string>
-  <string name="pay_id_is_not_valid">Pay Id is not valid</string>
+  <string name="pay_id_is_not_valid">Payment Id is not valid</string>
   <string name="charge_type">Charge type</string>
   <string name="operator">operator</string>
   <string name="trabord">Ported subscriber</string>
@@ -1257,7 +1272,7 @@
   <string name="connection_error">no connection error</string>
   <string name="server_error">server error</string>
   <string name="network_error">network error</string>
-  <string name="dialog_canceled">dialog canceled</string>
+  <string name="dialog_canceled">Request canceled</string>
   <string name="device_root">device root</string>
   <string name="phone_number_is_not_valid">phone number is not valid</string>
   <string name="please_select_operator">please select operator</string>
@@ -1265,21 +1280,38 @@
   <string name="loading_wallet_agreement">Loading wallet agreement …</string>
   <string name="i_agree_with_the_terms">I agree with the terms</string>
   <string name="accept_the_terms">Accept the terms</string>
-  <string name="wallet_agrement">Wallet agrement</string>
+  <string name="wallet_agrement">Wallet agreement</string>
+  <string name="SendMoney">Send Money</string>
+  <string name="transfer_amount_hint">Enter the transfer amount below :</string>
+  <string name="amount_in_rial">Amount in Rial :</string>
+  <string name="pay">pay</string>
+  <string name="transfer_to_dialog">Transfer to :</string>
+  <string name="am_money">money</string>
+
+
+  <string name="trace_number">Trace Number</string>
+  <string name="amount_2">amount :</string>
+  <string name="not_success">ناموفق</string>
+  <string name="not_success_2">"پرداخت ناموفق بود"</string>
+  <string name="payment_canceled">payment is canceled</string>
+  <string name="PayGear_unavailable">PayGear is unavailable</string>
+
+  <string name="result_3">نتیجه پرداخت مشخص نیست به تاریخجه کیف پول مراجع یا با پشتیبانی تماس بگیرید</string>
+  <string name="result_4">پرداخت موفقیت آمیز بود اطلاعات بیشتر در قسمت تاریخچه کیف پول</string>
   <string name="bills_inquiry_mci">MCI subscribers bill enquiry </string>
   <string name="bills_inquiry_telecom">Home phones bill enquiry</string>
   <string name="bills_inquiry">Bills inquiry mci and telecom</string>
   <string name="bills_inquiry_title">Bills inquiry</string>
   <string name="bill_type">Bill Type</string>
-  <string name="telecom">Telecom</string>
-  <string name="phone">phone</string>
-  <string name="area_code">area code</string>
+  <string name="telecom">Home phone</string>
+  <string name="phone">Phone number</string>
+  <string name="area_code">Area code</string>
   <string name="inquiry">Inquiry</string>
-  <string name="mci_opreator_check">This number is not in mci operator</string>
+  <string name="mci_opreator_check">This number is not an mci subscriber</string>
   <string name="mid_term">mid term</string>
-  <string name="intermediate_payment">Intermediate payment</string>
+  <string name="intermediate_payment">mid-term payment</string>
   <string name="last_term">last term</string>
-  <string name="last_term_payment">last term payment</string>
+  <string name="last_term_payment">last-term payment</string>
   <string name="responsible_for_all_financial_services">Responsible for all financial services</string>
   <string name="parsian_e_commerce_company_top">Parsian e-commerce company (top)</string>
   <string name="is_empty"></string>

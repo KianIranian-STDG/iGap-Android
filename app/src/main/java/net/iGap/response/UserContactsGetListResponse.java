@@ -62,8 +62,8 @@ public class UserContactsGetListResponse extends MessageHandler {
                             realm.delete(RealmContacts.class);
 
                             for (ProtoGlobal.RegisteredUser registerUser : builder.getRegisteredUserList()) {
-                                 RealmRegisteredInfo.putOrUpdate(realm, registerUser);
-                                 RealmContacts.putOrUpdate(realm, registerUser);
+                                RealmRegisteredInfo.putOrUpdate(realm, registerUser);
+                                RealmContacts.putOrUpdate(realm, registerUser);
                             }
                         }
                     }, new Realm.Transaction.OnSuccess() {

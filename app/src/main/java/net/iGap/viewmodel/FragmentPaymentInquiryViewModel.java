@@ -7,7 +7,7 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
  * All rights reserved.
-*/
+ */
 
 import android.content.Context;
 import android.databinding.ObservableBoolean;

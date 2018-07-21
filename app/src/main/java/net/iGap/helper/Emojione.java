@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class Emojione implements EmojiProvider{
+public abstract class Emojione implements EmojiProvider {
     private static final HashMap<String, String> _shortNameToUnicode = new HashMap<>();
     private static final Pattern SHORTNAME_PATTERN = Pattern.compile(":([-+\\w]+):");
 

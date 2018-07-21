@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.eventbus.EventManager;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoWalletPaymentInit;
 
@@ -34,11 +35,13 @@ public class WalletPaymentInitResponse extends MessageHandler {
         ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder builder = (ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder) message;
         builder.getToken();
         builder.getPublicKey();
+        EventManager.getInstance().postEvent(EventManager.ON_INIT_PAY, builder);
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        EventManager.getInstance().postEvent(EventManager.ON_INIT_PAY, null);
     }
 
     @Override
@@ -47,6 +50,8 @@ public class WalletPaymentInitResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
+
+        EventManager.getInstance().postEvent(EventManager.ON_INIT_PAY, null);
     }
 }
 

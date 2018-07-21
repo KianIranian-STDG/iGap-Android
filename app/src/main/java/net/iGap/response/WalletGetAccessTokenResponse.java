@@ -12,8 +12,13 @@ package net.iGap.response;
 
 import android.util.Log;
 
+import net.iGap.G;
+import net.iGap.eventbus.EventManager;
+import net.iGap.eventbus.socketMessages;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoWalletGetAccessToken;
+
+import ir.radsense.raadcore.model.Auth;
 
 public class WalletGetAccessTokenResponse extends MessageHandler {
 
@@ -37,12 +42,23 @@ public class WalletGetAccessTokenResponse extends MessageHandler {
         builder.getTokenType();
         builder.getAccessToken();
         builder.getExpiresIn();
-        Log.i("TTT", "handler: builder.getTokenType():" + builder.getTokenType() + "   ||   builder.getAccessToken(): " + builder.getAccessToken() + "   ||   builder.getExpiresIn():" + builder.getExpiresIn());
+
+
+        Auth auth = new Auth(builder.getAccessToken(), "bearer");
+        if (auth.getJWT() == null) {
+            return;
+        }
+
+        G.jwt = builder.getAccessToken();
+
+        auth.save();
+        EventManager.getInstance().postEvent(EventManager.ON_ACCESS_TOKEN_RECIVE, socketMessages.SUCCESS);
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        EventManager.getInstance().postEvent(EventManager.ON_ACCESS_TOKEN_RECIVE, socketMessages.FAILED);
     }
 
     @Override
@@ -51,6 +67,7 @@ public class WalletGetAccessTokenResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
+        EventManager.getInstance().postEvent(EventManager.ON_ACCESS_TOKEN_RECIVE, socketMessages.FAILED);
     }
 }
 

@@ -20,7 +20,7 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '26.0.3'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "net.iGap"
@@ -72,20 +72,17 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':libwebrtc')
-    compile('com.afollestad.material-dialogs:core:0.9.4.5') {
+    compile('com.afollestad.material-dialogs:core:0.9.6.0') {
         transitive = true
     }
     compile('com.crashlytics.sdk.android:crashlytics:2.9.3@aar') {
         transitive = true
     }
-
     compile project(path: ':lvl')
-
     implementation 'com.mikepenz:fastadapter:3.2.5'
     implementation 'com.mikepenz:fastadapter-commons:3.2.5'
     implementation 'com.mikepenz:fastadapter-extensions-expandable:3.2.5'
     implementation 'com.mikepenz:fastadapter-extensions:3.2.5'
-
     compile 'com.android.support:multidex:1.0.3'
     compile 'com.android.support:appcompat-v7:27.1.1'
     compile 'com.nineoldandroids:library:2.4.0'
@@ -143,6 +140,14 @@ dependencies {
     implementation 'com.github.RooyeKhat-Media:Proto:Build91'
     implementation project(':pecpayment-release')
     implementation 'com.mcxiaoke.volley:library:1.0.19'
+    implementation project(':raadcore')
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    implementation project(':paygear_wallet')
 }
 
 configurations.all {

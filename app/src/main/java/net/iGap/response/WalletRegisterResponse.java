@@ -14,6 +14,7 @@ import net.iGap.G;
 import net.iGap.fragments.FragmentWallet;
 import net.iGap.helper.HelperFragment;
 import net.iGap.proto.ProtoWalletRegister;
+import net.iGap.request.RequestWalletGetAccessToken;
 
 public class WalletRegisterResponse extends MessageHandler {
 
@@ -27,6 +28,7 @@ public class WalletRegisterResponse extends MessageHandler {
         this.message = protoClass;
         this.actionId = actionId;
         this.identity = identity;
+        new RequestWalletGetAccessToken().walletGetAccessToken();
     }
 
     @Override
