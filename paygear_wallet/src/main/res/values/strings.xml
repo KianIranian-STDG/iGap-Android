@@ -286,4 +286,6 @@
     <string name="card_bank">Bank Card</string>
     <string name="paygear_card">Wallet Card</string>
   <string name="please_wait">Please Wait</string>
+  <string name="set_password">Set Password</string>
+  <string name="change_password">Change Password</string>
 </resources>

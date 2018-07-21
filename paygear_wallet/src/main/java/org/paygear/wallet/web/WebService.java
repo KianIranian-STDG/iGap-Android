@@ -26,6 +26,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -92,6 +93,15 @@ public interface WebService {
 
     @GET("payment/v3/{account_id}/cards")
     Call<ArrayList<Card>> getUserCards(@Query("account_id") String accountId);
+
+    @GET("credit/v3/password/{card_token}/accounts/{account_id}")
+    Call<Void> getForgotPassword(@Path("card_token") String card_token,
+                                 @Path("account_id") String account_id);
+
+    @PUT("credit/v3/password/{card_token}/accounts/{account_id}")
+    Call<Void> PutForgotPassword(@Path("card_token") String card_token,
+                                 @Path("account_id") String account_id);
+
 
     @POST("payment/v3/cards")
     Call<Card> addCard(@Body RequestBody cardJsonBody);

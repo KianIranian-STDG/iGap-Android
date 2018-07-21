@@ -121,7 +121,11 @@ public class CardFragment extends Fragment {
         button = view.findViewById(R.id.button);
         Drawable mDrawableSkip = ContextCompat.getDrawable(getContext(), R.drawable.button_green_selector_24dp);
         if (mDrawableSkip != null) {
-            mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+            if (WalletActivity.isDarkTheme) {
+                mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.backgroundTheme_2), PorterDuff.Mode.SRC_IN));
+            } else {
+                mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 button.setBackground(mDrawableSkip);
             }
@@ -137,6 +141,17 @@ public class CardFragment extends Fragment {
         TextView cvv2Title = view.findViewById(R.id.cvv2_title);
         pinText = view.findViewById(R.id.pin);
         cvv2Text = view.findViewById(R.id.cvv2);
+
+        if (WalletActivity.isDarkTheme) {
+            cvv2Text.setHintTextColor(Color.parseColor(WalletActivity.textSubTheme));
+            cvv2Text.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            pinText.setHintTextColor(Color.parseColor(WalletActivity.textSubTheme));
+            pinText.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            defaultCardTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            pinTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            cvv2Title.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            paymentPriceText.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+        }
 
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, defaultCardTitle, button,
                 pinTitle, cvv2Title, paymentPriceText);

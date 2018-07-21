@@ -81,7 +81,6 @@ public class CashOutRequestFragment extends Fragment {
     TextView numberTitle;
     AutoCompleteTextView numberText;
 
-    TextView getSheba;
     TextView hintText;
 
 
@@ -195,16 +194,21 @@ public class CashOutRequestFragment extends Fragment {
         numberText = view.findViewById(R.id.number);
 
         hintText = view.findViewById(R.id.hint);
-        getSheba = view.findViewById(R.id.get_sheba);
 
-        getSheba.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Utils.showCustomTab(getActivity(), "https://paygear.ir/iban");
-            }
-        });
 
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, button, limitTextView2, priceTitle, numberTitle, getSheba);
+        if (WalletActivity.isDarkTheme) {
+
+            priceTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            priceText.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            priceText.setHintTextColor(Color.parseColor(WalletActivity.textSubTheme));
+            numberText.setHintTextColor(Color.parseColor(WalletActivity.textSubTheme));
+            numberTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            numberText.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            hintText.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+        }
+
+
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, button, limitTextView2, priceTitle, numberTitle);
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, limitTextView1, priceText, numberText, hintText);
 
         limitTextView1.setText(getString(R.string.paygear_account_balance) + ":   " +
@@ -304,7 +308,6 @@ public class CashOutRequestFragment extends Fragment {
                 priceTitle.setText(R.string.enter_cash_out_price);
                 numberTitle.setText(R.string.enter_your_sheba_number);
                 hintText.setText(R.string.cash_out_normal_hint);
-                getSheba.setVisibility(View.VISIBLE);
                 numberText.setHint(R.string.sheba_20_digits);
                 numberText.setFilters(new InputFilter[] { new InputFilter.LengthFilter(26) });
                 break;

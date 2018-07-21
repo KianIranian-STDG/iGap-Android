@@ -169,7 +169,10 @@ public class OrderView extends LinearLayout {
                     title.setText(R.string.receive_charge_for_raad_card_from);
 
                 title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_payment_in, 0);
-                subtitle.setText(order.sender.getName());
+                subtitle.setText(order.sender.name);
+                Log.i("CCCCCCCCCC", "order.sender.name: " + order.sender.name);
+                Log.i("CCCCCCCCCC", "order.sender.name: " + order.sender.mobile);
+                Log.i("CCCCCCCCCC", "order.sender.name: " + order.sender.getName());
                 img = order.sender.profilePicture;
                 price.setTextColor(ContextCompat.getColor(getContext(), R.color.primary_text));
             } else {

@@ -325,6 +325,8 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                             dialog.dismiss();
                             fragmentActivity.onBackPressed();
                             sendPost(response.body().callbackUrl);
+                            G.cardamount -= response.body().amount;
+
                         }
                     });
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");

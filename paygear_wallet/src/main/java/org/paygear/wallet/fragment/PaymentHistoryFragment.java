@@ -275,9 +275,7 @@ public class PaymentHistoryFragment extends Fragment {
                     public void onClick(View v) {
                         if (getActivity() instanceof NavigationBarActivity) {
                             Order order = orderList.items.get(getAdapterPosition());
-                            RaadApp.paygearHistoryOpenChat.paygearId(order.id);
-                            Log.i("CCCCCCCCC", "0 rderId: " + order.orderId);
-                            Log.i("CCCCCCCCC", "1 order.id: " + order.id);
+                            RaadApp.paygearHistoryOpenChat.paygearId(order.receiver.id);
                             showProgress();
                         }
                     }

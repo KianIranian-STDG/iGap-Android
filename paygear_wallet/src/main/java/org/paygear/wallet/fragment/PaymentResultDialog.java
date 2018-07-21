@@ -87,6 +87,14 @@ public class PaymentResultDialog extends DialogFragment {
         TextView priceTitle = view.findViewById(R.id.price_title);
         TextView priceValue = view.findViewById(R.id.price_value);
 
+        if (WalletActivity.isDarkTheme) {
+
+            priceValue.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            priceTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            statusTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+        }
+
+
         TextView saveButton = view.findViewById(R.id.save_button);
         ViewCompat.setBackground(saveButton, getButtonSelector());
         saveButton.setTextColor(Color.parseColor(WalletActivity.accentColor));

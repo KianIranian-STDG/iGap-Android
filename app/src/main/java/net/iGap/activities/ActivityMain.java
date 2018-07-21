@@ -424,7 +424,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void paygearId(String id) {
 
-                Log.i("CCCCCCCCC", "2 paygearId: " + id);
                 new RequestWalletIdMapping().walletIdMapping(id);
             }
         };
@@ -1432,7 +1431,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
         itemCash = (TextView) findViewById(R.id.cash);
-        itemCash.setTextColor(Color.parseColor(G.appBarColor));
+        if (G.isDarkTheme) {
+            itemCash.setTextColor(Color.parseColor(G.textTitleTheme));
+        } else {
+            itemCash.setTextColor(Color.parseColor(G.appBarColor));
+        }
 
         if (G.isWalletActive && G.isWalletRegister) {
             itemCash.setVisibility(View.VISIBLE);
@@ -2906,6 +2909,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         if (response.body().size() > 0)
                             G.selectedCard = response.body().get(0);
+
+                        G.cardamount = G.selectedCard.cashOutBalance;
                         if (G.selectedCard != null) {
                             itemCash.setVisibility(View.VISIBLE);
                             itemCash.setText("اعتبار شما : " + String.valueOf(G.selectedCard.cashOutBalance) + " ریال ");
@@ -2918,6 +2923,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                     intent.putExtra("PrimaryColor", G.appBarColor);
                                     intent.putExtra("DarkPrimaryColor", G.appBarColor);
                                     intent.putExtra("AccentColor", G.appBarColor);
+                                    intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
                                     intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
                                     intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
                                     intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);

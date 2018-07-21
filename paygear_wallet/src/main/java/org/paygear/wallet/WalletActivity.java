@@ -46,6 +46,10 @@ public class WalletActivity extends NavigationBarActivity {
     public static String BACKGROUND_2 = "BACKGROUND_2";
     public static String TEXT_TITLE = "TEXT_TITLE";
     public static String TEXT_SUB_TITLE = "TEXT_SUB_TITLE";
+    public static String API_KEY = "API_KEY";
+    public static String ACCESS_TOKEN = "ACCESS_TOKEN";
+    public static String IS_DARK_THEME = "IS_DARK_THEME";
+    public static boolean isDarkTheme = false;
 
 
     @Override
@@ -77,6 +81,7 @@ public class WalletActivity extends NavigationBarActivity {
         Payment payment = (Payment) intent.getSerializableExtra("Payment");
         primaryColor = intent.getStringExtra("PrimaryColor");
         darkPrimaryColor = intent.getStringExtra("DarkPrimaryColor");
+        isDarkTheme = intent.getBooleanExtra(IS_DARK_THEME, false);
         progressColor = intent.getStringExtra(PROGRESSBAR);
         lineBorder = intent.getStringExtra(LINE_BORDER);
         backgroundTheme = intent.getStringExtra(BACKGROUND);

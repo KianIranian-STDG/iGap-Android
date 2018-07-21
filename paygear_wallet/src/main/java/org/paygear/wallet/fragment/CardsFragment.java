@@ -125,8 +125,8 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
                 @Override
                 public void onClick(View v) {
                     if (getActivity() instanceof NavigationBarActivity) {
-                        ((NavigationBarActivity) getActivity()).replaceFragment(
-                                new SetCardPinFragment(), "SetCardPinFragment", true);
+                        ((NavigationBarActivity) getActivity()).pushFullFragment(
+                                FragmentSettingWallet.newInstance(), "FragmentSettingWallet");
                     }
                 }
             });
@@ -399,20 +399,37 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         TextView charge = view.findViewById(R.id.charge);
         LinearLayout balanceLayout=view.findViewById(R.id.balance_layout);
 
-        balanceLayout.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
+        if (WalletActivity.isDarkTheme) {
+
+            cashableBalance.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            cashableTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            giftBalance.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            giftTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            cashout.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            charge.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            unit.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            balance.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            balanceTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+        }
+
+        if (WalletActivity.isDarkTheme) {
+            balanceLayout.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.backgroundTheme), PorterDuff.Mode.SRC_IN));
+        } else {
+            balanceLayout.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+        }
+
 
 
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, unit, cashableTitle, cashableBalance, giftTitle, giftBalance);
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, balanceTitle, balance, cashout, charge);
 
-//        ViewCompat.setBackground(logo, RaadCommonUtils.getRectShape(getContext(), R.color.add_card_plus_back, 20, 0));
-//        logo.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
 
         Drawable mDrawable = getResources().getDrawable(R.drawable.button_blue_selector_24dp);
-        mDrawable.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-
-//        Drawable mDrawable_charge = getResources().getDrawable(R.drawable.button_green_selector_24dp);
-//        mDrawable_charge.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+        if (WalletActivity.isDarkTheme) {
+            mDrawable.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.backgroundTheme), PorterDuff.Mode.SRC_IN));
+        } else {
+            mDrawable.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+        }
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -451,7 +468,14 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
 
         if (giftPrice == 0) {
             view.findViewById(R.id.bals_layout).setVisibility(View.GONE);
-            view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
+
+            if (WalletActivity.isDarkTheme) {
+                view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.backgroundTheme_2), PorterDuff.Mode.SRC_IN));
+
+            } else {
+                view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+
+            }
 
         }
     }
@@ -474,7 +498,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
                 0, LinearLayout.LayoutParams.WRAP_CONTENT);
         title2Params.weight = 1.0f;
         title2.setLayoutParams(title2Params);
-        title2.setTextColor(Color.parseColor("#de000000"));
+        title2.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
         title2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
         title2.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
         title2.setText(R.string.my_cards);
@@ -518,7 +542,12 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
                 RelativeLayout.LayoutParams.MATCH_PARENT, cardHeight);
         params.setMargins(dp16, 0, dp16, dp16);
         cardView.setLayoutParams(params);
-        cardView.setCardBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
+        if (WalletActivity.isDarkTheme) {
+            cardView.setCardBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+        } else {
+            cardView.setCardBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
+        }
+
         cardView.setPreventCornerOverlap(false);
         cardView.setCardElevation(RaadCommonUtils.getPx(6, context));
         cardView.setRadius(RaadCommonUtils.getPx(8, context));

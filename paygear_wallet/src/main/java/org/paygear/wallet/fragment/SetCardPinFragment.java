@@ -72,6 +72,7 @@ public class SetCardPinFragment extends Fragment {
         TextView newPassTitle = view.findViewById(R.id.new_pass_title);
         TextView confirmPassTitle = view.findViewById(R.id.confirm_pass_title);
 
+
         currentPass = view.findViewById(R.id.current_pass);
         newPass = view.findViewById(R.id.new_pass);
         confirmPass = view.findViewById(R.id.confirm_pass);
@@ -83,6 +84,19 @@ public class SetCardPinFragment extends Fragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 button.setBackground(mDrawableSkip);
             }
+        }
+
+        if (WalletActivity.isDarkTheme) {
+            currentPass.setHintTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            currentPass.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            newPass.setHintTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            newPass.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            confirmPass.setHintTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            confirmPass.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+
+            currentPassTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            newPassTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            confirmPassTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
         }
         progressBar = view.findViewById(R.id.progress);
 

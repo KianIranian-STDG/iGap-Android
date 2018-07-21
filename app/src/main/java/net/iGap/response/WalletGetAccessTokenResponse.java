@@ -12,6 +12,7 @@ package net.iGap.response;
 
 import android.util.Log;
 
+import net.iGap.G;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
 import net.iGap.proto.ProtoError;
@@ -47,6 +48,9 @@ public class WalletGetAccessTokenResponse extends MessageHandler {
         if (auth.getJWT() == null) {
             return;
         }
+
+        G.jwt = builder.getAccessToken();
+
         auth.save();
         EventManager.getInstance().postEvent(EventManager.ON_ACCESS_TOKEN_RECIVE, socketMessages.SUCCESS);
     }

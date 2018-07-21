@@ -381,6 +381,8 @@ public class G extends MultiDexApplication {
     private Tracker mTracker;
     public static Account iGapAccount;
     public static Card selectedCard = null;
+    public static long cardamount;
+    public static String jwt = null;
 
     public static int rotationState;
 

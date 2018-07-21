@@ -85,6 +85,7 @@ public class AddCardFragment extends Fragment {
         appBar.showBack();
 
         cardNumberText = view.findViewById(R.id.card_number);
+
         monthText = view.findViewById(R.id.month);
         yearText = view.findViewById(R.id.year);
         imageView = view.findViewById(R.id.image);
@@ -100,6 +101,18 @@ public class AddCardFragment extends Fragment {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 button.setBackground(mDrawableSkip);
             }
+        }
+        if (WalletActivity.isDarkTheme) {
+            cardNumberText.setHintTextColor(Color.parseColor(WalletActivity.textSubTheme));
+            cardNumberText.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            monthText.setHintTextColor(Color.parseColor(WalletActivity.textSubTheme));
+            monthText.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            yearText.setHintTextColor(Color.parseColor(WalletActivity.textSubTheme));
+            yearText.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            defaultCardTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            cardNumberTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            yearTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+            monthTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
         }
 
         progressBar = view.findViewById(R.id.progress);
