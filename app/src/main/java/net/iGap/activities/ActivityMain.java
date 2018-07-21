@@ -2913,7 +2913,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         G.cardamount = G.selectedCard.cashOutBalance;
                         if (G.selectedCard != null) {
                             itemCash.setVisibility(View.VISIBLE);
-                            itemCash.setText("اعتبار شما : " + String.valueOf(G.selectedCard.cashOutBalance) + " ریال ");
+                            itemCash.setText("اعتبار شما : " + String.valueOf(G.cardamount) + " ریال ");
                             itemNavWallet.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

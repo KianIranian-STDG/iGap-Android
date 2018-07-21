@@ -121,7 +121,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         if (userName != null)
             paymentDialogBinding.subtitle.setText(userName);
         if (G.selectedCard != null) {
-            paymentDialogBinding.amountCard.setText("اعتبار شما : " + String.valueOf(G.selectedCard.cashOutBalance) + " ریال ");
+            paymentDialogBinding.amountCard.setText("اعتبار شما : " + String.valueOf(G.cardamount) + " ریال ");
         } else {
             paymentDialogBinding.amountCard.setVisibility(View.GONE);
         }
