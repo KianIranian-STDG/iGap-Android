@@ -1221,6 +1221,7 @@
   <string name="payment">Payment</string>
   <string name="buy_charge">Buy a mobile charge</string>
   <string name="pay_bills">Pay bills</string>
+  <string name="pay_bills_crime">Pay traffic tickets</string>
   <string name="barcode_reader">Barcode reader</string>
   <string name="billing_id">Billing ID</string>
   <string name="enter">enter</string>
@@ -1251,7 +1252,7 @@
   <string name="pay_id_is_not_valid">Pay Id is not valid</string>
   <string name="charge_type">Charge type</string>
   <string name="operator">operator</string>
-  <string name="trabord">trabord</string>
+  <string name="trabord">Ported subscriber</string>
   <string name="time_out_error">time out error</string>
   <string name="connection_error">no connection error</string>
   <string name="server_error">server error</string>
@@ -1266,6 +1267,7 @@
   <string name="accept_the_terms">Accept the terms</string>
   <string name="wallet_agrement">Wallet agrement</string>
   <string name="bills_inquiry_mci">MCI subscribers bill enquiry </string>
+  <string name="bills_inquiry_telecom">Home phones bill enquiry</string>
   <string name="bills_inquiry">Bills inquiry mci and telecom</string>
   <string name="bills_inquiry_title">Bills inquiry</string>
   <string name="bill_type">Bill Type</string>
