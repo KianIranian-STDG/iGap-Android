@@ -196,6 +196,13 @@ public final class ContactUtils {
 
     private static void addContactToPhoneBook(RealmContacts contact) {
 
+        String phoneNumber = contact.getPhone() + "";
+        if (phoneNumber.startsWith("98")) {
+            phoneNumber = "+" + phoneNumber;
+        } else if (phoneNumber.startsWith("0")) {
+            phoneNumber = "+98" + phoneNumber.substring(1);
+        }
+
         String accountName = StartupActions.getiGapAccountInstance().name;
         String accountType = StartupActions.getiGapAccountInstance().type;
 
@@ -213,7 +220,7 @@ public final class ContactUtils {
         ContentProviderOperation.Builder builder = ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI);
         builder.withValue(ContactsContract.RawContacts.ACCOUNT_NAME, accountName);
         builder.withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, accountType);
-        builder.withValue(ContactsContract.RawContacts.SYNC1, contact.getPhone());
+        builder.withValue(ContactsContract.RawContacts.SYNC1, phoneNumber);
         builder.withValue(ContactsContract.RawContacts.SYNC2, contact.getId());
 
         query.add(builder.build());
@@ -221,7 +228,7 @@ public final class ContactUtils {
         query.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
                 .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, contact.getPhone())
+                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNumber)
                 .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
                 .build());
 
@@ -240,7 +247,7 @@ public final class ContactUtils {
 
 
                 // Sets the phone number and type
-                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, contact.getPhone())
+                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNumber)
                 .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
                 .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_WORK_MOBILE)
                 .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_HOME);
@@ -275,9 +282,9 @@ public final class ContactUtils {
         builder.withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0);
         builder.withValue(ContactsContract.Data.MIMETYPE, "vnd.android.cursor.item/vnd.net.iGap.profile");
         builder.withValue(ContactsContract.Data.DATA1, contact.getId());
-       // builder.withValue(ContactsContract.Data.DATA2, "iGap Profile");
+        // builder.withValue(ContactsContract.Data.DATA2, "iGap Profile");
         builder.withValue(ContactsContract.Data.DATA2, "Call via my app");
-        builder.withValue(ContactsContract.Data.DATA3, "message to : "+ contact.getPhone());
+        builder.withValue(ContactsContract.Data.DATA3, "message to : " + phoneNumber);
         builder.withValue(ContactsContract.Data.DATA4, contact.getId());
 
         query.add(builder.build());
@@ -289,7 +296,7 @@ public final class ContactUtils {
         builder.withValue(ContactsContract.Data.DATA1, contact.getId());
         // builder.withValue(ContactsContract.Data.DATA2, "iGap Profile");
         builder.withValue(ContactsContract.Data.DATA2, "Call via my app");
-        builder.withValue(ContactsContract.Data.DATA3, "Call to : "+ contact.getPhone());
+        builder.withValue(ContactsContract.Data.DATA3, "Call to : " + phoneNumber);
         builder.withValue(ContactsContract.Data.DATA4, contact.getId());
         query.add(builder.build());
 
@@ -346,7 +353,7 @@ public final class ContactUtils {
                                 public void run() {
                                     dialog[0].dismiss();
                                 }
-                            },500);
+                            }, 500);
                         }
                     }, new Realm.Transaction.OnSuccess() {
                         @Override
