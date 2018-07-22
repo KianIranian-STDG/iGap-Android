@@ -35,6 +35,7 @@
         android:textSize="@dimen/dp13" />
 
       <View
+
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_gravity="center"
@@ -43,6 +44,7 @@
         android:background="@color/black90" />
 
       <TextView
+        android:id="@+id/fromUserId_2"
         fontPath="fonts/IRANSansMobile.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -79,6 +81,7 @@
         android:background="@color/black90" />
 
       <TextView
+        android:id="@+id/toUserId_2"
         fontPath="fonts/IRANSansMobile.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -115,6 +118,7 @@
         android:background="@color/black90" />
 
       <TextView
+        android:id="@+id/amount_2"
         fontPath="fonts/IRANSansMobile.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -151,6 +155,7 @@
         android:background="@color/black90" />
 
       <TextView
+        android:id="@+id/traceNumber_2"
         fontPath="fonts/IRANSansMobile.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -187,6 +192,7 @@
         android:background="@color/black90" />
 
       <TextView
+        android:id="@+id/invoiceNumber_2"
         fontPath="fonts/IRANSansMobile.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -224,6 +230,7 @@
         android:background="@color/black90" />
 
       <TextView
+        android:id="@+id/payTime_2"
         fontPath="fonts/IRANSansMobile.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
