@@ -1287,17 +1287,10 @@
   <string name="pay">pay</string>
   <string name="transfer_to_dialog">Transfer to :</string>
   <string name="am_money">money</string>
-
-
   <string name="trace_number">Trace Number</string>
   <string name="amount_2">amount :</string>
-  <string name="not_success">ناموفق</string>
-  <string name="not_success_2">"پرداخت ناموفق بود"</string>
   <string name="payment_canceled">payment is canceled</string>
   <string name="PayGear_unavailable">PayGear is unavailable</string>
-
-  <string name="result_3">نتیجه پرداخت مشخص نیست به تاریخجه کیف پول مراجع یا با پشتیبانی تماس بگیرید</string>
-  <string name="result_4">پرداخت موفقیت آمیز بود اطلاعات بیشتر در قسمت تاریخچه کیف پول</string>
   <string name="bills_inquiry_mci">MCI subscribers bill enquiry </string>
   <string name="bills_inquiry_telecom">Home phones bill enquiry</string>
   <string name="bills_inquiry">Bills inquiry mci and telecom</string>
@@ -1326,5 +1319,10 @@
   <string name="map_distance">m away</string>
   <string name="calculation">Calculating...</string>
   <string name="get_location_data">Getting data</string>
+
+  <string name="not_success">Unsuccessful</string>
+  <string name="not_success_2">"Payment was unsuccessful"</string>
+  <string name="result_3">The result of the payment is not known to the wallet period of the references or with the support contact.</string>
+  <string name="result_4">Payment was successful. Check more in the wallet history section.</string>
 
 </resources>
