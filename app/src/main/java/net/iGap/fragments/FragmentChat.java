@@ -402,6 +402,7 @@ public class FragmentChat extends BaseFragment
     private GroupChatRole groupRole;
     private ChannelChatRole channelRole;
     private PopupWindow popupWindow;
+    private MaterialDialog dialogWait;
     private Uri latestUri;
     private Calendar lastDateCalendar = Calendar.getInstance();
     private MaterialDesignTextView iconMute;
@@ -4775,8 +4776,12 @@ public class FragmentChat extends BaseFragment
 
     private void showErrorDialog(final int time) {
 
+        if (dialogWait != null && dialogWait.isShowing()) {
+            return;
+        }
+
         boolean wrapInScrollView = true;
-        final MaterialDialog dialogWait = new MaterialDialog.Builder(G.currentActivity).title(G.fragmentActivity.getResources().getString(R.string.title_limit_chat_to_unknown_contact)).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
+        dialogWait = new MaterialDialog.Builder(G.currentActivity).title(G.fragmentActivity.getResources().getString(R.string.title_limit_chat_to_unknown_contact)).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(true).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                 dialog.dismiss();
