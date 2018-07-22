@@ -2226,4 +2226,8 @@
   <string name="calculation">حساب ...</string>
   <string name="get_location_data">الحصول على البيانات</string>
 
+  <string name="not_success">غير ناجح</string>
+  <string name="not_success_2">"كان الدفع غير ناجح"</string>
+  <string name="result_3">لا تعرف نتيجة الدفع فترة المحفظة للمراجع أو الاتصال بالدعم.</string>
+  <string name="result_4">تم الدفع بنجاح. تحقق أكثر في قسم محفوظات المحفظة.</string>
 </resources>

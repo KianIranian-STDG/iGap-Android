@@ -284,5 +284,8 @@
     <string name="bank_etebari_asgarieh">موسسه اعتباری عسگریه</string>
     <string name="card_bank">کارت بانک</string>
     <string name="paygear_card">کیف پول کارت</string>
+    <string name="please_wait">لطفا صبر کنید</string>
+    <string name="set_password">ثبت رمز عبور</string>
+    <string name="change_password">تغییر رمز عبور</string>
 
 </resources>
