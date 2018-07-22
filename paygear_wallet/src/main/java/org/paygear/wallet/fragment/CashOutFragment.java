@@ -65,7 +65,7 @@ public class CashOutFragment extends Fragment {
 
         ViewGroup rootView = view.findViewById(R.id.rootView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+            rootView.setBackgroundColor(Color.parseColor("#9e9e9e"));
         }
         appBar = view.findViewById(R.id.app_bar);
         appBar.setTitle(getString(isCashOut ? R.string.cash_out_paygear : R.string.charge_paygear));
@@ -93,6 +93,7 @@ public class CashOutFragment extends Fragment {
                 textView.setTextColor(Color.WHITE);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
                 textView.setTypeface(Typefaces.get(getContext(), Typefaces.IRAN_YEKAN_REGULAR));
+
                 tab.setCustomView(textView);
             }
         }
