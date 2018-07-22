@@ -288,4 +288,6 @@
   <string name="please_wait">Please Wait</string>
   <string name="set_password">Set Password</string>
   <string name="change_password">Change Password</string>
+  <string name="text_forgot">Your wallet password has been sent to you</string>
+  <string name="text_forgot_title">Resend Password</string>
 </resources>

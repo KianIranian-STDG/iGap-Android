@@ -8,6 +8,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -20,6 +21,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.paygear.wallet.R;
 import org.paygear.wallet.RaadApp;
@@ -125,21 +129,33 @@ public class FragmentSettingWallet extends Fragment {
         btnForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                new MaterialDialog.Builder(getContext())
+                        .title(R.string.text_forgot_title)
+                        .content(R.string.text_forgot)
+                        .positiveText(R.string.ok)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                String id = Auth.getCurrentAuth().getId();
+                                String token = RaadApp.paygearCard.token;
 
-                String id = Auth.getCurrentAuth().getId();
-                String token = RaadApp.paygearCard.token;
-
-                Web.getInstance().getWebService().getForgotPassword(token, id).enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                Web.getInstance().getWebService().getForgotPassword(token, id).enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
 
 
-                    }
+                                    }
 
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                    }
-                });
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable t) {
+                                    }
+                                });
+                            }
+                        })
+                        .show();
+
+
+
             }
         });
     }
