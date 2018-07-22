@@ -249,10 +249,31 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 18
+        if (oldVersion == 18) {
             RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
             if (realmUserInfo != null) {
                 realmUserInfo.addField(RealmUserInfoFields.PUSH_NOTIFICATION_TOKEN, String.class);
+            }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 19
+
+            RealmObjectSchema realmRoomMessageWallet = schema.create(RealmRoomMessageWallet.class.getSimpleName())
+                    .addField(RealmRoomMessageWalletFields.ID, long.class, FieldAttribute.REQUIRED)
+                    .addField(RealmRoomMessageWalletFields.FROM_USER_ID, long.class, FieldAttribute.REQUIRED)
+                    .addField(RealmRoomMessageWalletFields.TO_USER_ID, long.class, FieldAttribute.REQUIRED)
+                    .addField(RealmRoomMessageWalletFields.AMOUNT, long.class, FieldAttribute.REQUIRED)
+                    .addField(RealmRoomMessageWalletFields.TRACE_NUMBER, long.class, FieldAttribute.REQUIRED)
+                    .addField(RealmRoomMessageWalletFields.INVOICE_NUMBER, long.class, FieldAttribute.REQUIRED)
+                    .addField(RealmRoomMessageWalletFields.PAY_TIME, int.class, FieldAttribute.REQUIRED)
+                    .addField(RealmRoomMessageWalletFields.TYPE, String.class)
+                    .addField(RealmRoomMessageWalletFields.DESCRIPTION, String.class);
+
+            RealmObjectSchema realmRoomMessage = schema.get(RealmRoomMessage.class.getSimpleName());
+            if (realmRoomMessage != null) {
+                realmRoomMessage.addRealmObjectField("roomMessageWallet", realmRoomMessageWallet);
             }
 
             oldVersion++;
