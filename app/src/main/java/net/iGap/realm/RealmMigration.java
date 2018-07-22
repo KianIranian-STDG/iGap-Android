@@ -262,6 +262,7 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             RealmObjectSchema realmRoomMessageWallet = schema.create(RealmRoomMessageWallet.class.getSimpleName())
                     .addField(RealmRoomMessageWalletFields.ID, long.class, FieldAttribute.REQUIRED)
+                    .addPrimaryKey(RealmRoomMessageWalletFields.ID)
                     .addField(RealmRoomMessageWalletFields.FROM_USER_ID, long.class, FieldAttribute.REQUIRED)
                     .addField(RealmRoomMessageWalletFields.TO_USER_ID, long.class, FieldAttribute.REQUIRED)
                     .addField(RealmRoomMessageWalletFields.AMOUNT, long.class, FieldAttribute.REQUIRED)
