@@ -1276,4 +1276,12 @@
   <string name="not_success_2">"پرداخت ناموفق بود"</string>
   <string name="result_3">نتیجه پرداخت مشخص نیست به تاریخجه کیف پول مراجع یا با پشتیبانی تماس بگیرید</string>
   <string name="result_4">پرداخت موفقیت آمیز بود اطلاعات بیشتر در قسمت تاریخچه کیف پول</string>
+
+  <string name="wallet_from">از:</string>
+  <string name="wallet_to">به:</string>
+  <string name="wallet_amount">مبلغ:</string>
+  <string name="wallet_trace">کدپیگیری:</string>
+  <string name="wallet_invoice">فاکتور:</string>
+  <string name="wallet_data">تاریخ:</string>
+  <string name="wallet_desc">توضیحات پرداخت:</string>
 </resources>

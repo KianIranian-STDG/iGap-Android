@@ -8,8 +8,7 @@
   android:clickable="true"
   android:paddingBottom="@dimen/dp4"
   android:layout_margin="@dimen/dp16"
-  tools:ignore="MissingPrefix"
-  android:textDirection="firstStrong">
+  tools:ignore="MissingPrefix">
 
 
   <LinearLayout
@@ -48,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="از:"
+        android:text="@string/wallet_from"
         android:textSize="@dimen/dp13" />
 
     </LinearLayout>
@@ -83,7 +82,7 @@
         fontPath="fonts/IRANSansMobile.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="به:"
+        android:text="@string/wallet_to"
         android:textColor="@color/black"
         android:textSize="@dimen/dp13" />
 
@@ -119,7 +118,7 @@
         fontPath="fonts/IRANSansMobile.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="مبلغ:"
+        android:text="@string/wallet_amount"
         android:textColor="@color/black"
         android:textSize="@dimen/dp13" />
 
@@ -155,7 +154,7 @@
         fontPath="fonts/IRANSansMobile.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="کدپیگیری:"
+        android:text="@string/wallet_trace"
         android:textColor="@color/black"
         android:textSize="@dimen/dp13" />
 
@@ -191,7 +190,7 @@
         fontPath="fonts/IRANSansMobile.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="فاکتور:"
+        android:text="@string/wallet_invoice"
         android:textColor="@color/black"
         android:textSize="@dimen/dp13" />
 
@@ -228,7 +227,7 @@
         fontPath="fonts/IRANSansMobile.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="تاریخ:"
+        android:text="@string/wallet_data"
         android:textColor="@color/black"
         android:textSize="@dimen/dp13" />
 

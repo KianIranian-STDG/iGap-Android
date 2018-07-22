@@ -1325,4 +1325,14 @@
   <string name="result_3">The result of the payment is not known to the wallet period of the references or with the support contact.</string>
   <string name="result_4">Payment was successful. Check more in the wallet history section.</string>
 
+
+  <string name="wallet_from">From:</string>
+  <string name="wallet_to">To:</string>
+  <string name="wallet_amount">Amount:</string>
+  <string name="wallet_trace">Trace Number:</string>
+  <string name="wallet_invoice">Invoice Number:</string>
+  <string name="wallet_data">Pay Time:</string>
+  <string name="wallet_desc">Description:</string>
+
+
 </resources>
