@@ -204,7 +204,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void bindView(final VH holder, List<Object> payloads) {
         super.bindView(holder, payloads);
 
-        if (holder instanceof ProgressWaiting.ViewHolder || holder instanceof UnreadMessage.ViewHolder || holder instanceof LogItem.ViewHolder || holder instanceof TimeItem.ViewHolder) {
+        if (holder instanceof ProgressWaiting.ViewHolder || holder instanceof UnreadMessage.ViewHolder || holder instanceof LogWallet.ViewHolder || holder instanceof LogItem.ViewHolder || holder instanceof TimeItem.ViewHolder) {
             return;
         }
 

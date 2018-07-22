@@ -80,6 +80,7 @@ public class RealmRoomMessage extends RealmObject {
     private long userId;
     private RealmRoomMessageLocation location;
     private RealmRoomMessageContact roomMessageContact;
+    private RealmRoomMessageWallet roomMessageWallet;
     private boolean edited;
     private long createTime;
     private long updateTime;
@@ -420,6 +421,12 @@ public class RealmRoomMessage extends RealmObject {
         if (input.hasContact()) {
             message.setRoomMessageContact(RealmRoomMessageContact.put(input.getContact()));
         }
+
+        if (input.hasWallet()) {
+            //wallet put
+            message.setRoomMessageWallet(RealmRoomMessageWallet.put(input.getWallet()));
+        }
+
         message.setMessageType(input.getMessageType());
         message.setMessageVersion(input.getMessageVersion());
         message.setStatusVersion(input.getStatusVersion());
@@ -1227,6 +1234,14 @@ public class RealmRoomMessage extends RealmObject {
 
     public void setRoomMessageContact(RealmRoomMessageContact roomMessageContact) {
         this.roomMessageContact = roomMessageContact;
+    }
+
+    public RealmRoomMessageWallet getRoomMessageWallet() {
+        return roomMessageWallet;
+    }
+
+    private void setRoomMessageWallet(RealmRoomMessageWallet roomMessageWallet) {
+        this.roomMessageWallet = roomMessageWallet;
     }
 
     public boolean isEdited() {

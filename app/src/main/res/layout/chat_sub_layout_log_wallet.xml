@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/chatSubLayoutLogWallet"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@drawable/rectangle_wallet_bable"
+  android:clickable="true"
+  android:paddingBottom="@dimen/dp4"
+  android:layout_margin="@dimen/dp16"
+  tools:ignore="MissingPrefix"
+  android:textDirection="firstStrong">
+
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingTop="@dimen/dp10"
+      android:paddingBottom="@dimen/dp4"
+      android:paddingLeft="@dimen/dp10"
+      android:paddingRight="@dimen/dp10">
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:id="@+id/fromUserId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="093312***12"
+        android:textSize="@dimen/dp13" />
+
+      <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/dp10"
+        android:layout_weight="1"
+        android:background="@color/black90" />
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="از:"
+        android:textSize="@dimen/dp13" />
+
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingTop="@dimen/dp10"
+      android:paddingBottom="@dimen/dp4"
+      android:paddingLeft="@dimen/dp10"
+      android:paddingRight="@dimen/dp10">
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:id="@+id/toUserId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="093312***12"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp13" />
+
+      <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/dp10"
+        android:layout_weight="1"
+        android:background="@color/black90" />
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="به:"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp13" />
+
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingTop="@dimen/dp10"
+      android:paddingBottom="@dimen/dp4"
+      android:paddingLeft="@dimen/dp10"
+      android:paddingRight="@dimen/dp10">
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:id="@+id/amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1000 تومان"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp13" />
+
+      <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/dp10"
+        android:layout_weight="1"
+        android:background="@color/black90" />
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="مبلغ:"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp13" />
+
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingTop="@dimen/dp10"
+      android:paddingBottom="@dimen/dp4"
+      android:paddingLeft="@dimen/dp10"
+      android:paddingRight="@dimen/dp10">
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:id="@+id/traceNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="13256447"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp13" />
+
+      <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/dp10"
+        android:layout_weight="1"
+        android:background="@color/black90" />
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="کدپیگیری:"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp13" />
+
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingTop="@dimen/dp10"
+      android:paddingBottom="@dimen/dp4"
+      android:paddingLeft="@dimen/dp10"
+      android:paddingRight="@dimen/dp10">
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:id="@+id/invoiceNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="56464654"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp13" />
+
+      <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/dp10"
+        android:layout_weight="1"
+        android:background="@color/black90" />
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="فاکتور:"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp13" />
+
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:paddingTop="@dimen/dp10"
+      android:paddingBottom="@dimen/dp4"
+      android:paddingLeft="@dimen/dp10"
+      android:paddingRight="@dimen/dp10">
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:id="@+id/payTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1397/4/28"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp13" />
+
+      <View
+
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/dp10"
+        android:layout_weight="1"
+        android:background="@color/black90" />
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="تاریخ:"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp13" />
+
+    </LinearLayout>
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="end"
+      android:orientation="horizontal"
+      android:paddingTop="@dimen/dp10"
+      android:paddingBottom="@dimen/dp10"
+      android:paddingLeft="@dimen/dp10"
+      android:paddingRight="@dimen/dp10">
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="توضیحات پرداخت:"
+        android:textColor="@color/black"
+        android:textSize="@dimen/dp13" />
+
+    </LinearLayout>
+  </LinearLayout>
+
+
+</FrameLayout>

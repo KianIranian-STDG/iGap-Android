@@ -134,7 +134,6 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                 G.fragmentActivity.onBackPressed();
             }
         });
-
         paymentDialogBinding.amount.addTextChangedListener(new TextWatcher() {
             boolean isSettingText;
 
@@ -167,7 +166,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             public void onClick(View v) {
                 if (mPrice[0] != null && !mPrice[0].isEmpty()) {
                     showProgress();
-                    new RequestWalletPaymentInit().walletPaymentInit(ProtoGlobal.Language.FA_IR, Auth.getCurrentAuth().accessToken, userId, Long.parseLong(mPrice[0]), "");
+                    new RequestWalletPaymentInit().walletPaymentInit(ProtoGlobal.Language.FA_IR, Auth.getCurrentAuth().accessToken, userId, Long.parseLong(mPrice[0]), paymentDialogBinding.edtDescription.getText().toString());
 
                 }
 
@@ -629,9 +628,15 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         mAPIService.sendToken(url, getRequestBody(finalInfoMap)).enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
+                Log.i("CCCCCCCCCC", "onResponse code: " + response.code());
+                Log.i("CCCCCCCCCC", "onResponse url: " + response.raw().request().url());
+                Log.i("CCCCCCCCCC", "onResponse url: " + token);
             }
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
+                Log.i("CCCCCCCCCC", "onFailure code: " + t.getMessage());
+                Log.i("CCCCCCCCCC", "onFailure headers: " + call.request().headers());
+                Log.i("CCCCCCCCCC", "onFailure url: " + call.request().url());
             }
         });
 

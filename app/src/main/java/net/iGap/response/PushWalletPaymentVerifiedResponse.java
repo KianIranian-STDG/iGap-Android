@@ -34,11 +34,14 @@ public class PushWalletPaymentVerifiedResponse extends MessageHandler {
         super.handler();
         ProtoPushWalletPaymentVerified.PushWalletPaymentVerifiedResponse.Builder builder = (ProtoPushWalletPaymentVerified.PushWalletPaymentVerifiedResponse.Builder) message;
         builder.getToken();
+        Log.i("CCCCCCCCCC", "onResponse url: " + builder.getToken());
+
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        Log.i("CCCCCCCCCC", "timeOut: ");
     }
 
     @Override
@@ -47,6 +50,7 @@ public class PushWalletPaymentVerifiedResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
+        Log.i("CCCCCCCCCC", " majorCode: " + majorCode);
     }
 }
 

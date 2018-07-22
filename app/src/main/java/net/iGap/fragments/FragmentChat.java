@@ -103,6 +103,7 @@ import net.iGap.adapter.items.chat.ImageItem;
 import net.iGap.adapter.items.chat.ImageWithTextItem;
 import net.iGap.adapter.items.chat.LocationItem;
 import net.iGap.adapter.items.chat.LogItem;
+import net.iGap.adapter.items.chat.LogWallet;
 import net.iGap.adapter.items.chat.ProgressWaiting;
 import net.iGap.adapter.items.chat.TextItem;
 import net.iGap.adapter.items.chat.TimeItem;
@@ -7613,6 +7614,13 @@ public class FragmentChat extends BaseFragment
                             mAdapter.add(new TextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(index, new TextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
+                        break;
+                    case WALLET:
+                        if (!addTop) {
+                            mAdapter.add(new LogWallet(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(index, new LogWallet(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case IMAGE:
