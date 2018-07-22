@@ -28,11 +28,14 @@ import org.paygear.wallet.WalletActivity;
 
 public class FragmentWalletAgreementViewModel {
 
+
     public ObservableField<String> callbackTxtAgreement = new ObservableField<>(G.context.getResources().getString(R.string.loading_wallet_agreement));
     private FragmentWalletAgrementBinding fragmentWalletAgrementBinding;
+    private String phone;
 
-    public FragmentWalletAgreementViewModel(FragmentWalletAgrementBinding fragmentWalletAgrementBinding) {
+    public FragmentWalletAgreementViewModel(FragmentWalletAgrementBinding fragmentWalletAgrementBinding, String mPhone) {
         this.fragmentWalletAgrementBinding = fragmentWalletAgrementBinding;
+        phone = mPhone;
     }
 
     public void checkBoxAgreement(View v, boolean checked) {
@@ -45,7 +48,21 @@ public class FragmentWalletAgreementViewModel {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             if (G.userLogin) {
-                                G.currentActivity.onBackPressed();
+                                new RequestWalletRegister().walletRegister();
+                                Intent intent = new Intent(G.currentActivity, WalletActivity.class);
+                                intent.putExtra("Language", "fa");
+                                intent.putExtra("Mobile", "0" + phone);
+                                intent.putExtra("PrimaryColor", G.appBarColor);
+                                intent.putExtra("DarkPrimaryColor", G.appBarColor);
+                                intent.putExtra("AccentColor", G.appBarColor);
+                                intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+                                intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+                                intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+                                intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+                                intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
+                                intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+                                intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                                (G.currentActivity).startActivity(intent);
                             } else {
                                 HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                             }

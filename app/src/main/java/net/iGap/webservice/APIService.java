@@ -9,6 +9,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Url;
 
 /*
  * This is the source code of iGap for Android
@@ -21,10 +22,7 @@ import retrofit2.http.POST;
  */
 public interface APIService {
 
-    //    @Headers("content-type: application/json")
-    @POST("wallet/callback")
-    Call<Post> sendToken(@Body RequestBody JsonBody);
-    /*@POST("post")
-    Call<Post> sendToken(@Body RequestBody body);
-*/
+    @POST
+    Call<Post> sendToken(@Url String url, @Body RequestBody JsonBody);
+
 }

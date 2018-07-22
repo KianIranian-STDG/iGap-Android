@@ -23,9 +23,16 @@ import net.iGap.viewmodel.FragmentWalletAgreementViewModel;
 public class FragmentWalletAgrement extends BaseFragment {
 
     private FragmentWalletAgrementBinding fragmentWalletAgrementBinding;
+    private final static String PHONE = "PATH";
+    private static String mPhone;
 
-    public static FragmentWalletAgrement newInstance() {
-        return new FragmentWalletAgrement();
+    public static FragmentWalletAgrement newInstance(String phone) {
+
+        Bundle args = new Bundle();
+        args.putString(PHONE, phone);
+        FragmentWalletAgrement fragmentWalletAgrement = new FragmentWalletAgrement();
+        fragmentWalletAgrement.setArguments(args);
+        return fragmentWalletAgrement;
     }
 
     public FragmentWalletAgrement() {
@@ -53,9 +60,15 @@ public class FragmentWalletAgrement extends BaseFragment {
             }
         };
 
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+//            path = bundle.getString(PATH);
+            mPhone = bundle.getString(PHONE);
+        }
+
         fragmentWalletAgrementBinding.setBackHandler(iBackHandler);
 
-        FragmentWalletAgreementViewModel fragmentWalletAgreementViewModel = new FragmentWalletAgreementViewModel(fragmentWalletAgrementBinding);
+        FragmentWalletAgreementViewModel fragmentWalletAgreementViewModel = new FragmentWalletAgreementViewModel(fragmentWalletAgrementBinding, mPhone);
         fragmentWalletAgrementBinding.setFragmentWalletAgreementViewModel(fragmentWalletAgreementViewModel);
 
 

@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import android.util.Log;
+
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoPushWalletPaymentVerified;
 
@@ -32,8 +34,6 @@ public class PushWalletPaymentVerifiedResponse extends MessageHandler {
         super.handler();
         ProtoPushWalletPaymentVerified.PushWalletPaymentVerifiedResponse.Builder builder = (ProtoPushWalletPaymentVerified.PushWalletPaymentVerifiedResponse.Builder) message;
         builder.getToken();
-
-
     }
 
     @Override

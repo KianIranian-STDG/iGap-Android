@@ -1424,8 +1424,23 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void onClick(View v) {
                 if (!G.isWalletRegister) {
-                    new HelperFragment(FragmentWalletAgrement.newInstance()).load();
+                    new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
                     lockNavigation();
+                } else {
+                    Intent intent = new Intent(ActivityMain.this, WalletActivity.class);
+                    intent.putExtra("Language", "fa");
+                    intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
+                    intent.putExtra("PrimaryColor", G.appBarColor);
+                    intent.putExtra("DarkPrimaryColor", G.appBarColor);
+                    intent.putExtra("AccentColor", G.appBarColor);
+                    intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+                    intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
+                    intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
+                    intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+                    intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
+                    intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
+                    intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
+                    startActivity(intent);
                 }
             }
         });
@@ -1436,12 +1451,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else {
             itemCash.setTextColor(Color.parseColor(G.appBarColor));
         }
+        itemCash.setVisibility(View.GONE);
 
-        if (G.isWalletActive && G.isWalletRegister) {
-            itemCash.setVisibility(View.VISIBLE);
-        } else {
-            itemCash.setVisibility(View.GONE);
-        }
 
         ViewGroup itemNavPayment = (ViewGroup) findViewById(R.id.lm_ll_payment);
         itemNavPayment.setOnClickListener(new View.OnClickListener() {
@@ -1599,6 +1610,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
+                                                G.isWalletRegister = false;
                                                 HelperLogout.logout();
                                             }
                                         });
@@ -2449,7 +2461,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
 
-
     @Override
     public void onChatClearMessage(final long roomId, long clearId) {
         //empty
@@ -2501,16 +2512,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     //******* GroupAvatar and ChannelAvatar
 
-    private void check(final long userId){
-        if (G.userLogin){
-            FragmentCall.call(userId,false);
+    private void check(final long userId) {
+        if (G.userLogin) {
+            FragmentCall.call(userId, false);
         } else {
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     check(userId);
                 }
-            },1000);
+            }, 1000);
         }
 
     }
@@ -2941,25 +2952,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         if (G.selectedCard != null) {
                             itemCash.setVisibility(View.VISIBLE);
                             itemCash.setText("اعتبار شما : " + String.valueOf(G.cardamount) + " ریال ");
-                            itemNavWallet.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(ActivityMain.this, WalletActivity.class);
-                                    intent.putExtra("Language", "fa");
-                                    intent.putExtra("Mobile", "0" + phoneNumber.substring(2));
-                                    intent.putExtra("PrimaryColor", G.appBarColor);
-                                    intent.putExtra("DarkPrimaryColor", G.appBarColor);
-                                    intent.putExtra("AccentColor", G.appBarColor);
-                                    intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
-                                    intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
-                                    intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                                    intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
-                                    intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
-                                    intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
-                                    intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-                                    startActivity(intent);
-                                }
-                            });
                         }
                     }
                 }

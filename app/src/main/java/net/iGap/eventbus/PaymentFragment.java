@@ -198,7 +198,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                                         if (response.body().size() > 0)
                                             selectedCard = response.body().get(0);
                                         if (selectedCard != null) {
-                                            if (selectedCard.cashOutBalance > Long.parseLong(mPrice[0])) {
+                                            if (selectedCard.cashOutBalance >= Long.parseLong(mPrice[0])) {
                                                 if (!selectedCard.isProtected) {
                                                     setNewPassword();
                                                 } else {
@@ -312,7 +312,6 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             @Override
             public void onResponse(Call<PaymentResult> call, final Response<PaymentResult> response) {
 
-
                 if (progressDialog != null) progressDialog.dismiss();
 //                DialogMaker.disMissDialog();
                 if (response.errorBody() == null && response.body() != null) {
@@ -324,14 +323,12 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                             RaadApp.cards = null;
                             dialog.dismiss();
                             fragmentActivity.onBackPressed();
-                            sendPost(response.body().callbackUrl);
+                            sendPost(response.body().callbackUrl, paymentAuth.token);
                             G.cardamount -= response.body().amount;
-
                         }
                     });
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
                 }
-
             }
 
             @Override
@@ -625,17 +622,14 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         progressDialog.show();
     }
 
-    public void sendPost(String body) {
+    public void sendPost(String url, String token) {
         Map<String, String> finalInfoMap = new HashMap<>();
-        finalInfoMap.put("token", body);
+        finalInfoMap.put("token", token);
         mAPIService = ApiUtils.getAPIService();
-        mAPIService.sendToken(getRequestBody(finalInfoMap)).enqueue(new Callback<Post>() {
+        mAPIService.sendToken(url, getRequestBody(finalInfoMap)).enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
-                if (response.isSuccessful()) {
-                }
             }
-
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
             }

@@ -118,6 +118,10 @@ public class PaymentResultDialog extends DialogFragment {
                     if (WalletActivity.intent.getBooleanExtra("IsP2P", false)) {
                         Intent returnIntent = WalletActivity.intent;
                         returnIntent.putExtra("result", mResult);
+                        if (getActivity() == null) {
+                            dismiss();
+                            return;
+                        }
                         getActivity().setResult(RESULT_OK, returnIntent);
                         if (getActivity() instanceof WalletActivity)
                             getActivity().finish();
