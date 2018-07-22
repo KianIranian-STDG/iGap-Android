@@ -57,11 +57,11 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
 
         holder.fromUserId.setText("" + mRealmRegisteredInfoFrom.getDisplayName());
         holder.toUserId.setText("" + mRealmRegisteredInfoTo.getDisplayName());
-        holder.amount.setText(mMessage.structWallet.amount + " " + "ریال");
+        holder.amount.setText("" + mMessage.structWallet.amount);
         holder.traceNumber.setText("" + mMessage.structWallet.traceNumber);
         holder.invoiceNumber.setText("" + mMessage.structWallet.invoiceNumber);
         holder.payTime.setText("" + mMessage.structWallet.payTime);
-        holder.description.setText("توضیحات پرداخت: " + mMessage.structWallet.description);
+        holder.description.setText(mMessage.structWallet.description);
 
         getRealm().close();
     }
