@@ -2198,6 +2198,16 @@
   <string name="i_agree_with_the_terms">أنا أتفق مع الشروط</string>
   <string name="accept_the_terms">اقبل الشروط</string>
   <string name="wallet_agrement">اتفاقية المحفظة</string>
+  <string name="SendMoney">إرسال الأموال</string>
+  <string name="transfer_amount_hint">أدخل مبلغ الإيداع:</string>
+  <string name="amount_in_rial">المبلغ بالريال:</string>
+  <string name="pay">دفع</string>
+  <string name="transfer_to_dialog">الانتقال إلى:</string>
+  <string name="am_money">نقود</string>
+  <string name="trace_number">رمز التتبع</string>
+  <string name="amount_2">مبشر:</string>
+  <string name="payment_canceled">تم إلغاء الدفعة</string>
+  <string name="PayGear_unavailable">المحفظة غير متاحة</string>
   <string name="bills_inquiry_mci">فواتير استفسار همراه اول </string>
   <string name="bills_inquiry_telecom">فواتير استفسار ثائق الهاتف </string>
   <string name="bills_inquiry_title">فواتير التحقيق</string>
@@ -2230,4 +2240,15 @@
   <string name="not_success_2">"كان الدفع غير ناجح"</string>
   <string name="result_3">لا تعرف نتيجة الدفع فترة المحفظة للمراجع أو الاتصال بالدعم.</string>
   <string name="result_4">تم الدفع بنجاح. تحقق أكثر في قسم محفوظات المحفظة.</string>
+
+  <string name="wallet_from">من عند:</string>
+  <string name="wallet_to">إلى:</string>
+  <string name="wallet_amount">كمية:</string>
+  <string name="wallet_trace">تتبع عدد:</string>
+  <string name="wallet_invoice">رقم الفاتورة:</string>
+  <string name="wallet_data">وقت الدفع:</string>
+  <string name="wallet_desc">وصف:</string>
+  <string name="wallet_toman">تومان</string>
+  <string name="wallet_Your_credit">رصيدك: </string>
+  <string name="wallet_Reial"> ریال </string>
 </resources>
