@@ -151,6 +151,7 @@ import net.iGap.viewmodel.ActivityCallViewModel;
 import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 import net.iGap.viewmodel.FragmentThemColorViewModel;
 
+import org.paygear.wallet.OnLanguageWallet;
 import org.paygear.wallet.RaadApp;
 import org.paygear.wallet.WalletActivity;
 import org.paygear.wallet.fragment.PaymentHistoryFragment;
@@ -409,6 +410,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+
+        RaadApp.onLanguageWallet = new OnLanguageWallet() {
+            @Override
+            public String detectLanguage() {
+                return G.selectedLanguage;
+            }
+        };
+
 
 //        setTheme(R.style.AppThemeTranslucent);
 

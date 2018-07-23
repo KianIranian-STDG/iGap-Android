@@ -32,6 +32,7 @@ public class RaadApp extends Application {
     public static final int NOTIFICATION_TYPE_CLUB = 9;
     public static PaymentHistoryFragment.PaygearHistoryOpenChat paygearHistoryOpenChat;
     public static PaymentHistoryFragment.PaygearHistoryCloseWallet paygearHistoryCloseWallet;
+    public static OnLanguageWallet onLanguageWallet;
 
     public static final String BROADCAST_INTENT_NEW_MESSAGE = "NEW_MESSAGE";
 
@@ -63,6 +64,12 @@ public class RaadApp extends Application {
 
         appVersion = RaadCommonUtils.getAppVersionName(getApplicationContext());
         //Raad.deviceToken = SettingHelper.getString(getApplicationContext(), SettingHelper.DEVICE_TOKEN, null);
+
+
+        if (onLanguageWallet != null) {
+            String language = onLanguageWallet.detectLanguage();
+        }
+
     }
 
 }
