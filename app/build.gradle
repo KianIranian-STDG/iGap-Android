@@ -112,7 +112,7 @@ dependencies {
     compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.4'
     compile 'cat.ereza:customactivityoncrash:2.1.0'
-    compile 'com.github.RooyeKhat-Media.Emoji:emoji-one:0.5.1.Fix2'
+    compile 'com.github.RooyeKhat-Media.Emoji:emoji-one:0.5.1.Fix2b'
     compile 'io.realm:android-adapters:3.0.0'
     compile 'org.osmdroid:osmdroid-android:5.6.5'
    // compile 'org.osmdroid:osmdroid-android:6.0.0-SNAPSHOT'

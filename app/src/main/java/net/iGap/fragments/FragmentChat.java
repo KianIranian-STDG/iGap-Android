@@ -5178,7 +5178,11 @@ public class FragmentChat extends BaseFragment
             public void onKeyboardClose() {
                 emojiPopup.dismiss();
             }
-        }).build(edtChat);
+        })
+                .setBackgroundColor(Color.parseColor(G.appBarColor))
+                .setIconColor(Color.parseColor(G.textTitleTheme))
+                .setDividerColor(Color.parseColor(G.textTitleTheme))
+                .build(edtChat);
     }
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
