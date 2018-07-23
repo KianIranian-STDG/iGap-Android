@@ -39,11 +39,6 @@ public class WalletGetAccessTokenResponse extends MessageHandler {
         super.handler();
 
         ProtoWalletGetAccessToken.WalletGetAccessTokenResponse.Builder builder = (ProtoWalletGetAccessToken.WalletGetAccessTokenResponse.Builder) message;
-        builder.getTokenType();
-        builder.getAccessToken();
-        builder.getExpiresIn();
-
-
         Auth auth = new Auth(builder.getAccessToken(), "bearer");
         if (auth.getJWT() == null) {
             return;

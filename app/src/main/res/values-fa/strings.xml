@@ -1284,4 +1284,20 @@
   <string name="wallet_invoice">فاکتور:</string>
   <string name="wallet_data">تاریخ:</string>
   <string name="wallet_desc">توضیحات پرداخت:</string>
+  <string name="wallet_toman">تومان</string>
+  <string name="wallet_Your_credit">اعتبار شما: </string>
+  <string name="wallet_Reial"> ریال </string>
+
+
+  <string name="SendMoney">ارسال پول</string>
+  <string name="transfer_amount_hint">مبلغ واریزی را وارد کنید:</string>
+  <string name="amount_in_rial">مبلغ به ریال:</string>
+  <string name="pay">پرداخت</string>
+  <string name="transfer_to_dialog">انتقال به:</string>
+  <string name="am_money">پول</string>
+  <string name="trace_number">کدپیگیری</string>
+  <string name="amount_2">مبلغ:</string>
+  <string name="payment_canceled">پرداخت لغو شد</string>
+  <string name="PayGear_unavailable">کیف پول در دسترس نیست</string>
+
 </resources>

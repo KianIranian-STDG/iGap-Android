@@ -1,6 +1,7 @@
 package org.paygear.wallet.fragment;
 
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -65,7 +66,7 @@ public class CashOutFragment extends Fragment {
 
         ViewGroup rootView = view.findViewById(R.id.rootView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            rootView.setBackgroundColor(Color.parseColor("#9e9e9e"));
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.primaryColor));
         }
         appBar = view.findViewById(R.id.app_bar);
         appBar.setTitle(getString(isCashOut ? R.string.cash_out_paygear : R.string.charge_paygear));

@@ -289,4 +289,5 @@
   <string name="change_password">تغییر رمز عبور</string>
   <string name="text_forgot">رمز کیف پول شما برای شما ارسال شد</string>
   <string name="text_forgot_title">ارسال مجدد رمز</string>
+  <string name="Forgot_Passwords">بازیابی رمز</string>
 </resources>

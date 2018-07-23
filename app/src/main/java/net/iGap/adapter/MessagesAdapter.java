@@ -89,7 +89,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
             @Override
             public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
 
-                if (!(item instanceof LogWallet)) {
+                if ((item instanceof LogWallet)) {
                     return false;
                 }
 

@@ -121,7 +121,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         if (userName != null)
             paymentDialogBinding.subtitle.setText(userName);
         if (G.selectedCard != null) {
-            paymentDialogBinding.amountCard.setText("اعتبار شما : " + String.valueOf(G.cardamount) + " ریال ");
+            paymentDialogBinding.amountCard.setText(getResources().getString(R.string.wallet_Your_credit) + " " + String.valueOf(G.cardamount) + " " + getResources().getString(R.string.wallet_Reial));
         } else {
             paymentDialogBinding.amountCard.setVisibility(View.GONE);
         }
@@ -628,15 +628,10 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         mAPIService.sendToken(url, getRequestBody(finalInfoMap)).enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
-                Log.i("CCCCCCCCCC", "onResponse code: " + response.code());
-                Log.i("CCCCCCCCCC", "onResponse url: " + response.raw().request().url());
-                Log.i("CCCCCCCCCC", "onResponse url: " + token);
             }
+
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
-                Log.i("CCCCCCCCCC", "onFailure code: " + t.getMessage());
-                Log.i("CCCCCCCCCC", "onFailure headers: " + call.request().headers());
-                Log.i("CCCCCCCCCC", "onFailure url: " + call.request().url());
             }
         });
 

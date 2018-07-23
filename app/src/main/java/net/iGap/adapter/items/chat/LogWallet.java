@@ -86,7 +86,12 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
             holder.payTime_2.setText("" + mMessage.structWallet.payTime);
         }
 
-        holder.description.setText(mMessage.structWallet.description);
+        if (mMessage.structWallet.description.isEmpty() || mMessage.structWallet.description.equals("")) {
+            holder.rootDescription.setVisibility(View.GONE);
+        } else {
+            holder.description.setText(mMessage.structWallet.description);
+        }
+
 
         getRealm().close();
     }
@@ -105,6 +110,7 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
         private TextView invoiceNumber;
         private TextView payTime;
         private TextView description;
+        private ViewGroup rootDescription;
 
 
         private TextView fromUserId_2;
@@ -127,6 +133,7 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
             invoiceNumber = view.findViewById(R.id.invoiceNumber);
             payTime = view.findViewById(R.id.payTime);
             description = view.findViewById(R.id.description);
+            rootDescription = view.findViewById(R.id.rootDescription);
 
 
             fromUserId_2 = view.findViewById(R.id.fromUserId_2);

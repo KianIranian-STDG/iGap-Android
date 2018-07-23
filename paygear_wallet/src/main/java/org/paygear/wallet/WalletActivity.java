@@ -49,7 +49,9 @@ public class WalletActivity extends NavigationBarActivity {
     public static String API_KEY = "API_KEY";
     public static String ACCESS_TOKEN = "ACCESS_TOKEN";
     public static String IS_DARK_THEME = "IS_DARK_THEME";
+    public static String LANGUAGE = "LANGUAGE";
     public static boolean isDarkTheme = false;
+    public static String selectedLanguage = "en";
 
 
     @Override

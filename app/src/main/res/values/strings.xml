@@ -1333,6 +1333,9 @@
   <string name="wallet_invoice">Invoice Number:</string>
   <string name="wallet_data">Pay Time:</string>
   <string name="wallet_desc">Description:</string>
+  <string name="wallet_toman">Toman</string>
+  <string name="wallet_Your_credit">Your credit: </string>
+  <string name="wallet_Reial"> Rial </string>
 
 
 </resources>

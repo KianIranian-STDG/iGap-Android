@@ -3,6 +3,7 @@ package org.paygear.wallet.utils;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
@@ -23,6 +24,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+
+import org.paygear.wallet.WalletActivity;
 
 import java.util.Locale;
 import java.util.Random;
@@ -75,6 +78,35 @@ public class Utils {
 //            conf.locale = new Locale(lan.toLowerCase());
 //        }
 //        res.updateConfiguration(conf, dm);
+    }
+
+    public static Context updateResources(Context baseContext) {
+        String selectedLanguage = WalletActivity.selectedLanguage;
+        if (selectedLanguage == null) {
+            selectedLanguage = "en";
+        }
+
+        Locale locale = new Locale(selectedLanguage);
+        Locale.setDefault(locale);
+
+        Resources res = baseContext.getResources();
+        Configuration configuration = res.getConfiguration();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            configuration.setLocale(locale);
+        } else {
+            configuration.locale = locale;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            baseContext = baseContext.createConfigurationContext(configuration);
+        } else {
+            res.updateConfiguration(configuration, res.getDisplayMetrics());
+        }
+
+//        G.context = baseContext;
+
+        return baseContext;
     }
 
     public static void setShadow(View view, Drawable sd) {

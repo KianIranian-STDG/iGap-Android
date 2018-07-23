@@ -290,4 +290,6 @@
   <string name="change_password">Change Password</string>
   <string name="text_forgot">Your wallet password has been sent to you</string>
   <string name="text_forgot_title">Resend Password</string>
+  <string name="Forgot_Passwords">Password recovery</string>
+
 </resources>

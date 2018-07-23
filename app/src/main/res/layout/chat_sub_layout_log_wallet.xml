@@ -7,7 +7,7 @@
   android:background="@drawable/rectangle_wallet_bable"
   android:clickable="true"
   android:paddingBottom="@dimen/dp4"
-  android:layout_margin="@dimen/dp16"
+  android:layout_margin="@dimen/dp32"
   tools:ignore="MissingPrefix">
 
 
@@ -58,7 +58,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:paddingTop="@dimen/dp10"
+      android:paddingTop="@dimen/dp4"
       android:paddingBottom="@dimen/dp4"
       android:paddingLeft="@dimen/dp10"
       android:paddingRight="@dimen/dp10">
@@ -95,7 +95,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:paddingTop="@dimen/dp10"
+      android:paddingTop="@dimen/dp4"
       android:paddingBottom="@dimen/dp4"
       android:paddingLeft="@dimen/dp10"
       android:paddingRight="@dimen/dp10">
@@ -132,7 +132,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:paddingTop="@dimen/dp10"
+      android:paddingTop="@dimen/dp4"
       android:paddingBottom="@dimen/dp4"
       android:paddingLeft="@dimen/dp10"
       android:paddingRight="@dimen/dp10">
@@ -169,7 +169,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:paddingTop="@dimen/dp10"
+      android:paddingTop="@dimen/dp4"
       android:paddingBottom="@dimen/dp4"
       android:paddingLeft="@dimen/dp10"
       android:paddingRight="@dimen/dp10">
@@ -206,7 +206,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:paddingTop="@dimen/dp10"
+      android:paddingTop="@dimen/dp4"
       android:paddingBottom="@dimen/dp4"
       android:paddingLeft="@dimen/dp10"
       android:paddingRight="@dimen/dp10">
@@ -241,14 +241,24 @@
     </LinearLayout>
 
     <LinearLayout
+      android:id="@+id/rootDescription"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="end"
-      android:orientation="horizontal"
-      android:paddingTop="@dimen/dp10"
+      android:orientation="vertical"
+      android:paddingTop="@dimen/dp4"
       android:paddingBottom="@dimen/dp10"
       android:paddingLeft="@dimen/dp10"
       android:paddingRight="@dimen/dp10">
+
+      <TextView
+        fontPath="fonts/IRANSansMobile.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wallet_desc"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="@dimen/dp14" />
 
       <TextView
         fontPath="fonts/IRANSansMobile.ttf"
@@ -257,7 +267,8 @@
         android:layout_height="wrap_content"
         android:text="@string/desc"
         android:textColor="@color/black"
-        android:textSize="@dimen/dp13" />
+        android:textSize="@dimen/dp13"
+        android:layout_marginTop="@dimen/dp10" />
 
     </LinearLayout>
   </LinearLayout>

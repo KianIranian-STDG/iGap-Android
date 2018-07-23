@@ -225,7 +225,8 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
     }
 
     private void load() {
-        if (Auth.getCurrentAuth().getPublicKey() == null) {
+
+        if (Auth.getCurrentAuth() != null && Auth.getCurrentAuth().getPublicKey() == null) {
             loadKey();
         } else {
             loadCards();
@@ -397,7 +398,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         TextView giftTitle = view.findViewById(R.id.gift_title);
         TextView cashout = view.findViewById(R.id.cashout);
         TextView charge = view.findViewById(R.id.charge);
-        LinearLayout balanceLayout=view.findViewById(R.id.balance_layout);
+        LinearLayout balanceLayout = view.findViewById(R.id.balance_layout);
 
         if (WalletActivity.isDarkTheme) {
 
@@ -417,7 +418,6 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         } else {
             balanceLayout.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
         }
-
 
 
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, unit, cashableTitle, cashableBalance, giftTitle, giftBalance);
@@ -515,7 +515,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         addCard.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         ViewCompat.setBackground(addCard, RaadCommonUtils.getRectShape(context, R.color.add_card_plus_back, 12, 0));
-        addCard.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
+        addCard.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
 
         addCard.setImageResource(R.drawable.ic_action_add_white);
         int dp4 = RaadCommonUtils.getPx(4, context);

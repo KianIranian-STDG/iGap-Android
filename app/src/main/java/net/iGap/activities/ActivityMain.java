@@ -49,6 +49,7 @@ import android.widget.ToggleButton;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -1434,6 +1435,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     intent.putExtra("DarkPrimaryColor", G.appBarColor);
                     intent.putExtra("AccentColor", G.appBarColor);
                     intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
+                    intent.putExtra(WalletActivity.LANGUAGE, G.selectedCard);
                     intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
                     intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
                     intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
@@ -2936,6 +2938,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
 
+    private int retryConnectToWallet = 0;
+
     public void getUserCredit() {
 
         WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
@@ -2944,21 +2948,26 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 @Override
                 public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
                     if (response.body() != null) {
-
+                        retryConnectToWallet = 0;
                         if (response.body().size() > 0)
                             G.selectedCard = response.body().get(0);
 
                         G.cardamount = G.selectedCard.cashOutBalance;
                         if (G.selectedCard != null) {
                             itemCash.setVisibility(View.VISIBLE);
-                            itemCash.setText("اعتبار شما : " + String.valueOf(G.cardamount) + " ریال ");
+                            itemCash.setText("" + getResources().getString(R.string.wallet_Your_credit) + " " + String.valueOf(G.cardamount) + " " + getResources().getString(R.string.wallet_Reial));
                         }
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ArrayList<Card>> call, Throwable t) {
-                    getUserCredit();
+
+                    if (retryConnectToWallet < 3) {
+                        Crashlytics.logException(new Exception(t.getMessage()));
+                        getUserCredit();
+                        retryConnectToWallet++;
+                    }
                 }
             });
         }
@@ -2976,13 +2985,18 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             @Override
                             public void run() {
                                 getUserCredit();
+                                retryConnectToWallet = 0;
                             }
                         });
 
                         break;
 
                     case socketMessages.FAILED:
-                        new RequestWalletGetAccessToken().walletGetAccessToken();
+                        if (retryConnectToWallet < 3) {
+                            new RequestWalletGetAccessToken().walletGetAccessToken();
+                            retryConnectToWallet++;
+                        }
+
                         break;
                 }
                 // backthread

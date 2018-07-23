@@ -87,7 +87,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="@dimen/dp4"
-        android:text="Forgot Passwords"
+        android:text="@string/Forgot_Passwords"
         android:textColor="@color/whit_background"
         android:textSize="@dimen/dp16" />
     </LinearLayout>
