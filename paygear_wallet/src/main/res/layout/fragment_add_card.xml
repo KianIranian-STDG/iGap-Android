@@ -11,22 +11,21 @@
     android:background="@color/fragment_back"
     tools:context=".fragment.AddCardFragment">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-      app:cardCornerRadius="1dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardMaxElevation="0dp"
-        app:cardElevation="@dimen/app_bar_card_view_elevation"
-        android:layout_marginTop="-8dp">
+  <!--<android.support.v7.widget.CardView-->
+  <!--android:layout_width="match_parent"-->
+  <!--android:layout_height="wrap_content"-->
+  <!--app:cardCornerRadius="1dp"-->
+  <!--app:cardPreventCornerOverlap="false"-->
+  <!--app:cardMaxElevation="0dp"-->
+  <!--app:cardElevation="@dimen/app_bar_card_view_elevation"-->
+  <!--android:layout_marginTop="-8dp">-->
 
         <ir.radsense.raadcore.app.RaadToolBar
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:layout_marginTop="7dp"/>
+          android:layout_height="?actionBarSize" />
 
-    </android.support.v7.widget.CardView>
+  <!--</android.support.v7.widget.CardView>-->
 
     <ScrollView
         android:layout_width="match_parent"

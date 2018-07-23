@@ -2,12 +2,16 @@ package org.paygear.wallet;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 
 import org.paygear.wallet.fragment.PaymentHistoryFragment;
 import org.paygear.wallet.model.Card;
 import org.paygear.wallet.web.Web;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import ir.radsense.raadcore.OnWebResponseListener;
 import ir.radsense.raadcore.Raad;
@@ -41,6 +45,7 @@ public class RaadApp extends Application {
     public static Account me;
     public static Card paygearCard;
     public static ArrayList<Card> cards;
+    private String language;
 
     @Override
     public void onCreate() {
@@ -67,9 +72,46 @@ public class RaadApp extends Application {
 
 
         if (onLanguageWallet != null) {
-            String language = onLanguageWallet.detectLanguage();
+            language = onLanguageWallet.detectLanguage();
+//            updateResources(getBaseContext() , language);
+            attachBaseContext(getApplicationContext());
         }
 
     }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(updateResources(base, language));
+    }
+
+    public static Context updateResources(Context baseContext, String language) {
+        String selectedLanguage = WalletActivity.selectedLanguage;
+        if (selectedLanguage == null) {
+            selectedLanguage = "en";
+        }
+
+        Locale locale = new Locale(selectedLanguage);
+        Locale.setDefault(locale);
+
+        Resources res = baseContext.getResources();
+        Configuration configuration = res.getConfiguration();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            configuration.setLocale(locale);
+        } else {
+            configuration.locale = locale;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            baseContext = baseContext.createConfigurationContext(configuration);
+        } else {
+            res.updateConfiguration(configuration, res.getDisplayMetrics());
+        }
+
+//        G.context = baseContext;
+
+        return baseContext;
+    }
+
 
 }
