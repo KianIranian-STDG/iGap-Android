@@ -1445,7 +1445,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     intent.putExtra("DarkPrimaryColor", G.appBarColor);
                     intent.putExtra("AccentColor", G.appBarColor);
                     intent.putExtra("IS_DARK_THEME", G.isDarkTheme);
-                    intent.putExtra(WalletActivity.LANGUAGE, G.selectedCard);
+                    intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
                     intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
                     intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
                     intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);

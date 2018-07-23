@@ -60,6 +60,9 @@ public class WalletActivity extends NavigationBarActivity {
         RelativeLayout navBarView = findViewById(R.id.nav_bar);
         navBarView.setVisibility(View.GONE);
 
+
+   //     Utils.setLocale(this, "fa");
+
         WebBase.apiKey = Web.API_KEY;
         WebBase.isDebug = true;
         WebBase.onResponseListener = new OnWebResponseListener() {
@@ -83,6 +86,7 @@ public class WalletActivity extends NavigationBarActivity {
         Payment payment = (Payment) intent.getSerializableExtra("Payment");
         primaryColor = intent.getStringExtra("PrimaryColor");
         darkPrimaryColor = intent.getStringExtra("DarkPrimaryColor");
+        selectedLanguage = intent.getStringExtra(LANGUAGE);
         isDarkTheme = intent.getBooleanExtra(IS_DARK_THEME, false);
         progressColor = intent.getStringExtra(PROGRESSBAR);
         lineBorder = intent.getStringExtra(LINE_BORDER);
@@ -96,8 +100,8 @@ public class WalletActivity extends NavigationBarActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.parseColor(WalletActivity.darkPrimaryColor));
         }
-        if (language != null) {
-            Utils.setLocale(this, language);
+        if (selectedLanguage != null) {
+            Utils.setLocale(this, selectedLanguage);
         }
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
