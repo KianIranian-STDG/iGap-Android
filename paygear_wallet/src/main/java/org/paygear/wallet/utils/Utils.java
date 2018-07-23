@@ -7,8 +7,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -17,7 +15,6 @@ import android.graphics.drawable.shapes.RoundRectShape;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -68,7 +65,7 @@ public class Utils {
     public static void setLocale(Context context, String lan) {
 
         Raad.language = lan;
-        if (lan.toLowerCase().equals("fa"))
+        if (lan.toLowerCase().equals("fa") || lan.toLowerCase().equals("ar"))
             Raad.isFA = true;
         else
             Raad.isFA = false;
