@@ -5158,7 +5158,7 @@ public class FragmentChat extends BaseFragment
             case Theme.TEAL_COMPLETE:
             case Theme.DARK:
 
-                setEmojiColor(G.appBarColor,G.textTitleTheme,G.textTitleTheme);
+                setEmojiColor(G.backgroundTheme_2,G.textTitleTheme,G.textTitleTheme);
                 break;
             default:
                 setEmojiColor("#eceff1","#61000000","#61000000");
@@ -8600,13 +8600,13 @@ public class FragmentChat extends BaseFragment
             StructCompress structCompress = new StructCompress();
             structCompress.path = params[1];
             structCompress.originalPath = params[0];
-//            long endTime = AndroidUtils.getAudioDuration(G.fragmentActivity, params[0]);
-//            try {
-//                structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1], endTime);
-//
-//            } catch (IllegalArgumentException e) {
-//                e.printStackTrace();
-//            }
+            long endTime = AndroidUtils.getAudioDuration(G.fragmentActivity, params[0]);
+            try {
+                structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1], endTime);
+
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
             structCompress.originalSize = originalSize;
             return structCompress;
         }

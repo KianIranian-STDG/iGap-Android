@@ -87,7 +87,8 @@
                 android:paddingLeft="@dimen/dp6"
                 android:paddingRight="@dimen/dp6"
                 android:text="@string/send_location_text"
-                android:textSize="@dimen/dp18" />
+                android:layout_marginTop="@dimen/dp2"
+                android:textSize="@dimen/dp16" />
 
             <TextView
                 android:id="@+id/mf_txt_accuracy"
@@ -104,7 +105,7 @@
                 android:paddingRight="@dimen/dp6"
 
                 android:text="sfsaasdfasdf"
-                android:textSize="@dimen/dp14" />
+                android:textSize="@dimen/dp12" />
 
         </RelativeLayout>
 
@@ -148,8 +149,8 @@
                 android:layout_marginRight="@dimen/dp52"
                 android:paddingLeft="@dimen/dp6"
                 android:paddingRight="@dimen/dp6"
-
-                android:textSize="@dimen/dp18" />
+                android:layout_marginTop="@dimen/dp2"
+                android:textSize="@dimen/dp16" />
 
             <TextView
                 android:id="@+id/mf_txt_distance"
@@ -167,7 +168,7 @@
                 android:paddingRight="@dimen/dp6"
 
 
-                android:textSize="@dimen/dp16" />
+                android:textSize="@dimen/dp12" />
 
         </RelativeLayout>
 
