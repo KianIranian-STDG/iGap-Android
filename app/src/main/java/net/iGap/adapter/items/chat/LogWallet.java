@@ -55,6 +55,9 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
         super.bindView(holder, payloads);
         RealmRegisteredInfo mRealmRegisteredInfoFrom = RealmRegisteredInfo.getRegistrationInfo(getRealm(), mMessage.structWallet.fromUserId);
         RealmRegisteredInfo mRealmRegisteredInfoTo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), mMessage.structWallet.toUserId);
+
+        String persianCalander = HelperCalander.getPersianCalander(mMessage.structWallet.payTime);
+
         if (HelperCalander.isPersianUnicode) {
 
             holder.fromUserId.setText("" + mRealmRegisteredInfoFrom.getDisplayName());
@@ -62,7 +65,7 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
             holder.amount.setText("" + mMessage.structWallet.amount);
             holder.traceNumber.setText("" + mMessage.structWallet.traceNumber);
             holder.invoiceNumber.setText("" + mMessage.structWallet.invoiceNumber);
-            holder.payTime.setText("" + mMessage.structWallet.payTime);
+            holder.payTime.setText("" + persianCalander);
 
             holder.fromUserId_2.setText(R.string.wallet_from);
             holder.toUserId_2.setText(R.string.wallet_to);
@@ -83,7 +86,7 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
             holder.amount_2.setText("" + mMessage.structWallet.amount);
             holder.traceNumber_2.setText("" + mMessage.structWallet.traceNumber);
             holder.invoiceNumber_2.setText("" + mMessage.structWallet.invoiceNumber);
-            holder.payTime_2.setText("" + mMessage.structWallet.payTime);
+            holder.payTime_2.setText("" + persianCalander);
         }
 
         if (mMessage.structWallet.description.isEmpty() || mMessage.structWallet.description.equals("")) {
