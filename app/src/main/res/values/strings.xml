@@ -1325,4 +1325,6 @@
   <string name="wallet_toman">Toman</string>
   <string name="wallet_Your_credit">Your credit: </string>
   <string name="wallet_Reial"> Rial </string>
+  <string name="wallet_error_server">Error communicating with server</string>
+
 </resources>

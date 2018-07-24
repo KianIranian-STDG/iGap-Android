@@ -2255,4 +2255,7 @@
   <string name="wallet_toman">تومان</string>
   <string name="wallet_Your_credit">رصيدك: </string>
   <string name="wallet_Reial"> ریال </string>
+  <string name="wallet_error_server">حدث خطأ في الاتصال بالخادم
+</string>
+
 </resources>

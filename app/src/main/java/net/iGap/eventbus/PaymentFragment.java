@@ -50,6 +50,7 @@ import net.iGap.webservice.Post;
 
 import org.paygear.wallet.RaadApp;
 import org.paygear.wallet.WalletActivity;
+import org.paygear.wallet.fragment.CardFragment;
 import org.paygear.wallet.fragment.PaymentResultDialog;
 import org.paygear.wallet.fragment.SetCardPinFragment;
 import org.paygear.wallet.model.Card;
@@ -62,6 +63,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.ErrorManager;
 
 import ir.radsense.raadcore.app.AlertDialog;
 import ir.radsense.raadcore.model.Auth;
@@ -313,6 +315,10 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             @Override
             public void onResponse(Call<PaymentResult> call, final Response<PaymentResult> response) {
 
+                Boolean success = Web.checkResponse(PaymentFragment.this, call, response);
+                if (success == null)
+                    return;
+
                 if (progressDialog != null) progressDialog.dismiss();
 //                DialogMaker.disMissDialog();
                 if (response.errorBody() == null && response.body() != null) {
@@ -335,9 +341,10 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             @Override
             public void onFailure(Call<PaymentResult> call, Throwable t) {
 //                DialogMaker.disMissDialog();
-                if (progressDialog != null) progressDialog.dismiss();
 
-                Log.i("CCCCCCCCCCC", "onFailure: " + t.getMessage());
+                if (progressDialog != null) progressDialog.dismiss();
+                HelperError.showSnackMessage(getResources().getString(R.string.wallet_error_server), false);
+
             }
         });
 

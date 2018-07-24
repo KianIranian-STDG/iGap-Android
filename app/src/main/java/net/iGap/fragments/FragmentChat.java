@@ -2187,7 +2187,7 @@ public class FragmentChat extends BaseFragment
 
 
                 TextView iconSendMoney = (TextView) v.findViewById(R.id.dialog_icon_item10_sendMoney);
-                iconSendMoney.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_alert_box));
+                iconSendMoney.setText(G.fragmentActivity.getResources().getString(R.string.md_payment));
 
                 root1.setVisibility(View.VISIBLE);
                 root2.setVisibility(View.VISIBLE);
