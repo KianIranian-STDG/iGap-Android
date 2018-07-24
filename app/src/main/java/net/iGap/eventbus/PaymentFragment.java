@@ -334,6 +334,8 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             public void onFailure(Call<PaymentResult> call, Throwable t) {
 //                DialogMaker.disMissDialog();
                 if (progressDialog != null) progressDialog.dismiss();
+
+                Log.i("CCCCCCCCCCC", "onFailure: " + t.getMessage());
             }
         });
 

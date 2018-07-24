@@ -105,6 +105,7 @@ public class FragmentSettingWallet extends Fragment {
         ViewGroup btnSetPassword = fragmentSettingWalletBinding.btnSetNewPassword;
         ViewGroup btnForgotPassword = fragmentSettingWalletBinding.btnForgotPassword;
         TextView txtSetPassword = fragmentSettingWalletBinding.txtSetPassword;
+        TextView txtForgotPassword = fragmentSettingWalletBinding.txtForgotPassword;
 
 
         Drawable mDrawableSetPassword = getResources().getDrawable(R.drawable.button_blue_selector_24dp);
@@ -116,6 +117,7 @@ public class FragmentSettingWallet extends Fragment {
             btnForgotPassword.setBackground(mDrawableSetPassword);
         }
 
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, txtForgotPassword, txtSetPassword);
 
         btnSetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
