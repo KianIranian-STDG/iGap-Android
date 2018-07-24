@@ -11,6 +11,7 @@
 package net.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -56,7 +57,7 @@ public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> 
         RealmRegisteredInfo mRealmRegisteredInfoFrom = RealmRegisteredInfo.getRegistrationInfo(getRealm(), mMessage.structWallet.fromUserId);
         RealmRegisteredInfo mRealmRegisteredInfoTo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), mMessage.structWallet.toUserId);
 
-        String persianCalander = HelperCalander.getPersianCalander(mMessage.structWallet.payTime);
+        String persianCalander = HelperCalander.getPersianCalander(mMessage.structWallet.payTime * DateUtils.SECOND_IN_MILLIS);
 
         if (HelperCalander.isPersianUnicode) {
 
