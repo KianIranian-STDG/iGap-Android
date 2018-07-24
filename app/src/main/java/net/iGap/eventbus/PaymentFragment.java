@@ -14,12 +14,14 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -402,53 +404,56 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
-        TextInputLayout inputFirstName = new TextInputLayout(G.fragmentActivity);
-        final EmojiEditTextE newPassWord = new EmojiEditTextE(G.fragmentActivity);
+        TextInputLayout inputNewPassWord = new TextInputLayout(G.fragmentActivity);
+        final EditText newPassWord = new EditText(G.fragmentActivity);
         newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
         newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         newPassWord.setTypeface(G.typeface_IRANSansMobile);
         newPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
         newPassWord.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
         newPassWord.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
-        newPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        newPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        newPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
         newPassWord.setPadding(0, 8, 0, 8);
         newPassWord.setSingleLine(true);
-        inputFirstName.addView(newPassWord);
-        inputFirstName.addView(viewFirstName, viewParams);
+        inputNewPassWord.addView(newPassWord);
+        inputNewPassWord.addView(viewFirstName, viewParams);
         final View viewLastName = new View(G.fragmentActivity);
         viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             newPassWord.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
         }
 
-        TextInputLayout inputLastName = new TextInputLayout(G.fragmentActivity);
-        final EmojiEditTextE confirmPassWord = new EmojiEditTextE(G.fragmentActivity);
+        TextInputLayout inputConfirmPassWord = new TextInputLayout(G.fragmentActivity);
+        final EditText confirmPassWord = new EditText(G.fragmentActivity);
         confirmPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_re_enter_your_password));
         confirmPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         confirmPassWord.setTypeface(G.typeface_IRANSansMobile);
         confirmPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
-        confirmPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        confirmPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        confirmPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
         confirmPassWord.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
         confirmPassWord.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
         confirmPassWord.setPadding(0, 8, 0, 8);
-        confirmPassWord.setSingleLine(true);
+        confirmPassWord.setMaxLines(1);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             confirmPassWord.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
         }
-        inputLastName.addView(confirmPassWord);
-        inputLastName.addView(viewLastName, viewParams);
+        inputConfirmPassWord.addView(confirmPassWord);
+        inputConfirmPassWord.addView(viewLastName, viewParams);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, 0, 0, 15);
         LinearLayout.LayoutParams lastNameLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lastNameLayoutParams.setMargins(0, 15, 0, 10);
 
-        layoutNickname.addView(inputFirstName, layoutParams);
-        layoutNickname.addView(inputLastName, lastNameLayoutParams);
+        layoutNickname.addView(inputConfirmPassWord, layoutParams);
+        layoutNickname.addView(inputConfirmPassWord, lastNameLayoutParams);
 
         final MaterialDialog dialog =
                 new MaterialDialog.Builder(G.fragmentActivity)
                         .title(G.fragmentActivity.getResources().getString(R.string.please_set_password))
+                        .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD)
                         .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).customView(layoutNickname, true)
                         .widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 
@@ -550,19 +555,20 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
-        TextInputLayout inputFirstName = new TextInputLayout(G.fragmentActivity);
-        final EmojiEditTextE newPassWord = new EmojiEditTextE(G.fragmentActivity);
+        TextInputLayout inputNewPassWord = new TextInputLayout(G.fragmentActivity);
+        final EditText newPassWord = new EditText(G.fragmentActivity);
         newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
         newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         newPassWord.setTypeface(G.typeface_IRANSansMobile);
         newPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
         newPassWord.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
         newPassWord.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
-        newPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        newPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        newPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
         newPassWord.setPadding(0, 8, 0, 8);
-        newPassWord.setSingleLine(true);
-        inputFirstName.addView(newPassWord);
-        inputFirstName.addView(viewFirstName, viewParams);
+        newPassWord.setMaxLines(1);
+        inputNewPassWord.addView(newPassWord);
+        inputNewPassWord.addView(viewFirstName, viewParams);
         final View viewLastName = new View(G.fragmentActivity);
         viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -574,11 +580,12 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         LinearLayout.LayoutParams lastNameLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lastNameLayoutParams.setMargins(0, 15, 0, 10);
 
-        layoutNickname.addView(inputFirstName, layoutParams);
+        layoutNickname.addView(inputNewPassWord, layoutParams);
 
         final MaterialDialog dialog =
                 new MaterialDialog.Builder(G.fragmentActivity)
                         .title(G.fragmentActivity.getResources().getString(R.string.your_password))
+                        .inputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD)
                         .positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).customView(layoutNickname, true)
                         .widgetColor(Color.parseColor(G.appBarColor)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).build();
 

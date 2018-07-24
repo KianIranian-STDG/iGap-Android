@@ -52,6 +52,9 @@ public class WalletActivity extends NavigationBarActivity {
     public static String LANGUAGE = "LANGUAGE";
     public static boolean isDarkTheme = false;
     public static String selectedLanguage = "en";
+    public static boolean isResetPassword = false;
+    public static String SH_SETTING = "SH_SETTING";
+    public static String RESET_PASSWORD = "RESET_PASSWORD";
 
 
     @Override

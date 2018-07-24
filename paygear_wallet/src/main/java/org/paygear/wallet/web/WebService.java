@@ -67,7 +67,7 @@ public interface WebService {
 
 
     @GET("credit/v3/users/{id}/credit")
-    Call<ArrayList<Card>> getCredit (@Path("id") String accountId);
+    Call<ArrayList<Card>> getCredit(@Path("id") String accountId);
 
     @Multipart
     @POST("files/v3/upload/images")
@@ -170,7 +170,13 @@ public interface WebService {
     Call<Void> setCreditCardPin(@Path("card_token") String cardToken,
                                 @Body RequestBody cardInfoJsonBody);
 
+    @PUT("credit/v3/password/{card_token}/accounts/{account_id}")
+    Call<Void> getResetPassword(@Path("card_token") String card_token,
+                                @Path("account_id") String account_id,
+                                @Body RequestBody cardInfoJsonBody);
+
+
     @POST("users/v3/thirdparty/auth")
-    Call<OTPVerifyResult> getIGapToken(@Body RequestBody requestBody,@Header ("abcdef") String ip);
+    Call<OTPVerifyResult> getIGapToken(@Body RequestBody requestBody, @Header("abcdef") String ip);
 
 }

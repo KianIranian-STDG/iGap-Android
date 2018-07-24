@@ -1,6 +1,7 @@
 package org.paygear.wallet.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -42,6 +43,8 @@ import ir.radsense.raadcore.utils.Typefaces;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /*
  * This is the source code of iGap for Android
@@ -144,8 +147,11 @@ public class FragmentSettingWallet extends Fragment {
                                 Web.getInstance().getWebService().getForgotPassword(token, id).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
-
-
+                                        if (getActivity() != null) {
+                                            SharedPreferences.Editor editor = getActivity().getSharedPreferences(WalletActivity.SH_SETTING, MODE_PRIVATE).edit();
+                                            editor.putBoolean(WalletActivity.RESET_PASSWORD, true);
+                                            editor.apply();
+                                        }
                                     }
 
                                     @Override

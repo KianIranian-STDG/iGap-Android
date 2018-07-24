@@ -1,6 +1,7 @@
 package org.paygear.wallet.fragment;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,11 +32,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ir.radsense.raadcore.app.RaadToolBar;
+import ir.radsense.raadcore.model.Auth;
 import ir.radsense.raadcore.utils.Typefaces;
 import ir.radsense.raadcore.web.PostRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class SetCardPinFragment extends Fragment {
@@ -45,7 +50,8 @@ public class SetCardPinFragment extends Fragment {
     private EditText confirmPass;
     private TextView button;
     private ProgressBar progressBar;
-
+    private static SharedPreferences sharedPreferences;
+    private boolean isResetPassword;
 
     public SetCardPinFragment() {
     }
@@ -54,6 +60,11 @@ public class SetCardPinFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        sharedPreferences = getActivity().getSharedPreferences(WalletActivity.SH_SETTING, MODE_PRIVATE);
+        isResetPassword = sharedPreferences.getBoolean(WalletActivity.RESET_PASSWORD, false);
+        Log.i("CCCCCCCCCC", "0 isResetPassword: " + isResetPassword);
+
         View view = inflater.inflate(R.layout.fragment_set_card_pin, container, false);
         ViewGroup rootView = view.findViewById(R.id.rootView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -61,8 +72,8 @@ public class SetCardPinFragment extends Fragment {
         }
         appBar = view.findViewById(R.id.app_bar);
         appBar.setTitle(getString(R.string.paygear_card_pin));
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
+        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
+        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
         appBar.showBack();
 
         ViewGroup root_current = view.findViewById(R.id.root_current);
@@ -109,7 +120,11 @@ public class SetCardPinFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    startSavePin();
+                    if (isResetPassword) {
+                        resetPassword();
+                    } else {
+                        startSavePin();
+                    }
                 }
                 return false;
             }
@@ -121,13 +136,79 @@ public class SetCardPinFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startSavePin();
+                if (isResetPassword) {
+                    resetPassword();
+                } else {
+                    startSavePin();
+                }
+
+            }
+        });
+        return view;
+    }
+
+
+    private void resetPassword() {
+
+        String[] data = new String[]{currentPass.getText().toString(),
+                newPass.getText().toString(),
+                confirmPass.getText().toString()};
+
+        if ((RaadApp.paygearCard.isProtected && TextUtils.isEmpty(data[0])) || TextUtils.isEmpty(data[1]) || TextUtils.isEmpty(data[2])) {
+            Toast.makeText(getContext(), R.string.enter_info_completely, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!data[1].equals(data[2])) {
+            Toast.makeText(getContext(), R.string.passwords_not_match, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        setLoading(true);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("otp", data[0]);
+        map.put("old_password", "");
+        map.put("new_password", data[1]);
+
+
+        String id = Auth.getCurrentAuth().getId();
+        String token = RaadApp.paygearCard.token;
+        Web.getInstance().getWebService().getResetPassword(token, id, PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.i("CCCCCCCCCC", "1 onResponse: " + call.request().url());
+                Boolean success = Web.checkResponse(SetCardPinFragment.this, call, response);
+                if (success == null)
+                    return;
+
+                if (success) {
+                    if (getActivity() != null) {
+                        SharedPreferences.Editor editor = getActivity().getSharedPreferences(WalletActivity.SH_SETTING, MODE_PRIVATE).edit();
+                        editor.putBoolean(WalletActivity.RESET_PASSWORD, false);
+                        editor.apply();
+                    }
+
+                    if (currentPass.getVisibility() == View.VISIBLE)
+                        Toast.makeText(getContext(), R.string.card_pin_changed, Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(getContext(), R.string.card_pin_saved, Toast.LENGTH_SHORT).show();
+
+                    RaadApp.paygearCard.isProtected = true;
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+                setLoading(false);
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.i("CCCCCCCCCC", "2 onFailure: " + call.request().url());
+                Log.i("CCCCCCCCCC", "3 t.getMessage: " + t.getMessage());
             }
         });
 
-
-        return view;
     }
+
 
     private void startSavePin() {
         String[] data = new String[]{currentPass.getText().toString(),
