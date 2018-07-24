@@ -102,7 +102,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cards, container, false);
-        mBinding=FragmentCardsBinding.bind(view);
+        mBinding = FragmentCardsBinding.bind(view);
         return view;
     }
 
@@ -110,8 +110,8 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
+        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
+        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
 
 
 //        appBar.setToolBarColorRes();
@@ -121,15 +121,15 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
             appBar.setTitle(getString(R.string.select_card));
         } else {
             setAppBar();
-            appBar.addRightButton(R.drawable.ic_action_settings, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (getActivity() instanceof NavigationBarActivity) {
-                        ((NavigationBarActivity) getActivity()).pushFullFragment(
-                                FragmentSettingWallet.newInstance(), "FragmentSettingWallet");
-                    }
-                }
-            });
+//            appBar.addRightButton(R.drawable.ic_action_settings, new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (getActivity() instanceof NavigationBarActivity) {
+//                        ((NavigationBarActivity) getActivity()).pushFullFragment(
+//                                FragmentSettingWallet.newInstance(), "FragmentSettingWallet");
+//                    }
+//                }
+//            });
         }
         mRefreshLayout = view.findViewById(R.id.refresh_layout);
         mRefreshLayout.setOnRefreshListener(new RecyclerRefreshLayout.OnRefreshListener() {
@@ -160,9 +160,21 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         mBinding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().onBackPressed();
+                if (getActivity() != null)
+                    getActivity().onBackPressed();
             }
         });
+
+        mBinding.settingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getActivity() instanceof NavigationBarActivity) {
+                    ((NavigationBarActivity) getActivity()).pushFullFragment(
+                            FragmentSettingWallet.newInstance(), "FragmentSettingWallet");
+                }
+            }
+        });
+
 
     }
 
