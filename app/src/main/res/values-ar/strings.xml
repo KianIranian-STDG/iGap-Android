@@ -851,11 +851,7 @@
 
   <string name="E_301">"خطأ من مزود خدمة الانترنت"</string>
 
-  <string name="E_467">CHANNEL_UPDATE_SIGNATURE_INTERNAL_SERVER_ERROR</string>
-
-  <string name="E_468">CHANNEL_UPDATE_SIGNATURE_FORBIDDEN</string>
-
-  <string name="E_469">CHANNEL_GET_MESSAGES_STATS_BAD_PAYLOAD</string>
+  <string name="E_468">توقيع تحديث القناة ممنوع</string>
 
   <string name="E_610">"خطأ من الزبون"</string>
 
@@ -894,6 +890,14 @@
   <string name="E_658">قد تم ارسال الابلاغ سابقاً.</string>
 
   <string name="E_659">لايجوز لك ارسال الابلاغ في الوقت الحالي .</string>
+
+  <string name="E_9002">غير قادر على الحصول على معرف</string>
+  <string name="E_9006">التواصل مع الخادم غير ممكن</string>
+  <string name="E_9007">التواصل مع الخادم غير ممكن</string>
+  <string name="E_9008">فشل الاتصال مع المستلم</string>
+  <string name="E_9009">التواصل مع الخادم غير ممكن</string>
+  <string name="E_9010">لم يتم تسجيل المستلم</string>
+  <string name="E_9013">لا يمكنك التسجيل نيابة عنك</string>
 
   <string name="E_10165">Bad payload: User report</string>
 

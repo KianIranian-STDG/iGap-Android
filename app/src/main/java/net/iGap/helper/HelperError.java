@@ -489,19 +489,19 @@ public class HelperError {
                 break;
 
             case 9001:
-                error = G.fragmentActivity.getResources().getString(R.string.E_9001);
+                //error = G.fragmentActivity.getResources().getString(R.string.E_9001);
                 break;
             case 9002:
                 error = G.fragmentActivity.getResources().getString(R.string.E_9002);
                 break;
             case 9003:
-                error = G.fragmentActivity.getResources().getString(R.string.E_9003);
+                //error = G.fragmentActivity.getResources().getString(R.string.E_9003);
                 break;
             case 9004:
-                error = G.fragmentActivity.getResources().getString(R.string.E_9004);
+                //error = G.fragmentActivity.getResources().getString(R.string.E_9004);
                 break;
             case 9005:
-                error = G.fragmentActivity.getResources().getString(R.string.E_9005);
+                //error = G.fragmentActivity.getResources().getString(R.string.E_9005);
                 break;
             case 9006:
                 error = G.fragmentActivity.getResources().getString(R.string.E_9006);
@@ -519,10 +519,10 @@ public class HelperError {
                 error = G.fragmentActivity.getResources().getString(R.string.E_9010);
                 break;
             case 9011:
-                error = G.fragmentActivity.getResources().getString(R.string.E_9011);
+                //error = G.fragmentActivity.getResources().getString(R.string.E_9011);
                 break;
             case 9012:
-                error = G.fragmentActivity.getResources().getString(R.string.E_9012);
+                //error = G.fragmentActivity.getResources().getString(R.string.E_9012);
                 break;
             case 9013:
                 error = G.fragmentActivity.getResources().getString(R.string.E_9013);

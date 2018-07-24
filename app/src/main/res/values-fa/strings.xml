@@ -443,17 +443,13 @@
   <string name="E_218">"خطایی از کلاینت: شناسهٔ روم اشتباه است."</string>
   <string name="E_219">"خطای درونی سرور"</string>
   <string name="E_220">"این کار مجاز نیست."</string>
-  <string name="E_300_1">Bad payload: Invalid description</string>
+  <string name="E_300_1">توضیح نامعتبر است</string>
   <string name="E_300_2">"خطایی از سمت کلاینت: توضیحات اشتباه است."</string>
   <string name="E_301">"خطای درونی سرور"</string>
-  <string name="E_379">You cannot invite this user to groups because of the protected privacy for the request</string>
+  <string name="E_379">شما نمی توانید این کاربر را به گروه دعوت کنید.</string>
 
-
-  <string name="E_405">You are forbidden to do the action for request</string>
-  <string name="E_467">CHANNEL_UPDATE_SIGNATURE_INTERNAL_SERVER_ERROR</string>
-  <string name="E_468">CHANNEL_UPDATE_SIGNATURE_FORBIDDEN</string>
-  <string name="E_469">CHANNEL_GET_MESSAGES_STATS_BAD_PAYLOAD</string>
-  <string name="E_478">You cannot invite this user to groups because of the protected privacy for the request</string>
+  <string name="E_468">تغییر وضعیت امضاء کانال ممنوع است</string>
+  <string name="E_478">شما نمی توانید این کاربر را به کانال دعوت کنید.</string>
 
   <string name="E_610">"خطایی از سمت کلاینت"</string>
   <string name="E_611">"خطای درونی سرور"</string>
@@ -476,6 +472,14 @@
 
   <string name="E_658">گزارش تخلف قبلاً ارسال شده است.</string>
   <string name="E_659">در حال حاضر مجاز به ارسال گزارش تخلف نیستید.</string>
+
+  <string name="E_9002">دریافت شناسه امکان پذیر نیست</string>
+  <string name="E_9006">ارتباط با سرور امکان پذیر نیست</string>
+  <string name="E_9007">ارتباط با سرور امکان پذیر نیست</string>
+  <string name="E_9008">ارتباط با دریافت کننده برقرار نشد</string>
+  <string name="E_9009">ارتباط با سرور امکان پذیر نیست</string>
+  <string name="E_9010">دریافت کننده ثبت نام نکرده است</string>
+  <string name="E_9013">امکان ثبت نام برای شما وجود ندارد</string>
 
   <string name="E_10165">Bad payload: User report</string>
   <string name="E_10166">ServerError: User report internal</string>
