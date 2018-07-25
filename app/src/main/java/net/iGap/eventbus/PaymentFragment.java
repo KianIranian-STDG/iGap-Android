@@ -407,8 +407,8 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
         layoutNickname.setOrientation(LinearLayout.VERTICAL);
 
-        final View viewFirstName = new View(G.fragmentActivity);
-        viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+        final View viewNewPassword = new View(G.fragmentActivity);
+        viewNewPassword.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
         TextInputLayout inputNewPassWord = new TextInputLayout(G.fragmentActivity);
@@ -422,11 +422,11 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         newPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         newPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
         newPassWord.setPadding(0, 8, 0, 8);
-        newPassWord.setSingleLine(true);
+        newPassWord.setMaxLines(1);
         inputNewPassWord.addView(newPassWord);
-        inputNewPassWord.addView(viewFirstName, viewParams);
-        final View viewLastName = new View(G.fragmentActivity);
-        viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+        inputNewPassWord.addView(viewNewPassword, viewParams);
+        final View viewConfirmPassWord = new View(G.fragmentActivity);
+        viewConfirmPassWord.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             newPassWord.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
         }
@@ -447,14 +447,14 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             confirmPassWord.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
         }
         inputConfirmPassWord.addView(confirmPassWord);
-        inputConfirmPassWord.addView(viewLastName, viewParams);
+        inputConfirmPassWord.addView(viewConfirmPassWord, viewParams);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, 0, 0, 15);
         LinearLayout.LayoutParams lastNameLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lastNameLayoutParams.setMargins(0, 15, 0, 10);
 
-        layoutNickname.addView(inputConfirmPassWord, layoutParams);
+        layoutNickname.addView(inputNewPassWord, layoutParams);
         layoutNickname.addView(inputConfirmPassWord, lastNameLayoutParams);
 
         final MaterialDialog dialog =
@@ -470,9 +470,9 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewFirstName.setBackgroundColor(Color.parseColor(G.appBarColor));
+                    viewNewPassword.setBackgroundColor(Color.parseColor(G.appBarColor));
                 } else {
-                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+                    viewNewPassword.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
             }
         });
@@ -481,9 +481,9 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    viewLastName.setBackgroundColor(Color.parseColor(G.appBarColor));
+                    viewConfirmPassWord.setBackgroundColor(Color.parseColor(G.appBarColor));
                 } else {
-                    viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
+                    viewConfirmPassWord.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
                 }
             }
         });

@@ -82,6 +82,7 @@
                   android:layout_height="match_parent"
                   android:singleLine="true"
                   android:text="@string/user_name"
+                  android:gravity="center_vertical"
                   android:textColor="#fff"
                   android:textSize="@dimen/dp13"
                   android:paddingLeft="@dimen/dp4"

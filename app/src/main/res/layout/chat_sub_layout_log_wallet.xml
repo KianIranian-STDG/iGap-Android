@@ -253,9 +253,10 @@
 
       <TextView
         fontPath="fonts/IRANSansMobile.ttf"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/wallet_desc"
+        android:gravity="center"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="@dimen/dp14" />
@@ -266,6 +267,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/desc"
+        android:gravity="start"
         android:textColor="@color/black"
         android:textSize="@dimen/dp13"
         android:layout_marginTop="@dimen/dp10" />

@@ -2253,7 +2253,7 @@
   <string name="wallet_trace">تتبع عدد:</string>
   <string name="wallet_invoice">رقم الفاتورة:</string>
   <string name="wallet_data">وقت الدفع:</string>
-  <string name="wallet_desc">وصف:</string>
+  <string name="wallet_desc">---وصف---</string>
   <string name="wallet_toman">تومان</string>
   <string name="wallet_Your_credit">رصيدك: </string>
   <string name="wallet_Reial"> ریال </string>

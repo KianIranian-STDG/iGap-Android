@@ -1297,7 +1297,7 @@
   <string name="wallet_trace">کد پیگیری:</string>
   <string name="wallet_invoice">فاکتور:</string>
   <string name="wallet_data">تاریخ:</string>
-  <string name="wallet_desc">توضیحات پرداخت:</string>
+  <string name="wallet_desc">---توضیحات پرداخت---</string>
   <string name="wallet_toman">تومان</string>
   <string name="wallet_Your_credit">اعتبار شما: </string>
   <string name="wallet_Reial"> ریال </string>
