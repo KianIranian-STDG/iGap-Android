@@ -33,7 +33,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -71,7 +70,6 @@ import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentInquiry;
 import net.iGap.fragments.FragmentSetting;
-import net.iGap.fragments.FragmentWallet;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
@@ -156,7 +154,6 @@ import org.paygear.wallet.RaadApp;
 import org.paygear.wallet.WalletActivity;
 import org.paygear.wallet.fragment.PaymentHistoryFragment;
 import org.paygear.wallet.model.Card;
-import org.paygear.wallet.model.PaymentResult;
 import org.paygear.wallet.web.Web;
 
 import java.io.File;
@@ -166,7 +163,6 @@ import java.util.List;
 
 import io.realm.Realm;
 import ir.pec.mpl.pecpayment.view.PaymentInitiator;
-import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.model.Auth;
 import ir.radsense.raadcore.web.WebBase;
 import retrofit2.Call;
@@ -176,7 +172,6 @@ import retrofit2.Response;
 import static net.iGap.G.context;
 import static net.iGap.G.isSendContact;
 import static net.iGap.G.userId;
-import static net.iGap.R.string.cash_in_hint;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
@@ -749,6 +744,25 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 });
             }
         };
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case requestCodePaymentCharge:
+            case requestCodePaymentBill:
+                getPaymentResultCode(resultCode, data);
+                break;
+            case requestCodeQrCode:
+                IntentResult result = IntentIntegrator.parseActivityResult(resultCode, data);
+                if (result.getContents() != null) {
+                    new RequestUserVerifyNewDevice().verifyNewDevice(result.getContents());
+                }
+                break;
+        }
     }
 
     private void checkKeepMedia() {

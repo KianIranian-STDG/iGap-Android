@@ -25,8 +25,6 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessageLocation;
 
@@ -78,19 +76,15 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         } else {
             if (mMessage.location != null) {
                 item = mMessage.location;
-
-
             }
         }
-
 
         if (item != null) {
             String path = getImagePath(item.getLocationLat(), item.getLocationLong());
 
-            if (new File(path).exists())
+            if (new File(path).exists()) {
                 G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.imgMapPosition);
-
-            else {
+            } else {
                 RealmRoomMessageLocation finalItem1 = item;
                 FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), new FragmentMap.OnGetPicture() {
                     @Override
@@ -158,12 +152,10 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
     }
 
     private String getImagePath(double locationLat, double locationLong) {
-
         return G.DIR_TEMP + "/location_" +
                 String.valueOf(locationLat).replace(".", "") +
                 "_" + String.valueOf(locationLong).replace(".", "") +
                 ".png";
-
     }
 
     @Override

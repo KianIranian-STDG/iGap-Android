@@ -73,7 +73,6 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
-import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
@@ -5592,13 +5591,11 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private String
-    getImagePath(double locationLat, double locationLong) {
+    private String getImagePath(double locationLat, double locationLong) {
         return G.DIR_TEMP + "/location_" +
                 String.valueOf(locationLat).replace(".", "") +
                 "_" + String.valueOf(locationLong).replace(".", "") +
                 ".png";
-
     }
 
     /**
