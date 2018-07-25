@@ -1477,8 +1477,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         } else {
             itemCash.setTextColor(Color.parseColor(G.appBarColor));
         }
-        itemCash.setVisibility(View.GONE);
 
+        if (G.selectedCard != null) {
+            itemCash.setVisibility(View.VISIBLE);
+            itemCash.setText("" + getResources().getString(R.string.wallet_Your_credit) + " " + String.valueOf(G.selectedCard.cashOutBalance) + " " + getResources().getString(R.string.wallet_Reial));
+        } else {
+            itemCash.setVisibility(View.GONE);
+        }
 
         ViewGroup itemNavPayment = (ViewGroup) findViewById(R.id.lm_ll_payment);
         itemNavPayment.setOnClickListener(new View.OnClickListener() {
