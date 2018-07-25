@@ -479,7 +479,7 @@
   <string name="E_9008">ارتباط با دریافت کننده برقرار نشد</string>
   <string name="E_9009">ارتباط با سرور امکان پذیر نیست</string>
   <string name="E_9010">دریافت کننده ثبت نام نکرده است</string>
-  <string name="E_9013">امکان ثبت نام برای شما وجود ندارد</string>
+  <string name="E_9013">ثبت نام برای شما ممنوع است</string>
 
   <string name="E_10165">Bad payload: User report</string>
   <string name="E_10166">ServerError: User report internal</string>

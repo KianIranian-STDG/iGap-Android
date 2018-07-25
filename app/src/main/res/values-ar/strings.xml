@@ -897,7 +897,7 @@
   <string name="E_9008">فشل الاتصال مع المستلم</string>
   <string name="E_9009">التواصل مع الخادم غير ممكن</string>
   <string name="E_9010">لم يتم تسجيل المستلم</string>
-  <string name="E_9013">لا يمكنك التسجيل نيابة عنك</string>
+  <string name="E_9013">التسجيل ممنوع عليك</string>
 
   <string name="E_10165">Bad payload: User report</string>
 
