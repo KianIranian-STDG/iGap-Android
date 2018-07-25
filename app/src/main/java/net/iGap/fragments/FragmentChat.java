@@ -5528,9 +5528,9 @@ public class FragmentChat extends BaseFragment
                     intent.putExtra(Intent.EXTRA_TEXT, messageContact);
                     break;
                 case "LOCATION":
-                    String imagePathPosition = messageInfo.forwardedFrom != null ? getImagePath(
-                            messageInfo.forwardedFrom.getLocation().getLocationLat(), messageInfo.forwardedFrom.getLocation().getLocationLong())
-                            : getImagePath(messageInfo.location.getLocationLat(), messageInfo.location.getLocationLong());
+                    String imagePathPosition = messageInfo.forwardedFrom != null ?
+                            AppUtils.getLocationPath(messageInfo.forwardedFrom.getLocation().getLocationLat(), messageInfo.forwardedFrom.getLocation().getLocationLong()) :
+                            AppUtils.getLocationPath(messageInfo.location.getLocationLat(), messageInfo.location.getLocationLong());
                     intent.setType("image/*");
                     if (imagePathPosition != null) {
                         intent.putExtra(Intent.EXTRA_STREAM, AppUtils.createtUri(new File(imagePathPosition)));
@@ -5591,15 +5591,8 @@ public class FragmentChat extends BaseFragment
         }
     }
 
-    private String getImagePath(double locationLat, double locationLong) {
-        return G.DIR_TEMP + "/location_" +
-                String.valueOf(locationLat).replace(".", "") +
-                "_" + String.valueOf(locationLong).replace(".", "") +
-                ".png";
-    }
-
     /**
-     * init layout for hashtak up and down
+     * init layout for hashtag up and down
      */
     private void initLayoutHashNavigationCallback() {
 

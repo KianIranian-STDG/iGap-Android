@@ -23,16 +23,14 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessageLocation;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 import io.realm.Realm;
@@ -80,7 +78,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         }
 
         if (item != null) {
-            String path = getImagePath(item.getLocationLat(), item.getLocationLong());
+            String path = AppUtils.getLocationPath(item.getLocationLat(), item.getLocationLong());
 
             if (new File(path).exists()) {
                 G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.imgMapPosition);
@@ -90,8 +88,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                     @Override
                     public void getBitmap(Bitmap bitmap) {
                         holder.imgMapPosition.setImageBitmap(bitmap);
-                        saveMapToFile(bitmap, finalItem1.getLocationLat(), finalItem1.getLocationLong());
-
+                        AppUtils.saveMapToFile(bitmap, finalItem1.getLocationLat(), finalItem1.getLocationLong());
                     }
                 });
             }
@@ -128,34 +125,6 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                 }
             });
         }
-    }
-
-    public String saveMapToFile(Bitmap bitmap, Double latitude, Double longitude) {
-
-        String result = "";
-
-        try {
-            if (bitmap == null) return result;
-
-            String fileName = "/location_" + latitude.toString().replace(".", "") + "_" + longitude.toString().replace(".", "") + ".png";
-            File file = new File(G.DIR_TEMP, fileName);
-
-            OutputStream fOut = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-
-            result = file.getPath();
-        } catch (FileNotFoundException e) {
-
-        }
-
-        return result;
-    }
-
-    private String getImagePath(double locationLat, double locationLong) {
-        return G.DIR_TEMP + "/location_" +
-                String.valueOf(locationLat).replace(".", "") +
-                "_" + String.valueOf(locationLong).replace(".", "") +
-                ".png";
     }
 
     @Override
