@@ -31,6 +31,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -165,14 +166,14 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         return result;
     }
 
-    public  String saveMapToFile(Bitmap bitmap) {
+    public String saveMapToFile(Bitmap bitmap) {
 
         String result = "";
 
         try {
             if (bitmap == null) return result;
 
-            String fileName = "/location_" + latitude.toString().replace(".","")+"_"+longitude.toString().replace(".","") + ".png";
+            String fileName = "/location_" + latitude.toString().replace(".", "") + "_" + longitude.toString().replace(".", "") + ".png";
             File file = new File(G.DIR_TEMP, fileName);
 
             OutputStream fOut = new FileOutputStream(file);
@@ -307,8 +308,6 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             rvSendPosition.setOnClickListener(this);
 
 
-
-
         } else if (mode == Mode.seePosition) {
             rvSeePosition.setVisibility(View.VISIBLE);
             fabOpenMap.setVisibility(View.VISIBLE);
@@ -317,15 +316,20 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
             Realm realm = Realm.getDefaultInstance();
 
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) fabOpenMap.getLayoutParams();
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fabOpenMap.getLayoutParams();
 
             if (HelperCalander.isPersianUnicode) {
-                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                //  params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                params.anchorGravity = Gravity.LEFT| Gravity.BOTTOM;
+
                 txtUserName.setGravity(Gravity.RIGHT);
                 ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 
             } else {
-                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                //    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                params.anchorGravity = Gravity.RIGHT| Gravity.BOTTOM;
+
+
                 txtUserName.setGravity(Gravity.LEFT);
                 ((RelativeLayout.LayoutParams) txtUserName.getLayoutParams()).addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 
