@@ -36,6 +36,7 @@ import net.iGap.R;
 import net.iGap.databinding.PaymentDialogBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import net.iGap.module.EmojiEditTextE;
 import net.iGap.proto.ProtoGlobal;
@@ -194,6 +195,14 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         switch (id) {
             case EventManager.ON_INIT_PAY:
                 if (message == null) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (progressDialog != null) progressDialog.dismiss();
+                            HelperError.showSnackMessage(getResources().getString(R.string.PayGear_unavailable), false);
+                        }
+                    });
+                    return;
                 }
                 final ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder initPayResponse = (ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder) message[0];
                 if (initPayResponse != null) {
@@ -204,6 +213,9 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                                 @Override
                                 public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
                                     if (progressDialog != null) progressDialog.dismiss();
+
+                                    if (!HelperFragment.isFragmentVisible("PaymentFragment"))
+                                        return;
                                     if (response.body() != null) {
                                         selectedCard = null;
                                         if (response.body().size() > 0)
@@ -213,8 +225,8 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                                                 if (!selectedCard.isProtected) {
                                                     if (progressDialog != null)
                                                         progressDialog.dismiss();
-                                                    setNewPassword();
 
+                                                    setNewPassword();
 
                                                 } else {
 
@@ -265,8 +277,8 @@ public class PaymentFragment extends BaseFragment implements EventListener {
 
                                 @Override
                                 public void onFailure(Call<ArrayList<Card>> call, Throwable t) {
-                                    paymentDialogBinding.payButton.setEnabled(true);
-
+                                    if (paymentDialogBinding.payButton != null)
+                                        paymentDialogBinding.payButton.setEnabled(true);
                                     if (progressDialog != null) progressDialog.dismiss();
 
                                     HelperError.showSnackMessage(getResources().getString(R.string.PayGear_unavailable), false);
@@ -289,6 +301,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                             @Override
                             public void run() {
                                 fragmentActivity.onBackPressed();
+
                                 HelperError.showSnackMessage(getResources().getString(R.string.result_4), false);
                             }
                         });
@@ -679,5 +692,10 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         return RequestBody.create(MediaType.parse("application/json"), json);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
 }
 

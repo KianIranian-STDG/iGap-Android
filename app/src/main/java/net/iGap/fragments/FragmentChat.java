@@ -8797,7 +8797,7 @@ public class FragmentChat extends BaseFragment
                 if (imvUserPicture != null && txtName != null) {
                     paymentDialog = PaymentFragment.newInstance(chatPeerId, imvUserPicture.getDrawable(), txtName.getText().toString());
 //                    paymentDialog.show(getFragmentManager(), "payment_dialog");
-                    new HelperFragment(paymentDialog).setReplace(false).load();
+                    new HelperFragment(paymentDialog).setTag("PaymentFragment").setReplace(false).load();
                 }
             }
         }
