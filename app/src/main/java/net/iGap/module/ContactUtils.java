@@ -284,7 +284,7 @@ public final class ContactUtils {
         builder.withValue(ContactsContract.Data.DATA1, contact.getId());
         // builder.withValue(ContactsContract.Data.DATA2, "iGap Profile");
         builder.withValue(ContactsContract.Data.DATA2, "Call via my app");
-        builder.withValue(ContactsContract.Data.DATA3, "message to : " + phoneNumber);
+        builder.withValue(ContactsContract.Data.DATA3, "Message " + phoneNumber);
         builder.withValue(ContactsContract.Data.DATA4, contact.getId());
 
         query.add(builder.build());
@@ -296,7 +296,7 @@ public final class ContactUtils {
         builder.withValue(ContactsContract.Data.DATA1, contact.getId());
         // builder.withValue(ContactsContract.Data.DATA2, "iGap Profile");
         builder.withValue(ContactsContract.Data.DATA2, "Call via my app");
-        builder.withValue(ContactsContract.Data.DATA3, "Call to : " + phoneNumber);
+        builder.withValue(ContactsContract.Data.DATA3, "Voice call " + phoneNumber);
         builder.withValue(ContactsContract.Data.DATA4, contact.getId());
         query.add(builder.build());
 

@@ -5151,7 +5151,7 @@ public class FragmentChat extends BaseFragment
      * emoji initialization
      */
     private void setUpEmojiPopup() {
-        switch (G.themeColor){
+        switch (G.themeColor) {
             case Theme.BLUE_GREY_COMPLETE:
             case Theme.INDIGO_COMPLETE:
             case Theme.BROWN_COMPLETE:
@@ -5159,10 +5159,10 @@ public class FragmentChat extends BaseFragment
             case Theme.TEAL_COMPLETE:
             case Theme.DARK:
 
-                setEmojiColor(G.backgroundTheme_2,G.textTitleTheme,G.textTitleTheme);
+                setEmojiColor(G.backgroundTheme_2, G.textTitleTheme, G.textTitleTheme);
                 break;
             default:
-                setEmojiColor("#eceff1","#61000000","#61000000");
+                setEmojiColor("#eceff1", "#61000000", "#61000000");
 
 
         }
@@ -5529,7 +5529,9 @@ public class FragmentChat extends BaseFragment
                     intent.putExtra(Intent.EXTRA_TEXT, messageContact);
                     break;
                 case "LOCATION":
-                    String imagePathPosition = messageInfo.forwardedFrom != null ? messageInfo.forwardedFrom.getLocation().getImagePath() : messageInfo.location.getImagePath();
+                    String imagePathPosition = messageInfo.forwardedFrom != null ? getImagePath(
+                            messageInfo.forwardedFrom.getLocation().getLocationLat(), messageInfo.forwardedFrom.getLocation().getLocationLong())
+                            : getImagePath(messageInfo.location.getLocationLat(), messageInfo.location.getLocationLong());
                     intent.setType("image/*");
                     if (imagePathPosition != null) {
                         intent.putExtra(Intent.EXTRA_STREAM, AppUtils.createtUri(new File(imagePathPosition)));
@@ -5588,6 +5590,15 @@ public class FragmentChat extends BaseFragment
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String
+    getImagePath(double locationLat, double locationLong) {
+        return G.DIR_TEMP + "/location_" +
+                String.valueOf(locationLat).replace(".", "") +
+                "_" + String.valueOf(locationLong).replace(".", "") +
+                ".png";
+
     }
 
     /**

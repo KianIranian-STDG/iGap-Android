@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.adapter.items.chat;
 
@@ -31,7 +31,10 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomMessageLocation;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 import io.realm.Realm;
@@ -75,37 +78,26 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         } else {
             if (mMessage.location != null) {
                 item = mMessage.location;
+
+
             }
         }
 
+
         if (item != null) {
-            if (item.getImagePath() != null && new File(item.getImagePath()).exists()) {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(item.getImagePath()), holder.imgMapPosition);
-            } else {
+            String path = getImagePath(item.getLocationLat(), item.getLocationLong());
+
+            if (new File(path).exists())
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.imgMapPosition);
+
+            else {
+                RealmRoomMessageLocation finalItem1 = item;
                 FragmentMap.loadImageFromPosition(item.getLocationLat(), item.getLocationLong(), new FragmentMap.OnGetPicture() {
                     @Override
                     public void getBitmap(Bitmap bitmap) {
                         holder.imgMapPosition.setImageBitmap(bitmap);
+                        saveMapToFile(bitmap, finalItem1.getLocationLat(), finalItem1.getLocationLong());
 
-                        final String savedPath = FragmentMap.saveBitmapToFile(bitmap);
-
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-
-                                if (mMessage.forwardedFrom != null) {
-                                    if (mMessage.forwardedFrom.getLocation() != null) {
-                                        mMessage.forwardedFrom.getLocation().setImagePath(savedPath);
-                                    }
-                                } else {
-                                    if (mMessage.location != null) {
-                                        mMessage.location.setImagePath(savedPath);
-                                    }
-                                }
-                            }
-                        });
-                        realm.close();
                     }
                 });
             }
@@ -124,9 +116,8 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                                     public void run() {
 
                                         FragmentMap fragment = FragmentMap.getInctance(finalItem.getLocationLat(), finalItem.getLocationLong(), FragmentMap.Mode.seePosition,
-                                                RealmRoom.detectType(mMessage.roomId).getNumber(),mMessage.roomId,mMessage.senderID);
+                                                RealmRoom.detectType(mMessage.roomId).getNumber(), mMessage.roomId, mMessage.senderID);
                                         new HelperFragment(fragment).setReplace(false).load();
-
 
                                     }
                                 });
@@ -143,6 +134,36 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
                 }
             });
         }
+    }
+
+    public String saveMapToFile(Bitmap bitmap, Double latitude, Double longitude) {
+
+        String result = "";
+
+        try {
+            if (bitmap == null) return result;
+
+            String fileName = "/location_" + latitude.toString().replace(".", "") + "_" + longitude.toString().replace(".", "") + ".png";
+            File file = new File(G.DIR_TEMP, fileName);
+
+            OutputStream fOut = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+
+            result = file.getPath();
+        } catch (FileNotFoundException e) {
+
+        }
+
+        return result;
+    }
+
+    private String getImagePath(double locationLat, double locationLong) {
+
+        return G.DIR_TEMP + "/location_" +
+                String.valueOf(locationLat).replace(".", "") +
+                "_" + String.valueOf(locationLong).replace(".", "") +
+                ".png";
+
     }
 
     @Override

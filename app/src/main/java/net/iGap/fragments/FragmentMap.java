@@ -151,7 +151,28 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         try {
             if (bitmap == null) return result;
 
-            String fileName = "location_" + HelperString.getRandomFileName(3) + ".png";
+            String fileName = "/location_" + HelperString.getRandomFileName(3) + ".png";
+            File file = new File(G.DIR_TEMP, fileName);
+
+            OutputStream fOut = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+
+            result = file.getPath();
+        } catch (FileNotFoundException e) {
+
+        }
+
+        return result;
+    }
+
+    public  String saveMapToFile(Bitmap bitmap) {
+
+        String result = "";
+
+        try {
+            if (bitmap == null) return result;
+
+            String fileName = "/location_" + latitude.toString().replace(".","")+"_"+longitude.toString().replace(".","") + ".png";
             File file = new File(G.DIR_TEMP, fileName);
 
             OutputStream fOut = new FileOutputStream(file);
@@ -201,6 +222,8 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
         rvSendPosition = (RelativeLayout) view.findViewById(R.id.mf_rv_send_position);
         rvSeePosition = (RelativeLayout) view.findViewById(R.id.mf_rv_see_position);
+
+        rvSendPosition.setEnabled(false);
 
         accuracy = (TextView) view.findViewById(R.id.mf_txt_accuracy);
         accuracy.setText(getResources().getString(R.string.get_location_data));
@@ -282,6 +305,8 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             rvSendPosition.setVisibility(View.VISIBLE);
             rvSeePosition.setVisibility(View.GONE);
             rvSendPosition.setOnClickListener(this);
+
+
 
 
         } else if (mode == Mode.seePosition) {
@@ -563,6 +588,13 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
                 }
             });
+
+            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+                @Override
+                public void onMapLoaded() {
+                    rvSendPosition.setEnabled(true);
+                }
+            });
         }
     }
 
@@ -587,7 +619,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                             @Override
                             public void onSnapshotReady(Bitmap bitmap) {
 
-                                String path = saveBitmapToFile(bitmap);
+                                String path = saveMapToFile(bitmap);
 
                                 close();
 
@@ -628,7 +660,6 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
     @Override
     public void onLocationChanged(Location location) {
-
 
         try {
             if (mode == Mode.seePosition) {
