@@ -169,6 +169,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             @Override
             public void onClick(View v) {
                 if (mPrice[0] != null && !mPrice[0].isEmpty()) {
+                    paymentDialogBinding.payButton.setEnabled(false);
                     showProgress();
                     new RequestWalletPaymentInit().walletPaymentInit(ProtoGlobal.Language.FA_IR, Auth.getCurrentAuth().accessToken, userId, Long.parseLong(mPrice[0]), paymentDialogBinding.edtDescription.getText().toString());
 
@@ -182,10 +183,17 @@ public class PaymentFragment extends BaseFragment implements EventListener {
 
     @Override
     public void receivedMessage(int id, Object... message) {
+
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                paymentDialogBinding.payButton.setEnabled(true);
+            }
+        });
+
         switch (id) {
             case EventManager.ON_INIT_PAY:
                 if (message == null) {
-                    if (progressDialog != null) progressDialog.dismiss();
                 }
                 final ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder initPayResponse = (ProtoWalletPaymentInit.WalletPaymentInitResponse.Builder) message[0];
                 if (initPayResponse != null) {
@@ -203,16 +211,27 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                                         if (selectedCard != null) {
                                             if (selectedCard.cashOutBalance >= Long.parseLong(mPrice[0])) {
                                                 if (!selectedCard.isProtected) {
+                                                    if (progressDialog != null)
+                                                        progressDialog.dismiss();
                                                     setNewPassword();
+
+
                                                 } else {
 
+                                                    if (progressDialog != null)
+                                                        progressDialog.dismiss();
                                                     PaymentAuth paymentAuth = new PaymentAuth();
                                                     paymentAuth.publicKey = initPayResponse.getPublicKey();
                                                     paymentAuth.token = initPayResponse.getToken();
 //                                                    showPinConfirm(paymentAuth);
                                                     setConfirmPassword(paymentAuth);
+
+
                                                 }
                                             } else {
+                                                if (progressDialog != null)
+                                                    progressDialog.dismiss();
+
                                                 Payment payment = new Payment();
                                                 PaymentAuth paymentAuth = new PaymentAuth();
                                                 paymentAuth.token = initPayResponse.getToken();
@@ -237,6 +256,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                                                 intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
                                                 intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
                                                 startActivityForResult(intent, 66);
+                                                G.currentActivity.onBackPressed();
                                             }
 
                                         }
@@ -245,8 +265,10 @@ public class PaymentFragment extends BaseFragment implements EventListener {
 
                                 @Override
                                 public void onFailure(Call<ArrayList<Card>> call, Throwable t) {
+                                    paymentDialogBinding.payButton.setEnabled(true);
+
                                     if (progressDialog != null) progressDialog.dismiss();
-                                    fragmentActivity.onBackPressed();
+
                                     HelperError.showSnackMessage(getResources().getString(R.string.PayGear_unavailable), false);
                                 }
                             });
@@ -255,7 +277,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                     });
                 } else {
                     if (progressDialog != null) progressDialog.dismiss();
-//                        new RequestWalletPaymentInit().walletPaymentInit();
+                    HelperError.showSnackMessage(getResources().getString(R.string.PayGear_unavailable), false);
                 }
             case EventManager.ON_PAYMENT_RESULT_RECIEVED:
 
@@ -403,7 +425,6 @@ public class PaymentFragment extends BaseFragment implements EventListener {
     }
 
     public void setNewPassword() {
-
         final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
         layoutNickname.setOrientation(LinearLayout.VERTICAL);
 
@@ -554,7 +575,6 @@ public class PaymentFragment extends BaseFragment implements EventListener {
      */
 
     public void setConfirmPassword(final PaymentAuth paymentAuth) {
-
         final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
         layoutNickname.setOrientation(LinearLayout.VERTICAL);
 

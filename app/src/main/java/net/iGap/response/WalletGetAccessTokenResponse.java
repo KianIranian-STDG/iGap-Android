@@ -47,7 +47,12 @@ public class WalletGetAccessTokenResponse extends MessageHandler {
         G.jwt = builder.getAccessToken();
 
         auth.save();
-        EventManager.getInstance().postEvent(EventManager.ON_ACCESS_TOKEN_RECIVE, socketMessages.SUCCESS);
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                EventManager.getInstance().postEvent(EventManager.ON_ACCESS_TOKEN_RECIVE, socketMessages.SUCCESS);
+            }
+        }, 1000);
     }
 
     @Override

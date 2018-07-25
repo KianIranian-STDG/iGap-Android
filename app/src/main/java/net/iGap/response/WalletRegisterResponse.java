@@ -36,7 +36,6 @@ public class WalletRegisterResponse extends MessageHandler {
         super.handler();
         ProtoWalletRegister.WalletRegisterResponse.Builder builder = (ProtoWalletRegister.WalletRegisterResponse.Builder) message;
         G.isWalletRegister = true;
-        new HelperFragment(FragmentWallet.newInstance()).load();
     }
 
     @Override

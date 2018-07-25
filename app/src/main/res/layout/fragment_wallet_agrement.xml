@@ -93,7 +93,7 @@
         android:orientation="vertical">
 
 
-        <TextView
+        <com.uncopt.android.widget.text.justify.JustifiedTextView
           android:id="@+id/txtAgreement_register"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
@@ -115,6 +115,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="start"
           android:textSize="@dimen/dp14"
+          android:layout_marginBottom="@dimen/dp32"
           android:onCheckedChanged="@{fragmentWalletAgreementViewModel.checkBoxAgreement}"
           android:text="@string/i_agree_with_the_terms" />
 

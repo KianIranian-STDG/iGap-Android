@@ -64,7 +64,7 @@ public class FragmentWalletAgreementViewModel {
                                 intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
                                 (G.currentActivity).startActivity(intent);
 
-                                G.currentActivity.onBackPressed();
+                                G.fragmentActivity.onBackPressed();
                             } else {
                                 HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
                             }

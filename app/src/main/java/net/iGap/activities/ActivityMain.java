@@ -1636,7 +1636,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                G.isWalletRegister = false;
+                                                G.selectedCard = null;
                                                 HelperLogout.logout();
                                             }
                                         });
@@ -1652,7 +1652,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-
                                                 HelperError.showSnackMessage(getResources().getString(R.string.error), false);
 
                                             }
@@ -2319,7 +2318,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         resume();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        getUserCredit();
     }
 
     public void resume() {
@@ -2977,6 +2975,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             G.selectedCard = response.body().get(0);
 
                         G.cardamount = G.selectedCard.cashOutBalance;
+
                         if (G.selectedCard != null) {
                             itemCash.setVisibility(View.VISIBLE);
                             itemCash.setText("" + getResources().getString(R.string.wallet_Your_credit) + " " + String.valueOf(G.cardamount) + " " + getResources().getString(R.string.wallet_Reial));

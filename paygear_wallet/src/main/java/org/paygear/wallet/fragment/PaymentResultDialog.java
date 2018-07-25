@@ -87,17 +87,13 @@ public class PaymentResultDialog extends DialogFragment {
         TextView priceTitle = view.findViewById(R.id.price_title);
         TextView priceValue = view.findViewById(R.id.price_value);
 
-        if (WalletActivity.isDarkTheme) {
-
-            priceValue.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
-            priceTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            statusView.setBackgroundColor(Color.parseColor(WalletActivity.primaryColor));
             statusTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
         }
 
-
         TextView saveButton = view.findViewById(R.id.save_button);
         ViewCompat.setBackground(saveButton, getButtonSelector());
-        saveButton.setTextColor(Color.parseColor(WalletActivity.accentColor));
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,7 +103,6 @@ public class PaymentResultDialog extends DialogFragment {
 
         TextView closeButton = view.findViewById(R.id.close_button);
         ViewCompat.setBackground(closeButton, getButtonSelector());
-        closeButton.setTextColor(Color.parseColor(WalletActivity.accentColor));
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +128,6 @@ public class PaymentResultDialog extends DialogFragment {
         Typefaces.setTypeface(getActivity(), Typefaces.IRAN_LIGHT, saveButton, closeButton);
 
         RecyclerView mList = view.findViewById(R.id.list);
-        mList.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
 
         if (mResult.result != null)
             mList.setAdapter(new ListItemAdapter());
