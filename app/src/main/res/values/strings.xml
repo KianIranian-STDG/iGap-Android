@@ -566,6 +566,7 @@
   <string name="phone_selected_for_send">selected phone</string>
   <string name="crop_selected_for_send">selected Image</string>
   <string name="location_message">Location Message</string>
+  <string name="wallet_message">Wallet Message</string>
   <string name="chat_to_group">Convert to Group</string>
   <string name="last_seen_at">last seen at</string>
   <string name="long_time_ago">long time ago</string>

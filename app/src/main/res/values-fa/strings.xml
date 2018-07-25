@@ -542,6 +542,7 @@
   <string name="phone_selected_for_send">شماره تلفن انتخاب شده</string>
   <string name="crop_selected_for_send">تصویر انتخاب شده</string>
   <string name="location_message">پیام مکانی</string>
+  <string name="wallet_message">پیام کیف پول</string>
   <string name="chat_to_group">انتقال گفتگو به گروه</string>
   <string name="last_seen_at">آخرین بار دیده شده در</string>
   <string name="long_time_ago">خیلی وقت پیش</string>

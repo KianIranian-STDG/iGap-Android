@@ -939,7 +939,7 @@
 
   <string name="time_out">عدم امكان الاتصال بمزود خدمة الانترنت</string>
 
-  <string name="resend_all_messages">"‫إعادة ارسال الرسالة</string>
+  <string name="resend_all_messages">"‫إعادة ارسال %d الرسالة</string>
   ‬‬‬‬‬‬
   <string name="resend_chat_message">"‫ارسال دوباإعادة ارسال الرسالة</string>
   ‬‬‬‬‬‬
@@ -1018,6 +1018,8 @@
   <string name="crop_selected_for_send">الصورة المختارة </string>
 
   <string name="location_message">رسالة الموقع </string>
+
+  <string name="wallet_message">رسالة المحفظة</string>
 
   <string name="chat_to_group">نقل المحادثة إلى المجموعة </string>
 
@@ -2079,7 +2081,7 @@
 
   <string name="st_checkbox_delete">الحذف لــ</string>
 
-  <string name="st_desc_delete">هل أنت متأكد من حذف هذه الرسالة؟</string>
+  <string name="st_desc_delete">هل أنت متأكد من حذف هذه %1$s الرسالة؟</string>
 
   <string name="st_send_report">تمّ تسجيل ابلاغ اساءة الاستخدام بنجاح</string>
 

@@ -203,6 +203,9 @@ public final class AppUtils {
             case LOCATION:
                 result = G.fragmentActivity.getResources().getString(R.string.location_message);
                 break;
+            case WALLET:
+                result = G.fragmentActivity.getResources().getString(R.string.wallet_message);
+                break;
             default:
                 break;
         }
@@ -383,7 +386,7 @@ public final class AppUtils {
                     messageText = G.fragmentActivity.getString(R.string.last_msg_format_chat, attachment.getName());
                     break;
                 case CONTACT:
-                    messageText = "contact"; // need to fill messageText with a String because in return check null
+                    messageText = "contact"; // need to fill messageText with a String because in return check null. this string isn't important.
                     break;
                 case FILE_TEXT:
                 case FILE:
