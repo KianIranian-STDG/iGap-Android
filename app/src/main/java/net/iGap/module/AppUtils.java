@@ -306,7 +306,7 @@ public final class AppUtils {
                 view.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
                 break;
             case FAILED:
-                setImageDrawable(view, R.drawable.ic_error);
+                setImageDrawable(view, R.drawable.ic_error_igap);
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.red));
                 break;
             case SEEN:
@@ -350,7 +350,7 @@ public final class AppUtils {
                 //DrawableCompat.setTint(view.getDrawable().mutate(), Color.BLACK);
                 break;
             case FAILED:
-                setImageDrawable(view, R.drawable.ic_error);
+                setImageDrawable(view, R.drawable.ic_error_igap);
                 if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.GIF) {
                     DrawableCompat.setTint(view.getDrawable().mutate(), Color.WHITE);
                 } else {
