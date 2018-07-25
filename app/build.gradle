@@ -40,7 +40,6 @@ android {
                 includeCompileClasspath true
             }
         }
-        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
 
     compileOptions {
@@ -80,54 +79,54 @@ dependencies {
         transitive = true
     }
     compile project(path: ':lvl')
-    implementation 'com.mikepenz:fastadapter:3.2.5'
-    implementation 'com.mikepenz:fastadapter-commons:3.2.5'
-    implementation 'com.mikepenz:fastadapter-extensions-expandable:3.2.5'
-    implementation 'com.mikepenz:fastadapter-extensions:3.2.5'
+    implementation 'com.mikepenz:fastadapter:3.2.8'    //update in 25-7-2018
+    implementation 'com.mikepenz:fastadapter-commons:3.2.8'  //update in 25-7-2018
+    implementation 'com.mikepenz:fastadapter-extensions-expandable:3.2.8'  //update in 25-7-2018
+    implementation 'com.mikepenz:fastadapter-extensions:3.2.8'   //update in 25-7-2018
     compile 'com.android.support:multidex:1.0.3'
     compile 'com.android.support:appcompat-v7:27.1.1'
-    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.nineoldandroids:library:2.4.0'  // dose not new update unitl 25-7-2018
     compile 'com.android.support:recyclerview-v7:27.1.1'
     compile 'com.android.support:design:27.1.1'
-    compile 'com.vicmikhailau:MaskedEditText:1.1.1'
-    compile 'com.uncopt:android.justified:1.0'
-    compile 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
-    compile 'com.android.support:percent:27.1.1'
-    compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'
+    compile 'com.vicmikhailau:MaskedEditText:2.0.4'  //update in 25-7-2018
+    compile 'com.uncopt:android.justified:1.0'    //  dose not new update unitl 25-7-2018
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.7.0'  //  dose not new update unitl 25-7-2018
+    compile 'com.android.support:percent:27.1.1'  //  dose not new update unitl 25-7-2018
+    compile 'com.timehop.stickyheadersrecyclerview:library:0.4.3@aar'  // dose not support anyway
     compile 'com.android.support:cardview-v7:27.1.1'
-    compile 'com.larswerkman:HoloColorPicker:1.5'
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-    compile 'uk.co.chrisjenx:calligraphy:2.3.0'
-    compile 'me.leolin:ShortcutBadger:1.1.18@aar'
+    compile 'com.larswerkman:HoloColorPicker:1.5' //  dose not new update unitl 25-7-2018
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'  //  dose not new update unitl 25-7-2018
+    compile 'uk.co.chrisjenx:calligraphy:2.3.0'  // dose not support anyway
+    compile "me.leolin:ShortcutBadger:1.1.22@aar"  //update in 25-7-2018    Attention this update about oreo  and xiaomi Attention
     compile 'com.android.support:support-v4:27.1.1'
-    compile 'com.makeramen:roundedimageview:2.3.0'
-    compile 'dk.ilios:realmfieldnameshelper:1.1.1'
-    compile 'com.hanks.animatecheckbox:library:0.1'
-    compile 'org.parceler:parceler-api:1.1.9'
+    compile 'com.makeramen:roundedimageview:2.3.0'  //  dose not new update unitl 25-7-2018
+    compile 'dk.ilios:realmfieldnameshelper:1.1.1'  //  dose not new update unitl 25-7-2018
+    compile 'com.hanks.animatecheckbox:library:0.1' //  dose not new update unitl 25-7-2018
+    compile 'org.parceler:parceler-api:1.1.11'      //  update in 25-7-2018
+    annotationProcessor 'org.parceler:parceler:1.1.11'    //  update in 25-7-2018
     compile 'com.android.support:gridlayout-v7:27.1.1'
-    compile 'com.google.zxing:core:3.3.0'
+    compile 'com.google.zxing:core:3.3.3'    //  update in 25-7-2018
     compile('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'   //  update in 25-7-2018
     compile 'com.google.android.gms:play-services-analytics:16.0.0'
     compile 'com.google.android.gms:play-services-maps:15.0.1'
-    compile 'me.zhanghai.android.customtabshelper:library:1.0.3'
+    compile 'me.zhanghai.android.customtabshelper:library:1.0.4' //  update in 25-7-2018
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.4'
-    compile 'cat.ereza:customactivityoncrash:2.1.0'
+    compile 'cat.ereza:customactivityoncrash:2.2.0'   //  update in 25-7-2018
     compile 'com.github.RooyeKhat-Media.Emoji:emoji-one:0.5.1.Fix2b'
     compile 'io.realm:android-adapters:3.0.0'
     compile 'org.osmdroid:osmdroid-android:5.6.5'
-   // compile 'org.osmdroid:osmdroid-android:6.0.0-SNAPSHOT'
+    // compile 'org.osmdroid:osmdroid-android:6.0.0-SNAPSHOT'
     compile 'io.fotoapparat.fotoapparat:library:1.3.0'
-    compile 'com.daimajia.swipelayout:library:1.2.0@aar'
-    compile 'com.github.pchmn:MaterialChipsInput:1.0.8'
+    compile 'com.daimajia.swipelayout:library:1.2.0@aar'   //  dose not new update until 25-7-2018
+    compile 'com.github.pchmn:MaterialChipsInput:1.0.8'    //  dose not new update until 25-7-2018
     testCompile 'junit:junit:4.12'
-    annotationProcessor 'org.parceler:parceler:1.1.6'
     provided 'com.android.support:support-annotations:27.1.1'
-    compile group: 'com.github.msarhan', name: 'ummalqura-calendar', version: '1.1.7'
-    compile 'com.sothree.slidinguppanel:library:3.4.0'
-    compile 'com.github.krokyze:ucropnedit:2.2.2'
-    implementation 'info.androidhive:imagefilters:1.0.7'
-    implementation 'com.mindorks.android:prdownloader:0.4.0'
+    compile group: 'com.github.msarhan', name: 'ummalqura-calendar', version: '1.1.9'   //  update in 25-7-2018
+    compile 'com.sothree.slidinguppanel:library:3.4.0'   //  dose not new update until 25-7-2018
+    compile 'com.github.krokyze:ucropnedit:2.2.3'   //  update in 25-7-2018
+    implementation 'info.androidhive:imagefilters:1.0.7'    //  dose not new update until 25-7-2018
+    implementation 'com.mindorks.android:prdownloader:0.4.0'  //  dose not new update until 25-7-2018
     implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.google.firebase:firebase-messaging:17.0.0'
     implementation('com.github.RooyeKhat-Media:Compress:1.0.0') {
@@ -140,21 +139,15 @@ dependencies {
     implementation 'com.github.RooyeKhat-Media:MessageProgress:1.0.0'
     implementation 'com.github.RooyeKhat-Media:Proto:Build91'
     implementation project(':pecpayment-release')
-    implementation 'com.mcxiaoke.volley:library:1.0.19'
     implementation project(':raadcore')
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.mcxiaoke.volley:library:1.0.19'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     implementation project(':paygear_wallet')
-    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude group: 'com.android.support', module: 'design'
-        exclude group: 'com.android.support', module: 'recyclerview-v7'
-    }
 }
 
 configurations.all {
