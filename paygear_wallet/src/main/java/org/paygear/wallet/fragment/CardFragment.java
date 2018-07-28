@@ -135,9 +135,9 @@ public class CardFragment extends Fragment {
             }
         }
         progressBar = view.findViewById(R.id.progress);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColor), PorterDuff.Mode.SRC_IN);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColorWhite), PorterDuff.Mode.SRC_IN);
         defaultCardProgress = view.findViewById(R.id.default_card_progress);
-        defaultCardProgress.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColor), PorterDuff.Mode.SRC_IN);
+        defaultCardProgress.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColorWhite), PorterDuff.Mode.SRC_IN);
 
         TextView paymentPriceText = view.findViewById(R.id.payment_price);
 

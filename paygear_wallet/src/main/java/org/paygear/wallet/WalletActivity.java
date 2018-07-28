@@ -34,6 +34,7 @@ public class WalletActivity extends NavigationBarActivity {
     public static String primaryColor = "#f69228";
     public static String darkPrimaryColor = "#37a9a1";
     public static String accentColor = "#00B0Bf";
+    public static String progressColorWhite = "#ffffff";
     public static String progressColor = "#00B0Bf";
     public static String lineBorder = "#00B0Bf";
     public static String backgroundTheme = "#00B0Bf";

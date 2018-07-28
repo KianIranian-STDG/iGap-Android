@@ -116,7 +116,7 @@ public class AddCardFragment extends Fragment {
         }
 
         progressBar = view.findViewById(R.id.progress);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColor), PorterDuff.Mode.SRC_IN);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColorWhite), PorterDuff.Mode.SRC_IN);
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, cardNumberTitle, monthTitle, yearTitle, defaultCardTitle, button);
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, cardNumberText, monthText, yearText);
 

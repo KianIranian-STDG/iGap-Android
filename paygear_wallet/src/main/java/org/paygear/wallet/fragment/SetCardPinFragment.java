@@ -111,7 +111,7 @@ public class SetCardPinFragment extends Fragment {
         }
         progressBar = view.findViewById(R.id.progress);
 
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColor), PorterDuff.Mode.SRC_IN);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColorWhite), PorterDuff.Mode.SRC_IN);
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, currentPassTitle, newPassTitle, confirmPassTitle, button);
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, currentPass, newPass, confirmPass);
 
@@ -177,7 +177,6 @@ public class SetCardPinFragment extends Fragment {
         Web.getInstance().getWebService().getResetPassword(token, id, PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.i("CCCCCCCCCC", "1 onResponse: " + call.request().url());
                 Boolean success = Web.checkResponse(SetCardPinFragment.this, call, response);
                 if (success == null)
                     return;
@@ -202,8 +201,7 @@ public class SetCardPinFragment extends Fragment {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Log.i("CCCCCCCCCC", "2 onFailure: " + call.request().url());
-                Log.i("CCCCCCCCCC", "3 t.getMessage: " + t.getMessage());
+
             }
         });
 
