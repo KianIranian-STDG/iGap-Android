@@ -73,6 +73,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
+import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
@@ -8604,7 +8605,7 @@ public class FragmentChat extends BaseFragment
             structCompress.originalPath = params[0];
             long endTime = AndroidUtils.getAudioDuration(G.fragmentActivity, params[0]);
             try {
-                //structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1], endTime);
+                structCompress.compress = MediaController.getInstance().convertVideo(params[0], params[1], endTime);
 
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
