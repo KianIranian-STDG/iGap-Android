@@ -51,6 +51,7 @@ public class PaymentResultDialog extends DialogFragment {
     private LinearLayout receiptLayout;
 
     private View.OnClickListener listener;
+    private String colorAppBar;
 
     public static PaymentResultDialog newInstance(PaymentResult result) {
         PaymentResultDialog fragment = new PaymentResultDialog();
@@ -68,8 +69,9 @@ public class PaymentResultDialog extends DialogFragment {
         }
     }
 
-    public void setListener(View.OnClickListener listener) {
+    public void setListener(View.OnClickListener listener, String colorAppBar) {
         this.listener = listener;
+        this.colorAppBar = colorAppBar;
     }
 
     @Nullable
@@ -88,8 +90,13 @@ public class PaymentResultDialog extends DialogFragment {
         TextView priceValue = view.findViewById(R.id.price_value);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            statusView.setBackgroundColor(Color.parseColor(WalletActivity.primaryColor));
-            statusTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
+
+            if (colorAppBar != null) {
+                statusView.setBackgroundColor(Color.parseColor(colorAppBar));
+            } else {
+                statusView.setBackgroundColor(Color.parseColor(WalletActivity.primaryColor));
+            }
+            statusTitle.setTextColor(Color.WHITE);
         }
 
         TextView saveButton = view.findViewById(R.id.save_button);

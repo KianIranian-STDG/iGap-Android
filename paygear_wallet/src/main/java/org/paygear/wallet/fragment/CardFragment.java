@@ -353,7 +353,7 @@ public class CardFragment extends Fragment {
                                     FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
                         }
-                    });
+                    }, WalletActivity.primaryColor );
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
                 } else {
                     /*if (mCard == null && getActivity() instanceof NavigationBarActivity) {
