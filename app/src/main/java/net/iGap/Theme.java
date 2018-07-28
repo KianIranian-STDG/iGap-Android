@@ -2,8 +2,10 @@ package net.iGap;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 
 import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.one.EmojiOneProvider;
 
 import net.iGap.module.SHP_SETTING;
@@ -104,6 +106,7 @@ public class Theme extends Application {
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
         }*/
         EmojiManager.install(new EmojiOneProvider());
+
 
         switch (G.themeColor) {
             case CUSTOM:
