@@ -218,7 +218,7 @@ public class FragmentRegister extends BaseFragment {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game state
         savedInstanceState.putString(KEY_SAVE_CODENUMBER, edtCodeNumber.getText().toString());
-        savedInstanceState.putString(KEY_SAVE_PHONENUMBER_MASK, edtPhoneNumber.getMask());
+        savedInstanceState.putString(KEY_SAVE_PHONENUMBER_MASK, edtPhoneNumber.getMaskString());
         savedInstanceState.putString(KEY_SAVE_PHONENUMBER_NUMBER, edtPhoneNumber.getText().toString());
         savedInstanceState.putString(KEY_SAVE_NAMECOUNTRY, btnChoseCountry.getText().toString());
         savedInstanceState.putString(KEY_SAVE_REGEX, fragmentRegisterViewModel.regex);
