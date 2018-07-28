@@ -2,6 +2,7 @@ package net.iGap.fragments;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import com.yalantis.ucrop.UCrop;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.fragments.filterImage.FragmentFilterImage;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
@@ -450,37 +452,71 @@ public class FragmentEditImage extends BaseFragment {
         void result(String path);
     }
 
+
+
+
+
+
     private void setUpEmojiPopup(View view) {
-        emojiPopup = EmojiPopup.Builder.fromRootView(view.findViewById(R.id.ac_ll_parent)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+        switch (G.themeColor) {
+            case Theme.BLUE_GREY_COMPLETE:
+            case Theme.INDIGO_COMPLETE:
+            case Theme.BROWN_COMPLETE:
+            case Theme.GREY_COMPLETE:
+            case Theme.TEAL_COMPLETE:
+            case Theme.DARK:
 
-            @Override
-            public void onEmojiBackspaceClick(View v) {
+                setEmojiColor(view,G.backgroundTheme_2, G.textTitleTheme, G.textTitleTheme);
+                break;
+            default:
+                setEmojiColor(view,"#eceff1", "#61000000", "#61000000");
 
-            }
-        }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
-            @Override
-            public void onEmojiPopupShown() {
-                changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
-                isEmojiSHow = true;
-            }
-        }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
-            @Override
-            public void onKeyboardOpen(final int keyBoardHeight) {
 
-            }
-        }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
-            @Override
-            public void onEmojiPopupDismiss() {
-                changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
-                isEmojiSHow = false;
-            }
-        }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
-            @Override
-            public void onKeyboardClose() {
-                emojiPopup.dismiss();
-            }
-        }).build(edtChat);
+        }
+
     }
+
+    private void setEmojiColor(View view,String BackgroundColor, String iconColor, String dividerColor) {
+
+        emojiPopup = EmojiPopup.Builder.fromRootView(view.findViewById(R.id.ac_ll_parent))
+                .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
+
+                    @Override
+                    public void onEmojiBackspaceClick(View v) {
+
+                    }
+                }).setOnEmojiPopupShownListener(new OnEmojiPopupShownListener() {
+                    @Override
+                    public void onEmojiPopupShown() {
+                        changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
+                        isEmojiSHow = true;
+                    }
+                }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
+                    @Override
+                    public void onKeyboardOpen(final int keyBoardHeight) {
+
+                    }
+                }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
+                    @Override
+                    public void onEmojiPopupDismiss() {
+                        changeEmojiButtonImageResource(R.string.md_emoticon_with_happy_face);
+                        isEmojiSHow = false;
+                    }
+                }).setOnSoftKeyboardCloseListener(new OnSoftKeyboardCloseListener() {
+                    @Override
+                    public void onKeyboardClose() {
+                        emojiPopup.dismiss();
+                    }
+                })
+                .setBackgroundColor(Color.parseColor(BackgroundColor))
+                .setIconColor(Color.parseColor(iconColor))
+                .setDividerColor(Color.parseColor(dividerColor))
+                .build(edtChat);
+
+    }
+
+
+
 
     private void changeEmojiButtonImageResource(@StringRes int drawableResourceId) {
         imvSmileButton.setText(drawableResourceId);
