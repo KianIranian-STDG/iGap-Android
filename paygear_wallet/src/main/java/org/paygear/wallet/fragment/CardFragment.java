@@ -7,6 +7,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +23,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import org.paygear.wallet.R;
 import org.paygear.wallet.WalletActivity;
@@ -104,8 +108,8 @@ public class CardFragment extends Fragment {
             rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
         }
         appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
+        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
+        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
         appBar.showBack();
         if (mPayment != null) {
             appBar.setTitle(getString(R.string.payment));
@@ -253,19 +257,19 @@ public class CardFragment extends Fragment {
     }
 
     private void showDeleteConfirm() {
-        new AlertDialog()
-                .setTitle(getString(R.string.delete_card))
-                .setMessage(getString(R.string.delete_card_confirm))
-                .setPositiveAction(getString(R.string.yes))
-                .setNegativeAction(getString(R.string.no))
-                .setOnActionListener(new AlertDialog.OnAlertActionListener() {
+
+        new MaterialDialog.Builder(getActivity())
+                .title(R.string.delete_card)
+                .content(R.string.delete_card_confirm)
+                .positiveText(R.string.yes)
+                .negativeText(R.string.no)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
-                    public boolean onAction(int i, Object o) {
-                        if (i == 1) removeCard();
-                        return true;
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        removeCard();
                     }
                 })
-                .show(getActivity().getSupportFragmentManager());
+                .show();
     }
 
     private void removeCard() {
@@ -314,7 +318,6 @@ public class CardFragment extends Fragment {
         Utils.hideKeyboard(getContext(), pinText);
         startPay(RSAUtils.getCardDataRSA(mPayment, mCard, pin2, cvv2));
     }
-
 
 
     private void startPay(String encryptedCardData) {
