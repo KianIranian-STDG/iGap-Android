@@ -6510,6 +6510,7 @@ public class FragmentChat extends BaseFragment
         });
         if (txtChannelMute == null)
             txtChannelMute = (TextView) rootView.findViewById(R.id.chl_txt_mute_channel);
+        if (G.isDarkTheme) txtChannelMute.setTextColor(Color.WHITE);
         if (isMuteNotification) {
             txtChannelMute.setText(R.string.unmute);
         } else {
