@@ -93,7 +93,7 @@
             android:layout_marginLeft="@dimen/dp24"
             android:layout_marginRight="@dimen/dp24"
             android:layout_marginTop="@dimen/dp24"
-            android:afterTextChanged="@{activityEnterPassCodeViewModel.afterTextChanged}"
+            android:afterTextChanged="@{activityEnterPassCodeViewModel::afterTextChanged}"
             android:background="@android:color/transparent"
             android:focusable="true"
             android:focusableInTouchMode="true"
