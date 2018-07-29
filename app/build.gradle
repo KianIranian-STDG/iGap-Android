@@ -139,10 +139,6 @@ dependencies {
     implementation 'com.github.RooyeKhat-Media:Proto:Build91'
     implementation project(':pecpayment-release')
     implementation project(':raadcore')
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.mcxiaoke.volley:library:1.0.19'
-    implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
