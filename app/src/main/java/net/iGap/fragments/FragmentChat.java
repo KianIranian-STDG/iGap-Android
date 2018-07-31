@@ -3786,6 +3786,8 @@ public class FragmentChat extends BaseFragment
             rootReport.setVisibility(View.GONE);
         }
 
+
+
         @ArrayRes int itemsRes = 0;
         switch (roomMessageType) {
             case TEXT:
@@ -3955,6 +3957,10 @@ public class FragmentChat extends BaseFragment
                 });
             }
 
+        }
+
+        if (isChatReadOnly){
+            rootEdit.setVisibility(View.GONE);
         }
 
         String _savedFolderName = "";
