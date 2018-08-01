@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -421,6 +422,8 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         return mRealm;
     }
 
+    private int counterCheckAvatar = 0;
+
     private void setAvatar() {
         HelperAvatar.getAvatar(fragmentSettingViewModel.userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
             @Override
@@ -428,7 +431,14 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), fragmentSettingBinding.stImgCircleImage);
+
+                        if (avatarPath != null) {
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), fragmentSettingBinding.stImgCircleImage);
+                        } else if (counterCheckAvatar < 4) {
+                            Log.i("CCCCCCCCC", "run: " + counterCheckAvatar);
+                            setAvatar();
+                            counterCheckAvatar++;
+                        }
                     }
                 });
             }
