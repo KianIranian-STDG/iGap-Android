@@ -41,6 +41,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentEditImage;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.ImageHelper;
 import net.iGap.module.AttachFile;
 
 import java.io.File;
@@ -102,7 +103,7 @@ public class FragmentFilterImage extends Fragment implements FiltersListFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        if (getActivity() !=null) getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -267,11 +268,8 @@ public class FragmentFilterImage extends Fragment implements FiltersListFragment
     }
 
     public static Bitmap getBitmapFile(Context context, String fileName, int width, int height) {
-
         File image = new File(fileName);
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        //        bitmap = Bitmap.createScaledBitmap(bitmap,width,height,true);
-        return BitmapFactory.decodeFile(image.getAbsolutePath(), bmOptions);
+        return ImageHelper.decodeFile(image);
     }
 
     private class FilterImageTask extends AsyncTask<Filter, Integer, Bitmap> {
