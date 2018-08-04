@@ -1,23 +1,33 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.realm;
+
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.protobuf.Any;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 import net.iGap.G;
 import net.iGap.module.SerializationUtils;
 import net.iGap.proto.ProtoSignalingGetConfiguration;
+import net.iGap.proto.ProtoSignalingGetLog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 
 public class RealmCallConfig extends RealmObject {
@@ -27,6 +37,8 @@ public class RealmCallConfig extends RealmObject {
     private boolean screen_sharing;
 
     private byte[] IceServer;
+
+    private RealmList<RealmIceProto> realmIceProto = null;
 
     public static void updateSignalingConfiguration(final ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.Builder builder) {
 
@@ -51,7 +63,7 @@ public class RealmCallConfig extends RealmObject {
                 item.setVideo_calling(builder.getVideoCalling());
                 item.setScreen_sharing(builder.getScreenSharing());
 
-                item.setIceServer(builder.getIceServerList());
+                item.setIceServer(realm, builder.getIceServerList());
 
                 G.needGetSignalingConfiguration = false;
             }
@@ -84,12 +96,22 @@ public class RealmCallConfig extends RealmObject {
         this.screen_sharing = screen_sharing;
     }
 
-    public List<ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer> getIceServer() {
-        return IceServer == null ? null : (List<ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer>) SerializationUtils.deserialize(IceServer);
+    public RealmList<RealmIceProto> getIceServer() {
+
+        return realmIceProto;
     }
 
-    public void setIceServer(List<ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer> iceServer) {
-        this.IceServer = SerializationUtils.serialize(iceServer);
+    public void setIceServer(Realm realm, List<ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer> iceServer) {
+
+        for (ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer mIceService : iceServer) {
+            RealmIceProto iceProto = realm.createObject(RealmIceProto.class);
+            iceProto.setUrl(mIceService.getUrl());
+            iceProto.setUsername(mIceService.getUsername());
+            iceProto.setCredential(mIceService.getCredential());
+            realmIceProto.add(iceProto);
+        }
+
+
     }
 }
 

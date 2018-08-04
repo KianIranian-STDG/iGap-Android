@@ -10,6 +10,10 @@
 
 package net.iGap.realm;
 
+import android.util.Log;
+
+import com.google.protobuf.InvalidProtocolBufferException;
+
 import net.iGap.module.SerializationUtils;
 import net.iGap.proto.ProtoSignalingGetLog;
 
@@ -27,6 +31,7 @@ public class RealmCallLog extends RealmObject {
     private String name;
     private long time;
     private byte[] logProto;
+   // private ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog logProto;
 
     public static void addLog(ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog, Realm realm) {
         RealmCallLog realmCallLog = realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.ID, callLog.getId()).findFirst();
@@ -88,10 +93,29 @@ public class RealmCallLog extends RealmObject {
     }
 
     public ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog getLogProto() {
-        return logProto == null ? null : (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog) SerializationUtils.deserialize(logProto);
+      //  return logProto == null ? null : (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog) SerializationUtils.deserialize(logProto);
+
+        try {
+            return logProto == null ? null : (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.parseFrom(logProto));
+        } catch (InvalidProtocolBufferException e) {
+            e.printStackTrace();
+        }catch (NullPointerException e){
+            Log.i("#null",e.getMessage());
+            return null;
+
+        }catch ( Exception e){
+            Log.i("#null",e.getMessage());
+            return null;
+        }
+        return null;
+        //  return  logProto;
     }
 
     public void setLogProto(ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog logProto) {
-        this.logProto = SerializationUtils.serialize(logProto);
+      //  this.logProto = SerializationUtils.serialize(logProto);
+
+        this.logProto=logProto.toByteArray();
+     //   this.logProto=logProto;
+
     }
 }
