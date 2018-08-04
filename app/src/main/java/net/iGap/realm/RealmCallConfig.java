@@ -10,24 +10,14 @@
 
 package net.iGap.realm;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.protobuf.Any;
-import com.google.protobuf.InvalidProtocolBufferException;
-
 import net.iGap.G;
-import net.iGap.module.SerializationUtils;
 import net.iGap.proto.ProtoSignalingGetConfiguration;
-import net.iGap.proto.ProtoSignalingGetLog;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.RealmResults;
 
 
 public class RealmCallConfig extends RealmObject {
@@ -35,10 +25,7 @@ public class RealmCallConfig extends RealmObject {
     private boolean voice_calling;
     private boolean video_calling;
     private boolean screen_sharing;
-
-    private byte[] IceServer;
-
-    private RealmList<RealmIceProto> realmIceProto = null;
+    private RealmList<RealmIceServer> realmIceServer = null;
 
     public static void updateSignalingConfiguration(final ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.Builder builder) {
 
@@ -96,19 +83,19 @@ public class RealmCallConfig extends RealmObject {
         this.screen_sharing = screen_sharing;
     }
 
-    public RealmList<RealmIceProto> getIceServer() {
+    public RealmList<RealmIceServer> getIceServer() {
 
-        return realmIceProto;
+        return realmIceServer;
     }
 
     public void setIceServer(Realm realm, List<ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer> iceServer) {
 
         for (ProtoSignalingGetConfiguration.SignalingGetConfigurationResponse.IceServer mIceService : iceServer) {
-            RealmIceProto iceProto = realm.createObject(RealmIceProto.class);
+            RealmIceServer iceProto = realm.createObject(RealmIceServer.class);
             iceProto.setUrl(mIceService.getUrl());
             iceProto.setUsername(mIceService.getUsername());
             iceProto.setCredential(mIceService.getCredential());
-            realmIceProto.add(iceProto);
+            realmIceServer.add(iceProto);
         }
 
 

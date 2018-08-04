@@ -258,7 +258,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 19
+        if (oldVersion == 20) {
 
             RealmObjectSchema realmRoomMessageWallet = schema.create(RealmRoomMessageWallet.class.getSimpleName())
                     .addField(RealmRoomMessageWalletFields.ID, long.class, FieldAttribute.REQUIRED)
@@ -275,6 +275,33 @@ public class RealmMigration implements io.realm.RealmMigration {
             RealmObjectSchema realmRoomMessage = schema.get(RealmRoomMessage.class.getSimpleName());
             if (realmRoomMessage != null) {
                 realmRoomMessage.addRealmObjectField("roomMessageWallet", realmRoomMessageWallet);
+            }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 20
+
+            RealmObjectSchema realmIceServer = schema.create(RealmIceServer.class.getSimpleName()).addField("url", String.class).addField("username", String.class).addField("credential", String.class);
+
+            RealmObjectSchema realmWallpaperProto = schema.create(RealmWallpaperProto.class.getSimpleName()).addRealmObjectField("file", schema.get(RealmAttachment.class.getSimpleName())).addField("color", String.class);
+
+            RealmObjectSchema realmCallConfig = schema.get(RealmCallConfig.class.getSimpleName());
+            if (realmCallConfig != null) {
+                realmCallConfig.addRealmListField("realmIceServer", realmIceServer);
+
+                if (realmCallConfig.hasField("IceServer")) {
+                    realmCallConfig.removeField("IceServer");
+                }
+            }
+
+            RealmObjectSchema realmWallpaper = schema.get(RealmWallpaper.class.getSimpleName());
+            if (realmWallpaper != null) {
+                realmWallpaper.addRealmListField("realmWallpaperProto", realmWallpaperProto);
+
+                if (realmWallpaper.hasField("wallPaperList")) {
+                    realmWallpaper.removeField("wallPaperList");
+                }
             }
 
             oldVersion++;

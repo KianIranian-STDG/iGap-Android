@@ -1,27 +1,25 @@
 package net.iGap.realm;
 
-import java.io.File;
-
 import io.realm.RealmObject;
 
 public class RealmWallpaperProto extends RealmObject {
 
-    private RealmAttachment File;
-    private String Color;
+    private RealmAttachment file;
+    private String color;
 
     public RealmAttachment getFile() {
-        return File;
+        return file;
     }
 
     public void setFile(RealmAttachment file) {
-        File = file;
+        this.file = file;
     }
 
     public String getColor() {
-        return Color;
+        return color;
     }
 
     public void setColor(String color) {
-        Color = color;
+        this.color = color;
     }
 }

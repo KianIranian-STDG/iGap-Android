@@ -1,35 +1,34 @@
 package net.iGap.realm;
 
-import io.realm.RealmList;
 import io.realm.RealmObject;
 
-public class RealmIceProto extends RealmObject {
+public class RealmIceServer extends RealmObject {
 
-    private String Url;
-    private String Username;
-    private String Credential;
+    private String url;
+    private String username;
+    private String credential;
 
     public String getUrl() {
-        return Url;
+        return url;
     }
 
     public void setUrl(String url) {
-        Url = url;
+        this.url = url;
     }
 
     public String getUsername() {
-        return Username;
+        return username;
     }
 
     public void setUsername(String username) {
-        Username = username;
+        this.username = username;
     }
 
     public String getCredential() {
-        return Credential;
+        return credential;
     }
 
     public void setCredential(String credential) {
-        Credential = credential;
+        this.credential = credential;
     }
 }

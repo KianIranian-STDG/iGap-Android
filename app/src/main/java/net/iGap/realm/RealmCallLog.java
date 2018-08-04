@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.realm;
 
@@ -14,7 +14,6 @@ import android.util.Log;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import net.iGap.module.SerializationUtils;
 import net.iGap.proto.ProtoSignalingGetLog;
 
 import java.util.List;
@@ -31,7 +30,6 @@ public class RealmCallLog extends RealmObject {
     private String name;
     private long time;
     private byte[] logProto;
-   // private ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog logProto;
 
     public static void addLog(ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog callLog, Realm realm) {
         RealmCallLog realmCallLog = realm.where(RealmCallLog.class).equalTo(RealmCallLogFields.ID, callLog.getId()).findFirst();
@@ -93,29 +91,22 @@ public class RealmCallLog extends RealmObject {
     }
 
     public ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog getLogProto() {
-      //  return logProto == null ? null : (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog) SerializationUtils.deserialize(logProto);
-
         try {
             return logProto == null ? null : (ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog.parseFrom(logProto));
         } catch (InvalidProtocolBufferException e) {
             e.printStackTrace();
-        }catch (NullPointerException e){
-            Log.i("#null",e.getMessage());
+        } catch (NullPointerException e) {
+            Log.i("#null", e.getMessage());
             return null;
 
-        }catch ( Exception e){
-            Log.i("#null",e.getMessage());
+        } catch (Exception e) {
+            Log.i("#null", e.getMessage());
             return null;
         }
         return null;
-        //  return  logProto;
     }
 
     public void setLogProto(ProtoSignalingGetLog.SignalingGetLogResponse.SignalingLog logProto) {
-      //  this.logProto = SerializationUtils.serialize(logProto);
-
-        this.logProto=logProto.toByteArray();
-     //   this.logProto=logProto;
-
+        this.logProto = logProto.toByteArray();
     }
 }

@@ -258,7 +258,7 @@ public class FragmentChatBackground extends BaseFragment {
                 for (String localPath : realmWallpaper.getLocalList()) {
                     if (new File(localPath).exists()) {
                         StructWallpaper _swl = new StructWallpaper();
-                        _swl.setWallpaperType(WallpaperType.lockal);
+                        _swl.setWallpaperType(WallpaperType.local);
                         _swl.setPath(localPath);
                         wList.add(_swl);
                     }
@@ -296,7 +296,7 @@ public class FragmentChatBackground extends BaseFragment {
     }
 
     public enum WallpaperType {
-        addNew, lockal, proto
+        addNew, local, proto
     }
 
     public interface OnImageClick {
