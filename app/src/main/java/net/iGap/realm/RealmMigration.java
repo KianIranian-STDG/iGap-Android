@@ -50,7 +50,7 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
         if (oldVersion == 3) {
-            schema.create(RealmWallpaper.class.getSimpleName()).addField(RealmWallpaperFields.LAST_TIME_GET_LIST, long.class, FieldAttribute.REQUIRED).addField(RealmWallpaperFields.WALL_PAPER_LIST, byte[].class).addField(RealmWallpaperFields.LOCAL_LIST, byte[].class);
+            schema.create(RealmWallpaper.class.getSimpleName()).addField(RealmWallpaperFields.LAST_TIME_GET_LIST, long.class, FieldAttribute.REQUIRED).addField("wallPaperList", byte[].class).addField(RealmWallpaperFields.LOCAL_LIST, byte[].class);
             oldVersion++;
         }
 
@@ -98,7 +98,7 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
         if (oldVersion == 9) {
-            schema.create(RealmCallConfig.class.getSimpleName()).addField(RealmCallConfigFields.VOICE_CALLING, boolean.class, FieldAttribute.REQUIRED).addField(RealmCallConfigFields.VIDEO_CALLING, boolean.class, FieldAttribute.REQUIRED).addField(RealmCallConfigFields.SCREEN_SHARING, boolean.class, FieldAttribute.REQUIRED).addField(RealmCallConfigFields.ICE_SERVER, byte[].class);
+            schema.create(RealmCallConfig.class.getSimpleName()).addField(RealmCallConfigFields.VOICE_CALLING, boolean.class, FieldAttribute.REQUIRED).addField(RealmCallConfigFields.VIDEO_CALLING, boolean.class, FieldAttribute.REQUIRED).addField(RealmCallConfigFields.SCREEN_SHARING, boolean.class, FieldAttribute.REQUIRED).addField("IceServer", byte[].class);
 
             RealmObjectSchema realmCallLog = schema.create(RealmCallLog.class.getSimpleName()).addField(RealmCallLogFields.ID, long.class, FieldAttribute.REQUIRED).addField(RealmCallLogFields.NAME, String.class).addField(RealmCallLogFields.TIME, long.class, FieldAttribute.REQUIRED).addField(RealmCallLogFields.LOG_PROTO, byte[].class);
             realmCallLog.addPrimaryKey(RealmCallLogFields.ID);
