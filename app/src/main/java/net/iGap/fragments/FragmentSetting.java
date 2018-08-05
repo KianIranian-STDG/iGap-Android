@@ -308,6 +308,8 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 if (data.getData() == null) {
                     return;
                 }
+                ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
+
                 FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
                 new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
             }
@@ -435,7 +437,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                         if (avatarPath != null) {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), fragmentSettingBinding.stImgCircleImage);
                         } else if (counterCheckAvatar < 4) {
-                            Log.i("CCCCCCCCC", "run: " + counterCheckAvatar);
                             setAvatar();
                             counterCheckAvatar++;
                         }

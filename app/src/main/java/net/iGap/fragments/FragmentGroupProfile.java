@@ -35,6 +35,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
+import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnAvatarDelete;
 import net.iGap.interfaces.OnAvatarGet;
@@ -61,14 +62,14 @@ import java.io.IOException;
 import java.util.HashMap;
 
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarResponse, OnGroupAvatarDelete {
 
     private static final String ROOM_ID = "RoomId";
@@ -179,10 +180,13 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                 case AttachFile.request_code_TAKE_PICTURE:
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        ImageHelper.correctRotateImage(AttachFile.mCurrentPhotoPath, true);
                         FragmentEditImage.insertItemList(AttachFile.mCurrentPhotoPath, false);
                         new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
 
                     } else {
+                        ImageHelper.correctRotateImage(AttachFile.imagePath, true);
+
                         FragmentEditImage.insertItemList(AttachFile.imagePath, false);
                         new HelperFragment(FragmentEditImage.newInstance(AttachFile.imagePath, false, false, 0)).setReplace(false).load();
                     }
@@ -192,6 +196,8 @@ public class FragmentGroupProfile extends BaseFragment implements OnGroupAvatarR
                     if (data.getData() == null) {
                         return;
                     }
+                    ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true);
+
                     FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
                     new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
 

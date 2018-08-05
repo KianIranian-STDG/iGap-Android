@@ -476,6 +476,7 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                     if (data.getData() == null) {
                         return;
                     }
+                    ImageHelper.correctRotateImage(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), true); //rotate image
                     FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(data.getData(), HelperGetDataFromOtherApp.FileType.image), false);
                     new HelperFragment(FragmentEditImage.newInstance(null, false, false, 0)).setReplace(false).load();
                     break;
