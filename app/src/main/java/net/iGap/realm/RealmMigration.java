@@ -258,7 +258,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == 20) {
+        if (oldVersion == 19) {
 
             RealmObjectSchema realmRoomMessageWallet = schema.create(RealmRoomMessageWallet.class.getSimpleName())
                     .addField(RealmRoomMessageWalletFields.ID, long.class, FieldAttribute.REQUIRED)
