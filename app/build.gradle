@@ -143,6 +143,10 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     implementation project(':paygear_wallet')
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.mcxiaoke.volley:library:1.0.19'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 }
 
 configurations.all {
