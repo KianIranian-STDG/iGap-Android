@@ -955,6 +955,12 @@ public class FragmentChat extends BaseFragment
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        /**
+         * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
+         * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
+         */
+        if (G.isPassCode) ActivityMain.isUseCamera = true;
+
         if (resultCode == RESULT_CANCELED) {
             HelperSetAction.sendCancel(messageId);
 
@@ -3787,7 +3793,6 @@ public class FragmentChat extends BaseFragment
         }
 
 
-
         @ArrayRes int itemsRes = 0;
         switch (roomMessageType) {
             case TEXT:
@@ -3959,7 +3964,7 @@ public class FragmentChat extends BaseFragment
 
         }
 
-        if (isChatReadOnly){
+        if (isChatReadOnly) {
             rootEdit.setVisibility(View.GONE);
         }
 

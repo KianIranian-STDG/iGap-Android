@@ -34,6 +34,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.ActivityNewGroupBinding;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperFragment;
@@ -446,6 +447,12 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        /**
+         * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
+         * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
+         */
+        if (G.isPassCode) ActivityMain.isUseCamera = true;
 
         if (FragmentEditImage.textImageList != null) FragmentEditImage.textImageList.clear();
         if (FragmentEditImage.itemGalleryList != null) FragmentEditImage.itemGalleryList.clear();
