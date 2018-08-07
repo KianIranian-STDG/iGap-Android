@@ -7976,15 +7976,16 @@ public class FragmentChat extends BaseFragment
                 visibleItemCount = linearLayoutManager.getChildCount();
                 totalItemCount = linearLayoutManager.getItemCount();
 
-                if (firstVisiblePosition < scrollEnd) {
-                    /**
-                     * scroll to top
-                     */
+                if (firstVisiblePosition < scrollEnd) {  /** scroll to top */
                     loadMessage(UP);
-                } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) {
-                    /**
-                     * scroll to bottom
+
+                    /** if totalItemCount is lower than scrollEnd so (firstVisiblePosition < scrollEnd) is always true and we can't load DOWN,
+                     * finally for solve this problem we to check following state and load DOWN even totalItemCount is lower than scrollEnd count
                      */
+                    if (totalItemCount <= scrollEnd) {
+                        loadMessage(DOWN);
+                    }
+                } else if (firstVisiblePosition + visibleItemCount >= (totalItemCount - scrollEnd)) { /** scroll to bottom */
                     loadMessage(DOWN);
                 }
             }
