@@ -1,6 +1,8 @@
 package net.iGap.helper;
 
+import android.content.Context;
 import android.content.res.Configuration;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -35,6 +37,7 @@ public class HelperFragment {
     private int exit;
     private int popEnter;
     private int popExit;
+
 
     public HelperFragment() {
     }
@@ -106,9 +109,29 @@ public class HelperFragment {
     }
 
     public void load() {
+
         if (fragment == null) {
             return;
         }
+
+        try {
+
+            if (fragment.getClass().getName().equalsIgnoreCase("net.iGap.fragments.FragmentChat")) {
+                if (SystemClock.elapsedRealtime() - G.mLastClickTime > 1000) {
+                    G.mLastClickTime = SystemClock.elapsedRealtime();
+                } else {
+                    return;
+                }
+            }
+
+           else if ((G.fragmentActivity.getSupportFragmentManager().getBackStackEntryAt(G.fragmentActivity.getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equalsIgnoreCase(fragment.getClass().getName()))){
+                return;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         if (G.fragmentManager == null) {
             HelperLog.setErrorLog("helper fragment loadFragment -> " + fragment.getClass().getName());
             return;
