@@ -392,7 +392,6 @@ public class G extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
 
-
         G.firstTimeEnterToApp = true;
 
         new Thread(new Runnable() {
@@ -421,12 +420,10 @@ public class G extends MultiDexApplication {
     }
 
     public static Context updateResources(Context baseContext) {
-        String selectedLanguage = G.selectedLanguage;
-        if (selectedLanguage == null) {
-            selectedLanguage = Locale.getDefault().getLanguage();
+        if (G.selectedLanguage == null) {
+            G.selectedLanguage = Locale.getDefault().getLanguage();
         }
-
-        Locale locale = new Locale(selectedLanguage);
+        Locale locale = new Locale(G.selectedLanguage);
         Locale.setDefault(locale);
 
         Resources res = baseContext.getResources();
