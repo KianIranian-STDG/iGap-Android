@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.downloader.PRDownloader;
@@ -34,6 +36,7 @@ import net.iGap.webrtc.CallObserver;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -78,6 +81,7 @@ import static net.iGap.G.userTextSize;
  * all actions that need doing after open app
  */
 public final class StartupActions {
+    private RealmConfiguration configuration;
 
     public StartupActions() {
 
@@ -526,22 +530,79 @@ public final class StartupActions {
          */
         Realm.init(context);
 
-        RealmConfiguration configuration = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm").schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
-        DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);
+
+        //  new SecureRandom().nextBytes(key);
+
+
+        // An encrypted Realm file can be opened in Realm Studio by using a Hex encoded version
+        // of the key. Copy the key from Logcat, then download the Realm file from the device using
+        // the method described here: https://stackoverflow.com/a/28486297/1389357
+        // The path is normally `/data/data/io.realm.examples.encryption/files/default.realm`
+
+     /*   RealmConfiguration configuration = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
+                .schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
+        DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);*/
+
+        Realm configuredRealm = getInstance();
+        DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuredRealm.getConfiguration());
+
+
+
+        /*if (configuration!=null)
+            Realm.deleteRealm(configuration);*/
+
         /**
          * Returns version of Realm file on disk
          */
         if (dynamicRealm.getVersion() == -1) {
-            Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabase.realm").schemaVersion(REALM_SCHEMA_VERSION).deleteRealmIfMigrationNeeded().build());
+           Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabaseEncrypted.realm").schemaVersion(REALM_SCHEMA_VERSION).deleteRealmIfMigrationNeeded().build());
+         //   Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
         } else {
-            Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabase.realm").schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build());
+            Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
+
         }
         dynamicRealm.close();
 
         try {
-            Realm.compactRealm(configuration);
+
+            Realm.compactRealm(configuredRealm.getConfiguration());
         } catch (UnsupportedOperationException e) {
             e.printStackTrace();
+        }
+    }
+
+    public Realm getInstance() {
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
+
+        String stringArray = sharedPreferences.getString("myByteArray", null);
+        if (stringArray == null) {
+            byte[] key = new byte[64];
+            new SecureRandom().nextBytes(key);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            String saveThis = Base64.encodeToString(key, Base64.DEFAULT);
+            editor.putString("myByteArray", saveThis);
+            editor.commit();
+        }
+
+        byte[] mKey = Base64.decode(sharedPreferences.getString("myByteArray", null), Base64.DEFAULT);
+        RealmConfiguration newConfig = new RealmConfiguration.Builder()
+                .name("iGapLocalDatabaseEncrypted.realm")
+                .encryptionKey(mKey)
+                .schemaVersion(REALM_SCHEMA_VERSION)
+                .migration(new RealmMigration())
+                .build();
+
+        File newRealmFile = new File(newConfig.getPath());
+        if (newRealmFile.exists()) {
+            return Realm.getInstance(newConfig);
+        } else {
+            configuration =new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
+                    .schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
+            Realm realm = Realm.getInstance(configuration);
+            realm.writeEncryptedCopyTo(newRealmFile, mKey);
+            realm.close();
+            Realm.deleteRealm(configuration);
+            return Realm.getInstance(newConfig);
         }
     }
 }
