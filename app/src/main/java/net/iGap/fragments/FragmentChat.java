@@ -3723,6 +3723,11 @@ public class FragmentChat extends BaseFragment
             return;
         }
 
+        if (mAdapter.getSelectedItems().size() > 0) {
+            view.performLongClick();
+            return;
+        }
+
         ProtoGlobal.RoomMessageType roomMessageType;
         if (message.forwardedFrom != null) {
             roomMessageType = message.forwardedFrom.getMessageType();
