@@ -31,6 +31,7 @@ public class HelperFragment {
     private boolean replace = true;
     private boolean stateLoss;
     private boolean hasCustomAnimation;
+    private boolean immediateRemove;
     private String tag;
     private int resourceContainer = 0;
     private int enter;
@@ -86,6 +87,11 @@ public class HelperFragment {
 
     public HelperFragment setStateLoss(boolean stateLoss) {
         this.stateLoss = stateLoss;
+        return this;
+    }
+
+    public HelperFragment setImmediateRemove(boolean immediateRemove) {
+        this.immediateRemove = immediateRemove;
         return this;
     }
 
@@ -186,7 +192,11 @@ public class HelperFragment {
                 return;
             }
             G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-            G.fragmentActivity.getSupportFragmentManager().popBackStack();
+            if (immediateRemove){
+                G.fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
+            } else {
+                G.fragmentActivity.getSupportFragmentManager().popBackStack();
+            }
 
             if (G.iTowPanModDesinLayout != null) {
                 G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);

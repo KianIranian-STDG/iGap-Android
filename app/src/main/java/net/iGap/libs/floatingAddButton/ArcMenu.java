@@ -45,6 +45,8 @@ public class ArcMenu extends FrameLayout {
     boolean mIsOpened = false;
     double mQuadrantAngle;
     MenuSideEnum mMenuSideEnum;
+
+    private boolean revConfig = false;
     int cx, cy; //Represents the center points of the circle whose arc we are considering
     private StateChangeListener mStateChangeListener;
     private OnClickListener mMenuClickListener = new OnClickListener() {
@@ -55,8 +57,10 @@ public class ArcMenu extends FrameLayout {
     };
 
     public ArcMenu(Context context) {
+
         super(context);
     }
+
 
     public ArcMenu(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -65,10 +69,18 @@ public class ArcMenu extends FrameLayout {
         fabMenu = new FloatingActionButton(context);
     }
 
+    public void setFabSize() {
+
+        fabMenu.setSize(FloatingActionButton.SIZE_MINI);
+    }
+
+
     public void setBackgroundTintColor() {
 
         fabMenu.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.fabBottom)));
     }
+
+
 
     private void init(TypedArray attr) {
         Resources resources = getResources();
@@ -86,6 +98,7 @@ public class ArcMenu extends FrameLayout {
         mElevation = attr.getDimension(R.styleable.ArcMenu_menu_elevation, resources.getDimension(R.dimen.dp6));
         mMenuSideEnum = MenuSideEnum.fromId(attr.getInt(R.styleable.ArcMenu_menu_open, 0));
         mAnimationTime = attr.getInteger(R.styleable.ArcMenu_menu_animation_time, ANIMATION_TIME);
+        revConfig=attr.getBoolean(R.styleable.ArcMenu_menu_config,false);
         mCurrentRadius = 0;
 
         if (mDrawable == null) {
@@ -105,11 +118,20 @@ public class ArcMenu extends FrameLayout {
 
         if (mMenuSideEnum == MenuSideEnum.ARC_LEFT) {
 
-            if (!HelperCalander.isPersianUnicode) {
-                mQuadrantAngle = 90;
-            } else {
-                mQuadrantAngle = -90;
+            if (revConfig){
+                if (!HelperCalander.isPersianUnicode) {
+                    mQuadrantAngle = -90;
+                } else {
+                    mQuadrantAngle = +90;
+                }
+            }else{
+                if (!HelperCalander.isPersianUnicode) {
+                    mQuadrantAngle = +90;
+                } else {
+                    mQuadrantAngle = -90;
+                }
             }
+
         } else {
             mQuadrantAngle = NEGATIVE_QUADRANT;
         }
@@ -143,6 +165,7 @@ public class ArcMenu extends FrameLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         layoutMenu();
+        //  reverseLayoutMenu();
         layoutChildren();
     }
 
@@ -165,12 +188,22 @@ public class ArcMenu extends FrameLayout {
                 leftPoint = (int) (mCurrentRadius * Math.cos(Math.toRadians(totalAngleForChild)));
                 topPoint = (int) (mCurrentRadius * Math.sin(Math.toRadians(totalAngleForChild)));
 
-                if (mMenuSideEnum == MenuSideEnum.ARC_RIGHT || HelperCalander.isPersianUnicode) {
-                    left = cx + leftPoint;
-                    top = cy + topPoint;
-                } else {
-                    left = cx - leftPoint;
-                    top = cy - topPoint;
+                if(revConfig) {
+                    if (!HelperCalander.isPersianUnicode) {
+                        left = cx + leftPoint;
+                        top = cy + topPoint;
+                    } else {
+                        left = cx - leftPoint;
+                        top = cy - topPoint;
+                    }
+                }else{
+                    if (HelperCalander.isPersianUnicode) {
+                        left = cx + leftPoint;
+                        top = cy + topPoint;
+                    } else {
+                        left = cx - leftPoint;
+                        top = cy - topPoint;
+                    }
                 }
 
                 child.layout(left, top, left + child.getMeasuredWidth(), top + child.getMeasuredHeight());
@@ -186,14 +219,23 @@ public class ArcMenu extends FrameLayout {
      * be show.
      */
     private void layoutMenu() {
-        if (mMenuSideEnum == MenuSideEnum.ARC_RIGHT || HelperCalander.isPersianUnicode) {
-            cx = 0 + menuMargin;
-            cy = getMeasuredHeight() - fabMenu.getMeasuredHeight() - menuMargin;
-        } else {
-            cx = getMeasuredWidth() - fabMenu.getMeasuredWidth() - menuMargin;
-            cy = getMeasuredHeight() - fabMenu.getMeasuredHeight() - menuMargin;
+        if (revConfig) {
+            if (!HelperCalander.isPersianUnicode) {
+                cx = 0 + menuMargin;
+                cy = getMeasuredHeight() - fabMenu.getMeasuredHeight() - menuMargin;
+            } else {
+                cx = getMeasuredWidth() - fabMenu.getMeasuredWidth() - menuMargin;
+                cy = getMeasuredHeight() - fabMenu.getMeasuredHeight() - menuMargin;
+            }
+        }else{
+            if (HelperCalander.isPersianUnicode) {
+                cx = 0 + menuMargin;
+                cy = getMeasuredHeight() - fabMenu.getMeasuredHeight() - menuMargin;
+            } else {
+                cx = getMeasuredWidth() - fabMenu.getMeasuredWidth() - menuMargin;
+                cy = getMeasuredHeight() - fabMenu.getMeasuredHeight() - menuMargin;
+            }
         }
-
         fabMenu.layout(cx, cy, cx + fabMenu.getMeasuredWidth(), cy + fabMenu.getMeasuredHeight());
     }
 
