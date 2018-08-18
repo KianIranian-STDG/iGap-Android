@@ -431,7 +431,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         if (!isVoice) {
             try {
-                if (remoteViews != null) {
+                if (remoteViews != null && mp !=null) {
                     remoteViews.setImageViewResource(R.id.mln_btn_play_music, R.mipmap.play_button);
                     notificationManager.notify(notificationId, notification);
                 }
