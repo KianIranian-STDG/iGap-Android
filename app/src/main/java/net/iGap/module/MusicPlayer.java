@@ -1528,7 +1528,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
         latestAudioFocusState = focusChange;
         if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS) {
             pauseOnAudioFocusChange = true;
-            pauseSound();
+            if (mp != null && mp.isPlaying()) pauseSound();
         } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
             if (pauseOnAudioFocusChange) {
                 pauseOnAudioFocusChange = false;
