@@ -2285,4 +2285,7 @@
   <string name="keep_media_6month">6 Month</string>
   <string name="minutes_ago">minutes ago</string>
 
+  <string name="IP_blocked">نظرًا للإفراط في الاستخدام ، تم حظر عنوان IP الخاص بك لفترة.</string>
+
+
 </resources>
