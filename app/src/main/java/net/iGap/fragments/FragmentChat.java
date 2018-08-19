@@ -1888,7 +1888,9 @@ public class FragmentChat extends BaseFragment
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        showErrorDialog(waitTime);
+                        if (!G.fragmentActivity.hasWindowFocus()) {
+                            showErrorDialog(waitTime);
+                        }
                     }
                 });
             }
