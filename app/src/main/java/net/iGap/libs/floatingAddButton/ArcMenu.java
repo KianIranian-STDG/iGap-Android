@@ -81,7 +81,6 @@ public class ArcMenu extends FrameLayout {
     }
 
 
-
     private void init(TypedArray attr) {
         Resources resources = getResources();
 
@@ -98,7 +97,7 @@ public class ArcMenu extends FrameLayout {
         mElevation = attr.getDimension(R.styleable.ArcMenu_menu_elevation, resources.getDimension(R.dimen.dp6));
         mMenuSideEnum = MenuSideEnum.fromId(attr.getInt(R.styleable.ArcMenu_menu_open, 0));
         mAnimationTime = attr.getInteger(R.styleable.ArcMenu_menu_animation_time, ANIMATION_TIME);
-        revConfig=attr.getBoolean(R.styleable.ArcMenu_menu_config,false);
+        revConfig = attr.getBoolean(R.styleable.ArcMenu_menu_config, false);
         mCurrentRadius = 0;
 
         if (mDrawable == null) {
@@ -106,7 +105,10 @@ public class ArcMenu extends FrameLayout {
 
                 mDrawable = resources.getDrawable(R.mipmap.plus, null);
             } else {
-                mDrawable = resources.getDrawable(R.mipmap.plus);
+                if (revConfig)
+                    mDrawable = resources.getDrawable(R.drawable.ic_gps_layer);
+                else
+                    mDrawable = resources.getDrawable(R.mipmap.plus);
             }
         }
 
@@ -118,13 +120,13 @@ public class ArcMenu extends FrameLayout {
 
         if (mMenuSideEnum == MenuSideEnum.ARC_LEFT) {
 
-            if (revConfig){
+            if (revConfig) {
                 if (!HelperCalander.isPersianUnicode) {
                     mQuadrantAngle = -90;
                 } else {
                     mQuadrantAngle = +90;
                 }
-            }else{
+            } else {
                 if (!HelperCalander.isPersianUnicode) {
                     mQuadrantAngle = +90;
                 } else {
@@ -188,7 +190,7 @@ public class ArcMenu extends FrameLayout {
                 leftPoint = (int) (mCurrentRadius * Math.cos(Math.toRadians(totalAngleForChild)));
                 topPoint = (int) (mCurrentRadius * Math.sin(Math.toRadians(totalAngleForChild)));
 
-                if(revConfig) {
+                if (revConfig) {
                     if (!HelperCalander.isPersianUnicode) {
                         left = cx + leftPoint;
                         top = cy + topPoint;
@@ -196,7 +198,7 @@ public class ArcMenu extends FrameLayout {
                         left = cx - leftPoint;
                         top = cy - topPoint;
                     }
-                }else{
+                } else {
                     if (HelperCalander.isPersianUnicode) {
                         left = cx + leftPoint;
                         top = cy + topPoint;
@@ -227,7 +229,7 @@ public class ArcMenu extends FrameLayout {
                 cx = getMeasuredWidth() - fabMenu.getMeasuredWidth() - menuMargin;
                 cy = getMeasuredHeight() - fabMenu.getMeasuredHeight() - menuMargin;
             }
-        }else{
+        } else {
             if (HelperCalander.isPersianUnicode) {
                 cx = 0 + menuMargin;
                 cy = getMeasuredHeight() - fabMenu.getMeasuredHeight() - menuMargin;
