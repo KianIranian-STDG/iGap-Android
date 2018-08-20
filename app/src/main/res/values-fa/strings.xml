@@ -1331,4 +1331,6 @@
   <string name="keep_media_6month">6 Month</string>
   <string name="minutes_ago">minutes ago</string>
 
+  <string name="IP_blocked">به دلیل تلاش بیش از حد، IP شما برای مدتی مسدود شده است.</string>
+
 </resources>
