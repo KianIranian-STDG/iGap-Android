@@ -491,6 +491,8 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
 
 
         btnOrginView = (FloatingActionButton) view.findViewById(R.id.ac_fab_orgin);
+        btnOrginView.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
+
         btnOrginView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -520,6 +522,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         });
 
         btnSatelliteView = (FloatingActionButton) view.findViewById(R.id.ac_fab_satellite);
+        btnSatelliteView.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(G.appBarColor)));
         btnSatelliteView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -532,7 +535,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         deleteMapFileCash();
                         getActivity().getSharedPreferences("KEY_SWITCH_MAP_STATE", Context.MODE_PRIVATE).edit().putBoolean("state", false).apply();
 
-                        new HelperFragment(FragmentiGapMap.getInstance()).remove();
+                        new HelperFragment(FragmentiGapMap.getInstance()).setImmediateRemove(true).remove();
 
                         new HelperFragment(FragmentiGapMap.getInstance()).load();
                     }
