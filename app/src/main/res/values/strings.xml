@@ -1327,5 +1327,7 @@
   <string name="wallet_Your_credit">Your credit: </string>
   <string name="wallet_Reial"> Rial </string>
   <string name="wallet_error_server">Error communicating with server</string>
+  <string name="wifi_data_usage">Wi-Fi Data Usage</string>
+  <string name="mobile_data_usage">Mobile Data Usage</string>
 
 </resources>

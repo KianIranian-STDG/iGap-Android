@@ -192,6 +192,7 @@ public class HelperFragment {
                 return;
             }
             G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+
             if (immediateRemove){
                 G.fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
             } else {

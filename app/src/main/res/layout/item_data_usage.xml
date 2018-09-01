@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp24">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp24"
+                android:text="photo" />
+
+            <TextView
+                android:id="@+id/txtSent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/txtTitle"
+                android:layout_marginLeft="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp24"
+                android:text="Sent" />
+
+
+            <TextView
+                android:id="@+id/txtSentNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/txtTitle"
+                android:layout_marginLeft="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp24"
+                android:text="22" />
+
+            <View
+                android:id="@+id/view1"
+                android:layout_below="@+id/txtSent"
+                android:layout_marginTop="@dimen/dp12"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp2"
+                android:background="@color/background_editText" />
+
+            <TextView
+                android:id="@+id/txtReceived"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/txtSentNum"
+                android:layout_marginLeft="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp24"
+                android:text="Received" />
+
+
+            <TextView
+                android:id="@+id/txtReceivedNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/txtSentNum"
+                android:layout_marginLeft="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp24"
+                android:text="2489" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_below="@+id/txtReceived"
+                android:layout_marginTop="@dimen/dp12"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp2"
+                android:background="@color/background_editText" />
+
+            <TextView
+                android:id="@+id/txtByteSent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/txtReceivedNum"
+                android:layout_marginLeft="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp24"
+                android:text="Bytes sent" />
+
+
+            <TextView
+                android:id="@+id/txtByteSentNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/txtReceivedNum"
+                android:layout_marginLeft="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp24"
+                android:text="2.0 MB" />
+
+            <View
+                android:id="@+id/view3"
+                android:layout_below="@+id/txtByteSent"
+                android:layout_marginTop="@dimen/dp12"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp2"
+                android:background="@color/background_editText" />
+
+            <TextView
+                android:id="@+id/txtByteReceived"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/txtByteSentNum"
+                android:layout_marginLeft="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp24"
+                android:text="Byte received" />
+
+            <TextView
+                android:id="@+id/txtByteReceivedNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/txtByteSentNum"
+                android:layout_marginLeft="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20"
+                android:layout_marginTop="@dimen/dp24"
+                android:text="807.9 MB"
+                android:layout_marginBottom="@dimen/dp24"/>
+
+
+
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

@@ -1302,6 +1302,7 @@
   <string name="wallet_Your_credit">اعتبار شما: </string>
   <string name="wallet_Reial"> ریال </string>
   <string name="wallet_error_server">خطا در برقراری ارتباط با سرور</string>
+    <string name="wifi_data_usage">Wi-Fi Data Usage</string>
 
 
 </resources>
