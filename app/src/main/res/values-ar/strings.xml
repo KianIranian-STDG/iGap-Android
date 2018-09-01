@@ -2291,4 +2291,14 @@
   <string name="IP_blocked">نظرًا للإفراط في الاستخدام ، تم حظر عنوان IP الخاص بك لفترة.</string>
 
 
+  <string name="wifi_data_usage">استخدام البيانات اللاسلكية</string>
+  <string name="mobile_data_usage">استخدام بيانات بطاقة SIM</string>
+  <string name="sent">نشر</string>
+  <string name="received">تلقى</string>
+  <string name="bytes_sent">حجم الرسائل المرسلة</string>
+  <string name="bytes_received">حجم المتلقي</string>
+  <string name="total">مجموع</string>
+  <string name="total_sent">مجموع حجم المرسلة</string>
+  <string name="total_received">مجموع حجم الواردة</string>
+  <string name="clear_data_usage">محو سجل استخدام البيانات</string>
 </resources>

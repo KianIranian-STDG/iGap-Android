@@ -1299,6 +1299,16 @@
   <string name="wallet_Reial"> ریال </string>
   <string name="wallet_error_server">خطا در برقراری ارتباط با سرور</string>
 
+  <string name="wifi_data_usage">استفاده از داده بیسیم</string>
+  <string name="mobile_data_usage">استفاده از داده سیم کارت</string>
+  <string name="sent">ارسال شده</string>
+  <string name="received">دریافت شده</string>
+  <string name="bytes_sent">حجم ارسال شده</string>
+  <string name="bytes_received">حجم دریافت شده</string>
+  <string name="total">جمع</string>
+  <string name="total_sent">مجموع حجم ارسال شده</string>
+  <string name="total_received">مجموع حجم دریافت شده</string>
+  <string name="clear_data_usage">پاک کردن تاریخچه مصرف داده</string>
 
   <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
   <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
