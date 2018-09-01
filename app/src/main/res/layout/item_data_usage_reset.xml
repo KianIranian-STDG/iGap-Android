@@ -11,15 +11,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/txtClearData"
-                android:layout_width="@dimen/dp140"
-                android:layout_height="50dp"
-                android:gravity="center|left"
-                android:layout_marginLeft="@dimen/dp14"
+          <TextView
+            android:id="@+id/txtClearData"
+            android:layout_width="@dimen/dp140"
+            android:layout_height="50dp"
+            android:layout_marginLeft="@dimen/dp14"
+            android:gravity="center|left"
 
-                android:text="clear data"
-                />
+            android:text="@string/clear_data_usage" />
 
         </RelativeLayout>
 
