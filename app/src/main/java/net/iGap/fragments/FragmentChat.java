@@ -5067,6 +5067,7 @@ public class FragmentChat extends BaseFragment
         FragmentShowImage fragment = FragmentShowImage.newInstance();
         Bundle bundle = new Bundle();
         bundle.putLong("RoomId", mRoomId);
+        bundle.putString("TYPE", messageInfo.messageType.toString());
         bundle.putLong("SelectedImage", selectedFileToken);
         fragment.setArguments(bundle);
         fragment.appBarLayout = appBarLayout;

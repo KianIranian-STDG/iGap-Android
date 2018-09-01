@@ -109,6 +109,7 @@ public class FragmentShowImage extends BaseFragment {
     private TouchImageView touchImageViewTmp = null;
     private int lastOrientation = 0;
     public static FocusAudioListener focusAudioListener;
+    private ProtoGlobal.RoomMessageType messageType;
     ArrayList<TextureView> mTextureViewTmp = new ArrayList<>();
 
     public static FragmentShowImage newInstance() {
@@ -197,7 +198,10 @@ public class FragmentShowImage extends BaseFragment {
         if (bundle != null) { // get a list of image
             mRoomId = bundle.getLong("RoomId");
             selectedFileToken = bundle.getLong("SelectedImage");
-            if (bundle.getString("TYPE") != null) type = bundle.getString("TYPE");
+            if (bundle.getString("TYPE") != null) {
+//                type = bundle.getString("TYPE");
+                messageType = convertType(bundle.getString("TYPE"));
+            }
             if (mRoomId == null) {
                 // G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentShowImage.this).commit();
 
@@ -441,7 +445,12 @@ public class FragmentShowImage extends BaseFragment {
         root2.setVisibility(View.VISIBLE);
 
         txtShare.setText(getResources().getString(R.string.save_to_gallery));
-        txtSaveToGallery.setText(G.fragmentActivity.getResources().getString(R.string.share_image));
+        if (messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+            txtSaveToGallery.setText(G.fragmentActivity.getResources().getString(R.string.share_video_file));
+        } else {
+            txtSaveToGallery.setText(G.fragmentActivity.getResources().getString(R.string.share_image));
+        }
+
 
         TextView iconShare = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
         iconShare.setText(G.fragmentActivity.getResources().getString(R.string.md_share_button));
@@ -812,15 +821,15 @@ public class FragmentShowImage extends BaseFragment {
                         txtImageNumber.setText(HelperCalander.convertToUnicodeFarsiNumber(txtImageNumber.getText().toString()));
                     }
                     showImageInfo(mFList.get(position));
-                    ProtoGlobal.RoomMessageType type;
+
                     if (mFList.get(position).getForwardMessage() != null) {
-                        type = mFList.get(position).getForwardMessage().getMessageType();
+                        messageType = mFList.get(position).getForwardMessage().getMessageType();
                     } else {
-                        type = mFList.get(position).getMessageType();
+                        messageType = mFList.get(position).getMessageType();
                     }
 
                     if (mMediaPlayer != null && mMediaPlayer.isPlaying()) mMediaPlayer.stop();
-                    if (type == ProtoGlobal.RoomMessageType.VIDEO || type == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+                    if (messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
                         File f = new File(getFilePath(position));
                         if (f.exists()) {
                             imgPlay.setVisibility(View.VISIBLE);
@@ -828,7 +837,7 @@ public class FragmentShowImage extends BaseFragment {
                         } else {
                             imgPlay.setVisibility(View.GONE);
                         }
-                    } else if (type == ProtoGlobal.RoomMessageType.IMAGE || type == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
+                    } else if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT) {
                         imgPlay.setVisibility(View.GONE);
                     }
                     if (videoController != null) {
