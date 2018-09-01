@@ -635,6 +635,8 @@
   <string name="please_write_your_message">لطفاْ پیام خود را بنویسید!</string>
   <string name="share_audio_file">به اشتراک گذاشتن فایل صوتی</string>
   <string name="share_image">به اشتراک گذاشتن تصویر</string>
+  <string name="share_image_2">به اشتراک گذاشتن تصویر</string>
+  <string name="share_video_file_2">به اشتراک گذاشتن فایل ویدئویی</string>
   <string name="share_video_file">به اشتراک گذاشتن فایل ویدئویی</string>
   <string name="share_file">به اشتراک گذاشتن فایل</string>
   <string name="text_copied">متن کپی شده</string>

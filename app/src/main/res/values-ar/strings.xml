@@ -1199,6 +1199,9 @@
 
   <string name="share_image">اشتراك الصورة </string>
 
+  <string name="share_image_2">اشتراك الصورة</string>
+  <string name="share_video_file_2">اشتراك ملف الفيديو</string>
+
   <string name="share_video_file">اشتراك ملف الفيديو </string>
 
   <string name="share_file">اشتراك الملف </string>

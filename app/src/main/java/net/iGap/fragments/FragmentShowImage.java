@@ -446,9 +446,9 @@ public class FragmentShowImage extends BaseFragment {
 
         txtShare.setText(getResources().getString(R.string.save_to_gallery));
         if (messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
-            txtSaveToGallery.setText(G.fragmentActivity.getResources().getString(R.string.share_video_file));
+            txtSaveToGallery.setText(G.fragmentActivity.getResources().getString(R.string.share_video_file_2));
         } else {
-            txtSaveToGallery.setText(G.fragmentActivity.getResources().getString(R.string.share_image));
+            txtSaveToGallery.setText(G.fragmentActivity.getResources().getString(R.string.share_image_2));
         }
 
 

@@ -652,6 +652,8 @@
   <string name="please_write_your_message">Please type your message!</string>
   <string name="share_audio_file">Shared Audios</string>
   <string name="share_image">Shared Images</string>
+  <string name="share_image_2">Share Image</string>
+  <string name="share_video_file_2">Share Video</string>
   <string name="share_video_file">Shared Videos</string>
   <string name="share_file">Shared Files</string>
   <string name="text_copied">Text Copied</string>
