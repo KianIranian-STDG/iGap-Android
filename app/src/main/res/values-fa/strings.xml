@@ -1332,5 +1332,7 @@
   <string name="minutes_ago">minutes ago</string>
 
   <string name="IP_blocked">به دلیل تلاش بیش از حد، IP شما برای مدتی مسدود شده است.</string>
+    <string name="export_chat">استخراج پیام ها</string>
+    <string name="export_message">قادر به استخراج پیام ها نیست</string>
 
 </resources>
