@@ -4,9 +4,6 @@ import android.util.Log;
 
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmDataUsage;
-import net.iGap.realm.RealmDataUsageSparse;
-
-import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmResults;

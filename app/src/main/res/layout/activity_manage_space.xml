@@ -155,7 +155,10 @@
 
 
         </LinearLayout>
-
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          style="?lineColorSettingTheme" />
         <LinearLayout
           android:id="@+id/st_layout_keepMedia"
           android:layout_width="match_parent"
@@ -195,10 +198,7 @@
             android:textSize="@dimen/dp15"
             android:textStyle="normal" />
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            style="?lineColorSettingTheme" />
+
 
 
         <View
