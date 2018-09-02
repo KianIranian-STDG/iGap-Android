@@ -2,6 +2,7 @@ package net.iGap.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -9,8 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -22,6 +27,8 @@ import net.iGap.realm.RealmDataUsage;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import static net.iGap.G.context;
 
 public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -68,7 +75,29 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((BaseHolder) holder).txtByteReceivedNum.setText(AndroidUtils.humanReadableByteCount(dataList.get(position).getByteReceived(), true));
             ((BaseHolder) holder).txtByteSentNum.setText(AndroidUtils.humanReadableByteCount(dataList.get(position).getByteSend(), true));
 
-            ((BaseHolder) holder).txtTitle.setText(dataList.get(position).getTitle());
+
+            switch (dataList.get(position).getTitle()) {
+                case "IMAGE":
+                    ((BaseHolder) holder).txtTitle.setText(context.getResources().getString(R.string.image_message));
+                    break;
+                case "VIDEO":
+                    ((BaseHolder) holder).txtTitle.setText(context.getResources().getString(R.string.video_message));
+
+                    break;
+                case "UNRECOGNIZED":
+                    ((BaseHolder) holder).txtTitle.setText(context.getResources().getString(R.string.st_Other));
+
+                    break;
+                case "FILE":
+                    ((BaseHolder) holder).txtTitle.setText(context.getResources().getString(R.string.file_message));
+
+                    break;
+                case "AUDIO":
+                    ((BaseHolder) holder).txtTitle.setText(context.getResources().getString(R.string.audio_message));
+                    break;
+
+            }
+            //    ((BaseHolder) holder).txtTitle.setText(dataList.get(position).getTitle());
             ((BaseHolder) holder).txtSentNum.setText(String.valueOf(dataList.get(position).getSendNum()));
             ((BaseHolder) holder).txtReceivedNum.setText(String.valueOf(dataList.get(position).getReceivednum()));
 
@@ -80,10 +109,22 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((TotalViewHolder) holder).txtTotalSentByte.setText(AndroidUtils.humanReadableByteCount(totalSend, true));
 
         } else if (holder instanceof ClearDataHolder) {
-            ((ClearDataHolder) holder).txtClearData.setOnClickListener(new View.OnClickListener() {
+            ((ClearDataHolder) holder).txtClearData.setText(context.getResources().getString(R.string.clear_data_usage));
+            ((ClearDataHolder) holder).rvClearDataUsage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    clearData.doClearDB(connectivityType);
+
+                    new MaterialDialog.Builder(context).title(R.string.clearDataUsage)
+                            //  .content(String.format(context.getString(R.string.pin_messages_content), context.getString(R.string.unpin)))
+
+                            .positiveText(R.string.yes)
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    clearData.doClearDB(connectivityType);
+                                    dialog.dismiss();
+                                }
+                            }).negativeText(R.string.no).show();
 
 
                 }
@@ -105,54 +146,95 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     public class BaseHolder extends RecyclerView.ViewHolder {
-        TextView txtTitle, txtSentNum, txtReceivedNum, txtByteSentNum, txtByteReceivedNum;
-        private CardView root, rootReset, rootTotal;
+        TextView txtTitle, txtSentNum, txtReceivedNum, txtByteSentNum, txtByteReceivedNum, txtByteReceived, txtByteSent, txtReceived, txtSent;
+        CardView rootBaseCard;
+        View view1, view2, view3;
 
         public BaseHolder(View itemView) {
             super(itemView);
             txtByteReceivedNum = (TextView) itemView.findViewById(R.id.txtByteReceivedNum);
             txtTitle = (TextView) itemView.findViewById(R.id.txtTitle);
+            txtTitle.setTypeface(G.typeface_IRANSansMobile);
             txtSentNum = (TextView) itemView.findViewById(R.id.txtSentNum);
             txtReceivedNum = (TextView) itemView.findViewById(R.id.txtReceivedNum);
             txtByteSentNum = (TextView) itemView.findViewById(R.id.txtByteSentNum);
-            root = (CardView) itemView.findViewById(R.id.rootDataUsage);
-            root.setCardBackgroundColor(Color.parseColor(G.backgroundTheme));
 
-            txtByteReceivedNum.setTextColor(Color.parseColor(G.textTitleTheme));
-            txtTitle.setTextColor(Color.parseColor(G.textTitleTheme));
-            txtSentNum.setTextColor(Color.parseColor(G.textTitleTheme));
-            txtReceivedNum.setTextColor(Color.parseColor(G.textTitleTheme));
-            txtByteSentNum.setTextColor(Color.parseColor(G.textTitleTheme));
+
+            txtByteReceived = (TextView) itemView.findViewById(R.id.txtByteReceived);
+            txtByteReceived.setText(context.getResources().getString(R.string.bytes_received));
+            txtByteReceived.setTypeface(G.typeface_IRANSansMobile);
+
+            txtByteSent = (TextView) itemView.findViewById(R.id.txtByteSent);
+            txtByteSent.setText(context.getResources().getString(R.string.bytes_sent));
+            txtByteSent.setTypeface(G.typeface_IRANSansMobile);
+
+            txtReceived = (TextView) itemView.findViewById(R.id.txtReceived);
+            txtReceived.setText(context.getResources().getString(R.string.received));
+            txtReceived.setTypeface(G.typeface_IRANSansMobile);
+
+            txtSent = (TextView) itemView.findViewById(R.id.txtSent);
+            txtSent.setText(context.getResources().getString(R.string.sent));
+            txtSent.setTypeface(G.typeface_IRANSansMobile);
+
+            rootBaseCard = itemView.findViewById(R.id.rootBaseCard);
+            rootBaseCard.setCardBackgroundColor(Color.parseColor(G.backgroundTheme));
+
+
+            view1 = itemView.findViewById(R.id.view1);
+            view2 = itemView.findViewById(R.id.view2);
+            view3 = itemView.findViewById(R.id.view3);
+
+            view1.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
+            view2.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
+            view3.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
+
         }
     }
 
     public class TotalViewHolder extends RecyclerView.ViewHolder {
-        TextView txtTotalSentByte, txtTotalReceivedByte;
-        private CardView root, rootReset, rootTotal;
+        TextView txtTotalSentByte, txtTotalReceivedByte, txtTotalReceived, txtTotalSent, txtTitle;
+        CardView rootDataUsageTotal;
+
+
         public TotalViewHolder(View itemView) {
             super(itemView);
             txtTotalSentByte = itemView.findViewById(R.id.txtTotalSentByte);
             txtTotalReceivedByte = itemView.findViewById(R.id.txtTotalReceivedByte);
+            txtTotalReceivedByte.setTypeface(G.typeface_IRANSansMobile);
 
-            rootTotal = (CardView) itemView.findViewById(R.id.rootDataUsageTotal);
-            rootTotal.setCardBackgroundColor(Color.parseColor(G.backgroundTheme));
 
-            txtTotalSentByte.setTextColor(Color.parseColor(G.textTitleTheme));
-            txtTotalReceivedByte.setTextColor(Color.parseColor(G.textTitleTheme));
+            txtTotalReceived = itemView.findViewById(R.id.txtTotalReceived);
+            txtTotalReceived.setText(context.getResources().getString(R.string.total_received));
+            txtTotalReceived.setTypeface(G.typeface_IRANSansMobile);
+
+            txtTotalSent = itemView.findViewById(R.id.txtTotalSent);
+            txtTotalSent.setText(context.getResources().getString(R.string.total_sent));
+            txtTotalSent.setTypeface(G.typeface_IRANSansMobile);
+
+            txtTitle = itemView.findViewById(R.id.txtTitle);
+            txtTitle.setText(context.getResources().getString(R.string.total));
+            txtTitle.setTypeface(G.typeface_IRANSansMobile);
+
+            rootDataUsageTotal = itemView.findViewById(R.id.rootDataUsageTotal);
+            rootDataUsageTotal.setCardBackgroundColor(Color.parseColor(G.backgroundTheme));
+
+
         }
     }
 
     public class ClearDataHolder extends RecyclerView.ViewHolder {
         TextView txtClearData;
-        private CardView  rootReset;
+        RelativeLayout rvClearDataUsage;
+        CardView rootDataUsageReset;
+
         public ClearDataHolder(View itemView) {
             super(itemView);
             txtClearData = itemView.findViewById(R.id.txtClearData);
-            rootReset = (CardView) itemView.findViewById(R.id.rootDataUsageReset);
-            rootReset.setCardBackgroundColor(Color.parseColor(G.backgroundTheme));
+            txtClearData.setTypeface(G.typeface_IRANSansMobile);
 
-            txtClearData.setTextColor(Color.parseColor(G.textTitleTheme));
-
+            rvClearDataUsage = itemView.findViewById(R.id.rvClearDataUsage);
+            rootDataUsageReset = itemView.findViewById(R.id.rootDataUsageReset);
+            rootDataUsageReset.setCardBackgroundColor(Color.parseColor(G.backgroundTheme));
         }
     }
 
