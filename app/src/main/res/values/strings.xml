@@ -1341,5 +1341,6 @@
   <string name="total_received">Total received</string>
   <string name="clear_data_usage">Clear data usage</string>
   <string name="clearDataUsage">Are you sure you want to clear data usage?</string>
+  <string name="export_chat">Export chat</string>
 
 </resources>

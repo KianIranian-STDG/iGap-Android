@@ -1281,7 +1281,7 @@
   <string name="map_distance">فاصله به متر</string>
   <string name="get_location_data">در حال دریافت اطلاعات</string>
   <string name="calculation">در حال محاسبه.. </string>
-
+  <string name="send">ارسال شده</string>
   <string name="not_success">ناموفق</string>
   <string name="not_success_2">"پرداخت ناموفق بود"</string>
   <string name="result_3">نتیجه پرداخت مشخص نیست به تاریخجه کیف پول مراجع یا با پشتیبانی تماس بگیرید</string>
@@ -1310,5 +1310,6 @@
   <string name="total_received">مجموع حجم دریافت شده</string>
   <string name="clear_data_usage">پاک کردن تاریخچه مصرف داده</string>
   <string name="clearDataUsage">آیا مایل به پاک کردن تاریخچه مصرف داده هستید؟</string>
+  <string name="export_chat">استخراج پیام ها</string>
 
 </resources>

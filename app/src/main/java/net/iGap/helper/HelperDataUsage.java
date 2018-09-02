@@ -81,7 +81,7 @@ public class HelperDataUsage {
                         usage.setConnectivityType(conectivityType);
 
                             if (isDownloaded) {
-                                if (usage.getType().equalsIgnoreCase(type.toString()))
+                                if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
                                     usage.setNumDownloadedFile(usage.getNumDownloadedFile() + 1);
 
                                 if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
@@ -111,7 +111,7 @@ public class HelperDataUsage {
                                 }
 
                             } else {
-                                if (usage.getType().equalsIgnoreCase(type.toString()))
+                                if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
                                     usage.setNumUploadedFiles(usage.getNumUploadedFiles() + 1);
 
                                 if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
@@ -146,7 +146,7 @@ public class HelperDataUsage {
 
                         usage.setConnectivityType(conectivityType);
 
-                        if (usage.getType().equalsIgnoreCase(type.toString()))
+                        if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
                             usage.setNumDownloadedFile(usage.getNumDownloadedFile() + 1);
                             if (isDownloaded) {
 
@@ -176,7 +176,7 @@ public class HelperDataUsage {
                                 }
 
                             } else {
-                                if (usage.getType().equalsIgnoreCase(type.toString()))
+                                if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
                                 usage.setNumUploadedFiles(usage.getNumUploadedFiles() + 1);
 
                                 if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {

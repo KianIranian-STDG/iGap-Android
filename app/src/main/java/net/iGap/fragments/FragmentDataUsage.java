@@ -38,8 +38,10 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
     private long totalReceivedByte;
     private boolean type;
     private DataUsageAdapter adapter;
-    private  TextView txtDataUsageHeader;
-    private RippleView  rippleDataUsage;
+    private TextView txtDataUsageHeader;
+    private RippleView rippleDataUsage;
+    private RelativeLayout rvMainDataUsage;
+
     public static FragmentDataUsage newInstance() {
         return new FragmentDataUsage();
     }
@@ -49,14 +51,18 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_data_usage, container, false);
-        txtDataUsageHeader  =(TextView) view.findViewById(R.id.txtDataUsageHeader);
+        txtDataUsageHeader = (TextView) view.findViewById(R.id.txtDataUsageHeader);
 
-        AppBarLayout appBarDataUsage=(AppBarLayout) view.findViewById(R.id.appBarDataUsage);
+        rvMainDataUsage = (RelativeLayout) view.findViewById(R.id.rvMainDataUsage);
+        rvMainDataUsage.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
+
+
+        AppBarLayout appBarDataUsage = (AppBarLayout) view.findViewById(R.id.appBarDataUsage);
         appBarDataUsage.setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        rippleDataUsage=(RippleView) view.findViewById(R.id.dataUsage_ripple_back);
+        rippleDataUsage = (RippleView) view.findViewById(R.id.dataUsage_ripple_back);
 
-        type=getArguments().getBoolean("TYPE", false);
+        type = getArguments().getBoolean("TYPE", false);
 
         initData(type);
 
@@ -107,7 +113,7 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
 
         RecyclerView rcDataUsage = view.findViewById(R.id.rcDataUsage);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
-        adapter = new DataUsageAdapter(G.currentActivity, usageArrayList, totalReceivedByte, totalSendByte, type,this);
+        adapter = new DataUsageAdapter(G.currentActivity, usageArrayList, totalReceivedByte, totalSendByte, type, this);
         rcDataUsage.setAdapter(adapter);
         rcDataUsage.setLayoutManager(layoutManager);
 
