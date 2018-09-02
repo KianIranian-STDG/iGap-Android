@@ -1330,6 +1330,10 @@
   <string name="wallet_Reial"> Rial </string>
   <string name="wallet_error_server">Error communicating with server</string>
 
+  <string name="IP_blocked">Due to overuse, your IP has been blocked for a while.</string>
+  <string name="export_chat">Export Chat</string>
+  <string name="export_message">Not able to extract messages</string>
+
   <string name="wifi_data_usage">Wi-Fi Data Usage</string>
   <string name="mobile_data_usage">Mobile Data Usage</string>
   <string name="sent">Sent</string>
@@ -1341,6 +1345,5 @@
   <string name="total_received">Total received</string>
   <string name="clear_data_usage">Clear data usage</string>
   <string name="clearDataUsage">Are you sure you want to clear data usage?</string>
-  <string name="export_chat">Export chat</string>
 
 </resources>
