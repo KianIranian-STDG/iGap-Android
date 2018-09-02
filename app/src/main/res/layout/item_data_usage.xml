@@ -42,7 +42,7 @@
                     android:text="@string/sent" />
 
 
-                <TextView
+                <net.iGap.module.HeaderTextview
                     android:id="@+id/txtSentNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
                     android:text="@string/received" />
 
 
-                <TextView
+                <net.iGap.module.HeaderTextview
                     android:id="@+id/txtReceivedNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
                     android:text="@string/bytes_sent" />
 
 
-                <TextView
+                <net.iGap.module.HeaderTextview
                     android:id="@+id/txtByteSentNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -155,7 +155,7 @@
                     android:layout_weight="1"
                     android:text="@string/bytes_received" />
 
-                <TextView
+                <net.iGap.module.HeaderTextview
                     android:id="@+id/txtByteReceivedNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

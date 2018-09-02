@@ -50,7 +50,7 @@
                     android:text="@string/total_sent" />
 
 
-                <TextView
+                <net.iGap.module.HeaderTextview
                     android:id="@+id/txtTotalSentByte"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -88,7 +88,7 @@
                     android:text="@string/total_received" />
 
 
-                <TextView
+                <net.iGap.module.HeaderTextview
                     android:id="@+id/txtTotalReceivedByte"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
