@@ -5,20 +5,22 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
+        android:id="@+id/rootDataUsageReset"
         android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-          <TextView
-            android:id="@+id/txtClearData"
-            android:layout_width="@dimen/dp140"
-            android:layout_height="50dp"
-            android:layout_marginLeft="@dimen/dp14"
-            android:gravity="center|left"
+            <TextView
+                style="?textTitleColorSettingTheme"
+                android:id="@+id/txtClearData"
+                android:layout_width="@dimen/dp140"
+                android:layout_height="50dp"
+                android:layout_marginLeft="@dimen/dp14"
+                android:gravity="center|left"
 
-            android:text="@string/clear_data_usage" />
+                android:text="@string/clear_data_usage" />
 
         </RelativeLayout>
 

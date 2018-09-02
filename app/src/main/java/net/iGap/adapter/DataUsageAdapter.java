@@ -1,7 +1,9 @@
 package net.iGap.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.interfaces.DataUsageListener;
@@ -29,14 +32,14 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private boolean connectivityType;
     private DataUsageListener clearData;
 
-    public DataUsageAdapter(Context context, ArrayList<DataUsageStruct> dataList, long totalReceive, long totalSend,boolean connectivityType,DataUsageListener clearData) {
-        Log.i("WWW", "totalReceive: "+totalReceive);
+    public DataUsageAdapter(Context context, ArrayList<DataUsageStruct> dataList, long totalReceive, long totalSend, boolean connectivityType, DataUsageListener clearData) {
+        Log.i("WWW", "totalReceive: " + totalReceive);
         this.context = context;
         this.dataList = dataList;
         this.totalReceive = totalReceive;
         this.totalSend = totalSend;
-        this.connectivityType=connectivityType;
-        this.clearData=clearData;
+        this.connectivityType = connectivityType;
+        this.clearData = clearData;
 
     }
 
@@ -62,8 +65,8 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof BaseHolder) {
-            ((BaseHolder) holder).txtByteReceivedNum.setText(AndroidUtils.humanReadableByteCount(dataList.get(position).getByteReceived(),true));
-            ((BaseHolder) holder).txtByteSentNum.setText(AndroidUtils.humanReadableByteCount(dataList.get(position).getByteSend(),true));
+            ((BaseHolder) holder).txtByteReceivedNum.setText(AndroidUtils.humanReadableByteCount(dataList.get(position).getByteReceived(), true));
+            ((BaseHolder) holder).txtByteSentNum.setText(AndroidUtils.humanReadableByteCount(dataList.get(position).getByteSend(), true));
 
             ((BaseHolder) holder).txtTitle.setText(dataList.get(position).getTitle());
             ((BaseHolder) holder).txtSentNum.setText(String.valueOf(dataList.get(position).getSendNum()));
@@ -71,12 +74,12 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         } else if (holder instanceof TotalViewHolder) {
 
-          //  ((TotalViewHolder)holder).txtTotalReceivedByte.setText(String.valueOf(totalReceive));
-            ((TotalViewHolder)holder).txtTotalReceivedByte.setText(AndroidUtils.humanReadableByteCount(totalReceive,true));
-          //  ((TotalViewHolder)holder).txtTotalSentByte.setText(String.valueOf(totalSend));
-            ((TotalViewHolder)holder).txtTotalSentByte.setText(AndroidUtils.humanReadableByteCount(totalSend,true));
+            //  ((TotalViewHolder)holder).txtTotalReceivedByte.setText(String.valueOf(totalReceive));
+            ((TotalViewHolder) holder).txtTotalReceivedByte.setText(AndroidUtils.humanReadableByteCount(totalReceive, true));
+            //  ((TotalViewHolder)holder).txtTotalSentByte.setText(String.valueOf(totalSend));
+            ((TotalViewHolder) holder).txtTotalSentByte.setText(AndroidUtils.humanReadableByteCount(totalSend, true));
 
-        } else if (holder instanceof ClearDataHolder){
+        } else if (holder instanceof ClearDataHolder) {
             ((ClearDataHolder) holder).txtClearData.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -103,6 +106,7 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public class BaseHolder extends RecyclerView.ViewHolder {
         TextView txtTitle, txtSentNum, txtReceivedNum, txtByteSentNum, txtByteReceivedNum;
+        private CardView root, rootReset, rootTotal;
 
         public BaseHolder(View itemView) {
             super(itemView);
@@ -111,25 +115,44 @@ public class DataUsageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             txtSentNum = (TextView) itemView.findViewById(R.id.txtSentNum);
             txtReceivedNum = (TextView) itemView.findViewById(R.id.txtReceivedNum);
             txtByteSentNum = (TextView) itemView.findViewById(R.id.txtByteSentNum);
+            root = (CardView) itemView.findViewById(R.id.rootDataUsage);
+            root.setCardBackgroundColor(Color.parseColor(G.backgroundTheme));
 
+            txtByteReceivedNum.setTextColor(Color.parseColor(G.textTitleTheme));
+            txtTitle.setTextColor(Color.parseColor(G.textTitleTheme));
+            txtSentNum.setTextColor(Color.parseColor(G.textTitleTheme));
+            txtReceivedNum.setTextColor(Color.parseColor(G.textTitleTheme));
+            txtByteSentNum.setTextColor(Color.parseColor(G.textTitleTheme));
         }
     }
 
     public class TotalViewHolder extends RecyclerView.ViewHolder {
         TextView txtTotalSentByte, txtTotalReceivedByte;
-
+        private CardView root, rootReset, rootTotal;
         public TotalViewHolder(View itemView) {
             super(itemView);
             txtTotalSentByte = itemView.findViewById(R.id.txtTotalSentByte);
             txtTotalReceivedByte = itemView.findViewById(R.id.txtTotalReceivedByte);
+
+            rootTotal = (CardView) itemView.findViewById(R.id.rootDataUsageTotal);
+            rootTotal.setCardBackgroundColor(Color.parseColor(G.backgroundTheme));
+
+            txtTotalSentByte.setTextColor(Color.parseColor(G.textTitleTheme));
+            txtTotalReceivedByte.setTextColor(Color.parseColor(G.textTitleTheme));
         }
     }
 
     public class ClearDataHolder extends RecyclerView.ViewHolder {
         TextView txtClearData;
+        private CardView  rootReset;
         public ClearDataHolder(View itemView) {
             super(itemView);
-            txtClearData=itemView.findViewById(R.id.txtClearData);
+            txtClearData = itemView.findViewById(R.id.txtClearData);
+            rootReset = (CardView) itemView.findViewById(R.id.rootDataUsageReset);
+            rootReset.setCardBackgroundColor(Color.parseColor(G.backgroundTheme));
+
+            txtClearData.setTextColor(Color.parseColor(G.textTitleTheme));
+
         }
     }
 
