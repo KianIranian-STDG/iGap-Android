@@ -22,30 +22,35 @@
                 android:layout_marginRight="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp8"
                 android:text="photo"
+                android:textSize="@dimen/dp16"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/liSent"
                 android:layout_width="match_parent"
-                android:layout_height="24dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/txtTitle"
-                android:layout_marginTop="@dimen/dp24"
+                android:layout_marginBottom="@dimen/dp12"
+                android:layout_marginTop="@dimen/dp12"
                 android:orientation="horizontal">
 
-                <net.iGap.module.HeaderTextview
+                <TextView
                     android:id="@+id/txtSent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
                     android:layout_weight="1"
-                    android:text="@string/sent" />
+                    android:text="@string/sent"
+                    android:textSize="@dimen/dp14" />
 
 
                 <net.iGap.module.HeaderTextview
                     android:id="@+id/txtSentNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
                     android:text="22" />
@@ -58,35 +63,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp1"
                 android:layout_below="@+id/liSent"
-                android:layout_marginTop="@dimen/dp12"
-                />
+                 />
 
             <LinearLayout
                 android:id="@+id/liRecived"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view1"
+                android:layout_marginBottom="@dimen/dp12"
+                android:layout_marginTop="@dimen/dp12"
                 android:orientation="horizontal">
 
-                <net.iGap.module.HeaderTextview
+                <TextView
                     android:id="@+id/txtReceived"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
-                    android:layout_marginTop="@dimen/dp24"
                     android:layout_weight="1"
-                    android:text="@string/received" />
+
+                    android:text="@string/received"
+                    android:textSize="@dimen/dp14" />
 
 
                 <net.iGap.module.HeaderTextview
                     android:id="@+id/txtReceivedNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
-                    android:layout_marginTop="@dimen/dp24"
                     android:text="2489" />
             </LinearLayout>
 
@@ -95,7 +102,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp1"
                 android:layout_below="@+id/liRecived"
-                android:layout_marginTop="@dimen/dp12"
                 />
 
             <LinearLayout
@@ -103,24 +109,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view2"
-                android:layout_marginTop="24dp"
+                android:layout_marginBottom="@dimen/dp12"
+                android:layout_marginTop="@dimen/dp12"
                 android:orientation="horizontal">
 
-                <net.iGap.module.HeaderTextview
+                <TextView
                     android:id="@+id/txtByteSent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
                     android:layout_weight="1"
-                    android:text="@string/bytes_sent" />
+                    android:text="@string/bytes_sent"
+                    android:textSize="@dimen/dp14" />
 
 
                 <net.iGap.module.HeaderTextview
                     android:id="@+id/txtByteSentNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
 
@@ -133,35 +142,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/liByteSent"
-                android:layout_marginTop="@dimen/dp12"
-                />
+                 />
 
             <LinearLayout
                 android:id="@+id/liByteRecived"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view3"
-                android:layout_marginTop="@dimen/dp24"
+                android:layout_marginBottom="@dimen/dp12"
+                android:layout_marginTop="@dimen/dp12"
                 android:orientation="horizontal">
 
 
-                <net.iGap.module.HeaderTextview
+                <TextView
                     android:id="@+id/txtByteReceived"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
                     android:layout_weight="1"
-                    android:text="@string/bytes_received" />
+                    android:text="@string/bytes_received"
+                    android:textSize="@dimen/dp14" />
 
                 <net.iGap.module.HeaderTextview
                     android:id="@+id/txtByteReceivedNum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
 
 
-                    android:layout_marginBottom="@dimen/dp24"
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
 

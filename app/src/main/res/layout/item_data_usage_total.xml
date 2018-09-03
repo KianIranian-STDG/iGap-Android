@@ -27,6 +27,7 @@
                 android:layout_marginRight="@dimen/dp20"
                 android:layout_marginTop="@dimen/dp18"
                 android:text="@string/total"
+                android:textSize="@dimen/dp16"
                 android:textStyle="bold" />
 
 
@@ -38,7 +39,7 @@
                 android:layout_marginTop="@dimen/dp14"
                 android:orientation="horizontal">
 
-                <net.iGap.module.HeaderTextview
+                <TextView
                     android:id="@+id/txtTotalSent"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -47,6 +48,7 @@
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
                     android:layout_weight="1"
+                    android:textSize="@dimen/dp14"
                     android:text="@string/total_sent" />
 
 
@@ -76,7 +78,7 @@
                 android:layout_marginBottom="@dimen/dp8"
                 android:orientation="horizontal">
 
-                <net.iGap.module.HeaderTextview
+                <TextView
                     android:id="@+id/txtTotalReceived"
                     style="?textTitleColorSettingTheme"
                     android:layout_width="wrap_content"
@@ -85,6 +87,7 @@
                     android:layout_marginLeft="@dimen/dp20"
                     android:layout_marginRight="@dimen/dp20"
                     android:layout_weight="1"
+                    android:textSize="@dimen/dp14"
                     android:text="@string/total_received" />
 
 
