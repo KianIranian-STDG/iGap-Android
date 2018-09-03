@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.downloader.PRDownloader;
@@ -114,7 +113,7 @@ public final class StartupActions {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmDataUsage> realmDataUsage=realm.where(RealmDataUsage.class).findAll();
         if (realmDataUsage.size()==0)
-            HelperDataUsage.initilizeRealmDataUsage();
+            HelperDataUsage.initializeRealmDataUsage();
     }
 
     private void manageTime() {
