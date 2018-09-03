@@ -80,62 +80,64 @@ public class HelperDataUsage {
 
                         usage.setConnectivityType(conectivityType);
 
-                            if (isDownloaded) {
-                                if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
-                                    usage.setNumDownloadedFile(usage.getNumDownloadedFile() + 1);
+                        if (isDownloaded) {
+                            if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
+                                usage.setNumDownloadedFile(usage.getNumDownloadedFile() + 1);
 
-                                if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
+                            if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
 
-                                    usage.setDownloadSize(usage.getDownloadSize() + wDownloadedImageSize);
+                                usage.setDownloadSize(usage.getDownloadSize() + wDownloadedImageSize);
 
-                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+                                Log.i("WWW", "old usage : "+usage.getDownloadSize());
+                                Log.i("WWW", "wDownloadedVideoSize : "+wDownloadedVideoSize);
+                                Log.i("WWW", "All : "+usage.getDownloadSize() + wDownloadedVideoSize);
+                                usage.setDownloadSize(usage.getDownloadSize() + wDownloadedVideoSize);
 
-                                    usage.setDownloadSize(usage.getDownloadSize() + wDownloadedVideoSize);
+                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
 
-                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
-
-                                    usage.setDownloadSize(usage.getDownloadSize() + wDownloadedFileSize);
-
-
-                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
-
-                                    usage.setDownloadSize(usage.getDownloadSize()  +wDownloadedAudioSize);
+                                usage.setDownloadSize(usage.getDownloadSize() + wDownloadedFileSize);
 
 
-                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
+                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
 
-                                    usage.setDownloadSize(usage.getDownloadSize() + wDownloadedOtherSize);
-
-                                }
-
-                            } else {
-                                if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
-                                    usage.setNumUploadedFiles(usage.getNumUploadedFiles() + 1);
-
-                                if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
-
-                                    usage.setUploadSize(usage.getUploadSize() + wUploadedImageSize);
-
-                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
-
-                                    usage.setUploadSize(usage.getUploadSize() + wUploadedVideoSize);
+                                usage.setDownloadSize(usage.getDownloadSize()  +wDownloadedAudioSize);
 
 
-                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
+                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
 
-                                    usage.setUploadSize(usage.getUploadSize() + wUploadedFileSize);
+                                usage.setDownloadSize(usage.getDownloadSize() + wDownloadedOtherSize);
 
-                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
-
-                                    usage.setUploadSize(usage.getUploadSize() + wUploadedAudioSize);
-
-                                } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
-
-                                    usage.setUploadSize(usage.getUploadSize() + wUploadedOtherSize);
-
-
-                                }
                             }
+
+                        } else {
+                            if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
+                                usage.setNumUploadedFiles(usage.getNumUploadedFiles() + 1);
+
+                            if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
+
+                                usage.setUploadSize(usage.getUploadSize() + wUploadedImageSize);
+
+                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
+
+                                usage.setUploadSize(usage.getUploadSize() + wUploadedVideoSize);
+
+
+                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
+
+                                usage.setUploadSize(usage.getUploadSize() + wUploadedFileSize);
+
+                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
+
+                                usage.setUploadSize(usage.getUploadSize() + wUploadedAudioSize);
+
+                            } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
+
+                                usage.setUploadSize(usage.getUploadSize() + wUploadedOtherSize);
+
+
+                            }
+                        }
 
 
                     }
@@ -144,7 +146,7 @@ public class HelperDataUsage {
 
                         usage.setConnectivityType(conectivityType);
 
-                        if (type != null && usage.getType().equalsIgnoreCase(type.toString()))
+                        if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
                             usage.setNumDownloadedFile(usage.getNumDownloadedFile() + 1);
                         if (isDownloaded) {
 
@@ -164,7 +166,7 @@ public class HelperDataUsage {
 
                             } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.AUDIO.toString())) {
 
-                                usage.setDownloadSize(usage.getDownloadSize() + dDownloadedAudioSize);
+                                usage.setDownloadSize(usage.getDownloadSize()  +dDownloadedAudioSize);
 
 
                             } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.UNRECOGNIZED.toString())) {
@@ -174,7 +176,7 @@ public class HelperDataUsage {
                             }
 
                         } else {
-                            if (type != null && usage.getType().equalsIgnoreCase(type.toString()))
+                            if (type!=null&&usage.getType().equalsIgnoreCase(type.toString()))
                                 usage.setNumUploadedFiles(usage.getNumUploadedFiles() + 1);
 
                             if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.IMAGE.toString())) {
@@ -184,6 +186,7 @@ public class HelperDataUsage {
                             } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.VIDEO.toString())) {
 
                                 usage.setUploadSize(usage.getUploadSize() + dUploadedVideoSize);
+
 
                             } else if (usage.getType().equalsIgnoreCase(ProtoGlobal.RoomMessageType.FILE.toString())) {
 
@@ -219,7 +222,10 @@ public class HelperDataUsage {
             case VIDEO_TEXT:
             case VIDEO:
                 if (connectivityType) {
+                    Log.i("WWW", "downloaded byte: "+downloadByte);
+                    Log.i("WWW", "progressDownload 1 : "+HelperDataUsage.wDownloadedVideoSize);
                     HelperDataUsage.wDownloadedVideoSize += downloadByte;
+                    Log.i("WWW", "progressDownload 2 : "+HelperDataUsage.wDownloadedVideoSize);
                 } else {
                     HelperDataUsage.dDownloadedVideoSize += downloadByte;
                 }
@@ -322,9 +328,15 @@ public class HelperDataUsage {
 
                     realmDataUsage.setNumUploadedFiles(0);
                     realmDataUsage.setNumDownloadedFile(0);
+
                     realmDataUsage.setConnectivityType(false);
+
                     realmDataUsage.setUploadSize(0);
+
+
                     realmDataUsage.setDownloadSize(0);
+
+
                     realmDataUsage.setType(typeList[finalI]);
                 }
             });
@@ -333,11 +345,19 @@ public class HelperDataUsage {
                 @Override
                 public void execute(Realm realm) {
                     RealmDataUsage realmDataUsage = realm.createObject(RealmDataUsage.class);
+
+
                     realmDataUsage.setNumUploadedFiles(0);
                     realmDataUsage.setNumDownloadedFile(0);
+
                     realmDataUsage.setConnectivityType(true);
+
                     realmDataUsage.setUploadSize(0);
+
+
                     realmDataUsage.setDownloadSize(0);
+
+
                     realmDataUsage.setType(typeList[finalI]);
                 }
 
@@ -345,6 +365,7 @@ public class HelperDataUsage {
 
         }
         realm.close();
+
     }
 
     public static void clearUsageRealm(boolean connectivityType) {
