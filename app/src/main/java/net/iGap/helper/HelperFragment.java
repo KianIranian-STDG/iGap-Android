@@ -1,6 +1,5 @@
 package net.iGap.helper;
 
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
@@ -122,7 +121,7 @@ public class HelperFragment {
 
         try {
 
-            if (fragment.getClass().getName().equalsIgnoreCase("net.iGap.fragments.FragmentChat")) {
+            if (fragment.getClass().getName().equalsIgnoreCase(FragmentChat.class.getName())) {
                 if (SystemClock.elapsedRealtime() - G.mLastClickTime > 1000) {
                     G.mLastClickTime = SystemClock.elapsedRealtime();
                 } else {
