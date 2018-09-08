@@ -578,7 +578,7 @@ public final class StartupActions {
 
         }
         dynamicRealm.close();
-
+        configuredRealm.close();
         try {
 
             Realm.compactRealm(configuredRealm.getConfiguration());
