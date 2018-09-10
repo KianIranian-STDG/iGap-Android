@@ -5,10 +5,12 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.downloader.PRDownloader;
@@ -580,8 +582,8 @@ public final class StartupActions {
         dynamicRealm.close();
         configuredRealm.close();
         try {
-
             Realm.compactRealm(configuredRealm.getConfiguration());
+
         } catch (UnsupportedOperationException e) {
             e.printStackTrace();
         }

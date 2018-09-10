@@ -411,7 +411,6 @@ public class HelperDownloadFile {
                         item.downloadedByte = progress.currentBytes;
                         if (item.progress < 100 && !item.isPause) {
                             updateView(item);
-
                             try {
                                 boolean connectivityType = true;
                                 if (HelperCheckInternetConnection.currentConnectivityType != null) {
@@ -424,10 +423,9 @@ public class HelperDownloadFile {
                                 if (item.selector == ProtoFileDownload.FileDownload.Selector.FILE) {
                                     HelperDataUsage.progressDownload(connectivityType, downloadByte, item.type);
                                 }
-
-                            } catch (Exception e) {};
-
-
+                            } catch (Exception e) {
+                            }
+                            ;
                         }
                     }
                 })
