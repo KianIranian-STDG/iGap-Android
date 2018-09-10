@@ -325,7 +325,7 @@
                         android:paddingLeft="@dimen/dp16"
                         android:paddingRight="@dimen/dp16"
                         android:paddingStart="@dimen/dp16"
-                        android:visibility="@{safeUnbox(fragmentPassCodeViewModel.visibilityPatternLock) ,default= visible}">
+                        android:visibility="@{safeUnbox(fragmentPassCodeViewModel.visibilityPatternLock) ,default= gone}">
 
                         <TextView
                             android:id="@+id/st_txt_st_toggle_patternPassCode"
@@ -360,7 +360,7 @@
                         style="?lineColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:visibility="@{safeUnbox(fragmentPassCodeViewModel.visibilityPatternLock) ,default= visible}" />
+                        android:visibility="@{safeUnbox(fragmentPassCodeViewModel.visibilityPatternLock) ,default= gone}" />
 
                     <LinearLayout
                         style="?backgroundColorSettingTheme"
