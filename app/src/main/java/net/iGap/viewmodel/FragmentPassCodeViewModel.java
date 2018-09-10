@@ -74,7 +74,7 @@ public class FragmentPassCodeViewModel {
     public ObservableField<Integer> visibilityPatternSetting = new ObservableField<>(View.GONE);
     public ObservableField<Integer> visibilityTactileFeedback = new ObservableField<>(View.GONE);
     public ObservableField<Integer> vgTogglePassCodeVisibility = new ObservableField<>(View.VISIBLE);
-    public ObservableField<Integer> visibilityPatternLock = new ObservableField<>(View.VISIBLE);
+    public ObservableField<Integer> visibilityPatternLock = new ObservableField<>(View.GONE);
     public ObservableField<Integer> visibilityDescription = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> visibilityPassCode = new ObservableField<>(View.VISIBLE);
     public ObservableField<Integer> visibilityCreateNewPattern = new ObservableField<>(View.VISIBLE);
@@ -226,7 +226,7 @@ public class FragmentPassCodeViewModel {
         isTogglePassCode.set(false);
         vgTogglePassCodeVisibility.set(View.VISIBLE);
         visibilityDescription.set(View.VISIBLE);
-        visibilityPatternLock.set(View.VISIBLE);
+        visibilityPatternLock.set(View.GONE);
         visibilityChangePass.set(View.GONE);
         rootEnterPassword.set(View.GONE);
         rootSettingPassword.set(View.GONE);
