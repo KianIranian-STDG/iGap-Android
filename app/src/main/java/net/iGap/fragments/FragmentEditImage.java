@@ -660,6 +660,9 @@ public class FragmentEditImage extends BaseFragment {
 
     private void goToCropPage(View v) {
         AndroidUtils.closeKeyboard(v);
+        if (itemGalleryList.size() == 0){
+            return;
+        }
         String newPath = "file://" + itemGalleryList.get(viewPager.getCurrentItem()).path;
         String fileNameWithOutExt = newPath.substring(newPath.lastIndexOf("/"));
         String extension = newPath.substring(newPath.lastIndexOf("."));

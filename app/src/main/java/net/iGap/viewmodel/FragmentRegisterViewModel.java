@@ -18,10 +18,10 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.FileUriExposedException;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.SearchView;
@@ -91,7 +91,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 
@@ -210,9 +209,24 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                     callBackEdtPhoneNumber.set("");
                 }
             }, 30);
-
         }
+    }
 
+    private void shareQr() {
+        if (_resultQrCode == null) {
+            return;
+        }
+        File file = new File(_resultQrCode);
+        if (file.exists()) {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("image/*");
+            try {
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            G.fragmentActivity.startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
+        }
     }
 
     public void onClickQrCode(View v) {
@@ -220,19 +234,14 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         dialogQrCode = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true).positiveText(R.string.share_item_dialog).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                if (_resultQrCode == null) {
-                    return;
-                }
-                File file = new File(_resultQrCode);
-                if (file.exists()) {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("image/*");
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                     try {
-                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-                    } catch (Exception e) {
+                        shareQr();
+                    } catch (FileUriExposedException e) {
                         e.printStackTrace();
                     }
-                    G.fragmentActivity.startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
+                } else {
+                    shareQr();
                 }
             }
         }).negativeText(R.string.save).onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -974,11 +983,11 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                long seconds =  millisUntilFinished/1000 % 60;
-                long minutes = millisUntilFinished/(60*1000) % 60;
-                long hour = millisUntilFinished/(3600*1000);
+                long seconds = millisUntilFinished / 1000 % 60;
+                long minutes = millisUntilFinished / (60 * 1000) % 60;
+                long hour = millisUntilFinished / (3600 * 1000);
 
-                remindTime.setText(String.format("%02d:%02d:%02d",hour, minutes, seconds));
+                remindTime.setText(String.format("%02d:%02d:%02d", hour, minutes, seconds));
                 dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(false);
             }
 
