@@ -1351,7 +1351,8 @@
   <string name="repeat_pattern_passCode">Repeat pattern</string>
   <string name="repeat_pattern_pattern">Pattern PassCode</string>
   <string name="show_line_pattern">Show line pattern</string>
-
+    <string name="solid_colors">Solid colors</string>
+  <string name="wallpapers">Wallpapers</string>
 
 
 </resources>

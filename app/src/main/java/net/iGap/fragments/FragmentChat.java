@@ -1917,6 +1917,7 @@ public class FragmentChat extends BaseFragment
         if (backGroundPath.length() > 0) {
             imgBackGround = (ImageView) rootView.findViewById(R.id.chl_img_view_chat);
 
+
             File f = new File(backGroundPath);
             if (f.exists()) {
                 try {
@@ -1928,6 +1929,12 @@ public class FragmentChat extends BaseFragment
                     activityManager.getMemoryInfo(memoryInfo);
                     Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
                 }
+            } else {
+                try {
+                    imgBackGround.setBackgroundColor(Color.parseColor(backGroundPath));
+                } catch (Exception e) {
+                }
+
             }
         }
 
@@ -2458,7 +2465,7 @@ public class FragmentChat extends BaseFragment
                         dialog.dismiss();
                         if (HelperPermission.grantedUseStorage()) {
                             exportChat();
-                        }else{
+                        } else {
                             try {
                                 HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                                     @Override
@@ -2468,7 +2475,7 @@ public class FragmentChat extends BaseFragment
 
                                     @Override
                                     public void deny() {
-                                     Toast.makeText(G.currentActivity,R.string.export_message,Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(G.currentActivity, R.string.export_message, Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             } catch (IOException e) {
@@ -3821,6 +3828,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onContainerClick(View view, final StructMessageInfo message, int pos) {
 
+
         if (message == null) {
             return;
         }
@@ -4253,7 +4261,7 @@ public class FragmentChat extends BaseFragment
 
                     final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
                     if (fileToken != null && fileToken.length() > 0 && size > 0) {
-                        HelperDownloadFile.getInstance().startDownload(message.messageType,message.messageID, fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
+                        HelperDownloadFile.getInstance().startDownload(message.messageType, message.messageID, fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(String path, int progress) {
 
@@ -4306,6 +4314,8 @@ public class FragmentChat extends BaseFragment
                 dialogReport(true, messageId);
             }
         });
+
+
     }
 
     private void deleteMassage(Realm realm, final StructMessageInfo message, final ArrayList<Long> list, final ArrayList<Long> bothDeleteMessageId, final ProtoGlobal.Room.Type chatType) {
@@ -4583,7 +4593,8 @@ public class FragmentChat extends BaseFragment
                     File f = new File(backgroundPath);
                     if (f.exists()) {
                         Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                        imgBackGround.setImageDrawable(d);
+                        //imgBackGround.setImageDrawable(d);
+                        imgBackGround.setBackgroundColor(Color.parseColor(backgroundPath));
                     }
                 }
             }
