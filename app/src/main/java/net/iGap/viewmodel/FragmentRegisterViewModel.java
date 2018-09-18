@@ -27,6 +27,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -41,6 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.protobuf.ByteString;
 
@@ -113,6 +115,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     //Array List for Store List of StructCountry Object
     public String regex;
     public boolean isVerify = false;
+    private boolean isCallMethodSupported;
+    ProtoUserRegister.UserRegisterResponse.Method methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
     public ObservableField<String> callbackTxtAgreement = new ObservableField<>(G.context.getResources().getString(R.string.rg_agreement_text_register));
     public ObservableField<String> callbackBtnChoseCountry = new ObservableField<>("Iran");
     public ObservableField<String> callbackEdtCodeNumber = new ObservableField<>("+98");
@@ -816,16 +820,40 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             }
         });
 
-        TextView btnOk = (TextView) dialog.findViewById(R.id.rg_btn_dialog_okVerifyCode);
+        TextView btnOk = (TextView) dialog.findViewById(R.id.rg_btn_dialog_okVerifyCode);// resend code
+
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userRegister();
-                dialog.dismiss();
-                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                if (isCallMethodSupported) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.way_receive_register_code)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.array_verifySms).itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                        @Override
+                        public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                            switch (which) {
+                                case 0: {
+                                    methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
+                                    break;
+                                }
+                                case 1: {
+                                    methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_CALL;
+                                    break;
+                                }
+                            }
+                            return false;
+                        }
+                    }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            startRegister(v);
+                        }
+                    }).show();
+                } else {
+                    methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
+                    startRegister(v);
                 }
+
             }
         });
         dialog.setCancelable(false);
@@ -843,13 +871,24 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         }
     }
 
+    private void startRegister(View v) {
+        userRegister();
+        dialog.dismiss();
+        InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        }
+    }
+
     private void userRegister() {
 
         G.onUserRegistration = new OnUserRegistration() {
 
             @Override
-            public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, final String authorHashR) {
+            public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, final String authorHashR, boolean callMethodSupported) {
                 G.onUserRegistration = null;
+                isCallMethodSupported = callMethodSupported;
+
                 digitCount = verifyCodeDigitCount;
                 countDownTimer.start();
                 regexFetchCodeVerification = regex;
@@ -868,7 +907,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                             errorVerifySms(FragmentRegister.Reason.SOCKET);
                             countDownTimer.cancel();
                         }
-
                         prgVerifyConnectVisibility.set(View.GONE);
                         txtIconVerifyConnectVisibility.set(View.VISIBLE);
                         imgVerifySmsVisibility.set(View.GONE);
@@ -1007,6 +1045,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
             builder.setCountryCode(isoCode);
             builder.setPhoneNumber(Long.parseLong(phoneNumber));
+            builder.setPreferenceMethodValue(methodForReceiveCode.getNumber());
             builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
             RequestWrapper requestWrapper = new RequestWrapper(100, builder);
 

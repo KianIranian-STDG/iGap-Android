@@ -245,6 +245,11 @@
     <item>@string/Female</item>
   </string-array>
 
+  <string-array name="array_verifySms">
+    <item>@string/verify_register_sms</item>
+    <item>@string/verify_register_call</item>
+  </string-array>
+
   <string-array name="array_passCode">
     <item>@string/PIN</item>
     <item>@string/password</item>

@@ -136,7 +136,7 @@ dependencies {
     }
     implementation 'com.github.RooyeKhat-Media:Websocket:1.0.0'
     implementation 'com.github.RooyeKhat-Media:MessageProgress:1.0.0'
-    implementation 'com.github.RooyeKhat-Media:Proto:Build91_Lite'
+    implementation 'com.github.RooyeKhat-Media:Proto:Build93'
     implementation project(':pecpayment-release')
     implementation project(':raadcore')
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'

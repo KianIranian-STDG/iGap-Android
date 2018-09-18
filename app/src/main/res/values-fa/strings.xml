@@ -1352,5 +1352,9 @@
   <string name="repeat_pattern_passCode">تکرار الگو</string>
   <string name="repeat_pattern_pattern">رمز عبور با الگو</string>
 
+  <string name="verify_register_sms">SMS</string>
+  <string name="verify_register_call">Call</string>
+  <string name="way_receive_register_code">Way to receive code: </string>
+
 
 </resources>
