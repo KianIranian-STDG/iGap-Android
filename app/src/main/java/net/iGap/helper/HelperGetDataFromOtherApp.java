@@ -265,6 +265,6 @@ public class HelperGetDataFromOtherApp {
     //*****************************************************************************************************
 
     public enum FileType {
-        message, video, file, audio, image
+        message, video, file, audio, image,gif
     }
 }

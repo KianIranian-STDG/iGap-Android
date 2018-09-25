@@ -50,7 +50,7 @@ public class GifItem extends AbstractMessage<GifItem, GifItem.ViewHolder> {
         MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         AppUtils.setProgresColor(progress.progressBar);
 
-        progress.withDrawable(R.drawable.photogif, true);
+        progress.withDrawable(R.mipmap.photogif, true);
 
         GifDrawable gifDrawable = (GifDrawable) holder.image.getDrawable();
         if (gifDrawable != null) {

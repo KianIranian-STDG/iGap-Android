@@ -1264,11 +1264,20 @@ public class FragmentChat extends BaseFragment
                                 });
                             }
                         } else {
+                            //# get gif there
+
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (prgWaiting != null) {
-                                        prgWaiting.setVisibility(View.GONE);
+                                        try {
+
+                                            sendMessage(requestCode, listPathString.get(0));
+                                            prgWaiting.setVisibility(View.GONE);
+
+                                        } catch (Exception e) {
+                                        }
+
                                     }
                                 }
                             });
@@ -2458,7 +2467,7 @@ public class FragmentChat extends BaseFragment
                         dialog.dismiss();
                         if (HelperPermission.grantedUseStorage()) {
                             exportChat();
-                        }else{
+                        } else {
                             try {
                                 HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                                     @Override
@@ -2468,7 +2477,7 @@ public class FragmentChat extends BaseFragment
 
                                     @Override
                                     public void deny() {
-                                     Toast.makeText(G.currentActivity,R.string.export_message,Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(G.currentActivity, R.string.export_message, Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             } catch (IOException e) {
@@ -4253,7 +4262,7 @@ public class FragmentChat extends BaseFragment
 
                     final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
                     if (fileToken != null && fileToken.length() > 0 && size > 0) {
-                        HelperDownloadFile.getInstance().startDownload(message.messageType,message.messageID, fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
+                        HelperDownloadFile.getInstance().startDownload(message.messageType, message.messageID, fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(String path, int progress) {
 
