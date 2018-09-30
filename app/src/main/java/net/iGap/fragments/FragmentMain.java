@@ -2,6 +2,7 @@ package net.iGap.fragments;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import net.iGap.Config;
@@ -117,6 +119,11 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     private long tagId;
     private Realm realmFragmentMain;
     private RecyclerView.OnScrollListener onScrollListener;
+    private String tabId;
+    private View mView = null;
+    private String switcher;
+    private int channelSwitcher, allSwitcher, groupSwitcher, chatSwitcher, callSwitcher = 0;
+    private ProgressBar pbLoading;
 
     public static FragmentMain newInstance(MainType mainType) {
         Bundle bundle = new Bundle();
@@ -124,6 +131,40 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
         FragmentMain fragment = new FragmentMain();
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
+            switcher = String.valueOf(this.toString().charAt(this.toString().lastIndexOf(":") + 1));
+            //   if (HelperCalander.isPersianUnicode) {
+
+            if (switcher.equals("1") && channelSwitcher == 0) {
+                channelSwitcher = 1;
+                initRecycleView();
+                initListener();
+            } else if (switcher.equals("2") && groupSwitcher == 0) {
+                groupSwitcher = 1;
+                initRecycleView();
+                initListener();
+            } else if (switcher.equals("3") && chatSwitcher == 0) {
+                chatSwitcher = 1;
+                initRecycleView();
+                initListener();
+            } else if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
+                allSwitcher = 1;
+                initRecycleView();
+                initListener();
+            } else if (switcher.equals("0") && allSwitcher == 0 && mView != null) {
+                allSwitcher = 1;
+                initRecycleView();
+                initListener();
+            }
+
+        }
+
     }
 
     @Nullable
@@ -144,6 +185,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
+        this.mView = view;
         mComplete = this;
         tagId = System.currentTimeMillis();
 
@@ -153,57 +195,78 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
         swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setEnabled(false);
         viewById = view.findViewById(R.id.empty_icon);
+        pbLoading = view.findViewById(R.id.pbLoading);
+       // pbLoading.setVisibility(View.VISIBLE);
 
-        initRecycleView(view);
-        initListener();
+        switcher = String.valueOf(this.toString().charAt(this.toString().lastIndexOf(":") + 1));
+        if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
+            allSwitcher = 1;
+            initRecycleView();
+            initListener();
+            pbLoading.setVisibility(View.GONE);
+        } else if (switcher.equals("0") && allSwitcher == 0 && mView != null) {
+            allSwitcher = 1;
+            initRecycleView();
+            initListener();
+            pbLoading.setVisibility(View.GONE);
+        }
+
+
     }
 
-    private void initRecycleView(View view) {
+    private void initRecycleView() {
 
-        if (view != null) {
-            mRecyclerView = (RecyclerView) view.findViewById(R.id.cl_recycler_view_contact);
+        if (mView != null) {
+            mRecyclerView = (RecyclerView) mView.findViewById(R.id.cl_recycler_view_contact);
             // mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
             mRecyclerView.setItemAnimator(null);
             mRecyclerView.setItemViewCacheSize(1000);
             mRecyclerView.setLayoutManager(new PreCachingLayoutManager(G.fragmentActivity, 3000));
         }
 
-
         RealmResults<RealmRoom> results = null;
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
         Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
-        switch (mainType) {
 
+        switch (mainType) {
             case all:
                 results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
                 if (results.size() > 0) {
                     viewById.setVisibility(View.GONE);
+                    pbLoading.setVisibility(View.GONE);
                 } else {
                     viewById.setVisibility(View.VISIBLE);
+            //        pbLoading.setVisibility(View.VISIBLE);
                 }
                 break;
             case chat:
                 results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
                 if (results.size() > 0) {
                     viewById.setVisibility(View.GONE);
+                    pbLoading.setVisibility(View.GONE);
                 } else {
                     viewById.setVisibility(View.VISIBLE);
+            //        pbLoading.setVisibility(View.VISIBLE);
                 }
                 break;
             case group:
                 results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
                 if (results.size() > 0) {
                     viewById.setVisibility(View.GONE);
+                    pbLoading.setVisibility(View.GONE);
                 } else {
                     viewById.setVisibility(View.VISIBLE);
+             //       pbLoading.setVisibility(View.VISIBLE);
                 }
                 break;
             case channel:
                 results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
                 if (results.size() > 0) {
                     viewById.setVisibility(View.GONE);
+                    pbLoading.setVisibility(View.GONE);
                 } else {
                     viewById.setVisibility(View.VISIBLE);
+      //              pbLoading.setVisibility(View.VISIBLE);
                 }
                 break;
         }
@@ -284,7 +347,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
             getChatsList();
         }
 
-        if (view != null) {
+        if (mView != null) {
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -329,7 +392,6 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     //***************************************************************************************************************************
 
     private void initListener() {
-
         switch (mainType) {
 
             case all:
