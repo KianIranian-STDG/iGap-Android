@@ -1640,17 +1640,14 @@ public class FragmentChat extends BaseFragment
                     savedScrollMessageId = messageId;
                     firstVisiblePositionOffset = 0;
 
-                    int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
-                    if (position > 0) {
-                        LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
-                        linearLayout.scrollToPositionWithOffset(position, firstVisiblePositionOffset);
+                    if (goToPositionWithAnimation(savedScrollMessageId, 2000)) {
                         savedScrollMessageId = 0;
                     } else {
                         RealmRoomMessage rm = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
                         rm = RealmRoomMessage.getFinalMessage(rm);
                         if (rm != null) {
                             resetMessagingValue();
-                            savedScrollMessageId = messageId;
+                            savedScrollMessageId = FragmentChat.messageId = messageId;
                             firstVisiblePositionOffset = 0;
                             getMessages();
                         }
@@ -1691,11 +1688,7 @@ public class FragmentChat extends BaseFragment
                 pinedMessageLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int position = mAdapter.findPositionByMessageId(pinMessageId);
-                        if (position != -1) {
-                            LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
-                            linearLayout.scrollToPositionWithOffset(position, 0);
-                        } else {
+                        if (!goToPositionWithAnimation(pinMessageId, 1000)) {
 
                             RealmRoomMessage rm = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, pinMessageId).findFirst();
                             rm = RealmRoomMessage.getFinalMessage(rm);
@@ -1776,6 +1769,36 @@ public class FragmentChat extends BaseFragment
                     }).negativeText(R.string.cancel).show();
         }
 
+    }
+
+    private boolean goToPositionWithAnimation(long messageId, int time) {
+
+        int position = mAdapter.findPositionByMessageId(messageId);
+        if (position != -1) {
+            LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
+            linearLayout.scrollToPositionWithOffset(position, 0);
+
+            mAdapter.getItem(position).mMessage.isSelected = true;
+            mAdapter.notifyItemChanged(position);
+
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        int position = mAdapter.findPositionByMessageId(messageId);
+                        if (position != -1) {
+                            mAdapter.getItem(position).mMessage.isSelected = false;
+                            mAdapter.notifyItemChanged(position);
+                        }
+                    } catch (RuntimeException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, time);
+
+            return true;
+        }
+        return false;
     }
 
     private void registerListener() {
@@ -4219,17 +4242,10 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onReplyClick(RealmRoomMessage replyMessage) {
 
-        long replyMessageId = replyMessage.getMessageId();
-        /**
-         * when i add message to RealmRoomMessage(putOrUpdate) set (replyMessageId * (-1))
-         * so i need to (replyMessageId * (-1)) again for use this messageId
-         */
-        int position = mAdapter.findPositionByMessageId((replyMessageId * (-1)));
-        if (position == -1) {
-            position = mAdapter.findPositionByMessageId(replyMessageId);
+        if (!goToPositionWithAnimation(replyMessage.getMessageId(), 1000)) {
+            goToPositionWithAnimation(replyMessage.getMessageId() * (-1), 1000);
         }
 
-        recyclerView.scrollToPosition(position);
     }
 
     @Override
@@ -7818,10 +7834,18 @@ public class FragmentChat extends BaseFragment
         } else {
             switchAddItem(messageInfos, false);
             if (hasSavedState()) {
-                int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
-                LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
-                linearLayout.scrollToPositionWithOffset(position, firstVisiblePositionOffset);
-                savedScrollMessageId = 0;
+
+                if (messageId != 0) {
+                    if (goToPositionWithAnimation(savedScrollMessageId, 1000)) {
+                        savedScrollMessageId = 0;
+                    }
+                } else {
+                    int position = mAdapter.findPositionByMessageId(savedScrollMessageId);
+                    LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    linearLayout.scrollToPositionWithOffset(position, firstVisiblePositionOffset);
+                    savedScrollMessageId = 0;
+                }
+
             }
         }
 
