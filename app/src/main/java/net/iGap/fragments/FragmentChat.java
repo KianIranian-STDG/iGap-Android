@@ -98,9 +98,7 @@ import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.AudioItem;
 import net.iGap.adapter.items.chat.ContactItem;
 import net.iGap.adapter.items.chat.FileItem;
-import net.iGap.adapter.items.chat.GifItem;
 import net.iGap.adapter.items.chat.GifWithTextItem;
-import net.iGap.adapter.items.chat.ImageItem;
 import net.iGap.adapter.items.chat.ImageWithTextItem;
 import net.iGap.adapter.items.chat.LocationItem;
 import net.iGap.adapter.items.chat.LogItem;
@@ -109,7 +107,6 @@ import net.iGap.adapter.items.chat.ProgressWaiting;
 import net.iGap.adapter.items.chat.TextItem;
 import net.iGap.adapter.items.chat.TimeItem;
 import net.iGap.adapter.items.chat.UnreadMessage;
-import net.iGap.adapter.items.chat.VideoItem;
 import net.iGap.adapter.items.chat.VideoWithTextItem;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
@@ -305,7 +302,6 @@ import static net.iGap.G.context;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.R.string.item;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
-import static net.iGap.helper.HelperGetDataFromOtherApp.messageType;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
 import static net.iGap.module.AttachFile.request_code_open_document;
@@ -1633,7 +1629,7 @@ public class FragmentChat extends BaseFragment
         initAppbarSelected();
         getDraft();
         getUserInfo();
-        insertShearedData(HelperGetDataFromOtherApp.messageFileAddress);
+        insertShearedData();
 
 
         FragmentShearedMedia.goToPositionFromShardMedia = new FragmentShearedMedia.GoToPositionFromShardMedia() {
@@ -2117,27 +2113,7 @@ public class FragmentChat extends BaseFragment
                 edtChat.setSelection(edtChat.getText().length());
 
                 if (edtChat.getText().length() == 0) {
-
-                    layoutAttachBottom.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            layoutAttachBottom.setVisibility(View.VISIBLE);
-                        }
-                    }).start();
-                    imvSendButton.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    imvSendButton.clearAnimation();
-                                    imvSendButton.setVisibility(View.GONE);
-                                }
-                            });
-                        }
-                    }).start();
+                    sendButtonVisibility(false);
                 }
             }
         });
@@ -2903,49 +2879,10 @@ public class FragmentChat extends BaseFragment
                 if (ll_attach_text.getVisibility() == View.GONE && hasForward == false) {
 
                     if (edtChat.getText().length() > 0) {
-                        layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                layoutAttachBottom.setVisibility(View.GONE);
-                            }
-                        }).start();
-                        imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        imvSendButton.clearAnimation();
-                                        imvSendButton.setVisibility(View.VISIBLE);
-                                    }
-                                });
-                            }
-                        }).start();
+                        sendButtonVisibility(true);
                     } else {
                         if (!isEditMessage) {
-                            layoutAttachBottom.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-
-                                    layoutAttachBottom.setVisibility(View.VISIBLE);
-                                }
-                            }).start();
-                            imvSendButton.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    G.handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            imvSendButton.clearAnimation();
-                                            imvSendButton.setVisibility(View.GONE);
-                                        }
-                                    });
-                                }
-                            }).start();
+                            sendButtonVisibility(false);
                         } else {
                             imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
                         }
@@ -3853,12 +3790,14 @@ public class FragmentChat extends BaseFragment
                 txtItemShare.setText(R.string.share_item_dialog);
                 txtItemForward.setText(R.string.forward_item_dialog);
                 txtItemDelete.setText(R.string.delete_item_dialog);
+                txtItemEdit.setText(R.string.edit_item_dialog);
 
                 rootReplay.setVisibility(View.VISIBLE);
                 rootShare.setVisibility(View.VISIBLE);
                 rootForward.setVisibility(View.VISIBLE);
                 rootDelete.setVisibility(View.VISIBLE);
                 rootSaveToDownload.setVisibility(View.VISIBLE);
+                rootEdit.setVisibility(View.VISIBLE);
 
                 //itemsRes = R.array.fileMessageDialogItems;
                 break;
@@ -4090,17 +4029,19 @@ public class FragmentChat extends BaseFragment
                 dialog.dismiss();
                 // edit message
                 // put message text to EditText
+                messageEdit = "";
                 if (message.messageText != null && !message.messageText.isEmpty()) {
                     edtChat.setText(message.messageText);
                     edtChat.setSelection(0, edtChat.getText().length());
                     // put message object to edtChat's tag to obtain it later and
                     // found is user trying to edit a message
-
-                    imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
-                    isEditMessage = true;
                     messageEdit = message.messageText;
-                    edtChat.setTag(message);
                 }
+                edtChat.setTag(message);
+                isEditMessage = true;
+                imvSendButton.setText(G.fragmentActivity.getResources().getString(R.string.md_close_button));
+                sendButtonVisibility(true);
+
             }
         });
         rootSaveToDownload.setOnClickListener(new View.OnClickListener() {
@@ -5327,28 +5268,33 @@ public class FragmentChat extends BaseFragment
                 // set maxLength  when layout attachment is visible
                 edtChat.setFilters(new InputFilter[]{new InputFilter.LengthFilter(Config.MAX_TEXT_ATTACHMENT_LENGTH)});
 
-                layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        layoutAttachBottom.setVisibility(View.GONE);
-                    }
-                }).start();
-                imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                imvSendButton.clearAnimation();
-                                imvSendButton.setVisibility(View.VISIBLE);
-                            }
-                        });
-                    }
-                }).start();
+                sendButtonVisibility(true);
             }
         }, 100);
+    }
+
+
+    private void sendButtonVisibility(boolean visibility) {
+        layoutAttachBottom.animate().alpha(visibility ? 0F : 1F).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                layoutAttachBottom.setVisibility(visibility ? View.GONE : View.VISIBLE);
+            }
+        }).start();
+        imvSendButton.animate().alpha(visibility ? 1F : 0F).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        imvSendButton.clearAnimation();
+                        imvSendButton.setVisibility(visibility ? View.VISIBLE : View.GONE);
+                    }
+                });
+            }
+        }).start();
     }
 
     /**
@@ -5429,7 +5375,7 @@ public class FragmentChat extends BaseFragment
      */
 
 
-    private void insertShearedData(final ArrayList<String> pathList) {
+    private void insertShearedData() {
         /**
          * run this method with delay , because client get local message with delay
          * for show messages with async changeState and before run getLocalMessage this shared
@@ -5442,60 +5388,21 @@ public class FragmentChat extends BaseFragment
                 if (HelperGetDataFromOtherApp.hasSharedData) {
                     HelperGetDataFromOtherApp.hasSharedData = false;
 
-                    if (messageType == HelperGetDataFromOtherApp.FileType.message) {
-                        String message = HelperGetDataFromOtherApp.message;
-                        edtChat.setText(message);
-                        imvSendButton.performClick();
-                    } else if (messageType == HelperGetDataFromOtherApp.FileType.image) {
+                    for (HelperGetDataFromOtherApp.SharedData sharedData : HelperGetDataFromOtherApp.sharedList) {
 
-                        for (int i = 0; i < pathList.size(); i++) {
-                            sendMessage(AttachFile.request_code_TAKE_PICTURE, pathList.get(i));
-                        }
-                    } else if (messageType == HelperGetDataFromOtherApp.FileType.video) {
-                        if (pathList.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
-//                            final String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                            final String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                            mainVideoPath = pathList.get(0);
+                        edtChat.setText(sharedData.message);
 
-                            if (mainVideoPath == null) {
-                                return;
-                            }
-
-                            G.handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new VideoCompressor().execute(mainVideoPath, savePathVideoCompress);
-                                }
-                            }, 200);
-                            sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
-                        } else {
-                            for (int i = 0; i < pathList.size(); i++) {
-                                compressedPath.put(pathList.get(i), true);
-                                sendMessage(request_code_VIDEO_CAPTURED, pathList.get(i));
-                            }
-                        }
-                    } else if (messageType == HelperGetDataFromOtherApp.FileType.audio) {
-
-                        for (int i = 0; i < pathList.size(); i++) {
-                            sendMessage(AttachFile.request_code_pic_audi, pathList.get(i));
-                        }
-                    } else if (messageType == HelperGetDataFromOtherApp.FileType.file) {
-
-                        for (int i = 0; i < pathList.size(); i++) {
-                            HelperGetDataFromOtherApp.FileType fileType = messageType = HelperGetDataFromOtherApp.FileType.file;
-                            if (HelperGetDataFromOtherApp.fileTypeArray.size() > 0) {
-                                fileType = HelperGetDataFromOtherApp.fileTypeArray.get(i);
-                            }
-
-                            if (fileType == HelperGetDataFromOtherApp.FileType.image) {
-                                sendMessage(AttachFile.request_code_TAKE_PICTURE, pathList.get(i));
-                            } else if (fileType == HelperGetDataFromOtherApp.FileType.video) {
-                                if (pathList.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
-                                    //                                    final String savePathVideoCompress = Environment.getExternalStorageDirectory() + File.separator + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_APPLICATION_DIR_NAME + com.lalongooo.videocompressor.Config.VIDEO_COMPRESSOR_COMPRESSED_VIDEOS_DIR + "VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format
-                                    // (new Date()) + ".mp4";
+                        switch (sharedData.fileType) {
+                            case message:
+                                imvSendButton.performClick();
+                                break;
+                            case video:
+                                if (HelperGetDataFromOtherApp.sharedList.size() == 1 && (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && (sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1))) {
                                     final String savePathVideoCompress = G.DIR_TEMP + "/VIDEO_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date()) + ".mp4";
-                                    mainVideoPath = pathList.get(0);
-
+                                    mainVideoPath = sharedData.address;
+                                    if (mainVideoPath == null) {
+                                        return;
+                                    }
                                     G.handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
@@ -5504,16 +5411,26 @@ public class FragmentChat extends BaseFragment
                                     }, 200);
                                     sendMessage(request_code_VIDEO_CAPTURED, savePathVideoCompress);
                                 } else {
-                                    compressedPath.put(pathList.get(i), true);
-                                    sendMessage(request_code_VIDEO_CAPTURED, pathList.get(i));
+                                    compressedPath.put(sharedData.address, true);
+                                    sendMessage(request_code_VIDEO_CAPTURED, sharedData.address);
                                 }
-                            } else if (fileType == HelperGetDataFromOtherApp.FileType.audio) {
-                                sendMessage(AttachFile.request_code_pic_audi, pathList.get(i));
-                            } else if (fileType == HelperGetDataFromOtherApp.FileType.file) {
-                                sendMessage(AttachFile.request_code_open_document, pathList.get(i));
-                            }
+                                break;
+                            case file:
+                                sendMessage(AttachFile.request_code_open_document, sharedData.address);
+                                break;
+                            case audio:
+                                sendMessage(AttachFile.request_code_pic_audi, sharedData.address);
+                                break;
+                            case image:
+                                sendMessage(AttachFile.request_code_TAKE_PICTURE, sharedData.address);
+                                break;
                         }
+
+                        edtChat.setText("");
                     }
+
+                    HelperGetDataFromOtherApp.sharedList.clear();
+
                 }
             }
         }, 300);
@@ -7463,51 +7380,12 @@ public class FragmentChat extends BaseFragment
 
                         if (edtChat.getText().length() == 0) {
 
-                            layoutAttachBottom.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    layoutAttachBottom.setVisibility(View.VISIBLE);
-                                }
-                            }).start();
-                            imvSendButton.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    G.handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            imvSendButton.clearAnimation();
-                                            imvSendButton.setVisibility(View.GONE);
-                                        }
-                                    });
-                                }
-                            }).start();
+                            sendButtonVisibility(false);
                         }
                     }
                 });
 
-                layoutAttachBottom.animate().alpha(0F).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        layoutAttachBottom.setVisibility(View.GONE);
-                    }
-                }).start();
-
-                imvSendButton.animate().alpha(1F).setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                imvSendButton.clearAnimation();
-                                imvSendButton.setVisibility(View.VISIBLE);
-                            }
-                        });
-                    }
-                }).start();
+                sendButtonVisibility(true);
 
                 int _count = mForwardMessages.size();
                 String str = _count > 1 ? G.fragmentActivity.getResources().getString(R.string.messages_selected) : G.fragmentActivity.getResources().getString(R.string.message_selected);
@@ -7677,12 +7555,6 @@ public class FragmentChat extends BaseFragment
                         }
                         break;
                     case IMAGE:
-                        if (!addTop) {
-                            mAdapter.add(new ImageItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                        } else {
-                            mAdapter.add(index, new ImageItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                        }
-                        break;
                     case IMAGE_TEXT:
                         if (!addTop) {
                             mAdapter.add(new ImageWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
@@ -7691,12 +7563,6 @@ public class FragmentChat extends BaseFragment
                         }
                         break;
                     case VIDEO:
-                        if (!addTop) {
-                            mAdapter.add(new VideoItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                        } else {
-                            mAdapter.add(index, new VideoItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                        }
-                        break;
                     case VIDEO_TEXT:
                         if (!addTop) {
                             mAdapter.add(new VideoWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
@@ -7742,12 +7608,6 @@ public class FragmentChat extends BaseFragment
                         }
                         break;
                     case GIF:
-                        if (!addTop) {
-                            mAdapter.add(new GifItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                        } else {
-                            mAdapter.add(index, new GifItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                        }
-                        break;
                     case GIF_TEXT:
                         if (!addTop) {
                             mAdapter.add(new GifWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
