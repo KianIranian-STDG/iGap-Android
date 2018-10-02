@@ -105,9 +105,9 @@ public class RealmRegisteredInfo extends RealmObject {
      *
      * @param onRegistrationInfo RealmRegisteredInfo will be returned with this interface
      */
-    public static void getRegistrationInfo(long userId, @Nullable String cacheId, final OnInfo onRegistrationInfo) {
-        Realm realm = Realm.getDefaultInstance();
-        final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+    public static void getRegistrationInfo(long userId, @Nullable String cacheId, Realm realm, final OnInfo onRegistrationInfo) {
+
+        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
         if (realmRegisteredInfo != null && (cacheId == null || realmRegisteredInfo.getCacheId().equals(cacheId))) {
             onRegistrationInfo.onInfo(realmRegisteredInfo);
         } else {
@@ -129,11 +129,13 @@ public class RealmRegisteredInfo extends RealmObject {
             };
             new RequestUserInfo().userInfo(userId, RequestUserInfo.InfoType.JUST_INFO.toString());
         }
-        realm.close();
+
     }
 
     public static void getRegistrationInfo(long userId, final OnInfo onRegistrationInfo) {
-        getRegistrationInfo(userId, null, onRegistrationInfo);
+        Realm realm = Realm.getDefaultInstance();
+        getRegistrationInfo(userId, null, realm, onRegistrationInfo);
+        realm.close();
     }
 
     public static RealmRegisteredInfo getRegistrationInfo(Realm realm, long userId) {
@@ -182,6 +184,12 @@ public class RealmRegisteredInfo extends RealmObject {
 
     public static void updateBlock(final long userId, final boolean block) {
         Realm realm = Realm.getDefaultInstance();
+        updateBlock(userId, block, realm);
+        realm.close();
+    }
+
+    public static void updateBlock(final long userId, final boolean block, Realm realm) {
+
         final RealmRegisteredInfo registeredInfo = getRegistrationInfo(realm, userId);
         if (registeredInfo != null) {
             realm.executeTransaction(new Realm.Transaction() {
@@ -191,7 +199,7 @@ public class RealmRegisteredInfo extends RealmObject {
                 }
             });
         }
-        realm.close();
+
     }
 
     public static void updateMutual(final String phone, final boolean mutual) {

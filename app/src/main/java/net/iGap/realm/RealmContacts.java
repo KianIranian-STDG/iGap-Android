@@ -89,7 +89,13 @@ public class RealmContacts extends RealmObject {
 
     public static void updateBlock(final long userId, final boolean block) {
         Realm realm = Realm.getDefaultInstance();
-        final RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
+        updateBlock(userId, block, realm);
+        realm.close();
+    }
+
+    public static void updateBlock(final long userId, final boolean block, Realm realm) {
+
+        RealmContacts realmContacts = realm.where(RealmContacts.class).equalTo(RealmContactsFields.ID, userId).findFirst();
         if (realmContacts != null) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -98,7 +104,7 @@ public class RealmContacts extends RealmObject {
                 }
             });
         }
-        realm.close();
+
     }
 
     public long getId() {

@@ -10,8 +10,6 @@
 
 package net.iGap.response;
 
-import android.util.Log;
-
 import net.iGap.interfaces.OnInfo;
 import net.iGap.proto.ProtoUserContactsGetBlockedList;
 import net.iGap.realm.RealmContacts;
@@ -79,17 +77,21 @@ public class UserContactsGetBlockedListResponse extends MessageHandler {
                         }
                     });
                 }
-                realm.close();
+
 
                 for (ProtoUserContactsGetBlockedList.UserContactsGetBlockedListResponse.User user : list) {
-                    RealmRegisteredInfo.getRegistrationInfo(user.getUserId(), user.getCacheId(), new OnInfo() {
+                    RealmRegisteredInfo.getRegistrationInfo(user.getUserId(), user.getCacheId(), realm, new OnInfo() {
                         @Override
                         public void onInfo(final RealmRegisteredInfo registeredInfo) {
                             RealmRegisteredInfo.updateBlock(registeredInfo.getId(), true);
-                            RealmContacts.updateBlock(registeredInfo.getId(), true);
+                            RealmContacts.updateBlock(registeredInfo.getId(), true, realm);
                         }
                     });
                 }
+
+                realm.close();
+
+
             }
         }).start();
 
