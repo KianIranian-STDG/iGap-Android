@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 
 import net.iGap.G;
 import net.iGap.activities.ActivityRegisteration;
+import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.SHP_SETTING;
 
@@ -33,7 +34,7 @@ public final class HelperLogout {
             @Override
             public void run() {
                 HelperRealm.realmTruncate();
-                HelperNotificationAndBadge.cleanBadge();
+                AppUtils.cleanBadge();
                 Intent intent = new Intent(G.context, ActivityRegisteration.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 new LoginActions();

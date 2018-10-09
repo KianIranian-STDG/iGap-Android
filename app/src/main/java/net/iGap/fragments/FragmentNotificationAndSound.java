@@ -21,6 +21,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentNotificationAndSoundBinding;
 import net.iGap.helper.HelperFragment;
+import net.iGap.helper.HelperNotification;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.viewmodel.FragmentNotificationAndSoundViewModel;
@@ -127,4 +128,10 @@ public class FragmentNotificationAndSound extends BaseFragment {
 
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        HelperNotification.getInstance().updateSettingValue();
+    }
 }

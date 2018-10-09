@@ -46,6 +46,8 @@ import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.realm.RealmAttachment;
+import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 
@@ -59,6 +61,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static net.iGap.G.context;
 
@@ -700,5 +703,40 @@ public final class AppUtils {
         return SUID.id().get();
         // return Math.abs(UUID.randomUUID().getLeastSignificantBits());
     }
+
+    public static int[] updateBadgeOnly(Realm realm, long roomId) {
+        int unreadMessageCount = 0;
+        int chatCount = 0;
+        int[] result = new int[2];
+
+        RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).
+                equalTo(RealmRoomFields.MUTE, false).equalTo(RealmRoomFields.IS_DELETED, false).notEqualTo(RealmRoomFields.ID, roomId).findAll();
+
+        for (RealmRoom realmRoom1 : realmRooms) {
+            if (realmRoom1.getUnreadCount() > 0) {
+                unreadMessageCount += realmRoom1.getUnreadCount();
+                ++chatCount;
+            }
+        }
+
+        try {
+            ShortcutBadger.applyCount(G.context, unreadMessageCount);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        result[0] = unreadMessageCount;
+        result[1] = chatCount;
+        return result;
+    }
+
+    public static void cleanBadge() {
+        try {
+            ShortcutBadger.applyCount(G.context, 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

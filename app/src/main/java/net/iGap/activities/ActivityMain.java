@@ -33,7 +33,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -85,7 +84,7 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperLogout;
-import net.iGap.helper.HelperNotificationAndBadge;
+import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.helper.HelperUrl;
@@ -682,7 +681,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         }
 
-        G.helperNotificationAndBadge.cancelNotification();
+        HelperNotification.getInstance().cancelNotification();
         G.onGroupAvatarResponse = this;
 
         G.onConvertToGroup = new OpenFragment() {
@@ -2465,7 +2464,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             return;
         }
 
-        HelperNotificationAndBadge.updateBadgeOnly(getRealm(), -1);
+        AppUtils.updateBadgeOnly(getRealm(), -1);
 
         G.onUnreadChange = null;
 

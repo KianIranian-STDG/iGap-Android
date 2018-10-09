@@ -23,7 +23,6 @@ import android.os.SystemClock;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 
 import com.crashlytics.android.Crashlytics;
@@ -35,7 +34,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCheckInternetConnection;
-import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.interfaces.*;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ChatUpdateStatusUtil;
@@ -82,7 +80,6 @@ public class G extends MultiDexApplication {
     public static Handler handler;
     public static long mLastClickTime = SystemClock.elapsedRealtime();
     public static LayoutInflater inflater;
-    public static HelperNotificationAndBadge helperNotificationAndBadge;
     public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
     public static List<Long> smsNumbers = new ArrayList<>();
     public static AtomicBoolean pullRequestQueueRunned = new AtomicBoolean(false);

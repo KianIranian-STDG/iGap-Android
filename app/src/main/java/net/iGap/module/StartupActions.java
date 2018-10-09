@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.downloader.PRDownloader;
@@ -27,7 +26,6 @@ import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFillLookUpClass;
-import net.iGap.helper.HelperNotificationAndBadge;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.realm.RealmMigration;
@@ -67,7 +65,6 @@ import static net.iGap.G.authorHash;
 import static net.iGap.G.context;
 import static net.iGap.G.displayName;
 import static net.iGap.G.headerTextColor;
-import static net.iGap.G.helperNotificationAndBadge;
 import static net.iGap.G.imageFile;
 import static net.iGap.G.imageLoader;
 import static net.iGap.G.isSaveToGallery;
@@ -486,7 +483,6 @@ public final class StartupActions {
                 DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisk(false).build();
                 ImageLoader.getInstance().init(new ImageLoaderConfiguration.Builder(context).defaultDisplayImageOptions(defaultOptions).build());
                 imageLoader = ImageLoader.getInstance();
-                helperNotificationAndBadge = new HelperNotificationAndBadge();
 
                 HelperFillLookUpClass.fillArrays();
             }
@@ -555,8 +551,8 @@ public final class StartupActions {
          * Returns version of Realm file on disk
          */
         if (dynamicRealm.getVersion() == -1) {
-           Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabaseEncrypted.realm").schemaVersion(REALM_SCHEMA_VERSION).deleteRealmIfMigrationNeeded().build());
-         //   Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
+            Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabaseEncrypted.realm").schemaVersion(REALM_SCHEMA_VERSION).deleteRealmIfMigrationNeeded().build());
+            //   Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
         } else {
             Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
 
@@ -596,7 +592,7 @@ public final class StartupActions {
         if (newRealmFile.exists()) {
             return Realm.getInstance(newConfig);
         } else {
-            configuration =new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
+            configuration = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
                     .schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
             Realm realm = Realm.getInstance(configuration);
             realm.writeEncryptedCopyTo(newRealmFile, mKey);

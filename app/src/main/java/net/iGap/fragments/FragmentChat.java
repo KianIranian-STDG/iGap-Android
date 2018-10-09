@@ -122,7 +122,7 @@ import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperGetMessageState;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperMimeType;
-import net.iGap.helper.HelperNotificationAndBadge;
+import net.iGap.helper.HelperNotification;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperSetAction;
@@ -658,8 +658,6 @@ public class FragmentChat extends BaseFragment
                 });
 
 
-                HelperNotificationAndBadge.updateBadgeOnly(getRealmChat(), mRoomId);
-
             }
         }, 500);
     }
@@ -797,7 +795,7 @@ public class FragmentChat extends BaseFragment
         G.onChatDelete = this;
         G.onBackgroundChanged = this;
         G.onConnectionChangeStateChat = this;
-        G.helperNotificationAndBadge.cancelNotification();
+        HelperNotification.getInstance().cancelNotification();
         G.onChannelUpdateReactionStatusChat = this;
         G.onPinedMessage = this;
 
@@ -810,7 +808,7 @@ public class FragmentChat extends BaseFragment
         };
 
         initCallbacks();
-        HelperNotificationAndBadge.isChatRoomNow = true;
+        HelperNotification.getInstance().isChatRoomNow = true;
 
         onUpdateUserOrRoomInfo = new OnUpdateUserOrRoomInfo() {
             @Override
@@ -909,7 +907,7 @@ public class FragmentChat extends BaseFragment
         canUpdateAfterDownload = false;
 
         setDraft();
-        HelperNotificationAndBadge.isChatRoomNow = false;
+        HelperNotification.getInstance().isChatRoomNow = false;
 
         //if (isNotJoin) { // hint : commented this code, because when going to profile and return can't load message
         //

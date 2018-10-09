@@ -65,7 +65,7 @@
       android:name=".module.CustomButtonListener"
       android:exported="false" />
     <receiver
-      android:name=".helper.HelperNotificationAndBadge$RemoteActionReceiver"
+      android:name=".helper.HelperNotification$RemoteActionReceiver"
       android:exported="false" />
     <receiver android:name=".module.MyPhonStateService">
       <intent-filter>
