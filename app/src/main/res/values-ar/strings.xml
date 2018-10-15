@@ -2286,6 +2286,8 @@
   <string name="minutes_ago">minutes ago</string>
 
   <string name="IP_blocked">نظرًا للإفراط في الاستخدام ، تم حظر عنوان IP الخاص بك لفترة.</string>
+  <string name="separate_notifications">إعلامات منفصلة</string>
+  <string name="mark_as_unread">مقروءة</string>
 
 
 </resources>

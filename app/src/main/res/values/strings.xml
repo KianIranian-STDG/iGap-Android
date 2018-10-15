@@ -1329,5 +1329,7 @@
   <string name="wallet_error_server">Error communicating with server</string>
 
   <string name="IP_blocked">Due to overuse, your IP has been blocked for a while.</string>
+  <string name="separate_notifications">Separate Notifications</string>
+  <string name="mark_as_unread">Mark as read</string>
 
 </resources>

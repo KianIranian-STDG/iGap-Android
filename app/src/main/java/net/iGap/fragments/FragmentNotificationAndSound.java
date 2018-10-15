@@ -102,6 +102,7 @@ public class FragmentNotificationAndSound extends BaseFragment {
                         editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 0);
                         editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 0);
                         editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 0);
+                        editor.putInt(SHP_SETTING.KEY_STNS_SEPARATE_NOTIFICATION, 0);
                         editor.putInt(SHP_SETTING.KEY_STNS_CONTACT_JOINED, 1);
                         editor.putInt(SHP_SETTING.KEY_STNS_PINNED_MESSAGE, 1);
                         editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);

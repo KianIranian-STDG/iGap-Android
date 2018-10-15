@@ -79,6 +79,7 @@ public class SHP_SETTING {
     public static final String KEY_STNS_APP_VIBRATE = "STNS_APP_VIBRATE";
     public static final String KEY_STNS_APP_PREVIEW = "STNS_APP_PREVIEW";
     public static final String KEY_STNS_CHAT_SOUND = "STNS_CHAT_SOUND";
+    public static final String KEY_STNS_SEPARATE_NOTIFICATION = "KEY_STNS_SEPARATE_NOTIFICATION";
 
     public static final String KEY_STNS_CONTACT_JOINED = "STNS_CONTACT_JOINED";
     public static final String KEY_STNS_PINNED_MESSAGE = "STNS_PINNED_MESSAGE";

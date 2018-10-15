@@ -1332,5 +1332,7 @@
   <string name="minutes_ago">minutes ago</string>
 
   <string name="IP_blocked">به دلیل تلاش بیش از حد، IP شما برای مدتی مسدود شده است.</string>
+  <string name="separate_notifications">اعلانات جداگانه</string>
+  <string name="mark_as_unread">خوانده شده</string>
 
 </resources>

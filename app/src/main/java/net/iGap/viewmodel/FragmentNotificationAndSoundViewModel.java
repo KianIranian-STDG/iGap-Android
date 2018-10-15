@@ -53,6 +53,7 @@ public class FragmentNotificationAndSoundViewModel {
     public ObservableField<Boolean> isInAppVibration = new ObservableField<>();
     public ObservableField<Boolean> isInAppPreView = new ObservableField<>();
     public ObservableField<Boolean> isSoundInChat = new ObservableField<>();
+    public ObservableField<Boolean> isSeparateNotification = new ObservableField<>();
     public ObservableField<Boolean> isKeepService = new ObservableField<>();
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -297,6 +298,17 @@ public class FragmentNotificationAndSoundViewModel {
             editor.apply();
         }
 
+    }
+
+    public void setSeparateNotification(Boolean isChecked) {
+        isSeparateNotification.set(isChecked);
+        if (isChecked) {
+            editor.putInt(SHP_SETTING.KEY_STNS_SEPARATE_NOTIFICATION, 1);
+            editor.apply();
+        } else {
+            editor.putInt(SHP_SETTING.KEY_STNS_SEPARATE_NOTIFICATION, 0);
+            editor.apply();
+        }
     }
 
     private void setKeepService(Boolean isChecked) {
@@ -638,6 +650,10 @@ public class FragmentNotificationAndSoundViewModel {
         isSoundInChat.set(!isSoundInChat.get());
     }
 
+    public void onClickSeparateNotification(View view) {
+        isSeparateNotification.set(!isSeparateNotification.get());
+    }
+
     public void onCheckedChangedSoundInChat(boolean isChecked) {
         setInSoundChat(isChecked);
     }
@@ -689,6 +705,7 @@ public class FragmentNotificationAndSoundViewModel {
         isInAppPreView.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 0)));
 
         isSoundInChat.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 0)));
+        isSeparateNotification.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SEPARATE_NOTIFICATION, 0)));
         isKeepService.set(getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1)));
 
     }

@@ -17,16 +17,20 @@ import android.hardware.display.DisplayManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.RemoteInput;
 import android.view.Display;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityPopUpNotification;
+import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.TimeUtils;
 import net.iGap.proto.ProtoGlobal;
@@ -34,8 +38,10 @@ import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmAvatarFields;
 import net.iGap.realm.RealmNotificationSetting;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomMessage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
@@ -45,6 +51,14 @@ import static net.iGap.proto.ProtoGlobal.RoomMessageLog.Type.PINNED_MESSAGE;
 
 
 public class HelperNotification {
+
+    static final String KEY_ROOM_ID = "KEY_ROOM_ID";
+    static final String KEY_NOTIFICATION_ID = "KEY_NOTIFICATION_ID";
+    static final String REPLY_ACTION = "REPLY_ACTION";
+    static final String UNREAD_ACTION = "UNREAD_ACTION";
+    static final String KEY_REPLY = "KEY_REPLY";
+    static final String KEY_CHAT_TYPE = "KEY_CHAT_TYPE";
+    static final String KEY_MESSAGE_ID = "KEY_MESSAGE_ID";
 
     private static HelperNotification _HelperNotification;
 
@@ -86,6 +100,8 @@ public class HelperNotification {
         int g_popUp;
         int g_sound;
 
+        boolean separateNotification;
+
         boolean inAppSound;
         boolean inAppVibration;
         boolean inAppPreview;
@@ -110,6 +126,8 @@ public class HelperNotification {
             g_popUp = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
             g_sound = sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
 
+            separateNotification = getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_SEPARATE_NOTIFICATION, 0));
+
             inAppSound = getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_SOUND, 0));
             inAppVibration = getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 0));
             inAppPreview = getBoolean(sharedPreferences.getInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 0));
@@ -128,7 +146,7 @@ public class HelperNotification {
 
         private NotificationManager notificationManager;
         private Notification notification;
-        private int notificationId = 20;
+        private int defaultNotificationId = 20;
         private String mHeader = "";
         private String mContent = "";
         private Bitmap mBitmapIcon = null;
@@ -136,6 +154,14 @@ public class HelperNotification {
         private int countUniqueChat = 0;
         private int delayAlarm = 5000;
         private long currentAlarm;
+        private int notificationIconSrc;
+
+        class StructNotificationMap {
+            int notificationId;
+            Notification notification;
+        }
+
+        private HashMap<Long, StructNotificationMap> notificationMap = new HashMap<>();
 
         int vibrator;
         int sound;
@@ -167,11 +193,23 @@ public class HelperNotification {
         }
 
         private void setNotification() {
+            StructNotificationMap np = null;
+            int notificationId = defaultNotificationId;
+            if (settingValue.separateNotification) {
+                if (notificationMap.containsKey(messageList.get(0).roomId)) {
+                    notificationId = notificationMap.get(messageList.get(0).roomId).notificationId;
+                } else {
+                    np = new StructNotificationMap();
+                    np.notificationId = ++defaultNotificationId;
+                    notificationMap.put(messageList.get(0).roomId, np);
+                    notificationId = defaultNotificationId;
+                }
+            }
 
             PendingIntent pi;
             Intent intent = new Intent(context, ActivityMain.class);
 
-            if (countUniqueChat == 1) {
+            if (countUniqueChat == 1 || settingValue.separateNotification) {
                 intent.putExtra(ActivityMain.openChat, messageList.get(0).roomId);
             }
 
@@ -184,24 +222,66 @@ public class HelperNotification {
                 messageToShow = messageToShow.substring(0, 40);
             }
 
-            notification = new NotificationCompat.Builder(context, CHANNEL_ID)
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                     .setSmallIcon(getNotificationIcon())
                     .setLargeIcon(mBitmapIcon)
                     .setContentTitle(mHeader)
                     .setContentText(mContent)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                     .setStyle(getBigStyle())
-                    .setContentIntent(pi).build();
+                    .setContentIntent(pi);
+
+            if (settingValue.separateNotification) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && messageList.get(0).roomType != ProtoGlobal.Room.Type.CHANNEL) {
+                    builder.addAction(getReplayAction(notificationId));
+                }
+                builder.addAction(getUnreadAction(notificationId));
+            }
+
+            notification = builder.build();
 
             if (currentAlarm + delayAlarm < System.currentTimeMillis()) {
                 alarmNotification(messageToShow);
             }
 
+            if (np != null) {
+                np.notification = notification;
+            }
+
             notificationManager.notify(notificationId, notification);
         }
 
+        private NotificationCompat.Action getReplayAction(int notificationId) {
+            String label = G.context.getResources().getString(R.string.replay);
+            RemoteInput remoteInput = new RemoteInput.Builder(KEY_REPLY).setLabel(label).build();
+            Intent intent = new Intent(context, RemoteActionReceiver.class);
+            intent.putExtra(KEY_NOTIFICATION_ID, notificationId);
+            intent.putExtra(KEY_ROOM_ID, messageList.get(0).roomId);
+            intent.putExtra(KEY_CHAT_TYPE, messageList.get(0).roomType);
+            intent.setAction(REPLY_ACTION);
+            PendingIntent replyPendingIntent = PendingIntent.getBroadcast(G.context, notificationId + 5000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            return new NotificationCompat.Action.Builder(notificationIconSrc, label, replyPendingIntent).addRemoteInput(remoteInput).build();
+        }
+
+        private NotificationCompat.Action getUnreadAction(int notificationId) {
+
+            Intent intent = new Intent(context, RemoteActionReceiver.class);
+            intent.putExtra(KEY_NOTIFICATION_ID, notificationId);
+            intent.putExtra(KEY_ROOM_ID, messageList.get(0).roomId);
+            intent.putExtra(KEY_MESSAGE_ID, messageList.get(0).roomMessage.getMessageId());
+            intent.putExtra(KEY_CHAT_TYPE, messageList.get(0).roomType);
+            intent.setAction(UNREAD_ACTION);
+            PendingIntent unreadIntent = PendingIntent.getBroadcast(G.context, notificationId + 10000, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            return new NotificationCompat.Action.Builder(notificationIconSrc, G.context.getString(R.string.mark_as_unread), unreadIntent).build();
+        }
 
         private NotificationCompat.InboxStyle getBigStyle() {
+
+            if (settingValue.separateNotification) {
+                return null;
+            }
 
             NotificationCompat.InboxStyle _style = new NotificationCompat.InboxStyle();
 
@@ -246,7 +326,7 @@ public class HelperNotification {
         private void getNotificationSmallInfo() {
 
             String avatarPath = null;
-            if (unreadMessageCount == 1) {
+            if (unreadMessageCount == 1 || settingValue.separateNotification) {
 
                 mHeader = messageList.get(0).name;
                 mContent = messageList.get(0).message;
@@ -266,7 +346,7 @@ public class HelperNotification {
 
             mBitmapIcon = BitmapFactory.decodeResource(null, R.mipmap.icon);
 
-            if (countUniqueChat == 1) {
+            if (countUniqueChat == 1 || settingValue.separateNotification) {
 
                 RealmAvatar realmAvatarPath = realm.where(RealmAvatar.class).equalTo(RealmAvatarFields.OWNER_ID, messageList.get(0).senderId).findFirst();
                 if (realmAvatarPath != null) {
@@ -295,8 +375,14 @@ public class HelperNotification {
         }
 
         private int getNotificationIcon() {
-            boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
-            return useWhiteIcon ? R.mipmap.white_icon : R.mipmap.iconsmal;
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                notificationIconSrc = R.mipmap.white_icon;
+            } else {
+                notificationIconSrc = R.mipmap.iconsmal;
+            }
+
+            return notificationIconSrc;
         }
 
         private void alarmNotification(String messageToShow) {
@@ -427,6 +513,14 @@ public class HelperNotification {
             return intVibrator;
         }
 
+        public void updateNotification(long roomId) {
+            if (notificationManager != null) {
+                StructNotificationMap sp = notificationMap.get(roomId);
+                if (sp != null && sp.notification != null) {
+                    notificationManager.notify(sp.notificationId, sp.notification);
+                }
+            }
+        }
 
     }
 
@@ -698,7 +792,7 @@ public class HelperNotification {
     }
 
     public void cancelNotification() {
-        showNotification.notificationManager.cancel(showNotification.notificationId);
+        showNotification.notificationManager.cancelAll();
     }
 
     public static class RemoteActionReceiver extends BroadcastReceiver {
@@ -708,7 +802,82 @@ public class HelperNotification {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            HelperNotification.getInstance().cancelNotification();
+
+            if (intent == null || intent.getAction() == null) {
+                return;
+            }
+
+            String message = "";
+            int notificationId = intent.getIntExtra(KEY_NOTIFICATION_ID, 0);
+            long roomId = intent.getLongExtra(KEY_ROOM_ID, 0);
+            ProtoGlobal.Room.Type chatType = (ProtoGlobal.Room.Type) intent.getSerializableExtra(KEY_CHAT_TYPE);
+
+            switch (intent.getAction()) {
+                case REPLY_ACTION:
+
+                    Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
+                    if (remoteInput != null) {
+                        message = (String) remoteInput.getCharSequence(KEY_REPLY);
+                    }
+
+                    if (notificationId > 0) {
+                        HelperNotification.getInstance().showNotification.updateNotification(roomId);
+                    }
+
+                    if (message != null && message.length() > 0 && roomId > 0) {
+                        String identity = Long.toString(System.currentTimeMillis());
+                        RealmRoomMessage.makeTextMessage(roomId, Long.parseLong(identity), message);
+                        new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, roomId).message(message).sendMessage(identity);
+                    }
+
+                    break;
+
+                case UNREAD_ACTION:
+                    long messageId = intent.getLongExtra(KEY_MESSAGE_ID, 0);
+
+                    if (notificationId > 0) {
+                        HelperNotification.getInstance().showNotification.notificationManager.cancel(notificationId);
+                    }
+
+                    if (roomId > 0 && messageId > 0) {
+
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Realm realm = Realm.getDefaultInstance();
+                                if (chatType == ProtoGlobal.Room.Type.CHAT || chatType == ProtoGlobal.Room.Type.GROUP) {
+                                    RealmRoomMessage.fetchMessages(realm, roomId, new OnActivityChatStart() {
+                                        @Override
+                                        public void sendSeenStatus(RealmRoomMessage message) {
+                                            G.chatUpdateStatusUtil.sendUpdateStatus(chatType, roomId, message.getMessageId(), ProtoGlobal.RoomMessageStatus.SEEN);
+                                        }
+
+                                        @Override
+                                        public void resendMessage(RealmRoomMessage message) {
+
+                                        }
+
+                                        @Override
+                                        public void resendMessageNeedsUpload(RealmRoomMessage message, long messageId) {
+
+                                        }
+                                    });
+                                }
+
+                                RealmRoom.setCount(roomId, 0);
+
+                                G.handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AppUtils.updateBadgeOnly(realm, roomId);
+                                        realm.close();
+                                    }
+                                }, 250);
+                            }
+                        }, 5);
+                    }
+                    break;
+            }
         }
     }
 
