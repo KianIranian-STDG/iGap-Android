@@ -7991,6 +7991,10 @@ public class FragmentChat extends BaseFragment
         };
 
         recyclerView.addOnScrollListener(scrollListener);
+        if (unreadCount > 0)
+            recyclerView.scrollToPosition(0);
+
+
         //realm.close();
     }
 
@@ -8308,6 +8312,7 @@ public class FragmentChat extends BaseFragment
             RealmRoomMessage unreadMessage = RealmRoomMessage.makeUnreadMessage(unreadMessageCount);
             mAdapter.add(0, new UnreadMessage(getRealmChat(), FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), unreadMessage)).withIdentifier(SUID.id().get()));
             isShowLayoutUnreadMessage = true;
+
         }
     }
 
