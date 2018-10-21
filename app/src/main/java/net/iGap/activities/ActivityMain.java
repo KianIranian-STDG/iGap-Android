@@ -10,6 +10,7 @@
 
 package net.iGap.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -1107,7 +1108,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     G.selectedTabInMainActivity = "";
 
 
-                } else {
+                }
+                else {
 
                     if (HelperCalander.isPersianUnicode) {
                         index = 4;
@@ -1184,6 +1186,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                     sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
+                    mViewPager.setCurrentItem(4);
                     setViewPagerSelectedItem();
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
                 }
@@ -1265,6 +1268,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //});
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //super.onSaveInstanceState(outState);
