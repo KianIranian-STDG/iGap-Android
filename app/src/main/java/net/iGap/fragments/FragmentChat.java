@@ -357,6 +357,7 @@ public class FragmentChat extends BaseFragment
     private static List<StructBottomSheet> contacts;
     private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
+    private boolean isShareOk = true;
 
     /**
      * *************************** common method ***************************
@@ -2455,7 +2456,7 @@ public class FragmentChat extends BaseFragment
                         dialog.dismiss();
                         if (HelperPermission.grantedUseStorage()) {
                             exportChat();
-                        }else{
+                        } else {
                             try {
                                 HelperPermission.getStoragePermision(G.fragmentActivity, new OnGetPermission() {
                                     @Override
@@ -2465,7 +2466,7 @@ public class FragmentChat extends BaseFragment
 
                                     @Override
                                     public void deny() {
-                                     Toast.makeText(G.currentActivity,R.string.export_message,Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(G.currentActivity, R.string.export_message, Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             } catch (IOException e) {
@@ -4215,7 +4216,7 @@ public class FragmentChat extends BaseFragment
 
                     final String _path = AndroidUtils.getFilePathWithCashId(cacheId, name, _messageType);
                     if (fileToken != null && fileToken.length() > 0 && size > 0) {
-                        HelperDownloadFile.getInstance().startDownload(message.messageType,message.messageID, fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
+                        HelperDownloadFile.getInstance().startDownload(message.messageType, message.messageID, fileToken, fileUrl, cacheId, name, size, selector, _path, 0, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(String path, int progress) {
 
@@ -5556,6 +5557,7 @@ public class FragmentChat extends BaseFragment
         if (messageInfo == null) return;
 
         try {
+            isShareOk = true;
             Intent intent = new Intent(Intent.ACTION_SEND);
             String chooserDialogText = "";
 
@@ -5625,6 +5627,8 @@ public class FragmentChat extends BaseFragment
                         intent.putExtra(Intent.EXTRA_STREAM, uri);
                         chooserDialogText = G.fragmentActivity.getResources().getString(R.string.share_file);
                     } else {
+
+                        isShareOk = false;
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -5632,9 +5636,10 @@ public class FragmentChat extends BaseFragment
                             }
                         });
                     }
-
                     break;
             }
+
+            if (!isShareOk) return;
 
             startActivity(Intent.createChooser(intent, chooserDialogText));
         } catch (Exception e) {
