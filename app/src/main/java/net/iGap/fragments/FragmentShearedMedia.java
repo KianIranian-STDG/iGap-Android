@@ -1902,7 +1902,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
                     holder1.gifDrawable = (GifDrawable) holder1.gifView.getDrawable();
 
-                    holder1.messageProgress.withDrawable(R.drawable.photogif, true);
+                    holder1.messageProgress.withDrawable(R.mipmap.photogif, true);
                     holder1.messageProgress.setVisibility(View.GONE);
                     holder1.messageProgress.setOnClickListener(new View.OnClickListener() {
                         @Override
