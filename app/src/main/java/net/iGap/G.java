@@ -70,6 +70,7 @@ public class G extends MultiDexApplication {
     public static final String IMAGES = "/iGap Images";
     public static final String VIDEOS = "/iGap Videos";
     public static final String AUDIOS = "/iGap Audios";
+    public static final String MESSAGES = "/iGap Messages";
     //public static Realm mRealm;
     public static final String DOCUMENT = "/iGap Document";
     public static final String TEMP = "/.temp";
@@ -93,6 +94,7 @@ public class G extends MultiDexApplication {
     public static ArrayList<String> waitingActionIds = new ArrayList<>();
     public static ArrayList<String> generalImmovableClasses = new ArrayList<>();
     public static ArrayList<Integer> forcePriorityActionId = new ArrayList<>();
+    public static ArrayList<Integer> ignoreErrorCodes = new ArrayList<>();
     public static HashMap<Integer, String> lookupMap = new HashMap<>();
     public static HashMap<String, ArrayList<Object>> requestQueueRelationMap = new HashMap<>();
     public static HashMap<Integer, Integer> priorityActionId = new HashMap<>();
@@ -108,6 +110,7 @@ public class G extends MultiDexApplication {
     public static String DIR_VIDEOS = DIR_APP + VIDEOS;
     public static String DIR_AUDIOS = DIR_APP + AUDIOS;
     public static String DIR_DOCUMENT = DIR_APP + DOCUMENT;
+    public static String DIR_MESSAGES = DIR_APP + MESSAGES;
     public static String DIR_TEMP = DIR_APP + TEMP;
     public static String DIR_CHAT_BACKGROUND = DIR_APP + CHAT_BACKGROUND;
     public static String DIR_IMAGE_USER = DIR_APP + IMAGE_USER;

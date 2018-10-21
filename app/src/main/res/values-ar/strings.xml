@@ -1199,6 +1199,9 @@
 
   <string name="share_image">اشتراك الصورة </string>
 
+  <string name="share_image_2">اشتراك الصورة</string>
+  <string name="share_video_file_2">اشتراك ملف الفيديو</string>
+
   <string name="share_video_file">اشتراك ملف الفيديو </string>
 
   <string name="share_file">اشتراك الملف </string>
@@ -2246,7 +2249,6 @@
   <string name="wallet_error_server">حدث خطأ في الاتصال بالخادم</string>
 
 
-
   <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
   <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
   <string name="USER_GET_DELETE_TOKEN_MAX_SEND">USER GET DELETE TOKEN MAX SEND</string>
@@ -2286,8 +2288,29 @@
   <string name="minutes_ago">minutes ago</string>
 
   <string name="IP_blocked">نظرًا للإفراط في الاستخدام ، تم حظر عنوان IP الخاص بك لفترة.</string>
+  <string name="export_chat">تصدير الدردشة</string>
+  <string name="export_message">غير قادر على استخراج الرسائل</string>
   <string name="separate_notifications">إعلامات منفصلة</string>
   <string name="mark_as_unread">مقروءة</string>
 
+
+  <string name="wifi_data_usage">استخدام البيانات اللاسلكية</string>
+  <string name="mobile_data_usage">استخدام بيانات بطاقة SIM</string>
+  <string name="sent">نشر</string>
+  <string name="received">تلقى</string>
+  <string name="bytes_sent">حجم الرسائل المرسلة</string>
+  <string name="bytes_received">حجم المتلقي</string>
+  <string name="total">مجموع</string>
+  <string name="total_sent">مجموع حجم المرسلة</string>
+  <string name="total_received">مجموع حجم الواردة</string>
+  <string name="clear_data_usage">محو سجل استخدام البيانات</string>
+  <string name="new_pattern_passCode">قم بإنشاء قالب جديد</string>
+  <string name="repeat_pattern_passCode">كرر النمط</string>
+  <string name="repeat_pattern_pattern">نمط رمز المرور</string>
+  <string name="clearDataUsage">هل أنت متأكد من أنك تريد مسح استخدام البيانات?</string>
+
+  <string name="verify_register_sms">SMS</string>
+  <string name="verify_register_call">Call</string>
+  <string name="way_receive_register_code">Way to receive code: </string>
 
 </resources>

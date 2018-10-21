@@ -538,7 +538,7 @@ public class FragmentMediaPlayer extends BaseFragment {
         });
 
 
-        HelperDownloadFile.getInstance().startDownload(MusicPlayer.mediaList.get(position).getMessageId() + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
+        HelperDownloadFile.getInstance().startDownload(messageType,MusicPlayer.mediaList.get(position).getMessageId() + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
             @Override
             public void OnProgress(String path, final int progress) {
 

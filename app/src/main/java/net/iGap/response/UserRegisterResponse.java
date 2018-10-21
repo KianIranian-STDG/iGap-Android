@@ -11,6 +11,7 @@
 package net.iGap.response;
 
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -35,7 +36,7 @@ public class UserRegisterResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserRegister.UserRegisterResponse.Builder builder = (ProtoUserRegister.UserRegisterResponse.Builder) message;
-        G.onUserRegistration.onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex(), builder.getVerifyCodeDigitCount(), builder.getAuthorHash());
+        G.onUserRegistration.onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex(), builder.getVerifyCodeDigitCount(), builder.getAuthorHash() , builder.getCallMethodSupported());
 
         G.userId = builder.getUserId();
         G.authorHash = builder.getAuthorHash();

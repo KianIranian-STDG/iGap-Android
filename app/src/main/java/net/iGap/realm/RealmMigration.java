@@ -280,7 +280,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 20
+        if (oldVersion == 20) {
 
             RealmObjectSchema realmIceServer = schema.create(RealmIceServer.class.getSimpleName()).addField("url", String.class).addField("username", String.class).addField("credential", String.class);
 
@@ -302,6 +302,28 @@ public class RealmMigration implements io.realm.RealmMigration {
                 if (realmWallpaper.hasField("wallPaperList")) {
                     realmWallpaper.removeField("wallPaperList");
                 }
+            }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == 21) {
+
+            schema.create(RealmDataUsage.class.getSimpleName()).addField("type", String.class)
+                    .addField("downloadSize", long.class, FieldAttribute.REQUIRED)
+                    .addField("uploadSize", long.class, FieldAttribute.REQUIRED)
+                    .addField("connectivityType", boolean.class, FieldAttribute.REQUIRED)
+                    .addField("numUploadedFiles", int.class, FieldAttribute.REQUIRED)
+                    .addField("numDownloadedFile", int.class, FieldAttribute.REQUIRED);
+
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 22
+
+            RealmObjectSchema realmUserInfo = schema.get(RealmUserInfo.class.getSimpleName());
+            if (realmUserInfo != null) {
+                realmUserInfo.addField("isPattern", boolean.class, FieldAttribute.REQUIRED);
             }
 
             oldVersion++;

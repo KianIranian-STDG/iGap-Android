@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
@@ -25,9 +26,11 @@ import net.iGap.WebSocketClient;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.helper.HelperCalander;
+import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperFillLookUpClass;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
+import net.iGap.realm.RealmDataUsage;
 import net.iGap.realm.RealmMigration;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.webrtc.CallObserver;
@@ -45,6 +48,7 @@ import java.util.TimeZone;
 import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -54,6 +58,7 @@ import static net.iGap.G.DIR_CHAT_BACKGROUND;
 import static net.iGap.G.DIR_DOCUMENT;
 import static net.iGap.G.DIR_IMAGES;
 import static net.iGap.G.DIR_IMAGE_USER;
+import static net.iGap.G.DIR_MESSAGES;
 import static net.iGap.G.DIR_TEMP;
 import static net.iGap.G.DIR_VIDEOS;
 import static net.iGap.G.IGAP;
@@ -100,6 +105,14 @@ public final class StartupActions {
          * initialize download and upload listeners
          */
         new HelperUploadFile();
+        checkDataUsage();
+    }
+
+    private void checkDataUsage() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmDataUsage> realmDataUsage=realm.where(RealmDataUsage.class).findAll();
+        if (realmDataUsage.size()==0)
+            HelperDataUsage.initializeRealmDataUsage();
     }
 
     private void manageTime() {
@@ -160,12 +173,14 @@ public final class StartupActions {
             new File(DIR_VIDEOS).mkdirs();
             new File(DIR_AUDIOS).mkdirs();
             new File(DIR_DOCUMENT).mkdirs();
+            new File(DIR_MESSAGES).mkdirs();
 
             String file = ".nomedia";
             new File(DIR_IMAGES + "/" + file).createNewFile();
             new File(DIR_VIDEOS + "/" + file).createNewFile();
             new File(DIR_AUDIOS + "/" + file).createNewFile();
             new File(DIR_DOCUMENT + "/" + file).createNewFile();
+            new File(DIR_MESSAGES + "/" + file).createNewFile();
 
 
             new File(DIR_CHAT_BACKGROUND).mkdirs();
@@ -192,12 +207,15 @@ public final class StartupActions {
             DIR_VIDEOS = rootPath + G.VIDEOS;
             DIR_AUDIOS = rootPath + G.AUDIOS;
             DIR_DOCUMENT = rootPath + G.DOCUMENT;
+            DIR_MESSAGES = rootPath + G.MESSAGES;
+
         } else {
             String selectedStorage = getSelectedStoragePath(rootPath);
             DIR_IMAGES = selectedStorage + G.IMAGES;
             DIR_VIDEOS = selectedStorage + G.VIDEOS;
             DIR_AUDIOS = selectedStorage + G.AUDIOS;
             DIR_DOCUMENT = selectedStorage + G.DOCUMENT;
+            DIR_MESSAGES = selectedStorage + G.MESSAGES;
         }
 
         DIR_TEMP = rootPath + G.TEMP;
@@ -558,10 +576,10 @@ public final class StartupActions {
 
         }
         dynamicRealm.close();
-
+        configuredRealm.close();
         try {
-
             Realm.compactRealm(configuredRealm.getConfiguration());
+
         } catch (UnsupportedOperationException e) {
             e.printStackTrace();
         }

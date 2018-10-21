@@ -18,15 +18,16 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.FileUriExposedException;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -41,6 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.protobuf.ByteString;
 
@@ -91,7 +93,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 
@@ -114,6 +115,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     //Array List for Store List of StructCountry Object
     public String regex;
     public boolean isVerify = false;
+    private boolean isCallMethodSupported;
+    ProtoUserRegister.UserRegisterResponse.Method methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
     public ObservableField<String> callbackTxtAgreement = new ObservableField<>(G.context.getResources().getString(R.string.rg_agreement_text_register));
     public ObservableField<String> callbackBtnChoseCountry = new ObservableField<>("Iran");
     public ObservableField<String> callbackEdtCodeNumber = new ObservableField<>("+98");
@@ -210,9 +213,24 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                     callBackEdtPhoneNumber.set("");
                 }
             }, 30);
-
         }
+    }
 
+    private void shareQr() {
+        if (_resultQrCode == null) {
+            return;
+        }
+        File file = new File(_resultQrCode);
+        if (file.exists()) {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("image/*");
+            try {
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            G.fragmentActivity.startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
+        }
     }
 
     public void onClickQrCode(View v) {
@@ -220,19 +238,14 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         dialogQrCode = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true).positiveText(R.string.share_item_dialog).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                if (_resultQrCode == null) {
-                    return;
-                }
-                File file = new File(_resultQrCode);
-                if (file.exists()) {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("image/*");
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                     try {
-                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-                    } catch (Exception e) {
+                        shareQr();
+                    } catch (FileUriExposedException e) {
                         e.printStackTrace();
                     }
-                    G.fragmentActivity.startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
+                } else {
+                    shareQr();
                 }
             }
         }).negativeText(R.string.save).onNegative(new MaterialDialog.SingleButtonCallback() {
@@ -807,16 +820,40 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             }
         });
 
-        TextView btnOk = (TextView) dialog.findViewById(R.id.rg_btn_dialog_okVerifyCode);
+        TextView btnOk = (TextView) dialog.findViewById(R.id.rg_btn_dialog_okVerifyCode);// resend code
+
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userRegister();
-                dialog.dismiss();
-                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                if (isCallMethodSupported) {
+                    new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.way_receive_register_code)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.array_verifySms).itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                        @Override
+                        public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                            switch (which) {
+                                case 0: {
+                                    methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
+                                    break;
+                                }
+                                case 1: {
+                                    methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_CALL;
+                                    break;
+                                }
+                            }
+                            return false;
+                        }
+                    }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            startRegister(v);
+                        }
+                    }).show();
+                } else {
+                    methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
+                    startRegister(v);
                 }
+
             }
         });
         dialog.setCancelable(false);
@@ -834,13 +871,24 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         }
     }
 
+    private void startRegister(View v) {
+        userRegister();
+        dialog.dismiss();
+        InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        }
+    }
+
     private void userRegister() {
 
         G.onUserRegistration = new OnUserRegistration() {
 
             @Override
-            public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, final String authorHashR) {
+            public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, final String authorHashR, boolean callMethodSupported) {
                 G.onUserRegistration = null;
+                isCallMethodSupported = callMethodSupported;
+
                 digitCount = verifyCodeDigitCount;
                 countDownTimer.start();
                 regexFetchCodeVerification = regex;
@@ -859,7 +907,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                             errorVerifySms(FragmentRegister.Reason.SOCKET);
                             countDownTimer.cancel();
                         }
-
                         prgVerifyConnectVisibility.set(View.GONE);
                         txtIconVerifyConnectVisibility.set(View.VISIBLE);
                         imgVerifySmsVisibility.set(View.GONE);
@@ -974,11 +1021,11 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         CountDownTimer countWaitTimer = new CountDownTimer(time * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                long seconds =  millisUntilFinished/1000 % 60;
-                long minutes = millisUntilFinished/(60*1000) % 60;
-                long hour = millisUntilFinished/(3600*1000);
+                long seconds = millisUntilFinished / 1000 % 60;
+                long minutes = millisUntilFinished / (60 * 1000) % 60;
+                long hour = millisUntilFinished / (3600 * 1000);
 
-                remindTime.setText(String.format("%02d:%02d:%02d",hour, minutes, seconds));
+                remindTime.setText(String.format("%02d:%02d:%02d", hour, minutes, seconds));
                 dialogWait.getActionButton(DialogAction.POSITIVE).setEnabled(false);
             }
 
@@ -998,6 +1045,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             ProtoUserRegister.UserRegister.Builder builder = ProtoUserRegister.UserRegister.newBuilder();
             builder.setCountryCode(isoCode);
             builder.setPhoneNumber(Long.parseLong(phoneNumber));
+            builder.setPreferenceMethodValue(methodForReceiveCode.getNumber());
             builder.setRequest(ProtoRequest.Request.newBuilder().setId(HelperString.generateKey()));
             RequestWrapper requestWrapper = new RequestWrapper(100, builder);
 

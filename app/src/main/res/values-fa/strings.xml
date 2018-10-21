@@ -635,6 +635,8 @@
   <string name="please_write_your_message">لطفاْ پیام خود را بنویسید!</string>
   <string name="share_audio_file">به اشتراک گذاشتن فایل صوتی</string>
   <string name="share_image">به اشتراک گذاشتن تصویر</string>
+  <string name="share_image_2">به اشتراک گذاشتن تصویر</string>
+  <string name="share_video_file_2">به اشتراک گذاشتن فایل ویدئویی</string>
   <string name="share_video_file">به اشتراک گذاشتن فایل ویدئویی</string>
   <string name="share_file">به اشتراک گذاشتن فایل</string>
   <string name="text_copied">متن کپی شده</string>
@@ -1279,7 +1281,7 @@
   <string name="map_distance">فاصله به متر</string>
   <string name="get_location_data">در حال دریافت اطلاعات</string>
   <string name="calculation">در حال محاسبه.. </string>
-
+  <string name="send">ارسال شده</string>
   <string name="not_success">ناموفق</string>
   <string name="not_success_2">"پرداخت ناموفق بود"</string>
   <string name="result_3">نتیجه پرداخت مشخص نیست به تاریخجه کیف پول مراجع یا با پشتیبانی تماس بگیرید</string>
@@ -1296,7 +1298,6 @@
   <string name="wallet_Your_credit">اعتبار شما: </string>
   <string name="wallet_Reial"> ریال </string>
   <string name="wallet_error_server">خطا در برقراری ارتباط با سرور</string>
-
 
   <string name="USER_VERIFY_MAX_TRY_LOCK">USER VERIFY MAX TRY</string>
   <string name="USER_GET_DELETE_TOKEN_MAX_TRY_LOCK">USER GET DELETE TOKEN MAX TRY</string>
@@ -1332,6 +1333,29 @@
   <string name="minutes_ago">minutes ago</string>
 
   <string name="IP_blocked">به دلیل تلاش بیش از حد، IP شما برای مدتی مسدود شده است.</string>
+  <string name="export_chat">استخراج پیام ها</string>
+  <string name="export_message">قادر به استخراج پیام ها نیست</string>
+
+  <string name="wifi_data_usage">استفاده از داده بیسیم</string>
+  <string name="mobile_data_usage">استفاده از داده سیم کارت</string>
+  <string name="sent">ارسال شده</string>
+  <string name="received">دریافت شده</string>
+  <string name="bytes_sent">حجم ارسال شده</string>
+  <string name="bytes_received">حجم دریافت شده</string>
+  <string name="total">جمع</string>
+  <string name="total_sent">مجموع حجم ارسال شده</string>
+  <string name="total_received">مجموع حجم دریافت شده</string>
+  <string name="clear_data_usage">پاک کردن تاریخچه مصرف داده</string>
+  <string name="clearDataUsage">آیا مایل به پاک کردن تاریخچه مصرف داده هستید؟</string>
+
+  <string name="new_pattern_passCode">ایجاد الگوی جدید</string>
+  <string name="repeat_pattern_passCode">تکرار الگو</string>
+  <string name="repeat_pattern_pattern">رمز عبور با الگو</string>
+
+  <string name="verify_register_sms">SMS</string>
+  <string name="verify_register_call">Call</string>
+  <string name="way_receive_register_code">Way to receive code: </string>
+
   <string name="separate_notifications">اعلانات جداگانه</string>
   <string name="mark_as_unread">خوانده شده</string>
 
