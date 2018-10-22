@@ -1943,6 +1943,7 @@ public class FragmentChat extends BaseFragment
         if (backGroundPath.length() > 0) {
             imgBackGround = (ImageView) rootView.findViewById(R.id.chl_img_view_chat);
 
+
             File f = new File(backGroundPath);
             if (f.exists()) {
                 try {
@@ -1954,6 +1955,12 @@ public class FragmentChat extends BaseFragment
                     activityManager.getMemoryInfo(memoryInfo);
                     Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
                 }
+            } else {
+                try {
+                    imgBackGround.setBackgroundColor(Color.parseColor(backGroundPath));
+                } catch (Exception e) {
+                }
+
             }
         }
 
@@ -3788,6 +3795,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onContainerClick(View view, final StructMessageInfo message, int pos) {
 
+
         if (message == null) {
             return;
         }
@@ -4277,6 +4285,8 @@ public class FragmentChat extends BaseFragment
                 dialogReport(true, messageId);
             }
         });
+
+
     }
 
     private void deleteMassage(Realm realm, final StructMessageInfo message, final ArrayList<Long> list, final ArrayList<Long> bothDeleteMessageId, final ProtoGlobal.Room.Type chatType) {
@@ -4547,7 +4557,8 @@ public class FragmentChat extends BaseFragment
                     File f = new File(backgroundPath);
                     if (f.exists()) {
                         Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                        imgBackGround.setImageDrawable(d);
+                        //imgBackGround.setImageDrawable(d);
+                        imgBackGround.setBackgroundColor(Color.parseColor(backgroundPath));
                     }
                 }
             }

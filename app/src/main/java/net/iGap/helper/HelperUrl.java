@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -159,6 +160,18 @@ public class HelperUrl {
 
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
+
+                new CountDownTimer(300, 100) {
+
+                    public void onTick(long millisUntilFinished) {
+                        view.setEnabled(false);
+                    }
+
+                    public void onFinish() {
+                        view.setEnabled(true);
+                    }
+                }.start();
+
                 if (withclickable) {
 
                     G.isLinkClicked = true;

@@ -37,41 +37,56 @@ import net.iGap.realm.RealmWallpaperProto;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdapterSolidChatBackground extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final int CHOOSE = 0;
-    private final int ALL = 1;
 
-    private ArrayList<FragmentChatBackground.StructWallpaper> mList;
+
+    private ArrayList<String> mList;
     private FragmentChatBackground.OnImageClick onImageClick;
     private Fragment fragment;
-
-
-    public AdapterChatBackground(Fragment fragment, ArrayList<FragmentChatBackground.StructWallpaper> List, FragmentChatBackground.OnImageClick onImageClick) {
+    private Enum imgSwitcher;
+ArrayList<String> palletList=new ArrayList<>(Arrays.asList("#2962ff","#00b8d4",
+        "#b71c1c","#e53935","#e57373",
+        "#880e4f","#d81b60","#f06292",
+        "#4a148c","#8e24aa","#ba68c8",
+        "#311b92","#5e35b1","#9575cd",
+        "#1a237e","#3949ab","#7986cb",
+        "#0d47a1","#1e88e5","#64b5f6",
+        "#01579b","#039be5","#4fc3f7",
+        "#006064","#00acc1","#4dd0e1",
+        "#004d40","#00897b","#4db6ac",
+        "#1b5e20","#43a047","#81c784",
+        "#33691e","#7cb342","#aed581",
+        "#827717","#c0ca33","#dce775",
+        "#f57f17","#fdd835","#fff176",
+        "#ff6f00","#ffb300","#ffd54f",
+        "#e65100","#fb8c00","#fb8c00",
+        "#bf360c","#f4511e","#ff8a65",
+        "#3e2723","#6d4c41","#a1887f",
+        "#212121","#757575","#e0e0e0",
+        "#263238","#546e7a","#90a4ae"));
+    public AdapterSolidChatBackground(Fragment fragment, ArrayList<String> List, FragmentChatBackground.OnImageClick onImageClick) {
         this.fragment = fragment;
         this.mList = List;
         this.onImageClick = onImageClick;
-
+        this.imgSwitcher=imgSwitcher;
+        mList.addAll(palletList);
         ;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        if (viewType == CHOOSE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_choose, parent, false);
-            return new ViewHolderImage(view);
-        } else {
+
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_background_image, parent, false);
             return new ViewHolderItem(view);
-        }
+
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-
-        if (holder.getItemViewType() == ALL) {
 
             final ViewHolderItem holder2 = (ViewHolderItem) holder;
             holder2.img.setImageDrawable(null);
@@ -79,70 +94,35 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
             if (mList.size() < (position + 1)) {
                 return;
             }
-            FragmentChatBackground.StructWallpaper wallpaper = mList.get(position);
-
-            if (wallpaper.getWallpaperType() == FragmentChatBackground.WallpaperType.proto) {
-                RealmAttachment pf = wallpaper.getProtoWallpaper().getFile();
+           String wallpaper = mList.get(position);
 
 
-                final String path = G.DIR_CHAT_BACKGROUND + "/" + "thumb_" + pf.getCacheId() + "_" + pf.getName();
-                if (!new File(path).exists()) {
-                    HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", pf.getToken(), pf.getUrl(), pf.getCacheId(), pf.getName(), pf.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, path, 4, new HelperDownloadFile.UpdateListener() {
-                        @Override
-                        public void OnProgress(String mPath, int progress) {
-                            if (progress == 100) {
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (holder2.img != null) {
-                                            G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
-                                        }
-                                    }
-                                });
-                            }
-                        }
+               holder2.img.setBackgroundColor(Color.parseColor(wallpaper));
 
-                        @Override
-                        public void OnError(String token) {
-                        }
-                    });
-                } else {
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder2.img);
-                }
-            } else {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(wallpaper.getPath()), holder2.img);
-
-            }
 
             String bigImagePath;
-            if (wallpaper.getWallpaperType() == FragmentChatBackground.WallpaperType.proto) {
-                RealmAttachment pf = wallpaper.getProtoWallpaper().getFile();
-                bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
-            } else {
-                bigImagePath = wallpaper.getPath();
-            }
 
-            if (new File(bigImagePath).exists()) {
+                bigImagePath = wallpaper;
+
+            if (bigImagePath!=null) {
                 holder2.messageProgress.setVisibility(View.GONE);
-
+                try{
+                    if (wallpaper != null)
+                        holder2.mPath = wallpaper;
+                    else
                         holder2.mPath = bigImagePath;
+                }catch (Exception e){}
 
             } else {
                 holder2.mPath = "";
                 holder2.messageProgress.setVisibility(View.VISIBLE);
-                startDownload(position, holder2.messageProgress);
             }
-        }
+
     }
 
     @Override
     public int getItemViewType(int position) {
-
-        if (position == 0) {
-            return CHOOSE;
-        } else {
-            return ALL;
-        }
+            return mList.size();
     }
 
     @Override
@@ -150,54 +130,6 @@ public class AdapterChatBackground extends RecyclerView.Adapter<RecyclerView.Vie
         return mList.size();
     }
 
-    private void startDownload(final int position, final MessageProgress messageProgress) {
-        messageProgress.withDrawable(R.drawable.ic_cancel, true);
-
-        RealmAttachment pf = mList.get(position).getProtoWallpaper().getFile();
-
-        String path = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
-
-
-        messageProgress.withOnProgress(new OnProgress() {
-            @Override
-            public void onProgressFinished() {
-
-                messageProgress.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        messageProgress.withProgress(0);
-                        messageProgress.setVisibility(View.GONE);
-                        notifyItemChanged(position);
-                    }
-                });
-
-
-            }
-        });
-
-        HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", pf.getToken(), pf.getUrl(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, path, 2, new HelperDownloadFile.UpdateListener() {
-            @Override
-            public void OnProgress(String mPath, final int progress) {
-                messageProgress.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        messageProgress.withProgress(progress);
-                    }
-                });
-            }
-
-            @Override
-            public void OnError(String token) {
-                messageProgress.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        messageProgress.withProgress(0);
-                        messageProgress.withDrawable(R.drawable.ic_download, true);
-                    }
-                });
-            }
-        });
-    }
 
     private class ViewHolderImage extends RecyclerView.ViewHolder {
 

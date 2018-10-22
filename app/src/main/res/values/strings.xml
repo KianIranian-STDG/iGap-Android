@@ -1357,6 +1357,9 @@
   <string name="way_receive_register_code">Way to receive code: </string>
   <string name="separate_notifications">Separate Notifications</string>
   <string name="mark_as_unread">Mark as read</string>
-    <string name="reply_label">Answer</string>
+  <string name="reply_label">Answer</string>
+  <string name="solid_colors">Solid colors</string>
+  <string name="wallpapers">Wallpapers</string>
+
 
 </resources>

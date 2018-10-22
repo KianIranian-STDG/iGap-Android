@@ -1351,6 +1351,8 @@
   <string name="new_pattern_passCode">ایجاد الگوی جدید</string>
   <string name="repeat_pattern_passCode">تکرار الگو</string>
   <string name="repeat_pattern_pattern">رمز عبور با الگو</string>
+    <string name="solid_colors">رنگ های پس زمین</string>
+  <string name="wallpapers">تصاویر پس زمینه</string>
 
   <string name="verify_register_sms">SMS</string>
   <string name="verify_register_call">Call</string>

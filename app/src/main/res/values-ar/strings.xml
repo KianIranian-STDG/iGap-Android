@@ -2293,7 +2293,6 @@
   <string name="separate_notifications">إعلامات منفصلة</string>
   <string name="mark_as_unread">مقروءة</string>
 
-
   <string name="wifi_data_usage">استخدام البيانات اللاسلكية</string>
   <string name="mobile_data_usage">استخدام بيانات بطاقة SIM</string>
   <string name="sent">نشر</string>
@@ -2308,10 +2307,12 @@
   <string name="repeat_pattern_passCode">كرر النمط</string>
   <string name="repeat_pattern_pattern">نمط رمز المرور</string>
   <string name="clearDataUsage">هل أنت متأكد من أنك تريد مسح استخدام البيانات?</string>
+  <string name="solid_colors">ألوان الخلفیه</string>
+  <string name="wallpapers">خلفيات</string>
 
   <string name="verify_register_sms">SMS</string>
   <string name="verify_register_call">Call</string>
   <string name="way_receive_register_code">Way to receive code: </string>
-    <string name="reply_label">Answer</string>
+  <string name="reply_label">Answer</string>
 
 </resources>
