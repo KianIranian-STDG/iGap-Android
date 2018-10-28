@@ -10,7 +10,6 @@
 
 package net.iGap.realm;
 
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.format.DateUtils;
@@ -1397,7 +1396,7 @@ public class RealmRoom extends RealmObject {
                 if (roomMessage == null) {
                     G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
                         @Override
-                        public void onClientGetRoomMessageResponse(long messageId) {
+                        public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
                             G.onClientGetRoomMessage = null;
                             G.handler.postDelayed(new Runnable() {
                                 @Override

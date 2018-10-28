@@ -173,7 +173,7 @@ public class HelperNotification {
             notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 CharSequence name = G.context.getString(R.string.channel_name_notification);// The user-visible name of the channel.
-                @SuppressLint("WrongConstant") NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
+                @SuppressLint("WrongConstant") NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH);
                 notificationManager.createNotificationChannel(mChannel);
             }
         }
@@ -629,7 +629,7 @@ public class HelperNotification {
         showPopUp = new ShowPopUp();
     }
 
-    void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, RealmRoom room, Realm realm) {
+    public void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, RealmRoom room, Realm realm) {
 
         if (!room.getMute()) {
 

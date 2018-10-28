@@ -837,10 +837,10 @@ public class HelperUrl {
                 new RequestClientGetRoomMessage().clientGetRoomMessage(room.getId(), messageId);
                 G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
                     @Override
-                    public void onClientGetRoomMessageResponse(final long messageId) {
-                        RealmRoomMessage.setGap(messageId);
+                    public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
+                        RealmRoomMessage.setGap(message.getMessageId());
                         G.onClientGetRoomMessage = null;
-                        openChat(username, type, user, room, chatEntry, messageId);
+                        openChat(username, type, user, room, chatEntry, message.getMessageId());
                     }
                 };
             }

@@ -50,7 +50,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -270,10 +269,8 @@ import net.iGap.viewmodel.ActivityCallViewModel;
 import org.parceler.Parcels;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1772,7 +1769,7 @@ public class FragmentChat extends BaseFragment
                                 new RequestClientGetRoomMessage().clientGetRoomMessage(mRoomId, pinMessageId);
                                 G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
                                     @Override
-                                    public void onClientGetRoomMessageResponse(long messageId) {
+                                    public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
                                         G.onClientGetRoomMessage = null;
                                         G.handler.post(new Runnable() {
                                             @Override
