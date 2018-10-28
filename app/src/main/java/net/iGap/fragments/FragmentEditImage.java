@@ -165,13 +165,6 @@ public class FragmentEditImage extends BaseFragment {
          */
 
 
-        setViewPager();
-        setCheckBoxItem();
-        messageBox(view);
-
-
-//        G.imageLoader.displayImage(suitablePath(path), imgEditImage);
-
         updateImage = new UpdateImage() {
             @Override
             public void result(String pathImageFilter) {
@@ -183,12 +176,15 @@ public class FragmentEditImage extends BaseFragment {
                         mAdapter.notifyDataSetChanged();
                     }
                 });
-
-
-//                G.imageLoader.displayImage(suitablePath(path), imgEditImage);
             }
         };
 
+        setViewPager();
+        setCheckBoxItem();
+        messageBox(view);
+
+
+//        G.imageLoader.displayImage(suitablePath(path), imgEditImage);
 
         view.findViewById(R.id.pu_ripple_back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -453,11 +449,6 @@ public class FragmentEditImage extends BaseFragment {
     public interface UpdateImage {
         void result(String path);
     }
-
-
-
-
-
 
     private void setUpEmojiPopup(View view) {
         switch (G.themeColor) {
