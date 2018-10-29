@@ -110,8 +110,8 @@ public final class StartupActions {
 
     private void checkDataUsage() {
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmDataUsage> realmDataUsage=realm.where(RealmDataUsage.class).findAll();
-        if (realmDataUsage.size()==0)
+        RealmResults<RealmDataUsage> realmDataUsage = realm.where(RealmDataUsage.class).findAll();
+        if (realmDataUsage.size() == 0)
             HelperDataUsage.initializeRealmDataUsage();
     }
 
@@ -610,13 +610,23 @@ public final class StartupActions {
         if (newRealmFile.exists()) {
             return Realm.getInstance(newConfig);
         } else {
+            try {
             configuration = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
-                    .schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
+                    .schemaVersion(REALM_SCHEMA_VERSION)
+                    .compactOnLaunch()
+                    .migration(new RealmMigration()).build();
             Realm realm = Realm.getInstance(configuration);
             realm.writeEncryptedCopyTo(newRealmFile, mKey);
             realm.close();
             Realm.deleteRealm(configuration);
             return Realm.getInstance(newConfig);
+
+            } catch (OutOfMemoryError oom) {
+                oom.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+           return Realm.getDefaultInstance();
         }
     }
 }

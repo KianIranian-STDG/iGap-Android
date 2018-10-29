@@ -84,7 +84,7 @@ public class UserContactsGetBlockedListResponse extends MessageHandler {
                         @Override
                         public void onInfo(final RealmRegisteredInfo registeredInfo) {
                             RealmRegisteredInfo.updateBlock(registeredInfo.getId(), true);
-                            RealmContacts.updateBlock(registeredInfo.getId(), true, realm);
+                            RealmContacts.updateBlock(registeredInfo.getId(), true);
                         }
                     });
                 }

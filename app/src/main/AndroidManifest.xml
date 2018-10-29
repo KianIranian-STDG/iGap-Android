@@ -260,7 +260,7 @@
     <service
       android:name="net.iGap.module.AuthenticatorService"
       android:exported="true"
-      android:process=":auth">
+     >
       <intent-filter>
         <action android:name="android.accounts.AccountAuthenticator" />
       </intent-filter>
