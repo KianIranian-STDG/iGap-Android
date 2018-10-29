@@ -98,11 +98,11 @@ public class FragmentNotificationAndSound extends BaseFragment {
                         editor.putInt(SHP_SETTING.KEY_STNS_POPUP_NOTIFICATION_GROUP, 0);
                         editor.putInt(SHP_SETTING.KEY_STNS_SOUND_GROUP_POSITION, 0);
                         editor.putString(SHP_SETTING.KEY_STNS_SOUND_GROUP, G.fragmentActivity.getResources().getString(R.string.array_Default_Notification_tone));
-                        editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND, 0);
-                        editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE, 0);
-                        editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW, 0);
-                        editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND, 0);
-                        editor.putInt(SHP_SETTING.KEY_STNS_SEPARATE_NOTIFICATION, 0);
+                        editor.putInt(SHP_SETTING.KEY_STNS_APP_SOUND_NEW, 1);
+                        editor.putInt(SHP_SETTING.KEY_STNS_APP_VIBRATE_NEW, 1);
+                        editor.putInt(SHP_SETTING.KEY_STNS_APP_PREVIEW_NEW, 1);
+                        editor.putInt(SHP_SETTING.KEY_STNS_CHAT_SOUND_NEW, 1);
+                        editor.putInt(SHP_SETTING.KEY_STNS_SEPARATE_NOTIFICATION, 1);
                         editor.putInt(SHP_SETTING.KEY_STNS_CONTACT_JOINED, 1);
                         editor.putInt(SHP_SETTING.KEY_STNS_PINNED_MESSAGE, 1);
                         editor.putInt(SHP_SETTING.KEY_STNS_KEEP_ALIVE_SERVICE, 1);
