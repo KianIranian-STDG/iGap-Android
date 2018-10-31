@@ -1,5 +1,6 @@
 package net.iGap.helper;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
@@ -90,7 +91,7 @@ public class GoToChatActivity {
 
             String message = G.context.getString(R.string.send_message_to) + " " + roomName;
 
-            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(G.fragmentActivity).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+            MaterialDialog.Builder mDialog = new MaterialDialog.Builder(G.fragmentActivity != null ? G.fragmentActivity : G.context).title(message).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                 @Override
                 public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     FragmentChat fragmentChat = new FragmentChat();
