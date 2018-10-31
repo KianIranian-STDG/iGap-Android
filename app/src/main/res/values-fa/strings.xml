@@ -1361,5 +1361,7 @@
 
   <string name="separate_notifications">اعلانات جداگانه</string>
   <string name="mark_as_unread">خوانده شده</string>
+    <string name="planDB">\"iGapLocalDatabase.realm\"</string>
+  <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
 
 </resources>

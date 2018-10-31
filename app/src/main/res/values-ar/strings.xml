@@ -2314,5 +2314,7 @@
   <string name="verify_register_call">Call</string>
   <string name="way_receive_register_code">Way to receive code: </string>
   <string name="reply_label">Answer</string>
+    <string name="planDB">\"iGapLocalDatabase.realm\"</string>
+  <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
 
 </resources>

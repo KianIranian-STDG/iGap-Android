@@ -585,6 +585,11 @@ public final class StartupActions {
         }
     }
 
+    public Realm getPlainInstance() {
+        RealmConfiguration configuration = new RealmConfiguration.Builder().name(context.getResources().getString(R.string.planDB)).schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
+        return Realm.getInstance(configuration);
+    }
+
     public Realm getInstance() {
         SharedPreferences sharedPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
 
@@ -600,7 +605,7 @@ public final class StartupActions {
 
         byte[] mKey = Base64.decode(sharedPreferences.getString("myByteArray", null), Base64.DEFAULT);
         RealmConfiguration newConfig = new RealmConfiguration.Builder()
-                .name("iGapLocalDatabaseEncrypted.realm")
+                .name(context.getResources().getString(R.string.encriptedDB))
                 .encryptionKey(mKey)
                 .schemaVersion(REALM_SCHEMA_VERSION)
                 .migration(new RealmMigration())
@@ -610,23 +615,25 @@ public final class StartupActions {
         if (newRealmFile.exists()) {
             return Realm.getInstance(newConfig);
         } else {
+            Realm realm = null;
             try {
-            configuration = new RealmConfiguration.Builder().name("iGapLocalDatabase.realm")
-                    .schemaVersion(REALM_SCHEMA_VERSION)
-                    .compactOnLaunch()
-                    .migration(new RealmMigration()).build();
-            Realm realm = Realm.getInstance(configuration);
-            realm.writeEncryptedCopyTo(newRealmFile, mKey);
-            realm.close();
-            Realm.deleteRealm(configuration);
-            return Realm.getInstance(newConfig);
-
+                configuration = new RealmConfiguration.Builder().name(context.getResources().getString(R.string.planDB))
+                        .schemaVersion(REALM_SCHEMA_VERSION)
+                        .compactOnLaunch()
+                        .migration(new RealmMigration()).build();
+                realm = Realm.getInstance(configuration);
+                realm.writeEncryptedCopyTo(newRealmFile, mKey);
+                realm.close();
+                Realm.deleteRealm(configuration);
+                return Realm.getInstance(newConfig);
             } catch (OutOfMemoryError oom) {
-                oom.printStackTrace();
+                realm.close();
+                return getPlainInstance();
             } catch (Exception e) {
-                e.printStackTrace();
+                realm.close();
+                return getPlainInstance();
+
             }
-           return Realm.getDefaultInstance();
         }
     }
 }

@@ -329,7 +329,7 @@
     <service
       android:name=".helper.contact.ContactsSyncAdapterService"
       android:exported="true"
-      android:process=":contacts">
+     >
 
       <intent-filter>
         <action android:name="android.content.SyncAdapter" />

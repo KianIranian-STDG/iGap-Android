@@ -1360,6 +1360,8 @@
   <string name="reply_label">Answer</string>
   <string name="solid_colors">Solid colors</string>
   <string name="wallpapers">Wallpapers</string>
+  <string name="planDB">iGapLocalDatabase.realm</string>
+  <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
 
 
 </resources>
