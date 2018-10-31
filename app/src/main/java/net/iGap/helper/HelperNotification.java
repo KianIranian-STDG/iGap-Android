@@ -27,6 +27,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityPopUpNotification;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
@@ -630,6 +631,10 @@ public class HelperNotification {
     }
 
     public void addMessage(long roomId, ProtoGlobal.RoomMessage roomMessage, ProtoGlobal.Room.Type roomType, RealmRoom room, Realm realm) {
+
+        if (roomId == FragmentChat.lastChatRoomId) {
+            return;
+        }
 
         if (!room.getMute()) {
 
