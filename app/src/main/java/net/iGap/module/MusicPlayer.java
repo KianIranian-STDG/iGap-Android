@@ -145,6 +145,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
     private static ComponentName remoteComponentName;
     private static Realm mRealm;
     private static boolean isRegisterSensor = false;
+    public static final String musicChannelId = "music_channel";
 
     private static Realm getRealm() {
         if (mRealm == null || mRealm.isClosed()) {
@@ -174,11 +175,6 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
 
         if (notificationManager == null) {
             notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                CharSequence name = G.context.getString(R.string.channel_name_notification);// The user-visible name of the channel.
-                @SuppressLint("WrongConstant") NotificationChannel mChannel = new NotificationChannel("iGap_channel_01", name, NotificationManager.IMPORTANCE_HIGH);
-                notificationManager.createNotificationChannel(mChannel);
-            }
         }
 
         return notificationManager;
@@ -953,7 +949,7 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
             PendingIntent pendingIntentClose = PendingIntent.getBroadcast(context, 4, intentClose, 0);
             remoteViews.setOnClickPendingIntent(R.id.mln_btn_close, pendingIntentClose);
 
-            notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName)
+            notification = new NotificationCompat.Builder(context.getApplicationContext()).setTicker("music").setSmallIcon(R.mipmap.j_mp3).setContentTitle(musicName).setChannelId(musicChannelId)
                     //  .setContentText(place)
                     .setContent(remoteViews).setContentIntent(pi).setDeleteIntent(pendingIntentClose).setAutoCancel(false).setOngoing(true).build();
         }
@@ -1498,7 +1494,20 @@ public class MusicPlayer extends Service implements AudioManager.OnAudioFocusCha
                 if (action.equals(STARTFOREGROUND_ACTION)) {
 
                     if (notification != null) {
-                        startForeground(notificationId, notification);
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            CharSequence name = G.context.getString(R.string.channel_name_notification);// The user-visible name of the channel.
+                            @SuppressLint("WrongConstant") NotificationChannel mChannel = new NotificationChannel(musicChannelId, name, NotificationManager.IMPORTANCE_HIGH);
+                            getNotificationManager().createNotificationChannel(mChannel);
+                        }
+
+                        try {
+                            startForeground(notificationId, notification);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
                         if (latestAudioFocusState != AudioManager.AUDIOFOCUS_GAIN) { // if do double "AUDIOFOCUS_GAIN", "AUDIOFOCUS_LOSS" will be called
                             latestAudioFocusState = AudioManager.AUDIOFOCUS_GAIN;
                             registerAudioFocus(AudioManager.AUDIOFOCUS_GAIN);

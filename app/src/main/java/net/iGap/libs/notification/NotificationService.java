@@ -50,7 +50,7 @@ public class NotificationService extends FirebaseMessagingService {
                                 final Realm realm = Realm.getDefaultInstance();
                                 RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                                 if (room != null) {
-                                    HelperNotification.getInstance().addMessage(roomId, message, ProtoGlobal.Room.Type.valueOf(date.get(MESSAGE_TYPE)), room, realm);
+                                    HelperNotification.getInstance().addMessage(roomId, message, room.getType(), room, realm);
                                 }
                                 realm.close();
                             }

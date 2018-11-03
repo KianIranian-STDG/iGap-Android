@@ -226,6 +226,7 @@ public class HelperNotification {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                     .setSmallIcon(getNotificationIcon())
                     .setLargeIcon(mBitmapIcon)
+                    .setChannelId(CHANNEL_ID)
                     .setContentTitle(mHeader)
                     .setContentText(mContent)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)

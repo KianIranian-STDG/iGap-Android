@@ -43,6 +43,7 @@
   <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
   <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
   <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
   <uses-feature
     android:glEsVersion="0x00020000"
