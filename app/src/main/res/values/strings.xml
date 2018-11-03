@@ -1363,5 +1363,7 @@
   <string name="planDB">iGapLocalDatabase.realm</string>
   <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
 
+  <string name="realmDatabaseEncrypt">iGapLocalDatabaseEncrypted.realm</string>
+  <string name="realmDatabaseNonEncrypt">iGapLocalDatabase.realm</string>
 
 </resources>
