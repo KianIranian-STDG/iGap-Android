@@ -44,6 +44,7 @@ public class RealmRegisteredInfo extends RealmObject {
     private int avatarCount;
     private String bio;
     private boolean verified;
+    private boolean isBot;
     private boolean mutual;
     private boolean blockUser = false;
     private boolean DoNotshowSpamBar = false;
@@ -70,6 +71,7 @@ public class RealmRegisteredInfo extends RealmObject {
         registeredInfo.setUsername(input.getUsername());
         registeredInfo.setBio(input.getBio());
         registeredInfo.setVerified(input.getVerified());
+        registeredInfo.setBot(input.getBot());
 
         return registeredInfo;
     }
@@ -364,6 +366,14 @@ public class RealmRegisteredInfo extends RealmObject {
 
     public void setVerified(boolean verified) {
         this.verified = verified;
+    }
+
+    public boolean isBot() {
+        return isBot;
+    }
+
+    public void setBot(boolean bot) {
+        isBot = bot;
     }
 
     public boolean isMutual() {

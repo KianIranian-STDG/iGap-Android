@@ -482,6 +482,7 @@ public class FragmentChat extends BaseFragment
     private boolean isShowLayoutUnreadMessage = false;
     private boolean isCloudRoom;
     private boolean isEditMessage = false;
+    private boolean isBot = false;
     private long biggestMessageId = 0;
     private long lastMessageId = 0;
     private long replyToMessageId = 0;
@@ -1389,6 +1390,7 @@ public class FragmentChat extends BaseFragment
                         title = realmRegisteredInfo.getDisplayName();
                         lastSeen = realmRegisteredInfo.getLastSeen();
                         userStatus = realmRegisteredInfo.getStatus();
+                        isBot = realmRegisteredInfo.isBot();
                         if (realmRegisteredInfo.isVerified()) {
                             txtVerifyRoomIcon.setVisibility(View.VISIBLE);
                         }
