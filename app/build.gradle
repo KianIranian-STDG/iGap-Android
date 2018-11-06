@@ -29,6 +29,7 @@ android {
         versionCode 81
         versionName "0.9.7"
         multiDexEnabled true
+        useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
 
         ndk {
@@ -148,6 +149,8 @@ dependencies {
     implementation 'com.mcxiaoke.volley:library:1.0.19'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
+    implementation 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 
 configurations.all {

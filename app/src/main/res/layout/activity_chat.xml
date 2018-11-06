@@ -505,10 +505,16 @@
           style="?backgroundColorSettingTheme_2"
           android:scaleType="centerCrop" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
         <android.support.v7.widget.RecyclerView
           android:id="@+id/chl_recycler_view_chat"
           android:layout_width="match_parent"
-          android:layout_height="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="1"
           android:background="@android:color/transparent"
           android:fadeScrollbars="true"
           android:scrollbarSize="@dimen/dp4"
@@ -518,6 +524,16 @@
           <!-- android:scrollbars="none"   android:overScrollMode="never"-->
         </android.support.v7.widget.RecyclerView>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcvDrBot"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_marginRight="@dimen/dp6"
+            android:layout_marginLeft="@dimen/dp6"
+            android:elevation="@dimen/dp10"
+            android:background="@android:color/transparent"
+            android:layout_height="@dimen/dp52"/>
+        </LinearLayout>
       </RelativeLayout>
 
       <FrameLayout
@@ -528,6 +544,7 @@
         android:layout_margin="@dimen/dp12"
         android:orientation="vertical"
         android:visibility="gone">
+
 
         <net.iGap.module.MaterialDesignTextView
           android:id="@+id/ac_txt_down_navigation"
@@ -661,6 +678,8 @@
 
            />
      </LinearLayout>-->
+
+
 
     <LinearLayout
       android:id="@+id/ac_ll_hash_navigation"

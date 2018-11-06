@@ -74,6 +74,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
+import com.google.gson.Gson;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
@@ -93,6 +94,7 @@ import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
 import net.iGap.adapter.AdapterBottomSheet;
+import net.iGap.adapter.AdapterDrBot;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.adapter.items.AdapterBottomSheetForward;
 import net.iGap.adapter.items.chat.AbstractMessage;
@@ -221,6 +223,9 @@ import net.iGap.module.structs.StructCompress;
 import net.iGap.module.structs.StructMessageAttachment;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructUploadVideo;
+import net.iGap.module.webserviceDrBot.Favorite;
+import net.iGap.module.webserviceDrBot.StructBot;
+import net.iGap.module.webserviceDrBot.WebService;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoClientGetRoomHistory;
 import net.iGap.proto.ProtoClientRoomReport;
@@ -355,6 +360,8 @@ public class FragmentChat extends BaseFragment
     private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
     private boolean isShareOk = true;
+    private boolean isDrBot = true;
+    public static OnHandleDrBot onHandleDrBot;
 
     /**
      * *************************** common method ***************************
@@ -423,6 +430,7 @@ public class FragmentChat extends BaseFragment
     private ViewGroup vgSpamUser;
     private RecyclerView.OnScrollListener scrollListener;
     private RecyclerView rcvBottomSheet;
+    private RecyclerView rcvDrBot;
     private FrameLayout llScrollNavigate;
     private FastItemAdapter fastItemAdapter;
     private FastItemAdapter fastItemAdapterForward;
@@ -515,6 +523,7 @@ public class FragmentChat extends BaseFragment
     private boolean isNewBottomSheet = true;
     PaymentDialogBinding paymentDialogBinding;
     PaymentFragment paymentDialog;
+    List<Favorite> items = new ArrayList<>();
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -1465,7 +1474,76 @@ public class FragmentChat extends BaseFragment
             isCloudRoom = true;
         }
 
+        if (isDrBot) {
+
+            initDrBot();
+
+
+        }
+
         //+realm.close();
+    }
+
+    private void initDrBot() {
+
+
+        rcvDrBot = rootView.findViewById(R.id.rcvDrBot);
+        rcvDrBot.setLayoutManager(new LinearLayoutManager(G.context, LinearLayoutManager.HORIZONTAL, false));
+        AdapterDrBot adapterDrBot = new AdapterDrBot(items);
+        rcvDrBot.setAdapter(adapterDrBot);
+
+        List nameValuePairs = new ArrayList(1);
+        WebService.AsyncCaller caller = new WebService.AsyncCaller(context, nameValuePairs, new WebService.AsyncTaskCompleteListener<String>() {
+            @Override
+            public void onTaskComplete(String result) {
+                Gson gson = new Gson();
+                StructBot item = gson.fromJson(result, StructBot.class);
+
+                if (item !=null && item.getResult() == 1) {
+
+                    rcvDrBot.setVisibility(View.VISIBLE);
+                    items = item.getFavorite();
+                    adapterDrBot.update(items);
+
+
+
+
+                    onHandleDrBot = new OnHandleDrBot() {
+                        @Override
+                        public void goToRoomBot(Favorite item) {
+
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(G.currentActivity, item.getFavoriteName(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void sendMessageBOt(Favorite item) {
+
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!isChatReadOnly) {
+                                        edtChat.setText(item.getFavoriteName());
+                                        imvSendButton.performClick();
+                                    }
+                                }
+                            });
+
+
+                        }
+                    };
+
+                }
+
+            }
+        }, true);
+        caller.execute("igap/getData");
+
+
     }
 
     private void checkConnection(String action) {
@@ -1561,6 +1639,10 @@ public class FragmentChat extends BaseFragment
             isGoingFromUserLink = extras.getBoolean("GoingFromUserLink");
             isNotJoin = extras.getBoolean("ISNotJoin");
             userName = extras.getString("UserName");
+
+            if (userName.equals("@Dr_iGap")) {
+                isDrBot = true;
+            }
 
             if (isNotJoin) {
                 final LinearLayout layoutJoin = (LinearLayout) rootView.findViewById(R.id.ac_ll_join);
@@ -8834,6 +8916,15 @@ public class FragmentChat extends BaseFragment
                 }
             }
         }
+
+    }
+
+
+    public interface OnHandleDrBot{
+
+        void goToRoomBot(Favorite favorite);
+
+        void sendMessageBOt(Favorite favorite);
 
     }
 
