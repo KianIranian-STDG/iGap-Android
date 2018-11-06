@@ -157,6 +157,7 @@
                 app:rv_alpha="200"
                 app:rv_centered="true"
                 app:rv_rippleDuration="150"
+                android:visibility="@{viewModel.menuVisibility, default=visible}"
                 app:rv_ripplePadding="5dp">
 
                 <net.iGap.module.MaterialDesignTextView

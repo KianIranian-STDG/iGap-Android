@@ -1364,4 +1364,7 @@
     <string name="planDB">\"iGapLocalDatabase.realm\"</string>
   <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
 
+  <string name="start">شروع</string>
+
+
 </resources>

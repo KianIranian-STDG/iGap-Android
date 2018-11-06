@@ -1404,6 +1404,32 @@ public class FragmentChat extends BaseFragment
                         lastSeen = realmRegisteredInfo.getLastSeen();
                         userStatus = realmRegisteredInfo.getStatus();
                         isBot = realmRegisteredInfo.isBot();
+
+                        if (isBot){
+
+                            if (getMessagesCount() == 0){
+                                if (layoutMute == null) {
+                                    layoutMute = (RelativeLayout) rootView.findViewById(R.id.chl_ll_channel_footer);
+                                    layoutMute.setVisibility(View.VISIBLE);
+                                    ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.start);
+                                    LinearLayout layoutAttach = (LinearLayout) rootView.findViewById(R.id.layout_attach_file);
+                                    layoutAttach.setVisibility(View.GONE);
+
+                                    layoutMute.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            if (!isChatReadOnly) {
+                                                edtChat.setText("/Start");
+                                                imvSendButton.performClick();
+                                                layoutMute.setVisibility(View.GONE);
+                                                layoutAttach.setVisibility(View.VISIBLE);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
                         if (realmRegisteredInfo.isVerified()) {
                             txtVerifyRoomIcon.setVisibility(View.VISIBLE);
                         }
@@ -1477,15 +1503,11 @@ public class FragmentChat extends BaseFragment
         if (chatPeerId == G.userId) {
             isCloudRoom = true;
         }
-
-        if (isDrBot) {
-
-            initDrBot();
-
-
-        }
-
         //+realm.close();
+    }
+
+    private long getMessagesCount() {
+        return getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll().size();
     }
 
     private void initDrBot() {
@@ -1644,8 +1666,8 @@ public class FragmentChat extends BaseFragment
             isNotJoin = extras.getBoolean("ISNotJoin");
             userName = extras.getString("UserName");
 
-            if (userName.equals("@Dr_iGap")) {
-                isDrBot = true;
+            if (userName != null && userName.equals("@Dr_iGap")) {
+                initDrBot();
             }
 
             if (isNotJoin) {
@@ -2264,7 +2286,7 @@ public class FragmentChat extends BaseFragment
 
         if (chatType == CHAT && !isChatReadOnly) {
 
-            if (G.userId != chatPeerId) {
+            if (G.userId != chatPeerId && !isBot) {
 
                 RippleView rippleCall = (RippleView) rootView.findViewById(R.id.acp_ripple_call);
                 // gone or visible view call
@@ -2440,7 +2462,7 @@ public class FragmentChat extends BaseFragment
                 }
 
 
-                if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom) {
+                if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
                     root8.setVisibility(View.VISIBLE);
                 } else {
                     root8.setVisibility(View.GONE);

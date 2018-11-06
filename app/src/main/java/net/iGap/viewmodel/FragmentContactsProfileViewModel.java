@@ -49,6 +49,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     public boolean disableDeleteContact = false;
     public boolean isVerified = false;
     public ObservableInt callVisibility = new ObservableInt(View.GONE);
+    public ObservableInt menuVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt toolbarVisibility = new ObservableInt(View.GONE);
     public ObservableInt bioVisibility = new ObservableInt(View.VISIBLE);
     public ObservableBoolean showNumber = new ObservableBoolean(true);
@@ -73,6 +74,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     private String color;
     private String userStatus;
     private String avatarPath;
+    private boolean isBot;
 
     public FragmentContactsProfileViewModel(FragmentContactsProfileBinding fragmentContactsProfileBinding, long roomId, long userId, String enterFrom) {
         this.fragmentContactsProfileBinding = fragmentContactsProfileBinding;
@@ -99,6 +101,14 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         }
 
         registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
+        isBot = registeredInfo.isBot();
+        if (isBot){
+
+            callVisibility.set(View.GONE);
+            menuVisibility.set(View.GONE);
+
+
+        }
 
         if (registeredInfo != null) {
             isBlockUser = registeredInfo.isBlockUser();
@@ -182,7 +192,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         if (userId != 134 && G.userId != userId) {
             RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
             if (callConfig != null) {
-                if (callConfig.isVoice_calling()) {
+                if (callConfig.isVoice_calling() && !isBot) {
                     callVisibility.set(View.VISIBLE);
                 } else {
                     callVisibility.set(View.GONE);

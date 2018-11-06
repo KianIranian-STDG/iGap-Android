@@ -2316,5 +2316,7 @@
   <string name="reply_label">Answer</string>
     <string name="planDB">\"iGapLocalDatabase.realm\"</string>
   <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
+  <string name="start">بداية</string>
+
 
 </resources>
