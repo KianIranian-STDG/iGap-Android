@@ -256,6 +256,7 @@ public class G extends MultiDexApplication {
     public static OnUpdateUserStatusInChangePage onUpdateUserStatusInChangePage;
     public static OnLastSeenUpdateTiming onLastSeenUpdateTiming;
     public static OnSetAction onSetAction;
+    public static OnBotClick onBotClick;
     public static OnSetActionInRoom onSetActionInRoom;
     public static OnUserSessionGetActiveList onUserSessionGetActiveList;
     public static OnUserSessionTerminate onUserSessionTerminate;

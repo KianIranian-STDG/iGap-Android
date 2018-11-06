@@ -283,6 +283,29 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
+    private static void insertIgapBot(final SpannableStringBuilder strBuilder, final int start, final int end) {
+
+        ClickableSpan clickable = new ClickableSpan() {
+            public void onClick(View view) {
+                G.isLinkClicked = true;
+                String botCommandText = strBuilder.toString().substring(start, end);
+
+                if (G.onBotClick != null) {
+                    G.onBotClick.onBotCommandText(botCommandText);
+                }
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                ds.linkColor = Color.parseColor(G.linkColor);
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+            }
+        };
+
+        strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
     private static void insertIgapResolveLink(final SpannableStringBuilder strBuilder, final int start, final int end) {
 
         ClickableSpan clickable = new ClickableSpan() {
@@ -371,7 +394,6 @@ public class HelperUrl {
             @Override
             public void onClick(View view) {
                 G.isLinkClicked = true;
-                ;
                 if (FragmentChat.hashListener != null) {
                     FragmentChat.hashListener.complete(true, "#" + text, messageID);
                 }
@@ -503,6 +525,8 @@ public class HelperUrl {
                         insertIgapLink(strBuilder, start, end);
                     } else if (type.equals("igapResolve")) {
                         insertIgapResolveLink(strBuilder, start, end);
+                    } else if (type.equals("bot")) {
+                        insertIgapBot(strBuilder, start, end);
                     } else if (type.equals("webLink")) {
                         insertLinkSpan(strBuilder, start, end, true);
                     }
@@ -546,6 +570,8 @@ public class HelperUrl {
                 linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapLink.toString() + "@";
             } else if (str.contains(igapResolve)) {
                 linkInfo += count + "_" + (count + str.length()) + "_" + linkType.igapResolve.toString() + "@";
+            } else if (isBotLink(str)) {
+                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.bot.toString() + "@";
             } else if (isTextLink(str)) {
                 linkInfo += count + "_" + (count + str.length()) + "_" + linkType.webLink.toString() + "@";
             }
@@ -553,6 +579,10 @@ public class HelperUrl {
         }
 
         return linkInfo;
+    }
+
+    private static boolean isBotLink(String text) {
+        return text.matches("^\\/\\w+");
     }
 
     private static String analysisAtSignLinkInfo(String text) {
@@ -798,9 +828,9 @@ public class HelperUrl {
                 @Override
                 public void onClientResolveUsername(ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, ProtoGlobal.RegisteredUser user, ProtoGlobal.Room room) {
                     if (messageId == 0 || type == ProtoClientResolveUsername.ClientResolveUsernameResponse.Type.USER) {
-                        openChat(username, type, user, room, chatEntry, messageId);
+                        openChat(username, type, user, room, user.getBot() ? ChatEntry.chat : chatEntry, messageId);
                     } else {
-                        resolveMessageAndOpenChat(messageId, username, chatEntry, type, user, room);
+                        resolveMessageAndOpenChat(messageId, username, user.getBot() ? ChatEntry.chat : chatEntry, type, user, room);
                     }
                 }
 
@@ -911,12 +941,12 @@ public class HelperUrl {
         if (realmRoom != null) {
             closeDialogWaiting();
 
-            goToActivity(realmRoom.getId(), id, chatEntery, messageId);
+            goToActivity(realmRoom.getId(), id, user.getBot() ? ChatEntry.chat : chatEntery, messageId);
 
             realm.close();
         } else {
             if (G.userLogin) {
-                addChatToDatabaseAndGoToChat(user, 0, chatEntery);
+                addChatToDatabaseAndGoToChat(user, 0, user.getBot() ? ChatEntry.chat : chatEntery);
             } else {
                 closeDialogWaiting();
                 HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
@@ -964,7 +994,7 @@ public class HelperUrl {
                     @Override
                     public void onSuccess() {
 
-                        goToActivity(roomId, user.getId(), chatEntery, 0);
+                        goToActivity(roomId, user.getId(), user.getBot() ? ChatEntry.chat : chatEntery, 0);
 
                         realm.close();
                     }
@@ -1110,7 +1140,7 @@ public class HelperUrl {
     }
 
     enum linkType {
-        hash, atSighn, igapLink, igapResolve, webLink
+        hash, atSighn, igapLink, igapResolve, webLink, bot
 
     }
 

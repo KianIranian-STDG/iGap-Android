@@ -5,6 +5,7 @@
   <string name="md_black_keyboard_with_white_keys">\uf30c</string> <!-- igap_keyboard  -->
   <string name="md_send_button">\uf48a</string>  <!-- igap_send  -->
   <string name="md_attachment_clip">\uf066</string>  <!-- igap_attachment  -->
+  <string name="md_bot">\uf6a8</string>
   <string name="md_voice_message_microphone_button">\uf36c</string> <!-- igap_microphone  -->
   <string name="md_flaticon_volume_off_indicator">\uf581</string> <!-- igap_volume-off  -->
   <string name="md_share_button">\uf497</string>  <!-- igap_share-variant  -->

@@ -764,6 +764,14 @@
       android:id="@+id/layout_attach_file"
       layout="@layout/layout_attach_file" />
 
+    <include
+      android:id="@+id/layout_bot"
+      layout="@layout/bot_action_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:visibility="gone" />
+
     <LinearLayout
       android:id="@+id/ac_ll_join"
       android:layout_width="match_parent"

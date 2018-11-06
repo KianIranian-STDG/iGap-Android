@@ -146,6 +146,7 @@ import net.iGap.interfaces.IUpdateLogItem;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnBackgroundChanged;
+import net.iGap.interfaces.OnBotClick;
 import net.iGap.interfaces.OnChannelAddMessageReaction;
 import net.iGap.interfaces.OnChannelGetMessagesStats;
 import net.iGap.interfaces.OnChannelUpdateReactionStatus;
@@ -188,6 +189,7 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
+import net.iGap.module.BotInit;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactUtils;
@@ -334,7 +336,7 @@ import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 public class FragmentChat extends BaseFragment
         implements IMessageItem, OnChatClearMessageResponse, OnPinedMessage, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged,
-        OnConnectionChangeStateChat, OnChannelUpdateReactionStatus {
+        OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick {
 
     public static FinishActivity finishActivity;
     public static OnComplete onMusicListener;
@@ -510,6 +512,7 @@ public class FragmentChat extends BaseFragment
     private boolean isEmojiSHow = false;
     private boolean isCameraStart = false;
     private boolean isCameraAttached = false;
+    BotInit botInit;
     private boolean isPermissionCamera = false;
     private boolean isPublicGroup = false;
     private ArrayList<Long> bothDeleteMessageId;
@@ -869,6 +872,7 @@ public class FragmentChat extends BaseFragment
         HelperNotification.getInstance().cancelNotification();
         G.onChannelUpdateReactionStatusChat = this;
         G.onPinedMessage = this;
+        G.onBotClick = this;
 
         finishActivity = new FinishActivity() {
             @Override
@@ -2601,6 +2605,8 @@ public class FragmentChat extends BaseFragment
 
                     imvSmileButton.performClick();
                 }
+
+                if (botInit != null) botInit.close();
             }
         });
 
@@ -2618,6 +2624,12 @@ public class FragmentChat extends BaseFragment
         imvMicButton = (MaterialDesignTextView) rootView.findViewById(R.id.chl_imv_mic_button);
 
         sendMoney = (MaterialDesignTextView) rootView.findViewById(R.id.chl_imv_sendMoney_button);
+
+        if (isBot) {
+            botInit = new BotInit(rootView, false);
+            sendButtonVisibility(false);
+        }
+
         if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom) {
             sendMoney.setVisibility(View.VISIBLE);
         } else {
@@ -3520,6 +3532,10 @@ public class FragmentChat extends BaseFragment
 
         if (roomMessage.getMessageId() <= biggestMessageId) {
             return;
+        }
+
+        if (isBot) {
+            botInit.updateCommandList(false, message);
         }
 
         G.handler.postDelayed(new Runnable() {
@@ -5359,11 +5375,12 @@ public class FragmentChat extends BaseFragment
                     public void onEmojiPopupShown() {
                         changeEmojiButtonImageResource(R.string.md_black_keyboard_with_white_keys);
                         isEmojiSHow = true;
+                        if (botInit != null) botInit.close();
                     }
                 }).setOnSoftKeyboardOpenListener(new OnSoftKeyboardOpenListener() {
                     @Override
                     public void onKeyboardOpen(final int keyBoardHeight) {
-
+                        if (botInit != null) botInit.close();
                     }
                 }).setOnEmojiPopupDismissListener(new OnEmojiPopupDismissListener() {
                     @Override
@@ -5496,7 +5513,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                layoutAttachBottom.setVisibility(visibility ? View.GONE : View.VISIBLE);
+                layoutAttachBottom.setVisibility(visibility || isBot ? View.GONE : View.VISIBLE);
             }
         }).start();
         imvSendButton.animate().alpha(visibility ? 1F : 0F).setListener(new AnimatorListenerAdapter() {
@@ -8599,6 +8616,14 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onPinMessage() {
         initPinedMessage();
+    }
+
+    @Override
+    public void onBotCommandText(String text) {
+        if (!isChatReadOnly) {
+            edtChat.setText(text);
+            imvSendButton.performClick();
+        }
     }
 
     /**
