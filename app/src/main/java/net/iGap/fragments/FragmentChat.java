@@ -474,6 +474,7 @@ public class FragmentChat extends BaseFragment
     private String mainVideoPath = "";
     private String color;
     private String initialize;
+    private String lastBotMessage = "";
     private String groupParticipantsCountLabel;
     private String channelParticipantsCountLabel;
     private String userStatus;
@@ -1428,6 +1429,11 @@ public class FragmentChat extends BaseFragment
                                     });
                                 }
                             }
+
+                            if (realmRoom.getLastMessage() != null) {
+                                lastBotMessage = realmRoom.getLastMessage().getMessage();
+                            }
+
                         }
 
                         if (realmRegisteredInfo.isVerified()) {
@@ -2655,6 +2661,7 @@ public class FragmentChat extends BaseFragment
         if (isBot) {
             botInit = new BotInit(rootView, false);
             sendButtonVisibility(false);
+            botInit.updateCommandList(false, lastBotMessage, getActivity());
         }
 
         if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom) {
@@ -3562,7 +3569,7 @@ public class FragmentChat extends BaseFragment
         }
 
         if (isBot) {
-            botInit.updateCommandList(false, message);
+            botInit.updateCommandList(false, message, getActivity());
         }
 
         G.handler.postDelayed(new Runnable() {

@@ -1,11 +1,16 @@
 package net.iGap.module;
 
 
-import android.util.Log;
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -24,15 +29,27 @@ public class BotInit {
 
     }
 
-    public void updateCommandList(boolean showCommandList, String message) {
+    public void updateCommandList(boolean showCommandList, String message, Activity activity) {
 
-        fillList(message);
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                fillList(message);
 
-        if (showCommandList) {
-            //  makeTxtList(rootView);
-        } else {
-            makeButtonList(rootView);
-        }
+                if (botActionList.size() == 0) {
+                    return;
+                }
+
+                if (showCommandList) {
+                    makeTxtList(rootView);
+                } else {
+                    makeButtonList(rootView);
+                }
+
+                setLayoutBot(false, false);
+            }
+        });
+
     }
 
 
@@ -46,9 +63,49 @@ public class BotInit {
         btnShowBot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layoutBot.setVisibility(layoutBot.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                setLayoutBot(layoutBot.getVisibility() == View.VISIBLE, true);
             }
         });
+
+    }
+
+    private void setLayoutBot(boolean gone, boolean changeKeyboard) {
+
+        if (botActionList.size() == 0) {
+            return;
+        }
+
+        MaterialDesignTextView btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
+
+        if (gone) {
+            layoutBot.setVisibility(View.GONE);
+            btnShowBot.setText(R.string.md_bot);
+
+            if (changeKeyboard) {
+                try {
+                    InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.showSoftInput(rootView.findViewById(R.id.chl_edt_chat), InputMethodManager.SHOW_IMPLICIT);
+                    }
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } else {
+            layoutBot.setVisibility(View.VISIBLE);
+            btnShowBot.setText(R.string.md_black_keyboard_with_white_keys);
+
+            if (changeKeyboard) {
+                try {
+                    InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(rootView.findViewById(R.id.chl_edt_chat).getWindowToken(), 0);
+                } catch (IllegalStateException e) {
+                    e.getStackTrace();
+                }
+            }
+
+        }
 
     }
 
@@ -63,7 +120,7 @@ public class BotInit {
                 if (lineSplit.length == 2) {
                     StructRowBotAction _row = new StructRowBotAction();
                     _row.action = lineSplit[0];
-                    _row.action = lineSplit[1];
+                    _row.name = lineSplit[1];
                     botActionList.add(_row);
                 }
             }
@@ -90,7 +147,7 @@ public class BotInit {
             }
 
             if (i + 1 < botActionList.size()) {
-                StructRowBotAction sb1 = botActionList.get(i);
+                StructRowBotAction sb1 = botActionList.get(i + 1);
                 if (sb1.name.length() > 0) {
                     addButton(layout, sb1.name, sb1.action);
                 }
@@ -103,16 +160,21 @@ public class BotInit {
 
     private void addButton(LinearLayout layout, String name, String action) {
 
-        ViewGroup.LayoutParams param = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+        param.setMargins(2, 2, 2, 2);
 
         Button btn = new Button(G.context);
         btn.setLayoutParams(param);
+        btn.setTextColor(Color.WHITE);
+        btn.setBackgroundColor(ContextCompat.getColor(G.context, R.color.backgroundColorCall2));
         btn.setText(name);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("ddd", action);
-                layoutBot.setVisibility(View.GONE);
+                if (G.onBotClick != null) {
+                    G.onBotClick.onBotCommandText(action);
+                }
+                setLayoutBot(true, false);
             }
         });
         layout.addView(btn);
@@ -123,55 +185,48 @@ public class BotInit {
         String name = "";
     }
 
+    private void makeTxtList(View rootView) {
 
-//    private void makeTxtList(View rootView) {
-//
-//        LinearLayout layoutBot = rootView.findViewById(R.id.bal_layout_bot_layout);
-//        layoutBot.removeAllViews();
-//
-//        for (StructRowBotAction sb : botActionList) {
-//
-//            if (sb.name1.length() > 0) {
-//                addTxt(layoutBot, sb.name1, sb.icon1, sb.action1);
-//            }
-//
-//            if (sb.name2.length() > 0) {
-//                addTxt(layoutBot, sb.name2, sb.icon2, sb.action2);
-//            }
-//
-//            if (sb.name3.length() > 0) {
-//                addTxt(layoutBot, sb.name3, sb.icon3, sb.action3);
-//            }
-//
-//        }
-//
-//    }
-//
-//    private void addTxt(LinearLayout layout, String name, String icon, String action) {
-//
-//        ViewGroup.LayoutParams param = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
-//
-//        TextView txt = new TextView(G.context);
-//        txt.setLayoutParams(param);
-//        txt.setPadding(15, 6, 15, 6);
-//        txt.setText(action);
-//        txt.setTextColor(Color.BLACK);
-//        txt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                ((EmojiEditTextE) rootView.findViewById(R.id.chl_edt_chat)).setText(action);
-//
-//                layoutBot.setVisibility(View.GONE);
-//            }
-//        });
-//        layout.addView(txt);
-//
-//    }
+        LinearLayout layoutBot = rootView.findViewById(R.id.bal_layout_bot_layout);
+        layoutBot.removeAllViews();
+
+        for (int i = 0; i < botActionList.size(); i++) {
+
+            StructRowBotAction sb0 = botActionList.get(i);
+            if (sb0.name.length() > 0) {
+                addTxt(layoutBot, sb0.name, sb0.action);
+            }
+
+            layoutBot.addView(layoutBot);
+        }
+
+    }
+
+    private void addTxt(LinearLayout layout, String name, String action) {
+
+        ViewGroup.LayoutParams param = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+
+        TextView txt = new TextView(G.context);
+        txt.setLayoutParams(param);
+        txt.setPadding(15, 6, 15, 6);
+        txt.setText(action);
+        txt.setTextColor(Color.BLACK);
+        txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (G.onBotClick != null) {
+                    G.onBotClick.onBotCommandText(action);
+                }
+                setLayoutBot(true, false);
+            }
+        });
+        layout.addView(txt);
+
+    }
 
 
     public void close() {
-        layoutBot.setVisibility(View.GONE);
+        setLayoutBot(true, false);
     }
 
 }
