@@ -1531,9 +1531,6 @@ public class FragmentChat extends BaseFragment
                     items = item.getFavorite();
                     adapterDrBot.update(items);
 
-
-
-
                     onHandleDrBot = new OnHandleDrBot() {
                         @Override
                         public void goToRoomBot(Favorite item) {
@@ -1541,7 +1538,7 @@ public class FragmentChat extends BaseFragment
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(G.currentActivity, item.getFavoriteName(), Toast.LENGTH_SHORT).show();
+                                    HelperUrl.checkUsernameAndGoToRoom(item.getFavoriteValue(), HelperUrl.ChatEntry.chat);
                                 }
                             });
                         }
