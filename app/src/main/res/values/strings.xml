@@ -1367,6 +1367,7 @@
   <string name="realmDatabaseNonEncrypt">iGapLocalDatabase.realm</string>
   <string name="check_internet_connection">check internet connection</string>
   <string name="start">Start</string>
+  <string name="bot">Bot</string>
 
 
 </resources>

@@ -168,6 +168,7 @@ public class BotInit {
         btn.setTextColor(Color.WHITE);
         btn.setBackgroundColor(ContextCompat.getColor(G.context, R.color.backgroundColorCall2));
         btn.setText(name);
+        btn.setTypeface(G.typeface_IRANSansMobile);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,6 +211,7 @@ public class BotInit {
         txt.setLayoutParams(param);
         txt.setPadding(15, 6, 15, 6);
         txt.setText(action);
+        txt.setTypeface(G.typeface_IRANSansMobile);
         txt.setTextColor(Color.BLACK);
         txt.setOnClickListener(new View.OnClickListener() {
             @Override

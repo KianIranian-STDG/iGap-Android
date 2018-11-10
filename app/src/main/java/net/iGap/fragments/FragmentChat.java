@@ -830,7 +830,7 @@ public class FragmentChat extends BaseFragment
                             if (txtName == null) {
                                 txtName = (EmojiTextViewE) rootView.findViewById(R.id.chl_txt_name);
                             }
-                            txtName.setText(room.getTitle());
+                            txtName.setText(isBot ? getString(R.string.bot) : room.getTitle());
                         }
 
                         //updateUnreadCountRealm.close();
@@ -1406,9 +1406,10 @@ public class FragmentChat extends BaseFragment
                         userStatus = realmRegisteredInfo.getStatus();
                         isBot = realmRegisteredInfo.isBot();
 
-                        if (isBot){
+                        if (isBot) {
+                            title = getString(R.string.bot);
 
-                            if (getMessagesCount() == 0){
+                            if (getMessagesCount() == 0) {
                                 if (layoutMute == null) {
                                     layoutMute = (RelativeLayout) rootView.findViewById(R.id.chl_ll_channel_footer);
                                     layoutMute.setVisibility(View.VISIBLE);
@@ -1490,7 +1491,7 @@ public class FragmentChat extends BaseFragment
             }
 
             if (title != null) {
-                txtName.setText(title);
+                txtName.setText(isBot ? getString(R.string.bot) : title);
             }
             /**
              * change english number to persian number
@@ -1531,7 +1532,7 @@ public class FragmentChat extends BaseFragment
                 Gson gson = new Gson();
                 StructBot item = gson.fromJson(result, StructBot.class);
 
-                if (item !=null && item.getResult() == 1) {
+                if (item != null && item.getResult() == 1) {
 
                     rcvDrBot.setVisibility(View.VISIBLE);
                     items = item.getFavorite();
@@ -1546,8 +1547,7 @@ public class FragmentChat extends BaseFragment
                                 public void run() {
 
 
-
-                                    HelperUrl.checkUsernameAndGoToRoom(item.getFavoriteValue().replace("@" ,""), HelperUrl.ChatEntry.chat);
+                                    HelperUrl.checkUsernameAndGoToRoom(item.getFavoriteValue().replace("@", ""), HelperUrl.ChatEntry.chat);
                                 }
                             });
                         }
@@ -1809,6 +1809,10 @@ public class FragmentChat extends BaseFragment
                     lastSeen = realmRegisteredInfo.getLastSeen();
                     userStatus = realmRegisteredInfo.getStatus();
                 }
+            }
+
+            if (isBot) {
+                title = getString(R.string.bot);
             }
 
             //realm.close();
@@ -8979,7 +8983,7 @@ public class FragmentChat extends BaseFragment
     }
 
 
-    public interface OnHandleDrBot{
+    public interface OnHandleDrBot {
 
         void goToRoomBot(Favorite favorite);
 

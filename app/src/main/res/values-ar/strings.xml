@@ -2317,6 +2317,7 @@
     <string name="planDB">\"iGapLocalDatabase.realm\"</string>
   <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
   <string name="start">بداية</string>
+  <string name="bot">بوت</string>
 
 
 </resources>
