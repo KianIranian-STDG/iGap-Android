@@ -1538,7 +1538,10 @@ public class FragmentChat extends BaseFragment
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    HelperUrl.checkUsernameAndGoToRoom(item.getFavoriteValue(), HelperUrl.ChatEntry.chat);
+
+
+
+                                    HelperUrl.checkUsernameAndGoToRoom(item.getFavoriteValue().replace("@" ,""), HelperUrl.ChatEntry.chat);
                                 }
                             });
                         }
@@ -1769,6 +1772,11 @@ public class FragmentChat extends BaseFragment
                         initialize = realmRegisteredInfo.getInitials();
                         color = realmRegisteredInfo.getColor();
                         phoneNumber = realmRegisteredInfo.getPhoneNumber();
+
+                        if (realmRegisteredInfo.getUsername().equals("Dr_iGap")) {
+                            initDrBot();
+                        }
+
                     } else {
                         title = realmRoom.getTitle();
                         initialize = realmRoom.getInitials();
