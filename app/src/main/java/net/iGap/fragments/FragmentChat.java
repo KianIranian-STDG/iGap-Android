@@ -2415,10 +2415,12 @@ public class FragmentChat extends BaseFragment
                 if (chatType == CHAT) {
                     root3.setVisibility(View.VISIBLE);
 
-                    if (!isChatReadOnly && !blockUser) {
+                    if (!isChatReadOnly && !blockUser && !isBot) {
                         root5.setVisibility(View.VISIBLE);
+                        root9.setVisibility(View.VISIBLE);
                     } else {
                         root5.setVisibility(View.GONE);
+                        root9.setVisibility(View.GONE);
                     }
                 } else {
                     root3.setVisibility(View.GONE);
