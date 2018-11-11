@@ -111,7 +111,7 @@ public class RealmRegisteredInfo extends RealmObject {
 
         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
         if (realmRegisteredInfo != null && (cacheId == null || realmRegisteredInfo.getCacheId().equals(cacheId))) {
-            onRegistrationInfo.onInfo(realmRegisteredInfo);
+            onRegistrationInfo.onInfo(realmRegisteredInfo.getId());
         } else {
             RequestUserInfo.infoHashMap.put(userId, onRegistrationInfo);
             G.onRegistrationInfo = new OnRegistrationInfo() {
@@ -122,7 +122,7 @@ public class RealmRegisteredInfo extends RealmObject {
                     if (InfoListener != null) {
                         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm1, registeredInfo.getId());
                         if (realmRegisteredInfo != null) {
-                            InfoListener.onInfo(realmRegisteredInfo);
+                            InfoListener.onInfo(realmRegisteredInfo.getId());
                         }
                     }
                     RequestUserInfo.infoHashMap.remove(registeredInfo.getId());

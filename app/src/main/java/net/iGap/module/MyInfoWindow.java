@@ -79,7 +79,7 @@ public class MyInfoWindow extends InfoWindow {
         if (realmRegisteredInfo == null) {
             RealmRegisteredInfo.getRegistrationInfo(userId, new OnInfo() {
                 @Override
-                public void onInfo(RealmRegisteredInfo registeredInfo) {
+                public void onInfo(Long registeredId) {
                     onOpen(arg);
                 }
             });

@@ -1176,7 +1176,16 @@ public class RealmRoomMessage extends RealmObject {
     }
 
     public ProtoGlobal.RoomMessageType getMessageType() {
-        return ProtoGlobal.RoomMessageType.valueOf(messageType);
+
+        if (messageType == null) {
+            return ProtoGlobal.RoomMessageType.UNRECOGNIZED;
+        }
+        try {
+            return ProtoGlobal.RoomMessageType.valueOf(messageType);
+        } catch (RuntimeException e) {
+            return ProtoGlobal.RoomMessageType.UNRECOGNIZED;
+        }
+
     }
 
     public void setMessageType(ProtoGlobal.RoomMessageType messageType) {
