@@ -39,6 +39,7 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnClientCheckInviteLink;
 import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.interfaces.OnClientJoinByInviteLink;
@@ -53,6 +54,7 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientCheckInviteLink;
 import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestClientJoinByInviteLink;
@@ -908,9 +910,39 @@ public class HelperUrl {
 
         switch (chatEntry) {
             case chat:
-
                 if (roomId != FragmentChat.lastChatRoomId) {
-                    new GoToChatActivity(roomId).setMessageID(messageId).setPeerID(peerId).startActivity();
+                    final Realm realm = Realm.getDefaultInstance();
+                    final RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, peerId).findFirst();
+
+                    if (realmRoom != null) {
+                        new GoToChatActivity(realmRoom.getId()).setMessageID(messageId).startActivity();
+                    } else {
+                        G.onChatGetRoom = new OnChatGetRoom() {
+                            @Override
+                            public void onChatGetRoom(final ProtoGlobal.Room room) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity();
+                                        G.onChatGetRoom = null;
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onChatGetRoomTimeOut() {
+
+                            }
+
+                            @Override
+                            public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                            }
+                        };
+
+                        new RequestChatGetRoom().chatGetRoom(peerId, "identity");
+                    }
+                    realm.close();
                 }
 
                 break;
@@ -946,7 +978,7 @@ public class HelperUrl {
             realm.close();
         } else {
             if (G.userLogin) {
-                addChatToDatabaseAndGoToChat(user, 0, user.getBot() ? ChatEntry.chat : chatEntery);
+                addChatToDatabaseAndGoToChat(user, -1, user.getBot() ? ChatEntry.chat : chatEntery);
             } else {
                 closeDialogWaiting();
                 HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
