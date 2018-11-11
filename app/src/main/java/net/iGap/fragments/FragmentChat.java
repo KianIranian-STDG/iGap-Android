@@ -527,6 +527,7 @@ public class FragmentChat extends BaseFragment
     PaymentDialogBinding paymentDialogBinding;
     PaymentFragment paymentDialog;
     List<Favorite> items = new ArrayList<>();
+    private final String userNameDrBot = "DriGap";
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -1667,10 +1668,6 @@ public class FragmentChat extends BaseFragment
             isNotJoin = extras.getBoolean("ISNotJoin");
             userName = extras.getString("UserName");
 
-            if (userName != null && userName.equals("@Dr_iGap")) {
-                initDrBot();
-            }
-
             if (isNotJoin) {
                 final LinearLayout layoutJoin = (LinearLayout) rootView.findViewById(R.id.ac_ll_join);
                 if (layoutMute == null) {
@@ -1774,7 +1771,7 @@ public class FragmentChat extends BaseFragment
                         color = realmRegisteredInfo.getColor();
                         phoneNumber = realmRegisteredInfo.getPhoneNumber();
 
-                        if (realmRegisteredInfo.getUsername().equals("Dr_iGap")) {
+                        if (realmRegisteredInfo.getUsername().equals(userNameDrBot)) {
                             initDrBot();
                         }
 
