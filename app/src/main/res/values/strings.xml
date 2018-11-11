@@ -1368,6 +1368,7 @@
   <string name="check_internet_connection">check internet connection</string>
   <string name="start">Start</string>
   <string name="bot">Bot</string>
+  <string name="back_to_menu">back to main menu</string>
 
 
 </resources>

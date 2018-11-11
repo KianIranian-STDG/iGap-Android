@@ -474,7 +474,6 @@ public class FragmentChat extends BaseFragment
     private String mainVideoPath = "";
     private String color;
     private String initialize;
-    private String lastBotMessage = "";
     private String groupParticipantsCountLabel;
     private String channelParticipantsCountLabel;
     private String userStatus;
@@ -1429,10 +1428,6 @@ public class FragmentChat extends BaseFragment
                                         }
                                     });
                                 }
-                            }
-
-                            if (realmRoom.getLastMessage() != null) {
-                                lastBotMessage = realmRoom.getLastMessage().getMessage();
                             }
 
                         }
@@ -2665,7 +2660,35 @@ public class FragmentChat extends BaseFragment
         if (isBot) {
             botInit = new BotInit(rootView, false);
             sendButtonVisibility(false);
-            botInit.updateCommandList(false, lastBotMessage, getActivity());
+
+
+            RealmResults<RealmRoomMessage> result;
+            RealmRoomMessage rm = null;
+            String lastMessage = "";
+            boolean backToMenu = true;
+
+            result = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
+            if (result.size() > 0) {
+                rm = result.last();
+                if (rm.getMessage() != null) {
+                    lastMessage = rm.getMessage();
+                }
+            }
+
+            result = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
+            if (result.size() > 0) {
+                rm = result.last();
+                if (rm.getMessage() != null) {
+                    if (rm.getMessage().equals("/start") || rm.getMessage().equals("/back")) {
+                        backToMenu = false;
+                    }
+                }
+
+            } else {
+                backToMenu = false;
+            }
+
+            botInit.updateCommandList(false, lastMessage, getActivity(), backToMenu);
         }
 
         if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom) {
@@ -3573,7 +3596,7 @@ public class FragmentChat extends BaseFragment
         }
 
         if (isBot) {
-            botInit.updateCommandList(false, message, getActivity());
+            botInit.updateCommandList(false, message, getActivity(), false);
         }
 
         G.handler.postDelayed(new Runnable() {

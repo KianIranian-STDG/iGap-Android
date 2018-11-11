@@ -21,13 +21,11 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.FileUriExposedException;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -220,16 +218,18 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         if (_resultQrCode == null) {
             return;
         }
-        File file = new File(_resultQrCode);
-        if (file.exists()) {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("image/*");
-            try {
+        try {
+            File file = new File(_resultQrCode);
+            if (file.exists()) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-            } catch (Exception e) {
-                e.printStackTrace();
+                G.fragmentActivity.startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
             }
-            G.fragmentActivity.startActivity(Intent.createChooser(intent, G.fragmentActivity.getResources().getString(R.string.share_image_from_igap)));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } catch (Exception e1) {
+            e1.printStackTrace();
         }
     }
 
@@ -238,15 +238,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         dialogQrCode = new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.Login_with_QrCode)).customView(R.layout.dialog_qrcode, true).positiveText(R.string.share_item_dialog).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    try {
-                        shareQr();
-                    } catch (FileUriExposedException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    shareQr();
-                }
+                shareQr();
             }
         }).negativeText(R.string.save).onNegative(new MaterialDialog.SingleButtonCallback() {
             @Override

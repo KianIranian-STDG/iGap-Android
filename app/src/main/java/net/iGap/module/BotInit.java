@@ -29,12 +29,12 @@ public class BotInit {
 
     }
 
-    public void updateCommandList(boolean showCommandList, String message, Activity activity) {
+    public void updateCommandList(boolean showCommandList, String message, Activity activity, boolean backToMenu) {
 
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                fillList(message);
+                fillList(message, backToMenu);
 
                 if (botActionList.size() == 0) {
                     return;
@@ -109,8 +109,12 @@ public class BotInit {
 
     }
 
-    private void fillList(String message) {
+    private void fillList(String message, boolean backToMenu) {
         botActionList = new ArrayList<>();
+
+        if (message.equals("")) {
+            return;
+        }
 
         String spiltList[] = message.split("\n");
 
@@ -124,6 +128,13 @@ public class BotInit {
                     botActionList.add(_row);
                 }
             }
+        }
+
+        if (botActionList.size() == 0 || backToMenu) {
+            StructRowBotAction _row = new StructRowBotAction();
+            _row.action = "/back";
+            _row.name = G.context.getString(R.string.back_to_menu);
+            botActionList.add(_row);
         }
 
     }
