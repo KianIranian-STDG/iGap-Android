@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.webrtc;
 
@@ -24,7 +24,6 @@ import net.iGap.request.RequestSignalingOffer;
 
 import org.webrtc.AudioSource;
 import org.webrtc.AudioTrack;
-
 import org.webrtc.MediaConstraints;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
@@ -93,7 +92,6 @@ public class WebRTC {
         if (peerConnectionFactory == null) {
 
 
-
             Set<String> HARDWARE_AEC_WHITELIST = new HashSet<String>() {{
                 add("D5803");
                 add("FP1");
@@ -118,15 +116,22 @@ public class WebRTC {
                 }
             }
 
-            //Initialize PeerConnectionFactory globals.
-            //Params are context, initAudio,initVideo and videoCodecHwAcceleration
-            //PeerConnectionFactory.initializeAndroidGlobals(this, true, true, true);
-            PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
+//            //Initialize PeerConnectionFactory globals.
+//            //Params are context, initAudio,initVideo and videoCodecHwAcceleration
+//            //PeerConnectionFactory.initializeAndroidGlobals(this, true, true, true);
+//            PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
+//
+//
+//            //Create a new PeerConnectionFactory instance.
+//            //PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
+//             peerConnectionFactory = PeerConnectionFactory.builder().createPeerConnectionFactory();
 
+            PeerConnectionFactory.initializeAndroidGlobals(G.context,  // Context
+                    true,  // Audio Enabled
+                    false,  // Video Enabled
+                    true); // Hardware Acceleration Enabled
 
-            //Create a new PeerConnectionFactory instance.
-            //PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
-             peerConnectionFactory = PeerConnectionFactory.builder().createPeerConnectionFactory();
+            peerConnectionFactory = new PeerConnectionFactory();
         }
         return peerConnectionFactory;
     }
@@ -145,7 +150,11 @@ public class WebRTC {
             configuration.bundlePolicy = PeerConnection.BundlePolicy.MAXBUNDLE;
             configuration.rtcpMuxPolicy = PeerConnection.RtcpMuxPolicy.REQUIRE;
             configuration.iceTransportsType = PeerConnection.IceTransportsType.RELAY;
-            peerConnection = peerConnectionFactoryInstance().createPeerConnection(iceServers, mediaConstraintsGetInstance(), new PeerConnectionObserver());
+
+            PeerConnection.Observer observer = new PeerConnectionObserver();
+            MediaConstraints mediaConstraints = mediaConstraintsGetInstance();
+
+            peerConnection = peerConnectionFactoryInstance().createPeerConnection(iceServers, mediaConstraints, observer);
 
             mediaStream = peerConnectionFactoryInstance().createLocalMediaStream("ARDAMS");
             addAudioTrack(mediaStream);
