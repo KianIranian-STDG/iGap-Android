@@ -2318,6 +2318,7 @@
   <string name="encriptedDB">iGapLocalDatabaseEncrypted.realm</string>
   <string name="start">بداية</string>
   <string name="bot">بوت</string>
+  <string name="back_to_menu">العودة إلى القائمة الرئيسية</string>
 
 
 </resources>
