@@ -830,7 +830,7 @@ public class FragmentChat extends BaseFragment
                             if (txtName == null) {
                                 txtName = (EmojiTextViewE) rootView.findViewById(R.id.chl_txt_name);
                             }
-                            txtName.setText(isBot ? getString(R.string.bot) : room.getTitle());
+                            txtName.setText(room.getTitle());
                         }
 
                         //updateUnreadCountRealm.close();
@@ -1407,7 +1407,6 @@ public class FragmentChat extends BaseFragment
                         isBot = realmRegisteredInfo.isBot();
 
                         if (isBot) {
-                            title = getString(R.string.bot);
 
                             if (getMessagesCount() == 0) {
                                 if (layoutMute == null) {
@@ -1487,7 +1486,7 @@ public class FragmentChat extends BaseFragment
             }
 
             if (title != null) {
-                txtName.setText(isBot ? getString(R.string.bot) : title);
+                txtName.setText(title);
             }
             /**
              * change english number to persian number
@@ -1801,10 +1800,6 @@ public class FragmentChat extends BaseFragment
                     lastSeen = realmRegisteredInfo.getLastSeen();
                     userStatus = realmRegisteredInfo.getStatus();
                 }
-            }
-
-            if (isBot) {
-                title = getString(R.string.bot);
             }
 
             //realm.close();
