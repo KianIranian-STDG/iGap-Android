@@ -315,9 +315,15 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         this.userStatus = userStatus;
         this.lastSeenValue = time;
 
+        if (isBot){
+            lastSeen.set(G.context.getResources().getString(R.string.bot));
+            return;
+        }
+
         if (userStatus != null) {
             if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
                 String status = LastSeenTimeUtil.computeTime(userId, time, false);
+
                 lastSeen.set(status);
             } else {
                 lastSeen.set(userStatus);
