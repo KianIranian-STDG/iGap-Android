@@ -1527,12 +1527,14 @@ public class FragmentChat extends BaseFragment
                 Gson gson = new Gson();
                 StructBot item = gson.fromJson(result, StructBot.class);
 
-                if (result.isEmpty())return;
-
                 if (item != null && item.getResult() == 1) {
 
-                    rcvDrBot.setVisibility(View.VISIBLE);
                     items = item.getFavorite();
+                    if (items.size() == 0){
+                        return;
+                    }
+
+                    rcvDrBot.setVisibility(View.VISIBLE);
                     adapterDrBot.update(items);
 
                     onHandleDrBot = new OnHandleDrBot() {
