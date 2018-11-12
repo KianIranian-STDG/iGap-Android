@@ -920,13 +920,14 @@ public class HelperUrl {
                         G.onChatGetRoom = new OnChatGetRoom() {
                             @Override
                             public void onChatGetRoom(final ProtoGlobal.Room room) {
-                                G.handler.post(new Runnable() {
+                                RealmRoom.putOrUpdate(room);
+                                G.handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
                                         new GoToChatActivity(room.getId()).setPeerID(peerId).startActivity();
                                         G.onChatGetRoom = null;
                                     }
-                                });
+                                },500);
                             }
 
                             @Override
@@ -940,7 +941,7 @@ public class HelperUrl {
                             }
                         };
 
-                        new RequestChatGetRoom().chatGetRoom(peerId, "identity");
+                        new RequestChatGetRoom().chatGetRoom(peerId);
                     }
                     realm.close();
                 }

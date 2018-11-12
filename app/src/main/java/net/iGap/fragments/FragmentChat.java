@@ -1527,6 +1527,8 @@ public class FragmentChat extends BaseFragment
                 Gson gson = new Gson();
                 StructBot item = gson.fromJson(result, StructBot.class);
 
+                if (result.isEmpty())return;
+
                 if (item != null && item.getResult() == 1) {
 
                     rcvDrBot.setVisibility(View.VISIBLE);
@@ -1582,8 +1584,8 @@ public class FragmentChat extends BaseFragment
             if (chatType == CHAT) {
                 if (isCloudRoom) {
                     txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
-                }else if(isBot){
-                    txtLastSeen.setText( G.fragmentActivity.getResources().getString(R.string.bot));
+                } else if (isBot) {
+                    txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.bot));
                 } else {
                     if (userStatus != null) {
                         if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
@@ -1657,6 +1659,10 @@ public class FragmentChat extends BaseFragment
         prgWaiting.setVisibility(View.VISIBLE);
 
         txtEmptyMessages = (TextView) rootView.findViewById(R.id.empty_messages);
+
+        if (isBot){
+            txtEmptyMessages.setText(G.fragmentActivity.getResources().getString(R.string.empty_text_dr_bot));
+        }
 
         lastDateCalendar.clear();
 
@@ -2675,7 +2681,7 @@ public class FragmentChat extends BaseFragment
             if (result.size() > 0) {
                 rm = result.last();
                 if (rm.getMessage() != null) {
-                    if (rm.getMessage().equals("/start") || rm.getMessage().equals("/back")) {
+                    if (rm.getMessage().toLowerCase().equals("/start") || rm.getMessage().equals("/back")) {
                         backToMenu = false;
                     }
                 }
@@ -2718,32 +2724,20 @@ public class FragmentChat extends BaseFragment
          * load message , use handler for load async
          */
 
-        if (mAdapter.getItemCount() > 0) {
-            txtEmptyMessages.setVisibility(View.GONE);
-        } else {
-            txtEmptyMessages.setVisibility(View.VISIBLE);
-        }
+        visibilityTextEmptyMessages();
 
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
-                if (mAdapter.getItemCount() > 0) {
-                    txtEmptyMessages.setVisibility(View.GONE);
-                } else {
-                    txtEmptyMessages.setVisibility(View.VISIBLE);
-                }
+                visibilityTextEmptyMessages();
             }
 
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 super.onItemRangeRemoved(positionStart, itemCount);
-                if (mAdapter.getItemCount() > 0) {
-                    txtEmptyMessages.setVisibility(View.GONE);
-                } else {
-                    txtEmptyMessages.setVisibility(View.VISIBLE);
-                }
+                visibilityTextEmptyMessages();
             }
         });
 
@@ -3182,6 +3176,14 @@ public class FragmentChat extends BaseFragment
         //realm.close();
     }
 
+    private void visibilityTextEmptyMessages() {
+        if (mAdapter.getItemCount() > 0) {
+            txtEmptyMessages.setVisibility(View.GONE);
+        } else {
+            txtEmptyMessages.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void dialogReport(final boolean isMessage, final long messageId) {
 
         final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
@@ -3592,7 +3594,41 @@ public class FragmentChat extends BaseFragment
         }
 
         if (isBot) {
-            botInit.updateCommandList(false, message, getActivity(), false);
+
+            try {
+
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        RealmRoomMessage rm = null;
+                        boolean backToMenu = true;
+
+                        RealmResults<RealmRoomMessage> result = getRealmChat().where(RealmRoomMessage.class).
+                                equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
+                        if (result.size() > 0) {
+                            rm = result.last();
+                            if (rm.getMessage() != null) {
+                                if (rm.getMessage().toLowerCase().equals("/start") || rm.getMessage().equals("/back")) {
+                                    backToMenu = false;
+                                }
+                            }
+                        } else {
+                            backToMenu = false;
+                        }
+
+                        if (getActivity() != null) {
+                            botInit.updateCommandList(false, message, getActivity(), backToMenu);
+                        }
+                    }
+                });
+
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+
+
         }
 
         G.handler.postDelayed(new Runnable() {
@@ -4557,7 +4593,7 @@ public class FragmentChat extends BaseFragment
                     } else if (chatType == CHAT) {
                         if (isCloudRoom) {
                             txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
-                        }else if(isBot){
+                        } else if (isBot) {
                             txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.bot));
                         } else {
                             if (userStatus != null) {
@@ -4909,7 +4945,7 @@ public class FragmentChat extends BaseFragment
                         //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
                         //}
                         ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
-                    }else if(isBot){
+                    } else if (isBot) {
                         txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.bot));
                     } else {
                         if (status != null && txtLastSeen != null) {

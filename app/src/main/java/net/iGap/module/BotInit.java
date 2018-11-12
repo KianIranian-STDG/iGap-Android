@@ -179,6 +179,7 @@ public class BotInit {
         btn.setTextColor(Color.WHITE);
         btn.setBackgroundColor(ContextCompat.getColor(G.context, R.color.backgroundColorCall2));
         btn.setText(name);
+        btn.setAllCaps(false);
         btn.setTypeface(G.typeface_IRANSansMobile);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
