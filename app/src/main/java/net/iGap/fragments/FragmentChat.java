@@ -1554,7 +1554,7 @@ public class FragmentChat extends BaseFragment
                                 @Override
                                 public void run() {
                                     if (!isChatReadOnly) {
-                                        edtChat.setText(item.getFavoriteName());
+                                        edtChat.setText(item.getFavoriteValue());
                                         imvSendButton.performClick();
                                     }
                                 }
@@ -1583,7 +1583,7 @@ public class FragmentChat extends BaseFragment
                 if (isCloudRoom) {
                     txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
                 }else if(isBot){
-                    txtLastSeen.setText(getResources().getString(R.string.bot));
+                    txtLastSeen.setText( G.fragmentActivity.getResources().getString(R.string.bot));
                 } else {
                     if (userStatus != null) {
                         if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
@@ -4558,7 +4558,7 @@ public class FragmentChat extends BaseFragment
                         if (isCloudRoom) {
                             txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
                         }else if(isBot){
-                            txtLastSeen.setText(getResources().getString(R.string.bot));
+                            txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.bot));
                         } else {
                             if (userStatus != null) {
                                 if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
@@ -4910,7 +4910,7 @@ public class FragmentChat extends BaseFragment
                         //}
                         ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
                     }else if(isBot){
-                        txtLastSeen.setText(getResources().getString(R.string.bot));
+                        txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.bot));
                     } else {
                         if (status != null && txtLastSeen != null) {
                             if (status.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
