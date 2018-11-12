@@ -1582,8 +1582,8 @@ public class FragmentChat extends BaseFragment
             if (chatType == CHAT) {
                 if (isCloudRoom) {
                     txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
-                }else if(isBot){
-                    txtLastSeen.setText( G.fragmentActivity.getResources().getString(R.string.bot));
+                } else if (isBot) {
+                    txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.bot));
                 } else {
                     if (userStatus != null) {
                         if (userStatus.equals(ProtoGlobal.RegisteredUser.Status.EXACTLY.toString())) {
@@ -2675,7 +2675,7 @@ public class FragmentChat extends BaseFragment
             if (result.size() > 0) {
                 rm = result.last();
                 if (rm.getMessage() != null) {
-                    if (rm.getMessage().equals("/start") || rm.getMessage().equals("/back")) {
+                    if (rm.getMessage().toLowerCase().equals("/start") || rm.getMessage().equals("/back")) {
                         backToMenu = false;
                     }
                 }
@@ -3592,7 +3592,41 @@ public class FragmentChat extends BaseFragment
         }
 
         if (isBot) {
-            botInit.updateCommandList(false, message, getActivity(), false);
+
+            try {
+
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        RealmRoomMessage rm = null;
+                        boolean backToMenu = true;
+
+                        RealmResults<RealmRoomMessage> result = getRealmChat().where(RealmRoomMessage.class).
+                                equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
+                        if (result.size() > 0) {
+                            rm = result.last();
+                            if (rm.getMessage() != null) {
+                                if (rm.getMessage().toLowerCase().equals("/start") || rm.getMessage().equals("/back")) {
+                                    backToMenu = false;
+                                }
+                            }
+                        } else {
+                            backToMenu = false;
+                        }
+
+                        if (getActivity() != null) {
+                            botInit.updateCommandList(false, message, getActivity(), backToMenu);
+                        }
+                    }
+                });
+
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+
+
         }
 
         G.handler.postDelayed(new Runnable() {
@@ -4557,7 +4591,7 @@ public class FragmentChat extends BaseFragment
                     } else if (chatType == CHAT) {
                         if (isCloudRoom) {
                             txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.chat_with_yourself));
-                        }else if(isBot){
+                        } else if (isBot) {
                             txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.bot));
                         } else {
                             if (userStatus != null) {
@@ -4909,7 +4943,7 @@ public class FragmentChat extends BaseFragment
                         //    //txtLastSeen.setTextDirection(View.TEXT_DIRECTION_LTR);
                         //}
                         ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LTR);
-                    }else if(isBot){
+                    } else if (isBot) {
                         txtLastSeen.setText(G.fragmentActivity.getResources().getString(R.string.bot));
                     } else {
                         if (status != null && txtLastSeen != null) {
