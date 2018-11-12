@@ -1527,6 +1527,8 @@ public class FragmentChat extends BaseFragment
                 Gson gson = new Gson();
                 StructBot item = gson.fromJson(result, StructBot.class);
 
+                if (result.isEmpty())return;
+
                 if (item != null && item.getResult() == 1) {
 
                     rcvDrBot.setVisibility(View.VISIBLE);
@@ -2718,32 +2720,20 @@ public class FragmentChat extends BaseFragment
          * load message , use handler for load async
          */
 
-        if (mAdapter.getItemCount() > 0) {
-            txtEmptyMessages.setVisibility(View.GONE);
-        } else {
-            txtEmptyMessages.setVisibility(View.VISIBLE);
-        }
+        visibilityTextEmptyMessages();
 
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);
-                if (mAdapter.getItemCount() > 0) {
-                    txtEmptyMessages.setVisibility(View.GONE);
-                } else {
-                    txtEmptyMessages.setVisibility(View.VISIBLE);
-                }
+                visibilityTextEmptyMessages();
             }
 
             @Override
             public void onItemRangeRemoved(int positionStart, int itemCount) {
                 super.onItemRangeRemoved(positionStart, itemCount);
-                if (mAdapter.getItemCount() > 0) {
-                    txtEmptyMessages.setVisibility(View.GONE);
-                } else {
-                    txtEmptyMessages.setVisibility(View.VISIBLE);
-                }
+                visibilityTextEmptyMessages();
             }
         });
 
@@ -3180,6 +3170,20 @@ public class FragmentChat extends BaseFragment
         });
 
         //realm.close();
+    }
+
+    private void visibilityTextEmptyMessages() {
+        if (mAdapter.getItemCount() > 0) {
+            txtEmptyMessages.setVisibility(View.GONE);
+        } else {
+            if (isBot){
+                txtEmptyMessages.setVisibility(View.GONE);
+
+            }else {
+                txtEmptyMessages.setVisibility(View.VISIBLE);
+
+            }
+        }
     }
 
     private void dialogReport(final boolean isMessage, final long messageId) {
