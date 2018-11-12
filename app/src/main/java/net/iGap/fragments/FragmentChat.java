@@ -1660,6 +1660,10 @@ public class FragmentChat extends BaseFragment
 
         txtEmptyMessages = (TextView) rootView.findViewById(R.id.empty_messages);
 
+        if (isBot){
+            txtEmptyMessages.setText(G.fragmentActivity.getResources().getString(R.string.empty_text_dr_bot));
+        }
+
         lastDateCalendar.clear();
 
         locationManager = (LocationManager) G.fragmentActivity.getSystemService(LOCATION_SERVICE);
@@ -3176,13 +3180,7 @@ public class FragmentChat extends BaseFragment
         if (mAdapter.getItemCount() > 0) {
             txtEmptyMessages.setVisibility(View.GONE);
         } else {
-            if (isBot){
-                txtEmptyMessages.setVisibility(View.GONE);
-
-            }else {
-                txtEmptyMessages.setVisibility(View.VISIBLE);
-
-            }
+            txtEmptyMessages.setVisibility(View.VISIBLE);
         }
     }
 
