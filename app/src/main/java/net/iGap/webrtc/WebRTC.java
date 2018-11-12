@@ -119,19 +119,19 @@ public class WebRTC {
 //            //Initialize PeerConnectionFactory globals.
 //            //Params are context, initAudio,initVideo and videoCodecHwAcceleration
 //            //PeerConnectionFactory.initializeAndroidGlobals(this, true, true, true);
-//            PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
+            PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
 //
 //
 //            //Create a new PeerConnectionFactory instance.
 //            //PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
-//             peerConnectionFactory = PeerConnectionFactory.builder().createPeerConnectionFactory();
+             peerConnectionFactory = PeerConnectionFactory.builder().createPeerConnectionFactory();
 
-            PeerConnectionFactory.initializeAndroidGlobals(G.context,  // Context
-                    true,  // Audio Enabled
-                    false,  // Video Enabled
-                    true); // Hardware Acceleration Enabled
-
-            peerConnectionFactory = new PeerConnectionFactory();
+//            PeerConnectionFactory.initializeAndroidGlobals(G.context,  // Context
+//                    true,  // Audio Enabled
+//                    false,  // Video Enabled
+//                    true); // Hardware Acceleration Enabled
+//
+//            peerConnectionFactory = new PeerConnectionFactory();
         }
         return peerConnectionFactory;
     }
