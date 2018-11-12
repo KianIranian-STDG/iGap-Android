@@ -24,15 +24,4 @@ public class RequestChatGetRoom {
             e.printStackTrace();
         }
     }
-
-    public void chatGetRoom(long peerId, String identity) {
-        ProtoChatGetRoom.ChatGetRoom.Builder chatGetRoom = ProtoChatGetRoom.ChatGetRoom.newBuilder();
-        chatGetRoom.setPeerId(peerId);
-        RequestWrapper requestWrapper = new RequestWrapper(200, chatGetRoom, identity);
-        try {
-            RequestQueue.sendRequest(requestWrapper);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
 }
