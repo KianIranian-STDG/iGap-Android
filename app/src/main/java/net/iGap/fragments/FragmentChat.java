@@ -1574,7 +1574,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void checkConnection(String action) {
-        if (action != null) {
+        if (action != null && !isBot) {
             ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LOCALE);
             txtLastSeen.setText(action);
         } else {
@@ -4551,7 +4551,7 @@ public class FragmentChat extends BaseFragment
             G.handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (action != null) {
+                    if (action != null && !isBot) {
                         ViewMaker.setLayoutDirection(viewGroupLastSeen, View.LAYOUT_DIRECTION_LOCALE);
                         txtLastSeen.setText(action);
                     } else if (chatType == CHAT) {
