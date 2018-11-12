@@ -2,7 +2,6 @@ package net.iGap.fragments;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import net.iGap.Config;
@@ -196,7 +194,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
         swipeRefreshLayout.setEnabled(false);
         viewById = view.findViewById(R.id.empty_icon);
         pbLoading = view.findViewById(R.id.pbLoading);
-       // pbLoading.setVisibility(View.VISIBLE);
+        // pbLoading.setVisibility(View.VISIBLE);
 
         switcher = String.valueOf(this.toString().charAt(this.toString().lastIndexOf(":") + 1));
         if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
@@ -236,7 +234,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                     pbLoading.setVisibility(View.GONE);
                 } else {
                     viewById.setVisibility(View.VISIBLE);
-            //        pbLoading.setVisibility(View.VISIBLE);
+                    //        pbLoading.setVisibility(View.VISIBLE);
                 }
                 break;
             case chat:
@@ -246,7 +244,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                     pbLoading.setVisibility(View.GONE);
                 } else {
                     viewById.setVisibility(View.VISIBLE);
-            //        pbLoading.setVisibility(View.VISIBLE);
+                    //        pbLoading.setVisibility(View.VISIBLE);
                 }
                 break;
             case group:
@@ -256,7 +254,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                     pbLoading.setVisibility(View.GONE);
                 } else {
                     viewById.setVisibility(View.VISIBLE);
-             //       pbLoading.setVisibility(View.VISIBLE);
+                    //       pbLoading.setVisibility(View.VISIBLE);
                 }
                 break;
             case channel:
@@ -266,7 +264,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                     pbLoading.setVisibility(View.GONE);
                 } else {
                     viewById.setVisibility(View.VISIBLE);
-      //              pbLoading.setVisibility(View.VISIBLE);
+                    //              pbLoading.setVisibility(View.VISIBLE);
                 }
                 break;
         }
@@ -1310,7 +1308,16 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                         if (mInfo.getLastMessage().isAuthorMe()) {
 
                             holder.txtTic.setVisibility(View.VISIBLE);
-                            AppUtils.rightMessageStatus(holder.txtTic, ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus()), mInfo.getLastMessage().isAuthorMe());
+
+                            ProtoGlobal.RoomMessageStatus status = ProtoGlobal.RoomMessageStatus.UNRECOGNIZED;
+                            if (mInfo.getLastMessage().getStatus() != null) {
+                                try {
+                                    status = ProtoGlobal.RoomMessageStatus.valueOf(mInfo.getLastMessage().getStatus());
+                                } catch (RuntimeException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            AppUtils.rightMessageStatus(holder.txtTic, status, mInfo.getLastMessage().isAuthorMe());
                         }
 
                         if (mInfo.getType() == GROUP) {
