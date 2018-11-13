@@ -6893,15 +6893,16 @@ public class FragmentChat extends BaseFragment
                             }).checkBoxPrompt(textCheckBox, false, null).show();
 
                         } else {
-
-                            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(G.context.getResources().getString(R.string.st_desc_delete, count)).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                    bothDeleteMessageId = null;
-                                    RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, bothDeleteMessageId, chatType);
-                                    deleteSelectedMessageFromAdapter(list);
-                                }
-                            }).show();
+                            if (!G.fragmentActivity.isFinishing()) {
+                                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.message).content(G.context.getResources().getString(R.string.st_desc_delete, count)).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        bothDeleteMessageId = null;
+                                        RealmRoomMessage.deleteSelectedMessages(getRealmChat(), mRoomId, list, bothDeleteMessageId, chatType);
+                                        deleteSelectedMessageFromAdapter(list);
+                                    }
+                                }).show();
+                            }
                         }
                     }
                 });

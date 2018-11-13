@@ -1000,7 +1000,7 @@ public class FragmentShearedMedia extends BaseFragment {
      * Simple Class to serialize object to byte arrays
      *
      * @author Nick Russler
-     * http://www.whitebyte.info
+     *         http://www.whitebyte.info
      */
     public static class SerializationUtils {
 
@@ -1239,7 +1239,7 @@ public class FragmentShearedMedia extends BaseFragment {
                 }
             });
 
-            HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(),mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
+            HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, dirPath, 2, new HelperDownloadFile.UpdateListener() {
                 @Override
                 public void OnProgress(String path, final int progress) {
 
@@ -1478,7 +1478,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
-                            HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(),mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
+                            HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
                                 @Override
                                 public void OnProgress(final String path, int progress) {
 
@@ -1614,7 +1614,7 @@ public class FragmentShearedMedia extends BaseFragment {
                     if (at.getSmallThumbnail() != null) {
                         if (at.getSmallThumbnail().getSize() > 0) {
 
-                            HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(),mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
+                            HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
                                 @Override
                                 public void OnProgress(final String path, int progress) {
 
@@ -1930,7 +1930,7 @@ public class FragmentShearedMedia extends BaseFragment {
                         if (at.getSmallThumbnail() != null) {
                             if (at.getSmallThumbnail().getSize() > 0) {
 
-                                HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(),mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
+                                HelperDownloadFile.getInstance().startDownload(mList.get(position).item.getMessageType(), mList.get(position).messageId + "", at.getToken(), at.getUrl(), at.getCacheId(), at.getName(), at.getSmallThumbnail().getSize(), ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, "", 4, new HelperDownloadFile.UpdateListener() {
                                     @Override
                                     public void OnProgress(final String path, int progress) {
 
@@ -2089,7 +2089,12 @@ public class FragmentShearedMedia extends BaseFragment {
 
             Intent intent = HelperMimeType.appropriateProgram(vh.filePath);
             if (intent != null) {
-                context.startActivity(intent);
+                try {
+                    context.startActivity(intent);
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                }
+
             } else {
                 Toast.makeText(context, R.string.can_not_open_file, Toast.LENGTH_SHORT).show();
             }

@@ -819,28 +819,32 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             public void onClick(View v) {
 
                 if (isCallMethodSupported) {
-                    new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.way_receive_register_code)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.array_verifySms).itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
-                        @Override
-                        public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
 
-                            switch (which) {
-                                case 0: {
-                                    methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
-                                    break;
+                    if (!G.fragmentActivity.isFinishing()) {
+                        new MaterialDialog.Builder(G.fragmentActivity).title(G.fragmentActivity.getResources().getString(R.string.way_receive_register_code)).titleGravity(GravityEnum.START).titleColor(G.context.getResources().getColor(android.R.color.black)).items(R.array.array_verifySms).itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                                switch (which) {
+                                    case 0: {
+                                        methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
+                                        break;
+                                    }
+                                    case 1: {
+                                        methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_CALL;
+                                        break;
+                                    }
                                 }
-                                case 1: {
-                                    methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_CALL;
-                                    break;
-                                }
+                                return false;
                             }
-                            return false;
-                        }
-                    }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            startRegister(v);
-                        }
-                    }).show();
+                        }).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                startRegister(v);
+                            }
+                        }).show();
+                    }
+
                 } else {
                     methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
                     startRegister(v);
