@@ -1,6 +1,5 @@
 package net.iGap.helper;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
@@ -99,7 +98,7 @@ public class GoToChatActivity {
                     new HelperFragment(fragmentChat).setReplace(false).load();
                 }
             });
-            if (!(G.fragmentActivity).isFinishing()) {
+            if (G.fragmentActivity != null && !(G.fragmentActivity).isFinishing()) {
                 mDialog.show();
             }
         } else if (FragmentChat.mForwardMessages != null) {
