@@ -1195,8 +1195,8 @@ public class HelperUrl {
                         DialogAnimation.animationDown(dialog);
                         dialog.show();
                         ViewGroup rootCopy = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-                        TextView txtCopy = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-                        txtCopy.setText(G.fragmentActivity.getResources().getString(R.string.md_copy));
+                        TextView iconCopy = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
+                        iconCopy.setText(G.fragmentActivity.getResources().getString(R.string.md_copy));
                         TextView txtItemCopy = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
                         txtItemCopy.setText(R.string.copy_item_dialog);
 
@@ -1210,6 +1210,26 @@ public class HelperUrl {
                                 Toast.makeText(context, R.string.text_copied, Toast.LENGTH_SHORT).show();
                             }
                         });
+
+
+                        ViewGroup rootCall = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
+                        rootCall.setVisibility(View.VISIBLE);
+                        TextView iconCall = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
+                        iconCall.setText(G.fragmentActivity.getResources().getString(R.string.md_call_made));
+                        TextView txtCall = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
+                        txtCall.setText(R.string.verify_register_call);
+
+                        rootCall.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                String uri = "tel:" + text;
+                                Intent intent = new Intent(Intent.ACTION_DIAL);
+                                intent.setData(Uri.parse(uri));
+                                G.context.startActivity(intent);
+                            }
+                        });
+
 
                     }
                 });
