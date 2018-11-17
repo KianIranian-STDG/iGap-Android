@@ -1370,6 +1370,7 @@
   <string name="bot">Bot</string>
   <string name="back_to_menu">back to main menu</string>
   <string name="empty_text_dr_bot">Welcome to iGap Smart Intelligence Assistant!</string>
+  <string name="hashtag">Hashtag</string>
 
 
 </resources>
