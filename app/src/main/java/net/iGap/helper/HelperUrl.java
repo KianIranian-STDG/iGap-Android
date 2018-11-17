@@ -12,6 +12,8 @@ package net.iGap.helper;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -29,7 +31,9 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -46,6 +50,7 @@ import net.iGap.interfaces.OnClientJoinByInviteLink;
 import net.iGap.interfaces.OnClientResolveUsername;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
+import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.proto.ProtoClientResolveUsername;
 import net.iGap.proto.ProtoGlobal;
@@ -71,6 +76,8 @@ import java.util.regex.Pattern;
 import io.realm.Realm;
 import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+import static net.iGap.G.context;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class HelperUrl {
@@ -345,6 +352,26 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
+    private static void insertDigitLink(final SpannableStringBuilder strBuilder, final int start, final int end) {
+
+        ClickableSpan clickable = new ClickableSpan() {
+            public void onClick(View view) {
+                G.isLinkClicked = true;
+                String digitLink = strBuilder.toString().substring(start, end);
+                openDialogDigitClick(digitLink);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                ds.linkColor = Color.parseColor(G.linkColor);
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+            }
+        };
+
+        strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
     private static SpannableStringBuilder analaysHash(SpannableStringBuilder builder, String messageID) {
 
         if (builder == null) return builder;
@@ -517,20 +544,29 @@ public class HelperUrl {
                 int end = Integer.parseInt(info[1]);
                 String type = info[2];
 
-
                 try {
-                    if (type.equals("hash")) {
-                        insertHashLink(text.substring(start + 1, end), strBuilder, start, messageID);
-                    } else if (type.equals("atSighn")) {
-                        insertAtSignLink(text.substring(start + 1, end), strBuilder, start);
-                    } else if (type.equals("igapLink")) {
-                        insertIgapLink(strBuilder, start, end);
-                    } else if (type.equals("igapResolve")) {
-                        insertIgapResolveLink(strBuilder, start, end);
-                    } else if (type.equals("bot")) {
-                        insertIgapBot(strBuilder, start, end);
-                    } else if (type.equals("webLink")) {
-                        insertLinkSpan(strBuilder, start, end, true);
+                    switch (type) {
+                        case "hash":
+                            insertHashLink(text.substring(start + 1, end), strBuilder, start, messageID);
+                            break;
+                        case "atSighn":
+                            insertAtSignLink(text.substring(start + 1, end), strBuilder, start);
+                            break;
+                        case "igapLink":
+                            insertIgapLink(strBuilder, start, end);
+                            break;
+                        case "igapResolve":
+                            insertIgapResolveLink(strBuilder, start, end);
+                            break;
+                        case "bot":
+                            insertIgapBot(strBuilder, start, end);
+                            break;
+                        case "webLink":
+                            insertLinkSpan(strBuilder, start, end, true);
+                            break;
+                        case "digitLink":
+                            insertDigitLink(strBuilder, start, end);
+                            break;
                     }
                 } catch (IndexOutOfBoundsException e) {
                     e.printStackTrace();
@@ -576,11 +612,17 @@ public class HelperUrl {
                 linkInfo += count + "_" + (count + str.length()) + "_" + linkType.bot.toString() + "@";
             } else if (isTextLink(str)) {
                 linkInfo += count + "_" + (count + str.length()) + "_" + linkType.webLink.toString() + "@";
+            } else if (isDigitLink(str)) {
+                linkInfo += count + "_" + (count + str.length()) + "_" + linkType.digitLink.toString() + "@";
             }
             count += str.length() + 1;
         }
 
         return linkInfo;
+    }
+
+    private static boolean isDigitLink(String text) {
+        return text.matches("\\d{5,}");
     }
 
     private static boolean isBotLink(String text) {
@@ -1137,6 +1179,50 @@ public class HelperUrl {
         }
     }
 
+    private static void openDialogDigitClick(String text) {
+
+        try {
+            if (G.fragmentActivity != null) {
+                G.fragmentActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
+                        View v = dialog.getCustomView();
+                        if (v == null) {
+                            return;
+                        }
+
+                        DialogAnimation.animationDown(dialog);
+                        dialog.show();
+                        ViewGroup rootCopy = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
+                        TextView txtCopy = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
+                        txtCopy.setText(G.fragmentActivity.getResources().getString(R.string.md_copy));
+                        TextView txtItemCopy = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
+                        txtItemCopy.setText(R.string.copy_item_dialog);
+
+                        rootCopy.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("Copied Text", text);
+                                clipboard.setPrimaryClip(clip);
+                                Toast.makeText(context, R.string.text_copied, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+                });
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+
+    }
+
+
     //************************************  go to room by urlLink   *********************************************************************
 
     private static void getToRoom(Uri path) {
@@ -1173,7 +1259,7 @@ public class HelperUrl {
     }
 
     enum linkType {
-        hash, atSighn, igapLink, igapResolve, webLink, bot
+        hash, atSighn, igapLink, igapResolve, webLink, bot, digitLink
 
     }
 
