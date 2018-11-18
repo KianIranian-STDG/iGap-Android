@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnComplete;
@@ -34,7 +35,7 @@ public class MyDialog {
     /**
      * create custom dialog for main page
      */
-    public static void showDialogMenuItemRooms(final Context context, final String itemName, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, final OnComplete complete, boolean isPinned) {
+    public static void showDialogMenuItemRooms(final Context context, final String itemName, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, long peerId, final OnComplete complete, boolean isPinned) {
 
         final MaterialDialog dialog = new MaterialDialog.Builder(context).customView(R.layout.chat_popup_dialog, true).build();
         View v = dialog.getCustomView();
@@ -46,6 +47,11 @@ public class MyDialog {
         RealmResults realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_PINNED, true).findAll();
         int pinCount = realmRoom.size();
         realm.close();
+
+        if (peerId == Config.drIgapPeerId) {
+            v.findViewById(R.id.cm_layout_delete_chat).setVisibility(View.GONE);
+            v.findViewById(R.id.cm_layout_mute_pinToTop).setVisibility(View.GONE);
+        }
 
         txtMuteNotification = (TextView) v.findViewById(R.id.cm_txt_mute_notification);
         MaterialDesignTextView iconMuteNotification = (MaterialDesignTextView) v.findViewById(R.id.cm_icon_mute_notification);

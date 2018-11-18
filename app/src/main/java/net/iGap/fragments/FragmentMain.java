@@ -1619,7 +1619,8 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                                 }
 
                                 if (!G.fragmentActivity.isFinishing()) {
-                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, new OnComplete() {
+                                    long peerId = mInfo.getChatRoom() != null ? mInfo.getChatRoom().getPeerId() : 0;
+                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId, new OnComplete() {
                                         @Override
                                         public void complete(boolean result, String messageOne, String MessageTow) {
                                             onSelectRoomMenu(messageOne, mInfo);

@@ -264,7 +264,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
         return super.dispatchTouchEvent(event);
     }
 
-    private void sendMessage(final String message, final long mRoomId, ProtoGlobal.Room.Type chatType) {
+    public static void sendMessage(final String message, final long mRoomId, ProtoGlobal.Room.Type chatType) {
         String identity = Long.toString(System.currentTimeMillis());
         RealmRoomMessage.makeTextMessage(mRoomId, Long.parseLong(identity), message);
         new ChatSendMessageUtil().newBuilder(chatType, ProtoGlobal.RoomMessageType.TEXT, mRoomId).message(message).sendMessage(identity);

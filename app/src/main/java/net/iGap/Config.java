@@ -31,6 +31,7 @@ public class Config {
     public static final int FAST_START_PAGE_TIME = (int) 20;
     public static final int LOW_START_PAGE_TIME = (int) 25;
     public static final int PHONE_CONTACT_MAX_COUNT_LIMIT = 9999;
+    public static final long drIgapPeerId = 2297310;
 
     public static final int TIME_OUT_DELAY_MS = (int) (DateUtils.SECOND_IN_MILLIS);
     public static final int FAKE_PM_DELAY = (int) (10 * DateUtils.SECOND_IN_MILLIS);

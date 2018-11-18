@@ -3,6 +3,7 @@ package net.iGap.module;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -14,8 +15,20 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityPopUpNotification;
+import net.iGap.interfaces.OnChatGetRoom;
+import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomFields;
+import net.iGap.request.RequestChatGetRoom;
+import net.iGap.request.RequestClientPinRoom;
 
 import java.util.ArrayList;
+
+import io.realm.Realm;
+
+import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.Config.drIgapPeerId;
 
 public class BotInit {
 
@@ -241,6 +254,66 @@ public class BotInit {
 
     public void close() {
         setLayoutBot(true, false);
+    }
+
+
+    public static void checkDrIgap() {
+
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
+                boolean isAddDRIgap = sharedPreferences.getBoolean(SHP_SETTING.KEY_ADD_DR_IGAP, false);
+
+                if (!isAddDRIgap) {
+
+                    final Realm realm = Realm.getDefaultInstance();
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, drIgapPeerId).findFirst();
+
+                    if (realmRoom == null) {
+                        G.onChatGetRoom = new OnChatGetRoom() {
+                            @Override
+                            public void onChatGetRoom(final ProtoGlobal.Room room) {
+                                G.onChatGetRoom = null;
+                                RealmRoom.putOrUpdate(room);
+                                if (room.getPinId() <= 0) {
+                                    new RequestClientPinRoom().pinRoom(room.getId(), true);
+                                }
+                                ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
+
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putBoolean(SHP_SETTING.KEY_ADD_DR_IGAP, true);
+                                editor.apply();
+
+                            }
+
+                            @Override
+                            public void onChatGetRoomTimeOut() {
+
+                            }
+
+                            @Override
+                            public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                            }
+                        };
+
+                        new RequestChatGetRoom().chatGetRoom(drIgapPeerId);
+                    } else {
+
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(SHP_SETTING.KEY_ADD_DR_IGAP, true);
+                        editor.apply();
+
+                        if (!realmRoom.isPinned()) {
+                            new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
+                        }
+                    }
+
+                    realm.close();
+                }
+            }
+        }, 2000);
     }
 
 }
