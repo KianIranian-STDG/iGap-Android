@@ -1418,21 +1418,21 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        ViewGroup igapSearch = (ViewGroup) findViewById(R.id.lm_ll_igap_search);
-        igapSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Fragment fragment = FragmentIgapSearch.newInstance();
-                try {
-                    new HelperFragment(fragment).load();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-
-                lockNavigation();
-                closeDrawer();
-            }
-        });
+//        ViewGroup igapSearch = (ViewGroup) findViewById(R.id.lm_ll_igap_search);
+//        igapSearch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final Fragment fragment = FragmentIgapSearch.newInstance();
+//                try {
+//                    new HelperFragment(fragment).load();
+//                } catch (Exception e) {
+//                    e.getStackTrace();
+//                }
+//
+//                lockNavigation();
+//                closeDrawer();
+//            }
+//        });
 
         ViewGroup itemNavContacts = (ViewGroup) findViewById(R.id.lm_ll_contacts);
         itemNavContacts.setOnClickListener(new View.OnClickListener() {
