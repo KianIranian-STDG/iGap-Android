@@ -2625,6 +2625,10 @@ public class FragmentChat extends BaseFragment
 
                     }
                 });
+
+                if (chatPeerId == Config.drIgapPeerId) {
+                    root3.setVisibility(View.GONE);
+                }
             }
         });
 

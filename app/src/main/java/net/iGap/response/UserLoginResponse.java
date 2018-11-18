@@ -13,6 +13,7 @@ package net.iGap.response;
 import net.iGap.G;
 import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperConnectionState;
+import net.iGap.module.BotInit;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserLogin;
@@ -76,6 +77,7 @@ public class UserLoginResponse extends MessageHandler {
             new RequestWalletGetAccessToken().walletGetAccessToken();
         }
 
+        BotInit.checkDrIgap();
     }
 
     @Override
