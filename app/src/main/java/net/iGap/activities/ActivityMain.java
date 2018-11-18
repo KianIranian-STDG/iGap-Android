@@ -34,6 +34,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -115,6 +116,7 @@ import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.interfaces.OnVerifyNewDevice;
 import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
+import net.iGap.interfaces.OnVersionCallBack;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -176,7 +178,7 @@ import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener {
+public class ActivityMain extends ActivityEnhanced implements  OnUserInfoMyClient, OnPayment, OnUnreadChange, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -644,6 +646,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         initComponent();
 
         G.onPayment = this;
+
         sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         boolean isGetContactList = sharedPreferences.getBoolean(SHP_SETTING.KEY_GET_CONTACT, false);
         /**
@@ -1108,8 +1111,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     G.selectedTabInMainActivity = "";
 
 
-                }
-                else {
+                } else {
 
                     if (HelperCalander.isPersianUnicode) {
                         index = 4;
@@ -2080,7 +2082,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void connectionState() {
         final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
 
-        Typeface typeface =  G.typeface_IRANSansMobile;
+        Typeface typeface = G.typeface_IRANSansMobile;
 
         if (G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
             txtIgap.setText(R.string.waiting_for_network);
@@ -2929,6 +2931,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
     }
+
+
+
 
     public enum MainAction {
         downScrool, clinetCondition

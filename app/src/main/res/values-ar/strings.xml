@@ -2319,8 +2319,12 @@
   <string name="start">بداية</string>
   <string name="bot">بوت</string>
   <string name="back_to_menu">العودة إلى القائمة الرئيسية</string>
-
+  <string name="update">تحديث</string>
   <string name="empty_text_dr_bot">مرحبا! آی‌کب مساعدك الذكي</string>
+    <string name="deprecated">تم إيقاف الإصدار الرجاء التحديث لاستخدامه</string>
+  <string name="new_version_avilable">الإصدار الجديد متاح</string>
+    <string name="new_version_alert">محزر</string>
+    <string name="ignore">تجاهل</string>
   <string name="hashtag">الهاشتاج</string>
 
 </resources>

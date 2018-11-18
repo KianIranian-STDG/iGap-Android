@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.ColorRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -13,6 +16,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +25,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -50,6 +58,7 @@ import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
 import net.iGap.interfaces.OnSelectMenu;
 import net.iGap.interfaces.OnSetActionInRoom;
+import net.iGap.interfaces.OnVersionCallBack;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
@@ -77,6 +86,7 @@ import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
+import net.iGap.request.RequestUserContactsUnblock;
 
 import java.util.HashMap;
 import java.util.List;
@@ -99,7 +109,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnDraftMessage, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClearUnread, OnClientGetRoomResponseRoomList, OnMute, OnClearRoomHistory, OnDateChanged {
+public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnDraftMessage, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClearUnread, OnClientGetRoomResponseRoomList, OnMute, OnClearRoomHistory, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static boolean isMenuButtonAddShown = false;
@@ -175,7 +185,7 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        G.onVersionCallBack = this;
         realmFragmentMain = Realm.getDefaultInstance();
     }
 
@@ -1094,6 +1104,44 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                 }
             }
         }
+    }
+
+    @Override
+    public void isDeprecated() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                new MaterialDialog.Builder(getActivity())
+                        .cancelable(false)
+                        .title(R.string.new_version_alert).titleGravity(GravityEnum.CENTER)
+                        .titleColor(Color.parseColor("#f44336"))
+                        .content(R.string.deprecated)
+                        .contentGravity(GravityEnum.CENTER)
+                        .show();
+            }
+        });
+
+    }
+
+    @Override
+    public void isUpdateAvailable() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                new MaterialDialog.Builder(G.fragmentActivity)
+                        .title(R.string.update).titleColor(Color.parseColor("#1DE9B6"))
+                        .titleGravity(GravityEnum.CENTER)
+                        .buttonsGravity(GravityEnum.CENTER)
+                        .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
+                        .positiveText(R.string.ignore).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                })
+               .show();
+            }
+        });
     }
 
     public enum MainType {
