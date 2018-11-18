@@ -1129,7 +1129,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             @Override
             public void run() {
                 new MaterialDialog.Builder(G.fragmentActivity)
-                        .title(R.string.update).titleColor(Color.parseColor("#1DE9B6"))
+                        .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
                         .titleGravity(GravityEnum.CENTER)
                         .buttonsGravity(GravityEnum.CENTER)
                         .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
