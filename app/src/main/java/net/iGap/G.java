@@ -360,6 +360,7 @@ public class G extends MultiDexApplication {
     public static OnNotifyTime onNotifyTime;
     public static OnPayment onPayment;
     public static OnMplResult onMplResult;
+    public static OnVersionCallBack onVersionCallBack;
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
     public static ISignalingAccept iSignalingAccept;
