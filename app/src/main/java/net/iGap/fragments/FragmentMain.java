@@ -1618,12 +1618,14 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                                     role = mInfo.getChannelRoom().getRole().toString();
                                 }
 
-                                MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, new OnComplete() {
-                                    @Override
-                                    public void complete(boolean result, String messageOne, String MessageTow) {
-                                        onSelectRoomMenu(messageOne, mInfo);
-                                    }
-                                }, mInfo.isPinned());
+                                if (!G.fragmentActivity.isFinishing()) {
+                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, new OnComplete() {
+                                        @Override
+                                        public void complete(boolean result, String messageOne, String MessageTow) {
+                                            onSelectRoomMenu(messageOne, mInfo);
+                                        }
+                                    }, mInfo.isPinned());
+                                }
                             }
                         }
                         return true;
