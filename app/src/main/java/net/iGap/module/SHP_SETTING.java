@@ -67,7 +67,7 @@ public class SHP_SETTING {
     public static final String KEY_AD_ROAMING_FILE = "ROAMING_FILE";
     public static final String KEY_AD_ROAMING_MUSIC = "ROAMING_MUSIC";
     public static final String KEY_AD_ROAMING_GIF = "ROAMING_GIF";
-    public static final String KEY_ADD_DR_IGAP = "KEY_ADD_DR_IGAP";
+
 
     // ========================================================================================== notification and sound
 

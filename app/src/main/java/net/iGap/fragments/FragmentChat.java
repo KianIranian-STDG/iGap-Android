@@ -497,6 +497,7 @@ public class FragmentChat extends BaseFragment
     private long lastMessageId = 0;
     private long replyToMessageId = 0;
     private long userId;
+    private boolean isShowStartButton = false;
     private long lastSeen;
     private long chatPeerId;
     private long userTime;
@@ -1409,25 +1410,22 @@ public class FragmentChat extends BaseFragment
                         if (isBot) {
 
                             if (getMessagesCount() == 0) {
-                                if (layoutMute == null) {
-                                    layoutMute = (RelativeLayout) rootView.findViewById(R.id.chl_ll_channel_footer);
-                                    layoutMute.setVisibility(View.VISIBLE);
-                                    ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.start);
-                                    LinearLayout layoutAttach = (LinearLayout) rootView.findViewById(R.id.layout_attach_file);
-                                    layoutAttach.setVisibility(View.GONE);
+                                layoutMute = (RelativeLayout) rootView.findViewById(R.id.chl_ll_channel_footer);
+                                layoutMute.setVisibility(View.VISIBLE);
+                                ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.start);
+                                LinearLayout layoutAttach = (LinearLayout) rootView.findViewById(R.id.layout_attach_file);
+                                layoutAttach.setVisibility(View.GONE);
 
-                                    layoutMute.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            if (!isChatReadOnly) {
-                                                edtChat.setText("/Start");
-                                                imvSendButton.performClick();
-                                                layoutMute.setVisibility(View.GONE);
-                                                layoutAttach.setVisibility(View.VISIBLE);
-                                            }
+                                layoutMute.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (!isChatReadOnly) {
+                                            edtChat.setText("/Start");
+                                            imvSendButton.performClick();
                                         }
-                                    });
-                                }
+                                    }
+                                });
+                                isShowStartButton = true;
                             }
 
                         }
@@ -1530,7 +1528,7 @@ public class FragmentChat extends BaseFragment
                 if (item != null && item.getResult() == 1) {
 
                     items = item.getFavorite();
-                    if (items.size() == 0){
+                    if (items.size() == 0) {
                         return;
                     }
 
@@ -1662,7 +1660,7 @@ public class FragmentChat extends BaseFragment
 
         txtEmptyMessages = (TextView) rootView.findViewById(R.id.empty_messages);
 
-        if (isBot){
+        if (isBot) {
             txtEmptyMessages.setText(G.fragmentActivity.getResources().getString(R.string.empty_text_dr_bot));
         }
 
@@ -3634,6 +3632,22 @@ public class FragmentChat extends BaseFragment
                 e1.printStackTrace();
             }
 
+            try {
+                if (isShowStartButton) {
+                    if (rootView != null) {
+                        rootView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                rootView.findViewById(R.id.chl_ll_channel_footer).setVisibility(View.GONE);
+                                rootView.findViewById(R.id.layout_attach_file).setVisibility(View.VISIBLE);
+                            }
+                        });
+                    }
+                    isShowStartButton = false;
+                }
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
 
         }
 

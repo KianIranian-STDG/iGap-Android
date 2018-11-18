@@ -1206,7 +1206,13 @@ public class FragmentMain extends BaseFragment implements OnComplete, OnSetActio
                  */
 
                 if (mInfo.isPinned()) {
-                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
+
+                    if (mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() == Config.drIgapPeerId) {
+                        holder.rootChat.setBackgroundColor(G.context.getResources().getColor(R.color.green_20));
+                    } else {
+                        holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
+                    }
+
                     holder.txtPinIcon.setVisibility(View.VISIBLE);
 
                 } else {

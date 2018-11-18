@@ -19,6 +19,7 @@ import net.iGap.R;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnClientGetRoomMessage;
+import net.iGap.module.BotInit;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
@@ -242,6 +243,8 @@ public class RealmRoom extends RealmObject {
                             for (int i = 0; i < list.size(); i++) {
                                 list.get(i).setDeleted(true);
                             }
+
+                            BotInit.checkDrIgap();
                         }
 
                         for (ProtoGlobal.Room room : rooms) {
