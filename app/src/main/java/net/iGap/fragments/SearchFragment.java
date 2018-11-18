@@ -20,7 +20,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,6 @@ import net.iGap.R;
 import net.iGap.adapter.items.SearchItem;
 import net.iGap.adapter.items.SearchItemHeader;
 import net.iGap.helper.GoToChatActivity;
-import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.interfaces.IClientSearchUserName;
 import net.iGap.interfaces.OnChatGetRoom;
@@ -646,6 +644,7 @@ public class SearchFragment extends BaseFragment {
             G.onChatGetRoom = new OnChatGetRoom() {
                 @Override
                 public void onChatGetRoom(final ProtoGlobal.Room room) {
+                    RealmRoom.putOrUpdate(room);
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
