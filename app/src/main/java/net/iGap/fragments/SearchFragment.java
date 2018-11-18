@@ -461,6 +461,15 @@ public class SearchFragment extends BaseFragment {
                     if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
                         item.idDetectAvatar = realmRoom.getChatRoom().getPeerId();
                     } else {
+
+                        if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP && realmRoom.getGroupRoom() != null) {
+                            item.userName = realmRoom.getGroupRoom().getUsername();
+
+                        }else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom.getChannelRoom() != null) {
+                            item.userName = realmRoom.getChannelRoom().getUsername();
+
+                        }
+
                         item.idDetectAvatar = realmRoom.getId();
                     }
                     item.type = SearchType.room;
@@ -499,6 +508,7 @@ public class SearchFragment extends BaseFragment {
 
                 item.name = contact.getDisplayName();
                 item.time = contact.getLastSeen();
+                item.userName = contact.getUsername();
                 item.comment = "";
                 item.id = contact.getId();
                 item.idDetectAvatar = contact.getId();
@@ -541,6 +551,7 @@ public class SearchFragment extends BaseFragment {
                 item.name = contact.getDisplay_name();
                 item.time = contact.getLast_seen();
                 item.comment = str;
+                item.userName = contact.getUsername();
                 item.id = contact.getId();
                 item.idDetectAvatar = contact.getId();
                 item.type = SearchType.contact;
@@ -589,6 +600,15 @@ public class SearchFragment extends BaseFragment {
                     if (realmRoom.getType() == ProtoGlobal.Room.Type.CHAT && realmRoom.getChatRoom() != null) {
                         item.idDetectAvatar = realmRoom.getChatRoom().getPeerId();
                     } else {
+
+                        if (realmRoom.getType() == ProtoGlobal.Room.Type.GROUP && realmRoom.getGroupRoom() != null) {
+                            item.userName = realmRoom.getGroupRoom().getUsername();
+
+                        }else if (realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && realmRoom.getChannelRoom() != null) {
+                            item.userName = realmRoom.getChannelRoom().getUsername();
+
+                        }
+
                         item.idDetectAvatar = realmRoom.getId();
                     }
                     list.add(item);
@@ -663,6 +683,7 @@ public class SearchFragment extends BaseFragment {
     public class StructSearch {
         public String name = "";
         public String comment = "";
+        public String userName = "";
         public String initials;
         public String color;
         public long time = 0;
