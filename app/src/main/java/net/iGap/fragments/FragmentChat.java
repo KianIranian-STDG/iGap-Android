@@ -527,7 +527,7 @@ public class FragmentChat extends BaseFragment
     PaymentDialogBinding paymentDialogBinding;
     PaymentFragment paymentDialog;
     List<Favorite> items = new ArrayList<>();
-    private final String userNameDrBot = "DriGap";
+    private final long ID_DR_BOT = 2297310;
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -1780,7 +1780,7 @@ public class FragmentChat extends BaseFragment
                         color = realmRegisteredInfo.getColor();
                         phoneNumber = realmRegisteredInfo.getPhoneNumber();
 
-                        if (realmRegisteredInfo.getUsername().equals(userNameDrBot)) {
+                        if (realmRegisteredInfo.getId() == ID_DR_BOT) {
                             initDrBot();
                         }
 
