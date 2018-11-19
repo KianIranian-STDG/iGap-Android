@@ -85,6 +85,7 @@
         android:paddingLeft="@dimen/dp8"
         android:paddingRight="@dimen/dp8"
         android:text="10:52"
+         android:visibility="invisible"
         android:textSize="@dimen/dp12" />
 
     </LinearLayout>

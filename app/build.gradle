@@ -26,8 +26,8 @@ android {
         applicationId "net.iGap"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 83
-        versionName "0.9.9"
+        versionCode 84
+        versionName "0.10.0"
         multiDexEnabled true
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
@@ -72,7 +72,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(':libwebrtc')
+    implementation 'org.webrtc:google-webrtc:1.0.23995'
     implementation('com.afollestad.material-dialogs:core:0.9.6.0') {
         transitive = true
     }
