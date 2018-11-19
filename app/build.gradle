@@ -72,7 +72,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(':libwebrtc')
+    implementation 'org.webrtc:google-webrtc:1.0.23995'
     implementation('com.afollestad.material-dialogs:core:0.9.6.0') {
         transitive = true
     }
