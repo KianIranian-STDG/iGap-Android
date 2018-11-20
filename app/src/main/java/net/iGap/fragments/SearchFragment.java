@@ -40,6 +40,7 @@ import net.iGap.adapter.items.SearchItem;
 import net.iGap.adapter.items.SearchItemHeader;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IClientSearchUserName;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -66,6 +67,8 @@ import java.util.List;
 import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static net.iGap.fragments.FragmentChat.messageId;
 
 public class SearchFragment extends BaseFragment {
 
@@ -192,7 +195,7 @@ public class SearchFragment extends BaseFragment {
 
                 } else {
                     SearchItem si = (SearchItem) currentItem;
-                    goToRoom(si.item.id, si.item.type, si.item.messageId);
+                    goToRoom(si.item.id, si.item.type, si.item.messageId , si.item.userName);
 
                     InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(edtSearch.getWindowToken(), 0);
@@ -621,16 +624,29 @@ public class SearchFragment extends BaseFragment {
         realm.close();
     }
 
-    private void goToRoom(final long id, SearchType type, long messageId) {
+    private void goToRoom(final long id, SearchType type, long messageId, String userName) {
 
         final Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = null;
 
-        if (type == SearchType.room || type == SearchType.message) {
+        if (type == SearchType.message) {
             realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+            goToRoomWithRealm(realmRoom,type,id);
         } else if (type == SearchType.contact) {
             realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
+            goToRoomWithRealm(realmRoom, type, id);
+        }else if (type == SearchType.room ){
+
+            HelperUrl.checkUsernameAndGoToRoom(userName, HelperUrl.ChatEntry.profile);
+            popBackStackFragment();
+
         }
+        realm.close();
+
+    }
+
+
+    public void goToRoomWithRealm(RealmRoom realmRoom, SearchType type, long id){
 
         if (realmRoom != null) {
             removeFromBaseFragment(SearchFragment.this);
@@ -670,13 +686,16 @@ public class SearchFragment extends BaseFragment {
 
             new RequestChatGetRoom().chatGetRoom(id);
         }
-        realm.close();
+
+
+
     }
+
 
     //*********************************************************************************************
 
     public enum SearchType {
-        header, room, contact, message;
+        header, room, contact, message ,CHANNEL , GROUP
     }
 
     public class StructSearch {
