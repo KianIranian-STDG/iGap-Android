@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.response;
 
@@ -36,7 +36,8 @@ public class UserRegisterResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserRegister.UserRegisterResponse.Builder builder = (ProtoUserRegister.UserRegisterResponse.Builder) message;
-        G.onUserRegistration.onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex(), builder.getVerifyCodeDigitCount(), builder.getAuthorHash() , builder.getCallMethodSupported());
+        if (G.onUserRegistration != null)
+            G.onUserRegistration.onRegister(builder.getUsername(), builder.getUserId(), builder.getMethod(), builder.getSmsNumberList(), builder.getVerifyCodeRegex(), builder.getVerifyCodeDigitCount(), builder.getAuthorHash(), builder.getCallMethodSupported());
 
         G.userId = builder.getUserId();
         G.authorHash = builder.getAuthorHash();
@@ -60,6 +61,7 @@ public class UserRegisterResponse extends MessageHandler {
         final int minorCode = errorResponse.getMinorCode();
         final int getWait = errorResponse.getWait();
 
-        G.onUserRegistration.onRegisterError(majorCode, minorCode, getWait);
+        if (G.onUserRegistration != null)
+            G.onUserRegistration.onRegisterError(majorCode, minorCode, getWait);
     }
 }
