@@ -24,39 +24,58 @@ import net.iGap.request.RequestSignalingOffer;
 
 import org.webrtc.AudioSource;
 import org.webrtc.AudioTrack;
+import org.webrtc.Camera1Enumerator;
+import org.webrtc.CameraEnumerator;
 import org.webrtc.MediaConstraints;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
 import org.webrtc.PeerConnectionFactory;
 import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
+import org.webrtc.VideoCapturer;
+import org.webrtc.VideoFrame;
+import org.webrtc.VideoSink;
+import org.webrtc.VideoSource;
+import org.webrtc.VideoTrack;
 import org.webrtc.voiceengine.WebRtcAudioManager;
 import org.webrtc.voiceengine.WebRtcAudioUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import io.realm.Realm;
 
 public class WebRTC {
-    private static PeerConnection peerConnection;
-    private static PeerConnectionFactory peerConnectionFactory;
-    private static MediaStream mediaStream;
-    private static String offerSdp;
+
+    private static final String VIDEO_TRACK_ID = "ARDAMSv0";
+    private static final int VIDEO_RESOLUTION_WIDTH = 720;
+    private static final int VIDEO_RESOLUTION_HEIGHT = 480;
+    private static final int FPS = 30;
+
+    private PeerConnection peerConnection;
+    private PeerConnectionFactory peerConnectionFactory;
+    private MediaStream mediaStream;
+    private String offerSdp;
     private MediaConstraints mediaConstraints;
     private MediaConstraints audioConstraints;
-    private AudioTrack audioTrack;
-    private AudioSource audioSource;
+    private VideoCapturer videoCapturer;
+    private VideoTrack videoTrackFromCamera;
+    VideoSource videoSource;
+    private ProtoSignalingOffer.SignalingOffer.Type callTYpe;
+
+    private static WebRTC webRTCInstance;
 
 
-    public WebRTC() {
-        peerConnectionInstance();
+    public static WebRTC getInstance() {
+        if (webRTCInstance == null) {
+            webRTCInstance = new WebRTC();
+        }
+        return webRTCInstance;
     }
 
-    public static void muteSound() {
+    public void muteSound() {
 
         if (mediaStream == null) {
             return;
@@ -67,7 +86,7 @@ public class WebRTC {
         }
     }
 
-    public static void unMuteSound() {
+    public void unMuteSound() {
 
         if (mediaStream == null) {
             return;
@@ -79,18 +98,95 @@ public class WebRTC {
     }
 
     private void addAudioTrack(MediaStream mediaStream) {
-        audioSource = peerConnectionFactoryInstance().createAudioSource(audioConstraintsGetInstance());
-        audioTrack = peerConnectionFactoryInstance().createAudioTrack("ARDAMSa0", audioSource);
+        AudioSource audioSource = peerConnectionFactoryInstance().createAudioSource(audioConstraintsGetInstance());
+        AudioTrack audioTrack = peerConnectionFactoryInstance().createAudioTrack("ARDAMSa0", audioSource);
         audioTrack.setEnabled(true);
         mediaStream.addTrack(audioTrack);
     }
+
+
+    public void setCallType(ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
+        this.callTYpe = callTYpe;
+    }
+
+
+    private void addVideoTrack(MediaStream mediaStream) {
+
+        if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+            videoCapturer = createCameraCapturer(new Camera1Enumerator(false));
+            videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer);
+            videoCapturer.startCapture(VIDEO_RESOLUTION_WIDTH, VIDEO_RESOLUTION_HEIGHT, FPS);
+            videoTrackFromCamera = peerConnectionFactoryInstance().createVideoTrack(VIDEO_TRACK_ID, videoSource);
+            videoTrackFromCamera.setEnabled(true);
+
+            videoTrackFromCamera.addSink(new VideoSink() {
+                @Override
+                public void onFrame(VideoFrame videoFrame) {
+                    if (G.onVideoCallFrame != null) {
+                        G.onVideoCallFrame.onPeerFrame(videoFrame);
+                    }
+                }
+            });
+
+            mediaStream.addTrack(videoTrackFromCamera);
+        }
+    }
+
+
+    private VideoCapturer createCameraCapturer(CameraEnumerator enumerator) {
+        final String[] deviceNames = enumerator.getDeviceNames();
+
+        // First, try to find front facing camera
+        for (String deviceName : deviceNames) {
+            if (enumerator.isFrontFacing(deviceName)) {
+                VideoCapturer videoCapturer = enumerator.createCapturer(deviceName, null);
+
+                if (videoCapturer != null) {
+                    return videoCapturer;
+                }
+            }
+        }
+
+        // Front facing camera not found, try something else
+        for (String deviceName : deviceNames) {
+            if (!enumerator.isFrontFacing(deviceName)) {
+                VideoCapturer videoCapturer = enumerator.createCapturer(deviceName, null);
+
+                if (videoCapturer != null) {
+                    return videoCapturer;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public void pauseVideoCapture() {
+        if (videoCapturer != null) {
+            try {
+                videoCapturer.stopCapture();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void startVideoCapture() {
+        if (videoCapturer != null) {
+            try {
+                videoCapturer.startCapture(VIDEO_RESOLUTION_WIDTH, VIDEO_RESOLUTION_HEIGHT, FPS);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     /**
      * First, we initiate the PeerConnectionFactory with our application context and some options.
      */
     private PeerConnectionFactory peerConnectionFactoryInstance() {
         if (peerConnectionFactory == null) {
-
 
             Set<String> HARDWARE_AEC_WHITELIST = new HashSet<String>() {{
                 add("D5803");
@@ -116,22 +212,10 @@ public class WebRTC {
                 }
             }
 
-//            //Initialize PeerConnectionFactory globals.
-//            //Params are context, initAudio,initVideo and videoCodecHwAcceleration
-//            //PeerConnectionFactory.initializeAndroidGlobals(this, true, true, true);
-            PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
-//
-//
-//            //Create a new PeerConnectionFactory instance.
-//            //PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
-             peerConnectionFactory = PeerConnectionFactory.builder().createPeerConnectionFactory();
 
-//            PeerConnectionFactory.initializeAndroidGlobals(G.context,  // Context
-//                    true,  // Audio Enabled
-//                    false,  // Video Enabled
-//                    true); // Hardware Acceleration Enabled
-//
-//            peerConnectionFactory = new PeerConnectionFactory();
+            PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
+            peerConnectionFactory = PeerConnectionFactory.builder().createPeerConnectionFactory();
+
         }
         return peerConnectionFactory;
     }
@@ -158,6 +242,7 @@ public class WebRTC {
 
             mediaStream = peerConnectionFactoryInstance().createLocalMediaStream("ARDAMS");
             addAudioTrack(mediaStream);
+            addVideoTrack(mediaStream);
             peerConnection.addStream(mediaStream);
         }
 
@@ -169,7 +254,7 @@ public class WebRTC {
             @Override
             public void onCreateSuccess(SessionDescription sessionDescription) {
                 offerSdp = sessionDescription.description;
-                new RequestSignalingOffer().signalingOffer(userIdCallee, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING, sessionDescription.description);
+                new RequestSignalingOffer().signalingOffer(userIdCallee, callTYpe, sessionDescription.description);
             }
 
             @Override
@@ -276,18 +361,36 @@ public class WebRTC {
     }
 
     public void close() {
-        peerConnectionInstance().close();
+        if (peerConnection != null) {
+            peerConnection.close();
+        }
     }
 
     void dispose() {
         try {
-            peerConnectionInstance().dispose();
-        } catch (NoSuchElementException e) {
+            if (peerConnection != null) {
+                peerConnection.dispose();
+            }
+
+            if (peerConnectionFactory != null) {
+                peerConnectionFactory.dispose();
+            }
+
+            if (videoCapturer != null) {
+                videoCapturer.stopCapture();
+                videoCapturer = null;
+            }
+
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     void clearConnection() {
+        peerConnectionFactory = null;
         peerConnection = null;
+        webRTCInstance = null;
     }
 }

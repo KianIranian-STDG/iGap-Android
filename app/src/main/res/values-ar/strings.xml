@@ -1660,7 +1660,9 @@
 
   <string name="show_sender_name_in_group">إظهار اسم المرسل في المجموعة </string>
 
-  <string name="calls">الاتصال الصوتي </string>
+  <string name="calls">قائمة المكالمات </string>
+  <string name="voice_calls">مكالمة الصوتي</string>
+  <string name="video_calls">مكالمة فيديو</string>
 
   <string name="map">الخريطة </string>
 

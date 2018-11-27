@@ -109,10 +109,10 @@ public class ActivityCallViewModel {
 
         if (cllBackBtnMic.get().toString().equals(G.fragmentActivity.getResources().getString(R.string.md_mic))) {
             cllBackBtnMic.set(G.fragmentActivity.getResources().getString(R.string.md_mic_off));
-            WebRTC.muteSound();
+            WebRTC.getInstance().muteSound();
         } else {
             cllBackBtnMic.set(G.fragmentActivity.getResources().getString(R.string.md_mic));
-            WebRTC.unMuteSound();
+            WebRTC.getInstance().unMuteSound();
         }
     }
 
@@ -331,7 +331,7 @@ public class ActivityCallViewModel {
 
         G.isInCall = false;
 
-        new WebRTC().leaveCall();
+        WebRTC.getInstance().leaveCall();
         isSendLeave = true;
 
 
@@ -766,7 +766,7 @@ public class ActivityCallViewModel {
         unMuteMusic();
         new RequestSignalingGetLog().signalingGetLog(0, 1);
         if (!isSendLeave) {
-            new WebRTC().leaveCall();
+            WebRTC.getInstance().leaveCall();
         }
     }
 

@@ -234,6 +234,7 @@ import net.iGap.proto.ProtoClientRoomReport;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
+import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.realm.RealmCallConfig;
@@ -2298,6 +2299,8 @@ public class FragmentChat extends BaseFragment
             if (G.userId != chatPeerId && !isBot) {
 
                 RippleView rippleCall = (RippleView) rootView.findViewById(R.id.acp_ripple_call);
+                RippleView rippleVideoCall = (RippleView) rootView.findViewById(R.id.acp_ripple_video_call);
+
                 // gone or visible view call
                 RealmCallConfig callConfig = getRealmChat().where(RealmCallConfig.class).findFirst();
                 if (callConfig != null) {
@@ -2306,12 +2309,26 @@ public class FragmentChat extends BaseFragment
                         rippleCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
                             @Override
                             public void onComplete(RippleView rippleView) {
-                                FragmentCall.call(chatPeerId, false);
+                                FragmentCall.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VOICE_CALLING);
                             }
                         });
                     } else {
                         rippleCall.setVisibility(View.GONE);
                     }
+
+                    if (callConfig.isVideo_calling()) {
+                        rippleVideoCall.setVisibility(View.VISIBLE);
+                        rippleVideoCall.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+                            @Override
+                            public void onComplete(RippleView rippleView) throws IOException {
+                                FragmentCall.call(chatPeerId, false, ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING);
+                            }
+                        });
+
+                    } else {
+                        rippleVideoCall.setVisibility(View.GONE);
+                    }
+
                 } else {
                     new RequestSignalingGetConfiguration().signalingGetConfiguration();
                 }

@@ -317,6 +317,7 @@ public class G extends MultiDexApplication {
     public static OnBackgroundChanged onBackgroundChanged;
     public static IClientSearchUserName onClientSearchUserName;
     public static OnCallLeaveView onCallLeaveView;
+    public static OnVideoCallFrame onVideoCallFrame;
     public static ICallFinish iCallFinishChat;
     public static ICallFinish iCallFinishMain;
     public static IMainFinish iMainFinish;

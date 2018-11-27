@@ -114,7 +114,7 @@
   <string name="icon_photo">\uf2ef</string> <!--  igap_image-filter  -->
   <string name="md_eraser">\uf1fe</string> <!-- igap_eraser  -->
   <string name="md_qrCode">\uf433</string> <!-- igap_qrCode  -->
-  <string name="md_file_video">\ue92a</string> <!-- igap_eraser  -->
+  <string name="md_file_video">\uf567</string> <!-- igap_eraser  -->
   <string name="md_file_music">\ue928</string> <!-- igap_eraser  -->
   <string name="igap_file_text2">\ue926</string> <!-- igap_eraser  -->
   <string name="md_igap_file">\uf24b</string> <!-- igap_eraser  -->
