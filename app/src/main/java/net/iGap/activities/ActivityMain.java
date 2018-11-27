@@ -11,6 +11,11 @@
 package net.iGap.activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -32,6 +37,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -40,11 +46,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -53,6 +61,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -178,7 +187,7 @@ import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements  OnUserInfoMyClient, OnPayment, OnUnreadChange, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -418,7 +427,10 @@ public class ActivityMain extends ActivityEnhanced implements  OnUserInfoMyClien
             }
         };
 
-
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (Build.BRAND.equalsIgnoreCase("xiaomi") || Build.BRAND.equalsIgnoreCase("Honor") || Build.BRAND.equalsIgnoreCase("oppo"))
+                isChinesPhone();
+        }
 //        setTheme(R.style.AppThemeTranslucent);
 
         if (G.isFirstPassCode) {
@@ -749,6 +761,9 @@ public class ActivityMain extends ActivityEnhanced implements  OnUserInfoMyClien
                 });
             }
         };
+
+
+        // Log.i("#token",FirebaseInstanceId.getInstance().getToken().toString());
     }
 
 
@@ -2933,8 +2948,6 @@ public class ActivityMain extends ActivityEnhanced implements  OnUserInfoMyClien
     }
 
 
-
-
     public enum MainAction {
         downScrool, clinetCondition
     }
@@ -3045,4 +3058,82 @@ public class ActivityMain extends ActivityEnhanced implements  OnUserInfoMyClien
         }
     }
 
+    private void isChinesPhone() {
+        final SharedPreferences settings = getSharedPreferences("ProtectedApps", Context.MODE_PRIVATE);
+        final String saveIfSkip = "skipProtectedAppsMessage";
+        boolean skipMessage = settings.getBoolean(saveIfSkip, false);
+        if (!skipMessage) {
+            final SharedPreferences.Editor editor = settings.edit();
+
+
+            new MaterialDialog.Builder(ActivityMain.this)
+                    .title(R.string.attention).titleColor(Color.parseColor("#1DE9B6"))
+                    .titleGravity(GravityEnum.CENTER)
+                    .buttonsGravity(GravityEnum.CENTER)
+                    .checkBoxPrompt(getString(R.string.dont_show_again), false, new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                          /*  if (isChecked) {
+                                editor.putBoolean(saveIfSkip, isChecked);
+                                editor.apply();
+
+                            }*/
+
+                        }
+                    })
+                    .content(R.string.permission_auto_start).contentGravity(GravityEnum.CENTER)
+                    .negativeText(R.string.ignore).onNegative(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    if (dialog.isPromptCheckBoxChecked()){
+                        editor.putBoolean(saveIfSkip, true);
+                        editor.apply();
+                    }
+                        dialog.dismiss();
+                }
+            })
+                    .positiveText(R.string.ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                @Override
+                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    if (dialog.isPromptCheckBoxChecked()){
+                        editor.putBoolean(saveIfSkip, true);
+                        editor.apply();
+                    }
+                    dialog.dismiss();
+                    try {
+
+                        if (Build.BRAND.equalsIgnoreCase("xiaomi")) {
+                            Intent intent = new Intent();
+                            intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
+                            startActivity(intent);
+
+
+                        } else if (Build.BRAND.equalsIgnoreCase("oppo")) {
+                            Intent intent = new Intent();
+                            intent.setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.startup.StartupAppListActivity"));
+
+                        } else if (Build.BRAND.equalsIgnoreCase("Letv")) {
+
+                            Intent intent = new Intent();
+                            intent.setComponent(new ComponentName("com.letv.android.letvsafe", "com.letv.android.letvsafe.AutobootManageActivity"));
+                            startActivity(intent);
+
+                        } else if (Build.BRAND.equalsIgnoreCase("Honor")) {
+
+                            Intent intent = new Intent();
+                            intent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity"));
+                            startActivity(intent);
+
+                        }
+                    } catch (ActivityNotFoundException e) {
+                    } catch (Exception ee) {
+                    }
+
+
+                }
+            }).show();
+
+        }
+    }
 }

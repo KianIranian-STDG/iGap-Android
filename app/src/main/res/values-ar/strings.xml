@@ -2326,5 +2326,7 @@
     <string name="new_version_alert">محزر</string>
     <string name="ignore">تجاهل</string>
   <string name="hashtag">الهاشتاج</string>
+  <string name="permission_auto_start">يرجى تحديد و iGap النشط من القائمة لاستقبال الرسائل حتى عندما لا يكون التطبيق في الخلفية</string>
+    <string name="dont_show_again">لا تظهر مرة أخرى</string>
 
 </resources>
