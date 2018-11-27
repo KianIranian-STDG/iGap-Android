@@ -200,6 +200,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30615, "ProtoClientPinRoom.ClientPinRoomResponse");
         lookupMap.put(30616, "ProtoClientRoomReport.ClientRoomReportResponse");
         lookupMap.put(30617, "ProtoClientRegisterDevice.ClientRegisterDeviceResponse");
+        lookupMap.put(30618, "ProtoClientGetPromote.ClientGetPromoteResponse");
 
         // FileUpload,Download 7xx , 307xx
         lookupMap.put(30700, "ProtoFileUploadOption.FileUploadOptionResponse");

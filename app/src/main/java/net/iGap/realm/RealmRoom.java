@@ -71,6 +71,7 @@ public class RealmRoom extends RealmObject {
     private long pinId;
     private long pinMessageId;
     private long pinMessageIdDeleted;
+    private int priority;
 
     /**
      * client need keepRoom info for show in forward message that forward
@@ -130,6 +131,7 @@ public class RealmRoom extends RealmObject {
         realmRoom.setUnreadCount(room.getUnreadCount());
         realmRoom.setReadOnly(room.getReadOnly());
         realmRoom.setMute(room.getRoomMute());
+        realmRoom.setPriority(room.getPriority());
         realmRoom.setPinId(room.getPinId());
         if (room.getPinId() > 0) {
             realmRoom.setPinned(true);
@@ -1335,6 +1337,14 @@ public class RealmRoom extends RealmObject {
 
     public void setPinMessageIdDeleted(long pinMessageIdDeleted) {
         this.pinMessageIdDeleted = pinMessageIdDeleted;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     public static boolean isPinedMessage(long roomId, long messageId) {
