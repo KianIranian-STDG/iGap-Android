@@ -329,11 +329,21 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 23
+        if (oldVersion == 23) {
 
             RealmObjectSchema realmRegisteredInfo = schema.get(RealmRegisteredInfo.class.getSimpleName());
             if (realmRegisteredInfo != null) {
                 realmRegisteredInfo.addField("isBot", boolean.class, FieldAttribute.REQUIRED);
+            }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 24
+
+            RealmObjectSchema realmRoom = schema.get(RealmRoom.class.getSimpleName());
+            if (realmRoom != null) {
+                realmRoom.addField("priority", int.class, FieldAttribute.REQUIRED);
             }
 
             oldVersion++;
