@@ -26,7 +26,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -41,7 +40,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.protobuf.ByteString;
 
@@ -193,7 +191,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     private View view;
     private int sendRequestRegister = 0;
     private EditText edtEnterCodeVerify;
-    private TextView btnCancel;
+    private TextView btnEnterManuallyCode;
 
 
     public FragmentRegisterViewModel(FragmentRegister fragmentRegister, View root, FragmentActivity mActivity) {
@@ -768,8 +766,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             isNeedTimer = false;
         }
 
-        btnCancel = (TextView) dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        btnEnterManuallyCode = (TextView) dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
+        btnEnterManuallyCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -900,7 +898,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {
                             errorVerifySms(FragmentRegister.Reason.SOCKET);
 //                            countDownTimer.cancel();
-                        }else {
+                        } else {
                             errorVerifySms(FragmentRegister.Reason.TIME_OUT); // open rg_dialog for enter sms code
                         }
                         prgVerifyConnectVisibility.set(View.GONE);
@@ -987,7 +985,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
     private void dialogWaitTime(int title, long time, int majorCode) {
 
-        if (dialog !=null && dialog.isShowing())dialog.dismiss();
+        if (dialog != null && dialog.isShowing()) dialog.dismiss();
 
         if (!G.fragmentActivity.hasWindowFocus() || G.fragmentActivity.isFinishing()) {
             return;
@@ -1406,23 +1404,31 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
     public void receiveVerifySms(String message) {
 
-        if (dialog != null && dialog.isShowing()) {
-            if (edtEnterCodeVerify != null)edtEnterCodeVerify.setText(message);
-            if (btnCancel != null)btnCancel.performClick();
 
-            dialog.dismiss();
-        }
-
-        String verificationCode = HelperString.regexExtractValue(message, regexFetchCodeVerification);
-        verifyCode = verificationCode;
-        countDownTimer.cancel(); //cancel method CountDown and continue process verify
-
-        prgVerifySmsVisibility.set(View.GONE);
-        imgVerifySmsVisibility.set(View.VISIBLE);
-        txtVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
 
 
+                verifyCode = HelperString.regexExtractValue(message, regexFetchCodeVerification);
+//        countDownTimer.cancel(); //cancel method CountDown and continue process verify
+
+                prgVerifySmsVisibility.set(View.GONE);
+                imgVerifySmsVisibility.set(View.VISIBLE);
+                txtVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
+
+                if (dialog != null && dialog.isShowing()) {
+                    if (edtEnterCodeVerify != null) {
+                        edtEnterCodeVerify.setText(verifyCode);
+                    }
+                    if (btnEnterManuallyCode != null) {
+                        btnEnterManuallyCode.performClick();
+                    }
+                    dialog.dismiss();
+                }
 //        userVerify(userName, verificationCode);
+            }
+        });
     }
 
     private void closeKeyboard(final View v) {
