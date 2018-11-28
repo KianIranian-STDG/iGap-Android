@@ -280,6 +280,11 @@
     <item>@string/capture_video</item>
   </string-array>
 
+  <string-array name="calls">
+    <item>@string/voice_calls</item>
+    <item>@string/video_calls</item>
+  </string-array>
+
   <string-array name="securityRecoveryPassword">
     <item>@string/recovery_by_email_dialog</item>
     <item>@string/recovery_by_question_dialog</item>
