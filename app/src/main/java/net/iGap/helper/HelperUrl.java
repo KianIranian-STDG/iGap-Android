@@ -1226,6 +1226,7 @@ public class HelperUrl {
                                 String uri = "tel:" + text;
                                 Intent intent = new Intent(Intent.ACTION_DIAL);
                                 intent.setData(Uri.parse(uri));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 G.context.startActivity(intent);
                             }
                         });
