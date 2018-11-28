@@ -75,6 +75,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
@@ -1523,7 +1524,15 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onTaskComplete(String result) {
                 Gson gson = new Gson();
-                StructBot item = gson.fromJson(result, StructBot.class);
+                StructBot item = null;
+                try {
+                    item = gson.fromJson(result, StructBot.class);
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                } catch (JsonSyntaxException e1) {
+                    e1.printStackTrace();
+                }
+
 
                 if (item != null && item.getResult() == 1) {
 
