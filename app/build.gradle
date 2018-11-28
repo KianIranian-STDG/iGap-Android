@@ -76,7 +76,7 @@ dependencies {
     implementation('com.afollestad.material-dialogs:core:0.9.6.0') {
         transitive = true
     }
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.3@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.6@aar') {
         transitive = true
     }
     implementation project(path: ':lvl')

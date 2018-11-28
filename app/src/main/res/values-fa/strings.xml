@@ -911,7 +911,7 @@
   <string name="password_answer">جواب </string>
   <string name="password_Question_title">پرسش رمزعبور</string>
   <string name="recovery_email">بازیابی از طریق پست الکترونیکی</string>
-  <string name="your_email">پست الکترونیکی (اختیاری) </string>
+  <string name="your_email">پست الکترونیکی (الزامی) </string>
   <string name="recovery_question"> بازیابی از طریق سؤال امنیتی</string>
   <string name="two_step_verification">فعال سازی دو مرحله ای </string>
   <string name="forgot_password"> رمزعبور خود را فراموش کرده اید؟</string>

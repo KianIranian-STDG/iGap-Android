@@ -17,6 +17,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
@@ -29,6 +31,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
@@ -46,6 +50,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ViewStubCompat;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -303,6 +308,7 @@ import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
+import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
 import static io.fotoapparat.parameter.selector.LensPositionSelectors.back;
 import static io.fotoapparat.parameter.selector.SizeSelectors.biggestSize;
 import static java.lang.Long.parseLong;
@@ -310,6 +316,7 @@ import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.R.string.item;
+import static net.iGap.R.string.replay;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
@@ -364,6 +371,10 @@ public class FragmentChat extends BaseFragment
     private boolean isShareOk = true;
     private boolean isDrBot = true;
     public static OnHandleDrBot onHandleDrBot;
+
+    private Bitmap icon;
+    private boolean isRepley = false;
+    private boolean swipeBack = false;
 
     /**
      * *************************** common method ***************************
@@ -2723,6 +2734,88 @@ public class FragmentChat extends BaseFragment
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
 
+      /*  icon = BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.ic_launcher_foreground);*/
+
+        if (!realmRoom.getReadOnly()) {
+            ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
+                @Override
+                public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                    //awesome code when user grabs recycler card to reorder
+
+                    return true;
+                }
+
+                @Override
+                public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                    super.clearView(recyclerView, viewHolder);
+
+                    //  recyclerView.getAdapter().notifyItemChanged(viewHolder.getAdapterPosition());
+                    //    recyclerView.getAdapter().notifyDataSetChanged();
+
+                    //   if (!((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage.isTimeOrLogMessage())
+                    replay(((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage);
+
+                    isRepley = false;
+                    //awesome code to run when user drops card and completes reorder
+                }
+
+                @Override
+                public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                    //awesome code when swiping right to remove recycler card and delete SQLite data
+
+                    Log.i("#peyman", "swipe triggered");
+                }
+
+                @Override
+                public void onChildDraw(Canvas c,
+                                        RecyclerView recyclerView,
+                                        RecyclerView.ViewHolder viewHolder,
+                                        float dX, float dY,
+                                        int actionState, boolean isCurrentlyActive) {
+
+                    if (actionState == ACTION_STATE_SWIPE) {
+
+                        setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                    }
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+
+                }
+
+                @Override
+                public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
+                    return super.getSwipeThreshold(viewHolder);
+                }
+
+                @Override
+                public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                    if (!((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage.isTimeOrLogMessage()) {
+                        return makeMovementFlags(0, ItemTouchHelper.LEFT);
+                    } else {
+
+                        return makeMovementFlags(0, 0);
+                    }
+                }
+
+                @Override
+                public int convertToAbsoluteDirection(int flags, int layoutDirection) {
+                    if (swipeBack) {
+                        swipeBack = false;
+                        return 0;
+                    }
+                    return super.convertToAbsoluteDirection(flags, layoutDirection);
+                }
+
+                @Override
+                public boolean isItemViewSwipeEnabled() {
+                    return true;
+                }
+            };
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+            itemTouchHelper.attachToRecyclerView(recyclerView);
+        }
         /**
          * load message , use handler for load async
          */
@@ -3177,6 +3270,61 @@ public class FragmentChat extends BaseFragment
         });
 
         //realm.close();
+    }
+
+    private void setTouchListener(Canvas c,
+                                  RecyclerView recyclerView,
+                                  RecyclerView.ViewHolder viewHolder,
+                                  float dX, float dY,
+                                  int actionState, boolean isCurrentlyActive) {
+
+
+        if (dX < -150 && !isRepley) {
+            Log.i("#peyman", "swipe triggered");
+            isRepley = true;
+
+            Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                v.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.PARCELABLE_WRITE_RETURN_VALUE));
+            } else {
+                //deprecated in API 26
+                v.vibrate(50);
+            }
+
+            // replay(message);
+           /* if (!goToPositionWithAnimation(replyMessage.getMessageId(), 1000)) {
+                goToPositionWithAnimation(replyMessage.getMessageId() * (-1), 1000);
+            }*/
+
+        }
+
+       /* icon.setBounds(viewHolder.itemView.getRight() - 0, 0, viewHolder.itemView.getRight() - 0, 0 + icon.getIntrinsicHeight());
+        icon.draw(c);*/
+
+
+        View itemView = viewHolder.itemView;
+
+
+   /*     DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        Drawable drawable = ContextCompat.getDrawable(G.fragmentActivity, R.mipmap.ic_launcher_round);
+        Bitmap icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        //  Canvas canvas = new Canvas(icon);
+        drawable.setBounds(displayMetrics.widthPixels - 109, itemView.getTop() + 9, itemView.getRight() - 22, itemView.getBottom() - 9);
+        drawable.draw(c);*/
+
+
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
+                return false;
+            }
+        });
+
     }
 
     private void visibilityTextEmptyMessages() {
