@@ -50,7 +50,7 @@ public class HelperPublicMethod {
                     if (onError != null) {
                         onError.error();
                     }
-
+                    RealmRoom.putOrUpdate(room);
                     getUserInfo(peerId, room.getId(), onComplete, onError);
 
                     G.onChatGetRoom = null;
