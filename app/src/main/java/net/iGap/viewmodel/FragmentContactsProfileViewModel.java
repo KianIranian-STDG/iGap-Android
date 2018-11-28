@@ -76,7 +76,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
     private String color;
     private String userStatus;
     private String avatarPath;
-    private boolean isBot;
+    private boolean isBot = false;
 
     public FragmentContactsProfileViewModel(FragmentContactsProfileBinding fragmentContactsProfileBinding, long roomId, long userId, String enterFrom) {
         this.fragmentContactsProfileBinding = fragmentContactsProfileBinding;
@@ -103,14 +103,16 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         }
 
         registeredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealm(), userId);
-        isBot = registeredInfo.isBot();
-        if (isBot){
-            callVisibility.set(View.GONE);
-            menuVisibility.set(View.GONE);
-            videoCallVisibility.set(View.GONE);
-        }
 
         if (registeredInfo != null) {
+
+            isBot = registeredInfo.isBot();
+            if (isBot) {
+                callVisibility.set(View.GONE);
+                menuVisibility.set(View.GONE);
+                videoCallVisibility.set(View.GONE);
+            }
+
             isBlockUser = registeredInfo.isBlockUser();
             registeredInfo.addChangeListener(new RealmChangeListener<RealmModel>() {
                 @Override
@@ -118,20 +120,14 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
                     isBlockUser = registeredInfo.isBlockUser();
                 }
             });
-        }
 
-
-        if (registeredInfo != null) {
             if (registeredInfo.getLastAvatar() != null) {
-
                 String mainFilePath = registeredInfo.getLastAvatar().getFile().getLocalFilePath();
-
                 if (mainFilePath != null && new File(mainFilePath).exists()) { // if main image is exist showing that
                     avatarPath = mainFilePath;
                 } else {
                     avatarPath = registeredInfo.getLastAvatar().getFile().getLocalThumbnailPath();
                 }
-
                 avatarList = registeredInfo.getAvatars();
             }
         }
@@ -330,7 +326,7 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
         this.userStatus = userStatus;
         this.lastSeenValue = time;
 
-        if (isBot){
+        if (isBot) {
             lastSeen.set(G.context.getResources().getString(R.string.bot));
             return;
         }
