@@ -530,7 +530,8 @@ public class FragmentChat extends BaseFragment
     PaymentDialogBinding paymentDialogBinding;
     PaymentFragment paymentDialog;
     List<Favorite> items = new ArrayList<>();
-
+    boolean isAnimateStart = false;
+    boolean isScrollEnd = false;
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
             realmChat = Realm.getDefaultInstance();
@@ -2856,63 +2857,53 @@ public class FragmentChat extends BaseFragment
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
-                int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                int visibleItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getChildCount();
+                int totalItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getItemCount();
+                int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
-                if (!firsInitScrollPosition) {
-                    lastPosition = lastVisiblePosition;
-                    firsInitScrollPosition = true;
-                }
 
-                int state = lastPosition - lastVisiblePosition;
-                if (state > 0) {   // up
+                if (pastVisibleItems + visibleItemCount >= totalItemCount  && !isAnimateStart) {
+                    isScrollEnd = false;
+                    isAnimateStart = true;
+                    llScrollNavigate.animate()
+                            .alpha(0.0f)
+                            .translationY(llScrollNavigate.getHeight()/2)
+                            .setDuration(200)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    isAnimateStart = false;
+                                    llScrollNavigate.setVisibility(View.GONE);
+                                }
+                            });
 
-                    if (countNewMessage == 0) {
-                        llScrollNavigate.setVisibility(View.GONE);
-                    } else {
-                        llScrollNavigate.setVisibility(View.VISIBLE);
+                } else if (!isScrollEnd && !isAnimateStart){
+                    isScrollEnd = true;
+                    isAnimateStart = true;
+                    llScrollNavigate.setVisibility(View.VISIBLE);
+                    llScrollNavigate.animate()
+                            .alpha(1.0f)
+                            .translationY(0)
+                            .setDuration(200)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    isAnimateStart = false;
+                                }
+                            });
 
-                        txtNewUnreadMessage.setText(countNewMessage + "");
+                    txtNewUnreadMessage.setText(countNewMessage + "");
+                    if (countNewMessage == 0){
+                        txtNewUnreadMessage.setVisibility(View.GONE);
+                    }else {
                         txtNewUnreadMessage.setVisibility(View.VISIBLE);
                     }
 
-                    lastPosition = lastVisiblePosition;
-                } else if (state < 0) { //down
-
-                    if (mAdapter.getItemCount() - lastVisiblePosition > 10) {
-                        /**
-                         * show llScrollNavigate if timeout from latest click
-                         */
-                        if (HelperTimeOut.timeoutChecking(0, latestButtonClickTime, (int) (2 * DateUtils.SECOND_IN_MILLIS))) {
-                            llScrollNavigate.setVisibility(View.VISIBLE);
-                        }
-                        if (countNewMessage > 0) {
-                            txtNewUnreadMessage.setText(countNewMessage + "");
-                            txtNewUnreadMessage.setVisibility(View.VISIBLE);
-                        } else {
-                            txtNewUnreadMessage.setVisibility(View.GONE);
-                        }
-                    } else {
-                        /**
-                         * if addToView is true means that
-                         */
-                        if (addToView) {
-
-                            /**
-                             * if countNewMessage is bigger than zero in onItemShowingMessageId
-                             * callback txtNewUnreadMessage visibility will be managed
-                             */
-                            if (countNewMessage == 0) {
-                                if (mAdapter.getItemCount() - lastVisiblePosition < 10) {
-                                    llScrollNavigate.setVisibility(View.GONE);
-                                }
-                            }
-                        }
-                    }
-
-                    lastPosition = lastVisiblePosition;
                 }
             }
         });
