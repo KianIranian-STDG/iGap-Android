@@ -40,6 +40,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentAddContact;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.interfaces.OnAvatarGet;
@@ -1231,6 +1232,45 @@ public class HelperUrl {
                             }
                         });
 
+                        ViewGroup rootAddToContact = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
+                        rootAddToContact.setVisibility(View.VISIBLE);
+                        TextView iconAddToContact = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
+                        iconAddToContact.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_contacts));
+                        TextView txtAddToContact = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
+                        txtAddToContact.setText(R.string.add_to_contact);
+
+                        rootAddToContact.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+
+                                FragmentAddContact fragment = FragmentAddContact.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
+                                bundle.putString("PHONE", text);
+                                fragment.setArguments(bundle);
+                                new HelperFragment(fragment).setReplace(false).load();
+                            }
+                        });
+
+                        ViewGroup rootSendSms = (ViewGroup) v.findViewById(R.id.dialog_root_item4_notification);
+                        rootSendSms.setVisibility(View.VISIBLE);
+                        TextView iconSendSms = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
+                        iconSendSms.setText(G.fragmentActivity.getResources().getString(R.string.md_email));
+                        TextView txtSendSms = (TextView) v.findViewById(R.id.dialog_text_item4_notification);
+                        txtSendSms.setText(R.string.verify_register_sms);
+
+                        rootSendSms.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                String uri = "smsto:" + text;
+                                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                                intent.setData(Uri.parse(uri));
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                G.context.startActivity(intent);
+                            }
+                        });
 
                     }
                 });

@@ -85,6 +85,13 @@ public class FragmentAddContact extends BaseFragment {
 
     private void initComponent(final View view) {
 
+        String phoneFromUrl = "";
+        try {
+            phoneFromUrl = getArguments().getString("PHONE");
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_back);
         final RippleView rippleBack = (RippleView) view.findViewById(R.id.ac_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -124,6 +131,9 @@ public class FragmentAddContact extends BaseFragment {
         edtLastName = (EditText) view.findViewById(R.id.ac_edt_lastName);
         final View viewLastName = view.findViewById(R.id.ac_view_lastName);
         edtPhoneNumber = (MaskedEditText) view.findViewById(R.id.ac_edt_phoneNumber);
+        if (phoneFromUrl != null && phoneFromUrl.length() > 0) {
+            edtPhoneNumber.setText(phoneFromUrl);
+        }
         final View viewPhoneNumber = view.findViewById(R.id.ac_view_phoneNumber);
 
         edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
