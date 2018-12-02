@@ -30,6 +30,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -190,19 +191,18 @@ public class HelperUrl {
 
                     int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 0);
 
-                    if (checkedInappBrowser == 1) {
-                        openLocalWebPage = true;
-                    } else {
-                        openLocalWebPage = false;
-                    }
-
                     String url = strBuilder.toString().substring(start, end).trim();
                     url = url.replaceAll("[^\\x00-\\x7F]", "");
 
                     if (!url.startsWith("https://") && !url.startsWith("http://")) {
                         url = "http://" + url;
                     }
-                    openBrowser(url);
+
+                    if (checkedInappBrowser == 1 && !isNeedOpenWithoutBrowser(url)) {
+                        openBrowser(url);
+                    } else {
+                        openWithoutBrowser(url);
+                    }
                 }
             }
 
@@ -223,8 +223,40 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    public static void openBrowser(String url) {
+    private static boolean isNeedOpenWithoutBrowser(String url) {
+        ArrayList<String> listApps = new ArrayList<>();
+        listApps.add("facebook.com");
+        listApps.add("twitter.com");
+        listApps.add("instagram.com");
+        listApps.add("pinterest.com");
+        listApps.add("tumblr.com");
+        listApps.add("telegram.org");
+        listApps.add("flickr.com");
+        listApps.add("500px.com");
+        listApps.add("behance.net");
+        listApps.add("t.me");
 
+        for (String string : listApps) {
+            if(url.contains(string)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void openWithoutBrowser(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (intent.resolveActivity(G.fragmentActivity.getPackageManager()) != null) {
+            G.fragmentActivity.startActivity(intent);
+        } else {
+            Toast.makeText(G.fragmentActivity, "", Toast.LENGTH_SHORT).show();
+            HelperError.showSnackMessage(G.context.getResources().getString(R.string.error),false);
+        }
+    }
+
+    public static void openBrowser(String url) {
         final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo((FragmentActivity) G.currentActivity);
 
         int mColorPrimary = Color.parseColor(G.appBarColor);
@@ -972,7 +1004,6 @@ public class HelperUrl {
                                     }
                                 },500);
                             }
-
                             @Override
                             public void onChatGetRoomTimeOut() {
 
