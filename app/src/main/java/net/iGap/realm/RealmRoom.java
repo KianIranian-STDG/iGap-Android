@@ -20,6 +20,7 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.module.BotInit;
+import net.iGap.module.TimeUtils;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
@@ -887,6 +888,12 @@ public class RealmRoom extends RealmObject {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null) {
                     realmRoom.setDraft(RealmRoomDraft.put(realm, message, replyToMessageId));
+
+                    if (realmRoom.getLastMessage().getUpdateTime() == 0) {
+                        realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
+                    } else {
+                        realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
+                    }
                 }
             }
         });
@@ -927,6 +934,12 @@ public class RealmRoom extends RealmObject {
                 if (realmRoom != null) {
                     realmRoom.setDraft(null);
                     realmRoom.setDraftFile(null);
+
+                    if (realmRoom.getLastMessage().getUpdateTime() == 0) {
+                        realmRoom.setUpdatedTime(realmRoom.getLastMessage().getCreateTime());
+                    } else {
+                        realmRoom.setUpdatedTime(realmRoom.getLastMessage().getUpdateTime());
+                    }
                 }
             }
         }, new Realm.Transaction.OnSuccess() {
