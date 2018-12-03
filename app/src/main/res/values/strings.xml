@@ -944,7 +944,7 @@
   <string name="password_answer">Answer</string>
   <string name="password_Question_title">Password Question</string>
   <string name="recovery_email">Recovery E-mail</string>
-  <string name="your_email">Your Email (Optional)</string>
+  <string name="your_email">Your Email (Required)</string>
   <string name="recovery_question">Recovery Question</string>
   <string name="two_step_verification">Two-Step Verification</string>
   <string name="forgot_password">Forgot password?</string>
