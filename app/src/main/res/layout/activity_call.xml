@@ -210,6 +210,8 @@
 
           <net.iGap.module.MaterialDesignTextView
             android:id="@+id/fcr_btn_mic"
+            android:layout_weight="1"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{activityCallViewModel::onClickBtnMic}"
@@ -220,28 +222,24 @@
 
             />
 
-          <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/fcr_btn_chat"
             android:layout_weight="1"
-            android:gravity="center">
-
-            <net.iGap.module.MaterialDesignTextView
-              android:id="@+id/fcr_btn_chat"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:onClick="@{activityCallViewModel::onClickBtnChat}"
-              android:text="@string/md_chat"
-              android:textAppearance="@style/TextIconAppearance.all"
-              android:textColor="@color/white"
-              android:textSize="@dimen/dp28" />
-
-          </LinearLayout>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="@{activityCallViewModel::onClickBtnChat}"
+            android:text="@string/md_chat"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp28" />
 
 
           <net.iGap.module.MaterialDesignTextView
             android:id="@+id/fcr_btn_speaker"
             android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
             android:layout_height="wrap_content"
             android:onClick="@{activityCallViewModel::onClickBtnSpeaker}"
             android:text="@{activityCallViewModel.cllBackBtnSpeaker , default = @string/md_Mute}"
@@ -250,6 +248,21 @@
             android:textSize="@dimen/dp28"
 
             />
+
+
+          <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/fcr_btn_swich_camera"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:onClick="@{activityCallViewModel::onClickBtnSwitchCamera}"
+            android:text="@string/md_swich_video"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="@color/white"
+            android:textSize="@dimen/dp28" />
+
+
         </LinearLayout>
       </LinearLayout>
     </FrameLayout>

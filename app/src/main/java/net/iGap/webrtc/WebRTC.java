@@ -11,6 +11,7 @@
 package net.iGap.webrtc;
 
 
+import android.hardware.Camera;
 import android.os.Build;
 import android.util.Log;
 
@@ -26,6 +27,7 @@ import org.webrtc.AudioSource;
 import org.webrtc.AudioTrack;
 import org.webrtc.Camera1Enumerator;
 import org.webrtc.CameraEnumerator;
+import org.webrtc.CameraVideoCapturer;
 import org.webrtc.MediaConstraints;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
@@ -83,6 +85,15 @@ public class WebRTC {
 
         for (AudioTrack audioTrack : mediaStream.audioTracks) {
             audioTrack.setEnabled(false);
+        }
+    }
+
+
+    public void switchCamera() {
+        if (Camera.getNumberOfCameras() > 1) {
+            if (videoCapturer instanceof CameraVideoCapturer) {
+                ((CameraVideoCapturer) videoCapturer).switchCamera(null);
+            }
         }
     }
 

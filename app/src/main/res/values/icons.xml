@@ -153,4 +153,5 @@
   <string name="md_solid_colors">\uf266</string>  <!-- igap_magnify  -->
   <string name="md_wallpapers">\ue927</string>  <!-- igap_magnify  -->
   <string name="md_email">\uf1f0</string>
+  <string name="md_swich_video">\uf569</string>
 </resources>
