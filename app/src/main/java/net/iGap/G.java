@@ -141,6 +141,7 @@ public class G extends MultiDexApplication {
     public static String textSubTheme;
     public static String tintImage;
     public static String lineBorder;
+    public static Ipromote ipromote;
     public static String menuBackgroundColor;
     public static String authorHash;
     public static String displayName;

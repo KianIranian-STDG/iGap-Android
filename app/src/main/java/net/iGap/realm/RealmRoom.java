@@ -1528,6 +1528,27 @@ public class RealmRoom extends RealmObject {
         }
     }
 
+    public static boolean isBot(long userId) {
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+            if (realmRegisteredInfo != null) {
+                if (realmRegisteredInfo.isBot()) {
+                    return true;
+                } else
+                    return false;
+            } else
+                return false;
+        } catch (Exception e) {
+        } finally {
+            realm.close();
+        }
+
+        realm.close();
+        return false;
+    }
+
     public static String[] getUnreadCountPages() {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmRoom> results = realm.where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.MUTE, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll();

@@ -12,14 +12,18 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityPopUpNotification;
+import net.iGap.interfaces.Ipromote;
 import net.iGap.interfaces.OnChatGetRoom;
+import net.iGap.proto.ProtoClientGetPromote;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChatGetRoom;
+import net.iGap.request.RequestClientGetPromote;
 import net.iGap.request.RequestClientPinRoom;
 
 import java.util.ArrayList;
@@ -257,7 +261,7 @@ public class BotInit {
 
     public static void checkDrIgap() {
 
-        final Realm realm = Realm.getDefaultInstance();
+    /*    final Realm realm = Realm.getDefaultInstance();
         RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, drIgapPeerId).findFirst();
 
         if (realmRoom == null) {
@@ -267,7 +271,7 @@ public class BotInit {
                     G.onChatGetRoom = null;
                     RealmRoom.putOrUpdate(room);
                     new RequestClientPinRoom().pinRoom(room.getId(), true);
-                    ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
+              //      ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
                 }
 
                 @Override
@@ -286,7 +290,58 @@ public class BotInit {
             new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
         }
 
-        realm.close();
+        realm.close();*/
+
+          new RequestClientGetPromote().getPromote();
+        G.ipromote = new Ipromote() {
+            @Override
+            public void onGetPromoteResponse(ProtoClientGetPromote.ClientGetPromoteResponse.Builder builder) {
+                final Realm realm = Realm.getDefaultInstance();
+                for (int i = 0; i < builder.getPromoteList().size(); i++) {
+
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getPromoteList().get(i).getId()).findFirst();
+
+                    if (realmRoom == null) {
+                        G.onChatGetRoom = new OnChatGetRoom() {
+                            @Override
+                            public void onChatGetRoom(final ProtoGlobal.Room room) {
+                                G.onChatGetRoom = null;
+                                RealmRoom.putOrUpdate(room);
+                                new RequestClientPinRoom().pinRoom(room.getId(), true);
+                                switch (builder.getPromoteList().get(1).getType()){
+                                    case USER:
+                                        ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
+                                        break;
+                                    case PUBLIC_ROOM:
+                                        ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHANNEL);
+                                        break;
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onChatGetRoomTimeOut() {
+
+                            }
+
+                            @Override
+                            public void onChatGetRoomError(int majorCode, int minorCode) {
+
+                            }
+                        };
+
+                        new RequestChatGetRoom().chatGetRoom(builder.getPromoteList().get(i).getId());
+                    } else {
+                        new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
+                    }
+                }
+
+
+                realm.close();
+            }
+        };
+
     }
 
 }

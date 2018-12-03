@@ -1254,12 +1254,12 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                  */
 
                 if (mInfo.isPinned()) {
+                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
 
-                    if (mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() == Config.drIgapPeerId) {
-                        holder.rootChat.setBackgroundColor(G.context.getResources().getColor(R.color.green_20));
+                    if (mInfo.getChatRoom() != null && RealmRoom.isBot(mInfo.getChatRoom().getPeerId())) {
+          //              holder.rootChat.setBackgroundColor(G.context.getResources().getColor(R.color.green_20));
                         holder.txtPinIcon.setVisibility(View.GONE);
                     } else {
-                        holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
                         holder.txtPinIcon.setVisibility(View.VISIBLE);
                     }
 
@@ -1305,6 +1305,20 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                 holder.txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getText().toString()));
             }
         }
+
+
+   /*     private boolean isBot(long userId) {
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmFragmentMain(), userId);
+            if (realmRegisteredInfo != null) {
+                if (realmRegisteredInfo.isBot()) {
+                    return true;
+                } else
+                    return false;
+            } else
+                return false;
+        }*/
+
+
 
         private String subStringInternal(String text) {
             if (text == null || text.length() == 0) {
