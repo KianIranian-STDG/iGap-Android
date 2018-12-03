@@ -88,6 +88,11 @@ public class FragmentAddContact extends BaseFragment {
         String phoneFromUrl = "";
         try {
             phoneFromUrl = getArguments().getString("PHONE");
+            if (phoneFromUrl != null && phoneFromUrl.length() > 0) {
+                if (phoneFromUrl.startsWith("0")) {
+                    phoneFromUrl = phoneFromUrl.substring(1);
+                }
+            }
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

@@ -959,7 +959,8 @@
   <string name="e_904_8">شما با دستگاه دیگرتان در حال مکالمه هستید</string>
   <string name="e_904_9">یوزر در حال مکالمه است</string>
   <string name="tab_to_return_to_call">بازگشت به صفحه تماس</string>
-  <string name="who_is_allowed_to_call">افراد مجاز برای تماس صوتی</string>
+  <string name="who_is_allowed_to_voice_call">افراد مجاز برای تماس صوتی</string>
+  <string name="who_is_allowed_to_video_call">افراد مجاز برای تماس تصویری</string>
   <string name="miss">از دست رفته</string>
   <string name="not_answer">بدون پاسخ</string>
   <string name="e_906_1">شما اجازه تماس با این مخاطب را ندارید.</string>

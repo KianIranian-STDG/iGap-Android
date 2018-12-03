@@ -1796,8 +1796,8 @@
 
   <string name="tab_to_return_to_call">العودة إلى صفحة الاتصال </string>
 
-  <string name="who_is_allowed_to_call">الأشخاص المسموحين للاتصال الصوتي </string>
-
+  <string name="who_is_allowed_to_voice_call">الأشخاص المسموحين للاتصال الصوتي </string>
+  <string name="who_is_allowed_to_video_call">الأشخاص المسموحين للاتصال فيديو </string>
   <string name="miss">الفائت </string>
 
   <string name="not_answer">دون الرد </string>

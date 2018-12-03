@@ -1465,7 +1465,7 @@ public class FragmentSettingViewModel {
 
 
         if (realmPrivacy == null) {
-            RealmPrivacy.updatePrivacy("", "", "", "", "");
+            RealmPrivacy.updatePrivacy("", "", "", "", "", "");
         }
         sharedPreferences = G.fragmentActivity.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
 
