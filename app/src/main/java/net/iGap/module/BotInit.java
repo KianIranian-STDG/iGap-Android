@@ -312,10 +312,9 @@ public class BotInit {
                                     case USER:
                                         ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
                                         break;
-                                    case PUBLIC_ROOM:
+                                   /* case PUBLIC_ROOM:
                                         ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHANNEL);
-                                        break;
-
+                                        break;*/
 
                                 }
 
