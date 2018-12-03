@@ -1370,7 +1370,7 @@
   <string name="bot">ربات</string>
   <string name="back_to_menu">بازگشت به منوی اصلی</string>
   <string name="empty_text_dr_bot">به دستیار هوشمند آی‌گپ خوش آمدید!</string>
-    <string name="deprecated">نسخه فعلی منقضی شده است لطفا برای استفاده ای "پ را به روز رسانی نمایید</string>
+    <string name="deprecated">نسخه فعلی منقضی شده است لطفا برای استفاده به روز رسانی نمایید</string>
   <string name="new_version_avilable">نسخه جدید موجود است</string>
     <string name="new_version_alert">هشدار</string>
     <string name="ignore">نادیده گرفتن</string>

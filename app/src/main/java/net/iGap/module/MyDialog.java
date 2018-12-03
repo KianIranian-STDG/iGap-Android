@@ -50,6 +50,7 @@ public class MyDialog {
         realm.close();
 
         if (RealmRoom.isBot(peerId)) {
+
             v.findViewById(R.id.cm_layout_delete_chat).setVisibility(View.GONE);
             v.findViewById(R.id.cm_layout_mute_pinToTop).setVisibility(View.GONE);
         }
@@ -190,7 +191,6 @@ public class MyDialog {
         //    }
         //});
     }
-
 
 
     public static void showDialogNotification(Context context, String title, String Message, final OnComplete complete, final String result) {

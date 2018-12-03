@@ -24,6 +24,7 @@ import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
 import net.iGap.module.structs.StructMessageOption;
+import net.iGap.proto.ProtoClientGetPromote;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientGetRoomMessage;
@@ -72,6 +73,15 @@ public class RealmRoom extends RealmObject {
     private long pinMessageId;
     private long pinMessageIdDeleted;
     private int priority;
+    private boolean isFromPromote;
+
+    public boolean isFromPromote() {
+        return isFromPromote;
+    }
+
+    public void setFromPromote(boolean fromPromote) {
+        isFromPromote = fromPromote;
+    }
 
     /**
      * client need keepRoom info for show in forward message that forward
@@ -1577,4 +1587,46 @@ public class RealmRoom extends RealmObject {
         return ar;
     }
 
+    public static void setPromote(Long id, ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type type) {
+        Realm realm = Realm.getDefaultInstance();
+        if (type == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
+
+                    if (realmRoom != null) {
+                        realmRoom.setFromPromote(true);
+                    }
+                }
+
+            });
+
+        } else {
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+                    if (realmRoom != null) {
+                        realmRoom.setFromPromote(true);
+                    }
+                }
+            });
+
+        }
+        realm.close();
+
+    }
+
+    public static boolean isPromote(Long id) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
+        if (realmRoom != null) {
+            return realmRoom.isFromPromote();
+        }
+        realm.close();
+        return false;
+    }
 }
