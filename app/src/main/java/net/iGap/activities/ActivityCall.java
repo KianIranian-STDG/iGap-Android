@@ -263,6 +263,10 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
             activityCallBinding.fcrImvBackground.setVisibility(View.GONE);
             activityCallBinding.fcrTxtCallType.setText(getResources().getString(R.string.video_calls));
+
+            activityCallBinding.fcrBtnSwichCamera.setVisibility(View.VISIBLE);
+        } else {
+            activityCallBinding.fcrBtnSwichCamera.setVisibility(View.GONE);
         }
 
         verticalSwipe = new VerticalSwipe();
