@@ -292,7 +292,7 @@ public class BotInit {
 
         realm.close();*/
 
-          new RequestClientGetPromote().getPromote();
+        new RequestClientGetPromote().getPromote();
         G.ipromote = new Ipromote() {
             @Override
             public void onGetPromoteResponse(ProtoClientGetPromote.ClientGetPromoteResponse.Builder builder) {
@@ -300,7 +300,7 @@ public class BotInit {
                 for (int i = 0; i < builder.getPromoteList().size(); i++) {
 
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getPromoteList().get(i).getId()).findFirst();
-
+                    ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type TYPE = builder.getPromoteList().get(i).getType();
                     if (realmRoom == null) {
                         G.onChatGetRoom = new OnChatGetRoom() {
                             @Override
@@ -308,13 +308,14 @@ public class BotInit {
                                 G.onChatGetRoom = null;
                                 RealmRoom.putOrUpdate(room);
                                 new RequestClientPinRoom().pinRoom(room.getId(), true);
-                                switch (builder.getPromoteList().get(1).getType()){
+                                switch (TYPE) {
                                     case USER:
                                         ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
                                         break;
                                     case PUBLIC_ROOM:
                                         ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHANNEL);
                                         break;
+
 
                                 }
 
