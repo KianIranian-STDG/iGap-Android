@@ -19,7 +19,6 @@ import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnGeoGetComment;
 import net.iGap.interfaces.OnInfo;
 import net.iGap.proto.ProtoSignalingOffer;
-import net.iGap.realm.RealmCallConfig;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestGeoGetComment;
 
@@ -90,11 +89,11 @@ public class MyInfoWindow extends InfoWindow {
             return;
         }
 
-        RealmCallConfig callConfig = realm.where(RealmCallConfig.class).findFirst();
+     /*   RealmCallConfig callConfig = realm.where(RealmCallConfig.class).findFirst();
         if (callConfig != null) {
             isCallEnable = callConfig.isVoice_calling();
             isVideoCallEnable = callConfig.isVideo_calling();
-        }
+        }*/
 
         final MaterialDialog dialog = new MaterialDialog.Builder(mActivity).customView(R.layout.map_user_info, true).build();
         View view = dialog.getCustomView();
