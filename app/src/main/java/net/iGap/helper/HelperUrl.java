@@ -189,7 +189,7 @@ public class HelperUrl {
                     boolean openLocalWebPage;
                     SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, G.context.MODE_PRIVATE);
 
-                    int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 0);
+                    int checkedInappBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
 
                     String url = strBuilder.toString().substring(start, end).trim();
                     url = url.replaceAll("[^\\x00-\\x7F]", "");
@@ -251,7 +251,7 @@ public class HelperUrl {
         if (intent.resolveActivity(G.fragmentActivity.getPackageManager()) != null) {
             G.fragmentActivity.startActivity(intent);
         } else {
-            Toast.makeText(G.fragmentActivity, "", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(G.fragmentActivity, "", Toast.LENGTH_SHORT).show();
             HelperError.showSnackMessage(G.context.getResources().getString(R.string.error),false);
         }
     }
