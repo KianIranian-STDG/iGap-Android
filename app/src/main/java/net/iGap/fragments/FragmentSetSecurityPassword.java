@@ -94,9 +94,9 @@ public class FragmentSetSecurityPassword extends BaseFragment {
         final ViewGroup rootEmail = (ViewGroup) view.findViewById(R.id.rootEmail);
         final ViewGroup rootConfirmEmail = (ViewGroup) view.findViewById(R.id.rootConfirmEmail);
 
-       // TextView txtSkipConfirmEmail = (TextView) view.findViewById(R.id.txtSkipConfirmEmail);
+        TextView txtSkipConfirmEmail = (TextView) view.findViewById(R.id.txtSkipConfirmEmail);
         TextView txtResendConfirmEmail = (TextView) view.findViewById(R.id.txtResendConfirmEmail);
-      //  TextView txtSkipSetEmail = (TextView) view.findViewById(R.id.txtSkipSetEmail);
+        TextView txtSkipSetEmail = (TextView) view.findViewById(R.id.txtSkipSetEmail);
         txtResendConfirmEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,7 +106,8 @@ public class FragmentSetSecurityPassword extends BaseFragment {
             }
         });
 
-/*        txtSkipConfirmEmail.setOnClickListener(new View.OnClickListener() {
+
+        txtSkipConfirmEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 closeKeyboard(v);
@@ -122,8 +123,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                 edtSetAnswerPassTwo.setText("");
                 edtSetEmail.setText("");
             }
-        });*/
-
+        });
 
         final RippleView btnOk = (RippleView) view.findViewById(R.id.setPassword_rippleOk);
         btnOk.setOnClickListener(new View.OnClickListener() {
@@ -215,9 +215,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                             error(G.fragmentActivity.getResources().getString(R.string.invalid_email));
                         }
                     } else {
-                        closeKeyboard(v);
-                        error(G.fragmentActivity.getResources().getString(R.string.please_complete_all_item));
-                     /*   page = 0;
+                        page = 0;
                         FragmentSecurity.isSetRecoveryEmail = false;
                         new RequestUserTwoStepVerificationSetPassword().setPassword(oldPassword, txtPassword, edtSetEmail.getText().toString(), edtSetQuestionPassOne.getText().toString(), edtSetAnswerPassOne.getText().toString(), edtSetQuestionPassTwo.getText().toString(), edtSetAnswerPassTwo.getText().toString(), edtSetHintPassword.getText().toString());
 
@@ -233,7 +231,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                         edtSetQuestionPassTwo.setText("");
                         edtSetAnswerPassOne.setText("");
                         edtSetAnswerPassTwo.setText("");
-                        edtSetEmail.setText("");*/
+                        edtSetEmail.setText("");
                     }
 
 
@@ -250,7 +248,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
             }
         });
 
-    /*    txtSkipSetEmail.setOnClickListener(new View.OnClickListener() {
+        txtSkipSetEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 page = 5;
@@ -258,7 +256,7 @@ public class FragmentSetSecurityPassword extends BaseFragment {
                 edtSetEmail.setText("");
                 btnOk.performClick();
             }
-        });*/
+        });
 
 
         G.twoStepSecurityConfirmEmail = new TwoStepSecurityConfirmEmail() {
