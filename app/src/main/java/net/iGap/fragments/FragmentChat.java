@@ -17,7 +17,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -55,7 +54,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -136,7 +134,6 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
-import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
@@ -318,7 +315,6 @@ import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.R.string.item;
-import static net.iGap.R.string.replay;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
@@ -1177,12 +1173,13 @@ public class FragmentChat extends BaseFragment
                  */
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     if (requestCode == AttachFile.requestOpenGalleryForVideoMultipleSelect) {
-                        if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
+                        boolean isGif = listPathString.get(0).toLowerCase().endsWith(".gif");
+                        if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1 && !isGif) {
                             Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
                             intent.putExtra("PATH", listPathString.get(0));
                             startActivityForResult(intent, AttachFile.request_code_trim_video);
                             return;
-                        } else if ((sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1)) {
+                        } else if ((sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1 && !isGif)) {
 
                             mainVideoPath = listPathString.get(0);
 
@@ -7486,6 +7483,10 @@ public class FragmentChat extends BaseFragment
         }
 
         StructMessageInfo messageInfo = null;
+
+        if (requestCode == AttachFile.requestOpenGalleryForVideoMultipleSelect && filePath.toLowerCase().endsWith(".gif")) {
+            requestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
+        }
 
         switch (requestCode) {
             case IntentRequests.REQ_CROP:
