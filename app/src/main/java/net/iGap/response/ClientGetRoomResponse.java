@@ -84,6 +84,7 @@ public class ClientGetRoomResponse extends MessageHandler {
                     if (!RealmRoom.isMainRoom(clientGetRoom.getRoom().getId())) {
                         RealmRoom realmRoom = RealmRoom.putOrUpdate(clientGetRoom.getRoom(), realm);
                         realmRoom.setFromPromote(true);
+                        realmRoom.setPromoteId(clientGetRoom.getRoom().getId());
                         realmRoom.setDeleted(true);
                         realmRoom.setKeepRoom(false);
                         if (clientGetRoom.getRoom().hasChannelRoomExtra()) {

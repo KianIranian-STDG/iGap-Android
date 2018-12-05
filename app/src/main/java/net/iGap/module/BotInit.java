@@ -31,6 +31,7 @@ import net.iGap.request.RequestClientPinRoom;
 import java.util.ArrayList;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 import static net.iGap.Config.drIgapPeerId;
 
@@ -268,20 +269,36 @@ public class BotInit {
             @Override
             public void onGetPromoteResponse(ProtoClientGetPromote.ClientGetPromoteResponse.Builder builder) {
                 final Realm realm = Realm.getDefaultInstance();
-                //  for (int i = builder.getPromoteList().size() - 1; i >= 0; i--) {
-                for (int i = 0; i < builder.getPromoteList().size(); i++) {
+                ArrayList<Long> promoteIds = new ArrayList<>();
+
+                for (int i = 0; i < builder.getPromoteList().size(); i++)
+                    promoteIds.add(builder.getPromoteList().get(i).getId());
+
+
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<RealmRoom> roomList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findAll();
+                        for (RealmRoom room : roomList) {
+                            if (!promoteIds.contains(room.getPromoteId())) {
+                             //   Log.i("#peymanPromoteId", room.getPromoteId() + "");
+                                room.setFromPromote(false);
+                                new RequestClientPinRoom().pinRoom(room.getId(), false);
+                            }
+
+                        }
+                    }
+                });
+
+                for (int i = builder.getPromoteList().size() - 1; i >= 0; i--) {
 
                     ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type TYPE = builder.getPromoteList().get(i).getType();
                     RealmRoom realmRoom;
 
                     if (TYPE == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
-
-                        realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, builder.getPromoteList().get(i).getId()).findFirst();
-
+                        realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, builder.getPromoteList().get(i).getId()).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findFirst();
                     } else {
-
-                        realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getPromoteList().get(i).getId()).findFirst();
-
+                        realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getPromoteList().get(i).getId()).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findFirst();
                     }
 
                     if (realmRoom == null) {
@@ -297,6 +314,7 @@ public class BotInit {
                                         public void execute(Realm mRealm) {
                                             RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, mRealm);
                                             realmRoom1.setFromPromote(true);
+                                            realmRoom1.setPromoteId(realmRoom1.getChatRoom().getPeerId());
                                         }
                                     });
 

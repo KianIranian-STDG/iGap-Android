@@ -49,11 +49,10 @@ public class MyDialog {
         int pinCount = realmRoom.size();
         realm.close();
 
-        //  if (RealmRoom.isBot(peerId)) {
-      /*  if (mInfo != null && RealmRoom.isPromote(mInfo.getId())) {
+        if (mInfo != null && RealmRoom.isPromote(mInfo.getId())) {
             v.findViewById(R.id.cm_layout_delete_chat).setVisibility(View.GONE);
             v.findViewById(R.id.cm_layout_mute_pinToTop).setVisibility(View.GONE);
-        }*/
+        }
 
         txtMuteNotification = (TextView) v.findViewById(R.id.cm_txt_mute_notification);
         MaterialDesignTextView iconMuteNotification = (MaterialDesignTextView) v.findViewById(R.id.cm_icon_mute_notification);

@@ -74,6 +74,15 @@ public class RealmRoom extends RealmObject {
     private long pinMessageIdDeleted;
     private int priority;
     private boolean isFromPromote;
+    private long promoteId;
+
+    public long getPromoteId() {
+        return promoteId;
+    }
+
+    public void setPromoteId(long promoteId) {
+        this.promoteId = promoteId;
+    }
 
     public boolean isFromPromote() {
         return isFromPromote;
