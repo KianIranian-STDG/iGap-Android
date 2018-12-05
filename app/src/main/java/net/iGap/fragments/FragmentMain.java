@@ -1256,7 +1256,9 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                 if (mInfo.isPinned()) {
                     holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
 
-                    if (mInfo.getChatRoom() != null && RealmRoom.isBot(mInfo.getChatRoom().getPeerId())) {
+                    //if (mInfo.getChatRoom() != null && RealmRoom.isBot(mInfo.getChatRoom().getPeerId())) {
+
+                    if (mInfo != null && RealmRoom.isPromote(mInfo.getId())) {
           //              holder.rootChat.setBackgroundColor(G.context.getResources().getColor(R.color.green_20));
                         holder.txtPinIcon.setVisibility(View.GONE);
                     } else {
@@ -1688,7 +1690,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
                                 if (!G.fragmentActivity.isFinishing()) {
                                     long peerId = mInfo.getChatRoom() != null ? mInfo.getChatRoom().getPeerId() : 0;
-                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId, new OnComplete() {
+                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId,mInfo, new OnComplete() {
                                         @Override
                                         public void complete(boolean result, String messageOne, String MessageTow) {
                                             onSelectRoomMenu(messageOne, mInfo);

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -24,6 +25,7 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientGetPromote;
+import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientPinRoom;
 
 import java.util.ArrayList;
@@ -261,87 +263,82 @@ public class BotInit {
 
     public static void checkDrIgap() {
 
-    /*    final Realm realm = Realm.getDefaultInstance();
-        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, drIgapPeerId).findFirst();
-
-        if (realmRoom == null) {
-            G.onChatGetRoom = new OnChatGetRoom() {
-                @Override
-                public void onChatGetRoom(final ProtoGlobal.Room room) {
-                    G.onChatGetRoom = null;
-                    RealmRoom.putOrUpdate(room);
-                    new RequestClientPinRoom().pinRoom(room.getId(), true);
-              //      ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
-                }
-
-                @Override
-                public void onChatGetRoomTimeOut() {
-
-                }
-
-                @Override
-                public void onChatGetRoomError(int majorCode, int minorCode) {
-
-                }
-            };
-
-            new RequestChatGetRoom().chatGetRoom(drIgapPeerId);
-        } else {
-            new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
-        }
-
-        realm.close();*/
-
         new RequestClientGetPromote().getPromote();
         G.ipromote = new Ipromote() {
             @Override
             public void onGetPromoteResponse(ProtoClientGetPromote.ClientGetPromoteResponse.Builder builder) {
                 final Realm realm = Realm.getDefaultInstance();
+                //  for (int i = builder.getPromoteList().size() - 1; i >= 0; i--) {
                 for (int i = 0; i < builder.getPromoteList().size(); i++) {
-                    RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getPromoteList().get(i).getId()).findFirst();
+
                     ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type TYPE = builder.getPromoteList().get(i).getType();
+                    RealmRoom realmRoom;
+
+                    if (TYPE == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
+
+                        realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, builder.getPromoteList().get(i).getId()).findFirst();
+
+                    } else {
+
+                        realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, builder.getPromoteList().get(i).getId()).findFirst();
+
+                    }
+
                     if (realmRoom == null) {
-                 //       RealmRoom.setPromote(builder.getPromoteList().get(i).getId(), TYPE);
-                        G.onChatGetRoom = new OnChatGetRoom() {
-                            @Override
-                            public void onChatGetRoom(final ProtoGlobal.Room room) {
-                                G.onChatGetRoom = null;
-                                RealmRoom.putOrUpdate(room);
-                                new RequestClientPinRoom().pinRoom(room.getId(), true);
+                        if (TYPE == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
+                            //                   RealmRoom.setPromote(builder.getPromoteList().get(i).getId(), TYPE);
+                            G.onChatGetRoom = new OnChatGetRoom() {
+                                @Override
+                                public void onChatGetRoom(final ProtoGlobal.Room room) {
+                                    G.onChatGetRoom = null;
+                                    Realm realm1 = Realm.getDefaultInstance();
+                                    realm1.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm mRealm) {
+                                            RealmRoom realmRoom1 = RealmRoom.putOrUpdate(room, mRealm);
+                                            realmRoom1.setFromPromote(true);
+                                        }
+                                    });
 
-                                switch (TYPE) {
-                                    case USER:
-                                        ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
-                                        break;
-                                   /* case PUBLIC_ROOM:
-                                        ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHANNEL);
-                                        break;*/
+                                    new RequestClientPinRoom().pinRoom(room.getId(), true);
 
+
+                                    //  RealmRoom.setPromote(2297310L, ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER);
+                                    ActivityPopUpNotification.sendMessage("/start", room.getId(), ProtoGlobal.Room.Type.CHAT);
+
+                                    realm1.close();
                                 }
 
 
-                            }
+                                @Override
+                                public void onChatGetRoomTimeOut() {
 
-                            @Override
-                            public void onChatGetRoomTimeOut() {
+                                }
 
-                            }
+                                @Override
+                                public void onChatGetRoomError(int majorCode, int minorCode) {
 
-                            @Override
-                            public void onChatGetRoomError(int majorCode, int minorCode) {
+                                }
+                            };
+                            new RequestChatGetRoom().chatGetRoom(builder.getPromoteList().get(i).getId());
 
-                            }
-                        };
+                        } else {
 
-                        new RequestChatGetRoom().chatGetRoom(builder.getPromoteList().get(i).getId());
+                            new RequestClientGetRoom().clientGetRoom(builder.getPromoteList().get(i).getId(), RequestClientGetRoom.CreateRoomMode.getPromote);
+
+                        }
+
+
                     } else {
+
                         new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
+                        Log.i("#peymanSize", builder.getPromoteList().size() + "");
+
                     }
                 }
 
-
-                realm.close();
             }
+
         };
 
     }

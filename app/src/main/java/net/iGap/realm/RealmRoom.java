@@ -131,6 +131,7 @@ public class RealmRoom extends RealmObject {
             realmRoom = realm.createObject(RealmRoom.class, room.getId());
         }
 
+
         realmRoom.isDeleted = false;
         realmRoom.keepRoom = false;
 
@@ -143,11 +144,13 @@ public class RealmRoom extends RealmObject {
         realmRoom.setMute(room.getRoomMute());
         realmRoom.setPriority(room.getPriority());
         realmRoom.setPinId(room.getPinId());
+
         if (room.getPinId() > 0) {
             realmRoom.setPinned(true);
         } else {
             realmRoom.setPinned(false);
         }
+
 
         if (room.getPinnedMessage() != null) {
             realmRoom.setPinMessageId(room.getPinnedMessage().getMessageId());
@@ -1588,10 +1591,10 @@ public class RealmRoom extends RealmObject {
     }
 
     public static void setPromote(Long id, ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type type) {
-        Realm realm = Realm.getDefaultInstance();
-        if (type == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
 
-            realm.executeTransaction(new Realm.Transaction() {
+        if (type == ProtoClientGetPromote.ClientGetPromoteResponse.Promote.Type.USER) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransactionAsync(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, id).findFirst();
@@ -1602,21 +1605,24 @@ public class RealmRoom extends RealmObject {
                 }
 
             });
-
+            realm.close();
         } else {
-
+            Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
                     RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, id).findFirst();
                     if (realmRoom != null) {
                         realmRoom.setFromPromote(true);
+                    } else {
+                        realmRoom.setFromPromote(false);
                     }
+
                 }
             });
-
+            realm.close();
         }
-        realm.close();
+
 
     }
 

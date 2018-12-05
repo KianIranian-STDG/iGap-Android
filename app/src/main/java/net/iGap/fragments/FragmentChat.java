@@ -1514,8 +1514,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initDrBot() {
-
-
         rcvDrBot = rootView.findViewById(R.id.rcvDrBot);
         rcvDrBot.setLayoutManager(new LinearLayoutManager(G.context, LinearLayoutManager.HORIZONTAL, false));
         AdapterDrBot adapterDrBot = new AdapterDrBot(items);
@@ -1789,8 +1787,8 @@ public class FragmentChat extends BaseFragment
                         color = realmRegisteredInfo.getColor();
                         phoneNumber = realmRegisteredInfo.getPhoneNumber();
 
-                        //   if (realmRegisteredInfo.getId() == Config.drIgapPeerId) {
-                        if (realmRegisteredInfo.isBot()) {
+                           if (realmRegisteredInfo.getId() == Config.drIgapPeerId) {
+                       // if (realmRegisteredInfo.getUsername().equalsIgnoreCase("")) {
                             initDrBot();
                         }
 

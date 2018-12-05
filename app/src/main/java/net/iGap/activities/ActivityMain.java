@@ -120,6 +120,7 @@ import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.libs.tabBar.NavigationTabStrip;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.BotInit;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUtils;
@@ -176,7 +177,7 @@ import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements  OnUserInfoMyClient, OnPayment, OnUnreadChange, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -2331,6 +2332,7 @@ public class ActivityMain extends ActivityEnhanced implements  OnUserInfoMyClien
 
         resume();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
     }
 
     public void resume() {
@@ -2929,8 +2931,6 @@ public class ActivityMain extends ActivityEnhanced implements  OnUserInfoMyClien
             }
         });
     }
-
-
 
 
     public enum MainAction {
