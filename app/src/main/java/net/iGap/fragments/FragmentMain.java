@@ -61,6 +61,7 @@ import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnVersionCallBack;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.BotInit;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
@@ -1104,6 +1105,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                 }
             }
         }
+//        BotInit.checkDrIgap();
     }
 
     @Override
@@ -1254,12 +1256,14 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                  */
 
                 if (mInfo.isPinned()) {
+                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
 
-                    if (mInfo.getChatRoom() != null && mInfo.getChatRoom().getPeerId() == Config.drIgapPeerId) {
-                        holder.rootChat.setBackgroundColor(G.context.getResources().getColor(R.color.green_20));
+                    //if (mInfo.getChatRoom() != null && RealmRoom.isBot(mInfo.getChatRoom().getPeerId())) {
+
+                    if (mInfo != null && RealmRoom.isPromote(mInfo.getId())) {
+          //              holder.rootChat.setBackgroundColor(G.context.getResources().getColor(R.color.green_20));
                         holder.txtPinIcon.setVisibility(View.GONE);
                     } else {
-                        holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
                         holder.txtPinIcon.setVisibility(View.VISIBLE);
                     }
 
@@ -1305,6 +1309,20 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                 holder.txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getText().toString()));
             }
         }
+
+
+   /*     private boolean isBot(long userId) {
+            RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmFragmentMain(), userId);
+            if (realmRegisteredInfo != null) {
+                if (realmRegisteredInfo.isBot()) {
+                    return true;
+                } else
+                    return false;
+            } else
+                return false;
+        }*/
+
+
 
         private String subStringInternal(String text) {
             if (text == null || text.length() == 0) {
@@ -1674,7 +1692,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
                                 if (!G.fragmentActivity.isFinishing()) {
                                     long peerId = mInfo.getChatRoom() != null ? mInfo.getChatRoom().getPeerId() : 0;
-                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId, new OnComplete() {
+                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId,mInfo, new OnComplete() {
                                         @Override
                                         public void complete(boolean result, String messageOne, String MessageTow) {
                                             onSelectRoomMenu(messageOne, mInfo);

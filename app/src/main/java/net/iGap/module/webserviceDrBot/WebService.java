@@ -26,7 +26,7 @@ import java.util.List;
 
 public class WebService {
 
-    static String url = "http://185.238.92.111:8080/rest/";
+    static String url = "http://botapi.igapnet:8080/rest/";
 
     private static String callWebService(String method, List nameValuePairs) {
         try {

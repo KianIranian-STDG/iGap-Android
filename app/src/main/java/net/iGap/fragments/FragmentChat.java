@@ -539,6 +539,7 @@ public class FragmentChat extends BaseFragment
     List<Favorite> items = new ArrayList<>();
     boolean isAnimateStart = false;
     boolean isScrollEnd = false;
+
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
             realmChat = Realm.getDefaultInstance();
@@ -1521,8 +1522,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initDrBot() {
-
-
         rcvDrBot = rootView.findViewById(R.id.rcvDrBot);
         rcvDrBot.setLayoutManager(new LinearLayoutManager(G.context, LinearLayoutManager.HORIZONTAL, false));
         AdapterDrBot adapterDrBot = new AdapterDrBot(items);
@@ -1796,7 +1795,8 @@ public class FragmentChat extends BaseFragment
                         color = realmRegisteredInfo.getColor();
                         phoneNumber = realmRegisteredInfo.getPhoneNumber();
 
-                        if (realmRegisteredInfo.getId() == Config.drIgapPeerId) {
+                           if (realmRegisteredInfo.getId() == Config.drIgapPeerId) {
+                       // if (realmRegisteredInfo.getUsername().equalsIgnoreCase("")) {
                             initDrBot();
                         }
 
@@ -2658,7 +2658,7 @@ public class FragmentChat extends BaseFragment
                     }
                 });
 
-                if (chatPeerId == Config.drIgapPeerId) {
+                if (RealmRoom.isBot(chatPeerId)) {
                     root3.setVisibility(View.GONE);
                 }
             }
@@ -2955,12 +2955,12 @@ public class FragmentChat extends BaseFragment
                 int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
 
-                if (pastVisibleItems + visibleItemCount >= totalItemCount  && !isAnimateStart) {
+                if (pastVisibleItems + visibleItemCount >= totalItemCount && !isAnimateStart) {
                     isScrollEnd = false;
                     isAnimateStart = true;
                     llScrollNavigate.animate()
                             .alpha(0.0f)
-                            .translationY(llScrollNavigate.getHeight()/2)
+                            .translationY(llScrollNavigate.getHeight() / 2)
                             .setDuration(200)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
@@ -2971,7 +2971,7 @@ public class FragmentChat extends BaseFragment
                                 }
                             });
 
-                } else if (!isScrollEnd && !isAnimateStart){
+                } else if (!isScrollEnd && !isAnimateStart) {
                     isScrollEnd = true;
                     isAnimateStart = true;
                     llScrollNavigate.setVisibility(View.VISIBLE);
@@ -2988,9 +2988,9 @@ public class FragmentChat extends BaseFragment
                             });
 
                     txtNewUnreadMessage.setText(countNewMessage + "");
-                    if (countNewMessage == 0){
+                    if (countNewMessage == 0) {
                         txtNewUnreadMessage.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         txtNewUnreadMessage.setVisibility(View.VISIBLE);
                     }
 
@@ -8898,7 +8898,9 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onPinMessage() {
+
         initPinedMessage();
+
     }
 
     @Override
@@ -9235,5 +9237,17 @@ public class FragmentChat extends BaseFragment
         void sendMessageBOt(Favorite favorite);
 
     }
+
+/*    private boolean isBot(long userId) {
+        Realm realm=Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+        if (realmRegisteredInfo != null) {
+            if (realmRegisteredInfo.isBot()) {
+                return true;
+            } else
+                return false;
+        } else
+            return false;
+    }*/
 
 }

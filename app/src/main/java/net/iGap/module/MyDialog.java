@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.module;
 
@@ -23,6 +23,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 
@@ -35,7 +36,7 @@ public class MyDialog {
     /**
      * create custom dialog for main page
      */
-    public static void showDialogMenuItemRooms(final Context context, final String itemName, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, long peerId, final OnComplete complete, boolean isPinned) {
+    public static void showDialogMenuItemRooms(final Context context, final String itemName, final ProtoGlobal.Room.Type mType, boolean isMute, final String role, long peerId, RealmRoom mInfo, final OnComplete complete, boolean isPinned) {
 
         final MaterialDialog dialog = new MaterialDialog.Builder(context).customView(R.layout.chat_popup_dialog, true).build();
         View v = dialog.getCustomView();
@@ -48,7 +49,7 @@ public class MyDialog {
         int pinCount = realmRoom.size();
         realm.close();
 
-        if (peerId == Config.drIgapPeerId) {
+        if (mInfo != null && RealmRoom.isPromote(mInfo.getId())) {
             v.findViewById(R.id.cm_layout_delete_chat).setVisibility(View.GONE);
             v.findViewById(R.id.cm_layout_mute_pinToTop).setVisibility(View.GONE);
         }
@@ -189,6 +190,7 @@ public class MyDialog {
         //    }
         //});
     }
+
 
     public static void showDialogNotification(Context context, String title, String Message, final OnComplete complete, final String result) {
 
