@@ -61,6 +61,7 @@ import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnVersionCallBack;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.BotInit;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
@@ -1104,6 +1105,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                 }
             }
         }
+//        BotInit.checkDrIgap();
     }
 
     @Override

@@ -350,7 +350,7 @@ public class BotInit {
                     } else {
 
                         new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
-                        Log.i("#peymanSize", builder.getPromoteList().size() + "");
+                         Log.i("#peymanSize", builder.getPromoteList().size() + "");
 
                     }
                 }
