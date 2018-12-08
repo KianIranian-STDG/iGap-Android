@@ -281,7 +281,7 @@ public class BotInit {
                         RealmResults<RealmRoom> roomList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findAll();
                         for (RealmRoom room : roomList) {
                             if (!promoteIds.contains(room.getPromoteId())) {
-                             //   Log.i("#peymanPromoteId", room.getPromoteId() + "");
+                                //   Log.i("#peymanPromoteId", room.getPromoteId() + "");
                                 room.setFromPromote(false);
                                 new RequestClientPinRoom().pinRoom(room.getId(), false);
                             }
@@ -350,7 +350,7 @@ public class BotInit {
                     } else {
 
                         new RequestClientPinRoom().pinRoom(realmRoom.getId(), true);
-                         Log.i("#peymanSize", builder.getPromoteList().size() + "");
+                        Log.i("#peymanSize", builder.getPromoteList().size() + "");
 
                     }
                 }
@@ -358,7 +358,7 @@ public class BotInit {
             }
 
         };
-
+     //   G.ipromote = null;
     }
 
 }
