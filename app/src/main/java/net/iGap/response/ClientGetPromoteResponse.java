@@ -35,6 +35,7 @@ public class ClientGetPromoteResponse extends MessageHandler {
         builder.getPromoteList().get(0).getType();
         builder.getPromoteList().get(0).getId();
 
+
         if (G.ipromote != null) {
             G.ipromote.onGetPromoteResponse(builder);
         }

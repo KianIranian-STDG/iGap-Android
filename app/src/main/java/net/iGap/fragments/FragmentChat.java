@@ -1795,8 +1795,8 @@ public class FragmentChat extends BaseFragment
                         color = realmRegisteredInfo.getColor();
                         phoneNumber = realmRegisteredInfo.getPhoneNumber();
 
-                           if (realmRegisteredInfo.getId() == Config.drIgapPeerId) {
-                       // if (realmRegisteredInfo.getUsername().equalsIgnoreCase("")) {
+                        if (realmRegisteredInfo.getId() == Config.drIgapPeerId) {
+                            // if (realmRegisteredInfo.getUsername().equalsIgnoreCase("")) {
                             initDrBot();
                         }
 
@@ -2761,7 +2761,7 @@ public class FragmentChat extends BaseFragment
       /*  icon = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.ic_launcher_foreground);*/
 
-        if (!realmRoom.getReadOnly()) {
+        if (realmRoom != null && !realmRoom.getReadOnly()) {
             ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
                 @Override
                 public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
