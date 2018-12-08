@@ -1379,6 +1379,8 @@
   <string name="new_version_avilable">New version is available </string>
   <string name="new_version_alert">Alert</string>
   <string name="ignore">Ignore</string>
+  <string name="permission_auto_start">please select and active iGap from menu to receive messages when even app is not in background</string>
+  <string name="dont_show_again">Do not show again</string>
 
 
 </resources>

@@ -1377,7 +1377,8 @@
     <string name="ignore">نادیده گرفتن</string>
   <string name="hashtag">هشتگ</string>
   <string name="igap_update">بروزرسانی</string>
-
+  <string name="permission_auto_start"> لطفا برای رسیدن پیام ها حتی در زمانی که ای گپ در پس زمینه فعال نیست ای گپ را از منو انتخاب و فعال نمایید</string>
+  <string name="dont_show_again"> مجددا نمایش نده</string>
 
 
 </resources>
