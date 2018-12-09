@@ -2731,7 +2731,7 @@ public class FragmentChat extends BaseFragment
             botInit.updateCommandList(false, lastMessage, getActivity(), backToMenu);
         }
 
-        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom) {
+        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
             sendMoney.setVisibility(View.VISIBLE);
         } else {
             sendMoney.setVisibility(View.GONE);
@@ -5791,7 +5791,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                layoutAttachBottom.setVisibility(visibility || isBot ? View.GONE : View.VISIBLE);
+                layoutAttachBottom.setVisibility(visibility ? View.GONE : View.VISIBLE);
             }
         }).start();
         imvSendButton.animate().alpha(visibility ? 1F : 0F).setListener(new AnimatorListenerAdapter() {
