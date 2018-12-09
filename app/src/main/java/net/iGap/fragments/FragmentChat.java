@@ -3160,6 +3160,7 @@ public class FragmentChat extends BaseFragment
                 }
 
                 //realmMessage.close();
+                scrollToEnd();
             }
         });
 

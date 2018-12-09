@@ -426,8 +426,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            if (Build.BRAND.equalsIgnoreCase("xiaomi") || Build.BRAND.equalsIgnoreCase("Honor") || Build.BRAND.equalsIgnoreCase("oppo"))
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            if (Build.BRAND.equalsIgnoreCase("xiaomi") || Build.BRAND.equalsIgnoreCase("Honor") || Build.BRAND.equalsIgnoreCase("oppo") || Build.BRAND.equalsIgnoreCase("asus"))
                 isChinesPhone();
         }
 //        setTheme(R.style.AppThemeTranslucent);
@@ -3124,6 +3124,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             Intent intent = new Intent();
                             intent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity"));
                             startActivity(intent);
+
+                        } else if (Build.BRAND.equalsIgnoreCase("asus")){
+                          Intent intent=  new Intent().setComponent(new ComponentName("com.asus.mobilemanager", "com.asus.mobilemanager.MainActivity"));
+                          startActivity(intent);
 
                         }
                     } catch (ActivityNotFoundException e) {
