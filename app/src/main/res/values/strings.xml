@@ -887,7 +887,7 @@
     <string name="igap_search">Look and Find</string>
     <string name="set_color_to_default">Reset Colors Back to Default</string>
     <string name="empty_message">Please try to enter the first 5 characters of username</string>
-    <string name="empty_message3">Enter at least 3 characters to search</string>
+    <string name="empty_message3">Enter at least 5 characters to search</string>
     <string name="there_is_no_any_result">No Result</string>
     <string name="there_is_no_connection_to_server">Server not found</string>
     <string name="empty_room">No Messages Yet</string>

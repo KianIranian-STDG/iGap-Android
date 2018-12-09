@@ -855,7 +855,7 @@
     <string name="igap_search">‫بگرد و کشف کن</string>‬‬‬‬‬‬
     <string name="set_color_to_default">برگرداندن رنگ ها به پیش فرض</string>
     <string name="empty_message"> لطفاً 5 کاراکتر ابتدایی نام کاربری را وارد کنید</string>‬‬‬‬‬‬
-    <string name="empty_message3"> برای جستجو حداقل 3 کاراکتر وارد کنید</string>‬‬‬‬‬‬
+    <string name="empty_message3"> برای جستجو حداقل 5 کاراکتر وارد کنید</string>‬‬‬‬‬‬
     <string name="there_is_no_any_result">نتیجه ای یافت نشد</string>
     <string name="there_is_no_connection_to_server">ارتباط با سرور برقرار نیست</string>
     <string name="empty_room">هنوز پیامی ندارید</string>

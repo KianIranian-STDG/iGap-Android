@@ -1604,7 +1604,7 @@
 
     <string name="empty_message"> من فضلك إدخل 5 حروف بداية اسم المستخدم</string>
     ‬‬‬‬‬‬
-    <string name="empty_message3">أدخل 3 حروف على الحدّ الأدنى للقيام بالبحث</string>
+    <string name="empty_message3">أدخل 5 حروف على الحدّ الأدنى للقيام بالبحث</string>
     ‬‬‬‬‬‬
     <string name="there_is_no_any_result">لم يتمّ العثور على أية نتائج</string>
 
