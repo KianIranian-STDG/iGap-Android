@@ -140,11 +140,6 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
     @Override
     public void onLeave(final ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
         WebRTC.getInstance().close();
-        WebRTC.getInstance().dispose();
-        /**
-         * set peer connection null for try again
-         */
-        WebRTC.getInstance().clearConnection();
 
         if (G.iSignalingCallBack != null) {
 

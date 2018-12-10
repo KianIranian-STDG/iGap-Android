@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
@@ -29,6 +30,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.NonNull;
@@ -46,11 +49,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.ViewStubCompat;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -131,7 +134,6 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperSetAction;
 import net.iGap.helper.HelperString;
-import net.iGap.helper.HelperTimeOut;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
@@ -305,6 +307,7 @@ import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
+import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
 import static io.fotoapparat.parameter.selector.LensPositionSelectors.back;
 import static io.fotoapparat.parameter.selector.SizeSelectors.biggestSize;
 import static java.lang.Long.parseLong;
@@ -366,6 +369,10 @@ public class FragmentChat extends BaseFragment
     private boolean isShareOk = true;
     private boolean isDrBot = true;
     public static OnHandleDrBot onHandleDrBot;
+
+    private Bitmap icon;
+    private boolean isRepley = false;
+    private boolean swipeBack = false;
 
     /**
      * *************************** common method ***************************
@@ -530,6 +537,8 @@ public class FragmentChat extends BaseFragment
     PaymentDialogBinding paymentDialogBinding;
     PaymentFragment paymentDialog;
     List<Favorite> items = new ArrayList<>();
+    boolean isAnimateStart = false;
+    boolean isScrollEnd = false;
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -1165,12 +1174,13 @@ public class FragmentChat extends BaseFragment
                  */
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     if (requestCode == AttachFile.requestOpenGalleryForVideoMultipleSelect) {
-                        if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1) {
+                        boolean isGif = listPathString.get(0).toLowerCase().endsWith(".gif");
+                        if (sharedPreferences.getInt(SHP_SETTING.KEY_TRIM, 1) == 1 && !isGif) {
                             Intent intent = new Intent(G.fragmentActivity, ActivityTrimVideo.class);
                             intent.putExtra("PATH", listPathString.get(0));
                             startActivityForResult(intent, AttachFile.request_code_trim_video);
                             return;
-                        } else if ((sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1)) {
+                        } else if ((sharedPreferences.getInt(SHP_SETTING.KEY_COMPRESS, 1) == 1 && !isGif)) {
 
                             mainVideoPath = listPathString.get(0);
 
@@ -1512,8 +1522,6 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initDrBot() {
-
-
         rcvDrBot = rootView.findViewById(R.id.rcvDrBot);
         rcvDrBot.setLayoutManager(new LinearLayoutManager(G.context, LinearLayoutManager.HORIZONTAL, false));
         AdapterDrBot adapterDrBot = new AdapterDrBot(items);
@@ -1788,6 +1796,7 @@ public class FragmentChat extends BaseFragment
                         phoneNumber = realmRegisteredInfo.getPhoneNumber();
 
                         if (realmRegisteredInfo.getId() == Config.drIgapPeerId) {
+                            // if (realmRegisteredInfo.getUsername().equalsIgnoreCase("")) {
                             initDrBot();
                         }
 
@@ -2649,7 +2658,7 @@ public class FragmentChat extends BaseFragment
                     }
                 });
 
-                if (chatPeerId == Config.drIgapPeerId) {
+                if (RealmRoom.isBot(chatPeerId)) {
                     root3.setVisibility(View.GONE);
                 }
             }
@@ -2722,7 +2731,7 @@ public class FragmentChat extends BaseFragment
             botInit.updateCommandList(false, lastMessage, getActivity(), backToMenu);
         }
 
-        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom) {
+        if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
             sendMoney.setVisibility(View.VISIBLE);
         } else {
             sendMoney.setVisibility(View.GONE);
@@ -2749,6 +2758,88 @@ public class FragmentChat extends BaseFragment
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
 
+      /*  icon = BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.ic_launcher_foreground);*/
+
+        if (realmRoom != null && !realmRoom.getReadOnly()) {
+            ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
+                @Override
+                public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                    //awesome code when user grabs recycler card to reorder
+
+                    return true;
+                }
+
+                @Override
+                public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                    super.clearView(recyclerView, viewHolder);
+
+                    //  recyclerView.getAdapter().notifyItemChanged(viewHolder.getAdapterPosition());
+                    //    recyclerView.getAdapter().notifyDataSetChanged();
+
+                    //   if (!((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage.isTimeOrLogMessage())
+                    replay(((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage);
+
+                    isRepley = false;
+                    //awesome code to run when user drops card and completes reorder
+                }
+
+                @Override
+                public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                    //awesome code when swiping right to remove recycler card and delete SQLite data
+
+                    Log.i("#peyman", "swipe triggered");
+                }
+
+                @Override
+                public void onChildDraw(Canvas c,
+                                        RecyclerView recyclerView,
+                                        RecyclerView.ViewHolder viewHolder,
+                                        float dX, float dY,
+                                        int actionState, boolean isCurrentlyActive) {
+
+                    if (actionState == ACTION_STATE_SWIPE) {
+
+                        setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                    }
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+
+                }
+
+                @Override
+                public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
+                    return super.getSwipeThreshold(viewHolder);
+                }
+
+                @Override
+                public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                    if (!((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage.isTimeOrLogMessage()) {
+                        return makeMovementFlags(0, ItemTouchHelper.LEFT);
+                    } else {
+
+                        return makeMovementFlags(0, 0);
+                    }
+                }
+
+                @Override
+                public int convertToAbsoluteDirection(int flags, int layoutDirection) {
+                    if (swipeBack) {
+                        swipeBack = false;
+                        return 0;
+                    }
+                    return super.convertToAbsoluteDirection(flags, layoutDirection);
+                }
+
+                @Override
+                public boolean isItemViewSwipeEnabled() {
+                    return true;
+                }
+            };
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+            itemTouchHelper.attachToRecyclerView(recyclerView);
+        }
         /**
          * load message , use handler for load async
          */
@@ -2856,63 +2947,53 @@ public class FragmentChat extends BaseFragment
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
-                int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                int visibleItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getChildCount();
+                int totalItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getItemCount();
+                int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
-                if (!firsInitScrollPosition) {
-                    lastPosition = lastVisiblePosition;
-                    firsInitScrollPosition = true;
-                }
 
-                int state = lastPosition - lastVisiblePosition;
-                if (state > 0) {   // up
+                if (pastVisibleItems + visibleItemCount >= totalItemCount && !isAnimateStart) {
+                    isScrollEnd = false;
+                    isAnimateStart = true;
+                    llScrollNavigate.animate()
+                            .alpha(0.0f)
+                            .translationY(llScrollNavigate.getHeight() / 2)
+                            .setDuration(200)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    isAnimateStart = false;
+                                    llScrollNavigate.setVisibility(View.GONE);
+                                }
+                            });
 
+                } else if (!isScrollEnd && !isAnimateStart) {
+                    isScrollEnd = true;
+                    isAnimateStart = true;
+                    llScrollNavigate.setVisibility(View.VISIBLE);
+                    llScrollNavigate.animate()
+                            .alpha(1.0f)
+                            .translationY(0)
+                            .setDuration(200)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    isAnimateStart = false;
+                                }
+                            });
+
+                    txtNewUnreadMessage.setText(countNewMessage + "");
                     if (countNewMessage == 0) {
-                        llScrollNavigate.setVisibility(View.GONE);
+                        txtNewUnreadMessage.setVisibility(View.GONE);
                     } else {
-                        llScrollNavigate.setVisibility(View.VISIBLE);
-
-                        txtNewUnreadMessage.setText(countNewMessage + "");
                         txtNewUnreadMessage.setVisibility(View.VISIBLE);
                     }
 
-                    lastPosition = lastVisiblePosition;
-                } else if (state < 0) { //down
-
-                    if (mAdapter.getItemCount() - lastVisiblePosition > 10) {
-                        /**
-                         * show llScrollNavigate if timeout from latest click
-                         */
-                        if (HelperTimeOut.timeoutChecking(0, latestButtonClickTime, (int) (2 * DateUtils.SECOND_IN_MILLIS))) {
-                            llScrollNavigate.setVisibility(View.VISIBLE);
-                        }
-                        if (countNewMessage > 0) {
-                            txtNewUnreadMessage.setText(countNewMessage + "");
-                            txtNewUnreadMessage.setVisibility(View.VISIBLE);
-                        } else {
-                            txtNewUnreadMessage.setVisibility(View.GONE);
-                        }
-                    } else {
-                        /**
-                         * if addToView is true means that
-                         */
-                        if (addToView) {
-
-                            /**
-                             * if countNewMessage is bigger than zero in onItemShowingMessageId
-                             * callback txtNewUnreadMessage visibility will be managed
-                             */
-                            if (countNewMessage == 0) {
-                                if (mAdapter.getItemCount() - lastVisiblePosition < 10) {
-                                    llScrollNavigate.setVisibility(View.GONE);
-                                }
-                            }
-                        }
-                    }
-
-                    lastPosition = lastVisiblePosition;
                 }
             }
         });
@@ -3079,6 +3160,7 @@ public class FragmentChat extends BaseFragment
                 }
 
                 //realmMessage.close();
+                scrollToEnd();
             }
         });
 
@@ -3203,6 +3285,61 @@ public class FragmentChat extends BaseFragment
         });
 
         //realm.close();
+    }
+
+    private void setTouchListener(Canvas c,
+                                  RecyclerView recyclerView,
+                                  RecyclerView.ViewHolder viewHolder,
+                                  float dX, float dY,
+                                  int actionState, boolean isCurrentlyActive) {
+
+
+        if (dX < -150 && !isRepley) {
+            Log.i("#peyman", "swipe triggered");
+            isRepley = true;
+
+            Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                v.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.PARCELABLE_WRITE_RETURN_VALUE));
+            } else {
+                //deprecated in API 26
+                v.vibrate(50);
+            }
+
+            // replay(message);
+           /* if (!goToPositionWithAnimation(replyMessage.getMessageId(), 1000)) {
+                goToPositionWithAnimation(replyMessage.getMessageId() * (-1), 1000);
+            }*/
+
+        }
+
+       /* icon.setBounds(viewHolder.itemView.getRight() - 0, 0, viewHolder.itemView.getRight() - 0, 0 + icon.getIntrinsicHeight());
+        icon.draw(c);*/
+
+
+        View itemView = viewHolder.itemView;
+
+
+   /*     DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        Drawable drawable = ContextCompat.getDrawable(G.fragmentActivity, R.mipmap.ic_launcher_round);
+        Bitmap icon = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        //  Canvas canvas = new Canvas(icon);
+        drawable.setBounds(displayMetrics.widthPixels - 109, itemView.getTop() + 9, itemView.getRight() - 22, itemView.getBottom() - 9);
+        drawable.draw(c);*/
+
+
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
+                return false;
+            }
+        });
+
     }
 
     private void visibilityTextEmptyMessages() {
@@ -5655,7 +5792,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                layoutAttachBottom.setVisibility(visibility || isBot ? View.GONE : View.VISIBLE);
+                layoutAttachBottom.setVisibility(visibility ? View.GONE : View.VISIBLE);
             }
         }).start();
         imvSendButton.animate().alpha(visibility ? 1F : 0F).setListener(new AnimatorListenerAdapter() {
@@ -7348,6 +7485,10 @@ public class FragmentChat extends BaseFragment
 
         StructMessageInfo messageInfo = null;
 
+        if (requestCode == AttachFile.requestOpenGalleryForVideoMultipleSelect && filePath.toLowerCase().endsWith(".gif")) {
+            requestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
+        }
+
         switch (requestCode) {
             case IntentRequests.REQ_CROP:
 
@@ -8758,7 +8899,9 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onPinMessage() {
+
         initPinedMessage();
+
     }
 
     @Override
@@ -9095,5 +9238,17 @@ public class FragmentChat extends BaseFragment
         void sendMessageBOt(Favorite favorite);
 
     }
+
+/*    private boolean isBot(long userId) {
+        Realm realm=Realm.getDefaultInstance();
+        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
+        if (realmRegisteredInfo != null) {
+            if (realmRegisteredInfo.isBot()) {
+                return true;
+            } else
+                return false;
+        } else
+            return false;
+    }*/
 
 }

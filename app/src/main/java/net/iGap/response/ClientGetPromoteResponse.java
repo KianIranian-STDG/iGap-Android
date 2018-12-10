@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoClientGetPromote;
 
 public class ClientGetPromoteResponse extends MessageHandler {
@@ -32,6 +33,13 @@ public class ClientGetPromoteResponse extends MessageHandler {
 
         ProtoClientGetPromote.ClientGetPromoteResponse.Builder builder = (ProtoClientGetPromote.ClientGetPromoteResponse.Builder) message;
         builder.getPromoteList().get(0).getType();
+        builder.getPromoteList().get(0).getId();
+
+
+        if (G.ipromote != null) {
+            G.ipromote.onGetPromoteResponse(builder);
+        }
+
     }
 
     @Override

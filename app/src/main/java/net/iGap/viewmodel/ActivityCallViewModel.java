@@ -128,6 +128,10 @@ public class ActivityCallViewModel {
         }
     }
 
+    public void onClickBtnSwitchCamera(View v) {
+        WebRTC.getInstance().switchCamera();
+    }
+
 
     private void getInfo() {
         initComponent();

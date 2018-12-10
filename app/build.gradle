@@ -27,7 +27,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 84
-        versionName "0.10.0"
+        versionName "1.0.0"
         multiDexEnabled true
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
@@ -76,7 +76,7 @@ dependencies {
     implementation('com.afollestad.material-dialogs:core:0.9.6.0') {
         transitive = true
     }
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.3@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.6@aar') {
         transitive = true
     }
     implementation project(path: ':lvl')
@@ -137,7 +137,7 @@ dependencies {
     }
     implementation 'com.github.RooyeKhat-Media:Websocket:1.0.0'
     implementation 'com.github.RooyeKhat-Media:MessageProgress:1.0.0'
-    implementation 'com.github.KianIranian-STDG:Proto:Build95'
+    implementation 'com.github.KianIranian-STDG:Proto:Build96'
     implementation project(':pecpayment-release')
     implementation project(':raadcore')
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'

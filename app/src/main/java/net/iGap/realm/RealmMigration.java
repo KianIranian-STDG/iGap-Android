@@ -339,11 +339,27 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 24
+        if (oldVersion == 24) {
 
             RealmObjectSchema realmRoom = schema.get(RealmRoom.class.getSimpleName());
             if (realmRoom != null) {
                 realmRoom.addField("priority", int.class, FieldAttribute.REQUIRED);
+            }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 25
+
+            RealmObjectSchema realmRoom = schema.get(RealmRoom.class.getSimpleName());
+            if (realmRoom != null) {
+                realmRoom.addField("isFromPromote", boolean.class, FieldAttribute.REQUIRED);
+                realmRoom.addField("promoteId", long.class, FieldAttribute.REQUIRED);
+            }
+
+            RealmObjectSchema realmPrivacy = schema.get(RealmPrivacy.class.getSimpleName());
+            if (realmPrivacy != null) {
+                realmPrivacy.addField("whoCanVideoCallToMe", String.class);
             }
 
             oldVersion++;

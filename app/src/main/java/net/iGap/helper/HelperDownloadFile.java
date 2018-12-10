@@ -13,7 +13,6 @@ package net.iGap.helper;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.support.v4.util.ArrayMap;
 
 import com.downloader.Error;
 import com.downloader.OnCancelListener;
@@ -46,6 +45,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class HelperDownloadFile {
+
 
     public interface UpdateListener {
         void OnProgress(String path, int progress);
@@ -184,6 +184,7 @@ public class HelperDownloadFile {
 
     }
 
+
     public void stopDownLoad(String cacheId) {
         manuallyStoppedDownload.add(cacheId);
 
@@ -255,7 +256,6 @@ public class HelperDownloadFile {
             }
         };
 
-
     }
 
     private void errorDownload(String cashId, ProtoFileDownload.FileDownload.Selector selector) {
@@ -282,6 +282,8 @@ public class HelperDownloadFile {
                 //  }
             }
         }
+
+
     }
 
     private void finishDownload(String cashId, long offset, ProtoFileDownload.FileDownload.Selector selector, int progress) {
@@ -379,8 +381,10 @@ public class HelperDownloadFile {
     private void startDownloadManager(final StructDownLoad item) {
 
         item.path = Utils.getTempPath(item.path, item.name);
+
         final String path = item.path.replace("/" + new File(item.path).getName(), "");
         final String name = new File(item.path).getName();
+        //  G.onCheckConnection = null;
         item.idDownload = PRDownloader.download(item.url, path, name).setTag(item.cashId)
                 .build()
                 .setOnStartOrResumeListener(new OnStartOrResumeListener() {
@@ -451,7 +455,11 @@ public class HelperDownloadFile {
 
                     @Override
                     public void onError(Error error) {
-                        errorDownload(item.cashId, item.selector);
+                        if (error.isConnectionError()) {
+                            stopDownLoad(item.cashId);
+                            item.isPause = true;
+                        } else
+                            errorDownload(item.cashId, item.selector);
                     }
                 });
     }

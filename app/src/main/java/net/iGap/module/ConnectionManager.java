@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.downloader.PRDownloader;
 import com.neovisionaries.ws.client.WebSocket;
 
 import net.iGap.BuildConfig;
@@ -120,6 +121,7 @@ public class ConnectionManager {
                     /**
                      * No Network
                      */
+
                     hasNetworkBefore = false;
                     HelperConnectionState.connectionState(ConnectionState.WAITING_FOR_NETWORK);
                     G.socketConnection = false;

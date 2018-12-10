@@ -252,6 +252,8 @@ public class SearchFragment extends BaseFragment {
             } else {
                 HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
             }
+        }else {
+            preventRepeatSearch = "";
         }
 
 

@@ -86,6 +86,7 @@ import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsEdit;
 import net.iGap.request.RequestUserContactsGetList;
@@ -883,9 +884,9 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
             });
 
-            viewHolder.txtEdit.setOnClickListener(v->{
+            viewHolder.txtEdit.setOnClickListener(v -> {
 
-                dialogEditContact(header,contact.getPhone(),contact.getId());
+                dialogEditContact(header, contact.getPhone(), contact.getId());
 
 
             });
@@ -1019,7 +1020,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         }
     }
 
-    private void dialogEditContact(String header, long phone,final long userId) {
+    private void dialogEditContact(String header, long phone, final long userId) {
 
         final LinearLayout layoutNickname = new LinearLayout(G.fragmentActivity);
         layoutNickname.setOrientation(LinearLayout.VERTICAL);
@@ -1270,7 +1271,8 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
                                     Intent sendIntent = new Intent();
                                     sendIntent.setAction(Intent.ACTION_SEND);
-                                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Hey Join iGap : https://www.igap.net/ I'm waiting for you!");
+                                    sendIntent.putExtra("address", phone);
+                                    sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.invitation_message) + G.userId);
                                     sendIntent.setType("text/plain");
                                     sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     G.context.startActivity(sendIntent);
