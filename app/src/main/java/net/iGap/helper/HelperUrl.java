@@ -68,12 +68,10 @@ import net.iGap.request.RequestClientResolveUsername;
 
 import org.chromium.customtabsclient.CustomTabsActivityHelper;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -672,7 +670,7 @@ public class HelperUrl {
     }
 
     private static boolean isDigitLink(String text) {
-        return text.matches("\\d{5,}");
+        return text.matches("\\+?\\d{5,}");
     }
 
     private static boolean isBotLink(String text) {
