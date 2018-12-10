@@ -2815,10 +2815,16 @@ public class FragmentChat extends BaseFragment
 
                 @Override
                 public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                    if (!((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage.isTimeOrLogMessage()) {
+
+                    if (mAdapter == null) {
+                        return makeMovementFlags(0, 0);
+                    }
+
+                    AbstractMessage abstractMessage = mAdapter.getItem(viewHolder.getAdapterPosition());
+
+                    if (abstractMessage != null && !abstractMessage.mMessage.isTimeOrLogMessage()) {
                         return makeMovementFlags(0, ItemTouchHelper.LEFT);
                     } else {
-
                         return makeMovementFlags(0, 0);
                     }
                 }
