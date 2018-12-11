@@ -6507,16 +6507,6 @@ public class FragmentChat extends BaseFragment
                     ll_attach_text.setVisibility(View.VISIBLE);
                     imvSendButton.performClick();
                 }
-//                for (Map.Entry<String, StructBottomSheet> items : textImageList.entrySet()) {
-//
-//                    edtChat.setText(items.getValue().getText());
-//                    listPathString.add(items.getValue().getPath());
-//                    latestRequestCode = AttachFile.requestOpenGalleryForImageMultipleSelect;
-//                    ll_attach_text.setVisibility(View.VISIBLE);
-//                    imvSendButton.performClick();
-//                }
-
-//                close.performClick();
             }
         };
         rcvBottomSheet = (RecyclerView) viewBottomSheet.findViewById(R.id.rcvContent);

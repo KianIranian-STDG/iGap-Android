@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -306,10 +307,8 @@ public class FragmentEditImage extends BaseFragment {
                 }
                 closeKeyboard(v);
                 v.setVisibility(View.GONE);
-
             }
         });
-
 
         edtChat.requestFocus();
 
@@ -716,10 +715,19 @@ public class FragmentEditImage extends BaseFragment {
         int po = (viewPager.getCurrentItem());
 
         if (textImageList.containsKey(itemGalleryList.get(po).getPath())) {
-            textImageList.get(itemGalleryList.get(po).getPath()).setPath(path);
-        }
-        itemGalleryList.get(viewPager.getCurrentItem()).setPath(path);
 
+            String message = textImageList.get(itemGalleryList.get(po).getPath()).getText();
+            int id = textImageList.get(itemGalleryList.get(po).getPath()).getId();
+
+            textImageList.remove(itemGalleryList.get(po).getPath());
+            StructBottomSheet item = new StructBottomSheet();
+            item.setPath(path);
+            item.setText(message);
+            item.setId(id);
+
+            textImageList.put(path, item);
+        }
+        itemGalleryList.get(po).setPath(path);
 
         mAdapter.notifyDataSetChanged();
 
