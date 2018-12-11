@@ -31,6 +31,9 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 import com.vicmikhailau.maskededittext.MaskedEditText;
 
 import net.iGap.G;
@@ -40,6 +43,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnCountryCallBack;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.CountryReader;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.structs.StructListOfContact;
 import net.iGap.realm.RealmUserInfo;
@@ -86,10 +90,22 @@ public class FragmentAddContact extends BaseFragment {
     private void initComponent(final View view) {
 
         String phoneFromUrl = "";
+        String countryCode = "";
         try {
             phoneFromUrl = getArguments().getString("PHONE");
             if (phoneFromUrl != null && phoneFromUrl.length() > 0) {
-                if (phoneFromUrl.startsWith("0")) {
+
+                if (phoneFromUrl.startsWith("+")) {
+                    PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+                    try {
+                        Phonenumber.PhoneNumber numberProto = phoneUtil.parse(phoneFromUrl, "");
+                        phoneFromUrl = numberProto.getNationalNumber() + "";
+                        countryCode = numberProto.getCountryCode() + "";
+                    } catch (NumberParseException e) {
+                        phoneFromUrl = phoneFromUrl.substring(1);
+                        ;
+                    }
+                } else if (phoneFromUrl.startsWith("0")) {
                     phoneFromUrl = phoneFromUrl.substring(1);
                 }
             }
@@ -263,7 +279,7 @@ public class FragmentAddContact extends BaseFragment {
                     public void run() {
                         txtChooseCountry.setText(nameCountry);
                         txtCodeCountry.setText("+" + code);
-                        edtPhoneNumber.setText("");
+                        // edtPhoneNumber.setText("");
                         if (!mask.equals(" ")) {
                             edtPhoneNumber.setMask(mask.replace("X", "#").replace(" ", "-"));
                         } else {
@@ -274,6 +290,25 @@ public class FragmentAddContact extends BaseFragment {
             }
         };
 
+        if (countryCode.length() > 0) {
+            txtCodeCountry.setText("+" + countryCode);
+            CountryReader countryReade = new CountryReader();
+            StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", G.fragmentActivity);
+            String listArray[] = fileListBuilder.toString().split("\\r?\\n");
+
+            for (String aListArray : listArray) {
+                String listItem[] = aListArray.split(";");
+                if (countryCode.equals(listItem[0])) {
+                    txtChooseCountry.setText(listItem[2]);
+                    if (listItem.length > 3) {
+                        if (!listItem[3].equals(" ")) {
+                            edtPhoneNumber.setMask(listItem[3].replace("X", "#").replace(" ", "-"));
+                        }
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     private void isEnableSetButton() {

@@ -17,7 +17,7 @@ public class StructBottomSheet implements Comparable<StructBottomSheet> {
     public int id;
     public boolean isSelected;
     public String path;
-    private String text;
+    private String text = "";
 
 
     public int getId() {

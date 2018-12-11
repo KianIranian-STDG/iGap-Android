@@ -265,6 +265,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             activityCallBinding.fcrTxtCallType.setText(getResources().getString(R.string.video_calls));
 
             activityCallBinding.fcrBtnSwichCamera.setVisibility(View.VISIBLE);
+            activityCallViewModel.setSpeakerphoneOn(true);
         } else {
             activityCallBinding.fcrBtnSwichCamera.setVisibility(View.GONE);
         }

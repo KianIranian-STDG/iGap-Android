@@ -662,7 +662,7 @@
     <string name="female">خانم</string>
     <string name="share_via">به اشتراک گذاشتن از طریق</string>
     <string name="error">خطا</string>
-    <string name="please_enter_code_for_verify">لطفاْ به منظور تأیید کد را وارد کنید.</string>
+    <string name="please_enter_code_for_verify">کد را وارد کنید.</string>
     <string name="server_do_not_response">سرور پاسخ نمی‌دهد.</string>
     <string name="share_image_from_igap">به اشتراک گذاشتن تصویر از آی‌گپ</string>
     <string name="TERMINATE">لغو</string>
@@ -1383,6 +1383,18 @@
 از طریق لینک زیر میتونی تو آی‌گپ عضو بشی، منتظرتیم
      https://www.igap.net
     شناسه دعوت کننده هست :</string>
+
+    <string name="namma_per_uh">FileLister</string>
+    <string name="Please_enter_valid_folder_name">لطفا نام پوشه را وارد کنید</string>
+    <string name="This_folder_already_exists">"این پوشه در حال حاضر وجود دارد لطفا نام دیگری انتخاب کنید"</string>
+    <string name="Select_directory">یک دایرکتوری را انتخاب کنید</string>
+    <string name="Select_Video_file">یک فایل ویدیویی را انتخاب کنید</string>
+    <string name="Select_Image_file">> یک فایل تصویر را انتخاب کنید</string>
+    <string name="Select_Audio_file">فایل صوتی را انتخاب کنید</string>
+    <string name="Select_file">یک فایل را انتخاب کنید</string>
+    <string name="Default_Dir">مسیر پیش فرض</string>
+    <string name="Select">انتخاب</string>
+    <string name="Create_new_Folder_here">در اینجا یک پوشه جدید ایجاد کنید</string>
 
 
 </resources>

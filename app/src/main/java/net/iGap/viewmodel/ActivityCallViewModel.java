@@ -315,7 +315,7 @@ public class ActivityCallViewModel {
     /**
      * Sets the speaker phone mode.
      */
-    private void setSpeakerphoneOn(boolean on) {
+    public void setSpeakerphoneOn(boolean on) {
 
         AudioManager audioManager = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
 
