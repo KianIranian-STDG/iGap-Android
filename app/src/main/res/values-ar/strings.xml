@@ -2335,4 +2335,16 @@
     https://www.igap.net
 هناك معرف عضوية:   </string>
 
+    <string name="namma_per_uh">FileLister</string>
+    <string name="Please_enter_valid_folder_name">يرجى إدخال اسم مجلد صالح</string>
+    <string name="This_folder_already_exists">هذا المجلد موجود بالفعل.يرجى تقديم اسم آخر للمجلد</string>
+    <string name="Select_directory">اختر دليلا</string>
+    <string name="Select_Video_file">اختر ملف فيديو</string>
+    <string name="Select_Image_file">حدد ملف الصورة</string>
+    <string name="Select_Audio_file">حدد ملف صوتي</string>
+    <string name="Select_file">حدد ملف</string>
+    <string name="Default_Dir">الافتراضي دير</string>
+    <string name="Select">تحديد</string>
+    <string name="Create_new_Folder_here">قم بإنشاء مجلد جديد هنا</string>
+
 </resources>

@@ -199,6 +199,8 @@ import net.iGap.module.ContactUtils;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.EmojiEditTextE;
 import net.iGap.module.EmojiTextViewE;
+import net.iGap.module.FileListerDialog.FileListerDialog;
+import net.iGap.module.FileListerDialog.OnFileSelectedListener;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.FileUtils;
 import net.iGap.module.IntentRequests;
@@ -301,6 +303,8 @@ import io.fotoapparat.view.CameraView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+
+
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -620,6 +624,8 @@ public class FragmentChat extends BaseFragment
     }
 
     public void exportChat() {
+
+
         RealmResults<RealmRoomMessage> realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo("roomId", mRoomId).sort("createTime").findAll();
         File root = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/iGap", "iGap Messages");
 
@@ -627,53 +633,65 @@ public class FragmentChat extends BaseFragment
             root.mkdir();
         }
 
-        File filepath = new File(root, title + ".txt");
-        final MaterialDialog[] dialog = new MaterialDialog[1];
-        if (realmRoomMessages.size() != 0 && chatType != CHANNEL) {
 
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    dialog[0] = new MaterialDialog.Builder(G.currentActivity)
-                            .title(R.string.export_chat)
-                            .content(R.string.just_wait_en)
-                            .progress(false, realmRoomMessages.size(), true)
-                            .show();
-                }
-            });
-            try {
+        FileListerDialog fileListerDialog = FileListerDialog.createFileListerDialog(G.fragmentActivity);
+        fileListerDialog.setDefaultDir(root);
+        fileListerDialog.setFileFilter(FileListerDialog.FILE_FILTER.DIRECTORY_ONLY);
+        fileListerDialog.show();
 
-                FileWriter writer = new FileWriter(filepath);
+        fileListerDialog.setOnFileSelectedListener(new OnFileSelectedListener() {
+            @Override
+            public void onFileSelected(File file, String path) {
+                final MaterialDialog[] dialog = new MaterialDialog[1];
+                if (realmRoomMessages.size() != 0 && chatType != CHANNEL) {
 
-                for (RealmRoomMessage export : realmRoomMessages) {
-
-                    if (export.getMessageType().toString().equalsIgnoreCase("TEXT")) {
-
-                        writer.append(RealmRegisteredInfo.getNameWithId(export.getUserId()) + "  text message " + "  :  " + export.getMessage() + "  date  :" + HelperCalander.milladyDate(export.getCreateTime()) + "\n");
-
-                    } else {
-                        writer.append(RealmRegisteredInfo.getNameWithId(export.getUserId()) + "  text message " + export.getMessage() + "  :  message in format " + export.getMessageType() + "  date  :" + HelperCalander.milladyDate(export.getCreateTime()) + "\n");
-                    }
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            dialog[0].incrementProgress(1);
+                            dialog[0] = new MaterialDialog.Builder(G.currentActivity)
+                                    .title(R.string.export_chat)
+                                    .content(R.string.just_wait_en)
+                                    .progress(false, realmRoomMessages.size(), true)
+                                    .show();
                         }
                     });
+                    try {
+                        File filepath = new File(file, title + ".txt");
+                        FileWriter writer = new FileWriter(filepath);
 
-                }
-                writer.flush();
-                writer.close();
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog[0].dismiss();
+                        for (RealmRoomMessage export : realmRoomMessages) {
+
+                            if (export.getMessageType().toString().equalsIgnoreCase("TEXT")) {
+
+                                writer.append(RealmRegisteredInfo.getNameWithId(export.getUserId()) + "  text message " + "  :  " + export.getMessage() + "  date  :" + HelperCalander.milladyDate(export.getCreateTime()) + "\n");
+
+                            } else {
+                                writer.append(RealmRegisteredInfo.getNameWithId(export.getUserId()) + "  text message " + export.getMessage() + "  :  message in format " + export.getMessageType() + "  date  :" + HelperCalander.milladyDate(export.getCreateTime()) + "\n");
+                            }
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog[0].incrementProgress(1);
+                                }
+                            });
+
+                        }
+                        writer.flush();
+                        writer.close();
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog[0].dismiss();
+                            }
+                        }, 500);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }, 500);
-            } catch (Exception e) {
-                e.printStackTrace();
+                }
             }
-        }
+        });
+
+//
 
     }
 

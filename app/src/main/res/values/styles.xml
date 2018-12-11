@@ -238,6 +238,10 @@
     <item name="android:activityCloseExitAnimation">@anim/slide_exit_out_left</item>
   </style>
 
+  <style name="FileListerItemColor">
+    <item name="android:textColor">#212121</item>
+    <item name="android:tint">#4CAF50</item>
+  </style>
 
   <!--custom theme-->
 
