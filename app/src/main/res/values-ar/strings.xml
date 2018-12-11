@@ -1248,7 +1248,7 @@
 
     <string name="error">خطأ </string>
 
-    <string name="please_enter_code_for_verify">من فضلك أدخل الرمز لأجل التأكيد</string>
+    <string name="please_enter_code_for_verify">ادخل الرمز.</string>
 
     <string name="server_do_not_response">لم يتم استلام الرد من مزود خدمة الانترنت.</string>
 

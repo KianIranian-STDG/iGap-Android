@@ -679,7 +679,7 @@
     <string name="female">Female</string>
     <string name="share_via">Share via</string>
     <string name="error">Error</string>
-    <string name="please_enter_code_for_verify">"Please enter code to verify."</string>
+    <string name="please_enter_code_for_verify">"Enter Code."</string>
     <string name="server_do_not_response">Server don\'t response</string>
     <string name="share_image_from_igap">Share image from iGap</string>
     <string name="TERMINATE">"TERMINATE"</string>

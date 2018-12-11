@@ -662,7 +662,7 @@
     <string name="female">خانم</string>
     <string name="share_via">به اشتراک گذاشتن از طریق</string>
     <string name="error">خطا</string>
-    <string name="please_enter_code_for_verify">لطفاْ به منظور تأیید کد را وارد کنید.</string>
+    <string name="please_enter_code_for_verify">کد را وارد کنید.</string>
     <string name="server_do_not_response">سرور پاسخ نمی‌دهد.</string>
     <string name="share_image_from_igap">به اشتراک گذاشتن تصویر از آی‌گپ</string>
     <string name="TERMINATE">لغو</string>
