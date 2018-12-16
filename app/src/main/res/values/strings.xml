@@ -1393,5 +1393,6 @@
     <string name="Default_Dir">Default Dir</string>
     <string name="Select">Select</string>
     <string name="Create_new_Folder_here">Create a new Folder here</string>
+    <string name="Powered_by_iGap">Powered by iGap</string>
 
 </resources>
