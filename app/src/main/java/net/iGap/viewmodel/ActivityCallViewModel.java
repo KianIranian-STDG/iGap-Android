@@ -59,7 +59,7 @@ public class ActivityCallViewModel {
     public static boolean isConnected = false;
     public static TextView txtTimeChat, txtTimerMain;
     public Vibrator vibrator;
-    public ObservableField<String> cllBackBtnSpeaker = new ObservableField<>(G.context.getResources().getString(R.string.md_Mute));
+    public ObservableField<String> cllBackBtnSpeaker = new ObservableField<>(G.context.getResources().getString(R.string.md_unMuted));
     public ObservableField<String> cllBackBtnMic = new ObservableField<>(G.context.getResources().getString(R.string.md_mic));
     public ObservableField<String> callBackTxtTimer = new ObservableField<>("00:00");
     public ObservableField<String> callBackTxtStatus = new ObservableField<>("Status");
