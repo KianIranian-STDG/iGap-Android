@@ -192,9 +192,11 @@ public class CardFragment extends Fragment {
 //                cvv2Text.setVisibility(View.GONE);
 //            }
 
-            button.setText(R.string.pay);
-            button.setBackgroundResource(R.drawable.button_green_selector_24dp);
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                button.setBackground(mDrawableSkip);
+            }
+            button.setText(R.string.pay);
         } else {
             button.setText(R.string.delete_card);
             button.setBackgroundColor(Color.parseColor(WalletActivity.primaryColor));
