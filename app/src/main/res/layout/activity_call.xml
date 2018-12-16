@@ -203,7 +203,7 @@
             android:id="@+id/powered_by"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/aban"
+            android:text="@string/Powered_by_iGap"
             android:gravity="center"
             android:visibility="gone"
             android:textColor="@color/color_powered_by"/>
