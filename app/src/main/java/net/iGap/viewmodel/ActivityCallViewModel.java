@@ -7,7 +7,7 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
  * All rights reserved.
-*/
+ */
 
 
 import android.content.BroadcastReceiver;
@@ -42,6 +42,7 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.CallState;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.request.RequestSignalingGetLog;
@@ -59,7 +60,7 @@ public class ActivityCallViewModel {
     public static boolean isConnected = false;
     public static TextView txtTimeChat, txtTimerMain;
     public Vibrator vibrator;
-    public ObservableField<String> cllBackBtnSpeaker = new ObservableField<>(G.context.getResources().getString(R.string.md_unMuted));
+    public ObservableField<String> cllBackBtnSpeaker = new ObservableField<>(G.context.getResources().getString(R.string.md_Mute));
     public ObservableField<String> cllBackBtnMic = new ObservableField<>(G.context.getResources().getString(R.string.md_mic));
     public ObservableField<String> callBackTxtTimer = new ObservableField<>("00:00");
     public ObservableField<String> callBackTxtStatus = new ObservableField<>("Status");
@@ -81,15 +82,18 @@ public class ActivityCallViewModel {
     private MediaPlayer ringtonePlayer;
     private Context context;
     private ActivityCallBinding activityCallBinding;
+    private ProtoSignalingOffer.SignalingOffer.Type callTYpe;
+
     private boolean isFinish = false;
 
 
-    public ActivityCallViewModel(Context context, long userId, boolean isIncomingCall, ActivityCallBinding activityCallBinding) {
+    public ActivityCallViewModel(Context context, long userId, boolean isIncomingCall, ActivityCallBinding activityCallBinding, ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
 
         this.context = context;
         this.userId = userId;
         this.isIncomingCall = isIncomingCall;
         this.activityCallBinding = activityCallBinding;
+        this.callTYpe = callTYpe;
         getInfo();
 
     }
@@ -137,6 +141,9 @@ public class ActivityCallViewModel {
         initComponent();
         initCallBack();
         muteMusic();
+        if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING){
+            cllBackBtnSpeaker.set(G.fragmentActivity.getResources().getString(R.string.md_unMuted));
+        }
     }
 
 
@@ -192,7 +199,11 @@ public class ActivityCallViewModel {
                         if (!isConnected) {
                             isConnected = true;
 
-                            playSound(R.raw.igap_connect);
+                            if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING && cllBackBtnSpeaker.get().equals(G.fragmentActivity.getResources().getString(R.string.md_unMuted))){
+                                playSoundVideo(R.raw.igap_connect);
+                            } else {
+                                playSound(R.raw.igap_connect);
+                            }
 
                             G.handler.postDelayed(new Runnable() {
                                 @Override
@@ -601,8 +612,9 @@ public class ActivityCallViewModel {
     }
 
     private void playSound(final int resSound) {
-
-        setSpeakerphoneOn(false);
+        if (callTYpe != ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING || !cllBackBtnSpeaker.get().equals(G.fragmentActivity.getResources().getString(R.string.md_Mute))){
+            setSpeakerphoneOn(false);
+        }
 
         if (player == null) {
             try {
@@ -620,6 +632,7 @@ public class ActivityCallViewModel {
                 player.prepare();
                 player.start();
             } catch (Exception e) {
+                e.printStackTrace();
             }
         } else {
 
@@ -638,6 +651,49 @@ public class ActivityCallViewModel {
                 player.setLooping(true);
                 player.start();
             } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void playSoundVideo(final int resSound) {
+
+        if (player == null) {
+            try {
+                player = new MediaPlayer();
+                player.setDataSource(context, Uri.parse("android.resource://" + G.context.getPackageName() + "/" + resSound));
+
+                //if (audioManager.isWiredHeadsetOn()) {
+                //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                //} else {
+                //   player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                //}
+                player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+
+                player.setLooping(true);
+                player.prepare();
+                player.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+
+            try {
+                player.reset();
+                player.setDataSource(context, Uri.parse("android.resource://" + G.context.getPackageName() + "/" + resSound));
+
+                //if (audioManager.isWiredHeadsetOn()) {
+                //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                //} else {
+                //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+                //}
+                player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+
+                player.prepare();
+                player.setLooping(true);
+                player.start();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
