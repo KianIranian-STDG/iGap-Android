@@ -37,7 +37,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -781,7 +780,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", pf.getToken(), pf.getUrl(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, bigImagePath, 2, new HelperDownloadFile.UpdateListener() {
                             @Override
                             public void OnProgress(String mPath, final int progress) {
-                                setDefaultBackground(bigImagePath);
+
+                                if (progress == 100) {
+                                    setDefaultBackground(bigImagePath);
+                                }
+
                             }
 
                             @Override
