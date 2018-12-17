@@ -141,13 +141,16 @@ public class ActivityCallViewModel {
         initComponent();
         initCallBack();
         muteMusic();
-        if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING){
-            cllBackBtnSpeaker.set(G.fragmentActivity.getResources().getString(R.string.md_unMuted));
-        }
     }
 
 
     private void initComponent() {
+
+        if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+            cllBackBtnSpeaker.set(G.fragmentActivity.getResources().getString(R.string.md_unMuted));
+            setSpeakerphoneOn(true);
+        }
+
         if (MusicPlayer.mp != null) {
             if (MusicPlayer.mp.isPlaying()) {
                 MusicPlayer.pauseSound();
@@ -161,7 +164,6 @@ public class ActivityCallViewModel {
             callBackTxtStatus.set(G.context.getResources().getString(R.string.incoming_call));
             layoutOptionVisibility.set(View.GONE);
         } else {
-
             playSound(R.raw.igap_signaling);
             callBackTxtStatus.set(G.context.getResources().getString(R.string.signaling));
             layoutAnswerCallVisibility.set(View.GONE);
@@ -198,13 +200,7 @@ public class ActivityCallViewModel {
                         layoutOptionVisibility.set(View.VISIBLE);
                         if (!isConnected) {
                             isConnected = true;
-
-                            if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING && cllBackBtnSpeaker.get().equals(G.fragmentActivity.getResources().getString(R.string.md_unMuted))){
-                                playSoundVideo(R.raw.igap_connect);
-                            } else {
-                                playSound(R.raw.igap_connect);
-                            }
-
+                            playSound(R.raw.igap_connect);
                             G.handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -612,51 +608,17 @@ public class ActivityCallViewModel {
     }
 
     private void playSound(final int resSound) {
-        if (callTYpe != ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING || !cllBackBtnSpeaker.get().equals(G.fragmentActivity.getResources().getString(R.string.md_Mute))){
-            setSpeakerphoneOn(false);
-        }
 
-        if (player == null) {
-            try {
-                player = new MediaPlayer();
-                player.setDataSource(context, Uri.parse("android.resource://" + G.context.getPackageName() + "/" + resSound));
-
-                //if (audioManager.isWiredHeadsetOn()) {
-                //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                //} else {
-                //   player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                //}
-                player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-
-                player.setLooping(true);
-                player.prepare();
-                player.start();
-            } catch (Exception e) {
-                e.printStackTrace();
+        try {
+            if (cllBackBtnSpeaker.get().equals(G.fragmentActivity.getResources().getString(R.string.md_unMuted))) {
+                setSpeakerphoneOn(true);
+            } else {
+                setSpeakerphoneOn(false);
             }
-        } else {
 
-            try {
-                player.reset();
-                player.setDataSource(context, Uri.parse("android.resource://" + G.context.getPackageName() + "/" + resSound));
-
-                //if (audioManager.isWiredHeadsetOn()) {
-                //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                //} else {
-                //    player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-                //}
-                player.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-
-                player.prepare();
-                player.setLooping(true);
-                player.start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
         }
-    }
-
-    private void playSoundVideo(final int resSound) {
 
         if (player == null) {
             try {
