@@ -771,33 +771,42 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void getWallpaperAsDefault() {
-        RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).findFirst();
-        if (realmWallpaper != null) {
-            if (realmWallpaper.getWallPaperList() != null) {
-                RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
-                String bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
-                if (!new File(bigImagePath).exists()) {
-                    HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", pf.getToken(), pf.getUrl(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, bigImagePath, 2, new HelperDownloadFile.UpdateListener() {
-                        @Override
-                        public void OnProgress(String mPath, final int progress) {
-                            setDefaultBackground(bigImagePath);
-                        }
+        try {
+            RealmWallpaper realmWallpaper = getRealm().where(RealmWallpaper.class).findFirst();
+            if (realmWallpaper != null) {
+                if (realmWallpaper.getWallPaperList() != null && realmWallpaper.getWallPaperList().size() > 0) {
+                    RealmAttachment pf = realmWallpaper.getWallPaperList().get(realmWallpaper.getWallPaperList().size() - 1).getFile();
+                    String bigImagePath = G.DIR_CHAT_BACKGROUND + "/" + pf.getCacheId() + "_" + pf.getName();
+                    if (!new File(bigImagePath).exists()) {
+                        HelperDownloadFile.getInstance().startDownload(ProtoGlobal.RoomMessageType.IMAGE, System.currentTimeMillis() + "", pf.getToken(), pf.getUrl(), pf.getCacheId(), pf.getName(), pf.getSize(), ProtoFileDownload.FileDownload.Selector.FILE, bigImagePath, 2, new HelperDownloadFile.UpdateListener() {
+                            @Override
+                            public void OnProgress(String mPath, final int progress) {
+                                setDefaultBackground(bigImagePath);
+                            }
 
-                        @Override
-                        public void OnError(String token) {
-                        }
-                    });
+                            @Override
+                            public void OnError(String token) {
+                            }
+                        });
 
+                    } else {
+                        setDefaultBackground(bigImagePath);
+
+                    }
                 } else {
-                    setDefaultBackground(bigImagePath);
-
+                    getImageListFromServer();
                 }
             } else {
                 getImageListFromServer();
             }
-        } else {
-            getImageListFromServer();
+        }catch (ArrayIndexOutOfBoundsException e){
+
+        }catch (NullPointerException e2){
+
+        }catch (Exception e3){
+
         }
+
     }
 
     private void setDefaultBackground(String bigImagePath) {
