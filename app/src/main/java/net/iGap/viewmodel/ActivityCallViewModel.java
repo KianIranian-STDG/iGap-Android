@@ -111,22 +111,22 @@ public class ActivityCallViewModel {
 
     public void onClickBtnMic(View v) {
 
-        if (cllBackBtnMic.get().toString().equals(G.fragmentActivity.getResources().getString(R.string.md_mic))) {
-            cllBackBtnMic.set(G.fragmentActivity.getResources().getString(R.string.md_mic_off));
+        if (cllBackBtnMic.get().toString().equals(G.context.getResources().getString(R.string.md_mic))) {
+            cllBackBtnMic.set(G.context.getResources().getString(R.string.md_mic_off));
             WebRTC.getInstance().muteSound();
         } else {
-            cllBackBtnMic.set(G.fragmentActivity.getResources().getString(R.string.md_mic));
+            cllBackBtnMic.set(G.context.getResources().getString(R.string.md_mic));
             WebRTC.getInstance().unMuteSound();
         }
     }
 
     public void onClickBtnSpeaker(View v) {
-        if (cllBackBtnSpeaker != null && cllBackBtnSpeaker.get() != null && G.fragmentActivity != null) {
-            if (cllBackBtnSpeaker.get().equals(G.fragmentActivity.getResources().getString(R.string.md_Mute))) {
-                cllBackBtnSpeaker.set(G.fragmentActivity.getResources().getString(R.string.md_unMuted));
+        if (cllBackBtnSpeaker != null && cllBackBtnSpeaker.get() != null) {
+            if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_Mute))) {
+                cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
                 setSpeakerphoneOn(true);
             } else {
-                cllBackBtnSpeaker.set(G.fragmentActivity.getResources().getString(R.string.md_Mute));
+                cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
                 setSpeakerphoneOn(false);
             }
         }
@@ -147,7 +147,7 @@ public class ActivityCallViewModel {
     private void initComponent() {
 
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
-            cllBackBtnSpeaker.set(G.fragmentActivity.getResources().getString(R.string.md_unMuted));
+            cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
             setSpeakerphoneOn(true);
         }
 
@@ -580,12 +580,19 @@ public class ActivityCallViewModel {
 
             try {
                 Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-                String path = AttachFile.getFilePathFromUri(alert);
+                String path = null;
+
+                try {
+                    path = AttachFile.getFilePathFromUri(alert);
+                } catch (RuntimeException e) {
+                    e.printStackTrace();
+                }
+
 
                 ringtonePlayer = new MediaPlayer();
 
                 if (path == null) {
-                    ringtonePlayer.setDataSource(context, Uri.parse("android.resource://" + G.context.getPackageName() + "/" + R.raw.tone));
+                    ringtonePlayer.setDataSource(G.context, Uri.parse("android.resource://" + G.context.getPackageName() + "/" + R.raw.tone));
                 } else {
                     ringtonePlayer.setDataSource(G.context, alert);
                 }
@@ -610,7 +617,7 @@ public class ActivityCallViewModel {
     private void playSound(final int resSound) {
 
         try {
-            if (cllBackBtnSpeaker.get().equals(G.fragmentActivity.getResources().getString(R.string.md_unMuted))) {
+            if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_unMuted))) {
                 setSpeakerphoneOn(true);
             } else {
                 setSpeakerphoneOn(false);
