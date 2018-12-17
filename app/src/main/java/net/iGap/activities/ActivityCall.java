@@ -253,6 +253,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             activityCallBinding.fcrSurfacePeer.init(rootEglBase.getEglBaseContext(), null);
             activityCallBinding.fcrSurfacePeer.setEnableHardwareScaler(true);
             activityCallBinding.fcrSurfacePeer.setMirror(true);
+            activityCallBinding.fcrSurfacePeer.setZOrderMediaOverlay(true);
+            activityCallBinding.fcrSurfacePeer.setZOrderOnTop(true);
             activityCallBinding.fcrSurfacePeer.setVisibility(View.VISIBLE);
 
             activityCallBinding.fcrSurfaceRemote.init(rootEglBase.getEglBaseContext(), null);
