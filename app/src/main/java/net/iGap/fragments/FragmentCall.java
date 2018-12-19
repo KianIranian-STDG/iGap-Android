@@ -55,6 +55,7 @@ import net.iGap.realm.RealmCallLogFields;
 import net.iGap.request.RequestSignalingClearLog;
 import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestSignalingGetLog;
+import net.iGap.webrtc.WebRTC;
 
 import java.util.HashMap;
 import java.util.List;
@@ -109,10 +110,8 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
                 if (realmCallConfig == null) {
                     new RequestSignalingGetConfiguration().signalingGetConfiguration();
                     HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-                } else {
-
+                } else if (!G.isCalling) {
                     if (G.currentActivity != null) {
-
                         Intent intent = new Intent(G.currentActivity, ActivityCall.class);
                         intent.putExtra(ActivityCall.USER_ID_STR, userID);
                         intent.putExtra(ActivityCall.INCOMING_CALL_STR, isIncomingCall);
@@ -129,6 +128,12 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
                         G.context.startActivity(intent);
                     }
 
+
+                } else {
+                    try {
+                        WebRTC.getInstance().leaveCall();
+                    } catch (Exception e) {
+                    }
 
                 }
 

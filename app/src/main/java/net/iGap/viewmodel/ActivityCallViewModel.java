@@ -148,7 +148,7 @@ public class ActivityCallViewModel {
 
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
-            setSpeakerphoneOn(true);
+            setSpeakerphoneOn(false);
         }
 
         if (MusicPlayer.mp != null) {
@@ -187,6 +187,7 @@ public class ActivityCallViewModel {
                     case RINGING:
                         playSound(R.raw.igap_ringing);
                         txtAviVisibility.set(View.VISIBLE);
+                        G.isVideoCallRinging = true;
                         break;
                     case INCAMING_CALL:
                         txtAviVisibility.set(View.VISIBLE);
@@ -344,7 +345,6 @@ public class ActivityCallViewModel {
 
         WebRTC.getInstance().leaveCall();
         isSendLeave = true;
-
 
         isConnected = false;
 
@@ -618,7 +618,7 @@ public class ActivityCallViewModel {
 
         try {
             if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_unMuted))) {
-                setSpeakerphoneOn(true);
+                setSpeakerphoneOn(false);
             } else {
                 setSpeakerphoneOn(false);
             }

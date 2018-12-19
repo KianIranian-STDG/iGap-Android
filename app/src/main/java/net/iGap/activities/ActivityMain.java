@@ -12,9 +12,11 @@ package net.iGap.activities;
 
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -133,6 +135,7 @@ import net.iGap.module.LoginActions;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyAppBarLayout;
+import net.iGap.module.MyPhonStateService;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoFileDownload;
@@ -361,6 +364,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             G.onAudioFocusChangeListener.onAudioFocusChangeListener(AudioManager.AUDIOFOCUS_LOSS);
         }
         EventManager.getInstance().removeEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
+        try {
+            AudioManager am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
+            am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        } catch (Exception e) {
+        }
 
     }
 
@@ -417,6 +425,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.PHONE_STATE");
+        MyPhonStateService myPhonStateService = new MyPhonStateService();
+
+        registerReceiver(myPhonStateService, intentFilter);
 
 
         RaadApp.onLanguageWallet = new OnLanguageWallet() {
@@ -802,11 +816,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             } else {
                 getImageListFromServer();
             }
-        }catch (ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
 
-        }catch (NullPointerException e2){
+        } catch (NullPointerException e2) {
 
-        }catch (Exception e3){
+        } catch (Exception e3) {
 
         }
 

@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.25.3'
+        classpath 'io.fabric.tools:gradle:1.25.4'
     }
 }
 apply plugin: 'com.android.application'
@@ -113,7 +113,8 @@ dependencies {
     implementation 'me.zhanghai.android.customtabshelper:library:1.0.3'
     implementation 'com.readystatesoftware.systembartint:systembartint:1.0.4'
     implementation 'cat.ereza:customactivityoncrash:2.1.0'
-    implementation 'com.github.RooyeKhat-Media.Emoji:emoji-one:0.5.1.Fix12'
+    //implementation 'com.github.RooyeKhat-Media.Emoji:emoji-one:0.5.1.Fix12'
+    implementation 'com.github.KianIranian-STDG.Emoji:emoji-one:0.5.1.Fix12'
     implementation 'io.realm:android-adapters:3.0.0'
     implementation 'org.osmdroid:osmdroid-android:5.6.5'
     implementation 'io.fotoapparat.fotoapparat:library:1.3.0'
@@ -129,14 +130,14 @@ dependencies {
     implementation 'com.mindorks.android:prdownloader:0.4.0'
     implementation 'com.google.firebase:firebase-core:16.0.0'
     implementation 'com.google.firebase:firebase-messaging:17.0.0'
-    implementation('com.github.RooyeKhat-Media:Compress:1.0.0') {
+    implementation('com.github.KianIranian-STDG:Compress:1.2.1') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
-    implementation('com.github.RooyeKhat-Media:VideoTrimmer:1.1.0') {
+    implementation('com.github.KianIranian-STDG:VideoTrimmer:1.1.1') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'
     }
-    implementation 'com.github.RooyeKhat-Media:Websocket:1.0.0'
-    implementation 'com.github.RooyeKhat-Media:MessageProgress:1.0.0'
+    implementation 'com.github.KianIranian-STDG:Websocket:1.0.1'
+    implementation 'com.github.KianIranian-STDG:MessageProgress:1.0.1'
     implementation 'com.github.KianIranian-STDG:Proto:Build96'
     implementation project(':pecpayment-release')
     implementation project(':raadcore')

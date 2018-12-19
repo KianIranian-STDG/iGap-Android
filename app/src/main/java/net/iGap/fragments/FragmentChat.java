@@ -305,7 +305,6 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 
-
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.CLIPBOARD_SERVICE;
@@ -2796,8 +2795,11 @@ public class FragmentChat extends BaseFragment
                     //    recyclerView.getAdapter().notifyDataSetChanged();
 
                     //   if (!((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage.isTimeOrLogMessage())
-                    replay(((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage);
-
+                    try {
+                        replay(((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage);
+                    } catch (NullPointerException e) {
+                    } catch (Exception e) {
+                    }
                     isRepley = false;
                     //awesome code to run when user drops card and completes reorder
                 }
@@ -2837,14 +2839,18 @@ public class FragmentChat extends BaseFragment
                     if (mAdapter == null) {
                         return makeMovementFlags(0, 0);
                     }
+                    try {
+                        AbstractMessage abstractMessage = mAdapter.getItem(viewHolder.getAdapterPosition());
 
-                    AbstractMessage abstractMessage = mAdapter.getItem(viewHolder.getAdapterPosition());
-
-                    if (abstractMessage != null && !abstractMessage.mMessage.isTimeOrLogMessage()) {
-                        return makeMovementFlags(0, ItemTouchHelper.LEFT);
-                    } else {
-                        return makeMovementFlags(0, 0);
+                        if (abstractMessage != null && abstractMessage.mMessage != null && !abstractMessage.mMessage.isTimeOrLogMessage()) {
+                            return makeMovementFlags(0, ItemTouchHelper.LEFT);
+                        } else {
+                            return makeMovementFlags(0, 0);
+                        }
+                    } catch (NullPointerException e) {
+                    } catch (Exception e1) {
                     }
+                    return makeMovementFlags(0, 0);
                 }
 
                 @Override

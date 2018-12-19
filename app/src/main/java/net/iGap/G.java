@@ -82,6 +82,9 @@ public class G extends MultiDexApplication {
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static Context context;
     public static Handler handler;
+    public static boolean isCalling = false;
+    public static boolean isVideoCallRinging = false;
+    public static OnRejectCallStatus onRejectCallStatus;
     public static long mLastClickTime = SystemClock.elapsedRealtime();
     public static LayoutInflater inflater;
     public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();

@@ -1,15 +1,17 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.webrtc;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.util.Log;
 
 import net.iGap.G;
@@ -60,6 +62,10 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
             return;
         }
         WebRTC.getInstance().setCallType(type);
+        if (type == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+            G.isVideoCallRinging = true;
+        }
+
         new RequestSignalingRinging().signalingRinging();
 
         G.handler.post(new Runnable() {
@@ -140,9 +146,11 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
     @Override
     public void onLeave(final ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
         WebRTC.getInstance().close();
+        AudioManager am= (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 
         if (G.iSignalingCallBack != null) {
-
+            G.isVideoCallRinging = false;
             switch (type) {
 
                 case REJECTED:
@@ -162,6 +170,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
         if (G.onCallLeaveView != null) {
             G.onCallLeaveView.onLeaveView("");
+
         }
     }
 

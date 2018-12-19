@@ -19,6 +19,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,6 +39,7 @@ import net.iGap.databinding.ActivityCallBinding;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.interfaces.OnRejectCallStatus;
 import net.iGap.interfaces.OnVideoCallFrame;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -110,6 +112,10 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         if (activityCallViewModel != null) {
             activityCallViewModel.onDestroy();
         }
+        if (G.onRejectCallStatus != null) {
+            G.onRejectCallStatus = null;
+        }
+
     }
 
     @Override
@@ -160,6 +166,13 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                             @Override
                             public void Allow() throws IOException {
                                 init();
+                         /*       G.onRejectCallStatus = new OnRejectCallStatus() {
+                                    @Override
+                                    public void setReject(boolean state) {
+                                        if (state)
+                                            doReject();
+                                    }
+                                };*/
                             }
 
                             @Override
@@ -174,6 +187,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
                     } else {
                         init();
+
+
                     }
                 }
 
@@ -223,6 +238,14 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         G.onCallLeaveView = ActivityCall.this;
         if (!isIncomingCall) {
             WebRTC.getInstance().createOffer(userId);
+        }
+    }
+
+    private void doReject() {
+        G.isInCall = false;
+        finish();
+        if (isIncomingCall) {
+            WebRTC.getInstance().leaveCall();
         }
     }
 
@@ -358,6 +381,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             btnAnswer.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    G.isVideoCallRinging = false;
                     setUpSwap(layoutAnswer);
                     return false;
                 }
@@ -383,6 +407,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
             WebRTC.getInstance().createAnswer();
             cancelRingtone();
+            try {
+                AudioManager am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
+                am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+            } catch (Exception e) {
+            }
 
             btnEndCall.setOnTouchListener(null);
 
