@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -112,9 +113,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         if (activityCallViewModel != null) {
             activityCallViewModel.onDestroy();
         }
-        if (G.onRejectCallStatus != null) {
+       /* if (G.onRejectCallStatus != null) {
             G.onRejectCallStatus = null;
-        }
+        }*/
 
     }
 
@@ -289,6 +290,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             activityCallBinding.fcrTxtCallType.setText(getResources().getString(R.string.video_calls));
             activityCallBinding.fcrBtnSwichCamera.setVisibility(View.VISIBLE);
             activityCallBinding.poweredBy.setVisibility(View.VISIBLE);
+            activityCallBinding.poweredBy.setShadowLayer(30, 0, 0, Color.BLACK);
 
         } else {
             activityCallBinding.fcrBtnSwichCamera.setVisibility(View.GONE);
