@@ -114,6 +114,13 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
                     @Override
                     public void onSetSuccess() {
+                        G.isVideoCallRinging = false;
+
+                        try {
+                            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+                            am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                        } catch (Exception e) {
+                        }
                         Log.i("WWW", "onSetSuccess");
                     }
 
@@ -138,6 +145,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
             public void run() {
                 Log.i("WWW_Candidate", "onCandidate server : " + peerCandidate);
                 WebRTC.getInstance().peerConnectionInstance().addIceCandidate(new IceCandidate(peerSdpMId, peerSdpMLineIndex, peerCandidate));
+
             }
         });
     }
