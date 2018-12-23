@@ -68,6 +68,7 @@
           android:layout_marginTop="@dimen/dp16"
           android:singleLine="true"
           android:text="@string/call_name"
+
           android:textAppearance="?android:attr/textAppearanceMedium"
 
           android:textColor="#f8f4df"
@@ -80,6 +81,10 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:singleLine="true"
+            android:shadowColor="@color/black"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="10"
           android:text="@{activityCallViewModel.callBackTxtName ,default = Name}"
           android:textColor="#f8f4df"
           android:textSize="@dimen/dp22"
@@ -95,6 +100,10 @@
             android:id="@+id/fcr_txt_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+              android:shadowColor="@color/black"
+              android:shadowDx="0"
+              android:shadowDy="3"
+              android:shadowRadius="10"
             android:text="@{activityCallViewModel.callBackTxtStatus ,default = Status}"
             android:textColor="#f8f4df" />
 
@@ -115,6 +124,10 @@
           android:id="@+id/fcr_txt_timer"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+            android:shadowColor="@color/black"
+            android:shadowDx="0"
+            android:shadowDy="3"
+            android:shadowRadius="10"
           android:text="@{activityCallViewModel.callBackTxtTimer}"
           android:textColor="#f8f4df"
           android:visibility="@{activityCallViewModel.txtTimerVisibility , default = gone}" />
@@ -207,6 +220,7 @@
             android:gravity="center"
             android:visibility="gone"
             android:textColor="@color/color_powered_by"/>
+
 
         <LinearLayout
           android:id="@+id/fcr_layout_option"

@@ -22,6 +22,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.audiofx.AcousticEchoCanceler;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -49,6 +50,7 @@ import net.iGap.webrtc.WebRTC;
 
 import org.webrtc.EglBase;
 import org.webrtc.VideoFrame;
+import org.webrtc.voiceengine.WebRtcAudioUtils;
 
 import java.io.IOException;
 
@@ -112,6 +114,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
         if (activityCallViewModel != null) {
             activityCallViewModel.onDestroy();
+
         }
        /* if (G.onRejectCallStatus != null) {
             G.onRejectCallStatus = null;
@@ -136,6 +139,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
         super.onCreate(savedInstanceState);
+        try {
+            WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
+            WebRtcAudioUtils.setWebRtcBasedNoiseSuppressor(true);
+        } catch (Exception e) {
+        }
 
         if (isGoingfromApp) {
             isGoingfromApp = false;
@@ -288,9 +296,10 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
             activityCallBinding.fcrImvBackground.setVisibility(View.GONE);
             activityCallBinding.fcrTxtCallType.setText(getResources().getString(R.string.video_calls));
+            activityCallBinding.fcrTxtCallType.setShadowLayer(10, 0, 3, Color.BLACK);
             activityCallBinding.fcrBtnSwichCamera.setVisibility(View.VISIBLE);
             activityCallBinding.poweredBy.setVisibility(View.VISIBLE);
-            activityCallBinding.poweredBy.setShadowLayer(30, 0, 0, Color.BLACK);
+            activityCallBinding.poweredBy.setShadowLayer(10, 0, 3, Color.BLACK);
 
         } else {
             activityCallBinding.fcrBtnSwichCamera.setVisibility(View.GONE);
