@@ -397,6 +397,9 @@ public class G extends MultiDexApplication {
     public static Card selectedCard = null;
     public static long cardamount;
     public static String jwt = null;
+    public static boolean isBluetoothConnected = false;
+    public static boolean isHandsFreeConnected = false;
+    public static SpeakerControlListener speakerControlListener;
 
     public static int rotationState;
 

@@ -10,6 +10,8 @@
 
 package net.iGap.activities;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -44,6 +46,8 @@ import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnRejectCallStatus;
 import net.iGap.interfaces.OnVideoCallFrame;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.audioManagement.BluethoothIntentReceiver;
+import net.iGap.module.audioManagement.MusicIntentReceiver;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.viewmodel.ActivityCallViewModel;
 import net.iGap.webrtc.WebRTC;
@@ -53,6 +57,8 @@ import org.webrtc.VideoFrame;
 import org.webrtc.voiceengine.WebRtcAudioUtils;
 
 import java.io.IOException;
+
+import static android.bluetooth.BluetoothProfile.HEADSET;
 
 public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, OnVideoCallFrame {
 
@@ -112,10 +118,15 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     protected void onDestroy() {
         super.onDestroy();
 
+        if (G.speakerControlListener != null) {
+            G.speakerControlListener = null;
+        }
+
         if (activityCallViewModel != null) {
             activityCallViewModel.onDestroy();
 
         }
+
        /* if (G.onRejectCallStatus != null) {
             G.onRejectCallStatus = null;
         }*/
@@ -138,6 +149,44 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     public void onCreate(Bundle savedInstanceState) {
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
+
+        /** register receiver for headset*/
+        registerReceiver(new MusicIntentReceiver(), new IntentFilter(Intent.ACTION_HEADSET_PLUG));
+
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+
+        registerReceiver(new BluethoothIntentReceiver(), filter);
+
+
+        //  registerReceiver(new BluethoothIntentReceiver(), new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+
+
+        /** First Check Is Headset Connected or Not */
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager.isWiredHeadsetOn()) {
+            G.isHandsFreeConnected = true;
+        }
+
+
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            // Device does not support Bluetooth
+
+        } else {
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            if (mBluetoothAdapter.getProfileConnectionState(HEADSET) == BluetoothAdapter.STATE_CONNECTED) {
+                G.isBluetoothConnected = true;
+                am.setSpeakerphoneOn(false);
+            } else {
+                G.isBluetoothConnected = false;
+                am.setSpeakerphoneOn(true);
+            }
+        }
+
         super.onCreate(savedInstanceState);
         try {
             WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
@@ -292,9 +341,9 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             activityCallBinding.fcrSurfaceRemote.init(rootEglBase.getEglBaseContext(), null);
             activityCallBinding.fcrSurfaceRemote.setEnableHardwareScaler(true);
             activityCallBinding.fcrSurfaceRemote.setMirror(true);
-            activityCallBinding.fcrSurfaceRemote.setVisibility(View.VISIBLE);
+            activityCallBinding.fcrSurfaceRemote.setVisibility(View.INVISIBLE);
 
-            activityCallBinding.fcrImvBackground.setVisibility(View.GONE);
+            activityCallBinding.fcrImvBackground.setVisibility(View.VISIBLE);
             activityCallBinding.fcrTxtCallType.setText(getResources().getString(R.string.video_calls));
             activityCallBinding.fcrTxtCallType.setShadowLayer(10, 0, 3, Color.BLACK);
             activityCallBinding.fcrBtnSwichCamera.setVisibility(View.VISIBLE);
@@ -392,8 +441,10 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             btnAnswer.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    activityCallBinding.fcrSurfaceRemote.setVisibility(View.VISIBLE);
                     G.isVideoCallRinging = false;
                     setUpSwap(layoutAnswer);
+
                     return false;
                 }
             });
@@ -561,7 +612,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             G.onVideoCallFrame = ActivityCall.this;
-            WebRTC.getInstance().startVideoCapture();
+            if (!G.isCalling) {
+                WebRTC.getInstance().startVideoCapture();
+                WebRTC.getInstance().unMuteSound();
+            }
+
         }
 
         mSensorManager.registerListener(sensorEventListener, mProximity, SensorManager.SENSOR_DELAY_NORMAL);

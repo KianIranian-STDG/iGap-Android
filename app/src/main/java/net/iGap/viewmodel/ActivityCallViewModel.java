@@ -36,6 +36,7 @@ import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.ISignalingCallBack;
+import net.iGap.interfaces.SpeakerControlListener;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MusicPlayer;
@@ -94,6 +95,7 @@ public class ActivityCallViewModel {
         this.isIncomingCall = isIncomingCall;
         this.activityCallBinding = activityCallBinding;
         this.callTYpe = callTYpe;
+     //   setPicture();
         getInfo();
 
     }
@@ -146,9 +148,28 @@ public class ActivityCallViewModel {
 
     private void initComponent() {
 
+
+        G.speakerControlListener = new SpeakerControlListener() {
+            @Override
+            public void setOnChangeSpeaker(int resId) {
+                cllBackBtnSpeaker.set(G.context.getResources().getString(resId));
+                if (G.isBluetoothConnected || G.isHandsFreeConnected) {
+                    setSpeakerphoneOn(false);
+                } else {
+                    setSpeakerphoneOn(true);
+                }
+            }
+        };
+
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
-            cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
-            setSpeakerphoneOn(false);
+            if (G.isBluetoothConnected || G.isHandsFreeConnected) {
+                cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
+                setSpeakerphoneOn(false);
+            } else {
+                cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
+                setSpeakerphoneOn(true);
+            }
+
         }
 
         if (MusicPlayer.mp != null) {
@@ -618,7 +639,7 @@ public class ActivityCallViewModel {
 
         try {
             if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_unMuted))) {
-                setSpeakerphoneOn(false);
+                setSpeakerphoneOn(true);
             } else {
                 setSpeakerphoneOn(false);
             }
