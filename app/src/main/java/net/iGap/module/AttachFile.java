@@ -33,6 +33,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -192,7 +193,7 @@ public class AttachFile {
         String path = getFilePathFromUri(uri);
 
         if (path == null) {
-            path = getPathN(uri, fileType);
+            path = getPathN(uri, fileType, null);
         }
 
         return path;
@@ -200,7 +201,7 @@ public class AttachFile {
 
     //*************************************************************************************************************
 
-    public static String getPathN(Uri uri, HelperGetDataFromOtherApp.FileType fileType) {
+    public static String getPathN(Uri uri, HelperGetDataFromOtherApp.FileType fileType, String type) {
 
         if (uri == null) {
             return null;
@@ -210,6 +211,17 @@ public class AttachFile {
                 String name = AttachFile.getFileName(uri.getPath());
                 if (name == null || name.length() == 0) {
                     name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                }
+
+                try{
+                    String substring = name.substring(name.lastIndexOf("."));
+
+                }catch (StringIndexOutOfBoundsException e){
+
+                    if (type !=null){
+                        String ex =type.substring(type.lastIndexOf("/") + 1);
+                        name += "." + ex;
+                    }
                 }
 
                 String destinationPath = "";

@@ -167,12 +167,12 @@ public class HelperGetDataFromOtherApp {
 
             if (fileAddressUri.getScheme() != null && fileAddressUri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                 if (_path == null) {
-                    _path = getPathN(fileAddressUri, type);
+                    _path = getPathN(fileAddressUri, type, intent.getType());
                 } else {
                     try {
                         FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", new File(_path));
                     } catch (IllegalArgumentException e) {
-                        _path = getPathN(fileAddressUri, type);
+                        _path = getPathN(fileAddressUri, type, intent.getType());
                     }
                 }
             }
@@ -211,12 +211,12 @@ public class HelperGetDataFromOtherApp {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && _Uri.getScheme() != null && _Uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                     if (_path == null) {
-                        _path = getPathN(_Uri, type);
+                        _path = getPathN(_Uri, type ,intent.getType());
                     } else {
                         try {
                             FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", new File(_path));
                         } catch (IllegalArgumentException e) {
-                            _path = getPathN(_Uri, type);
+                            _path = getPathN(_Uri, type, intent.getType());
                         }
                     }
                 }
