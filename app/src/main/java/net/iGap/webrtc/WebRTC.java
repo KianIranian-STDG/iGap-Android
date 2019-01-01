@@ -11,9 +11,13 @@
 package net.iGap.webrtc;
 
 
+import android.graphics.Bitmap;
 import android.hardware.Camera;
+import android.media.AudioRecord;
 import android.os.Build;
 import android.util.Log;
+
+
 
 import net.iGap.G;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -28,10 +32,13 @@ import org.webrtc.AudioTrack;
 import org.webrtc.Camera1Enumerator;
 import org.webrtc.CameraEnumerator;
 import org.webrtc.CameraVideoCapturer;
+import org.webrtc.EglRenderer;
 import org.webrtc.MediaConstraints;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
 import org.webrtc.PeerConnectionFactory;
+import org.webrtc.RTCStatsCollectorCallback;
+import org.webrtc.RTCStatsReport;
 import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
 import org.webrtc.VideoCapturer;
@@ -59,6 +66,7 @@ public class WebRTC {
     private PeerConnection peerConnection;
     private PeerConnectionFactory peerConnectionFactory;
     private MediaStream mediaStream;
+
     private String offerSdp;
     private MediaConstraints mediaConstraints;
     private MediaConstraints audioConstraints;
@@ -73,6 +81,7 @@ public class WebRTC {
     public static WebRTC getInstance() {
         if (webRTCInstance == null) {
             webRTCInstance = new WebRTC();
+
         }
         return webRTCInstance;
     }
@@ -122,7 +131,6 @@ public class WebRTC {
 
 
     private void addVideoTrack(MediaStream mediaStream) {
-
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             videoCapturer = createCameraCapturer(new Camera1Enumerator(false));
             videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer);
@@ -135,9 +143,12 @@ public class WebRTC {
                 public void onFrame(VideoFrame videoFrame) {
                     if (G.onVideoCallFrame != null) {
                         G.onVideoCallFrame.onPeerFrame(videoFrame);
+                    /*    Log.i("#peymanW2",videoFrame.getRotatedWidth()+"");
+                        Log.i("#peymanH2",videoFrame.getRotatedHeight()+"");*/
                     }
                 }
             });
+
 
             mediaStream.addTrack(videoTrackFromCamera);
         }
@@ -211,7 +222,7 @@ public class WebRTC {
 
             if (Build.VERSION.SDK_INT >= 11) {
                 if (HARDWARE_AEC_WHITELIST.contains(Build.MODEL)) {
-                    WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(false);
+                    WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
                 } else {
                     WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
                 }
@@ -246,6 +257,7 @@ public class WebRTC {
             configuration.rtcpMuxPolicy = PeerConnection.RtcpMuxPolicy.REQUIRE;
             configuration.iceTransportsType = PeerConnection.IceTransportsType.RELAY;
 
+
             PeerConnection.Observer observer = new PeerConnectionObserver();
             MediaConstraints mediaConstraints = mediaConstraintsGetInstance();
 
@@ -255,6 +267,7 @@ public class WebRTC {
             addAudioTrack(mediaStream);
             addVideoTrack(mediaStream);
             peerConnection.addStream(mediaStream);
+
         }
 
         return peerConnection;

@@ -2509,7 +2509,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.onUnreadChange = this;
         G.onPayment = this;
 
-        startService(new Intent(this, ServiceContact.class));
+
+        try {
+            startService(new Intent(this, ServiceContact.class));
+        } catch (Exception e) {
+        }
+
 
         Intent intent = getIntent();
         String appLinkAction = intent.getAction();

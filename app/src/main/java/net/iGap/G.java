@@ -400,6 +400,8 @@ public class G extends MultiDexApplication {
     public static boolean isBluetoothConnected = false;
     public static boolean isHandsFreeConnected = false;
     public static SpeakerControlListener speakerControlListener;
+    public static VideoCallListener videoCallListener;
+    public static OnHoldBackgroundChanegeListener onHoldBackgroundChanegeListener;
 
     public static int rotationState;
 
@@ -427,11 +429,12 @@ public class G extends MultiDexApplication {
         WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
 
         new StartupActions();
-        try {
+     /*   try {
             WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
             WebRtcAudioUtils.setWebRtcBasedNoiseSuppressor(true);
+            WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);
         } catch (Exception e) {
-        }
+        }*/
     }
 
     @Override

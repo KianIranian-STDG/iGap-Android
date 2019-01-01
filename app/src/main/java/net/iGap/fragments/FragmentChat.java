@@ -4963,7 +4963,11 @@ public class FragmentChat extends BaseFragment
                     if (f.exists()) {
                         Drawable d = Drawable.createFromPath(f.getAbsolutePath());
                         //imgBackGround.setImageDrawable(d);
-                        imgBackGround.setBackgroundColor(Color.parseColor(backgroundPath));
+                        try {
+                            imgBackGround.setBackgroundColor(Color.parseColor(backgroundPath));
+                        } catch (Exception e) {
+                        }
+
                     }
                 }
             }

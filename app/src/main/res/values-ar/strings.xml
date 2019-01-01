@@ -2347,5 +2347,7 @@
     <string name="Select">تحديد</string>
     <string name="Create_new_Folder_here">قم بإنشاء مجلد جديد هنا</string>
     <string name="Powered_by_iGap">مدعوم من آی کب</string>
+    <string name="on_hold">call on hold...</string>
+    <string name="switchTo">switch To :</string>
 
 </resources>

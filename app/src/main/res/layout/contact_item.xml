@@ -56,7 +56,7 @@
       android:clickable="true"
       android:orientation="vertical"
       android:paddingEnd="@dimen/dp20"
-      android:paddingLeft="@dimen/dp52"
+      android:paddingLeft="@dimen/dp16"
       android:paddingRight="@dimen/dp20">
 
 
@@ -66,10 +66,19 @@
         android:layout_marginTop="@dimen/dp16"
         android:orientation="horizontal">
 
+
+        <CheckBox
+            android:id="@+id/img2"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            android:layout_marginRight="@dimen/dp20"/>
+
         <net.iGap.module.CircleImageView
           android:id="@+id/imageView"
           android:layout_width="@dimen/dp48"
           android:layout_height="@dimen/dp48" />
+
+
 
         <LinearLayout
           android:layout_width="match_parent"

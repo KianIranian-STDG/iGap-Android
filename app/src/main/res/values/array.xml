@@ -141,6 +141,13 @@
     <item>@string/array_Disable</item>
   </string-array>
 
+  <string-array name="phone_selection">
+    <item>@string/bluetooth</item>
+    <item>@string/speacker</item>
+    <item>@string/phone</item>
+
+  </string-array>
+
   <string-array name="notifications_vibrate">
     <item>@string/array_Disable</item>
     <item>@string/array_Default</item>
@@ -343,4 +350,6 @@
     <item> @string/charge_20_ir</item>
   </string-array>
 
+  <string name="bluetooth">bluetooth</string>
+  <string name="speacker">speacker</string>
 </resources>

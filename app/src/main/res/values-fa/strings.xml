@@ -1396,6 +1396,8 @@
     <string name="Select">انتخاب</string>
     <string name="Create_new_Folder_here">در اینجا یک پوشه جدید ایجاد کنید</string>
     <string name="Powered_by_iGap">طراحی شده توسط آی گپ</string>
+    <string name="on_hold">call on hold...</string>
+    <string name="switchTo">switch To :</string>
 
 
 </resources>

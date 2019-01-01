@@ -24,13 +24,10 @@ public class MyPhoneStateListener extends PhoneStateListener {
                 WebRTC.getInstance().leaveCall();
             }catch (Exception e){}*/
 
-      /*      new RequestSignalingSessionHold().signalingSessionHold(false);
+            new RequestSignalingSessionHold().signalingSessionHold(true);
             WebRTC.getInstance().muteSound();
-            WebRTC.getInstance().pauseVideoCapture();*/
-
-            WebRTC.getInstance().muteSound();
-
             WebRTC.getInstance().pauseVideoCapture();
+
 
             G.isCalling = true;
         } else if (state == TelephonyManager.CALL_STATE_RINGING) {
@@ -49,9 +46,10 @@ public class MyPhoneStateListener extends PhoneStateListener {
         } else if (state == TelephonyManager.CALL_STATE_IDLE) {
             WebRTC.getInstance().unMuteSound();
             WebRTC.getInstance().startVideoCapture();
-           /* new RequestSignalingSessionHold().signalingSessionHold(true);
+
+            new RequestSignalingSessionHold().signalingSessionHold(false);
             WebRTC.getInstance().unMuteSound();
-            WebRTC.getInstance().startVideoCapture();*/
+            WebRTC.getInstance().startVideoCapture();
 
             G.isCalling = false;
         }

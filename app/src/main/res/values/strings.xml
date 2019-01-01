@@ -1394,5 +1394,7 @@
     <string name="Select">Select</string>
     <string name="Create_new_Folder_here">Create a new Folder here</string>
     <string name="Powered_by_iGap">Powered by iGap</string>
+    <string name="on_hold">call on hold...</string>
+    <string name="switchTo">switch To :</string>
 
 </resources>

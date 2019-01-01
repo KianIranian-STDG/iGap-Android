@@ -10,29 +10,57 @@ package net.iGap.viewmodel;
  */
 
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothHeadset;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.media.AudioFocusRequest;
+import android.media.AudioFormat;
 import android.media.AudioManager;
+import android.media.AudioRecord;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.media.RingtoneManager;
+import android.media.audiofx.AcousticEchoCanceler;
+import android.media.audiofx.AutomaticGainControl;
+import android.media.audiofx.NoiseSuppressor;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
+import android.widget.Toast;
+
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.databinding.ActivityCallBinding;
+import net.iGap.fragments.FragmentNotificationAndSound;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.ISignalingCallBack;
@@ -40,6 +68,7 @@ import net.iGap.interfaces.SpeakerControlListener;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MusicPlayer;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.CallState;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -51,12 +80,27 @@ import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.webrtc.WebRTC;
 
+import org.webrtc.voiceengine.WebRtcAudioEffects;
+import org.webrtc.voiceengine.WebRtcAudioManager;
+import org.webrtc.voiceengine.WebRtcAudioUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import io.realm.Realm;
+import yogesh.firzen.mukkiasevaigal.K;
 
-public class ActivityCallViewModel {
+import static android.content.Context.MODE_PRIVATE;
+import static android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY;
+import static android.media.AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
+
+public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
     public static boolean isConnected = false;
     public static TextView txtTimeChat, txtTimerMain;
@@ -86,6 +130,9 @@ public class ActivityCallViewModel {
     private ProtoSignalingOffer.SignalingOffer.Type callTYpe;
 
     private boolean isFinish = false;
+    private AudioManager audioManager;
+    BluetoothManager bluetoothManager;
+    BluetoothHeadset bluetoothHeadset;
 
 
     public ActivityCallViewModel(Context context, long userId, boolean isIncomingCall, ActivityCallBinding activityCallBinding, ProtoSignalingOffer.SignalingOffer.Type callTYpe) {
@@ -95,7 +142,16 @@ public class ActivityCallViewModel {
         this.isIncomingCall = isIncomingCall;
         this.activityCallBinding = activityCallBinding;
         this.callTYpe = callTYpe;
-     //   setPicture();
+        //   setPicture();
+        audioManager = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+        audioManager.getMode();
+        Set<BluetoothDevice> pairedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
+
+        for (BluetoothDevice device : pairedDevices) {
+            Log.d("#peyman", " name=" + device.getName() + ", address=" + device.getAddress());
+
+            device.getAddress();
+        }
         getInfo();
 
     }
@@ -122,17 +178,116 @@ public class ActivityCallViewModel {
         }
     }
 
+
     public void onClickBtnSpeaker(View v) {
+
+
         if (cllBackBtnSpeaker != null && cllBackBtnSpeaker.get() != null) {
-            if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_Mute))) {
-                cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
-                setSpeakerphoneOn(true);
+
+            if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_igap_bluetooth))) {
+                changeConnectedDevice(v);
+
+            } else if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_Mute))) {
+                if (G.isBluetoothConnected)
+                    changeConnectedDevice(v);
+                else {
+                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
+                    setSpeakerphoneOn(true);
+                }
+
             } else {
-                cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
-                setSpeakerphoneOn(false);
+                if (G.isBluetoothConnected)
+                    changeConnectedDevice(v);
+                else {
+                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
+                    setSpeakerphoneOn(false);
+                }
             }
         }
     }
+
+    private void changeConnectedDevice(View v) {
+        try {
+
+            new MaterialDialog.Builder(v.getContext()).title(R.string.switchTo).itemsGravity(GravityEnum.CENTER).items(R.array.phone_selection).negativeText(G.fragmentActivity.getResources().getString(R.string.B_cancel)).itemsCallback(new MaterialDialog.ListCallback() {
+                @Override
+                public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
+                    switch (position) {
+                        case 0:
+                            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+                           /* if (!bluetoothAdapter.isEnabled())
+                                bluetoothAdapter.enable();*/
+                            cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_igap_bluetooth));
+                            //     audioManager.setBluetoothScoOn(true);
+                            setSpeakerphoneOn(false);
+                            audioManager.setMode(0);
+                            audioManager.startBluetoothSco();
+                            audioManager.setBluetoothScoOn(true);
+                            audioManager.setMode(AudioManager.MODE_IN_CALL);
+                            //  if (!audioManager.isBluetoothScoOn()) {
+
+
+                            //   }
+                            break;
+                        case 1:
+                            cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
+                            setSpeakerphoneOn(true);
+
+                            break;
+                        case 2:
+                            cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
+                //            setSpeakerphoneOn(false);
+                            audioManager.setMode(AudioManager.MODE_INVALID);
+                            //   if (audioManager.isBluetoothScoOn()) {
+                            audioManager.setBluetoothScoOn(false);
+                            audioManager.stopBluetoothSco();
+                            /*audioManager.stopBluetoothSco();
+                            audioManager.setBluetoothScoOn(false);*/
+
+                            //     }
+                            break;
+
+                    }
+                }
+            }).show();
+
+        } catch (Exception e) {
+        }
+    }
+
+/*    public void onClickBtnSpeaker(View v) {
+        if (cllBackBtnSpeaker != null && cllBackBtnSpeaker.get() != null) {
+            if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_Mute))) {
+                if (G.isBluetoothConnected) {
+                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_igap_bluetooth));
+                    setSpeakerphoneOn(false);
+
+                } else {
+                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
+                    setSpeakerphoneOn(true);
+                }
+
+            } else if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_unMuted))) {
+                if (G.isBluetoothConnected)
+                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_igap_bluetooth));
+                else
+                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
+
+                setSpeakerphoneOn(false);
+            } else if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_igap_bluetooth))) {
+                if (G.isHandsFreeConnected) {
+                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
+                    setSpeakerphoneOn(false);
+                } else {
+                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
+                    setSpeakerphoneOn(true);
+                }
+
+
+            }
+        }
+    }*/
 
     public void onClickBtnSwitchCamera(View v) {
         WebRTC.getInstance().switchCamera();
@@ -147,22 +302,35 @@ public class ActivityCallViewModel {
 
 
     private void initComponent() {
-
-
         G.speakerControlListener = new SpeakerControlListener() {
             @Override
             public void setOnChangeSpeaker(int resId) {
                 cllBackBtnSpeaker.set(G.context.getResources().getString(resId));
-                if (G.isBluetoothConnected || G.isHandsFreeConnected) {
+                if (G.isBluetoothConnected) {
+                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_igap_bluetooth));
+                    setSpeakerphoneOn(false);
+                } else if (G.isHandsFreeConnected) {
+                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
                     setSpeakerphoneOn(false);
                 } else {
-                    setSpeakerphoneOn(true);
+                    if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+                        cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
+                        setSpeakerphoneOn(true);
+                    } else {
+                        cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
+                        setSpeakerphoneOn(false);
+                    }
+
                 }
             }
         };
 
+
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
-            if (G.isBluetoothConnected || G.isHandsFreeConnected) {
+            if (G.isBluetoothConnected) {
+                cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_igap_bluetooth));
+                setSpeakerphoneOn(false);
+            } else if (G.isHandsFreeConnected) {
                 cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
                 setSpeakerphoneOn(false);
             } else {
@@ -332,6 +500,9 @@ public class ActivityCallViewModel {
             case TOO_LONG:
                 result = G.context.getResources().getString(R.string.too_long);
                 break;
+            case ON_HOLD:
+                result = G.context.getResources().getString(R.string.on_hold);
+                break;
         }
 
         return result;
@@ -344,9 +515,71 @@ public class ActivityCallViewModel {
     /**
      * Sets the speaker phone mode.
      */
+
     public void setSpeakerphoneOn(boolean on) {
 
-        AudioManager audioManager = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+
+        //  mAudioRecord.startRecording();
+/*        AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.VOICE_COMMUNICATION,
+                48000,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT,
+                1024);
+        NoiseSuppressor ns;
+        AcousticEchoCanceler aec;
+        if (AcousticEchoCanceler.isAvailable()) {
+            aec = AcousticEchoCanceler.create(audioRecord.getAudioSessionId());
+            if (aec != null)
+                aec.setEnabled(true);
+        }
+        ns = NoiseSuppressor.create(audioRecord.getAudioSessionId());
+        if (ns != null)
+            ns.setEnabled(true);
+
+        audioRecord.startRecording();*/
+        try {
+
+
+     /*       AudioRecord  mAudioRecord = new AudioRecord(MediaRecorder.AudioSource.VOICE_COMMUNICATION, 16000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, 2048);
+            NoiseSuppressor  mNoiseSuppressor = NoiseSuppressor.create(mAudioRecord.getAudioSessionId());
+            if (mNoiseSuppressor != null) {
+                int res = mNoiseSuppressor.setEnabled(true);
+            }
+
+            AcousticEchoCanceler  mAcousticEchoCanceler = AcousticEchoCanceler.create(mAudioRecord.getAudioSessionId());
+            if (mAcousticEchoCanceler != null) {
+                int res = mAcousticEchoCanceler.setEnabled(true);
+            }*/
+
+            WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
+            WebRtcAudioUtils.useWebRtcBasedAcousticEchoCanceler();
+    /*        int audioSessionId = id;
+
+            if (NoiseSuppressor.isAvailable()) {
+                NoiseSuppressor.create(audioSessionId);
+                Log.i("#peyman", " noise " + NoiseSuppressor.create(audioSessionId));
+            }
+            if (AutomaticGainControl.isAvailable()) {
+                AutomaticGainControl.create(audioSessionId);
+                Log.i("#peyman", " gain " + AutomaticGainControl.create(audioSessionId).getEnabled());
+            }
+            if (AcousticEchoCanceler.isAvailable()) {
+
+                AcousticEchoCanceler.create(audioSessionId);
+                Log.i("#peyman", " echo " + AcousticEchoCanceler.create(audioSessionId).getEnabled());
+            }*/
+
+
+        /*    WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
+            WebRtcAudioUtils.setWebRtcBasedNoiseSuppressor(true);
+            WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);*/
+          /*  WebRtcAudioUtils.useWebRtcBasedAutomaticGainControl();
+            WebRtcAudioUtils.useWebRtcBasedAcousticEchoCanceler();
+            WebRtcAudioUtils.useWebRtcBasedNoiseSuppressor();*/
+        /*    WebRtcAudioEffects.create().setAEC(true);
+            WebRtcAudioEffects.create().setNS(true);*/
+        } catch (Exception e) {
+        }
 
         boolean wasOn = false;
         if (audioManager != null) {
@@ -357,6 +590,7 @@ public class ActivityCallViewModel {
         }
         if (audioManager != null) {
             audioManager.setSpeakerphoneOn(on);
+
         }
     }
 
@@ -541,20 +775,20 @@ public class ActivityCallViewModel {
     private void muteMusic() {
 
         if (!isMuteAllMusic) {
-            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-            if (am == null) {
+
+            if (audioManager == null) {
                 return;
             }
-            int result = am.requestAudioFocus(new AudioManager.OnAudioFocusChangeListener() {
+            int result = audioManager.requestAudioFocus(new AudioManager.OnAudioFocusChangeListener() {
                 @Override
                 public void onAudioFocusChange(int focusChange) {
 
                 }
             }, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
             if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                musicVolum = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-                am.setStreamMute(AudioManager.STREAM_MUSIC, true);
-                am.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
+                musicVolum = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
                 isMuteAllMusic = true;
             }
         }
@@ -563,10 +797,10 @@ public class ActivityCallViewModel {
     private void unMuteMusic() {
 
         if (isMuteAllMusic) {
-            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-            if (am != null) {
-                am.setStreamVolume(AudioManager.STREAM_MUSIC, musicVolum, 0);
-                am.setStreamMute(AudioManager.STREAM_MUSIC, false);
+
+            if (audioManager != null) {
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, musicVolum, 0);
+                audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
                 isMuteAllMusic = false;
             }
         }
@@ -574,9 +808,9 @@ public class ActivityCallViewModel {
 
     public void playRingtone() {
         boolean canPlay = false;
-        AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
 
-        switch (am.getRingerMode()) {
+
+        switch (audioManager.getRingerMode()) {
             case AudioManager.RINGER_MODE_SILENT:
                 canPlay = false;
                 break;
@@ -593,7 +827,7 @@ public class ActivityCallViewModel {
                 break;
         }
 
-        if (am.isWiredHeadsetOn()) {
+        if (audioManager.isWiredHeadsetOn()) {
             canPlay = true;
         }
 
@@ -618,7 +852,7 @@ public class ActivityCallViewModel {
                     ringtonePlayer.setDataSource(G.context, alert);
                 }
 
-                if (am.isWiredHeadsetOn()) {
+                if (audioManager.isWiredHeadsetOn()) {
                     ringtonePlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
                 } else {
                     ringtonePlayer.setAudioStreamType(AudioManager.STREAM_RING);
@@ -639,7 +873,12 @@ public class ActivityCallViewModel {
 
         try {
             if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_unMuted))) {
-                setSpeakerphoneOn(true);
+                if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING)
+                    setSpeakerphoneOn(true);
+                else {
+                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
+                    setSpeakerphoneOn(false);
+                }
             } else {
                 setSpeakerphoneOn(false);
             }
@@ -848,6 +1087,17 @@ public class ActivityCallViewModel {
                 }
             }, 1000);
         }
+    }
+
+    @Override
+    public void onServiceConnected(int profile, BluetoothProfile proxy) {
+        Log.i("#peymanProxy", "Activity call view model");
+
+    }
+
+    @Override
+    public void onServiceDisconnected(int profile) {
+
     }
 
 

@@ -15,16 +15,18 @@ public class BluethoothIntentReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         if (BluetoothDevice.ACTION_FOUND.equals(action)) {
             //Device found
         } else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
             //Device is now connected
             G.isBluetoothConnected = true;
+
             if (G.speakerControlListener != null) {
-                G.speakerControlListener.setOnChangeSpeaker(R.string.md_Mute);
+                G.speakerControlListener.setOnChangeSpeaker(R.string.md_igap_bluetooth);
             }
-            am.setSpeakerphoneOn(false);
+            audioManager.setSpeakerphoneOn(false);
+
         } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
             //Done searching
         } else if (BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED.equals(action)) {
@@ -35,7 +37,8 @@ public class BluethoothIntentReceiver extends BroadcastReceiver {
             if (G.speakerControlListener != null) {
                 G.speakerControlListener.setOnChangeSpeaker(R.string.md_unMuted);
             }
-            am.setSpeakerphoneOn(true);
+            audioManager.setSpeakerphoneOn(true);
+
         }
 /*        if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
 
