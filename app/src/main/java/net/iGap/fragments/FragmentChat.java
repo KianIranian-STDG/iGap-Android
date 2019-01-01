@@ -23,6 +23,7 @@ import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -64,6 +65,11 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -408,6 +414,9 @@ public class FragmentChat extends BaseFragment
     private AppCompatImageView txtVerifyRoomIcon;
     private ImageView imgBackGround;
     private RecyclerView recyclerView;
+    private WebView webViewChatPage;
+    private RelativeLayout rootWebView;
+    private ProgressBar progressWebView;
     private MaterialDesignTextView imvSmileButton;
     private LocationManager locationManager;
     private OnComplete complete;
@@ -1577,6 +1586,10 @@ public class FragmentChat extends BaseFragment
                                 @Override
                                 public void run() {
 
+                                    if (item.getFavoriteValue().toLowerCase().startsWith("igaplink::")){
+                                        openWebViewForSpecialUrlChat(item.getFavoriteValue().replace("igaplink::", ""));
+                                        return;
+                                    }
 
                                     HelperUrl.checkUsernameAndGoToRoom(item.getFavoriteValue().replace("@", ""), HelperUrl.ChatEntry.chat);
                                 }
@@ -2060,6 +2073,12 @@ public class FragmentChat extends BaseFragment
     public boolean onBackPressed() {
         boolean stopSuperPress = true;
         try {
+
+            if (webViewChatPage != null) {
+                closeWebViewForSpecialUrlChat();
+                return stopSuperPress;
+            }
+
             FragmentShowImage fragment = (FragmentShowImage) G.fragmentActivity.getSupportFragmentManager().findFragmentByTag(FragmentShowImage.class.getName());
             if (fragment != null) {
                 removeFromBaseFragment(fragment);
@@ -2074,6 +2093,13 @@ public class FragmentChat extends BaseFragment
             e.printStackTrace();
         }
         return stopSuperPress;
+    }
+
+    private void closeWebViewForSpecialUrlChat() {
+        recyclerView.setVisibility(View.VISIBLE);
+        viewAttachFile.setVisibility(View.VISIBLE);
+        rootWebView.setVisibility(View.GONE);
+        webViewChatPage = null;
     }
 
     /**
@@ -3031,6 +3057,12 @@ public class FragmentChat extends BaseFragment
         rippleBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (webViewChatPage != null) {
+                    closeWebViewForSpecialUrlChat();
+                    return;
+                }
+
                 closeKeyboard(view);
                 popBackStackFragment();
                 //finishChat();
@@ -3315,6 +3347,44 @@ public class FragmentChat extends BaseFragment
         });
 
         //realm.close();
+    }
+
+    private void openWebViewForSpecialUrlChat(String url) {
+
+        if (webViewChatPage == null) webViewChatPage = rootView.findViewById(R.id.webViewChatPage);
+        if (rootWebView == null) rootWebView = rootView.findViewById(R.id.rootWebView);
+        if (progressWebView == null) progressWebView = rootView.findViewById(R.id.progressWebView);
+        webViewChatPage.loadUrl("");
+        recyclerView.setVisibility(View.GONE);
+        viewAttachFile.setVisibility(View.GONE);
+        rootWebView.setVisibility(View.VISIBLE);
+        webViewChatPage.getSettings().setLoadsImagesAutomatically(true);
+        webViewChatPage.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        webViewChatPage.clearCache(true);
+        webViewChatPage.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webViewChatPage.getSettings().setJavaScriptEnabled(true);
+        progressWebView.setVisibility(View.VISIBLE);
+
+        webViewChatPage.setWebChromeClient(new WebChromeClient() {
+
+            @Override
+            public void onProgressChanged(WebView view, int progress) {
+                if (progress == 100) {
+                    progressWebView.setVisibility(View.GONE);
+
+                }else {
+                    progressWebView.setVisibility(View.VISIBLE);
+
+                }
+            }
+        });
+        webViewChatPage.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public void onReceivedSslError(final WebView view, final SslErrorHandler handler, SslError error) {
+            }
+        });
+        webViewChatPage.loadUrl(url);
     }
 
     private void setTouchListener(Canvas c,
