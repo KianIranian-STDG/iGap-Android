@@ -67,9 +67,11 @@ import org.webrtc.voiceengine.WebRtcAudioUtils;
 
 import java.io.IOException;
 
+import ir.pec.mpl.pecpayment.view.d.If;
+
 import static android.bluetooth.BluetoothProfile.HEADSET;
 
-public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, OnVideoCallFrame,BluetoothProfile.ServiceListener{
+public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, OnVideoCallFrame, BluetoothProfile.ServiceListener {
 
     public static final String USER_ID_STR = "USER_ID";
     public static final String INCOMING_CALL_STR = "INCOMING_CALL_STR";
@@ -113,6 +115,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     private boolean isFrameChange = true;
     private boolean isVerticalOrient = true;
     private boolean isFirst = true;
+    private boolean isHiddenButtons = false;
 
 
     /**
@@ -172,7 +175,6 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
 
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
@@ -389,6 +391,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             activityCallBinding.poweredBy.setVisibility(View.VISIBLE);
             activityCallBinding.poweredBy.setShadowLayer(10, 0, 3, Color.BLACK);
 
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                if (activityCallBinding.poweredBy != null)
+                    activityCallBinding.poweredBy.setVisibility(View.GONE);
+            }
+
 
             G.videoCallListener = new VideoCallListener() {
                 @Override
@@ -409,6 +416,38 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
                 }
             };
+
+            try {
+
+
+                activityCallBinding.fcrSurfaceRemote.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (!isHiddenButtons) {
+                            activityCallBinding.fcrBtnChat.setVisibility(View.INVISIBLE);
+                            activityCallBinding.fcrBtnSpeaker.setVisibility(View.INVISIBLE);
+                            activityCallBinding.fcrBtnEnd.setVisibility(View.INVISIBLE);
+                            activityCallBinding.fcrBtnChat.setVisibility(View.INVISIBLE);
+                            activityCallBinding.fcrBtnMic.setVisibility(View.INVISIBLE);
+                            activityCallBinding.fcrBtnSwichCamera.setVisibility(View.INVISIBLE);
+
+                            isHiddenButtons = true;
+                        } else {
+                            activityCallBinding.fcrBtnChat.setVisibility(View.VISIBLE);
+                            activityCallBinding.fcrBtnSpeaker.setVisibility(View.VISIBLE);
+                            activityCallBinding.fcrBtnEnd.setVisibility(View.VISIBLE);
+                            activityCallBinding.fcrBtnChat.setVisibility(View.VISIBLE);
+                            activityCallBinding.fcrBtnMic.setVisibility(View.VISIBLE);
+                            activityCallBinding.fcrBtnSwichCamera.setVisibility(View.VISIBLE);
+                            isHiddenButtons = false;
+                        }
+
+
+                    }
+                });
+            } catch (Exception e) {
+            }
 
         } else {
             activityCallBinding.fcrBtnSwichCamera.setVisibility(View.GONE);
@@ -534,6 +573,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         };
 
         setAnimation();
+
 
     }
 
@@ -707,6 +747,13 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            activityCallBinding.poweredBy.setVisibility(View.VISIBLE);
+        } else {
+            activityCallBinding.poweredBy.setVisibility(View.GONE);
+
+        }
+
 
         rotateScreen(frameWidth, frameHeight);
         rotatePeer();
@@ -826,7 +873,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onServiceConnected(int profile, BluetoothProfile proxy) {
-        Log.i("#peymanProxy","Activity call");
+        Log.i("#peymanProxy", "Activity call");
     }
 
     @Override

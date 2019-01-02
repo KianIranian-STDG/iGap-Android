@@ -156,33 +156,48 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
     @Override
     public void onLeave(final ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
-        WebRTC.getInstance().close();
-        AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        try {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    WebRTC.getInstance().close();
+                    try {
+                        AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+                        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                    } catch (Exception e) {
+                    }
 
-        if (G.iSignalingCallBack != null) {
-            G.isVideoCallRinging = false;
-            switch (type) {
 
-                case REJECTED:
-                    G.iSignalingCallBack.onStatusChanged(CallState.REJECT);
-                    break;
-                case NOT_ANSWERED:
-                    G.iSignalingCallBack.onStatusChanged(CallState.NOT_ANSWERED);
-                    break;
-                case UNAVAILABLE:
-                    G.iSignalingCallBack.onStatusChanged(CallState.UNAVAILABLE);
-                    break;
-                case TOO_LONG:
-                    G.iSignalingCallBack.onStatusChanged(CallState.TOO_LONG);
-                    break;
-            }
+                    if (G.iSignalingCallBack != null) {
+                        G.isVideoCallRinging = false;
+                        switch (type) {
+
+                            case REJECTED:
+                                G.iSignalingCallBack.onStatusChanged(CallState.REJECT);
+                                break;
+                            case NOT_ANSWERED:
+                                G.iSignalingCallBack.onStatusChanged(CallState.NOT_ANSWERED);
+                                break;
+                            case UNAVAILABLE:
+                                G.iSignalingCallBack.onStatusChanged(CallState.UNAVAILABLE);
+                                break;
+                            case TOO_LONG:
+                                G.iSignalingCallBack.onStatusChanged(CallState.TOO_LONG);
+                                break;
+                        }
+                    }
+
+                    if (G.onCallLeaveView != null) {
+                        G.onCallLeaveView.onLeaveView("");
+
+                    }
+                }
+            }, 2000);
+        } catch (Exception e) {
+            WebRTC.getInstance().leaveCall();
         }
 
-        if (G.onCallLeaveView != null) {
-            G.onCallLeaveView.onLeaveView("");
 
-        }
     }
 
     @Override

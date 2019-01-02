@@ -131,6 +131,7 @@ public class WebRTC {
 
 
     private void addVideoTrack(MediaStream mediaStream) {
+
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             videoCapturer = createCameraCapturer(new Camera1Enumerator(false));
             videoSource = peerConnectionFactoryInstance().createVideoSource(videoCapturer);

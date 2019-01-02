@@ -884,8 +884,8 @@
     <string name="text_limit_Create_Group">شما اجازه دارید نهایتاً ۲۵ گروه و یا کانال بسازید</string>
     <string name="show_sender_name_in_group">نمایش نام فرستنده پیام در گروه</string>
     <string name="calls">لیست تماس</string>
-    <string name="voice_calls">تماس صوتی</string>
-    <string name="video_calls">تماس تصویری</string>
+    <string name="voice_calls">تماس صوتی آی گپ</string>
+    <string name="video_calls">تماس تصویری آی گپ</string>
     <string name="map">نقشه</string>
     <string name="igap_nearby">اطراف من</string>
     <string name="igap_call">تماس صوتی آی گپ</string>
