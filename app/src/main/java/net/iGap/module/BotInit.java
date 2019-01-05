@@ -57,6 +57,13 @@ public class BotInit {
                 if (botActionList.size() == 0) {
                     return;
                 }
+                if (message.equalsIgnoreCase("clear")) {
+                    botActionList.clear();
+                    StructRowBotAction _row = new StructRowBotAction();
+                    _row.action = "/start";
+                    _row.name = G.context.getString(R.string.start);
+                    botActionList.add(_row);
+                }
 
                 if (showCommandList) {
                     makeTxtList(rootView);
@@ -358,7 +365,7 @@ public class BotInit {
             }
 
         };
-     //   G.ipromote = null;
+        //   G.ipromote = null;
     }
 
 }

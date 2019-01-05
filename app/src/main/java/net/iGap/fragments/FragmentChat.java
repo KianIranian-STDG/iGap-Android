@@ -2748,6 +2748,7 @@ public class FragmentChat extends BaseFragment
             botInit.updateCommandList(false, lastMessage, getActivity(), backToMenu);
         }
 
+
         if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
             sendMoney.setVisibility(View.VISIBLE);
         } else {
@@ -3813,7 +3814,13 @@ public class FragmentChat extends BaseFragment
                         }
 
                         if (getActivity() != null) {
-                            botInit.updateCommandList(false, message, getActivity(), backToMenu);
+                            try {
+                                if (roomMessage.getAuthor().getUser().getUserId() == chatPeerId)
+                                    botInit.updateCommandList(false, message, getActivity(), backToMenu);
+                            } catch (NullPointerException e) {
+                            } catch (Exception e) {
+                            }
+
                         }
                     }
                 });
@@ -5012,6 +5019,7 @@ public class FragmentChat extends BaseFragment
         if (G.onClearRoomHistory != null) {
             G.onClearRoomHistory.onClearRoomHistory(roomId);
         }
+        botInit.updateCommandList(false, "clear", getActivity(), false);
     }
 
     /**
@@ -6326,7 +6334,7 @@ public class FragmentChat extends BaseFragment
         fastItemAdapterForward.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<AdapterBottomSheetForward>() {
             @Override
             public boolean filter(AdapterBottomSheetForward item, CharSequence constraint) {
-                return item.mList.getDisplayName().toLowerCase().startsWith(String.valueOf(constraint));
+                return item.mList.getDisplayName().toLowerCase().contains(String.valueOf(constraint));
             }
         });
 
