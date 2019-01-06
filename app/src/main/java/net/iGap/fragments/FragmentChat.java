@@ -5618,7 +5618,7 @@ public class FragmentChat extends BaseFragment
 
                 long lastScrolledMessageID = 0;
 
-                if (firstVisiblePosition + 10 < mAdapter.getAdapterItemCount()) {
+                if (firstVisiblePosition + Config.STORE_MESSAGE_POSITION_LIMIT < mAdapter.getAdapterItemCount()) {
                     lastScrolledMessageID = parseLong(mAdapter.getItem(firstVisiblePosition).mMessage.messageID);
                 }
 
