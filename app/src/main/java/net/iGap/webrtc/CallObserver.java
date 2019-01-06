@@ -115,6 +115,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
                     @Override
                     public void onSetSuccess() {
+
                         G.isVideoCallRinging = false;
                         try {
                             AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
@@ -122,6 +123,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
                         } catch (Exception e) {
                         }
                         if (G.videoCallListener != null) {
+
                             G.videoCallListener.notifyBackgroundChange();
                         }
                         Log.i("WWW", "onSetSuccess");
@@ -156,7 +158,9 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
     @Override
     public void onLeave(final ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
+
         try {
+            G.isWebRtcConnected = false;
             G.handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -202,6 +206,7 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
     @Override
     public void onRinging() {
+
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {

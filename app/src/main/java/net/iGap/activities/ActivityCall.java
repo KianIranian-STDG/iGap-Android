@@ -406,9 +406,13 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                         @Override
                         public void run() {
                             try {
-                                if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING)
+                                if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING){
                                     activityCallBinding.fcrImvBackground.setVisibility(View.GONE);
+
+                                }
+
                             } catch (Exception e) {
+                                e.printStackTrace();
                             }
 
                         }
@@ -419,33 +423,34 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
             try {
 
-
                 activityCallBinding.fcrSurfaceRemote.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (G.isWebRtcConnected) {
 
-                        if (!isHiddenButtons) {
-                            activityCallBinding.fcrBtnChat.setVisibility(View.INVISIBLE);
-                            activityCallBinding.fcrBtnSpeaker.setVisibility(View.INVISIBLE);
-                            activityCallBinding.fcrBtnEnd.setVisibility(View.INVISIBLE);
-                            activityCallBinding.fcrBtnChat.setVisibility(View.INVISIBLE);
-                            activityCallBinding.fcrBtnMic.setVisibility(View.INVISIBLE);
-                            activityCallBinding.fcrBtnSwichCamera.setVisibility(View.INVISIBLE);
+                            if (!isHiddenButtons) {
+                                activityCallBinding.fcrBtnChat.setVisibility(View.INVISIBLE);
+                                activityCallBinding.fcrBtnSpeaker.setVisibility(View.INVISIBLE);
+                                activityCallBinding.fcrBtnEnd.setVisibility(View.INVISIBLE);
+                                activityCallBinding.fcrBtnChat.setVisibility(View.INVISIBLE);
+                                activityCallBinding.fcrBtnMic.setVisibility(View.INVISIBLE);
+                                activityCallBinding.fcrBtnSwichCamera.setVisibility(View.INVISIBLE);
 
-                            isHiddenButtons = true;
-                        } else {
-                            activityCallBinding.fcrBtnChat.setVisibility(View.VISIBLE);
-                            activityCallBinding.fcrBtnSpeaker.setVisibility(View.VISIBLE);
-                            activityCallBinding.fcrBtnEnd.setVisibility(View.VISIBLE);
-                            activityCallBinding.fcrBtnChat.setVisibility(View.VISIBLE);
-                            activityCallBinding.fcrBtnMic.setVisibility(View.VISIBLE);
-                            activityCallBinding.fcrBtnSwichCamera.setVisibility(View.VISIBLE);
-                            isHiddenButtons = false;
+                                isHiddenButtons = true;
+                            } else {
+                                activityCallBinding.fcrBtnChat.setVisibility(View.VISIBLE);
+                                activityCallBinding.fcrBtnSpeaker.setVisibility(View.VISIBLE);
+                                activityCallBinding.fcrBtnEnd.setVisibility(View.VISIBLE);
+                                activityCallBinding.fcrBtnChat.setVisibility(View.VISIBLE);
+                                activityCallBinding.fcrBtnMic.setVisibility(View.VISIBLE);
+                                activityCallBinding.fcrBtnSwichCamera.setVisibility(View.VISIBLE);
+                                isHiddenButtons = false;
+                            }
+
                         }
-
-
                     }
                 });
+
             } catch (Exception e) {
             }
 
@@ -540,6 +545,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             btnAnswer.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    G.isWebRtcConnected = true;
                     // activityCallBinding.fcrSurfaceRemote.setVisibility(View.VISIBLE);
                     activityCallBinding.fcrImvBackground.setVisibility(View.GONE);
                     G.isVideoCallRinging = false;
