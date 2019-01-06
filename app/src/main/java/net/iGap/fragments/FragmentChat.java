@@ -3818,11 +3818,8 @@ public class FragmentChat extends BaseFragment
                                 if (roomMessage.getAuthor().getUser().getUserId() == chatPeerId)
                                     botInit.updateCommandList(false, message, getActivity(), backToMenu);
                             } catch (NullPointerException e) {
-
                             } catch (Exception e) {
                             }
-
-
                         }
                     }
                 });
