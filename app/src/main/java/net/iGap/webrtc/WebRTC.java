@@ -11,13 +11,9 @@
 package net.iGap.webrtc;
 
 
-import android.graphics.Bitmap;
 import android.hardware.Camera;
-import android.media.AudioRecord;
 import android.os.Build;
 import android.util.Log;
-
-
 
 import net.iGap.G;
 import net.iGap.proto.ProtoSignalingOffer;
@@ -32,13 +28,10 @@ import org.webrtc.AudioTrack;
 import org.webrtc.Camera1Enumerator;
 import org.webrtc.CameraEnumerator;
 import org.webrtc.CameraVideoCapturer;
-import org.webrtc.EglRenderer;
 import org.webrtc.MediaConstraints;
 import org.webrtc.MediaStream;
 import org.webrtc.PeerConnection;
 import org.webrtc.PeerConnectionFactory;
-import org.webrtc.RTCStatsCollectorCallback;
-import org.webrtc.RTCStatsReport;
 import org.webrtc.SdpObserver;
 import org.webrtc.SessionDescription;
 import org.webrtc.VideoCapturer;
@@ -211,36 +204,60 @@ public class WebRTC {
     private PeerConnectionFactory peerConnectionFactoryInstance() {
         if (peerConnectionFactory == null) {
 
-            Set<String> HARDWARE_AEC_WHITELIST = new HashSet<String>() {{
-                add("D5803");
-                add("FP1");
-                add("SM-A500FU");
-                add("XT1092");
-            }};
-
-            Set<String> OPEN_SL_ES_WHITELIST = new HashSet<String>() {{
-            }};
-
-            if (Build.VERSION.SDK_INT >= 11) {
-                if (HARDWARE_AEC_WHITELIST.contains(Build.MODEL)) {
-                    WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
-                } else {
-                    WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
-                }
-
-                if (OPEN_SL_ES_WHITELIST.contains(Build.MODEL)) {
-                    WebRtcAudioManager.setBlacklistDeviceForOpenSLESUsage(false);
-                } else {
-                    WebRtcAudioManager.setBlacklistDeviceForOpenSLESUsage(true);
-                }
-            }
-
+            initializePeerConnectionFactory();
 
             PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
             peerConnectionFactory = PeerConnectionFactory.builder().createPeerConnectionFactory();
 
         }
         return peerConnectionFactory;
+    }
+
+    private void initializePeerConnectionFactory() {
+        try {
+            Set<String> HARDWARE_AEC_BLACKLIST = new HashSet<String>() {{
+                add("Pixel");
+                add("Pixel XL");
+                add("Moto G5");
+                add("Moto G (5S) Plus");
+                add("Moto G4");
+                add("TA-1053");
+                add("Mi A1");
+                add("E5823"); // Sony z5 compact
+            }};
+
+            Set<String> OPEN_SL_ES_WHITELIST = new HashSet<String>() {{
+                add("Pixel");
+                add("Pixel XL");
+            }};
+
+
+            if (WebRtcAudioUtils.isAcousticEchoCancelerSupported()) {
+                WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
+            }
+
+            if (WebRtcAudioUtils.isAutomaticGainControlSupported()) {
+                WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);
+            }
+
+            if (WebRtcAudioUtils.isNoiseSuppressorSupported()) {
+                WebRtcAudioUtils.setWebRtcBasedNoiseSuppressor(true);
+            }
+
+//            if (HARDWARE_AEC_BLACKLIST.contains(Build.MODEL)) {
+//                    WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
+//            }
+
+            if (!OPEN_SL_ES_WHITELIST.contains(Build.MODEL)) {
+                WebRtcAudioManager.setBlacklistDeviceForOpenSLESUsage(true);
+            }
+
+            PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
+        } catch (UnsatisfiedLinkError e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     PeerConnection peerConnectionInstance() {
