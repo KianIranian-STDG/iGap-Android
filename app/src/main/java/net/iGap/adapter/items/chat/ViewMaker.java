@@ -2053,8 +2053,14 @@ public class ViewMaker {
         CircleImageView imageView = new CircleImageView(G.context);
         imageView.setId(R.id.imageView);
         RelativeLayout.LayoutParams layout_54 = new RelativeLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp48));
-        layout_54.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        layout_54.setMargins(i_Dp(R.dimen.dp36), 0, 0, 0);
+
+        if (HelperCalander.isPersianUnicode) {
+            layout_54.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            layout_54.setMargins(0, 0, i_Dp(R.dimen.dp36), 0);
+        } else {
+            layout_54.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            layout_54.setMargins(i_Dp(R.dimen.dp36), 0, 0, 0);
+        }
         //  layout_54.leftMargin=i_Dp(R.dimen.dp36);
         imageView.setLayoutParams(layout_54);
 
@@ -2087,8 +2093,13 @@ public class ViewMaker {
         LinearLayout linearLayout_673 = new LinearLayout(G.context);
         linearLayout_673.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_445 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+
+
         if (HelperCalander.isPersianUnicode) {
             layout_445.rightMargin = i_Dp(R.dimen.dp8);
+         /*   title.setPadding(i_Dp(R.dimen.dp48), 0, 0, 0);
+            subtitle.setPadding(i_Dp(R.dimen.dp48), 0, 0, 0);*/
         } else {
             layout_445.leftMargin = i_Dp(R.dimen.dp8);
         }
@@ -2096,6 +2107,8 @@ public class ViewMaker {
 
         TextView title = new TextView(G.context);
         title.setId(R.id.title);
+
+
         title.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
         title.setSingleLine(true);
         title.setTextColor(Color.parseColor(G.textTitleTheme));

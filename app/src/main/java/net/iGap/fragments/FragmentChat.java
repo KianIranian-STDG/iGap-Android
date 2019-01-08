@@ -613,6 +613,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -5018,7 +5019,8 @@ public class FragmentChat extends BaseFragment
         if (G.onClearRoomHistory != null) {
             G.onClearRoomHistory.onClearRoomHistory(roomId);
         }
-        botInit.updateCommandList(false, "clear", getActivity(), false);
+        if (botInit != null)
+            botInit.updateCommandList(false, "clear", getActivity(), false);
     }
 
     /**
