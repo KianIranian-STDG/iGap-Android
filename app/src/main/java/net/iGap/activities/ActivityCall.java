@@ -406,7 +406,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                         @Override
                         public void run() {
                             try {
-                                if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING){
+                                if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
                                     activityCallBinding.fcrImvBackground.setVisibility(View.GONE);
 
                                 }
@@ -753,13 +753,20 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            activityCallBinding.poweredBy.setVisibility(View.VISIBLE);
-        } else {
-            activityCallBinding.poweredBy.setVisibility(View.GONE);
+        try {
 
+            if (activityCallBinding.poweredBy != null) {
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+                    activityCallBinding.poweredBy.setVisibility(View.VISIBLE);
+                } else {
+                    activityCallBinding.poweredBy.setVisibility(View.GONE);
+
+                }
+            }
+        } catch (NullPointerException e) {
+        } catch (Exception e) {
         }
-
 
         rotateScreen(frameWidth, frameHeight);
         rotatePeer();

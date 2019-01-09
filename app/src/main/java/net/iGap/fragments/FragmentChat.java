@@ -8940,7 +8940,8 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onBotCommandText(String text) {
         if (!isChatReadOnly) {
-            edtChat.setText(text);
+            if (edtChat != null)
+                edtChat.setText(text);
             imvSendButton.performClick();
         }
     }
