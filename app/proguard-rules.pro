@@ -232,3 +232,5 @@
 -keep class ir.radsense.** { *; }
 
 -dontwarn com.alexvasilkov.gestures**
+
+-ignorewarnings

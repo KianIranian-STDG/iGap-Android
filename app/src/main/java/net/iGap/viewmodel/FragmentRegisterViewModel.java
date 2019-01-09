@@ -1076,14 +1076,14 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
             prgVerifyKeyVisibility.set(View.VISIBLE);
 
-
+            try {
             userVerifyResponse(verificationCode);
             ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
             userVerify.setCode(Integer.parseInt(verificationCode));
             userVerify.setUsername(userName);
 
             RequestWrapper requestWrapper = new RequestWrapper(101, userVerify);
-            try {
+
                 RequestQueue.sendRequest(requestWrapper);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();

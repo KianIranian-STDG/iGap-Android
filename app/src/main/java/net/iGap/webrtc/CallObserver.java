@@ -13,6 +13,7 @@ package net.iGap.webrtc;
 import android.content.Context;
 import android.media.AudioManager;
 import android.util.Log;
+import android.view.View;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -114,12 +115,16 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
                     @Override
                     public void onSetSuccess() {
-                        G.isVideoCallRinging = false;
 
+                        G.isVideoCallRinging = false;
                         try {
                             AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
                             am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                         } catch (Exception e) {
+                        }
+                        if (G.videoCallListener != null) {
+
+                            G.videoCallListener.notifyBackgroundChange();
                         }
                         Log.i("WWW", "onSetSuccess");
                     }
@@ -153,37 +158,55 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
     @Override
     public void onLeave(final ProtoSignalingLeave.SignalingLeaveResponse.Type type) {
-        WebRTC.getInstance().close();
-        AudioManager am= (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 
-        if (G.iSignalingCallBack != null) {
-            G.isVideoCallRinging = false;
-            switch (type) {
+        try {
+            G.isWebRtcConnected = false;
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    WebRTC.getInstance().close();
+                    try {
+                        AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+                        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                    } catch (Exception e) {
+                    }
 
-                case REJECTED:
-                    G.iSignalingCallBack.onStatusChanged(CallState.REJECT);
-                    break;
-                case NOT_ANSWERED:
-                    G.iSignalingCallBack.onStatusChanged(CallState.NOT_ANSWERED);
-                    break;
-                case UNAVAILABLE:
-                    G.iSignalingCallBack.onStatusChanged(CallState.UNAVAILABLE);
-                    break;
-                case TOO_LONG:
-                    G.iSignalingCallBack.onStatusChanged(CallState.TOO_LONG);
-                    break;
-            }
+
+                    if (G.iSignalingCallBack != null) {
+                        G.isVideoCallRinging = false;
+                        switch (type) {
+
+                            case REJECTED:
+                                G.iSignalingCallBack.onStatusChanged(CallState.REJECT);
+                                break;
+                            case NOT_ANSWERED:
+                                G.iSignalingCallBack.onStatusChanged(CallState.NOT_ANSWERED);
+                                break;
+                            case UNAVAILABLE:
+                                G.iSignalingCallBack.onStatusChanged(CallState.UNAVAILABLE);
+                                break;
+                            case TOO_LONG:
+                                G.iSignalingCallBack.onStatusChanged(CallState.TOO_LONG);
+                                break;
+                        }
+                    }
+
+                    if (G.onCallLeaveView != null) {
+                        G.onCallLeaveView.onLeaveView("");
+
+                    }
+                }
+            }, 2000);
+        } catch (Exception e) {
+            WebRTC.getInstance().leaveCall();
         }
 
-        if (G.onCallLeaveView != null) {
-            G.onCallLeaveView.onLeaveView("");
 
-        }
     }
 
     @Override
     public void onRinging() {
+
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -196,7 +219,25 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
 
     @Override
     public void onHold(Boolean hold) {
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (G.iSignalingCallBack != null) {
+                    if (hold) {
+                        G.iSignalingCallBack.onStatusChanged(CallState.ON_HOLD);
+                        if (G.onHoldBackgroundChanegeListener != null) {
+                            G.onHoldBackgroundChanegeListener.notifyBakcgroundChanege(true);
+                        }
+                    } else {
+                        G.iSignalingCallBack.onStatusChanged(CallState.CONNECTED);
+                        if (G.onHoldBackgroundChanegeListener != null) {
+                            G.onHoldBackgroundChanegeListener.notifyBakcgroundChanege(false);
+                        }
+                    }
 
+                }
+            }
+        }, 1000);
     }
 
     @Override

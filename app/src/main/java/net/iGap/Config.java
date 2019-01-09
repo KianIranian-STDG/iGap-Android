@@ -28,6 +28,7 @@ public class Config {
     public static final int LIMIT_GET_HISTORY_LOW = 10;
     public static final int LIMIT_GET_HISTORY_NORMAL = 50;
     public static final int LIMIT_LOAD_ROOM = 50;
+    public static final int STORE_MESSAGE_POSITION_LIMIT = 2; // count of message from end of list
     public static final int FAST_START_PAGE_TIME = (int) 20;
     public static final int LOW_START_PAGE_TIME = (int) 25;
     public static final int PHONE_CONTACT_MAX_COUNT_LIMIT = 9999;

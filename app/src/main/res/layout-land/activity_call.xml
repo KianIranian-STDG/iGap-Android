@@ -95,7 +95,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp40"
+                    android:layout_height="@dimen/dp32"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 

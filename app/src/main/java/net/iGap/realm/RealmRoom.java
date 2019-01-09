@@ -911,11 +911,11 @@ public class RealmRoom extends RealmObject {
                 if (realmRoom != null) {
                     realmRoom.setDraft(RealmRoomDraft.put(realm, message, replyToMessageId));
 
-                    if (realmRoom.getLastMessage().getUpdateTime() == 0) {
+                //    if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getUpdateTime() == 0) {
                         realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
-                    } else {
-                        realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
-                    }
+                //    } else {
+                //        realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
+               //     }
                 }
             }
         });

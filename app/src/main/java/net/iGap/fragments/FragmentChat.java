@@ -622,6 +622,7 @@ public class FragmentChat extends BaseFragment
         }
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -2774,6 +2775,7 @@ public class FragmentChat extends BaseFragment
             botInit.updateCommandList(false, lastMessage, getActivity(), backToMenu);
         }
 
+
         if (G.isWalletActive && G.isWalletRegister && (chatType == CHAT) && !isCloudRoom && !isBot) {
             sendMoney.setVisibility(View.VISIBLE);
         } else {
@@ -3883,7 +3885,12 @@ public class FragmentChat extends BaseFragment
                         }
 
                         if (getActivity() != null) {
-                            botInit.updateCommandList(false, message, getActivity(), backToMenu);
+                            try {
+                                if (roomMessage.getAuthor().getUser().getUserId() == chatPeerId)
+                                    botInit.updateCommandList(false, message, getActivity(), backToMenu);
+                            } catch (NullPointerException e) {
+                            } catch (Exception e) {
+                            }
                         }
                     }
                 });
@@ -5033,7 +5040,11 @@ public class FragmentChat extends BaseFragment
                     if (f.exists()) {
                         Drawable d = Drawable.createFromPath(f.getAbsolutePath());
                         //imgBackGround.setImageDrawable(d);
-                        imgBackGround.setBackgroundColor(Color.parseColor(backgroundPath));
+                        try {
+                            imgBackGround.setBackgroundColor(Color.parseColor(backgroundPath));
+                        } catch (Exception e) {
+                        }
+
                     }
                 }
             }
@@ -5078,6 +5089,8 @@ public class FragmentChat extends BaseFragment
         if (G.onClearRoomHistory != null) {
             G.onClearRoomHistory.onClearRoomHistory(roomId);
         }
+        if (botInit != null)
+            botInit.updateCommandList(false, "clear", getActivity(), false);
     }
 
     /**
@@ -5676,7 +5689,7 @@ public class FragmentChat extends BaseFragment
 
                 long lastScrolledMessageID = 0;
 
-                if (firstVisiblePosition + 10 < mAdapter.getAdapterItemCount()) {
+                if (firstVisiblePosition + Config.STORE_MESSAGE_POSITION_LIMIT < mAdapter.getAdapterItemCount()) {
                     lastScrolledMessageID = parseLong(mAdapter.getItem(firstVisiblePosition).mMessage.messageID);
                 }
 
@@ -6392,7 +6405,7 @@ public class FragmentChat extends BaseFragment
         fastItemAdapterForward.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<AdapterBottomSheetForward>() {
             @Override
             public boolean filter(AdapterBottomSheetForward item, CharSequence constraint) {
-                return item.mList.getDisplayName().toLowerCase().startsWith(String.valueOf(constraint));
+                return item.mList.getDisplayName().toLowerCase().contains(String.valueOf(constraint));
             }
         });
 

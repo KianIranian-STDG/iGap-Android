@@ -16,6 +16,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -1940,7 +1941,6 @@ public class ViewMaker {
         swipeLayout.setLayoutParams(layoutParams1);
 
 
-
         LinearLayout layoutDelete = new LinearLayout(G.context);
         layoutDelete.setId(R.id.swipeDelete);
         layoutDelete.setBackgroundColor(G.context.getResources().getColor(R.color.red_swipe));
@@ -1953,7 +1953,7 @@ public class ViewMaker {
         txtDelete.setGravity(Gravity.CENTER);
         setTypeFace(txtDelete);
 
-        txtDelete.setPadding(20,0,20,0);
+        txtDelete.setPadding(20, 0, 20, 0);
         txtDelete.setTextColor(G.context.getResources().getColor(R.color.white));
         LinearLayout.LayoutParams layoutParams2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         txtDelete.setLayoutParams(layoutParams2);
@@ -1962,7 +1962,7 @@ public class ViewMaker {
         iconDelete.setGravity(CENTER_VERTICAL);
         iconDelete.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
         iconDelete.setTextColor(G.context.getResources().getColor(R.color.white));
-        iconDelete.setPadding(10,0,10,0);
+        iconDelete.setPadding(10, 0, 10, 0);
         setTextSize(iconDelete, R.dimen.dp22);
         LinearLayout.LayoutParams layout_178 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
 //        layout_178.gravity = Gravity.LEFT;
@@ -1984,7 +1984,7 @@ public class ViewMaker {
         txtEdit.setText(G.context.getResources().getString(R.string.edit));
         txtEdit.setGravity(Gravity.CENTER);
         setTypeFace(txtEdit);
-        txtEdit.setPadding(20,0,20,0);
+        txtEdit.setPadding(20, 0, 20, 0);
 
         txtEdit.setTextColor(G.context.getResources().getColor(R.color.white));
         ViewGroup.LayoutParams layoutParamsEdit = new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -1994,7 +1994,7 @@ public class ViewMaker {
         iconEdit.setGravity(CENTER_VERTICAL);
         iconEdit.setText(G.fragmentActivity.getResources().getString(R.string.md_edit));
         iconEdit.setTextColor(G.context.getResources().getColor(R.color.white));
-        iconEdit.setPadding(10,0,10,0);
+        iconEdit.setPadding(10, 0, 10, 0);
         setTextSize(iconEdit, R.dimen.dp22);
         LinearLayout.LayoutParams iconEditParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
 //        iconEditParams.gravity = Gravity.LEFT;
@@ -2016,7 +2016,7 @@ public class ViewMaker {
         if (HelperCalander.isPersianUnicode) {
             linearLayout_578.setPadding(i_Dp(R.dimen.dp20), 0, i_Dp(R.dimen.dp20), 0);
         } else {
-            linearLayout_578.setPadding(i_Dp(R.dimen.dp52), 0, i_Dp(R.dimen.dp20), 0);
+            linearLayout_578.setPadding(i_Dp(R.dimen.dp16), 0, i_Dp(R.dimen.dp20), 0);
         }
 
         LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -2052,30 +2052,54 @@ public class ViewMaker {
 
         CircleImageView imageView = new CircleImageView(G.context);
         imageView.setId(R.id.imageView);
-        LinearLayout.LayoutParams layout_54 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48));
+        RelativeLayout.LayoutParams layout_54 = new RelativeLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp48));
+
+        if (HelperCalander.isPersianUnicode) {
+            layout_54.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            layout_54.setMargins(0, 0, i_Dp(R.dimen.dp36), 0);
+        } else {
+            layout_54.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            layout_54.setMargins(i_Dp(R.dimen.dp36), 0, 0, 0);
+        }
+        //  layout_54.leftMargin=i_Dp(R.dimen.dp36);
         imageView.setLayoutParams(layout_54);
 
-        AnimateCheckBox animateCheckBox = new AnimateCheckBox(G.context);
+
+        CheckBox animateCheckBox = new CheckBox(G.context);
         animateCheckBox.setId(R.id.animateCheckBoxContact);
-        animateCheckBox.setVisibility(View.GONE);
-        animateCheckBox.setLineColor(R.color.white);
-        LinearLayout.LayoutParams animateCheckBoxParams = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp24), i_Dp(R.dimen.dp24));
+        animateCheckBox.setVisibility(View.INVISIBLE);
+        animateCheckBox.setClickable(false);
+
+        // animateCheckBox.on(R.color.white);
+        RelativeLayout.LayoutParams animateCheckBoxParams = new RelativeLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48));
+
+        // animateCheckBoxParams.rightMargin=i_Dp(R.dimen.dp24);
+        // animateCheckBoxParams.leftMargin=i_Dp(R.dimen.dp24);
         animateCheckBox.setLayoutParams(animateCheckBoxParams);
-        animateCheckBoxParams.gravity = Gravity.BOTTOM;
-        animateCheckBoxParams.gravity = Gravity.RIGHT;
-        animateCheckBoxParams.gravity = Gravity.END;
+     /*   animateCheckBoxParams.gravity = Gravity.BOTTOM;
+        animateCheckBoxParams.gravity = Gravity.LEFT;
+
+        animateCheckBoxParams.gravity = Gravity.START;*/
+
+        // animateCheckBoxParams.leftMargin=90;
 
 
-        layoutCheckBoxAndImage.addView(imageView);
         layoutCheckBoxAndImage.addView(animateCheckBox);
+        layoutCheckBoxAndImage.addView(imageView);
+
 
         linearLayout_823.addView(layoutCheckBoxAndImage);
 
         LinearLayout linearLayout_673 = new LinearLayout(G.context);
         linearLayout_673.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_445 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+
+
         if (HelperCalander.isPersianUnicode) {
             layout_445.rightMargin = i_Dp(R.dimen.dp8);
+         /*   title.setPadding(i_Dp(R.dimen.dp48), 0, 0, 0);
+            subtitle.setPadding(i_Dp(R.dimen.dp48), 0, 0, 0);*/
         } else {
             layout_445.leftMargin = i_Dp(R.dimen.dp8);
         }
@@ -2083,6 +2107,8 @@ public class ViewMaker {
 
         TextView title = new TextView(G.context);
         title.setId(R.id.title);
+
+
         title.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
         title.setSingleLine(true);
         title.setTextColor(Color.parseColor(G.textTitleTheme));
