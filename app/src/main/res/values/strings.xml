@@ -1396,5 +1396,6 @@
     <string name="Powered_by_iGap">Powered by iGap</string>
     <string name="on_hold">call on hold...</string>
     <string name="switchTo">switch To :</string>
+    <string name="startUpdate">update</string>
 
 </resources>

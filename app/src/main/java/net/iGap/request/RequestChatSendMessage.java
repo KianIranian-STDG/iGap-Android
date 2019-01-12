@@ -39,6 +39,7 @@ public class RequestChatSendMessage {
         return this;
     }
 
+
     public RequestChatSendMessage contact(ProtoGlobal.RoomMessageContact value) {
         chatSendMessage.setContact(value);
         return this;

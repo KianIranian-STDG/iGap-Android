@@ -2,6 +2,7 @@ package net.iGap.fragments;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,6 +42,7 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
+import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
@@ -88,6 +90,7 @@ import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestUserContactsUnblock;
+import net.iGap.request.RequestUserLogin;
 
 import java.util.HashMap;
 import java.util.List;
@@ -1048,6 +1051,9 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
         G.onSetActionInRoom = this;
         G.onDateChanged = this;
+        if (G.isDepricatedApp)
+            isDeprecated();
+
         //G.onSelectMenu = this;
         //G.onRemoveFragment = this;
         //G.onDraftMessage = this;
@@ -1119,6 +1125,19 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                         .titleColor(Color.parseColor("#f44336"))
                         .content(R.string.deprecated)
                         .contentGravity(GravityEnum.CENTER)
+                        .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                       // HelperUrl.openBrowser("http://d.igap.net/update");
+                        String url = "http://d.igap.net/update";
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
+
+
+                    }
+                })
                         .show();
             }
         });
@@ -1135,13 +1154,25 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                         .titleGravity(GravityEnum.CENTER)
                         .buttonsGravity(GravityEnum.CENTER)
                         .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
-                        .positiveText(R.string.ignore).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        dialog.dismiss();
+                    }
+                }).positiveText(R.string.startUpdate).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                       // HelperUrl.openBrowser("http://d.igap.net/update");
+                        String url = "http://d.igap.net/update";
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
                         dialog.dismiss();
                     }
                 })
-               .show();
+                        .show();
             }
         });
     }
@@ -1261,7 +1292,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                     //if (mInfo.getChatRoom() != null && RealmRoom.isBot(mInfo.getChatRoom().getPeerId())) {
 
                     if (mInfo != null && RealmRoom.isPromote(mInfo.getId())) {
-          //              holder.rootChat.setBackgroundColor(G.context.getResources().getColor(R.color.green_20));
+                        //              holder.rootChat.setBackgroundColor(G.context.getResources().getColor(R.color.green_20));
                         holder.txtPinIcon.setVisibility(View.GONE);
                     } else {
                         holder.txtPinIcon.setVisibility(View.VISIBLE);
@@ -1321,7 +1352,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             } else
                 return false;
         }*/
-
 
 
         private String subStringInternal(String text) {
@@ -1692,7 +1722,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
                                 if (!G.fragmentActivity.isFinishing()) {
                                     long peerId = mInfo.getChatRoom() != null ? mInfo.getChatRoom().getPeerId() : 0;
-                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId,mInfo, new OnComplete() {
+                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId, mInfo, new OnComplete() {
                                         @Override
                                         public void complete(boolean result, String messageOne, String MessageTow) {
                                             onSelectRoomMenu(messageOne, mInfo);

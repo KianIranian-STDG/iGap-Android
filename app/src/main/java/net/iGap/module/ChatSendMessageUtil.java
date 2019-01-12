@@ -91,6 +91,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             builder.replyMessage(message.getReplyTo().getMessageId());
         }
 
+
         builder.sendMessage(Long.toString(message.getMessageId()));
         return this;
     }

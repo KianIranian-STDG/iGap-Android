@@ -214,7 +214,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                 public void onSelection(MaterialDialog dialog, View itemView, int position, CharSequence text) {
                     switch (position) {
                         case 0:
-                            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
 
                            /* if (!bluetoothAdapter.isEnabled())
                                 bluetoothAdapter.enable();*/
@@ -236,12 +236,25 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
                             break;
                         case 2:
+                            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                             cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
-                //            setSpeakerphoneOn(false);
+                            //            setSpeakerphoneOn(false);
                             audioManager.setMode(AudioManager.MODE_INVALID);
                             //   if (audioManager.isBluetoothScoOn()) {
                             audioManager.setBluetoothScoOn(false);
                             audioManager.stopBluetoothSco();
+
+
+
+                            /** cancel bluetooth if could not stop it
+                             * if (audioManager.isBluetoothScoAvailableOffCall())
+                             */
+                            try {
+                                if (bluetoothAdapter != null && bluetoothAdapter.isEnabled())
+                                    bluetoothAdapter.disable();
+                            } catch (Exception e) {
+                            }
+
                             /*audioManager.stopBluetoothSco();
                             audioManager.setBluetoothScoOn(false);*/
 

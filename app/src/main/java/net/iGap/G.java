@@ -403,6 +403,7 @@ public class G extends MultiDexApplication {
     public static VideoCallListener videoCallListener;
     public static OnHoldBackgroundChanegeListener onHoldBackgroundChanegeListener;
     public static boolean isWebRtcConnected = false;
+    public static boolean isDepricatedApp = false;
 
     public static int rotationState;
 
