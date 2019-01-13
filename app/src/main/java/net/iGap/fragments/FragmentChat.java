@@ -222,6 +222,7 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.VoiceRecord;
+import net.iGap.module.enums.Additional;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.module.enums.GroupChatRole;
@@ -236,6 +237,7 @@ import net.iGap.module.structs.StructCompress;
 import net.iGap.module.structs.StructMessageAttachment;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructUploadVideo;
+import net.iGap.module.structs.StructWebView;
 import net.iGap.module.webserviceDrBot.Favorite;
 import net.iGap.module.webserviceDrBot.StructBot;
 import net.iGap.module.webserviceDrBot.WebService;
@@ -324,6 +326,7 @@ import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.R.string.item;
+import static net.iGap.R.string.login;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
@@ -415,6 +418,8 @@ public class FragmentChat extends BaseFragment
     private ImageView imgBackGround;
     private RecyclerView recyclerView;
     private WebView webViewChatPage;
+    private boolean isStopBot;
+    private String urlWebViewForSpecialUrlChat;
     private RelativeLayout rootWebView;
     private ProgressBar progressWebView;
     private MaterialDesignTextView imvSmileButton;
@@ -1048,6 +1053,8 @@ public class FragmentChat extends BaseFragment
 
         mRoomId = -1;
 
+        if (webViewChatPage != null) closeWebViewForSpecialUrlChat(true);
+
         if (G.fragmentActivity != null && G.fragmentActivity instanceof ActivityMain) {
             ((ActivityMain) G.fragmentActivity).resume();
         }
@@ -1586,12 +1593,6 @@ public class FragmentChat extends BaseFragment
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-
-                                    if (item.getFavoriteValue().toLowerCase().startsWith("igaplink::")){
-                                        openWebViewForSpecialUrlChat(item.getFavoriteValue().replace("igaplink::", ""));
-                                        return;
-                                    }
-
                                     HelperUrl.checkUsernameAndGoToRoom(item.getFavoriteValue().replace("@", ""), HelperUrl.ChatEntry.chat);
                                 }
                             });
@@ -1868,6 +1869,19 @@ public class FragmentChat extends BaseFragment
         getUserInfo();
         insertShearedData();
 
+        RealmRoomMessage rm = null;
+        RealmResults<RealmRoomMessage> result = getRealmChat().where(RealmRoomMessage.class).
+                equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).findAll();
+        if (result.size() > 0) {
+            rm = result.last();
+            if (rm != null && rm.getMessage() != null) {
+                if (rm.getRealmAdditional() != null && (rm.getRealmAdditional().getAdditionalType() == Additional.WEB_VIEW.getAdditional())) {
+                    String additionalData = rm.getRealmAdditional().getAdditionalData();
+                    if (!additionalData.isEmpty()) openWebViewForSpecialUrlChat(additionalData);
+                }
+            }
+        }
+
 
         FragmentShearedMedia.goToPositionFromShardMedia = new FragmentShearedMedia.GoToPositionFromShardMedia() {
             @Override
@@ -2076,7 +2090,8 @@ public class FragmentChat extends BaseFragment
         try {
 
             if (webViewChatPage != null) {
-                closeWebViewForSpecialUrlChat();
+
+                closeWebViewForSpecialUrlChat(false);
                 return stopSuperPress;
             }
 
@@ -2096,11 +2111,21 @@ public class FragmentChat extends BaseFragment
         return stopSuperPress;
     }
 
-    private void closeWebViewForSpecialUrlChat() {
-        recyclerView.setVisibility(View.VISIBLE);
-        viewAttachFile.setVisibility(View.VISIBLE);
-        rootWebView.setVisibility(View.GONE);
-        webViewChatPage = null;
+    private void closeWebViewForSpecialUrlChat(boolean isStopBot) {
+
+        if (webViewChatPage != null) {
+            if (webViewChatPage.canGoBack() && (!webViewChatPage.getUrl().trim().toLowerCase().equals(urlWebViewForSpecialUrlChat.trim().toLowerCase())) && !isStopBot) {
+                webViewChatPage.goBack();
+            } else {
+                recyclerView.setVisibility(View.VISIBLE);
+                viewAttachFile.setVisibility(View.VISIBLE);
+                rootWebView.setVisibility(View.GONE);
+                webViewChatPage = null;
+                if (!isStopBot) popBackStackFragment();
+            }
+        }
+
+
     }
 
     /**
@@ -2436,6 +2461,7 @@ public class FragmentChat extends BaseFragment
                 ViewGroup root7 = (ViewGroup) v.findViewById(R.id.dialog_root_item7_notification);
                 ViewGroup root8 = (ViewGroup) v.findViewById(R.id.dialog_root_item10_sendMoney);
                 ViewGroup root9 = (ViewGroup) v.findViewById(R.id.dialog_root_item11_exportChat);
+                ViewGroup root10 = (ViewGroup) v.findViewById(R.id.dialog_root_item12_stopBot);
 
                 TextView txtSearch = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
                 TextView txtClearHistory = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
@@ -2446,6 +2472,7 @@ public class FragmentChat extends BaseFragment
                 TextView txtReport = (TextView) v.findViewById(R.id.dialog_text_item7_notification);
                 TextView txtSendMoney = (TextView) v.findViewById(R.id.dialog_text_item10_sendMoney);
                 TextView txtExportChat = (TextView) v.findViewById(R.id.dialog_text_item11_exportChat);
+                TextView txtStopBot = (TextView) v.findViewById(R.id.dialog_text_item12_stopBot);
 
                 TextView iconSearch = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
                 iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_searching_magnifying_glass));
@@ -2474,6 +2501,9 @@ public class FragmentChat extends BaseFragment
                 TextView iconExposrtChat = (TextView) v.findViewById(R.id.dialog_icon_item11_exportChat);
                 iconExposrtChat.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_export));
 
+                TextView iconStopBot = (TextView) v.findViewById(R.id.dialog_icon_item12_stopBot);
+                iconStopBot.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_stop));
+
                 root1.setVisibility(View.VISIBLE);
                 root2.setVisibility(View.VISIBLE);
                 root3.setVisibility(View.VISIBLE);
@@ -2482,6 +2512,7 @@ public class FragmentChat extends BaseFragment
                 root6.setVisibility(View.VISIBLE);
                 root8.setVisibility(View.GONE);
                 root9.setVisibility(View.VISIBLE);
+                root10.setVisibility(View.GONE);
 
                 txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.Search));
                 txtClearHistory.setText(G.fragmentActivity.getResources().getString(R.string.clear_history));
@@ -2492,6 +2523,7 @@ public class FragmentChat extends BaseFragment
                 txtReport.setText(G.fragmentActivity.getResources().getString(R.string.report));
                 txtSendMoney.setText(G.fragmentActivity.getResources().getString(R.string.SendMoney));
                 txtExportChat.setText(R.string.export_chat);
+                txtStopBot.setText(R.string.stop);
 
                 if (chatType == CHAT) {
                     root3.setVisibility(View.VISIBLE);
@@ -2556,6 +2588,20 @@ public class FragmentChat extends BaseFragment
                     root8.setVisibility(View.VISIBLE);
                 } else {
                     root8.setVisibility(View.GONE);
+                }
+
+                if (isBot) {
+                    if (webViewChatPage != null) {
+                        root1.setVisibility(View.GONE);
+                        root2.setVisibility(View.GONE);
+                        root3.setVisibility(View.GONE);
+                        root4.setVisibility(View.GONE);
+                        root5.setVisibility(View.GONE);
+                        root6.setVisibility(View.GONE);
+                        root8.setVisibility(View.GONE);
+                        root9.setVisibility(View.GONE);
+                        root10.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 //realm.close();
@@ -2702,6 +2748,22 @@ public class FragmentChat extends BaseFragment
                     }
                 });
 
+                root10.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        new MaterialDialog.Builder(G.fragmentActivity).title(R.string.stop).content(R.string.stop_message_bot).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                onSelectRoomMenu("txtClearHistory", mRoomId);
+                                closeWebViewForSpecialUrlChat(true);
+                                popBackStackFragment();
+
+                            }
+                        }).negativeText(R.string.no).show();
+                    }
+                });
+
                 if (RealmRoom.isBot(chatPeerId)) {
                     root3.setVisibility(View.GONE);
                 }
@@ -2836,7 +2898,6 @@ public class FragmentChat extends BaseFragment
                 public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                     //awesome code when swiping right to remove recycler card and delete SQLite data
 
-                    Log.i("#peyman", "swipe triggered");
                 }
 
                 @Override
@@ -3061,10 +3122,9 @@ public class FragmentChat extends BaseFragment
             public void onClick(View view) {
 
                 if (webViewChatPage != null) {
-                    closeWebViewForSpecialUrlChat();
+                    closeWebViewForSpecialUrlChat(false);
                     return;
                 }
-
                 closeKeyboard(view);
                 popBackStackFragment();
                 //finishChat();
@@ -3351,7 +3411,16 @@ public class FragmentChat extends BaseFragment
         //realm.close();
     }
 
-    private void openWebViewForSpecialUrlChat(String url) {
+    private void openWebViewForSpecialUrlChat(String mUrl) {
+
+
+        if (botInit != null) botInit.close();
+        StructWebView urlWebView = getUrlWebView(mUrl);
+        if (urlWebView == null) {
+            return;
+        } else {
+            urlWebViewForSpecialUrlChat = urlWebView.getUrl();
+        }
 
         if (webViewChatPage == null) webViewChatPage = rootView.findViewById(R.id.webViewChatPage);
         if (rootWebView == null) rootWebView = rootView.findViewById(R.id.rootWebView);
@@ -3374,7 +3443,7 @@ public class FragmentChat extends BaseFragment
                 if (progress == 100) {
                     progressWebView.setVisibility(View.GONE);
 
-                }else {
+                } else {
                     progressWebView.setVisibility(View.VISIBLE);
 
                 }
@@ -3386,7 +3455,7 @@ public class FragmentChat extends BaseFragment
             public void onReceivedSslError(final WebView view, final SslErrorHandler handler, SslError error) {
             }
         });
-        webViewChatPage.loadUrl(url);
+        webViewChatPage.loadUrl(urlWebViewForSpecialUrlChat);
     }
 
     private void setTouchListener(Canvas c,
@@ -3397,7 +3466,6 @@ public class FragmentChat extends BaseFragment
 
 
         if (dX < -150 && !isRepley) {
-            Log.i("#peyman", "swipe triggered");
             isRepley = true;
 
             Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
@@ -3868,6 +3936,13 @@ public class FragmentChat extends BaseFragment
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+
+                        if (roomMessage.getAdditionalType() == Additional.WEB_VIEW.getAdditional()) {
+//                            StructWebView item = getUrlWebView(roomMessage.getAdditionalData());
+                            openWebViewForSpecialUrlChat(roomMessage.getAdditionalData());
+                            return;
+                        }
+
                         RealmRoomMessage rm = null;
                         boolean backToMenu = true;
 
@@ -3880,10 +3955,7 @@ public class FragmentChat extends BaseFragment
                                     backToMenu = false;
                                 }
                             }
-                        } else {
-                            backToMenu = false;
                         }
-
                         if (getActivity() != null) {
                             try {
                                 if (roomMessage.getAuthor().getUser().getUserId() == chatPeerId)
@@ -3908,7 +3980,8 @@ public class FragmentChat extends BaseFragment
                             @Override
                             public void run() {
                                 rootView.findViewById(R.id.chl_ll_channel_footer).setVisibility(View.GONE);
-                                rootView.findViewById(R.id.layout_attach_file).setVisibility(View.VISIBLE);
+                                if (webViewChatPage == null)
+                                    rootView.findViewById(R.id.layout_attach_file).setVisibility(View.VISIBLE);
                             }
                         });
                     }
@@ -4054,6 +4127,21 @@ public class FragmentChat extends BaseFragment
                 //realm.close();
             }
         }, 400);
+    }
+
+    private StructWebView getUrlWebView(String additionalData) {
+
+        Gson gson = new Gson();
+        StructWebView item = new StructWebView();
+        try {
+            item = gson.fromJson(additionalData, StructWebView.class);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (JsonSyntaxException e1) {
+            e1.printStackTrace();
+        }
+
+        return item;
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import com.vanniktech.emoji.EmojiUtils;
 
@@ -82,6 +83,7 @@ public class RealmRoomMessage extends RealmObject {
     private RealmRoomMessageLocation location;
     private RealmRoomMessageContact roomMessageContact;
     private RealmRoomMessageWallet roomMessageWallet;
+    private RealmAdditional realmAdditional;
     private boolean edited;
     private long createTime;
     private long updateTime;
@@ -425,6 +427,13 @@ public class RealmRoomMessage extends RealmObject {
 
         if (input.hasWallet()) {
             message.setRoomMessageWallet(RealmRoomMessageWallet.put(input.getWallet()));
+        }
+
+
+        if (input.getAdditionalType() !=0 && !input.getAdditionalData().isEmpty()){
+            if (message.getRealmAdditional() ==null){
+                message.setRealmAdditional(RealmAdditional.put(input ));
+            }
         }
 
         message.setMessageType(input.getMessageType());
@@ -1270,6 +1279,14 @@ public class RealmRoomMessage extends RealmObject {
 
     private void setRoomMessageWallet(RealmRoomMessageWallet roomMessageWallet) {
         this.roomMessageWallet = roomMessageWallet;
+    }
+
+    public RealmAdditional getRealmAdditional() {
+        return realmAdditional;
+    }
+
+    public void setRealmAdditional(RealmAdditional realmAdditional) {
+        this.realmAdditional = realmAdditional;
     }
 
     public boolean isEdited() {
