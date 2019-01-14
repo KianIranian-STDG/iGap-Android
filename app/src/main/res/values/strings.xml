@@ -1396,6 +1396,8 @@
     <string name="Powered_by_iGap">Powered by iGap</string>
     <string name="on_hold">call on hold...</string>
     <string name="switchTo">switch To :</string>
+    <string name="stop">Stop Bot</string>
+    <string name="stop_message_bot">Are you sure you want to stop this bot?</string>
     <string name="startUpdate">update</string>
 
 </resources>

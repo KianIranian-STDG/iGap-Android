@@ -1398,7 +1398,8 @@
     <string name="Powered_by_iGap">طراحی شده توسط آی گپ</string>
     <string name="on_hold">call on hold...</string>
     <string name="switchTo">switch To :</string>
+    <string name="stop">توقف</string>
+    <string name="stop_message_bot">آیا مطمئن هستید که میخواهید ربات را متوقف کنید؟</string>
     <string name="startUpdate">به روز رسانی</string>
-
 
 </resources>

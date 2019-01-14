@@ -155,4 +155,5 @@
   <string name="md_email">\uf1f0</string>
   <string name="md_swich_video">\uf569</string>
   <string name="md_igap_bluetooth">\uf0af</string>
+  <string name="md_igap_stop">\uf4db</string>
 </resources>
