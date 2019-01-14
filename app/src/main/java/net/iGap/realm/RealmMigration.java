@@ -368,7 +368,7 @@ public class RealmMigration implements io.realm.RealmMigration {
 
         if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 26
 
-            schema.create(RealmAdditional.class.getSimpleName())
+            RealmObjectSchema realmAdditional = schema.create(RealmAdditional.class.getSimpleName())
                     .addField("id", long.class, FieldAttribute.REQUIRED)
                     .addField("additionalData", String.class)
                     .addField("AdditionalType", int.class, FieldAttribute.REQUIRED)
@@ -376,7 +376,7 @@ public class RealmMigration implements io.realm.RealmMigration {
 
             RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
             if (realmRoomMessageSchema != null) {
-                realmRoomMessageSchema.addRealmObjectField("realmAdditional", realmRoomMessageSchema);
+                realmRoomMessageSchema.addRealmObjectField("realmAdditional", realmAdditional);
             }
 
             oldVersion++;
