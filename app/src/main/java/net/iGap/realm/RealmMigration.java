@@ -349,7 +349,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 25
+        if (oldVersion == 25) {
 
             RealmObjectSchema realmRoom = schema.get(RealmRoom.class.getSimpleName());
             if (realmRoom != null) {
@@ -360,6 +360,23 @@ public class RealmMigration implements io.realm.RealmMigration {
             RealmObjectSchema realmPrivacy = schema.get(RealmPrivacy.class.getSimpleName());
             if (realmPrivacy != null) {
                 realmPrivacy.addField("whoCanVideoCallToMe", String.class);
+            }
+
+            oldVersion++;
+        }
+
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 26
+
+            schema.create(RealmAdditional.class.getSimpleName())
+                    .addField("id", long.class, FieldAttribute.REQUIRED)
+                    .addField("additionalData", String.class)
+                    .addField("AdditionalType", int.class, FieldAttribute.REQUIRED)
+                    .addPrimaryKey("id");
+
+            RealmObjectSchema realmRoomMessageSchema = schema.get(RealmRoomMessage.class.getSimpleName());
+            if (realmRoomMessageSchema != null) {
+                realmRoomMessageSchema.addRealmObjectField("realmAdditional", realmRoomMessageSchema);
             }
 
             oldVersion++;
