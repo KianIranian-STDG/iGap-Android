@@ -119,6 +119,8 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
                         G.isVideoCallRinging = false;
                         try {
                             AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+                            G.mainRingerMode = am.getRingerMode();
+                            G.appChangeRinggerMode = true;
                             am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                         } catch (Exception e) {
                         }
@@ -167,7 +169,8 @@ public class CallObserver implements ISignalingOffer, ISignalingErrore, ISignali
                     WebRTC.getInstance().close();
                     try {
                         AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-                        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                        G.appChangeRinggerMode = false;
+                        am.setRingerMode(G.mainRingerMode);
                     } catch (Exception e) {
                     }
 

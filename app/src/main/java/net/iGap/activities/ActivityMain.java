@@ -366,7 +366,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         EventManager.getInstance().removeEventListener(EventManager.ON_ACCESS_TOKEN_RECIVE, this);
         try {
             AudioManager am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
-            am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+
+            am.setRingerMode(G.mainRingerMode);
         } catch (Exception e) {
         }
 
@@ -431,6 +432,30 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         MyPhonStateService myPhonStateService = new MyPhonStateService();
 
         registerReceiver(myPhonStateService, intentFilter);
+
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //code...
+            }
+        };
+        IntentFilter ringgerFilter = new IntentFilter(
+                AudioManager.RINGER_MODE_CHANGED_ACTION);
+
+
+        BroadcastReceiver audioManagerReciver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //code...
+                if (!G.appChangeRinggerMode) {
+                    AudioManager mainAudioManager = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+                    G.mainRingerMode = mainAudioManager.getRingerMode();
+                }
+
+            }
+        };
+
+        registerReceiver(audioManagerReciver, ringgerFilter);
 
 
         RaadApp.onLanguageWallet = new OnLanguageWallet() {

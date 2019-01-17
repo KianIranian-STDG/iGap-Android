@@ -594,11 +594,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
             WebRTC.getInstance().createAnswer();
             cancelRingtone();
-            try {
+        /*    try {
                 AudioManager am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
                 am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
             } catch (Exception e) {
-            }
+            }*/
 
             btnEndCall.setOnTouchListener(null);
 

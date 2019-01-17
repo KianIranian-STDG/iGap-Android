@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -406,6 +407,8 @@ public class G extends MultiDexApplication {
     public static boolean isDepricatedApp = false;
 
     public static int rotationState;
+    public static int mainRingerMode = 0;
+    public static boolean appChangeRinggerMode = false;
 
 
     @Override
@@ -430,6 +433,11 @@ public class G extends MultiDexApplication {
         Utils.setInstart(context, "fa");
         WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
 
+        try {
+            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+            mainRingerMode = am.getRingerMode();
+        } catch (Exception e) {
+        }
         new StartupActions();
      /*   try {
             WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
