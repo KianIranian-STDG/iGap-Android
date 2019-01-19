@@ -12,14 +12,20 @@ package net.iGap.adapter.items.chat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +33,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
+import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -51,18 +62,22 @@ import net.iGap.messageprogress.OnMessageProgressClick;
 import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
+import net.iGap.module.MakeButtons;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyType;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.enums.SendingStep;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelExtraFields;
@@ -72,17 +87,29 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChannelAddMessageReaction;
+import net.iGap.request.RequestChatSendMessage;
+import net.iGap.response.ClientJoinByInviteLinkResponse;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
+import ir.radsense.raadcore.utils.Typefaces;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.view.Gravity.CENTER;
+import static android.widget.LinearLayout.HORIZONTAL;
+import static android.widget.LinearLayout.VERTICAL;
+import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
-public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
+public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH>, View.OnClickListener {//IChatItemAvatar
     public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
     public IMessageItem messageClickListener;
     public StructMessageInfo mMessage;
@@ -91,6 +118,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     //protected Realm realmChat;
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
+    private Gson gson;
+    private LinearLayout mainLayout;
+    private LinearLayout childLayout;
+    private HashMap<Integer, JSONArray> buttonList;
+    private LinearLayout secondlayoutMessageContainer;
 
     /**
      * add this prt for video player
@@ -103,6 +135,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         this.directionalBased = directionalBased;
         this.type = type;
         this.messageClickListener = messageClickListener;
+
     }
 
     public static void processVideo(final TextView duration, final View holder1, final StructMessageInfo mMessage) {
@@ -180,6 +213,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     public AbstractMessage setMessage(StructMessageInfo message) {
         this.mMessage = message;
+
         return this;
     }
 
@@ -216,6 +250,46 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             layoutMessageContainer.removeAllViews();
         }
 
+        if (mMessage.additionalData != null) {
+            if (mMessage.additionalData.AdditionalType == 2) {
+
+                secondlayoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
+                if (secondlayoutMessageContainer != null)
+                    secondlayoutMessageContainer.setOrientation(VERTICAL);
+
+                if (secondlayoutMessageContainer != null) {
+                    secondlayoutMessageContainer.removeAllViews();
+                }
+
+                buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
+
+                childLayout = MakeButtons.createLayout();
+                // parsedList = parsJson(mMessage.additionalData.additionalData);
+
+                gson = new GsonBuilder().create();
+
+                ArrayList<ButtonEntity> jsonList = new ArrayList<>();
+
+                buttonList = new HashMap<>();
+
+                try {
+                    //    JSONObject jObject = new JSONObject(mJson);
+                    JSONArray jsonElements = new JSONArray(mMessage.additionalData.additionalData);
+                    //   JSONArray jsonElements = new JSONArray(mJson);
+
+                    //   rows = jsonElements.length();
+                    for (int i = 0; i < jsonElements.length(); i++) {
+                        // jsonElements.get(0);
+                        buttonList.put(i, jsonElements.getJSONArray(i));
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
         if (holder instanceof TextItem.ViewHolder || holder instanceof ImageWithTextItem.ViewHolder || holder instanceof AudioItem.ViewHolder || holder instanceof FileItem.ViewHolder || holder instanceof VideoWithTextItem.ViewHolder || holder instanceof GifWithTextItem.ViewHolder) {
             int maxsize = 0;
 
@@ -224,7 +298,35 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             messageView = ViewMaker.makeTextViewMessage(maxsize, mMessage.hasEmojiInText, mMessage.hasLinkInMessage);
+
             layoutMessageContainer.addView(messageView);
+            try {
+                if (buttonList != null && mMessage.additionalData.AdditionalType == 2) {
+                    if (secondlayoutMessageContainer != null) {
+
+
+                        for (int i = 0; i < buttonList.size(); i++) {
+                            for (int j = 0; j < buttonList.get(i).length(); j++) {
+                                try {
+                                    ButtonEntity btnEntery = new ButtonEntity();
+                                    btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
+                                    }.getType());
+                                   // btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
+                                    //   addButtons(buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType());
+                                    childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(),this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            secondlayoutMessageContainer.addView(childLayout);
+                            childLayout = MakeButtons.createLayout();
+
+                        }
+                    }
+                }
+
+            } catch (Exception e) {
+            }
         }
 
         /**
@@ -379,6 +481,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.GONE);
         }
 
+
         if (holder.itemView.findViewById(R.id.lyt_see) != null) {
             holder.itemView.findViewById(R.id.lyt_see).setVisibility(View.GONE);
         }
@@ -479,7 +582,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                         _tv.measure(0, 0);       //must call measure!
                         int maxWith = 0;
-                        maxWith = _tv.getMeasuredWidth() + ViewMaker.i_Dp(R.dimen.dp40);
+                        maxWith = _tv.getMeasuredWidth() + i_Dp(R.dimen.dp40);
 
                         if (minWith < maxWith) {
                             minWith = maxWith;
@@ -864,9 +967,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 withTitle = replyFrom.getMeasuredWidth();
                 withMessage = replayMessage.getMeasuredWidth();
                 maxWith = withTitle > withMessage ? withTitle : withMessage;
-                maxWith += ViewMaker.i_Dp(R.dimen.dp44);
+                maxWith += i_Dp(R.dimen.dp44);
                 if (replayView.findViewById(R.id.chslr_imv_replay_pic).getVisibility() == View.VISIBLE) {
-                    maxWith += ViewMaker.i_Dp(R.dimen.dp52);
+                    maxWith += i_Dp(R.dimen.dp52);
                 }
 
                 minWith = maxWith;
@@ -1001,7 +1104,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             txtPrefixForwardFrom.measure(0, 0);       //must call measure!
             txtForwardFrom.measure(0, 0);
-            int maxWith = txtPrefixForwardFrom.getMeasuredWidth() + txtForwardFrom.getMeasuredWidth() + ViewMaker.i_Dp(R.dimen.dp32);
+            int maxWith = txtPrefixForwardFrom.getMeasuredWidth() + txtForwardFrom.getMeasuredWidth() + i_Dp(R.dimen.dp32);
 
             if (minWith < maxWith) {
                 minWith = maxWith;
@@ -1318,7 +1421,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         }
     }
-
 
 
     private void autoDownload(VH holder, RealmAttachment attachment) {
@@ -1700,6 +1802,187 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         return "";
+    }
+
+
+    private LinearLayout createLayout() {
+        LinearLayout linearLayout_179 = new LinearLayout(G.context);
+        linearLayout_179.setOrientation(HORIZONTAL);
+        LinearLayout.LayoutParams layout_937 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout_937.topMargin = 4;
+        linearLayout_179.setLayoutParams(layout_937);
+        return linearLayout_179;
+    }
+
+    public void addButtons(int culmn, float wightSum, String lable, String btnName, String imageUrl, int btnId, String value, LinearLayout mainLayout, Integer actionType) {
+        float weight = wightSum / culmn;
+        float weightSum = 0;
+        float textWeight = 0f;
+        float imageWeight = 0f;
+        if (culmn == 1) {
+            if (!imageUrl.equals("")) {
+                weightSum = 5f;
+                textWeight = 3.5f;
+                imageWeight = 1.5f;
+            } else {
+                weightSum = 1f;
+                textWeight = 1f;
+            }
+        } else if (culmn == 2) {
+            if (!imageUrl.equals("")) {
+                weightSum = .5f;
+                textWeight = .33f;
+                imageWeight = .16f;
+            } else {
+                weightSum = .5f;
+                textWeight = .5f;
+            }
+        } else if (culmn == 3) {
+            if (!imageUrl.equals("")) {
+                weightSum = 3f;
+                textWeight = 2f;
+                imageWeight = 1f;
+            } else {
+                weightSum = 3f;
+                textWeight = 3f;
+            }
+        }
+        CardView card = new CardView(G.context);
+
+        // Set the CardView layoutParams
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp2));
+        params.weight = weight;
+        card.setLayoutParams(params);
+
+        // Set CardView corner radius
+        card.setRadius(16);
+
+        card.setCardElevation(2);
+
+        // Set cardView content padding
+        //card.setContentPadding(15, 15, 15, 15);
+
+        // Set a background color for CardView
+        if (Build.VERSION.SDK_INT < 21) {
+            card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
+        }
+        // Set the CardView maximum elevation
+        // card.setMaxCardElevation(3);
+
+        card.setForeground(getSelectedItemDrawable());
+        card.setClickable(true);
+        // card.setCardElevation(3);
+
+
+        LinearLayout linearLayout_529 = new LinearLayout(G.context);
+        LinearLayout.LayoutParams layout_941 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp36));
+
+        layout_941.gravity = Gravity.CENTER_VERTICAL;
+        layout_941.setMargins(0, i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4));
+        linearLayout_529.setLayoutParams(layout_941);
+        linearLayout_529.setWeightSum(weightSum);
+
+        ImageView img1 = new ImageView(G.context);
+
+        /*img1.setId(1);
+        img1.setTag("abc");*/
+        if (!imageUrl.equals("")) {
+            Picasso.get()
+                    .load(imageUrl)
+                    .resize(i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32))
+
+                    .into(img1);
+            // img1.setImageResource(R.drawable.icons8_potted_plant_50);
+            LinearLayout.LayoutParams layout_738 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+            layout_738.weight = imageWeight;
+            layout_738.setMargins(0, i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp10), i_Dp(R.dimen.dp2));
+            layout_738.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+
+
+            img1.setLayoutParams(layout_738);
+            linearLayout_529.addView(img1);
+        }
+
+        if (lable.trim() != null) {
+            TextView btn1 = new TextView(G.context);
+
+            // btn1.setId(R.id.btn1);
+            btn1.setEllipsize(TextUtils.TruncateAt.END);
+            btn1.setGravity(CENTER);
+            btn1.setMaxLines(1);
+            btn1.setTypeface(G.typeface_IRANSansMobile);
+            btn1.setText(btnName);
+            btn1.setTextSize(16);
+
+            LinearLayout.LayoutParams layout_844 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
+
+            layout_844.weight = textWeight;
+            btn1.setLayoutParams(layout_844);
+
+            linearLayout_529.addView(btn1);
+        }
+        card.addView(linearLayout_529);
+        ArrayList<String> actions = new ArrayList<>();
+        actions.add(value);
+        actions.add(lable);
+        card.setTag(actions);
+
+
+        card.setId(actionType);
+
+        card.setOnClickListener(this);
+        mainLayout.addView(card);
+
+
+
+
+
+      /*  Button btn1 = new Button(this);
+        btn1.setId(btnId);
+        if (imageUrl != null)
+            btn1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icons8_potted_plant_50, 0, 0, 0);
+        btn1.setText(btnName);
+        btn1.setMaxLines(1);
+        btn1.setAlpha(.2f);
+        LinearLayout.LayoutParams layout_353 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layout_353.weight = weight;
+        btn1.setLayoutParams(layout_353);
+        btn1.setOnClickListener(this);
+        mainLayout.addView(btn1);*/
+    }
+
+    public Drawable getSelectedItemDrawable() {
+        int[] attrs = new int[]{R.attr.selectableItemBackground};
+        TypedArray ta = G.context.getApplicationContext().obtainStyledAttributes(attrs);
+        Drawable selectedItemDrawable = ta.getDrawable(0);
+        ta.recycle();
+        return selectedItemDrawable;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == 3) {
+            HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
+        } else if (v.getId() == 2) {
+         //   new RequestChatSendMessage().sendMessage(mMessage.roomId, ((ArrayList<String>) v.getTag()).get(1), ((ArrayList<String>) v.getTag()).get(2), 3);
+
+            Long identity = System.currentTimeMillis();
+            RealmRoomMessage.makeAdditionalData(mMessage.roomId,identity,mMessage.messageText,mMessage.additionalData.additionalData,3);
+            new ChatSendMessageUtil().newBuilder(ProtoGlobal.Room.Type.CHAT, ProtoGlobal.RoomMessageType.TEXT, mMessage.roomId).message(mMessage.messageText).sendMessage(identity+"");
+
+
+        } else if (v.getId() == 1) {
+            HelperUrl.checkAndJoinToRoom("UlQdYfkuLcBzOGfTFgf6bHV9m");
+
+        } else if (v.getId() == 4) {
+            HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
+
+        }
+
+
+      //  Toast.makeText(G.context, "button action type is " + v.getId() + " must do " + v.getTag() + "", Toast.LENGTH_LONG).show();
     }
 
 

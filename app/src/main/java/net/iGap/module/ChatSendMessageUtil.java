@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.module;
 
@@ -58,6 +58,17 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         return this;
     }
 
+    public ChatSendMessageUtil additional(String value) {
+        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+            requestChatSendMessage.message(value);
+        } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
+            requestGroupSendMessage.message(value);
+        } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+            requestChannelSendMessage.message(value);
+        }
+        return this;
+    }
+
     public ChatSendMessageUtil attachment(String value) {
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
             requestChatSendMessage.attachment(value);
@@ -90,7 +101,9 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         if (message.getReplyTo() != null) {
             builder.replyMessage(message.getReplyTo().getMessageId());
         }
-
+        if (message.getRealmAdditional() != null) {
+            builder.additional(message.getRealmAdditional().getAdditionalData());
+        }
 
         builder.sendMessage(Long.toString(message.getMessageId()));
         return this;

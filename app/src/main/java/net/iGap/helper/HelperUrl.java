@@ -706,7 +706,7 @@ public class HelperUrl {
         return result;
     }
 
-    private static void checkAndJoinToRoom(final String token) {
+    public static void checkAndJoinToRoom(final String token) {
 
         if (token == null || token.length() < 0 || isInCurrentChat(token)) return;
 

@@ -65,5 +65,25 @@ public class RequestChatSendMessage {
         }
         return this;
     }
+
+    public void sendMessage(long roomId, String message, String additionalData, int additionalType) {
+
+        ProtoChatSendMessage.ChatSendMessage.Builder chatSendMessage = ProtoChatSendMessage.ChatSendMessage.newBuilder();
+        chatSendMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+        chatSendMessage.setRoomId(roomId);
+        chatSendMessage.setMessage(message);
+        chatSendMessage.setAdditionalData(additionalData);
+        chatSendMessage.setAdditionalType(additionalType);
+        String identity = Long.toString(System.currentTimeMillis());
+        chatSendMessage.setRandomId(Long.parseLong(identity));
+
+        RequestWrapper requestWrapper = new RequestWrapper(201, chatSendMessage, identity);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
 

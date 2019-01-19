@@ -326,7 +326,6 @@ import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.R.string.item;
-import static net.iGap.R.string.login;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
@@ -2834,7 +2833,7 @@ public class FragmentChat extends BaseFragment
                 backToMenu = false;
             }
 
-            botInit.updateCommandList(false, lastMessage, getActivity(), backToMenu);
+            botInit.updateCommandList(false, lastMessage, getActivity(), backToMenu, rm, rm.getRoomId());
         }
 
 
@@ -3959,7 +3958,7 @@ public class FragmentChat extends BaseFragment
                         if (getActivity() != null) {
                             try {
                                 if (roomMessage.getAuthor().getUser().getUserId() == chatPeerId)
-                                    botInit.updateCommandList(false, message, getActivity(), backToMenu);
+                                    botInit.updateCommandList(false, message, getActivity(), backToMenu, rm,roomId);
                             } catch (NullPointerException e) {
                             } catch (Exception e) {
                             }
@@ -5178,7 +5177,7 @@ public class FragmentChat extends BaseFragment
             G.onClearRoomHistory.onClearRoomHistory(roomId);
         }
         if (botInit != null)
-            botInit.updateCommandList(false, "clear", getActivity(), false);
+            botInit.updateCommandList(false, "clear", getActivity(), false, null, 0);
     }
 
     /**
