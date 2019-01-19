@@ -13,6 +13,7 @@ package net.iGap.module;
 import net.iGap.G;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestChannelSendMessage;
 import net.iGap.request.RequestChatSendMessage;
@@ -58,13 +59,13 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
         return this;
     }
 
-    public ChatSendMessageUtil additional(String value) {
+    public ChatSendMessageUtil additional(RealmAdditional realmAdditional) {
         if (roomType == ProtoGlobal.Room.Type.CHAT) {
-            requestChatSendMessage.message(value);
+            requestChatSendMessage.additionalData(realmAdditional);
         } else if (roomType == ProtoGlobal.Room.Type.GROUP) {
-            requestGroupSendMessage.message(value);
+            requestGroupSendMessage.additionalData(realmAdditional);
         } else if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-            requestChannelSendMessage.message(value);
+            requestChannelSendMessage.additionalData(realmAdditional);
         }
         return this;
     }
@@ -102,7 +103,7 @@ public class ChatSendMessageUtil implements OnChatSendMessageResponse {
             builder.replyMessage(message.getReplyTo().getMessageId());
         }
         if (message.getRealmAdditional() != null) {
-            builder.additional(message.getRealmAdditional().getAdditionalData());
+            builder.additional(message.getRealmAdditional());
         }
 
         builder.sendMessage(Long.toString(message.getMessageId()));

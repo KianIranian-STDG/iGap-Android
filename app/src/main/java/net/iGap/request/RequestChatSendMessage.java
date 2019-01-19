@@ -12,6 +12,7 @@ package net.iGap.request;
 
 import net.iGap.proto.ProtoChatSendMessage;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAdditional;
 
 public class RequestChatSendMessage {
     // builder to force use newBuilder
@@ -52,6 +53,12 @@ public class RequestChatSendMessage {
 
     public RequestChatSendMessage replyMessage(long messageId) {
         chatSendMessage.setReplyTo(messageId);
+        return this;
+    }
+
+    public RequestChatSendMessage additionalData(RealmAdditional realmAdditional) {
+        chatSendMessage.setAdditionalData(realmAdditional.getAdditionalData());
+        chatSendMessage.setAdditionalType(realmAdditional.getAdditionalType());
         return this;
     }
 
