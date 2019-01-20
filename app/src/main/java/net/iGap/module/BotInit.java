@@ -56,8 +56,10 @@ public class BotInit implements View.OnClickListener {
     private HashMap<Integer, JSONArray> buttonList;
     private RealmRoomMessage roomMessage;
     private String additionalData;
+    ProtoGlobal.RoomMessage newMessage;
     private int additionalType;
     private long roomId;
+    // private boolean state;
 
 
     public BotInit(View rootView, boolean showCommandList) {
@@ -94,7 +96,63 @@ public class BotInit implements View.OnClickListener {
                 if (showCommandList) {
                     makeTxtList(rootView);
                 } else if (roomMessage != null && roomMessage.getRealmAdditional() != null) {
-                    makeButtonList(rootView, roomMessage.getRealmAdditional().getAdditionalData());
+                    try {
+                        makeButtonList(rootView, roomMessage.getRealmAdditional().getAdditionalData(), roomMessage.getRealmAdditional().getAdditionalType());
+                    } catch (Exception e) {
+                    }
+
+                } else
+                    makeButtonList(rootView);
+
+                setLayoutBot(false, false);
+            }
+        });
+
+    }
+
+    public void updateCommandList(boolean showCommandList, String message, Activity activity, boolean backToMenu, ProtoGlobal.RoomMessage newMessage, long roomId, boolean state) {
+
+        if (newMessage != null) {
+            this.newMessage = newMessage;
+
+        }
+        if (roomId != 0)
+            this.roomId = roomId;
+
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                fillList(message, backToMenu);
+
+                if (botActionList.size() == 0) {
+                    return;
+                }
+                if (message.equalsIgnoreCase("clear")) {
+                    if (!state) {
+                        botActionList.clear();
+                        StructRowBotAction _row = new StructRowBotAction();
+                        _row.action = "/start";
+                        _row.name = G.context.getString(R.string.start);
+                        botActionList.add(_row);
+                    } else {
+                        botActionList.clear();
+                        StructRowBotAction _row = new StructRowBotAction();
+                       /* _row.action = "/start";
+                        _row.name = G.context.getString(R.string.start);*/
+                        botActionList.add(_row);
+                    }
+
+                }
+
+                if (showCommandList) {
+                    makeTxtList(rootView);
+                } else if (newMessage != null && newMessage.getAdditionalData() != null && roomId != 0) {
+                    try {
+                        makeButtonList(rootView, newMessage.getAdditionalData(), newMessage.getAdditionalType());
+                    } catch (Exception e) {
+                    }
+
                 } else
                     makeButtonList(rootView);
 
@@ -123,9 +181,9 @@ public class BotInit implements View.OnClickListener {
 
     private void setLayoutBot(boolean gone, boolean changeKeyboard) {
 
-        if (botActionList.size() == 0) {
+     /*   if (botActionList.size() == 0) {
             return;
-        }
+        }*/
 
         MaterialDesignTextView btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
 
@@ -191,7 +249,7 @@ public class BotInit implements View.OnClickListener {
 
     }
 
-    private void makeButtonList(View rootView, String additionalData) {
+    private void makeButtonList(View rootView, String additionalData, int type) {
 
         LinearLayout layoutBot = rootView.findViewById(R.id.bal_layout_bot_layout);
         layoutBot.removeAllViews();
@@ -208,9 +266,10 @@ public class BotInit implements View.OnClickListener {
                     ButtonEntity btnEntery = new ButtonEntity();
                     btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
                     }.getType());
-                    //   addButtons(buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType());
-                    childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(), this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), roomMessage.getRealmAdditional().getAdditionalType());
+                    childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(), this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), type);
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -277,23 +336,33 @@ public class BotInit implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
         if (v.getId() == 3) {
             HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
-
         } else if (v.getId() == 2) {
-            new RequestChatSendMessage().sendMessage(roomId, ((ArrayList<String>) v.getTag()).get(1), roomMessage.getRealmAdditional().getAdditionalData(), 3);
-        } else if (v.getId() == 1) {
+            try {
+                Long identity = System.currentTimeMillis();
+                Realm realm = Realm.getDefaultInstance();
 
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm);
+                        G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
+                        if (G.onBotClick != null) {
+                            G.onBotClick.onBotCommandText(realmRoomMessage);
+                        }
+                    }
+                });
+            } catch (Exception e) {
+            }
+        } else if (v.getId() == 1) {
+            HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
         } else if (v.getId() == 4) {
             HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
         }
 
-
-        //
-
-        Toast.makeText(G.context, "button action type is " + v.getId() + " must do " + v.getTag() + "", Toast.LENGTH_LONG).show();
     }
+
 
     class StructRowBotAction {
         String action = "";

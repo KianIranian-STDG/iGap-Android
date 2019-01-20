@@ -1,11 +1,14 @@
 package net.iGap.module;
 
+import android.animation.AnimatorInflater;
+import android.animation.StateListAnimator;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,10 +21,12 @@ import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonEntity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,8 +54,10 @@ public class MakeButtons {
 
         try {
             //    JSONObject jObject = new JSONObject(mJson);
+
             JSONArray jsonElements = new JSONArray(json);
             //   JSONArray jsonElements = new JSONArray(mJson);
+
 
             //   rows = jsonElements.length();
             for (int i = 0; i < jsonElements.length(); i++) {
@@ -60,6 +67,12 @@ public class MakeButtons {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+
+            try {
+                buttonList.put(0, new JSONObject(json).getJSONArray(""));
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+            }
         }
         return buttonList;
     }
@@ -74,15 +87,15 @@ public class MakeButtons {
     }
 
     public static LinearLayout addButtons(String jsonObject, View.OnClickListener clickListener, int culmn, float wightSum, String lable, String btnName, String imageUrl, int btnId, String value, LinearLayout mainLayout, Integer actionType, Integer additionalType) {
-        float weight = wightSum / culmn;
+         float weight = wightSum / culmn;
         float weightSum = 0;
         float textWeight = 0f;
         float imageWeight = 0f;
         if (culmn == 1) {
             if (!imageUrl.equals("")) {
                 weightSum = 5f;
-                textWeight = 3.5f;
-                imageWeight = 1.5f;
+                textWeight = 4f;
+                imageWeight = 1f;
             } else {
                 weightSum = 1f;
                 textWeight = 1f;
@@ -124,7 +137,7 @@ public class MakeButtons {
 
         // Set a background color for CardView
 
-        if (additionalType == 1) {
+        if (additionalType == AdditionalType.UNDER_KEYBOARD_BUTTON) {
             card.setCardBackgroundColor(Color.parseColor("#20000000"));
         }
 
@@ -132,6 +145,9 @@ public class MakeButtons {
             card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
         }
 
+
+    //    card.setForeground(getSelectedItemDrawable());
+      //  card.setBackgroundResource(getSelectedItemDrawable());
 
         card.setForeground(getSelectedItemDrawable());
         card.setClickable(true);
@@ -141,7 +157,7 @@ public class MakeButtons {
         LinearLayout linearLayout_529 = new LinearLayout(G.context);
         LinearLayout.LayoutParams layout_941 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp36));
 
-        layout_941.gravity = Gravity.CENTER_VERTICAL;
+        layout_941.gravity = Gravity.CENTER;
         layout_941.setMargins(0, i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4));
         linearLayout_529.setLayoutParams(layout_941);
         linearLayout_529.setWeightSum(weightSum);
@@ -154,14 +170,21 @@ public class MakeButtons {
             Picasso.get()
                     .load(imageUrl)
                     .resize(i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32))
-
                     .into(img1);
-            // img1.setImageResource(R.drawable.icons8_potted_plant_50);
-            LinearLayout.LayoutParams layout_738 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+
+
+            LinearLayout.LayoutParams layout_738 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
 
             layout_738.weight = imageWeight;
             layout_738.setMargins(0, i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp10), i_Dp(R.dimen.dp2));
             layout_738.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+
+
+
+
+          //  img1.setBackgroundColor(Color.parseColor("#000000"));
 
 
             img1.setLayoutParams(layout_738);
@@ -182,6 +205,7 @@ public class MakeButtons {
             LinearLayout.LayoutParams layout_844 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
 
             layout_844.weight = textWeight;
+       //     btn1.setBackgroundColor(Color.parseColor("#FF0000"));
             btn1.setLayoutParams(layout_844);
 
             linearLayout_529.addView(btn1);
@@ -195,7 +219,11 @@ public class MakeButtons {
 
 
         card.setId(actionType);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            StateListAnimator stateListAnimator = AnimatorInflater
+                    .loadStateListAnimator(G.context, R.animator.lift_on_touch);
+            card.setStateListAnimator(stateListAnimator);
+        }
         card.setOnClickListener(clickListener);
         mainLayout.addView(card);
         return mainLayout;
@@ -205,7 +233,7 @@ public class MakeButtons {
 
     public static Drawable getSelectedItemDrawable() {
         int[] attrs = new int[]{R.attr.selectableItemBackground};
-        TypedArray ta = G.context.getApplicationContext().obtainStyledAttributes(attrs);
+        TypedArray ta = G.context.obtainStyledAttributes(attrs);
         Drawable selectedItemDrawable = ta.getDrawable(0);
         ta.recycle();
         return selectedItemDrawable;
