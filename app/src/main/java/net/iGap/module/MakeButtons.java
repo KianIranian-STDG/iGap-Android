@@ -126,6 +126,15 @@ public class MakeButtons {
                 weightSum = 3f;
                 textWeight = 3f;
             }
+        }else if (culmn == 4) {
+            if (!imageUrl.equals("")) {
+                weightSum = 4f;
+                textWeight = 2.6f;
+                imageWeight = 1.4f;
+            } else {
+                weightSum = 4f;
+                textWeight = 4f;
+            }
         }
         CardView card = new CardView(G.context);
 
