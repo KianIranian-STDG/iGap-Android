@@ -44,5 +44,5 @@ public interface IMessageItem {
 
     boolean getShowVoteChannel();
 
-    void sendFromBot(RealmRoomMessage realmRoomMessage);
+    void sendFromBot(Object realmRoomMessage);
 }

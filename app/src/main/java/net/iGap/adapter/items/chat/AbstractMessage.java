@@ -251,16 +251,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             layoutMessageContainer.removeAllViews();
         }
 
+
         if (mMessage.additionalData != null) {
             if (mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
 
-                secondlayoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
-                if (secondlayoutMessageContainer != null)
-                    secondlayoutMessageContainer.setOrientation(VERTICAL);
+                /** create Parent view */
 
+
+                secondlayoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
                 if (secondlayoutMessageContainer != null) {
                     secondlayoutMessageContainer.removeAllViews();
+                    secondlayoutMessageContainer.setOrientation(VERTICAL);
                 }
+
 
                 buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
 
@@ -1788,35 +1791,41 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == 3) {
-            HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
-        } else if (v.getId() == 2) {
-            try {
-                Long identity = System.currentTimeMillis();
-                Realm realm = Realm.getDefaultInstance();
+        try {
+            if (v.getId() == 3) {
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
+            } else if (v.getId() == 2) {
+                try {
+                    Long identity = System.currentTimeMillis();
+                    Realm realm = Realm.getDefaultInstance();
 
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm);
-                        G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
-                        messageClickListener.sendFromBot(realmRoomMessage);
-                    }
-                });
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm);
+                            G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
+                            messageClickListener.sendFromBot(realmRoomMessage);
+                        }
+                    });
 
-            } catch (Exception e) {
+                } catch (Exception e) {
+                }
+
+            } else if (v.getId() == 1) {
+                HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
+
+            } else if (v.getId() == 4) {
+                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
+
+            } else if (v.getId() == 5) {
+                messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0).toString());
+
             }
 
-        } else if (v.getId() == 1) {
-            HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
-
-        } else if (v.getId() == 4) {
-            HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
-
+        } catch (Exception e) {
+            Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
         }
 
-
-        //  Toast.makeText(G.context, "button action type is " + v.getId() + " must do " + v.getTag() + "", Toast.LENGTH_LONG).show();
     }
 
 

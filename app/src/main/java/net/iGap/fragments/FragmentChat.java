@@ -3419,13 +3419,16 @@ public class FragmentChat extends BaseFragment
 
 
         if (botInit != null) botInit.close();
-        StructWebView urlWebView = getUrlWebView(mUrl);
+     /*   StructWebView urlWebView = getUrlWebView(mUrl);
         if (urlWebView == null) {
             return;
         } else {
+
             urlWebViewForSpecialUrlChat = urlWebView.getUrl();
         }
+        */
 
+        urlWebViewForSpecialUrlChat = mUrl;
         if (webViewChatPage == null) webViewChatPage = rootView.findViewById(R.id.webViewChatPage);
         if (rootWebView == null) rootWebView = rootView.findViewById(R.id.rootWebView);
         if (progressWebView == null) progressWebView = rootView.findViewById(R.id.progressWebView);
@@ -4370,10 +4373,11 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void sendFromBot(RealmRoomMessage realmRoomMessage) {
-
-        mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), realmRoomMessage)).withIdentifier(SUID.id().get()));
-
+    public void sendFromBot(Object message) {
+        if (message instanceof RealmRoomMessage)
+            mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
+        else if (message instanceof String)
+            openWebViewForSpecialUrlChat(message.toString());
 
     }
 
@@ -9113,16 +9117,20 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onBotCommandText(Object message) {
+    public void onBotCommandText(Object message, int botAction) {
 
-        if (message instanceof String){
-            if (!isChatReadOnly) {
-                if (edtChat != null)
-                    edtChat.setText(message.toString());
-                imvSendButton.performClick();
+        if (message instanceof String) {
+            if (botAction == 0) {
+                if (!isChatReadOnly) {
+                    if (edtChat != null)
+                        edtChat.setText(message.toString());
+                    imvSendButton.performClick();
+                }
+            } else {
+                openWebViewForSpecialUrlChat(message.toString());
             }
-        }else if (message instanceof RealmRoomMessage){
-            mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage)message)).withIdentifier(SUID.id().get()));
+        } else if (message instanceof RealmRoomMessage) {
+            mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
 
         }
 

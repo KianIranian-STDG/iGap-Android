@@ -24,6 +24,7 @@ import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.Ipromote;
 import net.iGap.interfaces.OnChatGetRoom;
+import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.proto.ProtoClientGetPromote;
 import net.iGap.proto.ProtoGlobal;
@@ -31,7 +32,6 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestChatGetRoom;
-import net.iGap.request.RequestChatSendMessage;
 import net.iGap.request.RequestClientGetPromote;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientPinRoom;
@@ -44,6 +44,8 @@ import java.util.HashMap;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 public class BotInit implements View.OnClickListener {
 
@@ -273,6 +275,7 @@ public class BotInit implements View.OnClickListener {
                     e.printStackTrace();
                 }
             }
+            layoutBot.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
             layoutBot.addView(childLayout);
             childLayout = MakeButtons.createLayout();
 
@@ -326,41 +329,49 @@ public class BotInit implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 if (G.onBotClick != null) {
-                    G.onBotClick.onBotCommandText(action);
+                    G.onBotClick.onBotCommandText(action, 0);
                 }
                 setLayoutBot(true, false);
             }
         });
         layout.addView(btn);
+
+        /*childLayout = MakeButtons.createLayout();
+        layout.addView(MakeButtons.addButtons(null, this, 1, .75f, "start", "start", "", 0, "/start", childLayout, 0, 1));*/
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == 3) {
-            HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
-        } else if (v.getId() == 2) {
-            try {
-                Long identity = System.currentTimeMillis();
-                Realm realm = Realm.getDefaultInstance();
+        try {
+            if (v.getId() == 3) {
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
+            } else if (v.getId() == 2) {
+                try {
+                    Long identity = System.currentTimeMillis();
+                    Realm realm = Realm.getDefaultInstance();
 
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm);
-                        G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
-                        if (G.onBotClick != null) {
-                            G.onBotClick.onBotCommandText(realmRoomMessage);
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm);
+                            G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
+                            if (G.onBotClick != null) {
+                                G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
+                            }
                         }
-                    }
-                });
-            } catch (Exception e) {
+                    });
+                } catch (Exception e) {
+                }
+            } else if (v.getId() == 1) {
+                HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
+            } else if (v.getId() == 4) {
+                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
+            } else if (v.getId() == 5) {
+                G.onBotClick.onBotCommandText(((ArrayList<String>) v.getTag()).get(0).toString(), ButtonActionType.WEBVIEW_LINK);
             }
-        } else if (v.getId() == 1) {
-            HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
-        } else if (v.getId() == 4) {
-            HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
+        } catch (Exception e) {
+            Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
         }
-
     }
 
 
@@ -400,7 +411,7 @@ public class BotInit implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 if (G.onBotClick != null) {
-                    G.onBotClick.onBotCommandText(action);
+                    G.onBotClick.onBotCommandText(action, 0);
                 }
                 setLayoutBot(true, false);
             }

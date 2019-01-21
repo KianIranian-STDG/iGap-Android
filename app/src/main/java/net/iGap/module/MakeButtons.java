@@ -5,15 +5,22 @@ import android.animation.StateListAnimator;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.http.SslError;
 import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,6 +30,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonEntity;
+import net.iGap.module.structs.StructWebView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,7 +95,7 @@ public class MakeButtons {
     }
 
     public static LinearLayout addButtons(String jsonObject, View.OnClickListener clickListener, int culmn, float wightSum, String lable, String btnName, String imageUrl, int btnId, String value, LinearLayout mainLayout, Integer actionType, Integer additionalType) {
-         float weight = wightSum / culmn;
+        float weight = wightSum / culmn;
         float weightSum = 0;
         float textWeight = 0f;
         float imageWeight = 0f;
@@ -112,8 +120,8 @@ public class MakeButtons {
         } else if (culmn == 3) {
             if (!imageUrl.equals("")) {
                 weightSum = 3f;
-                textWeight = 2f;
-                imageWeight = 1f;
+                textWeight = 1.8f;
+                imageWeight = 1.2f;
             } else {
                 weightSum = 3f;
                 textWeight = 3f;
@@ -124,6 +132,8 @@ public class MakeButtons {
         // Set the CardView layoutParams
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp2));
+        //      card.setPadding(i_Dp(R.dimen.dp15), 0, i_Dp(R.dimen.dp15), 0);
+
         params.weight = weight;
         card.setLayoutParams(params);
 
@@ -146,10 +156,17 @@ public class MakeButtons {
         }
 
 
-    //    card.setForeground(getSelectedItemDrawable());
-      //  card.setBackgroundResource(getSelectedItemDrawable());
+        //    card.setForeground(getSelectedItemDrawable());
+        //  card.setBackgroundResource(getSelectedItemDrawable());
 
+    /*    int[] attrs = new int[]{R.attr.selectableItemBackground};
+        TypedArray typedArray = G.context.obtainStyledAttributes(attrs);
+        int backgroundResource = typedArray.getResourceId(0, 0);
+        card.setBackgroundResource(backgroundResource);
+        typedArray.recycle();*/
         card.setForeground(getSelectedItemDrawable());
+
+        //  card.setFocusable(true);
         card.setClickable(true);
         // card.setCardElevation(3);
 
@@ -173,8 +190,6 @@ public class MakeButtons {
                     .into(img1);
 
 
-
-
             LinearLayout.LayoutParams layout_738 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
 
             layout_738.weight = imageWeight;
@@ -182,9 +197,7 @@ public class MakeButtons {
             layout_738.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 
 
-
-
-          //  img1.setBackgroundColor(Color.parseColor("#000000"));
+            //  img1.setBackgroundColor(Color.parseColor("#000000"));
 
 
             img1.setLayoutParams(layout_738);
@@ -200,12 +213,14 @@ public class MakeButtons {
             btn1.setMaxLines(1);
             btn1.setTypeface(G.typeface_IRANSansMobile);
             btn1.setText(btnName);
+
             btn1.setTextSize(16);
 
             LinearLayout.LayoutParams layout_844 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
 
+            layout_844.setMargins(0, 0, i_Dp(R.dimen.dp2), 0);
             layout_844.weight = textWeight;
-       //     btn1.setBackgroundColor(Color.parseColor("#FF0000"));
+            //     btn1.setBackgroundColor(Color.parseColor("#FF0000"));
             btn1.setLayoutParams(layout_844);
 
             linearLayout_529.addView(btn1);
@@ -219,12 +234,16 @@ public class MakeButtons {
 
 
         card.setId(actionType);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && additionalType != AdditionalType.UNDER_KEYBOARD_BUTTON) {
             StateListAnimator stateListAnimator = AnimatorInflater
                     .loadStateListAnimator(G.context, R.animator.lift_on_touch);
             card.setStateListAnimator(stateListAnimator);
         }
+
         card.setOnClickListener(clickListener);
+
+
         mainLayout.addView(card);
         return mainLayout;
 
@@ -238,4 +257,5 @@ public class MakeButtons {
         ta.recycle();
         return selectedItemDrawable;
     }
+
 }

@@ -348,7 +348,7 @@ public class HelperUrl {
                 String botCommandText = strBuilder.toString().substring(start, end);
 
                 if (G.onBotClick != null) {
-                    G.onBotClick.onBotCommandText(botCommandText);
+                    G.onBotClick.onBotCommandText(botCommandText, 0);
                 }
             }
 

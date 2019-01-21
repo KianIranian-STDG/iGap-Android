@@ -10,9 +10,7 @@
 
 package net.iGap.interfaces;
 
-import net.iGap.realm.RealmRoomMessage;
-
 public interface OnBotClick <T> {
-    void onBotCommandText(Object message);
+    void onBotCommandText(Object message, int botAction);
 }
 
