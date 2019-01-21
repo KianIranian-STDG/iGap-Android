@@ -1063,6 +1063,20 @@ public class RealmRoomMessage extends RealmObject {
         realm.close();
     }
 
+    public static RealmRoomMessage makeAdditionalData(final long roomId, final long messageId, final String message, String additionalData, int additionalTaype, Realm realm) {
+
+        RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
+        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+        roomMessage.setRoomId(roomId);
+        roomMessage.setMessage(message);
+        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+        roomMessage.setUserId(G.userId);
+        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+        roomMessage.setRealmAdditional(RealmAdditional.put(additionalData, additionalTaype));
+
+        return roomMessage;
+    }
+
     public static RealmRoomMessage makeVoiceMessage(Realm realm, final long roomId, final long messageId, final long duration, final long updateTime, final String filepath, final String message) {
         RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
         roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE);

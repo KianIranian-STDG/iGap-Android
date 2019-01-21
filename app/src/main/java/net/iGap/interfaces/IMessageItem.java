@@ -43,4 +43,6 @@ public interface IMessageItem {
     void onPlayMusic(String messageId);
 
     boolean getShowVoteChannel();
+
+    void sendFromBot(Object realmRoomMessage);
 }

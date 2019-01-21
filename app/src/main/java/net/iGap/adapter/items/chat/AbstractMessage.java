@@ -12,14 +12,20 @@ package net.iGap.adapter.items.chat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +33,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
+import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -51,18 +62,23 @@ import net.iGap.messageprogress.OnMessageProgressClick;
 import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
+import net.iGap.module.MakeButtons;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyType;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.additionalData.AdditionalType;
+import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.enums.SendingStep;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelExtraFields;
@@ -72,17 +88,29 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChannelAddMessageReaction;
+import net.iGap.request.RequestChatSendMessage;
+import net.iGap.response.ClientJoinByInviteLinkResponse;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
+import ir.radsense.raadcore.utils.Typefaces;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.view.Gravity.CENTER;
+import static android.widget.LinearLayout.HORIZONTAL;
+import static android.widget.LinearLayout.VERTICAL;
+import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
-public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
+public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH>, View.OnClickListener {//IChatItemAvatar
     public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
     public IMessageItem messageClickListener;
     public StructMessageInfo mMessage;
@@ -91,6 +119,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     //protected Realm realmChat;
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
+    private Gson gson;
+    private LinearLayout mainLayout;
+    private LinearLayout childLayout;
+    private HashMap<Integer, JSONArray> buttonList;
+    private LinearLayout secondlayoutMessageContainer;
 
     /**
      * add this prt for video player
@@ -103,6 +136,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         this.directionalBased = directionalBased;
         this.type = type;
         this.messageClickListener = messageClickListener;
+
     }
 
     public static void processVideo(final TextView duration, final View holder1, final StructMessageInfo mMessage) {
@@ -180,6 +214,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     public AbstractMessage setMessage(StructMessageInfo message) {
         this.mMessage = message;
+
         return this;
     }
 
@@ -216,6 +251,31 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             layoutMessageContainer.removeAllViews();
         }
 
+
+        if (mMessage.additionalData != null) {
+            if (mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
+
+                /** create Parent view */
+
+
+                secondlayoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
+                if (secondlayoutMessageContainer != null) {
+                    secondlayoutMessageContainer.removeAllViews();
+                    secondlayoutMessageContainer.setOrientation(VERTICAL);
+                }
+
+
+                buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
+
+                childLayout = MakeButtons.createLayout();
+                // parsedList = parsJson(mMessage.additionalData.additionalData);
+
+                gson = new GsonBuilder().create();
+
+            }
+        }
+
+
         if (holder instanceof TextItem.ViewHolder || holder instanceof ImageWithTextItem.ViewHolder || holder instanceof AudioItem.ViewHolder || holder instanceof FileItem.ViewHolder || holder instanceof VideoWithTextItem.ViewHolder || holder instanceof GifWithTextItem.ViewHolder) {
             int maxsize = 0;
 
@@ -224,7 +284,33 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             messageView = ViewMaker.makeTextViewMessage(maxsize, mMessage.hasEmojiInText, mMessage.hasLinkInMessage);
+
             layoutMessageContainer.addView(messageView);
+            try {
+                if (buttonList != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
+                    if (secondlayoutMessageContainer != null) {
+
+
+                        for (int i = 0; i < buttonList.size(); i++) {
+                            for (int j = 0; j < buttonList.get(i).length(); j++) {
+                                try {
+                                    ButtonEntity btnEntery = new ButtonEntity();
+                                    btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
+                                    }.getType());
+                                    childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(), this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            secondlayoutMessageContainer.addView(childLayout);
+                            childLayout = MakeButtons.createLayout();
+
+                        }
+                    }
+                }
+
+            } catch (Exception e) {
+            }
         }
 
         /**
@@ -379,6 +465,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.GONE);
         }
 
+
         if (holder.itemView.findViewById(R.id.lyt_see) != null) {
             holder.itemView.findViewById(R.id.lyt_see).setVisibility(View.GONE);
         }
@@ -479,7 +566,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                         _tv.measure(0, 0);       //must call measure!
                         int maxWith = 0;
-                        maxWith = _tv.getMeasuredWidth() + ViewMaker.i_Dp(R.dimen.dp40);
+                        maxWith = _tv.getMeasuredWidth() + i_Dp(R.dimen.dp40);
 
                         if (minWith < maxWith) {
                             minWith = maxWith;
@@ -864,9 +951,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 withTitle = replyFrom.getMeasuredWidth();
                 withMessage = replayMessage.getMeasuredWidth();
                 maxWith = withTitle > withMessage ? withTitle : withMessage;
-                maxWith += ViewMaker.i_Dp(R.dimen.dp44);
+                maxWith += i_Dp(R.dimen.dp44);
                 if (replayView.findViewById(R.id.chslr_imv_replay_pic).getVisibility() == View.VISIBLE) {
-                    maxWith += ViewMaker.i_Dp(R.dimen.dp52);
+                    maxWith += i_Dp(R.dimen.dp52);
                 }
 
                 minWith = maxWith;
@@ -1001,7 +1088,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             txtPrefixForwardFrom.measure(0, 0);       //must call measure!
             txtForwardFrom.measure(0, 0);
-            int maxWith = txtPrefixForwardFrom.getMeasuredWidth() + txtForwardFrom.getMeasuredWidth() + ViewMaker.i_Dp(R.dimen.dp32);
+            int maxWith = txtPrefixForwardFrom.getMeasuredWidth() + txtForwardFrom.getMeasuredWidth() + i_Dp(R.dimen.dp32);
 
             if (minWith < maxWith) {
                 minWith = maxWith;
@@ -1318,7 +1405,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         }
     }
-
 
 
     private void autoDownload(VH holder, RealmAttachment attachment) {
@@ -1700,6 +1786,46 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         return "";
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        try {
+            if (v.getId() == 3) {
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
+            } else if (v.getId() == 2) {
+                try {
+                    Long identity = System.currentTimeMillis();
+                    Realm realm = Realm.getDefaultInstance();
+
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm);
+                            G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
+                            messageClickListener.sendFromBot(realmRoomMessage);
+                        }
+                    });
+
+                } catch (Exception e) {
+                }
+
+            } else if (v.getId() == 1) {
+                HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
+
+            } else if (v.getId() == 4) {
+                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
+
+            } else if (v.getId() == 5) {
+                messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0).toString());
+
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
+        }
+
     }
 
 

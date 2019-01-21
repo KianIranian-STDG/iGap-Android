@@ -35,6 +35,16 @@ public class RealmAdditional extends RealmObject {
         return realmAdditional;
     }
 
+    public static RealmAdditional put(String additionalData, int additionalType) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmAdditional realmAdditional = realm.createObject(RealmAdditional.class ,  AppUtils.makeRandomId());
+        realmAdditional.setAdditionalType(additionalType);
+        realmAdditional.setAdditionalData(additionalData);
+
+        realm.close();
+        return realmAdditional;
+    }
+
 
     public long getId() {
         return id;

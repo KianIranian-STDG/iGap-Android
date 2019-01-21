@@ -222,6 +222,7 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.VoiceRecord;
+import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.enums.Additional;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
@@ -326,7 +327,6 @@ import static net.iGap.G.chatSendMessageUtil;
 import static net.iGap.G.context;
 import static net.iGap.R.id.ac_ll_parent;
 import static net.iGap.R.string.item;
-import static net.iGap.R.string.login;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 import static net.iGap.module.AttachFile.getFilePathFromUri;
 import static net.iGap.module.AttachFile.request_code_VIDEO_CAPTURED;
@@ -2121,7 +2121,7 @@ public class FragmentChat extends BaseFragment
                 viewAttachFile.setVisibility(View.VISIBLE);
                 rootWebView.setVisibility(View.GONE);
                 webViewChatPage = null;
-                if (!isStopBot) popBackStackFragment();
+        //        if (!isStopBot) popBackStackFragment();
             }
         }
 
@@ -2755,9 +2755,9 @@ public class FragmentChat extends BaseFragment
                         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.stop).content(R.string.stop_message_bot).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                onSelectRoomMenu("txtClearHistory", mRoomId);
+                             //   onSelectRoomMenu("txtClearHistory", mRoomId);
                                 closeWebViewForSpecialUrlChat(true);
-                                popBackStackFragment();
+                              //  popBackStackFragment();
 
                             }
                         }).negativeText(R.string.no).show();
@@ -2821,7 +2821,7 @@ public class FragmentChat extends BaseFragment
                 }
             }
 
-            result = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
+      /*      result = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
             if (result.size() > 0) {
                 rm = result.last();
                 if (rm.getMessage() != null) {
@@ -2832,9 +2832,13 @@ public class FragmentChat extends BaseFragment
 
             } else {
                 backToMenu = false;
+            }*/
+            try {
+                if (rm.getRealmAdditional() != null && rm.getRealmAdditional().getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON)
+                    botInit.updateCommandList(false, lastMessage, getActivity(), backToMenu, rm, rm.getRoomId());
+            } catch (Exception e) {
             }
 
-            botInit.updateCommandList(false, lastMessage, getActivity(), backToMenu);
         }
 
 
@@ -3414,14 +3418,25 @@ public class FragmentChat extends BaseFragment
     private void openWebViewForSpecialUrlChat(String mUrl) {
 
 
+        try {
+            llScrollNavigate.setVisibility(View.GONE);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         if (botInit != null) botInit.close();
-        StructWebView urlWebView = getUrlWebView(mUrl);
+     /*   StructWebView urlWebView = getUrlWebView(mUrl);
         if (urlWebView == null) {
             return;
         } else {
+
             urlWebViewForSpecialUrlChat = urlWebView.getUrl();
         }
+        */
 
+        urlWebViewForSpecialUrlChat = mUrl;
         if (webViewChatPage == null) webViewChatPage = rootView.findViewById(R.id.webViewChatPage);
         if (rootWebView == null) rootWebView = rootView.findViewById(R.id.rootWebView);
         if (progressWebView == null) progressWebView = rootView.findViewById(R.id.progressWebView);
@@ -3947,7 +3962,7 @@ public class FragmentChat extends BaseFragment
                         boolean backToMenu = true;
 
                         RealmResults<RealmRoomMessage> result = getRealmChat().where(RealmRoomMessage.class).
-                                equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).equalTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
+                                equalTo(RealmRoomMessageFields.ROOM_ID, mRoomId).notEqualTo(RealmRoomMessageFields.AUTHOR_HASH, G.authorHash).findAll();
                         if (result.size() > 0) {
                             rm = result.last();
                             if (rm.getMessage() != null) {
@@ -3958,8 +3973,13 @@ public class FragmentChat extends BaseFragment
                         }
                         if (getActivity() != null) {
                             try {
-                                if (roomMessage.getAuthor().getUser().getUserId() == chatPeerId)
-                                    botInit.updateCommandList(false, message, getActivity(), backToMenu);
+                                if (roomMessage.getAuthor().getUser().getUserId() == chatPeerId) {
+
+                                    if (rm.getRealmAdditional() != null && roomMessage.getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON)
+                                        botInit.updateCommandList(false, message, getActivity(), backToMenu, roomMessage, roomId, true);
+                                    else
+                                        botInit.updateCommandList(false, "clear", getActivity(), backToMenu, null, 0, true);
+                                }
                             } catch (NullPointerException e) {
                             } catch (Exception e) {
                             }
@@ -4358,6 +4378,15 @@ public class FragmentChat extends BaseFragment
     @Override
     public boolean getShowVoteChannel() {
         return showVoteChannel;
+    }
+
+    @Override
+    public void sendFromBot(Object message) {
+        if (message instanceof RealmRoomMessage)
+            mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
+        else if (message instanceof String)
+            openWebViewForSpecialUrlChat(message.toString());
+
     }
 
     @Override
@@ -5178,7 +5207,7 @@ public class FragmentChat extends BaseFragment
             G.onClearRoomHistory.onClearRoomHistory(roomId);
         }
         if (botInit != null)
-            botInit.updateCommandList(false, "clear", getActivity(), false);
+            botInit.updateCommandList(false, "clear", getActivity(), false, null, 0, false);
     }
 
     /**
@@ -9096,12 +9125,23 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onBotCommandText(String text) {
-        if (!isChatReadOnly) {
-            if (edtChat != null)
-                edtChat.setText(text);
-            imvSendButton.performClick();
+    public void onBotCommandText(Object message, int botAction) {
+
+        if (message instanceof String) {
+            if (botAction == 0) {
+                if (!isChatReadOnly) {
+                    if (edtChat != null)
+                        edtChat.setText(message.toString());
+                    imvSendButton.performClick();
+                }
+            } else {
+                openWebViewForSpecialUrlChat(message.toString());
+            }
+        } else if (message instanceof RealmRoomMessage) {
+            mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
+
         }
+
     }
 
     /**

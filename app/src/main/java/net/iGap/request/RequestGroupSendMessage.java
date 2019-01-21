@@ -12,6 +12,7 @@ package net.iGap.request;
 
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoGroupSendMessage;
+import net.iGap.realm.RealmAdditional;
 
 public class RequestGroupSendMessage {
     ProtoGroupSendMessage.GroupSendMessage.Builder groupSendMessage;
@@ -50,6 +51,12 @@ public class RequestGroupSendMessage {
 
     public RequestGroupSendMessage replyMessage(long messageId) {
         groupSendMessage.setReplyTo(messageId);
+        return this;
+    }
+
+    public RequestGroupSendMessage additionalData(RealmAdditional realmAdditional) {
+        groupSendMessage.setAdditionalData(realmAdditional.getAdditionalData());
+        groupSendMessage.setAdditionalType(realmAdditional.getAdditionalType());
         return this;
     }
 

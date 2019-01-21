@@ -19,7 +19,7 @@ public class Config {
     public static final int REALM_SCHEMA_VERSION = 27;
     public static final int REALM_LATEST_MIGRATION_VERSION = REALM_SCHEMA_VERSION - 1;
     public static final int LOOKUP_MAP_RESPONSE_OFFSET = 30000;
-    public static final int MAX_TEXT_ATTACHMENT_LENGTH = 200;
+    public static final int MAX_TEXT_ATTACHMENT_LENGTH = 1024;
     public static final int MAX_TEXT_LENGTH = 4096;
     public static final int IMAGE_CORNER = 7;
     public static final int TRY_CONNECTION_COUNT = 5;

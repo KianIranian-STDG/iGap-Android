@@ -12,34 +12,57 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import net.iGap.Config;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityPopUpNotification;
+import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.Ipromote;
 import net.iGap.interfaces.OnChatGetRoom;
+import net.iGap.module.additionalData.ButtonActionType;
+import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.proto.ProtoClientGetPromote;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientGetPromote;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientPinRoom;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-import static net.iGap.Config.drIgapPeerId;
+import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
-public class BotInit {
+public class BotInit implements View.OnClickListener {
 
     private ArrayList<StructRowBotAction> botActionList;
     private View layoutBot;
     private View rootView;
+    private Gson gson;
+    private LinearLayout mainLayout;
+    private LinearLayout childLayout;
+    private HashMap<Integer, JSONArray> buttonList;
+    private RealmRoomMessage roomMessage;
+    private String additionalData;
+    ProtoGlobal.RoomMessage newMessage;
+    private int additionalType;
+    private long roomId;
+    // private boolean state;
+
 
     public BotInit(View rootView, boolean showCommandList) {
         this.rootView = rootView;
@@ -47,7 +70,14 @@ public class BotInit {
 
     }
 
-    public void updateCommandList(boolean showCommandList, String message, Activity activity, boolean backToMenu) {
+    public void updateCommandList(boolean showCommandList, String message, Activity activity, boolean backToMenu, RealmRoomMessage roomMessage, long roomId) {
+        if (roomMessage != null) {
+            this.roomMessage = roomMessage;
+
+        }
+        if (roomId != 0)
+            this.roomId = roomId;
+
 
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -67,9 +97,66 @@ public class BotInit {
 
                 if (showCommandList) {
                     makeTxtList(rootView);
-                } else {
+                } else if (roomMessage != null && roomMessage.getRealmAdditional() != null) {
+                    try {
+                        makeButtonList(rootView, roomMessage.getRealmAdditional().getAdditionalData(), roomMessage.getRealmAdditional().getAdditionalType());
+                    } catch (Exception e) {
+                    }
+
+                } else
                     makeButtonList(rootView);
+
+                setLayoutBot(false, false);
+            }
+        });
+
+    }
+
+    public void updateCommandList(boolean showCommandList, String message, Activity activity, boolean backToMenu, ProtoGlobal.RoomMessage newMessage, long roomId, boolean state) {
+
+        if (newMessage != null) {
+            this.newMessage = newMessage;
+
+        }
+        if (roomId != 0)
+            this.roomId = roomId;
+
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                fillList(message, backToMenu);
+
+                if (botActionList.size() == 0) {
+                    return;
                 }
+                if (message.equalsIgnoreCase("clear")) {
+                    if (!state) {
+                        botActionList.clear();
+                        StructRowBotAction _row = new StructRowBotAction();
+                        _row.action = "/start";
+                        _row.name = G.context.getString(R.string.start);
+                        botActionList.add(_row);
+                    } else {
+                        botActionList.clear();
+                        StructRowBotAction _row = new StructRowBotAction();
+                       /* _row.action = "/start";
+                        _row.name = G.context.getString(R.string.start);*/
+                        botActionList.add(_row);
+                    }
+
+                }
+
+                if (showCommandList) {
+                    makeTxtList(rootView);
+                } else if (newMessage != null && newMessage.getAdditionalData() != null && roomId != 0) {
+                    try {
+                        makeButtonList(rootView, newMessage.getAdditionalData(), newMessage.getAdditionalType());
+                    } catch (Exception e) {
+                    }
+
+                } else
+                    makeButtonList(rootView);
 
                 setLayoutBot(false, false);
             }
@@ -96,9 +183,9 @@ public class BotInit {
 
     private void setLayoutBot(boolean gone, boolean changeKeyboard) {
 
-        if (botActionList.size() == 0) {
+     /*   if (botActionList.size() == 0) {
             return;
-        }
+        }*/
 
         MaterialDesignTextView btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
 
@@ -164,6 +251,38 @@ public class BotInit {
 
     }
 
+    private void makeButtonList(View rootView, String additionalData, int type) {
+
+        LinearLayout layoutBot = rootView.findViewById(R.id.bal_layout_bot_layout);
+        layoutBot.removeAllViews();
+
+        LinearLayout layout = null;
+        buttonList = new HashMap<>();
+        buttonList = MakeButtons.parseData(additionalData);
+
+        childLayout = MakeButtons.createLayout();
+        gson = new GsonBuilder().create();
+        for (int i = 0; i < buttonList.size(); i++) {
+            for (int j = 0; j < buttonList.get(i).length(); j++) {
+                try {
+                    ButtonEntity btnEntery = new ButtonEntity();
+                    btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
+                    }.getType());
+                    childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(), this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), type);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            layoutBot.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
+            layoutBot.addView(childLayout);
+            childLayout = MakeButtons.createLayout();
+
+        }
+
+    }
+
     private void makeButtonList(View rootView) {
 
         LinearLayout layoutBot = rootView.findViewById(R.id.bal_layout_bot_layout);
@@ -202,7 +321,7 @@ public class BotInit {
         Button btn = new Button(G.context);
         btn.setLayoutParams(param);
         btn.setTextColor(Color.WHITE);
-        btn.setBackgroundColor(ContextCompat.getColor(G.context, R.color.backgroundColorCall2));
+        btn.setBackgroundColor(ContextCompat.getColor(G.context, R.color.zxing_viewfinder_laser));
         btn.setText(name);
         btn.setAllCaps(false);
         btn.setTypeface(G.typeface_IRANSansMobile);
@@ -210,13 +329,51 @@ public class BotInit {
             @Override
             public void onClick(View v) {
                 if (G.onBotClick != null) {
-                    G.onBotClick.onBotCommandText(action);
+                    G.onBotClick.onBotCommandText(action, 0);
                 }
                 setLayoutBot(true, false);
             }
         });
         layout.addView(btn);
+
+        /*childLayout = MakeButtons.createLayout();
+        layout.addView(MakeButtons.addButtons(null, this, 1, .75f, "start", "start", "", 0, "/start", childLayout, 0, 1));*/
     }
+
+    @Override
+    public void onClick(View v) {
+        try {
+            if (v.getId() == 3) {
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
+            } else if (v.getId() == 2) {
+                try {
+                    Long identity = System.currentTimeMillis();
+                    Realm realm = Realm.getDefaultInstance();
+
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm);
+                            G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
+                            if (G.onBotClick != null) {
+                                G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                }
+            } else if (v.getId() == 1) {
+                HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
+            } else if (v.getId() == 4) {
+                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
+            } else if (v.getId() == 5) {
+                G.onBotClick.onBotCommandText(((ArrayList<String>) v.getTag()).get(0).toString(), ButtonActionType.WEBVIEW_LINK);
+            }
+        } catch (Exception e) {
+            Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
+        }
+    }
+
 
     class StructRowBotAction {
         String action = "";
@@ -254,7 +411,7 @@ public class BotInit {
             @Override
             public void onClick(View v) {
                 if (G.onBotClick != null) {
-                    G.onBotClick.onBotCommandText(action);
+                    G.onBotClick.onBotCommandText(action, 0);
                 }
                 setLayoutBot(true, false);
             }

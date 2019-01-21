@@ -348,7 +348,7 @@ public class HelperUrl {
                 String botCommandText = strBuilder.toString().substring(start, end);
 
                 if (G.onBotClick != null) {
-                    G.onBotClick.onBotCommandText(botCommandText);
+                    G.onBotClick.onBotCommandText(botCommandText, 0);
                 }
             }
 
@@ -706,7 +706,7 @@ public class HelperUrl {
         return result;
     }
 
-    private static void checkAndJoinToRoom(final String token) {
+    public static void checkAndJoinToRoom(final String token) {
 
         if (token == null || token.length() < 0 || isInCurrentChat(token)) return;
 
