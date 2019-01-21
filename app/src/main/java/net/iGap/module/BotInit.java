@@ -146,8 +146,6 @@ public class BotInit implements View.OnClickListener {
                         _row.name = G.context.getString(R.string.start);*/
                         botActionList.add(_row);
                         try {
-
-
                             if (btnShowBot != null)
                                 btnShowBot.setVisibility(View.INVISIBLE);
                         } catch (Exception e) {

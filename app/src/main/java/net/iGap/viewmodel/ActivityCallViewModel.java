@@ -145,13 +145,18 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         //   setPicture();
         audioManager = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
         audioManager.getMode();
-        Set<BluetoothDevice> pairedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
+        try {
+            Set<BluetoothDevice> pairedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
 
-        for (BluetoothDevice device : pairedDevices) {
-            Log.d("#peyman", " name=" + device.getName() + ", address=" + device.getAddress());
+            for (BluetoothDevice device : pairedDevices) {
+                Log.d("#peyman", " name=" + device.getName() + ", address=" + device.getAddress());
 
-            device.getAddress();
+                device.getAddress();
+            }
+        } catch (NullPointerException e) {
+        } catch (Exception e) {
         }
+
         getInfo();
 
     }
@@ -243,7 +248,6 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                             //   if (audioManager.isBluetoothScoOn()) {
                             audioManager.setBluetoothScoOn(false);
                             audioManager.stopBluetoothSco();
-
 
 
                             /** cancel bluetooth if could not stop it
