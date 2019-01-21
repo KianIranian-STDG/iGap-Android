@@ -26,8 +26,8 @@ android {
         applicationId "net.iGap"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 89
-        versionName "1.0.4"
+        versionCode 90
+        versionName "1.0.5"
         multiDexEnabled true
         useLibrary 'org.apache.http.legacy'
         vectorDrawables.useSupportLibrary = true
