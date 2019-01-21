@@ -1819,7 +1819,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             } else if (v.getId() == 5) {
                 messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0).toString());
-
             }
 
         } catch (Exception e) {

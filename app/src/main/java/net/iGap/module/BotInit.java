@@ -24,6 +24,7 @@ import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.Ipromote;
 import net.iGap.interfaces.OnChatGetRoom;
+import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.proto.ProtoClientGetPromote;
@@ -252,7 +253,14 @@ public class BotInit implements View.OnClickListener {
     }
 
     private void makeButtonList(View rootView, String additionalData, int type) {
-
+        if (type == AdditionalType.UNDER_KEYBOARD_BUTTON) {
+            try {
+                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(rootView.findViewById(R.id.chl_edt_chat).getWindowToken(), 0);
+            } catch (IllegalStateException e) {
+                e.getStackTrace();
+            }
+        }
         LinearLayout layoutBot = rootView.findViewById(R.id.bal_layout_bot_layout);
         layoutBot.removeAllViews();
 
