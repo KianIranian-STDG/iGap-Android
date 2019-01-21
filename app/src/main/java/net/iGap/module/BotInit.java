@@ -61,6 +61,7 @@ public class BotInit implements View.OnClickListener {
     private String additionalData;
     ProtoGlobal.RoomMessage newMessage;
     private int additionalType;
+    private MaterialDesignTextView btnShowBot;
     private long roomId;
     // private boolean state;
 
@@ -144,6 +145,20 @@ public class BotInit implements View.OnClickListener {
                        /* _row.action = "/start";
                         _row.name = G.context.getString(R.string.start);*/
                         botActionList.add(_row);
+                        try {
+
+
+                            if (btnShowBot != null)
+                                btnShowBot.setVisibility(View.INVISIBLE);
+                        } catch (Exception e) {
+                        }
+                    }
+
+                } else {
+                    try {
+                        if (btnShowBot != null)
+                            btnShowBot.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
                     }
 
                 }
@@ -188,7 +203,7 @@ public class BotInit implements View.OnClickListener {
             return;
         }*/
 
-        MaterialDesignTextView btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
+        btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
 
         if (gone) {
             layoutBot.setVisibility(View.GONE);
@@ -257,10 +272,15 @@ public class BotInit implements View.OnClickListener {
             try {
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rootView.findViewById(R.id.chl_edt_chat).getWindowToken(), 0);
+
+                MaterialDesignTextView btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
+
             } catch (IllegalStateException e) {
                 e.getStackTrace();
             }
+
         }
+
         LinearLayout layoutBot = rootView.findViewById(R.id.bal_layout_bot_layout);
         layoutBot.removeAllViews();
 
