@@ -3418,6 +3418,14 @@ public class FragmentChat extends BaseFragment
     private void openWebViewForSpecialUrlChat(String mUrl) {
 
 
+        try {
+            llScrollNavigate.setVisibility(View.GONE);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         if (botInit != null) botInit.close();
      /*   StructWebView urlWebView = getUrlWebView(mUrl);
         if (urlWebView == null) {
