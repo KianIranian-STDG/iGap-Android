@@ -2121,7 +2121,7 @@ public class FragmentChat extends BaseFragment
                 viewAttachFile.setVisibility(View.VISIBLE);
                 rootWebView.setVisibility(View.GONE);
                 webViewChatPage = null;
-                if (!isStopBot) popBackStackFragment();
+        //        if (!isStopBot) popBackStackFragment();
             }
         }
 
@@ -2755,9 +2755,9 @@ public class FragmentChat extends BaseFragment
                         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.stop).content(R.string.stop_message_bot).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                onSelectRoomMenu("txtClearHistory", mRoomId);
+                             //   onSelectRoomMenu("txtClearHistory", mRoomId);
                                 closeWebViewForSpecialUrlChat(true);
-                                popBackStackFragment();
+                              //  popBackStackFragment();
 
                             }
                         }).negativeText(R.string.no).show();

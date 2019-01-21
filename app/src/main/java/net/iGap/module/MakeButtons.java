@@ -151,9 +151,7 @@ public class MakeButtons {
             card.setCardBackgroundColor(Color.parseColor("#20000000"));
         }
 
-        if (Build.VERSION.SDK_INT < 21) {
-            card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
-        }
+
 
 
         //    card.setForeground(getSelectedItemDrawable());
@@ -215,6 +213,10 @@ public class MakeButtons {
             btn1.setText(btnName);
 
             btn1.setTextSize(16);
+            if (Build.VERSION.SDK_INT < 21) {
+                card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
+                btn1.setTextColor(Color.parseColor("#000000"));
+            }
 
             LinearLayout.LayoutParams layout_844 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
 
