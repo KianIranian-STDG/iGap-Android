@@ -61,7 +61,7 @@ public class BotInit implements View.OnClickListener {
     private String additionalData;
     ProtoGlobal.RoomMessage newMessage;
     private int additionalType;
-    private MaterialDesignTextView btnShowBot;
+    public static MaterialDesignTextView btnShowBot;
     private long roomId;
     // private boolean state;
 
@@ -102,6 +102,9 @@ public class BotInit implements View.OnClickListener {
                 } else if (roomMessage != null && roomMessage.getRealmAdditional() != null) {
                     try {
                         makeButtonList(rootView, roomMessage.getRealmAdditional().getAdditionalData(), roomMessage.getRealmAdditional().getAdditionalType());
+                        if (btnShowBot != null)
+                            btnShowBot.setVisibility(View.VISIBLE);
+
                     } catch (Exception e) {
                     }
 
@@ -181,8 +184,8 @@ public class BotInit implements View.OnClickListener {
 
     private void init(View rootView) {
 
-        MaterialDesignTextView btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
-        btnShowBot.setVisibility(View.VISIBLE);
+        btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
+        btnShowBot.setVisibility(View.INVISIBLE);
 
         layoutBot = rootView.findViewById(R.id.layout_bot);
 

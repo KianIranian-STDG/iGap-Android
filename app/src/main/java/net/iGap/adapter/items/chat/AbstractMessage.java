@@ -1810,7 +1810,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 } catch (Exception e) {
                 }
-
             } else if (v.getId() == 1) {
                 HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
 

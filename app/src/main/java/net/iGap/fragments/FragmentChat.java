@@ -2834,8 +2834,10 @@ public class FragmentChat extends BaseFragment
                 backToMenu = false;
             }*/
             try {
-                if (rm.getRealmAdditional() != null && rm.getRealmAdditional().getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON)
+                if (rm.getRealmAdditional() != null && rm.getRealmAdditional().getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON){
                     botInit.updateCommandList(false, lastMessage, getActivity(), backToMenu, rm, rm.getRoomId());
+                }
+
             } catch (Exception e) {
             }
 
