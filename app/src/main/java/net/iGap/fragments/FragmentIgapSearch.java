@@ -182,6 +182,7 @@ public class FragmentIgapSearch extends BaseFragment {
         InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
 
+        /*
         MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_back);
         final RippleView rippleBack = (RippleView) view.findViewById(R.id.sfl_ripple_back);
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -194,6 +195,7 @@ public class FragmentIgapSearch extends BaseFragment {
                 G.fragmentActivity.onBackPressed();
             }
         });
+        */
 
         btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
         btnClose.setOnClickListener(new View.OnClickListener() {
