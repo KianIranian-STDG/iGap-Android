@@ -63,6 +63,9 @@ public class Theme extends Application {
     public static String default_attachmentColor = "#00B0BF";
     public static String default_headerTextColor = "#00B0BF";
     public static String default_progressColor = "#00B0BF";
+    public static String default_linkColor = "#303F9F";
+    public static String default_bubbleChatMusicColor = "#bfefef";
+    public static String default_bubbleChatSendColor = "#e679dde6";
 
     public static String default_dark_appBarColor = "#000000";
     public static String default_dark_notificationColor = "#000000";
@@ -125,13 +128,13 @@ public class Theme extends Application {
                         "#000000",
                         "#e9e9e9",
                         "#FFFFFF",
-                        "#e679dde6",
+                        default_bubbleChatSendColor,
                         "#FFFFFF",
                         preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, default_appBarColor),
                         "#000000",
                         "#2A2A2A",
-                        "#bfefef",
-                        "#303F9F",
+                        default_bubbleChatMusicColor,
+                        default_linkColor,
                         "#212121"
 
                 );
@@ -153,13 +156,13 @@ public class Theme extends Application {
                         "#000000",
                         "#e9e9e9",
                         "#FFFFFF",
-                        "#e679dde6",
+                        default_bubbleChatSendColor,
                         "#FFFFFF",
-                        "#00BCD4",
+                        default_appBarColor,
                         "#000000",
                         "#2A2A2A",
-                        "#bfefef",
-                        "#303F9F",
+                        default_bubbleChatMusicColor,
+                        default_linkColor,
                         "#212121"
                 );
 
