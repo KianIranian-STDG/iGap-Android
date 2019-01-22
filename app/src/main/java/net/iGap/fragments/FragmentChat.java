@@ -1024,7 +1024,8 @@ public class FragmentChat extends BaseFragment
     public void onStop() {
 
         canUpdateAfterDownload = false;
-
+        if (G.onChatSendMessage != null)
+            G.onChatSendMessage = null;
         setDraft();
         HelperNotification.getInstance().isChatRoomNow = false;
 
@@ -2121,7 +2122,7 @@ public class FragmentChat extends BaseFragment
                 viewAttachFile.setVisibility(View.VISIBLE);
                 rootWebView.setVisibility(View.GONE);
                 webViewChatPage = null;
-        //        if (!isStopBot) popBackStackFragment();
+                //        if (!isStopBot) popBackStackFragment();
             }
         }
 
@@ -2189,9 +2190,13 @@ public class FragmentChat extends BaseFragment
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (!G.fragmentActivity.hasWindowFocus()) {
-                            showErrorDialog(waitTime);
+                        try {
+                            if (G.fragmentActivity.hasWindowFocus()) {
+                                showErrorDialog(waitTime);
+                            }
+                        } catch (Exception e) {
                         }
+
                     }
                 });
             }
@@ -2755,9 +2760,9 @@ public class FragmentChat extends BaseFragment
                         new MaterialDialog.Builder(G.fragmentActivity).title(R.string.stop).content(R.string.stop_message_bot).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                             //   onSelectRoomMenu("txtClearHistory", mRoomId);
+                                //   onSelectRoomMenu("txtClearHistory", mRoomId);
                                 closeWebViewForSpecialUrlChat(true);
-                              //  popBackStackFragment();
+                                //  popBackStackFragment();
 
                             }
                         }).negativeText(R.string.no).show();
@@ -2834,7 +2839,7 @@ public class FragmentChat extends BaseFragment
                 backToMenu = false;
             }*/
             try {
-                if (rm.getRealmAdditional() != null && rm.getRealmAdditional().getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON){
+                if (rm.getRealmAdditional() != null && rm.getRealmAdditional().getAdditionalType() == AdditionalType.UNDER_KEYBOARD_BUTTON) {
                     botInit.updateCommandList(false, lastMessage, getActivity(), backToMenu, rm, rm.getRoomId());
                 }
 
@@ -3424,7 +3429,7 @@ public class FragmentChat extends BaseFragment
             llScrollNavigate.setVisibility(View.GONE);
         } catch (NullPointerException e) {
             e.printStackTrace();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -42,7 +42,7 @@ public class ChatSendMessageResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        makeFailed(Long.parseLong(identity));
+            makeFailed(Long.parseLong(identity));
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
