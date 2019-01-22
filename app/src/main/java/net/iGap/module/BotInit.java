@@ -61,7 +61,7 @@ public class BotInit implements View.OnClickListener {
     private String additionalData;
     ProtoGlobal.RoomMessage newMessage;
     private int additionalType;
-    public static MaterialDesignTextView btnShowBot;
+    private MaterialDesignTextView btnShowBot;
     private long roomId;
     // private boolean state;
 
