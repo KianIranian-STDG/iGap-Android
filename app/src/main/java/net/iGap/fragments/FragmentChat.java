@@ -7399,30 +7399,27 @@ public class FragmentChat extends BaseFragment
         rippleClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // deSelectMessage(selectedPosition);
-                edtSearchMessage.setText("");
-                btnHashLayoutClose.performClick();
+                if (edtSearchMessage.getText().toString().length() == 0) {
+                    //  deSelectMessage(selectedPosition);
+                    edtSearchMessage.setText("");
+                    ll_Search.setVisibility(View.GONE);
+                    rootView.findViewById(R.id.toolbarContainer).setVisibility(View.VISIBLE);
+                    //  ll_navigate_Message.setVisibility(View.GONE);
+                    // viewAttachFile.setVisibility(View.VISIBLE);
+
+                    btnHashLayoutClose.performClick();
+
+                    InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                } else {
+                    // deSelectMessage(selectedPosition);
+                    edtSearchMessage.setText("");
+                    btnHashLayoutClose.performClick();
+                }
             }
         });
 
         ll_Search = (LinearLayout) rootView.findViewById(R.id.ac_ll_search_message);
-        RippleView rippleBack = (RippleView) rootView.findViewById(R.id.chl_ripple_back);
-        rippleBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //  deSelectMessage(selectedPosition);
-                edtSearchMessage.setText("");
-                ll_Search.setVisibility(View.GONE);
-                rootView.findViewById(R.id.toolbarContainer).setVisibility(View.VISIBLE);
-                //  ll_navigate_Message.setVisibility(View.GONE);
-                // viewAttachFile.setVisibility(View.VISIBLE);
-
-                btnHashLayoutClose.performClick();
-
-                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            }
-        });
         //btnCloseLayoutSearch = (Button)  rootView.findViewById(R.id.ac_btn_close_layout_search_message);
         edtSearchMessage = (EditText) rootView.findViewById(R.id.chl_edt_search_message);
         edtSearchMessage.addTextChangedListener(new TextWatcher() {
@@ -7466,14 +7463,6 @@ public class FragmentChat extends BaseFragment
                 //    }
                 //}, 600);
                 //
-                if (charSequence.length() > 0) {
-                    txtClearMessageSearch.setTextColor(Color.WHITE);
-                    ((View) rippleClose).setEnabled(true);
-                } else {
-                    txtClearMessageSearch.setTextColor(Color.parseColor("#dededd"));
-                    ((View) rippleClose).setEnabled(false);
-                    //  txtMessageCounter.setText("0 " + getString(of) + " 0");
-                }
             }
 
             @Override

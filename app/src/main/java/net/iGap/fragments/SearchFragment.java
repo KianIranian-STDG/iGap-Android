@@ -140,42 +140,25 @@ public class SearchFragment extends BaseFragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 fillList(editable.toString());
-
-
-                if (editable.length() > 0) {
-                    btnClose.setTextColor(Color.WHITE);
-                    ((View) rippleDown).setEnabled(true);
-
-                } else {
-                    btnClose.setTextColor(G.context.getResources().getColor(R.color.colorChatMessageSelectableItemBg));
-                    ((View) rippleDown).setEnabled(false);
-
-                }
             }
         });
         edtSearch.requestFocus();
         InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(edtSearch, InputMethodManager.SHOW_IMPLICIT);
 
-        MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_back);
-        final RippleView rippleBack = (RippleView) view.findViewById(R.id.sfl_ripple_back);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-
-                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(rippleBack.getWindowToken(), 0);
-                G.fragmentActivity.onBackPressed();
-            }
-        });
 
         btnClose = (MaterialDesignTextView) view.findViewById(R.id.sfl_btn_close);
         rippleDown = (RippleView) view.findViewById(R.id.sfl_ripple_done);
-        ((View) rippleDown).setEnabled(false);
         rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                edtSearch.setText("");
+                if (edtSearch.getText().toString().length() == 0) {
+                    InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(rippleDown.getWindowToken(), 0);
+                    G.fragmentActivity.onBackPressed();
+                } else {
+                    edtSearch.setText("");
+                }
             }
         });
 
