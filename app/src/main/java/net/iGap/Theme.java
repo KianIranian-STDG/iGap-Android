@@ -57,7 +57,7 @@ public class Theme extends Application {
     public static final int GREY_COMPLETE = 26;
 
 
-    public static String default_appBarColor = "#00B0BF";
+    public static String default_appBarColor = "#9dc756";
     public static String default_notificationColor = "#e51c23";
     public static String default_toggleButtonColor = "#00B0BF";
     public static String default_attachmentColor = "#00B0BF";

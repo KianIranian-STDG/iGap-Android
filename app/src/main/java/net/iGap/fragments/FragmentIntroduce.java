@@ -73,7 +73,7 @@ public class FragmentIntroduce extends BaseFragment {
     private TextView txt_p5_l2;
     private TextView txt_p6_l1;
     private TextView txt_p6_l2;
-    private TextView txtSkip;
+//    private TextView txtSkip;
     private Button btnStart;
     private ViewGroup layout_iGap;
     private String isoCode = "", countryName = "", pattern = "", regex = "", body = null;
@@ -160,13 +160,13 @@ public class FragmentIntroduce extends BaseFragment {
             titleTypeface = G.typeface_IRANSansMobile;
         }
 
-        txtSkip = (TextView) view.findViewById(R.id.int_txt_skip);
+//        txtSkip = (TextView) view.findViewById(R.id.int_txt_skip);
 
         Drawable mDrawableSkip = ContextCompat.getDrawable(context, R.drawable.background_skip);
         mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            txtSkip.setBackground(mDrawableSkip);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//            txtSkip.setBackground(mDrawableSkip);
+//        }
 
         logoIgap = (ImageView) view.findViewById(R.id.int_img_logo_introduce);
 
@@ -223,12 +223,12 @@ public class FragmentIntroduce extends BaseFragment {
             }
         });
 
-        txtSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startRegistration();
-            }
-        });
+//        txtSkip.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startRegistration();
+//            }
+//        });
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -239,7 +239,7 @@ public class FragmentIntroduce extends BaseFragment {
                 switch (position) {
 
                     case 0://Igap 1
-                        txtSkip.bringToFront();
+//                        txtSkip.bringToFront();
                         if (positionOffset == 0) {
 
                             isOne1 = true;
@@ -262,7 +262,7 @@ public class FragmentIntroduce extends BaseFragment {
                         break;
 
                     case 1://Security 2
-                        txtSkip.bringToFront();
+//                        txtSkip.bringToFront();
                         if (positionOffset == 0) {
                             isOne0 = true;
                             isOne2 = true;
@@ -286,7 +286,7 @@ public class FragmentIntroduce extends BaseFragment {
                         }
                         break;
                     case 2://Chat 3
-                        txtSkip.bringToFront();
+//                        txtSkip.bringToFront();
                         if (positionOffset == 0) {
                             isOne0 = true;
                             isOne1 = true;
@@ -308,7 +308,7 @@ public class FragmentIntroduce extends BaseFragment {
                         }
                         break;
                     case 3://boy 4
-                        txtSkip.bringToFront();
+//                        txtSkip.bringToFront();
                         if (positionOffset == 0) {
                             isOne0 = true;
                             isOne1 = true;
@@ -330,7 +330,7 @@ public class FragmentIntroduce extends BaseFragment {
                         }
                         break;
                     case 4://call 5
-                        txtSkip.bringToFront();
+//                        txtSkip.bringToFront();
                         if (positionOffset == 0) {
                             isOne0 = true;
                             isOne1 = true;
@@ -352,7 +352,7 @@ public class FragmentIntroduce extends BaseFragment {
                         }
                         break;
                     case 5://transfer1 6
-                        txtSkip.bringToFront();
+//                        txtSkip.bringToFront();
                         btnStart.bringToFront();
                         btnStart.getParent().requestLayout();
 
@@ -846,7 +846,7 @@ public class FragmentIntroduce extends BaseFragment {
 
             txt_p6_l1.setVisibility(View.GONE);
             txt_p6_l2.setVisibility(View.GONE);
-            btnStart.setVisibility(View.GONE);
+//            btnStart.setVisibility(View.GONE);
         }
         if (logo.equals(logoSecurity)) { //2
             logoIgap.setVisibility(View.INVISIBLE);
@@ -870,7 +870,7 @@ public class FragmentIntroduce extends BaseFragment {
 
             txt_p6_l1.setVisibility(View.GONE);
             txt_p6_l2.setVisibility(View.GONE);
-            btnStart.setVisibility(View.GONE);
+//            btnStart.setVisibility(View.GONE);
         }
         if (logo.equals(logoChat)) { // 3
 
@@ -895,7 +895,7 @@ public class FragmentIntroduce extends BaseFragment {
 
             txt_p6_l1.setVisibility(View.GONE);
             txt_p6_l2.setVisibility(View.GONE);
-            btnStart.setVisibility(View.GONE);
+//            btnStart.setVisibility(View.GONE);
         }
         if (logo.equals(transfer)) { // 4
 
@@ -920,7 +920,7 @@ public class FragmentIntroduce extends BaseFragment {
 
             txt_p6_l1.setVisibility(View.GONE);
             txt_p6_l2.setVisibility(View.GONE);
-            btnStart.setVisibility(View.GONE);
+//            btnStart.setVisibility(View.GONE);
         }
         if (logo.equals(call)) { // 5
 
@@ -945,7 +945,7 @@ public class FragmentIntroduce extends BaseFragment {
 
             txt_p6_l1.setVisibility(View.GONE);
             txt_p6_l2.setVisibility(View.GONE);
-            btnStart.setVisibility(View.GONE);
+//            btnStart.setVisibility(View.GONE);
         }
         if (logo.equals(boy)) { //6
 
