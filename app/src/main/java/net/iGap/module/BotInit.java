@@ -297,7 +297,9 @@ public class BotInit implements View.OnClickListener {
                     ButtonEntity btnEntery = new ButtonEntity();
                     btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
                     }.getType());
-                    childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(), this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), type);
+                    btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
+                    childLayout = MakeButtons.addButtons(btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, type);
+                 //   childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(), this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), type);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (Exception e) {
@@ -372,9 +374,9 @@ public class BotInit implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         try {
-            if (v.getId() == 3) {
+            if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
-            } else if (v.getId() == 2) {
+            } else if (v.getId() == ButtonActionType.BOT_ACTION) {
                 try {
                     Long identity = System.currentTimeMillis();
                     Realm realm = Realm.getDefaultInstance();
@@ -391,11 +393,11 @@ public class BotInit implements View.OnClickListener {
                     });
                 } catch (Exception e) {
                 }
-            } else if (v.getId() == 1) {
+            } else if (v.getId() == ButtonActionType.JOIN_LINK) {
                 HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
-            } else if (v.getId() == 4) {
+            } else if (v.getId() == ButtonActionType.WEB_LINK) {
                 HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
-            } else if (v.getId() == 5) {
+            } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
                 G.onBotClick.onBotCommandText(((ArrayList<String>) v.getTag()).get(0).toString(), ButtonActionType.WEBVIEW_LINK);
             }
         } catch (Exception e) {

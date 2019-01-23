@@ -72,6 +72,7 @@ import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.additionalData.AdditionalType;
+import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.additionalData.ButtonEntity;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.module.enums.SendingStep;
@@ -297,7 +298,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     ButtonEntity btnEntery = new ButtonEntity();
                                     btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
                                     }.getType());
-                                    childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(), this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
+                                    btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
+                                    childLayout = MakeButtons.addButtons(btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
+                                  //  childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(),this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -1792,9 +1795,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     @Override
     public void onClick(View v) {
         try {
-            if (v.getId() == 3) {
+            if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
-            } else if (v.getId() == 2) {
+            } else if (v.getId() == ButtonActionType.BOT_ACTION) {
                 try {
                     Long identity = System.currentTimeMillis();
                     Realm realm = Realm.getDefaultInstance();
@@ -1810,13 +1813,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 } catch (Exception e) {
                 }
-            } else if (v.getId() == 1) {
+            } else if (v.getId() ==  ButtonActionType.JOIN_LINK) {
                 HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
 
-            } else if (v.getId() == 4) {
+            } else if (v.getId() == ButtonActionType.WEB_LINK) {
                 HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
 
-            } else if (v.getId() == 5) {
+            } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
                 messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0).toString());
             }
 

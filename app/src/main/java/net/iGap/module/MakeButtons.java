@@ -94,13 +94,13 @@ public class MakeButtons {
         return linearLayout_179;
     }
 
-    public static LinearLayout addButtons(String jsonObject, View.OnClickListener clickListener, int culmn, float wightSum, String lable, String btnName, String imageUrl, int btnId, String value, LinearLayout mainLayout, Integer actionType, Integer additionalType) {
+    public static LinearLayout addButtons(ButtonEntity entity, View.OnClickListener clickListener, int culmn, float wightSum,  int btnId,  LinearLayout mainLayout,  Integer additionalType) {
         float weight = wightSum / culmn;
         float weightSum = 0;
         float textWeight = 0f;
         float imageWeight = 0f;
         if (culmn == 1) {
-            if (!imageUrl.equals("")) {
+            if (!entity.getImageUrl().equals("")) {
                 weightSum = 5f;
                 textWeight = 4f;
                 imageWeight = 1f;
@@ -109,7 +109,7 @@ public class MakeButtons {
                 textWeight = 1f;
             }
         } else if (culmn == 2) {
-            if (!imageUrl.equals("")) {
+            if (!entity.getImageUrl().equals("")) {
                 weightSum = .5f;
                 textWeight = .33f;
                 imageWeight = .16f;
@@ -118,7 +118,7 @@ public class MakeButtons {
                 textWeight = .5f;
             }
         } else if (culmn == 3) {
-            if (!imageUrl.equals("")) {
+            if (!entity.getImageUrl().equals("")) {
                 weightSum = 3f;
                 textWeight = 1.8f;
                 imageWeight = 1.2f;
@@ -127,7 +127,7 @@ public class MakeButtons {
                 textWeight = 3f;
             }
         }else if (culmn == 4) {
-            if (!imageUrl.equals("")) {
+            if (!entity.getImageUrl().equals("")) {
                 weightSum = 4f;
                 textWeight = 2.6f;
                 imageWeight = 1.4f;
@@ -190,9 +190,9 @@ public class MakeButtons {
 
         /*img1.setId(1);
         img1.setTag("abc");*/
-        if (!imageUrl.equals("")) {
+        if (!entity.getImageUrl().equals("")) {
             Picasso.get()
-                    .load(imageUrl)
+                    .load(entity.getImageUrl())
                     .resize(i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32))
                     .into(img1);
 
@@ -211,7 +211,7 @@ public class MakeButtons {
             linearLayout_529.addView(img1);
         }
 
-        if (lable.trim() != null) {
+        if (entity.getLable().trim() != null) {
             TextView btn1 = new TextView(G.context);
 
             // btn1.setId(R.id.btn1);
@@ -219,7 +219,7 @@ public class MakeButtons {
             btn1.setGravity(CENTER);
             btn1.setMaxLines(1);
             btn1.setTypeface(G.typeface_IRANSansMobile);
-            btn1.setText(btnName);
+            btn1.setText(entity.getLable());
 
             btn1.setTextSize(16);
             if (Build.VERSION.SDK_INT < 21) {
@@ -238,13 +238,13 @@ public class MakeButtons {
         }
         card.addView(linearLayout_529);
         ArrayList<String> actions = new ArrayList<>();
-        actions.add(value);
-        actions.add(lable);
-        actions.add(jsonObject);
+        actions.add(entity.getValue());
+        actions.add(entity.getLable());
+        actions.add(entity.getJsonObject());
         card.setTag(actions);
 
 
-        card.setId(actionType);
+        card.setId(entity.getActionType());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && additionalType != AdditionalType.UNDER_KEYBOARD_BUTTON) {
             StateListAnimator stateListAnimator = AnimatorInflater
