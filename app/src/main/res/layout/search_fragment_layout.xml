@@ -26,6 +26,7 @@
         android:layout_weight="1"
         android:paddingStart="@dimen/dp8"
         android:paddingLeft="@dimen/dp8"
+        android:paddingRight="@dimen/dp8"
         android:background="@color/green"
         android:orientation="horizontal">
 
