@@ -426,6 +426,7 @@
           android:layout_weight="1"
           android:hint="@string/search"
           android:padding="@dimen/dp8"
+          android:background="@null"
           android:textColor="@color/white"
           android:textColorHint="#dededd"
           android:textCursorDrawable="@drawable/white_cursor_color"
