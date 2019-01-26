@@ -78,16 +78,6 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
             setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
         }
 
-        /*
-        messageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                holder.itemView.performLongClick();
-                return false;
-            }
-        });
-        */
-
     }
 
     @Override

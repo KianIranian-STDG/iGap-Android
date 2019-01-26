@@ -281,7 +281,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             @Override
             public boolean onLongClick(View view) {
                 holder.itemView.performLongClick();
-                return false;
+                return true;
             }
         });
 

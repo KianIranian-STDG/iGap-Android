@@ -33,6 +33,7 @@ import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.LogWallet;
 import net.iGap.adapter.items.chat.TimeItem;
+import net.iGap.eventbus.ErrorHandler;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnChatMessageRemove;
@@ -47,6 +48,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.ErrorManager;
 
 public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements OnLongClickListener<Item> {
     // contain sender id
@@ -59,7 +61,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
-
             if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet) {
                 if (item.isSelected()) v.performLongClick();
             } else {
