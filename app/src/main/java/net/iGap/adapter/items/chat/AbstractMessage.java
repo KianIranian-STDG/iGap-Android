@@ -18,6 +18,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
@@ -275,6 +276,46 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             }
         }
+
+        holder.itemView.findViewById(R.id.mainContainer).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                holder.itemView.performLongClick();
+                return false;
+            }
+        });
+
+        holder.itemView.findViewById(R.id.mainContainer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new CountDownTimer(300, 100) {
+
+                    public void onTick(long millisUntilFinished) {
+                        view.setEnabled(false);
+                    }
+
+                    public void onFinish() {
+                        view.setEnabled(true);
+                    }
+                }.start();
+
+                if (G.isLinkClicked) {
+                    G.isLinkClicked = false;
+                    return;
+                }
+
+                if (messageClickListener != null && mMessage != null && mMessage.senderID != null && !mMessage.senderID.equalsIgnoreCase("-1")) {
+                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                        return ;
+                    }
+                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                        messageClickListener.onFailedMessageClick(view, mMessage, holder.getAdapterPosition());
+                    } else {
+                        messageClickListener.onContainerClick(view, mMessage, holder.getAdapterPosition());
+                    }
+                }
+            }
+        });
 
 
         if (holder instanceof TextItem.ViewHolder || holder instanceof ImageWithTextItem.ViewHolder || holder instanceof AudioItem.ViewHolder || holder instanceof FileItem.ViewHolder || holder instanceof VideoWithTextItem.ViewHolder || holder instanceof GifWithTextItem.ViewHolder) {

@@ -13,16 +13,21 @@ package net.iGap.adapter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.listeners.ClickEventHook;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.mikepenz.fastadapter.listeners.OnLongClickListener;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.LogItem;
@@ -33,6 +38,7 @@ import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnChatMessageRemove;
 import net.iGap.interfaces.OnChatMessageSelectionChanged;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.structs.StructMessageAttachment;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
@@ -91,7 +97,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         withOnClickListener(new OnClickListener<Item>() {
             @Override
             public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
-
                 new CountDownTimer(300, 100) {
 
                     public void onTick(long millisUntilFinished) {
@@ -103,23 +108,13 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                     }
                 }.start();
 
+                AppUtils.closeKeyboard(v);
 
                 if ((item instanceof LogWallet)) {
                     return false;
                 }
 
-                if (getSelectedItems().size() == 0) {
-                    if (iMessageItem != null && item.mMessage != null && item.mMessage.senderID != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
-                        if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                            return true;
-                        }
-                        if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                            iMessageItem.onFailedMessageClick(v, item.mMessage, position);
-                        } else {
-                            iMessageItem.onContainerClick(v, item.mMessage, position);
-                        }
-                    }
-                } else {
+                if (getSelectedItems().size() != 0) {
                     if (!(item instanceof TimeItem)) {
                         if (item.mMessage != null && item.mMessage.status != null && !item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             v.performLongClick();
