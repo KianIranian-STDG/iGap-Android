@@ -66,14 +66,40 @@ public class Theme extends Application {
     public static String default_linkColor = "#303F9F";
     public static String default_bubbleChatMusicColor = "#bfefef";
     public static String default_bubbleChatSendColor = "#e679dde6";
+    public static String default_backgroundThemeMsg = "#FFFFFF";
+    public static String default_backgroundThemeMsgPined = "#f9f9f9";
+    public static String default_textTitleTheme = "#000000";
+    public static String default_textSubTheme = "#bbbbbb";
+    public static String default_tintImage = "#000000";
+    public static String default_logLineTheme = "#e9e9e9";
+    public static String default_voteIconTheme = "#FFFFFF";
+    public static String default_bubbleChatReceiveColor = "#FFFFFF";
+    public static String default_textBubbleColor = "#000000";
+    public static String default_txtIconCheckColor = "#2A2A2A";
+    public static String default_textChatMusicColor = "#212121";
+
 
     public static String default_dark_appBarColor = "#000000";
     public static String default_dark_notificationColor = "#000000";
     public static String default_dark_toggleButtonColor = "#000000";
     public static String default_dark_attachmentColor = "#ffffff";
-    public static String default_dark_menuBackgroundColor = "#000000";
     public static String default_dark_headerTextColor = "#ffffff";
     public static String default_dark_progressColor = "#ffffff";
+    public static String default_dark_linkColor = "#00BCD4";
+    public static String default_dark_bubbleChatMusicColor = "#313131";
+    public static String default_dark_bubbleChatSendColor = "#151515";
+    public static String default_dark_backgroundThemeMsg = "#151515";
+    public static String default_dark_backgroundThemeMsgPined = "#000000";
+    public static String default_dark_textTitleTheme = "#ffffff";
+    public static String default_dark_textSubTheme = "#ffffff";
+    public static String default_dark_tintImage = "#ffffff";
+    public static String default_dark_logLineTheme = "#4b4b4b";
+    public static String default_dark_voteIconTheme = "#cacaca";
+    public static String default_dark_bubbleChatReceiveColor = "#c7101010";
+    public static String default_dark_textBubbleColor = "#ffffff";
+    public static String default_dark_txtIconCheckColor = "#ffffff";
+    public static String default_dark_textChatMusicColor = "#ffffff";
+
 
     public static String default_red_appBarColor = "#F44336";
     public static String default_Pink_appBarColor = "#E91E63";
@@ -95,6 +121,7 @@ public class Theme extends Application {
     public static String default_grey_appBarColor = "#616161";
     public static String default_blueGrey_appBarColor = "#455A64";
     public static String lineView = "#52afafaf";
+    public static String lineView_dark = "#313131";
 
 
     public static void setThemeColor() {
@@ -121,21 +148,21 @@ public class Theme extends Application {
                         preferences.getString(SHP_SETTING.KEY_FONT_HEADER_COLOR, default_headerTextColor),
                         preferences.getString(SHP_SETTING.KEY_PROGRES_COLOR, default_progressColor),
                         lineView,
-                        "#FFFFFF",
-                        "#f9f9f9",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
+                        default_backgroundThemeMsg,
+                        default_backgroundThemeMsgPined,
+                        default_textTitleTheme,
+                        default_textSubTheme,
+                        default_tintImage,
+                        default_logLineTheme,
+                        default_voteIconTheme,
                         default_bubbleChatSendColor,
-                        "#FFFFFF",
+                        default_bubbleChatReceiveColor,
                         preferences.getString(SHP_SETTING.KEY_APP_BAR_COLOR, default_appBarColor),
-                        "#000000",
-                        "#2A2A2A",
+                        default_textBubbleColor,
+                        default_txtIconCheckColor,
                         default_bubbleChatMusicColor,
                         default_linkColor,
-                        "#212121"
+                        default_textChatMusicColor
 
                 );
 
@@ -149,21 +176,21 @@ public class Theme extends Application {
                         default_headerTextColor,
                         default_progressColor,
                         lineView,
-                        "#FFFFFF",
-                        "#f9f9f9",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
+                        default_backgroundThemeMsg,
+                        default_backgroundThemeMsgPined,
+                        default_textTitleTheme,
+                        default_textSubTheme,
+                        default_tintImage,
+                        default_logLineTheme,
+                        default_voteIconTheme,
                         default_bubbleChatSendColor,
-                        "#FFFFFF",
+                        default_bubbleChatReceiveColor,
                         default_appBarColor,
-                        "#000000",
-                        "#2A2A2A",
+                        default_textBubbleColor,
+                        default_txtIconCheckColor,
                         default_bubbleChatMusicColor,
                         default_linkColor,
-                        "#212121"
+                        default_textChatMusicColor
                 );
 
                 break;
@@ -175,22 +202,22 @@ public class Theme extends Application {
                         default_dark_attachmentColor,
                         default_dark_headerTextColor,
                         default_dark_progressColor,
-                        "#313131",
-                        "#151515",
-                        "#000000",
-                        "#ffffff",
-                        "#ffffff",
-                        "#ffffff",
-                        "#4b4b4b",
-                        "#cacaca",
-                        "#151515",
-                        "#c7101010",
+                        lineView_dark,
+                        default_dark_backgroundThemeMsg,
+                        default_dark_backgroundThemeMsgPined,
+                        default_dark_textTitleTheme,
+                        default_dark_textSubTheme,
+                        default_dark_tintImage,
+                        default_dark_logLineTheme,
+                        default_dark_voteIconTheme,
+                        default_dark_bubbleChatSendColor,
+                        default_dark_bubbleChatReceiveColor,
                         "#2A2A2A",
-                        "#ffffff",
-                        "#ffffff",
-                        "#313131",
-                        "#00BCD4",
-                        "#ffffff"
+                        default_dark_textBubbleColor,
+                        default_dark_txtIconCheckColor,
+                        default_dark_bubbleChatMusicColor,
+                        default_dark_linkColor,
+                        default_dark_textChatMusicColor
                 );
 
                 break;
@@ -202,22 +229,22 @@ public class Theme extends Application {
                         default_red_appBarColor,
                         default_red_appBarColor,
                         default_red_appBarColor,
-                        "#ffcdd2",// is set
-                        "#FFFFFF",
-                        "#ef9a9a",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#D32F2F",
-                        "#FF5252",
-                        "#FF5252",
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#ffcdd2",
-                        "#283593",
-                        "#212121"
+                        "#ffcdd2",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#ef9a9a",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#D32F2F",//bubbleChatSendColor,
+                        "#FF5252",//bubbleChatReceiveColor,
+                        "#FF5252",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#ffcdd2",//bubbleChatMusicColor,
+                        "#283593",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case PINK:
@@ -228,22 +255,22 @@ public class Theme extends Application {
                         default_Pink_appBarColor,
                         default_Pink_appBarColor,
                         default_Pink_appBarColor,
-                        "#f8bbd0",// is set
-                        "#FFFFFF",
-                        "#f48fb1",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#C2185B",
-                        "#FF4081",
-                        "#FF4081",
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#f8bbd0",
-                        "#283593",
-                        "#212121"
+                        "#f8bbd0",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#f48fb1",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#C2185B",//bubbleChatSendColor,
+                        "#FF4081",//bubbleChatReceiveColor,
+                        "#FF4081",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#f8bbd0",//bubbleChatMusicColor,
+                        "#283593",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case PURPLE:
@@ -254,22 +281,22 @@ public class Theme extends Application {
                         default_purple_appBarColor,
                         default_purple_appBarColor,
                         default_purple_appBarColor,
-                        "#e1bee7",// is set
-                        "#FFFFFF",
-                        "#ce93d8",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#7B1FA2",
-                        "#E040FB",
-                        "#E040FB",
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#e1bee7",
-                        "#303F9F",
-                        "#212121"
+                        "#e1bee7",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#ce93d8",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#7B1FA2",//bubbleChatSendColor,
+                        "#E040FB",//bubbleChatReceiveColor,
+                        "#E040FB",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#e1bee7",//bubbleChatMusicColor,
+                        "#303F9F",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case DEEPPURPLE:
@@ -280,22 +307,22 @@ public class Theme extends Application {
                         default_deepPurple_appBarColor,
                         default_deepPurple_appBarColor,
                         default_deepPurple_appBarColor,
-                        "#d1c4e9",// is set
-                        "#FFFFFF",
-                        "#b39ddb",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#512DA8",
-                        "#7C4DFF",
-                        "#7C4DFF",
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#d1c4e9",
-                        "#303F9F",
-                        "#212121"
+                        "#d1c4e9",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#b39ddb",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#512DA8",//bubbleChatSendColor,
+                        "#7C4DFF",//bubbleChatReceiveColor,
+                        "#7C4DFF",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#d1c4e9",//bubbleChatMusicColor,
+                        "#303F9F",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case INDIGO:
@@ -306,22 +333,22 @@ public class Theme extends Application {
                         default_indigo_appBarColor,
                         default_indigo_appBarColor,
                         default_indigo_appBarColor,
-                        "#c5cae9",// line
-                        "#FFFFFF",
-                        "#9fa8da",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#303F9F",
-                        "#536DFE",
-                        "#536DFE",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#c5cae9",
-                        "#00BCD4",
-                        "#212121"
+                        "#c5cae9",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#9fa8da",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#303F9F",//bubbleChatSendColor,
+                        "#536DFE",//bubbleChatReceiveColor,
+                        "#536DFE",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#c5cae9",//bubbleChatMusicColor,
+                        "#00BCD4",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case BLUE:
@@ -332,22 +359,22 @@ public class Theme extends Application {
                         default_blue_appBarColor,
                         default_blue_appBarColor,
                         default_blue_appBarColor,
-                        "#bbdefb",// line
-                        "#FFFFFF",
-                        "#90caf9",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#1976D2",
-                        "#448AFF",
-                        "#03A9F4",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#bbdefb",
-                        "#283593",
-                        "#212121"
+                        "#bbdefb",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#90caf9",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#1976D2",//bubbleChatSendColor,
+                        "#448AFF",//bubbleChatReceiveColor,
+                        "#03A9F4",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#bbdefb",//bubbleChatMusicColor,
+                        "#283593",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
 
@@ -359,22 +386,22 @@ public class Theme extends Application {
                         default_lightBlue_appBarColor,
                         default_lightBlue_appBarColor,
                         default_lightBlue_appBarColor,
-                        "#b3e5fc",// line
-                        "#FFFFFF",
-                        "#81d4fa",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#0288D1",
-                        "#03A9F4",
-                        "#03A9F4",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#b3e5fc",
-                        "#283593",
-                        "#212121"
+                        "#b3e5fc",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#81d4fa",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#0288D1",//bubbleChatSendColor,
+                        "#03A9F4",//bubbleChatReceiveColor,
+                        "#03A9F4",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#b3e5fc",//bubbleChatMusicColor,
+                        "#283593",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
 
@@ -386,22 +413,22 @@ public class Theme extends Application {
                         default_cyan_appBarColor,
                         default_cyan_appBarColor,
                         default_cyan_appBarColor,
-                        "#b2ebf2",// line
-                        "#FFFFFF",
-                        "#81d4fa",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#0097A7",
-                        "#00BCD4",
-                        "#00BCD4",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#b2ebf2",
-                        "#283593",
-                        "#212121"
+                        "#b2ebf2",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#81d4fa",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#0097A7",//bubbleChatSendColor,
+                        "#00BCD4",//bubbleChatReceiveColor,
+                        "#00BCD4",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#b2ebf2",//bubbleChatMusicColor,
+                        "#283593",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case TEAL:
@@ -412,22 +439,22 @@ public class Theme extends Application {
                         default_teal_appBarColor,
                         default_teal_appBarColor,
                         default_teal_appBarColor,
-                        "#b2dfdb",// line
-                        "#FFFFFF",
-                        "#80cbc4",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#00796B",
-                        "#009688",
-                        "#009688",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#b2dfdb",
-                        "#303F9F",
-                        "#212121"
+                        "#b2dfdb",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#80cbc4",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#00796B",//bubbleChatSendColor,
+                        "#009688",//bubbleChatReceiveColor,
+                        "#009688",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#b2dfdb",//bubbleChatMusicColor,
+                        "#303F9F",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case GREEN:
@@ -438,22 +465,22 @@ public class Theme extends Application {
                         default_green_appBarColor,
                         default_green_appBarColor,
                         default_green_appBarColor,
-                        "#c8e6c9",// line
-                        "#FFFFFF",
-                        "#a5d6a7",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#388E3C",
-                        "#4CAF50",
-                        "#4CAF50",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#c8e6c9",
-                        "#283593",
-                        "#212121"
+                        "#c8e6c9",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#a5d6a7",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#388E3C",//bubbleChatSendColor,
+                        "#4CAF50",//bubbleChatReceiveColor,
+                        "#4CAF50",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#c8e6c9",//bubbleChatMusicColor,
+                        "#283593",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case LIGHT_GREEN:
@@ -464,22 +491,22 @@ public class Theme extends Application {
                         default_lightGreen_appBarColor,
                         default_lightGreen_appBarColor,
                         default_lightGreen_appBarColor,
-                        "#dcedc8",// line
-                        "#FFFFFF",
-                        "#c5e1a5",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#689F38",
-                        "#8BC34A",
-                        "#8BC34A",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#dcedc8",
-                        "#283593",
-                        "#212121"
+                        "#dcedc8",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#c5e1a5",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#689F38",//bubbleChatSendColor,
+                        "#8BC34A",//bubbleChatReceiveColor,
+                        "#8BC34A",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#dcedc8",//bubbleChatMusicColor,
+                        "#283593",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case LIME:
@@ -490,22 +517,22 @@ public class Theme extends Application {
                         default_lime_appBarColor,
                         default_lime_appBarColor,
                         default_lime_appBarColor,
-                        "#f0f4c3",// line
-                        "#FFFFFF",
-                        "#e6ee9c",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#AFB42B",
-                        "#CDDC39",
-                        "#CDDC39",//fab bottom
-                        "#212121",
-                        "#212121",
-                        "#f0f4c3",
-                        "#283593",
-                        "#212121"
+                        "#f0f4c3",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#e6ee9c",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#AFB42B",//bubbleChatSendColor,
+                        "#CDDC39",//bubbleChatReceiveColor,
+                        "#CDDC39",//fab bottom appBarColor,
+                        "#212121",//textBubbleColor,
+                        "#212121",//txtIconCheckColor,
+                        "#f0f4c3",//bubbleChatMusicColor,
+                        "#283593",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
 
@@ -517,22 +544,22 @@ public class Theme extends Application {
                         default_yellow_appBarColor,
                         default_yellow_appBarColor,
                         default_yellow_appBarColor,
-                        "#fff9c4",// line
-                        "#FFFFFF",
-                        "#fff59d",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#FBC02D",
-                        "#FFEB3B",
-                        "#FFEB3B",//fab bottom
-                        "#212121",
-                        "#212121",
-                        "#fff9c4",
-                        "#00BCD4",
-                        "#212121"
+                        "#fff9c4",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#fff59d",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#FBC02D",//bubbleChatSendColor,
+                        "#FFEB3B",//bubbleChatReceiveColor,
+                        "#FFEB3B",//fab bottom appBarColor,
+                        "#212121",//textBubbleColor,
+                        "#212121",//txtIconCheckColor,
+                        "#fff9c4",//bubbleChatMusicColor,
+                        "#00BCD4",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case AMBER:
@@ -543,22 +570,22 @@ public class Theme extends Application {
                         default_amber_appBarColor,
                         default_amber_appBarColor,
                         default_amber_appBarColor,
-                        "#ffecb3",// line
-                        "#FFFFFF",
-                        "#ffe082",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#FFA000",
-                        "#FFC107",
-                        "#FFC107",//fab bottom
-                        "#212121",
-                        "#212121",
-                        "#ffecb3",
-                        "#283593",
-                        "#212121"
+                        "#ffecb3",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#ffe082",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#FFA000",//bubbleChatSendColor,
+                        "#FFC107",//bubbleChatReceiveColor,
+                        "#FFC107",//fab bottom appBarColor,
+                        "#212121",//textBubbleColor,
+                        "#212121",//txtIconCheckColor,
+                        "#ffecb3",//bubbleChatMusicColor,
+                        "#283593",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case ORANGE:
@@ -569,22 +596,22 @@ public class Theme extends Application {
                         default_orange_appBarColor,
                         default_orange_appBarColor,
                         default_orange_appBarColor,
-                        "#ffe0b2",// line
-                        "#FFFFFF",
-                        "#ffcc80",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#F57C00",
-                        "#FF9800",
-                        "#FF9800",//fab bottom
-                        "#212121",
-                        "#212121",
-                        "#ffe0b2",
-                        "#283593",
-                        "#212121"
+                        "#ffe0b2",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#ffcc80",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#F57C00",//bubbleChatSendColor,
+                        "#FF9800",//bubbleChatReceiveColor,
+                        "#FF9800",//fab bottom appBarColor,
+                        "#212121",//textBubbleColor,
+                        "#212121",//txtIconCheckColor,
+                        "#ffe0b2",//bubbleChatMusicColor,
+                        "#283593",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
 
@@ -596,22 +623,22 @@ public class Theme extends Application {
                         default_deepOrange_appBarColor,
                         default_deepOrange_appBarColor,
                         default_deepOrange_appBarColor,
-                        "#ffccbc",// line
-                        "#FFFFFF",
-                        "#ffab91",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#E64A19",
-                        "#FF5722",
-                        "#FF5722",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#ffccbc",
-                        "#536DFE",
-                        "#212121"
+                        "#ffccbc",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#ffab91",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#E64A19",//bubbleChatSendColor,
+                        "#FF5722",//bubbleChatReceiveColor,
+                        "#FF5722",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#ffccbc",//bubbleChatMusicColor,
+                        "#536DFE",//linkColor,
+                        "#212121" //textChatMusicColor
 
                 );
                 break;
@@ -624,22 +651,22 @@ public class Theme extends Application {
                         default_brown_appBarColor,
                         default_brown_appBarColor,
                         default_brown_appBarColor,
-                        "#d7ccc8",// line
-                        "#FFFFFF",
-                        "#bcaaa4",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#5D4037",
-                        "#795548",
-                        "#795548",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#d7ccc8",
-                        "#303F9F",
-                        "#212121"
+                        "#d7ccc8",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#bcaaa4",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#5D4037",//bubbleChatSendColor,
+                        "#795548",//bubbleChatReceiveColor,
+                        "#795548",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#d7ccc8",//bubbleChatMusicColor,
+                        "#303F9F",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case GREY:
@@ -650,22 +677,22 @@ public class Theme extends Application {
                         default_grey_appBarColor,
                         default_grey_appBarColor,
                         default_grey_appBarColor,
-                        "#f5f5f5",// line
-                        "#FFFFFF",
-                        "#e0e0e0",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#616161",
-                        "#9E9E9E",
-                        "#9E9E9E",//fab bottom
-                        "#ffffff",
-                        "#212121",
-                        "#f5f5f5",
-                        "#536DFE",
-                        "#212121"
+                        "#f5f5f5",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#e0e0e0",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#616161",//bubbleChatSendColor,
+                        "#9E9E9E",//bubbleChatReceiveColor,
+                        "#9E9E9E",//fab bottom appBarColor,
+                        "#ffffff",//textBubbleColor,
+                        "#212121",//txtIconCheckColor,
+                        "#f5f5f5",//bubbleChatMusicColor,
+                        "#536DFE",//linkColor,
+                        "#212121" //textChatMusicColor
 
                 );
                 break;
@@ -677,22 +704,22 @@ public class Theme extends Application {
                         default_blueGrey_appBarColor,
                         default_blueGrey_appBarColor,
                         default_blueGrey_appBarColor,
-                        "#cfd8dc",// line
-                        "#FFFFFF",
-                        "#b0bec5",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#455A64",
-                        "#607D8B",
-                        "#607D8B",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#cfd8dc",
-                        "#303F9F",
-                        "#212121"
+                        "#cfd8dc",//lineView,
+                        "#FFFFFF",//backgroundThemeMsg,
+                        "#b0bec5",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#455A64",//bubbleChatSendColor,
+                        "#607D8B",//bubbleChatReceiveColor,
+                        "#607D8B",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#cfd8dc",//bubbleChatMusicColor,
+                        "#303F9F",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case BLUE_GREY_COMPLETE:
@@ -703,22 +730,22 @@ public class Theme extends Application {
                         default_blueGrey_appBarColor,
                         default_blueGrey_appBarColor,
                         default_blueGrey_appBarColor,
-                        "#607D8B",// line
-                        "#CFD8DC",
-                        "#b0bec5",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#455A64",
-                        "#607D8B",
-                        "#607D8B",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#cfd8dc",
-                        "#00bcd4",
-                        "#212121"
+                        "#607D8B",//lineView,
+                        "#CFD8DC",//backgroundThemeMsg,
+                        "#b0bec5",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#455A64",//bubbleChatSendColor,
+                        "#607D8B",//bubbleChatReceiveColor,
+                        "#607D8B",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#cfd8dc",//bubbleChatMusicColor,
+                        "#00bcd4",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
 
@@ -730,22 +757,22 @@ public class Theme extends Application {
                         default_indigo_appBarColor,
                         default_indigo_appBarColor,
                         default_indigo_appBarColor,
-                        "#3f51b5",// line
-                        "#C5CAE9",
-                        "#9fa8da",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#303F9F",
-                        "#3f51b5",
-                        "#3f51b5",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#C5CAE9",
-                        "#448AFF",
-                        "#212121"
+                        "#3f51b5",//lineView,
+                        "#C5CAE9",//backgroundThemeMsg,
+                        "#9fa8da",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#303F9F",//bubbleChatSendColor,
+                        "#3f51b5",//bubbleChatReceiveColor,
+                        "#3f51b5",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#C5CAE9",//bubbleChatMusicColor,
+                        "#448AFF",//linkColor,
+                        "#212121" //textChatMusicColor
 
                 );
                 break;
@@ -757,22 +784,22 @@ public class Theme extends Application {
                         default_brown_appBarColor,
                         default_brown_appBarColor,
                         default_brown_appBarColor,
-                        "#795548",// line
-                        "#D7CCC8",
-                        "#bcaaa4",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#5D4037",
-                        "#795548",
-                        "#795548",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#D7CCC8",
-                        "#00bcd4",
-                        "#212121"
+                        "#795548",//lineView,
+                        "#D7CCC8",//backgroundThemeMsg,
+                        "#bcaaa4",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#5D4037",//bubbleChatSendColor,
+                        "#795548",//bubbleChatReceiveColor,
+                        "#795548",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#D7CCC8",//bubbleChatMusicColor,
+                        "#00bcd4",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
             case TEAL_COMPLETE:
@@ -783,22 +810,22 @@ public class Theme extends Application {
                         default_teal_appBarColor,
                         default_teal_appBarColor,
                         default_teal_appBarColor,
-                        "#009688",// line
-                        "#B2DFDB",
-                        "#80cbc4",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#00796B",
-                        "#009688",
-                        "#009688",//fab bottom
-                        "#FFFFFF",
-                        "#FFFFFF",
-                        "#B2DFDB",
-                        "#303F9F",
-                        "#212121"
+                        "#009688",//lineView,
+                        "#B2DFDB",//backgroundThemeMsg,
+                        "#80cbc4",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#00796B",//bubbleChatSendColor,
+                        "#009688",//bubbleChatReceiveColor,
+                        "#009688",//fab bottom appBarColor,
+                        "#FFFFFF",//textBubbleColor,
+                        "#FFFFFF",//txtIconCheckColor,
+                        "#B2DFDB",//bubbleChatMusicColor,
+                        "#303F9F",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
 
@@ -810,22 +837,22 @@ public class Theme extends Application {
                         default_grey_appBarColor,
                         default_grey_appBarColor,
                         default_grey_appBarColor,
-                        "#e0e0e0",// line
-                        "#F5F5F5",
-                        "#e0e0e0",
-                        "#000000",
-                        "#bbbbbb",
-                        "#000000",
-                        "#e9e9e9",
-                        "#FFFFFF",
-                        "#616161",
-                        "#9E9E9E",
-                        "#9E9E9E",//fab bottom
-                        "#ffffff",
-                        "#212121",
-                        "#F5F5F5",
-                        "#2196f3",
-                        "#212121"
+                        "#e0e0e0",//lineView,
+                        "#F5F5F5",//backgroundThemeMsg,
+                        "#e0e0e0",//backgroundThemeMsgPined
+                        "#000000",//textTitleTheme,
+                        "#bbbbbb",//textSubTheme,
+                        "#000000",//tintImage,
+                        "#e9e9e9",//logLineTheme,
+                        "#FFFFFF",//voteIconTheme,
+                        "#616161",//bubbleChatSendColor,
+                        "#9E9E9E",//bubbleChatReceiveColor,
+                        "#9E9E9E",//fab bottom appBarColor,
+                        "#ffffff",//textBubbleColor,
+                        "#212121",//txtIconCheckColor,
+                        "#F5F5F5",//bubbleChatMusicColor,
+                        "#2196f3",//linkColor,
+                        "#212121" //textChatMusicColor
                 );
                 break;
         }
