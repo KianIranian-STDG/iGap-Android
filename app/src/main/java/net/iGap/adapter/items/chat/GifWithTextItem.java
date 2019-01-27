@@ -13,12 +13,15 @@ package net.iGap.adapter.items.chat;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
@@ -129,7 +132,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         holder.itemView.findViewById(R.id.progress).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isSelected()) {
+                if (!FragmentChat.isInSelectionMode) {
                     if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         if (!hasFileSize(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getLocalFilePath() :
                                 mMessage.attachment.getLocalFilePath())) {
@@ -164,6 +167,8 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
                             }
                         }
                     }
+                } else {
+                    holder.itemView.performLongClick();
                 }
             }
         });
@@ -171,43 +176,10 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.itemView.findViewById(R.id.progress).performClick();
-            }
-        });
-
-        holder.image.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                holder.itemView.performLongClick();
-                return false;
-            }
-        });
-
-
-        messageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                holder.itemView.performLongClick();
-                return false;
-            }
-        });
-
-        messageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (G.isLinkClicked) {
-                    G.isLinkClicked = false;
-                    return;
-                }
-                if (!isSelected()) {
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                        return;
-                    }
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
-                    } else {
-                        messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
-                    }
+                if (FragmentChat.isInSelectionMode){
+                    holder.itemView.performLongClick();
+                } else {
+                    holder.itemView.findViewById(R.id.progress).performClick();
                 }
             }
         });

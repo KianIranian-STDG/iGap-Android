@@ -369,6 +369,7 @@ public class FragmentChat extends BaseFragment
     public static int forwardMessageCount = 0;
     public static ArrayList<Parcelable> mForwardMessages;
     public static boolean canClearForwardList = true;
+    public static boolean isInSelectionMode = false;
     public static Realm realmChat; // static for FragmentTest
     public static boolean canUpdateAfterDownload = false;
     public static String titleStatic;
@@ -3818,6 +3819,7 @@ public class FragmentChat extends BaseFragment
     public void onChatMessageSelectionChanged(int selectedCount, Set<AbstractMessage> selectedItems) {
         //   Toast.makeText(ActivityChat.this, "selected: " + Integer.toString(selectedCount), Toast.LENGTH_SHORT).show();
         if (selectedCount > 0) {
+            FragmentChat.isInSelectionMode = true;
             toolbar.setVisibility(View.GONE);
             rippleReplaySelected.setVisibility(View.VISIBLE);
 
@@ -3918,6 +3920,7 @@ public class FragmentChat extends BaseFragment
 
             ll_AppBarSelected.setVisibility(View.VISIBLE);
         } else {
+            FragmentChat.isInSelectionMode = false;
             toolbar.setVisibility(View.VISIBLE);
             ll_AppBarSelected.setVisibility(View.GONE);
         }
