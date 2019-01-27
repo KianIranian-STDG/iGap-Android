@@ -9,8 +9,10 @@ import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -30,6 +32,7 @@ import com.hanks.library.AnimateCheckBox;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
@@ -38,6 +41,8 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.ReserveSpaceGifImageView;
 import net.iGap.module.ReserveSpaceRoundedImageView;
+
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.R.attr.left;
 import static android.graphics.Typeface.BOLD;
@@ -1301,7 +1306,7 @@ public class ViewMaker {
         return mainContainer;
     }
 
-    static View makeTextViewMessage(int maxsize, boolean hasEmoji, boolean hasLink) {
+    static View makeTextViewMessage(int maxsize, boolean hasEmoji, boolean hasLink, RecyclerView.ViewHolder holder) {
 
         if (hasEmoji) {
             EmojiTextViewE emojiTextViewE = new EmojiTextViewE(context);
@@ -1322,7 +1327,21 @@ public class ViewMaker {
             }
             setLayoutDirection(emojiTextViewE, View.LAYOUT_DIRECTION_LOCALE);
             if (hasLink) {
-                emojiTextViewE.setMovementMethod(LinkMovementMethod.getInstance());
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, emojiTextViewE)
+                        .setOnLinkClickListener((tv, url) -> {
+                            // Handle clicks.
+                            if (FragmentChat.isInSelectionMode) {
+                                holder.itemView.performLongClick();
+                                return true;
+                            }
+                            return false;
+                        })
+                        .setOnLinkLongClickListener((tv, url) -> {
+                            // Handle long-clicks.
+                            return true;
+                        });
+
             }
 
             if (maxsize > 0) {
@@ -1348,7 +1367,20 @@ public class ViewMaker {
             }
             setLayoutDirection(textView, View.LAYOUT_DIRECTION_LOCALE);
             if (hasLink) {
-                textView.setMovementMethod(LinkMovementMethod.getInstance());
+                BetterLinkMovementMethod
+                        .linkify(Linkify.ALL, textView)
+                        .setOnLinkClickListener((tv, url) -> {
+                            // Handle clicks.
+                            if (FragmentChat.isInSelectionMode) {
+                                holder.itemView.performLongClick();
+                                return true;
+                            }
+                            return false;
+                        })
+                        .setOnLinkLongClickListener((tv, url) -> {
+                            // Handle long-clicks.
+                            return true;
+                        });
             }
             if (maxsize > 0) {
                 textView.setMaxWidth(maxsize);

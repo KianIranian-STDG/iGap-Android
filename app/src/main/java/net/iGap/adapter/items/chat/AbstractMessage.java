@@ -25,6 +25,7 @@ import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -198,22 +199,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    protected void setTextIfNeeded(EmojiTextViewE view, String msg) {
-
-        if (!TextUtils.isEmpty(msg)) {
-            if (mMessage.hasLinkInMessage) {
-                view.setText(HelperUrl.getLinkText(msg, mMessage.linkInfo, mMessage.messageID));
-            } else {
-                msg = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
-                view.setText(msg);
-            }
-
-            view.setVisibility(View.VISIBLE);
-        } else {
-            view.setVisibility(View.GONE);
-        }
-    }
-
     public AbstractMessage setMessage(StructMessageInfo message) {
         this.mMessage = message;
 
@@ -325,8 +310,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 maxsize = G.maxChatBox;
             }
 
-            messageView = ViewMaker.makeTextViewMessage(maxsize, mMessage.hasEmojiInText, mMessage.hasLinkInMessage);
-
+            messageView = ViewMaker.makeTextViewMessage(maxsize, mMessage.hasEmojiInText, mMessage.hasLinkInMessage, holder);
             layoutMessageContainer.addView(messageView);
             try {
                 if (buttonList != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
