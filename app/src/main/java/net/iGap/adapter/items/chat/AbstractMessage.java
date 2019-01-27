@@ -715,21 +715,31 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             lytVoteUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    voteSend(ProtoGlobal.RoomMessageReaction.THUMBS_UP);
+                    if (FragmentChat.isInSelectionMode) {
+                        holder.itemView.performLongClick();
+                    } else {
+                        voteSend(ProtoGlobal.RoomMessageReaction.THUMBS_UP);
+                    }
                 }
             });
 
             lytVoteDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    voteSend(ProtoGlobal.RoomMessageReaction.THUMBS_DOWN);
+                    if (FragmentChat.isInSelectionMode) {
+                        holder.itemView.performLongClick();
+                    } else {
+                        voteSend(ProtoGlobal.RoomMessageReaction.THUMBS_DOWN);
+                    }
                 }
             });
 
             txtVoteForward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!isSelected()) {
+                    if (FragmentChat.isInSelectionMode) {
+                        holder.itemView.performLongClick();
+                    } else {
                         messageClickListener.onForwardClick(mMessage);
                     }
                 }
