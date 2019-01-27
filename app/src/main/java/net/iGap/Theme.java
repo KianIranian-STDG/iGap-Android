@@ -3,6 +3,7 @@ package net.iGap;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.EmojiPopup;
@@ -57,45 +58,45 @@ public class Theme extends Application {
     public static final int GREY_COMPLETE = 26;
 
 
-    public static String default_appBarColor = "#00B0BF";
-    public static String default_notificationColor = "#e51c23";
+    public static String default_appBarColor = "#9dc756";
+    public static String default_notificationColor = "#e05353";
     public static String default_toggleButtonColor = "#00B0BF";
     public static String default_attachmentColor = "#00B0BF";
     public static String default_headerTextColor = "#00B0BF";
     public static String default_progressColor = "#00B0BF";
     public static String default_linkColor = "#303F9F";
     public static String default_bubbleChatMusicColor = "#bfefef";
-    public static String default_bubbleChatSendColor = "#e679dde6";
+    public static String default_bubbleChatSendColor = "#809dc756";
+    public static String default_bubbleChatReceiveColor = "#cce5e1dc";
     public static String default_backgroundThemeMsg = "#FFFFFF";
-    public static String default_backgroundThemeMsgPined = "#f9f9f9";
+    public static String default_backgroundThemeMsgPined = "#1a9dc756";
     public static String default_textTitleTheme = "#000000";
     public static String default_textSubTheme = "#bbbbbb";
     public static String default_tintImage = "#000000";
     public static String default_logLineTheme = "#e9e9e9";
     public static String default_voteIconTheme = "#FFFFFF";
-    public static String default_bubbleChatReceiveColor = "#FFFFFF";
     public static String default_textBubbleColor = "#000000";
     public static String default_txtIconCheckColor = "#2A2A2A";
     public static String default_textChatMusicColor = "#212121";
 
 
-    public static String default_dark_appBarColor = "#000000";
-    public static String default_dark_notificationColor = "#000000";
+    public static String default_dark_appBarColor = "#2a3d3d";
+    public static String default_dark_notificationColor = "#c4d838";
     public static String default_dark_toggleButtonColor = "#000000";
     public static String default_dark_attachmentColor = "#ffffff";
     public static String default_dark_headerTextColor = "#ffffff";
     public static String default_dark_progressColor = "#ffffff";
     public static String default_dark_linkColor = "#00BCD4";
     public static String default_dark_bubbleChatMusicColor = "#313131";
-    public static String default_dark_bubbleChatSendColor = "#151515";
+    public static String default_dark_bubbleChatSendColor = "#33749e85";
+    public static String default_dark_bubbleChatReceiveColor = "#33ddd1c5";
     public static String default_dark_backgroundThemeMsg = "#151515";
-    public static String default_dark_backgroundThemeMsgPined = "#000000";
+    public static String default_dark_backgroundThemeMsgPined = "#3314191c";
     public static String default_dark_textTitleTheme = "#ffffff";
     public static String default_dark_textSubTheme = "#ffffff";
     public static String default_dark_tintImage = "#ffffff";
     public static String default_dark_logLineTheme = "#4b4b4b";
     public static String default_dark_voteIconTheme = "#cacaca";
-    public static String default_dark_bubbleChatReceiveColor = "#c7101010";
     public static String default_dark_textBubbleColor = "#ffffff";
     public static String default_dark_txtIconCheckColor = "#ffffff";
     public static String default_dark_textChatMusicColor = "#ffffff";
@@ -129,6 +130,8 @@ public class Theme extends Application {
         SharedPreferences preferences = context.getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         G.themeColor = preferences.getInt(SHP_SETTING.KEY_THEME_COLOR, DEFAULT);
         G.isDarkTheme = preferences.getBoolean(SHP_SETTING.KEY_THEME_DARK, false);
+        Log.d("bagi" , G.themeColor + "");
+        Log.d("bagi" , G.isDarkTheme + "");
 
         /*if (G.themeColor == DARK) {
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
@@ -789,14 +792,14 @@ public class Theme extends Application {
                         "#bcaaa4",//backgroundThemeMsgPined
                         "#000000",//textTitleTheme,
                         "#bbbbbb",//textSubTheme,
-                        "#000000",//tintImage,
+                        "#000000",//tintImage,?
                         "#e9e9e9",//logLineTheme,
                         "#FFFFFF",//voteIconTheme,
                         "#5D4037",//bubbleChatSendColor,
                         "#795548",//bubbleChatReceiveColor,
                         "#795548",//fab bottom appBarColor,
                         "#FFFFFF",//textBubbleColor,
-                        "#FFFFFF",//txtIconCheckColor,
+                        "#FFFFFF",//txtIconCheckColor,?
                         "#D7CCC8",//bubbleChatMusicColor,
                         "#00bcd4",//linkColor,
                         "#212121" //textChatMusicColor
