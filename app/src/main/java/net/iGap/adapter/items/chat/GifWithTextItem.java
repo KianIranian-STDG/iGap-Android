@@ -183,6 +183,14 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
                 }
             }
         });
+
+        holder.image.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                holder.itemView.performLongClick();
+                return true;
+            }
+        });
     }
 
     @Override

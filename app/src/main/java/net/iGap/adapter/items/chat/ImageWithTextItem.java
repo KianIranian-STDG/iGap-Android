@@ -11,12 +11,14 @@
 package net.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperRadius;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.EmojiTextViewE;
@@ -75,7 +77,10 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isSelected()) {
+                Log.d("bagi" , "ClickImage");
+                if (FragmentChat.isInSelectionMode){
+                        holder.itemView.performLongClick();
+                } else {
                     if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         return;
                     }
@@ -90,38 +95,10 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
         holder.image.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public boolean onLongClick(View view) {
+                Log.d("bagi" , "LongClickImage");
                 holder.itemView.performLongClick();
-                return false;
-            }
-        });
-
-
-        messageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                holder.itemView.performLongClick();
-                return false;
-            }
-        });
-
-        messageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (G.isLinkClicked) {
-                    G.isLinkClicked = false;
-                    return;
-                }
-                if (!isSelected()) {
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                        return;
-                    }
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
-                    } else {
-                        messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
-                    }
-                }
+                return true;
             }
         });
     }

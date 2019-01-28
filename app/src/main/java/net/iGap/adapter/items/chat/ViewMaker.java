@@ -11,9 +11,9 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -1330,14 +1330,17 @@ public class ViewMaker {
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, emojiTextViewE)
                         .setOnLinkClickListener((tv, url) -> {
+
+                            Log.d("bagi" , "OnMessageLinkClick");
                             // Handle clicks.
                             if (FragmentChat.isInSelectionMode) {
-                                holder.itemView.performLongClick();
                                 return true;
                             }
+
                             return false;
                         })
                         .setOnLinkLongClickListener((tv, url) -> {
+                            Log.d("bagi" , "OnMessageLinkLongClick");
                             // Handle long-clicks.
                             return true;
                         });

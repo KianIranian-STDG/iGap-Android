@@ -265,6 +265,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         holder.itemView.findViewById(R.id.mainContainer).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+                Log.d("bagi" , "itemViewLongClick");
                 holder.itemView.performLongClick();
                 return true;
             }
@@ -273,6 +274,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         holder.itemView.findViewById(R.id.mainContainer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("bagi" , "itemViewClick");
                 new CountDownTimer(300, 100) {
 
                     public void onTick(long millisUntilFinished) {
@@ -312,6 +314,29 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             messageView = ViewMaker.makeTextViewMessage(maxsize, mMessage.hasEmojiInText, mMessage.hasLinkInMessage, holder);
             layoutMessageContainer.addView(messageView);
+
+            messageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("bagi" , "OnClickMessage");
+                    if (FragmentChat.isInSelectionMode) {
+                        holder.itemView.performLongClick();
+                    } else {
+                        holder.itemView.findViewById(R.id.mainContainer).performClick();
+                    }
+
+                }
+            });
+
+            messageView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    Log.d("bagi" , "OnLongClickMessage");
+                    holder.itemView.performLongClick();
+                    return true;
+                }
+            });
+
             try {
                 if (buttonList != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
                     if (secondlayoutMessageContainer != null) {
@@ -1173,7 +1198,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                 @Override
                 public void onMessageProgressClick(MessageProgress progress) {
-                    forOnCLick(holder, attachment);
+                    if (FragmentChat.isInSelectionMode) {
+                        holder.itemView.performLongClick();
+                    } else {
+                        forOnCLick(holder, attachment);
+                    }
                 }
             });
         }
@@ -1266,7 +1295,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                     @Override
                     public void onMessageProgressClick(MessageProgress progress) {
-                        forOnCLick(holder, attachment);
+                        if (FragmentChat.isInSelectionMode) {
+                            holder.itemView.performLongClick();
+                        } else {
+                            forOnCLick(holder, attachment);
+                        }
                     }
                 });
                 break;
@@ -1372,7 +1405,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                     @Override
                     public void onMessageProgressClick(MessageProgress progress) {
-                        forOnCLick(holder, attachment);
+                        if (FragmentChat.isInSelectionMode) {
+                            holder.itemView.performLongClick();
+                        } else {
+                            forOnCLick(holder, attachment);
+                        }
                     }
                 });
 
