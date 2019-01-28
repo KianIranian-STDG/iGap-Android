@@ -365,11 +365,11 @@
 
   <!--setting-->
   <style name="background_setting_light">
-    <item name="android:background">@color/white</item>
+    <item name="android:background">@color/background_setting_light</item>
   </style>
 
   <style name="background_2_setting_light">
-    <item name="android:background">@color/st_background2</item>
+    <item name="android:background">@color/background_setting_light_2</item>
   </style>
 
   <style name="text_title_style_setting_light">

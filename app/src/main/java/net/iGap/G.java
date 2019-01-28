@@ -133,7 +133,10 @@ public class G extends MultiDexApplication {
     public static String textChatMusic;
     public static String notificationColor;
     public static String toggleButtonColor;
+    public static String roomSenderTextColor;
+    public static String SeenTickColor;
     public static String attachmentColor;
+    public static String roomMessageTypeColor;
     public static String iconColorBottomSheet;
     public static String progressColor;
     public static String headerTextColor;
