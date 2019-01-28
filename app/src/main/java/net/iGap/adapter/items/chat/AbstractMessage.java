@@ -1027,9 +1027,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             forwardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    if (mMessage.username.length() > 0) {
-                        HelperUrl.checkUsernameAndGoToRoomWithMessageId(mMessage.username, HelperUrl.ChatEntry.profile, (mMessage.forwardedFrom.getMessageId() * (-1)));
+                    if (FragmentChat.isInSelectionMode) {
+                        holder.itemView.performLongClick();
+                    } else {
+                        if (mMessage.username.length() > 0) {
+                            HelperUrl.checkUsernameAndGoToRoomWithMessageId(mMessage.username, HelperUrl.ChatEntry.profile, (mMessage.forwardedFrom.getMessageId() * (-1)));
+                        }
                     }
                 }
             });
