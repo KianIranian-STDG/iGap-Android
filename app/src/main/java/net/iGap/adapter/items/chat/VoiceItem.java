@@ -143,6 +143,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             }
         };
 
+        holder.btnPlayMusic.setOnLongClickListener(getLongClickPerform(holder));
+
         holder.btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

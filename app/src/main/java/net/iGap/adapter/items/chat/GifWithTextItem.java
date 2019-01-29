@@ -129,6 +129,8 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
         }
 
+        holder.itemView.findViewById(R.id.progress).setOnLongClickListener(getLongClickPerform(holder));
+
         holder.itemView.findViewById(R.id.progress).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -184,13 +186,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             }
         });
 
-        holder.image.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                holder.itemView.performLongClick();
-                return true;
-            }
-        });
+        holder.image.setOnLongClickListener(getLongClickPerform(holder));
     }
 
     @Override

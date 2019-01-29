@@ -156,16 +156,15 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             }
         };
 
-//        holder.itemView.findViewById(R.id.mainContainer).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
+        holder.btnPlayMusic.setOnLongClickListener(getLongClickPerform(holder));
 
         holder.btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (FragmentChat.isInSelectionMode) {
+                    holder.itemView.performLongClick();
+                    return;
+                }
 
                 if (holder.mFilePath.length() < 1) return;
 
@@ -202,6 +201,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             public boolean onTouch(View v, MotionEvent event) {
 
                 if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (FragmentChat.isInSelectionMode) {
+                        holder.itemView.performLongClick();
+                        return true;
+                    }
                     if (holder.mMessageID.equals(MusicPlayer.messageId)) {
                         MusicPlayer.setMusicProgress(holder.musicSeekbar.getProgress());
                     }

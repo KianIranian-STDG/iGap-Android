@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
@@ -94,9 +95,16 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
             }
 
             final RealmRoomMessageLocation finalItem = item;
+            holder.imgMapPosition.setOnLongClickListener(getLongClickPerform(holder));
+
             holder.imgMapPosition.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (FragmentChat.isInSelectionMode) {
+                        holder.itemView.performLongClick();
+                        return;
+                    }
+
                     try {
                         HelperPermission.getLocationPermission(G.currentActivity, new OnGetPermission() {
 

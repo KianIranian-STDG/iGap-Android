@@ -339,14 +339,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             });
 
-            messageView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    Log.d("bagi" , "OnLongClickMessage");
-                    holder.itemView.performLongClick();
-                    return true;
-                }
-            });
+            messageView.setOnLongClickListener(getLongClickPerform(holder));
 
             try {
                 if (buttonList != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
@@ -643,6 +636,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
+    protected View.OnLongClickListener getLongClickPerform(final RecyclerView.ViewHolder holder){
+        return new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                holder.itemView.performLongClick();
+                return true;
+            }
+        };
+    }
+
     protected void voteAction(VH holder, Realm realm) {
 
         LinearLayout mainContainer = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
@@ -732,14 +735,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 txtVoteUp.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVoteUp.getText().toString()));
             }
 
-            View.OnLongClickListener longClick = new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    holder.itemView.performLongClick();
-                    return true;
-                }
-            };
-
             lytVoteUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -751,7 +746,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             });
 
-            lytVoteUp.setOnLongClickListener(longClick);
+            lytVoteUp.setOnLongClickListener(getLongClickPerform(holder));
 
             lytVoteDown.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -764,7 +759,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             });
 
-            lytVoteDown.setOnLongClickListener(longClick);
+            lytVoteDown.setOnLongClickListener(getLongClickPerform(holder));
 
             txtVoteForward.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -777,7 +772,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             });
 
-            txtVoteForward.setOnLongClickListener(longClick);
+            txtVoteForward.setOnLongClickListener(getLongClickPerform(holder));
 
 
         }
@@ -981,15 +976,21 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             final View replayView = ViewMaker.getViewReplay();
 
             if (replayView != null) {
-
                 final TextView replyFrom = (TextView) replayView.findViewById(R.id.chslr_txt_replay_from);
                 final EmojiTextViewE replayMessage = (EmojiTextViewE) replayView.findViewById(R.id.chslr_txt_replay_message);
                 replayView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (FragmentChat.isInSelectionMode) {
+                            holder.itemView.performLongClick();
+                            return;
+                        }
+
                         messageClickListener.onReplyClick(mMessage.replayTo);
                     }
                 });
+
+                replayView.setOnLongClickListener(getLongClickPerform(holder));
 
                 try {
                     AppUtils.rightFileThumbnailIcon(((ImageView) replayView.findViewById(R.id.chslr_imv_replay_pic)), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo.getMessageType() : mMessage.replayTo.getForwardMessage().getMessageType(), mMessage.replayTo.getForwardMessage() == null ? mMessage.replayTo : mMessage.replayTo.getForwardMessage());
@@ -1076,6 +1077,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (mMessage.forwardedFrom != null) {
 
             View forwardView = ViewMaker.getViewForward();
+            forwardView.setOnLongClickListener(getLongClickPerform(holder));
+
             forwardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1455,13 +1458,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             }
                         });
 
-                        holder.itemView.findViewById(R.id.thumbnail).setOnLongClickListener(new View.OnLongClickListener() {
-                            @Override
-                            public boolean onLongClick(View view) {
-                                holder.itemView.performLongClick();
-                                return true;
-                            }
-                        });
+                        holder.itemView.findViewById(R.id.thumbnail).setOnLongClickListener(getLongClickPerform(holder));
 
                         _Progress.withDrawable(null, true);
 

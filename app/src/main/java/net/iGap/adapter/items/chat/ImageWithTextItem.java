@@ -93,14 +93,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
             }
         });
 
-        holder.image.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Log.d("bagi" , "LongClickImage");
-                holder.itemView.performLongClick();
-                return true;
-            }
-        });
+        holder.image.setOnLongClickListener(getLongClickPerform(holder));
     }
 
     @Override
