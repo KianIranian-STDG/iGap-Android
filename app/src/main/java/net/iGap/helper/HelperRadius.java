@@ -11,6 +11,8 @@
 package net.iGap.helper;
 
 import net.iGap.Config;
+import net.iGap.G;
+import net.iGap.R;
 
 public class HelperRadius {
 
@@ -37,7 +39,7 @@ public class HelperRadius {
         } else {
             return (int) (options.outHeight / Config.IMAGE_CORNER);
         }*/
-
-        return Config.IMAGE_CORNER;
+        return (int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius);
+        //return Config.IMAGE_CORNER;
     }
 }
