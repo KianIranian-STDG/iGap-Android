@@ -2149,25 +2149,27 @@ public class FragmentChat extends BaseFragment
         String backGroundPath = sharedPreferences.getString(SHP_SETTING.KEY_PATH_CHAT_BACKGROUND, "");
         if (backGroundPath.length() > 0) {
             imgBackGround = (ImageView) rootView.findViewById(R.id.chl_img_view_chat);
-
-
-            File f = new File(backGroundPath);
-            if (f.exists()) {
-                try {
-                    Drawable d = Drawable.createFromPath(f.getAbsolutePath());
-                    imgBackGround.setImageDrawable(d);
-                } catch (OutOfMemoryError e) {
-                    ActivityManager activityManager = (ActivityManager) G.context.getSystemService(ACTIVITY_SERVICE);
-                    ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
-                    activityManager.getMemoryInfo(memoryInfo);
-                    Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
-                }
+            if (G.themeColor == Theme.DARK) {
+                imgBackGround.setBackgroundColor(Color.parseColor(Theme.default_dark_background));
             } else {
-                try {
-                    imgBackGround.setBackgroundColor(Color.parseColor(backGroundPath));
-                } catch (Exception e) {
-                }
+                File f = new File(backGroundPath);
+                if (f.exists()) {
+                    try {
+                        Drawable d = Drawable.createFromPath(f.getAbsolutePath());
+                        imgBackGround.setImageDrawable(d);
+                    } catch (OutOfMemoryError e) {
+                        ActivityManager activityManager = (ActivityManager) G.context.getSystemService(ACTIVITY_SERVICE);
+                        ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+                        activityManager.getMemoryInfo(memoryInfo);
+                        Crashlytics.logException(new Exception("FragmentChat -> Device Name : " + Build.BRAND + " || memoryInfo.availMem : " + memoryInfo.availMem + " || memoryInfo.totalMem : " + memoryInfo.totalMem + " || memoryInfo.lowMemory : " + memoryInfo.lowMemory));
+                    }
+                } else {
+                    try {
+                        imgBackGround.setBackgroundColor(Color.parseColor(backGroundPath));
+                    } catch (Exception e) {
+                    }
 
+                }
             }
         }
 

@@ -912,11 +912,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (status == ProtoGlobal.RoomMessageStatus.SEEN) {
-            if (G.isDarkTheme) {
-                setTextColor(imgTick, R.color.iGapColor);
-            } else {
-                setTextColor(imgTick, R.color.backgroundColorCall2);
-            }
+            imgTick.setColorFilter(Color.parseColor(G.SeenTickColor));
 
         } else if (status == ProtoGlobal.RoomMessageStatus.LISTENED) {
             // iconHearing.setVisibility(View.VISIBLE);

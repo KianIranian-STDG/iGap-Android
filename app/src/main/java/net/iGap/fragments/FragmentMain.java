@@ -1383,15 +1383,11 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
 
                 holder.txtLastMessage.setText(subStringInternal(mInfo.getDraft().getMessage()));
-                holder.txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
+                holder.txtLastMessage.setTextColor(Color.parseColor(G.textSubTheme));
 
                 holder.lastMessageSender.setVisibility(View.VISIBLE);
                 holder.lastMessageSender.setText(R.string.txt_draft);
-                if (G.isDarkTheme) {
-                    holder.lastMessageSender.setTextColor(Color.parseColor(G.textSubTheme));
-                } else {
-                    holder.lastMessageSender.setTextColor(Color.parseColor(G.appBarColor));
-                }
+                holder.lastMessageSender.setTextColor(Color.parseColor(G.roomSenderTextColor));
 
                 holder.lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
             } else {
@@ -1462,11 +1458,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                             holder.lastMessageSender.setVisibility(View.VISIBLE);
 
                             holder.lastMessageSender.setText(lastMessageSender);
-                            if (G.isDarkTheme) {
-                                holder.lastMessageSender.setTextColor(Color.parseColor(G.textSubTheme));
-                            } else {
-                                holder.lastMessageSender.setTextColor(Color.parseColor(G.appBarColor));
-                            }
+                            holder.lastMessageSender.setTextColor(Color.parseColor(G.roomSenderTextColor));
 
                         } else {
                             holder.lastMessageSender.setVisibility(View.GONE);
@@ -1507,14 +1499,14 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                                 e.printStackTrace();
                             }
 
-                            String result = AppUtils.conversionMessageType(_type, holder.txtLastMessage, R.color.room_message_blue);
+                            String result = AppUtils.conversionMessageType(_type, holder.txtLastMessage, G.roomMessageTypeColor);
                             if (result.isEmpty()) {
                                 if (!HelperCalander.isPersianUnicode) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                                         holder.txtLastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
                                     }
                                 }
-                                holder.txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
+                                holder.txtLastMessage.setTextColor(Color.parseColor(G.textSubTheme));
                                 holder.txtLastMessage.setText(subStringInternal(lastMessage));
                                 holder.txtLastMessage.setEllipsize(TextUtils.TruncateAt.END);
                             } else {
