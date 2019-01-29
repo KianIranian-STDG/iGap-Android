@@ -1373,14 +1373,16 @@ public class ViewMaker {
                 BetterLinkMovementMethod
                         .linkify(Linkify.ALL, textView)
                         .setOnLinkClickListener((tv, url) -> {
+                            Log.d("bagi" , "OnMessageLinkClick");
                             // Handle clicks.
                             if (FragmentChat.isInSelectionMode) {
-                                holder.itemView.performLongClick();
                                 return true;
                             }
+
                             return false;
                         })
                         .setOnLinkLongClickListener((tv, url) -> {
+                            Log.d("bagi" , "OnMessageLinkLongClick");
                             // Handle long-clicks.
                             return true;
                         });

@@ -286,19 +286,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }.start();
 
-                if (G.isLinkClicked) {
-                    G.isLinkClicked = false;
-                    return;
-                }
-
-                if (messageClickListener != null && mMessage != null && mMessage.senderID != null && !mMessage.senderID.equalsIgnoreCase("-1")) {
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                        return ;
+                if (FragmentChat.isInSelectionMode){
+                    holder.itemView.performLongClick();
+                } else {
+                    if (G.isLinkClicked) {
+                        G.isLinkClicked = false;
+                        return;
                     }
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(view, mMessage, holder.getAdapterPosition());
-                    } else {
-                        messageClickListener.onContainerClick(view, mMessage, holder.getAdapterPosition());
+
+                    if (messageClickListener != null && mMessage != null && mMessage.senderID != null && !mMessage.senderID.equalsIgnoreCase("-1")) {
+                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                            return ;
+                        }
+                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                            messageClickListener.onFailedMessageClick(view, mMessage, holder.getAdapterPosition());
+                        } else {
+                            messageClickListener.onContainerClick(view, mMessage, holder.getAdapterPosition());
+                        }
                     }
                 }
             }
@@ -318,7 +322,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             messageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("bagi" , "OnClickMessage");
+                    Log.d("bagi" , "OnClickMessage" + FragmentChat.isInSelectionMode);
+
                     if (FragmentChat.isInSelectionMode) {
                         holder.itemView.performLongClick();
                     } else {
