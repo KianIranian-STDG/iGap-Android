@@ -53,7 +53,7 @@ public class ProgressWaiting extends AbstractMessage<net.iGap.adapter.items.chat
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                return false;
+                return true;
             }
         });
 

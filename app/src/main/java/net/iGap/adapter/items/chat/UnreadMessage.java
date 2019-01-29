@@ -61,7 +61,7 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
         holder.txtUnreadMessage.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                return false;
+                return true;
             }
         });
 

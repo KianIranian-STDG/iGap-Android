@@ -732,6 +732,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 txtVoteUp.setText(HelperCalander.convertToUnicodeFarsiNumber(txtVoteUp.getText().toString()));
             }
 
+            View.OnLongClickListener longClick = new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    holder.itemView.performLongClick();
+                    return true;
+                }
+            };
+
             lytVoteUp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -742,6 +750,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
             });
+
+            lytVoteUp.setOnLongClickListener(longClick);
 
             lytVoteDown.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -754,6 +764,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             });
 
+            lytVoteDown.setOnLongClickListener(longClick);
+
             txtVoteForward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -764,6 +776,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
             });
+
+            txtVoteForward.setOnLongClickListener(longClick);
+
+
         }
     }
 
@@ -1438,6 +1454,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 }
                             }
                         });
+
+                        holder.itemView.findViewById(R.id.thumbnail).setOnLongClickListener(new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View view) {
+                                holder.itemView.performLongClick();
+                                return true;
+                            }
+                        });
+
                         _Progress.withDrawable(null, true);
 
                         switch (messageType) {

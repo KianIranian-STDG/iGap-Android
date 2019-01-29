@@ -89,35 +89,6 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         } else {
             setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
         }
-
-
-        messageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                holder.itemView.performLongClick();
-                return false;
-            }
-        });
-
-        messageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (G.isLinkClicked) {
-                    G.isLinkClicked = false;
-                    return;
-                }
-                if (!isSelected()) {
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                        return;
-                    }
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
-                    } else {
-                        messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
-                    }
-                }
-            }
-        });
     }
 
     @Override
