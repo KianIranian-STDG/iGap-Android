@@ -43,14 +43,6 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
     @Override
     public void bindView(ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.csll_txt_log_text) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getLogItem());
-        }
-
-        holder.text = (TextView) holder.itemView.findViewById(R.id.csll_txt_log_text);
-        holder.text.setMovementMethod(LinkMovementMethod.getInstance());
-
         super.bindView(holder, payloads);
         holder.text.setText(HelperLogMessage.deserializeLog(mMessage.logs, true));
     }
@@ -66,11 +58,11 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
         public ViewHolder(View view) {
             super(view);
-            /**
-             *  this commented code used with xml layout
-             */
-            //text = (TextView) view.findViewById(R.id.csll_txt_log_text);
-            //text.setMovementMethod(LinkMovementMethod.getInstance());
+            if (itemView.findViewById(R.id.csll_txt_log_text) == null) {
+                ((ViewGroup) itemView).addView(ViewMaker.getLogItem());
+            }
+            text = (TextView) itemView.findViewById(R.id.csll_txt_log_text);
+            text.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 }

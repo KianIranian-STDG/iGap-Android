@@ -56,16 +56,6 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
     @Override
     public void bindView(ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getFileItem());
-        }
-
-        holder.cslf_txt_file_name = (TextView) holder.itemView.findViewById(R.id.songArtist);
-        holder.cslf_txt_file_size = (TextView) holder.itemView.findViewById(R.id.fileSize);
-        holder.thumbnail = (ImageView) holder.itemView.findViewById(R.id.thumbnail);
-
-
         super.bindView(holder, payloads);
 
         String text = "";
@@ -85,11 +75,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             text = mMessage.messageText;
         }
 
-        if (mMessage.hasEmojiInText) {
-            setTextIfNeeded((EmojiTextViewE) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
-        } else {
-            setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
-        }
+        setTextIfNeeded(holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
 
         RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(mMessage.messageID)).findFirst());
         if (roomMessage != null) {
@@ -135,19 +121,18 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
-
-        /**
-         * this commented code used with xml layout
-         */
         protected TextView cslf_txt_file_name;
         protected TextView cslf_txt_file_size;
         protected ImageView thumbnail;
 
         public ViewHolder(View view) {
             super(view);
-            //cslf_txt_file_name = (TextView) view.findViewById(R.id.songArtist);
-            //cslf_txt_file_size = (TextView) view.findViewById(R.id.fileSize);
-            //thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            if (itemView.findViewById(R.id.mainContainer) == null) {
+                ((ViewGroup) itemView).addView(ViewMaker.getFileItem());
+            }
+            cslf_txt_file_name = (TextView) itemView.findViewById(R.id.songArtist);
+            cslf_txt_file_size = (TextView) itemView.findViewById(R.id.fileSize);
+            thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
         }
     }
 }

@@ -51,14 +51,6 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getVideoItem(true));
-
-        }
-
-        holder.image = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
-        holder.duration = (TextView) holder.itemView.findViewById(R.id.duration);
         holder.image.setTag(getCacheId(mMessage));
 
         super.bindView(holder, payloads);
@@ -123,11 +115,11 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
 
         public ViewHolder(View view) {
             super(view);
-            /**
-             *  this commented code used with xml layout
-             */
-            //image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
-            //duration = (TextView) view.findViewById(R.id.duration);
+            if (itemView.findViewById(R.id.mainContainer) == null) {
+                ((ViewGroup) itemView).addView(ViewMaker.getVideoItem(true));
+            }
+            image = (ReserveSpaceRoundedImageView) itemView.findViewById(R.id.thumbnail);
+            duration = (TextView) itemView.findViewById(R.id.duration);
         }
     }
 }

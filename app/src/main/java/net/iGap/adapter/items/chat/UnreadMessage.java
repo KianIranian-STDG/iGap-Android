@@ -43,12 +43,6 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
 
     @Override
     public void bindView(ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.cslum_txt_unread_message) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getUnreadMessageItem());
-        }
-
-        holder.txtUnreadMessage = (TextView) holder.itemView.findViewById(R.id.cslum_txt_unread_message);
         holder.txtUnreadMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,21 +74,10 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
 
         public ViewHolder(View view) {
             super(view);
-            /**
-             *  this commented code used with xml layout
-             */
-            //txtUnreadMessage = (TextView) view.findViewById(R.id.cslum_txt_unread_message);
-            //txtUnreadMessage.setOnClickListener(new View.OnClickListener() {
-            //    @Override public void onClick(View v) {
-            //
-            //    }
-            //});
-            //
-            //txtUnreadMessage.setOnLongClickListener(new View.OnLongClickListener() {
-            //    @Override public boolean onLongClick(View v) {
-            //        return false;
-            //    }
-            //});
+            if (itemView.findViewById(R.id.cslum_txt_unread_message) == null) {
+                ((ViewGroup) itemView).addView(ViewMaker.getUnreadMessageItem());
+            }
+            txtUnreadMessage = (TextView) itemView.findViewById(R.id.cslum_txt_unread_message);
         }
     }
 }

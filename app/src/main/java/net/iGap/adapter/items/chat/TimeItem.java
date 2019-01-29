@@ -41,14 +41,6 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
 
     @Override
     public void bindView(ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.cslt_txt_time_date) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getTimeItem());
-
-        }
-
-        holder.text = (TextView) holder.itemView.findViewById(R.id.cslt_txt_time_date);
-
         super.bindView(holder, payloads);
 
         setTextIfNeeded(holder.text, mMessage.messageText);
@@ -65,10 +57,10 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
 
         public ViewHolder(View view) {
             super(view);
-            /**
-             *  this commented code used with xml layout
-             */
-            //text = (TextView) view.findViewById(R.id.cslt_txt_time_date);
+            if (itemView.findViewById(R.id.cslt_txt_time_date) == null) {
+                ((ViewGroup) itemView).addView(ViewMaker.getTimeItem());
+            }
+            text = (TextView) itemView.findViewById(R.id.cslt_txt_time_date);
         }
     }
 }

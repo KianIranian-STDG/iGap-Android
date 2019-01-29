@@ -72,11 +72,6 @@ public class ProgressWaiting extends AbstractMessage<net.iGap.adapter.items.chat
 
         public ViewHolder(View view) {
             super(view);
-            /**
-             *  this commented code used with xml layout
-             */
-            //progressBar = (ProgressBar) view.findViewById(R.id.cslp_progress_bar_waiting);
-            //AppUtils.setProgresColler(progressBar);
         }
     }
 }
