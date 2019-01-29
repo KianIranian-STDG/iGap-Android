@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import net.iGap.G;
@@ -142,16 +143,13 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             }
         };
 
-        holder.itemView.findViewById(R.id.mainContainer).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         holder.btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (FragmentChat.isInSelectionMode) {
+                    holder.itemView.performLongClick();
+                    return;
+                }
 
                 if (holder.mFilePath.length() < 1) return;
 
@@ -184,8 +182,11 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
                 if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (FragmentChat.isInSelectionMode) {
+                        holder.itemView.performLongClick();
+                        return true;
+                    }
                     if (holder.mMessageID.equals(MusicPlayer.messageId)) {
                         MusicPlayer.setMusicProgress(holder.musicSeekbar.getProgress());
                     }

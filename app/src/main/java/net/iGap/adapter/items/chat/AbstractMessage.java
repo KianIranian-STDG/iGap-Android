@@ -266,6 +266,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             @Override
             public boolean onLongClick(View view) {
                 Log.d("bagi" , "itemViewLongClick");
+                if (!FragmentChat.isInSelectionMode && (
+                        holder instanceof VoiceItem.ViewHolder)
+                ) {
+                    return true;
+                }
+
                 holder.itemView.performLongClick();
                 return true;
             }
@@ -1203,11 +1209,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                 @Override
                 public void onMessageProgressClick(MessageProgress progress) {
-                    if (FragmentChat.isInSelectionMode) {
-                        holder.itemView.performLongClick();
-                    } else {
-                        forOnCLick(holder, attachment);
-                    }
+                    forOnCLick(holder, attachment);
                 }
             });
         }
@@ -1300,11 +1302,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                     @Override
                     public void onMessageProgressClick(MessageProgress progress) {
-                        if (FragmentChat.isInSelectionMode) {
-                            holder.itemView.performLongClick();
-                        } else {
-                            forOnCLick(holder, attachment);
-                        }
+                        forOnCLick(holder, attachment);
                     }
                 });
                 break;
@@ -1410,11 +1408,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 _Progress.withOnMessageProgress(new OnMessageProgressClick() {
                     @Override
                     public void onMessageProgressClick(MessageProgress progress) {
-                        if (FragmentChat.isInSelectionMode) {
-                            holder.itemView.performLongClick();
-                        } else {
-                            forOnCLick(holder, attachment);
-                        }
+                        forOnCLick(holder, attachment);
                     }
                 });
 
@@ -1436,7 +1430,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                         _Progress.setVisibility(View.GONE);
 
-                        holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(null);
+                        holder.itemView.findViewById(R.id.thumbnail).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (FragmentChat.isInSelectionMode) {
+                                    holder.itemView.performLongClick();
+                                }
+                            }
+                        });
                         _Progress.withDrawable(null, true);
 
                         switch (messageType) {
@@ -1512,6 +1513,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     }
 
     private void forOnCLick(VH holder, RealmAttachment attachment) {
+
+        if (FragmentChat.isInSelectionMode) {
+            holder.itemView.performLongClick();
+            return;
+        }
 
         final MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
         AppUtils.setProgresColor(progress.progressBar);
