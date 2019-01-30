@@ -131,7 +131,7 @@ public class SHP_SETTING {
 
     // ========================================================================================== chat background
 
-    public static final String KEY_PATH_CHAT_BACKGROUND = "KEY_PATH_CHAT_BACKGROUND";
+    public static final String KEY_PATH_CHAT_BACKGROUND = "KEY_PATH_CHAT_BACKGROUND_V1";
 
     // ========================================================================================== Notifications and sound Group
 
