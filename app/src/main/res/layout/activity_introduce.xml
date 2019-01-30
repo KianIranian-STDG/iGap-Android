@@ -30,8 +30,8 @@
       <!--page 1-->
       <ImageView
         android:id="@+id/int_img_logo_introduce"
-        android:layout_width="@dimen/dp140"
-        android:layout_height="@dimen/dp140"
+        android:layout_width="@dimen/dp200"
+        android:layout_height="@dimen/dp200"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="top"
@@ -45,8 +45,8 @@
       <!--page 2-->
       <ImageView
         android:id="@+id/int_img_security_introduce"
-        android:layout_width="@dimen/dp140"
-        android:layout_height="@dimen/dp140"
+        android:layout_width="@dimen/dp200"
+        android:layout_height="@dimen/dp200"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="top"
@@ -60,8 +60,8 @@
       <!--page 6-->
       <ImageView
         android:id="@+id/int_img_boy_introduce"
-        android:layout_width="@dimen/dp140"
-        android:layout_height="@dimen/dp140"
+        android:layout_width="@dimen/dp200"
+        android:layout_height="@dimen/dp200"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="top"
