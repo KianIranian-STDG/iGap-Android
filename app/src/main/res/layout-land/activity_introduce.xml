@@ -414,11 +414,10 @@
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_below="@+id/int_layout_1"
-    android:layout_marginLeft="@dimen/dp120"
-    android:layout_marginRight="@dimen/dp10"
     android:duration="0"
     android:fillAfter="true"
     android:fromDegrees="0"
+    android:gravity="center"
     android:layoutDirection="ltr"
     app:layout_heightPercent="8%">
 
@@ -438,7 +437,7 @@
   <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp32"
-    android:layout_above="@+id/int_layoutParentCircleImage"
+    android:layout_below="@+id/int_layoutParentCircleImage"
     android:layout_marginLeft="@dimen/dp200"
     android:layout_marginRight="@dimen/dp10"
     android:fillAfter="true"
@@ -456,25 +455,8 @@
       android:textAllCaps="false"
       android:textColor="@color/txt_start_page5"
       android:textSize="@dimen/dp16"
-      android:visibility="gone"
 
       />
   </RelativeLayout>
-
-  <TextView
-    android:id="@+id/int_txt_skip"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentRight="true"
-    android:layout_alignParentTop="true"
-    android:layout_alignTop="@+id/int_layoutParentCircleImage"
-    android:layout_marginTop="@dimen/dp4"
-    android:background="@drawable/background_skip"
-    android:gravity="center"
-    android:minWidth="@dimen/dp60"
-    android:padding="@dimen/dp4"
-    android:text="@string/B_skip"
-    android:textColor="@color/white"
-    android:textSize="@dimen/dp14" />
 
 </android.support.percent.PercentRelativeLayout>

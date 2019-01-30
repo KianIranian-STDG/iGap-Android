@@ -342,7 +342,7 @@ public class FragmentIntroduce extends BaseFragment {
                                 if (transfer.getVisibility() == View.VISIBLE) {
                                     animationOut(transfer, txt_p4_l1, txt_p4_l2);
                                 } else if (boy.getVisibility() == View.VISIBLE) {
-                                    animationOutBoy(boy, txt_p6_l1, txt_p6_l2, btnStart);
+                                    animationOutBoy(boy, txt_p6_l1, txt_p6_l2);
                                 }
                                 if (isOne4) {
                                     animationIn(call, txt_p5_l1, txt_p5_l2);
@@ -775,7 +775,7 @@ public class FragmentIntroduce extends BaseFragment {
         }, 500);
     }
 
-    private void animationOutBoy(final ImageView logo, final TextView txt1, final TextView txt2, final Button start) {
+    private void animationOutBoy(final ImageView logo, final TextView txt1, final TextView txt2) {
 
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(logo, "scaleX", 1, 0);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(logo, "scaleY", 1, 0);
@@ -787,12 +787,9 @@ public class FragmentIntroduce extends BaseFragment {
         ObjectAnimator txt_scaleY = ObjectAnimator.ofFloat(txt1, "scaleY", 1, 0);
         ObjectAnimator txt_scaleX2 = ObjectAnimator.ofFloat(txt2, "scaleX", 1, 0);
         ObjectAnimator txt_scaleY2 = ObjectAnimator.ofFloat(txt2, "scaleY", 1, 0);
-        ObjectAnimator btn_scaleX2 = ObjectAnimator.ofFloat(start, "scaleX", 1, 0);
-        ObjectAnimator btn_scaleY2 = ObjectAnimator.ofFloat(start, "scaleY", 1, 0);
-        ObjectAnimator txt_fade1 = ObjectAnimator.ofFloat(start, "alpha", 1, 0);
 
         AnimatorSet scaleDown = new AnimatorSet();
-        scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX).with(txt_scaleY).with(fade2).with(fade3).with(txt_scaleX2).with(txt_scaleY2).with(btn_scaleX2).with(btn_scaleY2).with(txt_fade1);
+        scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX).with(txt_scaleY).with(fade2).with(fade3).with(txt_scaleX2).with(txt_scaleY2);
         scaleDown.setDuration(500);
         scaleDown.addListener(new Animator.AnimatorListener() {
             @Override
@@ -806,7 +803,7 @@ public class FragmentIntroduce extends BaseFragment {
                 logo.setVisibility(View.GONE);
                 txt1.setVisibility(View.GONE);
                 txt2.setVisibility(View.GONE);
-                start.setVisibility(View.GONE);
+//                start.setVisibility(View.GONE);
             }
 
             @Override
