@@ -498,13 +498,13 @@
       <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="?backgroundColorSettingTheme_2">
+        style="?backgroundColorSettingTheme">
 
         <ImageView
           android:id="@+id/chl_img_view_chat"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          style="?backgroundColorSettingTheme_2"
+          style="?backgroundColorSettingTheme"
           android:scaleType="centerCrop" />
 
         <LinearLayout
