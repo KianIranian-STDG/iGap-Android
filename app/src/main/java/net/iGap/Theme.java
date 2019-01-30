@@ -61,7 +61,7 @@ public class Theme extends Application {
     public static String default_appBarColor = "#9dc756";
     public static String default_notificationColor = "#e05353";
     public static String default_toggleButtonColor = "#00B0BF";
-    public static String default_attachmentColor = "#00B0BF";
+    public static String default_attachmentColor = default_appBarColor;
     public static String default_headerTextColor = "#00B0BF";
     public static String default_progressColor = "#00B0BF";
     public static String default_linkColor = "#303F9F";
@@ -85,7 +85,7 @@ public class Theme extends Application {
     public static String default_dark_appBarColor = "#2a3d3d";
     public static String default_dark_notificationColor = "#c4d838";
     public static String default_dark_toggleButtonColor = "#000000";//
-    public static String default_dark_attachmentColor = "#ffffff";
+    public static String default_dark_attachmentColor = "#cccccc";
     public static String default_dark_headerTextColor = "#ffffff";
     public static String default_dark_progressColor = "#ffffff";
     public static String default_dark_linkColor = "#00BCD4";
