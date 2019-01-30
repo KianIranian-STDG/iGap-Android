@@ -39,9 +39,9 @@
     <!-- Page 5 introduce app -->
 
 
-    <string name="text_line_1_introduce_page5">"الاتصال الصوتي في آي كب"</string>
+    <string name="text_line_1_introduce_page5">"الصوت والفيديو مكالمة في آي كب"</string>
 
-    <string name="text_line_2_introduce_page5">"يمكنك الاتصال الصوتي بشكل مجان و آمن تماماً بواسطة استخدام تطبيق آي كب و بالتالي التوفير في تكاليفك. إضافة إلى ذلك إنّ الاتصال الصوتي لطبيق آي كب هو من نوع p2p و لاتتدخّل حتى مزود خدمة الانترنت في هذه الاتصال"</string>
+    <string name="text_line_2_introduce_page5">"يمكنك الصوت والفيديو مكالمة بشكل مجان و آمن تماماً بواسطة استخدام تطبيق آي كب و بالتالي التوفير في تكاليفك. إضافة إلى ذلك إنّ الصوت والفيديو مكالمة لطبيق آي كب هو من نوع p2p و لاتتدخّل حتى مزود خدمة الانترنت في هذه الاتصال"</string>
 
     <!-- Page 6 introduce app -->
 
@@ -51,6 +51,10 @@
     <string name="text_line_1_introduce_page6">"كلّ شيء مجان في آي كب!"</string>
 
     <string name="text_line_2_introduce_page6">"آي كب كان ولايزال مجانا. فتعالوا لانتمهّل أكثر من هذا. فاصنع عالمك بواسطة آي كب الآن."</string>
+
+
+    <string name="text_line_1_introduce_page7">ميزة قريبة</string>
+    <string name="text_line_2_introduce_page7">اترك عالماً جديداً حولي. من حولك ، اعثر على أصدقائك ومراكز الترفيه والفن والأعمال ... واستمتع بلحظاتك ...</string>
 
     <!-- Fill Profile User -->
 

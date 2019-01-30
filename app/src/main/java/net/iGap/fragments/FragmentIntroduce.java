@@ -53,29 +53,19 @@ public class FragmentIntroduce extends BaseFragment {
     private CustomCircleImage circleButton;
     private boolean isOne0 = true;
     private boolean isOne1 = true;
-    private boolean isOne2 = true;
-    private boolean isOne3 = true;
-    private boolean isOne4 = true;
-    private boolean isOne5 = true;
+    private boolean isOne6 = true;
     private boolean locationFound;
     private boolean registrationTry;
     private boolean enableRegistration = true;
-    private ImageView logoIgap, logoSecurity, logoChat, transfer, call, boy;
+    private ImageView logoIgap, logoSecurity, boy;
     private TextView txt_p1_l2;
     private TextView txt_p1_l3;
     private TextView txt_p2_l1;
     private TextView txt_p2_l2;
-    private TextView txt_p3_l1;
-    private TextView txt_p3_l2;
-    private TextView txt_p4_l1;
-    private TextView txt_p4_l2;
-    private TextView txt_p5_l1;
-    private TextView txt_p5_l2;
     private TextView txt_p6_l1;
     private TextView txt_p6_l2;
 //    private TextView txtSkip;
     private Button btnStart;
-    private ViewGroup layout_iGap;
     private String isoCode = "", countryName = "", pattern = "", regex = "", body = null;
     private int callingCode;
 
@@ -140,8 +130,6 @@ public class FragmentIntroduce extends BaseFragment {
             getInfo();
         }
 
-        layout_iGap = (ViewGroup) view.findViewById(R.id.int_layout_iGap);
-
         int[] layout = new int[]{
                 R.layout.view_pager_introduce_1,
         };
@@ -150,7 +138,7 @@ public class FragmentIntroduce extends BaseFragment {
 
         circleButton = (CustomCircleImage) view.findViewById(R.id.int_circleButton_introduce);
         if (circleButton != null) {
-            circleButton.circleButtonCount(6);
+            circleButton.circleButtonCount(3);
         }
 
         Typeface titleTypeface;
@@ -170,44 +158,25 @@ public class FragmentIntroduce extends BaseFragment {
 
         logoIgap = (ImageView) view.findViewById(R.id.int_img_logo_introduce);
 
-        TextView txt_i_p1_l1 = (TextView) view.findViewById(R.id.int_txt_i_p1_l1);
-        TextView txt_p1_l1 = (TextView) view.findViewById(R.id.int_txt_p1_l1);
-
-        txt_i_p1_l1.setTypeface(titleTypeface);
-        txt_p1_l1.setTypeface(titleTypeface);
-
         txt_p1_l2 = (TextView) view.findViewById(R.id.int_txt_p1_l2);
         txt_p1_l3 = (TextView) view.findViewById(R.id.int_txt_p1_l3);
-        txt_p1_l3.setText(G.fragmentActivity.getResources().getString(R.string.text_line_3_introduce_page1) + "\n" + G.fragmentActivity.getResources().getString(R.string.text_line_4_introduce_page1));
+        txt_p1_l3.setText(R.string.text_line_2_introduce_page5);
 
-        txt_p1_l2.setText(R.string.text_line_2_introduce_page1);
+        txt_p1_l2.setText(R.string.text_line_1_introduce_page5);
 
         logoSecurity = (ImageView) view.findViewById(R.id.int_img_security_introduce);
         txt_p2_l1 = (TextView) view.findViewById(R.id.int_txt_p2_l1);
         txt_p2_l2 = (TextView) view.findViewById(R.id.int_txt_p2_l2);
 
-        txt_p2_l2.setText(R.string.text_line_2_introduce_page2);
+        txt_p2_l1.setText(R.string.text_line_1_introduce_page7);
+        txt_p2_l2.setText(R.string.text_line_2_introduce_page7);
 
-        logoChat = (ImageView) view.findViewById(R.id.int_img_chat_introduce);
-        txt_p3_l1 = (TextView) view.findViewById(R.id.int_txt_p3_l1);
-        txt_p3_l2 = (TextView) view.findViewById(R.id.int_txt_p3_l2);
-
-        txt_p3_l2.setText(R.string.text_line_2_introduce_page3);
-
-        transfer = (ImageView) view.findViewById(R.id.int_img_transfer_introduce);
-        txt_p4_l1 = (TextView) view.findViewById(R.id.int_txt_p4_l1);
-        txt_p4_l2 = (TextView) view.findViewById(R.id.int_txt_p4_l2);
-
-        txt_p4_l2.setText(R.string.text_line_2_introduce_page4);
-
-        call = (ImageView) view.findViewById(R.id.int_img_call_introduce);
-        txt_p5_l1 = (TextView) view.findViewById(R.id.int_txt_p5_l1);
-        txt_p5_l2 = (TextView) view.findViewById(R.id.int_txt_p5_l2);
 
         boy = (ImageView) view.findViewById(R.id.int_img_boy_introduce);
         txt_p6_l1 = (TextView) view.findViewById(R.id.int_txt_p6_l1);
         txt_p6_l2 = (TextView) view.findViewById(R.id.int_txt_p6_l2);
-        txt_p6_l2.setText(R.string.text_line_2_introduce_page6);
+        txt_p6_l2.setText(R.string.text_line_1_introduce_page3);
+        txt_p6_l2.setText(R.string.text_line_2_introduce_page3);
 
         btnStart = (Button) view.findViewById(R.id.int_btnStart);
         Drawable mDrawable = ContextCompat.getDrawable(context, R.drawable.int_button_interduce);
@@ -243,10 +212,7 @@ public class FragmentIntroduce extends BaseFragment {
                         if (positionOffset == 0) {
 
                             isOne1 = true;
-                            isOne2 = true;
-                            isOne3 = true;
-                            isOne4 = true;
-                            isOne5 = true;
+                            isOne6 = true;
 
                             if (logoSecurity.getVisibility() == View.VISIBLE) {
 
@@ -254,7 +220,7 @@ public class FragmentIntroduce extends BaseFragment {
                             }
 
                             if (isOne0) {
-                                animationInPage1(logoIgap, layout_iGap, txt_p1_l2, txt_p1_l3);
+                                animationInPage1(logoIgap, txt_p1_l2, txt_p1_l3);
                                 isOne0 = false;
                             }
                         }
@@ -265,17 +231,14 @@ public class FragmentIntroduce extends BaseFragment {
 //                        txtSkip.bringToFront();
                         if (positionOffset == 0) {
                             isOne0 = true;
-                            isOne2 = true;
-                            isOne3 = true;
-                            isOne4 = true;
-                            isOne5 = true;
+                            isOne6 = true;
 
                             if (logoIgap.getVisibility() == View.VISIBLE) {
 
-                                animationOutPage1(logoIgap, layout_iGap, txt_p1_l2, txt_p1_l3);
+                                animationOutPage1(logoIgap, txt_p1_l2, txt_p1_l3);
                             }
-                            if (logoChat.getVisibility() == View.VISIBLE) {
-                                animationOut(logoChat, txt_p3_l1, txt_p3_l2);
+                            if (boy.getVisibility() == View.VISIBLE) {
+                                animationOut(boy, txt_p6_l1, txt_p6_l2);
                             }
 
                             if (isOne1) {
@@ -285,73 +248,8 @@ public class FragmentIntroduce extends BaseFragment {
                             }
                         }
                         break;
-                    case 2://Chat 3
-//                        txtSkip.bringToFront();
-                        if (positionOffset == 0) {
-                            isOne0 = true;
-                            isOne1 = true;
-                            isOne3 = true;
-                            isOne4 = true;
-                            isOne5 = true;
 
-                            if (logoSecurity.getVisibility() == View.VISIBLE) {
-                                animationOut(logoSecurity, txt_p2_l1, txt_p2_l2);
-                            }
-                            if (transfer.getVisibility() == View.VISIBLE) {
-                                animationOut(transfer, txt_p4_l1, txt_p4_l2);
-                            }
-                            if (isOne2) {
-
-                                animationIn(logoChat, txt_p3_l1, txt_p3_l2);
-                                isOne2 = false;
-                            }
-                        }
-                        break;
-                    case 3://boy 4
-//                        txtSkip.bringToFront();
-                        if (positionOffset == 0) {
-                            isOne0 = true;
-                            isOne1 = true;
-                            isOne2 = true;
-                            isOne4 = true;
-                            isOne5 = true;
-                            if (viewPager.isFocusable()) {
-                                if (logoChat.getVisibility() == View.VISIBLE) {
-                                    animationOut(logoChat, txt_p3_l1, txt_p3_l2);
-                                } else if (call.getVisibility() == View.VISIBLE) {
-                                    animationOut(call, txt_p5_l1, txt_p5_l2);
-                                }
-                                if (isOne3) {
-
-                                    animationIn(transfer, txt_p4_l1, txt_p4_l2);
-                                    isOne3 = false;
-                                }
-                            }
-                        }
-                        break;
-                    case 4://call 5
-//                        txtSkip.bringToFront();
-                        if (positionOffset == 0) {
-                            isOne0 = true;
-                            isOne1 = true;
-                            isOne2 = true;
-                            isOne3 = true;
-                            isOne5 = true;
-
-                            if (viewPager.isFocusable()) {
-                                if (transfer.getVisibility() == View.VISIBLE) {
-                                    animationOut(transfer, txt_p4_l1, txt_p4_l2);
-                                } else if (boy.getVisibility() == View.VISIBLE) {
-                                    animationOutBoy(boy, txt_p6_l1, txt_p6_l2);
-                                }
-                                if (isOne4) {
-                                    animationIn(call, txt_p5_l1, txt_p5_l2);
-                                    isOne4 = false;
-                                }
-                            }
-                        }
-                        break;
-                    case 5://transfer1 6
+                    case 2://transfer1 6
 //                        txtSkip.bringToFront();
                         btnStart.bringToFront();
                         btnStart.getParent().requestLayout();
@@ -359,17 +257,14 @@ public class FragmentIntroduce extends BaseFragment {
                         if (positionOffset == 0) {
                             isOne0 = true;
                             isOne1 = true;
-                            isOne2 = true;
-                            isOne3 = true;
-                            isOne4 = true;
 
-                            if (call.getVisibility() == View.VISIBLE) {
+                            if (logoSecurity.getVisibility() == View.VISIBLE) {
 
-                                animationOut(call, txt_p5_l1, txt_p5_l2);
+                                animationOut(logoSecurity, txt_p2_l1, txt_p2_l2);
                             }
-                            if (isOne5) {
+                            if (isOne6) {
                                 animationInBoy(boy, txt_p6_l1, txt_p6_l2, btnStart);
-                                isOne5 = false;
+                                isOne6 = false;
                             }
                         }
                         break;
@@ -519,30 +414,26 @@ public class FragmentIntroduce extends BaseFragment {
         }
     }
 
-    private void animationInPage1(final ImageView logo, final ViewGroup txt1, final TextView txt2, final TextView txt3) {
+    private void animationInPage1(final ImageView logo, final TextView txt2, final TextView txt3) {
 
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(logo, "scaleX", 0, 1);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(logo, "scaleY", 0, 1);
         ObjectAnimator fade = ObjectAnimator.ofFloat(logo, "alpha", 0, 1);
 
-        ObjectAnimator txt_fade1 = ObjectAnimator.ofFloat(txt1, "alpha", 0, 1);
         ObjectAnimator txt_fade2 = ObjectAnimator.ofFloat(txt2, "alpha", 0, 1);
         ObjectAnimator txt_fade3 = ObjectAnimator.ofFloat(txt3, "alpha", 0, 1);
 
-        ObjectAnimator txt_scaleX1 = ObjectAnimator.ofFloat(txt1, "scaleX", 0, 1);
         ObjectAnimator txt_scaleX2 = ObjectAnimator.ofFloat(txt2, "scaleX", 0, 1);
         ObjectAnimator txt_scaleX3 = ObjectAnimator.ofFloat(txt3, "scaleX", 0, 1);
-        ObjectAnimator txt_scaleY1 = ObjectAnimator.ofFloat(txt1, "scaleY", 0, 1);
         ObjectAnimator txt_scaleY2 = ObjectAnimator.ofFloat(txt2, "scaleY", 0, 1);
         ObjectAnimator txt_scaleY3 = ObjectAnimator.ofFloat(txt3, "scaleY", 0, 1);
         final AnimatorSet scaleDown = new AnimatorSet();
-        scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX1).with(txt_scaleY1).with(txt_scaleX2).with(txt_scaleY2).with(txt_scaleX3).with(txt_scaleY3).with(txt_fade1).with(txt_fade2).with(txt_fade3);
+        scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX2).with(txt_scaleY2).with(txt_scaleX3).with(txt_scaleY3).with(txt_fade2).with(txt_fade3);
         scaleDown.setDuration(500);
         scaleDown.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
                 logo.setVisibility(View.VISIBLE);
-                txt1.setVisibility(View.VISIBLE);
                 txt2.setVisibility(View.VISIBLE);
                 if (txt3 != null) {
                     txt3.setVisibility(View.VISIBLE);
@@ -575,22 +466,19 @@ public class FragmentIntroduce extends BaseFragment {
         }, 500);
     }
 
-    private void animationOutPage1(final ImageView logo, final ViewGroup txt1, final TextView txt2, final TextView txt3) {
+    private void animationOutPage1(final ImageView logo, final TextView txt2, final TextView txt3) {
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(logo, "scaleX", 1, 0);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(logo, "scaleY", 1, 0);
         ObjectAnimator fade = ObjectAnimator.ofFloat(logo, "alpha", 1, 0);
-        ObjectAnimator txt_fade1 = ObjectAnimator.ofFloat(txt1, "alpha", 1, 0);
         ObjectAnimator txt_fade2 = ObjectAnimator.ofFloat(txt2, "alpha", 1, 0);
         ObjectAnimator txt_fade3 = ObjectAnimator.ofFloat(txt3, "alpha", 1, 0);
-        ObjectAnimator txt_scaleX1 = ObjectAnimator.ofFloat(txt1, "scaleX", 1, 0);
         ObjectAnimator txt_scaleX2 = ObjectAnimator.ofFloat(txt2, "scaleX", 1, 0);
         ObjectAnimator txt_scaleX3 = ObjectAnimator.ofFloat(txt3, "scaleX", 1, 0);
-        ObjectAnimator txt_scaleY1 = ObjectAnimator.ofFloat(txt1, "scaleY", 1, 0);
         ObjectAnimator txt_scaleY2 = ObjectAnimator.ofFloat(txt2, "scaleY", 1, 0);
         ObjectAnimator txt_scaleY3 = ObjectAnimator.ofFloat(txt3, "scaleY", 1, 0);
 
         final AnimatorSet scaleDown = new AnimatorSet();
-        scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX1).with(txt_scaleY1).with(txt_scaleX2).with(txt_scaleY2).with(txt_scaleX3).with(txt_scaleY3).with(txt_fade1).with(txt_fade2).with(txt_fade3);
+        scaleDown.play(scaleX).with(scaleY).with(fade).with(txt_scaleX2).with(txt_scaleY2).with(txt_scaleX3).with(txt_scaleY3).with(txt_fade2).with(txt_fade3);
         scaleDown.setDuration(500);
         scaleDown.addListener(new Animator.AnimatorListener() {
             @Override
@@ -824,22 +712,10 @@ public class FragmentIntroduce extends BaseFragment {
         if (logo.equals(logoIgap)) { // 1
 
             logoSecurity.setVisibility(View.INVISIBLE);
-            logoChat.setVisibility(View.INVISIBLE);
-            transfer.setVisibility(View.INVISIBLE);
-            call.setVisibility(View.INVISIBLE);
             boy.setVisibility(View.GONE);
 
             txt_p2_l1.setVisibility(View.GONE);
             txt_p2_l2.setVisibility(View.GONE);
-
-            txt_p3_l1.setVisibility(View.GONE);
-            txt_p3_l2.setVisibility(View.GONE);
-
-            txt_p4_l1.setVisibility(View.GONE);
-            txt_p4_l2.setVisibility(View.GONE);
-
-            txt_p5_l1.setVisibility(View.GONE);
-            txt_p5_l2.setVisibility(View.GONE);
 
             txt_p6_l1.setVisibility(View.GONE);
             txt_p6_l2.setVisibility(View.GONE);
@@ -847,98 +723,10 @@ public class FragmentIntroduce extends BaseFragment {
         }
         if (logo.equals(logoSecurity)) { //2
             logoIgap.setVisibility(View.INVISIBLE);
-            logoChat.setVisibility(View.INVISIBLE);
-            transfer.setVisibility(View.INVISIBLE);
-            call.setVisibility(View.INVISIBLE);
             boy.setVisibility(View.GONE);
 
-            layout_iGap.setVisibility(View.GONE);
             txt_p1_l2.setVisibility(View.GONE);
             txt_p1_l3.setVisibility(View.GONE);
-
-            txt_p3_l1.setVisibility(View.GONE);
-            txt_p3_l2.setVisibility(View.GONE);
-
-            txt_p4_l1.setVisibility(View.GONE);
-            txt_p4_l2.setVisibility(View.GONE);
-
-            txt_p5_l1.setVisibility(View.GONE);
-            txt_p5_l2.setVisibility(View.GONE);
-
-            txt_p6_l1.setVisibility(View.GONE);
-            txt_p6_l2.setVisibility(View.GONE);
-//            btnStart.setVisibility(View.GONE);
-        }
-        if (logo.equals(logoChat)) { // 3
-
-            logoIgap.setVisibility(View.INVISIBLE);
-            logoSecurity.setVisibility(View.INVISIBLE);
-            transfer.setVisibility(View.INVISIBLE);
-            call.setVisibility(View.INVISIBLE);
-            boy.setVisibility(View.GONE);
-
-            layout_iGap.setVisibility(View.GONE);
-            txt_p1_l2.setVisibility(View.GONE);
-            txt_p1_l3.setVisibility(View.GONE);
-
-            txt_p2_l1.setVisibility(View.GONE);
-            txt_p2_l2.setVisibility(View.GONE);
-
-            txt_p4_l1.setVisibility(View.GONE);
-            txt_p4_l2.setVisibility(View.GONE);
-
-            txt_p5_l1.setVisibility(View.GONE);
-            txt_p5_l2.setVisibility(View.GONE);
-
-            txt_p6_l1.setVisibility(View.GONE);
-            txt_p6_l2.setVisibility(View.GONE);
-//            btnStart.setVisibility(View.GONE);
-        }
-        if (logo.equals(transfer)) { // 4
-
-            logoIgap.setVisibility(View.INVISIBLE);
-            logoSecurity.setVisibility(View.INVISIBLE);
-            logoChat.setVisibility(View.INVISIBLE);
-            call.setVisibility(View.INVISIBLE);
-            boy.setVisibility(View.GONE);
-
-            layout_iGap.setVisibility(View.GONE);
-            txt_p1_l2.setVisibility(View.GONE);
-            txt_p1_l3.setVisibility(View.GONE);
-
-            txt_p2_l1.setVisibility(View.GONE);
-            txt_p2_l2.setVisibility(View.GONE);
-
-            txt_p3_l1.setVisibility(View.GONE);
-            txt_p3_l2.setVisibility(View.GONE);
-
-            txt_p5_l1.setVisibility(View.GONE);
-            txt_p5_l2.setVisibility(View.GONE);
-
-            txt_p6_l1.setVisibility(View.GONE);
-            txt_p6_l2.setVisibility(View.GONE);
-//            btnStart.setVisibility(View.GONE);
-        }
-        if (logo.equals(call)) { // 5
-
-            logoIgap.setVisibility(View.INVISIBLE);
-            logoSecurity.setVisibility(View.INVISIBLE);
-            logoChat.setVisibility(View.INVISIBLE);
-            transfer.setVisibility(View.INVISIBLE);
-            boy.setVisibility(View.GONE);
-
-            layout_iGap.setVisibility(View.GONE);
-            txt_p1_l2.setVisibility(View.GONE);
-            txt_p1_l3.setVisibility(View.GONE);
-
-            txt_p2_l1.setVisibility(View.GONE);
-            txt_p2_l2.setVisibility(View.GONE);
-
-            txt_p3_l1.setVisibility(View.GONE);
-            txt_p3_l2.setVisibility(View.GONE);
-
-            txt_p4_l1.setVisibility(View.GONE);
-            txt_p4_l2.setVisibility(View.GONE);
 
             txt_p6_l1.setVisibility(View.GONE);
             txt_p6_l2.setVisibility(View.GONE);
@@ -948,25 +736,13 @@ public class FragmentIntroduce extends BaseFragment {
 
             logoIgap.setVisibility(View.INVISIBLE);
             logoSecurity.setVisibility(View.INVISIBLE);
-            logoChat.setVisibility(View.INVISIBLE);
-            transfer.setVisibility(View.INVISIBLE);
-            call.setVisibility(View.INVISIBLE);
 
-            layout_iGap.setVisibility(View.GONE);
             txt_p1_l2.setVisibility(View.GONE);
             txt_p1_l3.setVisibility(View.GONE);
 
             txt_p2_l1.setVisibility(View.GONE);
             txt_p2_l2.setVisibility(View.GONE);
 
-            txt_p3_l1.setVisibility(View.GONE);
-            txt_p3_l2.setVisibility(View.GONE);
-
-            txt_p4_l1.setVisibility(View.GONE);
-            txt_p4_l2.setVisibility(View.GONE);
-
-            txt_p5_l1.setVisibility(View.GONE);
-            txt_p5_l2.setVisibility(View.GONE);
         }
     }
 
@@ -994,7 +770,7 @@ public class FragmentIntroduce extends BaseFragment {
 
         @Override
         public int getCount() {
-            return 6;
+            return 3;
         }
 
         @Override

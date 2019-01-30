@@ -22,13 +22,17 @@
 
 
     <!-- Page 5 introduce app -->
-    <string name="text_line_1_introduce_page5">"تماس صوتی در آی گپ"</string>
-    <string name="text_line_2_introduce_page5">"شما میتوانید بر بستر آی گپ با سایر کاربرانِ آی گپ تماس صوتیِ کاملاً رایگان و امن برقرار کنید و در هزینه های خود صرفه جویی نمایید، همچنین تماس صوتی آی گپ P2P بوده و حتی سرور های آی گپ هم در جابجایی صدای شما دخالت ندارند."</string>
+    <string name="text_line_1_introduce_page5">"تماس صوتی و تصویری در آی گپ"</string>
+    <string name="text_line_2_introduce_page5">"شما میتوانید بر بستر آی گپ با سایر کاربرانِ آی گپ تماس صوتیِ و تصویری کاملاً رایگان و امن برقرار کنید و در هزینه های خود صرفه جویی نمایید، همچنین تماس ها در آی گپ P2P بوده و حتی سرور های آی گپ هم در جابجایی صدا و تصویر شما دخالت ندارند."</string>
 
     <!-- Page 6 introduce app -->
     <string name="btn_start_page6">"همین حالا شروع کنید"</string>
     <string name="text_line_1_introduce_page6">"همه چیز رایگان در آی گپ!"</string>
     <string name="text_line_2_introduce_page6">"آی گپ همیشه رایگان بوده و هست. پس بیش از این منتظر نمی مانیم. همین حالا دنیای خود را در آی گپ بسازید."</string>
+
+
+    <string name="text_line_1_introduce_page7">اطراف من</string>
+    <string name="text_line_2_introduce_page7">با اطراف من پا به دنیای جدید بگذارید. در اطرافتان دوستان خود، مراکز تفریحی، هنری، تجاری و ... را پیدا کنید و از لحظه های خود لذت ببرید ...</string>
 
 
     <!-- Fill Profile User  -->

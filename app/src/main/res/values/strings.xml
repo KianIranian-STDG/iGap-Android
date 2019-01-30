@@ -20,13 +20,16 @@
     <string name="text_line_2_introduce_page4">You have an authority to transfer any file with any size and type or save them on your cloud storage; and then share anything you’d like to with anyone you’d want to.</string>
 
     <!-- Page 5 introduce app -->
-    <string name="text_line_1_introduce_page5">Voice Call</string>
-    <string name="text_line_2_introduce_page5">You can make thoroughly free and secure voice calls to anyone on iGap and save your money. iGap voice call is P2P-based with no server\'s interference in voice transmission.</string>
+    <string name="text_line_1_introduce_page5">Voice and video Call</string>
+    <string name="text_line_2_introduce_page5">You can make thoroughly free and secure voice and video calls to anyone on iGap and save your money. iGap voice and video call is P2P-based with no server\'s interference in voice and video transmission.</string>
 
     <!-- Page 6 introduce app -->
     <string name="btn_start_page6">Start Now</string>
     <string name="text_line_1_introduce_page6">Everything for Free in iGap!</string>
     <string name="text_line_2_introduce_page6">Let’s stop waiting! \n iGap is thoroughly free. So, just now build your own world freely.</string>
+
+    <string name="text_line_1_introduce_page7">Nearby Feature</string>
+    <string name="text_line_2_introduce_page7">Leave a new world around me. Around you, find your friends, entertainment centers, art, business and other and enjoy your moments ...</string>
 
 
     <!--Fill Profile User -->
