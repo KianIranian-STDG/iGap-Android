@@ -3459,6 +3459,7 @@ public class FragmentChat extends BaseFragment
         webViewChatPage.clearCache(true);
         webViewChatPage.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webViewChatPage.getSettings().setJavaScriptEnabled(true);
+        webViewChatPage.getSettings().setDomStorageEnabled(true);
         progressWebView.setVisibility(View.VISIBLE);
 
         webViewChatPage.setWebChromeClient(new WebChromeClient() {
@@ -3480,6 +3481,7 @@ public class FragmentChat extends BaseFragment
             public void onReceivedSslError(final WebView view, final SslErrorHandler handler, SslError error) {
             }
         });
+        System.out.println(urlWebViewForSpecialUrlChat);
         webViewChatPage.loadUrl(urlWebViewForSpecialUrlChat);
     }
 
