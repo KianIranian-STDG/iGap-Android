@@ -247,6 +247,7 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/channel_white"
                 app:backgroundTint="@color/green"
+                app:menu_angle="@integer/ANGLE_MAIN_ARC_MENU"
                 app:elevation="@dimen/dp6" />
 
             </net.iGap.libs.floatingAddButton.ArcMenu>

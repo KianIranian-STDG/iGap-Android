@@ -305,7 +305,9 @@
                         app:layout_anchor="@+id/replace"
                         app:layout_anchorGravity="top|right|end"
                         app:menu_config="true"
+                        app:menu_radius="@dimen/dp60"
                         app:menu_color="@color/green"
+                        app:menu_angle="@integer/ANGLE_NEARBY_ARC_MENU"
 
 
                         app:menu_scr="@drawable/ic_gps_layer">
