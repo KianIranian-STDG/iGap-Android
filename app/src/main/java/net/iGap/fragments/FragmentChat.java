@@ -355,6 +355,7 @@ public class FragmentChat extends BaseFragment
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged,
         OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick {
 
+    private static boolean BugUnreadMessage;
     public static FinishActivity finishActivity;
     public static OnComplete onMusicListener;
     public static IUpdateLogItem iUpdateLogItem;
@@ -3013,8 +3014,14 @@ public class FragmentChat extends BaseFragment
         llScrollNavigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("bagi" , "llScrollNavigatonClicke");
 
                 if (isWaitingForHistoryUp || isWaitingForHistoryDown) {
+                    Log.d("bagi" , "BUGGGllScrollNavigatonClicke");
+                    FragmentChat.BugUnreadMessage = true;
+                    clearAdapterItems();
+                    mAdapter.add(new ProgressWaiting(getRealmChat(), FragmentChat.this).withIdentifier(progressIdentifierDown));
+                    mAdapter.notifyAdapterDataSetChanged();
                     return;
                 }
 
@@ -8409,6 +8416,7 @@ public class FragmentChat extends BaseFragment
      * manage save changeState , unread message , load from local or need get message from server and finally load message
      */
     private void getMessages() {
+        Log.d("bagi" ,"getMessagesCalled");
         //+Realm realm = Realm.getDefaultInstance();
 
         ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction;
@@ -8585,6 +8593,11 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                Log.d("bagi" , "onScrolledCalled");
+
+                if (FragmentChat.BugUnreadMessage) {
+                    return;
+                }
 
                 LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
                 int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
@@ -8751,6 +8764,7 @@ public class FragmentChat extends BaseFragment
             MessageLoader.getOnlineMessage(getRealmChat(), mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
                 @Override
                 public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached, boolean jumpOverLocal, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
+                    Log.d("bagi" , "getOnlineMessage+onMessage");
                     if (roomId != mRoomId) {
                         return;
                     }
@@ -8822,6 +8836,12 @@ public class FragmentChat extends BaseFragment
                         switchAddItem(structMessageInfos, true);
                     } else {
                         switchAddItem(structMessageInfos, false);
+                    }
+
+                    if (FragmentChat.BugUnreadMessage){
+                        FragmentChat.BugUnreadMessage = false;
+                        mAdapter.remove(mAdapter.getAdapterItemCount() - 1);
+                        llScrollNavigate.performClick();
                     }
 
                     //realm.close();

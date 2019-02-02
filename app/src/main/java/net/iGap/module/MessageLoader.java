@@ -11,6 +11,8 @@
 
 package net.iGap.module;
 
+import android.util.Log;
+
 import net.iGap.G;
 import net.iGap.interfaces.OnClientGetRoomHistoryResponse;
 import net.iGap.interfaces.OnMessageReceive;
@@ -49,6 +51,7 @@ public final class MessageLoader {
      */
     public static Object[] getLocalMessage(Realm realm, long roomId, long messageId, long gapMessageId, boolean duplicateMessage, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
         //+Realm realm = Realm.getDefaultInstance();
+        Log.d("bagi" , "getLocalMessageCalled");
         boolean hasMore = true;
         boolean hasSpaceToGap = true;
         List<RealmRoomMessage> realmRoomMessages;
