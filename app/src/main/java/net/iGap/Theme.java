@@ -74,8 +74,8 @@ public class Theme extends Application {
     public static String default_textSubTheme = "#FF616161";
     public static String default_tintImage = default_textSubTheme;
     public static String default_logLineTheme = "#e9e9e9";
-    public static String default_voteIconTheme = "#FFFFFF";
     public static String default_textBubbleColor = "#686868";
+    public static String default_voteIconTheme = default_textBubbleColor;
     public static String default_txtIconCheckColor = default_tintImage;
     public static String default_textChatMusicColor = "#212121";
     public static String default_roomMessageTypeColor = "#9dc756";
@@ -98,8 +98,8 @@ public class Theme extends Application {
     public static String default_dark_textSubTheme = "#686868";
     public static String default_dark_tintImage = default_dark_textSubTheme;
     public static String default_dark_logLineTheme = "#2c363f";//
-    public static String default_dark_voteIconTheme = "#cacaca";
     public static String default_dark_textBubbleColor = "#cccccc";
+    public static String default_dark_voteIconTheme = default_dark_textBubbleColor;
     public static String default_dark_txtIconCheckColor = default_dark_tintImage;
     public static String default_dark_textChatMusicColor = "#cccccc";
     public static String default_dark_roomMessageTypeColor = "#809dc756";

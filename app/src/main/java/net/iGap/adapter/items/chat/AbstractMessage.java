@@ -648,16 +648,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     protected void voteAction(VH holder, Realm realm) {
 
-        LinearLayout mainContainer = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
-        if (mainContainer == null) {
+        LinearLayout csl_ll_time = (LinearLayout) holder.itemView.findViewById(R.id.csl_ll_time);
+
+        if (csl_ll_time == null)
             return;
-        }
 
         if (holder.itemView.findViewById(R.id.lyt_vote) == null) {
             //   View voteView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_messages_vote, null);
             View voteView = ViewMaker.getViewVote();
 
-            mainContainer.addView(voteView, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            csl_ll_time.addView(voteView, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             voteView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
         }
 
@@ -673,16 +673,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             LinearLayout lytVoteUp = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote_up);
             LinearLayout lytVoteDown = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote_down);
-            TextView txtVoteForward = (TextView) holder.itemView.findViewById(R.id.img_vote_forward);
             TextView txtVoteUp = (TextView) holder.itemView.findViewById(R.id.txt_vote_up);
             TextView txtVoteDown = (TextView) holder.itemView.findViewById(R.id.txt_vote_down);
             TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
             TextView txtSignature = (TextView) holder.itemView.findViewById(R.id.txt_signature);
 
             if (showThump) {
-                holder.itemView.findViewById(R.id.lyt_vote_sub).setVisibility(View.VISIBLE);
+                holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.VISIBLE);
             } else {
-                holder.itemView.findViewById(R.id.lyt_vote_sub).setVisibility(View.INVISIBLE);
+                holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.INVISIBLE);
             }
 
             lytVote.setVisibility(View.VISIBLE);
@@ -760,21 +759,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             });
 
             lytVoteDown.setOnLongClickListener(getLongClickPerform(holder));
-
-            txtVoteForward.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (FragmentChat.isInSelectionMode) {
-                        holder.itemView.performLongClick();
-                    } else {
-                        messageClickListener.onForwardClick(mMessage);
-                    }
-                }
-            });
-
-            txtVoteForward.setOnLongClickListener(getLongClickPerform(holder));
-
-
         }
     }
 

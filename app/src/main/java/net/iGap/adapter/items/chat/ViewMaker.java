@@ -28,6 +28,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
+import com.googlecode.mp4parser.boxes.cenc.CencDecryptingSampleList;
 import com.hanks.library.AnimateCheckBox;
 
 import net.iGap.G;
@@ -777,130 +778,97 @@ public class ViewMaker {
 
     static View getViewVote() {
 
+        LinearLayout.LayoutParams layout_356 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        layout_356.bottomMargin = i_Dp(R.dimen.dp16);
         LinearLayout lyt_vote = new LinearLayout(context);
         lyt_vote.setId(R.id.lyt_vote);
-        lyt_vote.setGravity(BOTTOM);
-        setLayoutDirection(lyt_vote, View.LAYOUT_DIRECTION_LTR);
-        lyt_vote.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_356 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp48), ViewGroup.LayoutParams.MATCH_PARENT);
-        layout_356.gravity = BOTTOM;
+        lyt_vote.setOrientation(HORIZONTAL);
         lyt_vote.setLayoutParams(layout_356);
+        setLayoutDirection(lyt_vote, View.LAYOUT_DIRECTION_LTR);
 
-        LinearLayout lyt_vote_sub = new LinearLayout(context);
-        lyt_vote_sub.setOrientation(VERTICAL);
-        lyt_vote_sub.setId(R.id.lyt_vote_sub);
-
-        lyt_vote_sub.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.rectangel_white_round));
-
-
-        GradientDrawable circleDarkColor = (GradientDrawable) lyt_vote_sub.getBackground();
-        circleDarkColor.setColor(Color.parseColor(G.appBarColor));
-
-        LinearLayout.LayoutParams layout_35644 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layout_35644.leftMargin = i_Dp(R.dimen.dp2);
-        lyt_vote_sub.setLayoutParams(layout_35644);
-
+        LinearLayout.LayoutParams layout_799 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout lyt_vote_up = new LinearLayout(context);
         lyt_vote_up.setId(R.id.lyt_vote_up);
-        lyt_vote_up.setGravity(CENTER);
-        lyt_vote_up.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_799 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lyt_vote_up.setPadding(0, 0, 0, i_Dp(R.dimen.dp6));
-        layout_799.bottomMargin = i_Dp(dp4);
+        lyt_vote_up.setOrientation(HORIZONTAL);
+        lyt_vote_up.setPadding(i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4), 0);
         lyt_vote_up.setLayoutParams(layout_799);
 
+        LinearLayout.LayoutParams layout_713 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         TextView txt_vote_up = new TextView(context);
         txt_vote_up.setId(R.id.txt_vote_up);
         txt_vote_up.setText("0");
+        txt_vote_up.setGravity(BOTTOM);
         txt_vote_up.setTextAppearance(context, R.style.ChatMessages_Time);
         txt_vote_up.setSingleLine(true);
+        txt_vote_up.setTextColor(Color.parseColor(G.voteIconTheme));
+        txt_vote_up.setLayoutParams(layout_713);
         setTypeFace(txt_vote_up);
 
-        txt_vote_up.setTextColor(Color.parseColor(G.voteIconTheme));
-        LinearLayout.LayoutParams layout_713 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dpToPixel(16));
-        txt_vote_up.setLayoutParams(layout_713);
-        lyt_vote_up.addView(txt_vote_up);
-
+        LinearLayout.LayoutParams layout_216 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         MaterialDesignTextView img_vote_up = new MaterialDesignTextView(context);
         img_vote_up.setId(R.id.img_vote_up);
         img_vote_up.setText(context.getResources().getString(R.string.md_thumb_up));
+        img_vote_up.setGravity(BOTTOM);
         img_vote_up.setTextColor(Color.parseColor(G.voteIconTheme));
-        setTextSize(img_vote_up, R.dimen.dp16);
-        LinearLayout.LayoutParams layout_216 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         img_vote_up.setLayoutParams(layout_216);
-        lyt_vote_up.addView(img_vote_up);
-        lyt_vote_sub.addView(lyt_vote_up);
+        setTextSize(img_vote_up, R.dimen.dp14);
+
+        LinearLayout.LayoutParams layout_221 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         LinearLayout lyt_vote_down = new LinearLayout(context);
-
-        lyt_vote_down.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.rectangel_white_round));
-
-        GradientDrawable circleDarkColor_2 = (GradientDrawable) lyt_vote_down.getBackground();
-        circleDarkColor_2.setColor(Color.parseColor(G.appBarColor));
-
         lyt_vote_down.setId(R.id.lyt_vote_down);
-        lyt_vote_down.setPadding(0, i_Dp(R.dimen.dp6), 0, 0);
-        lyt_vote_down.setGravity(CENTER);
-        lyt_vote_down.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_221 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lyt_vote_down.setPadding(i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4), 0);
+        lyt_vote_down.setOrientation(HORIZONTAL);
         lyt_vote_down.setLayoutParams(layout_221);
+
+        LinearLayout.LayoutParams layout_877 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         MaterialDesignTextView img_vote_down = new MaterialDesignTextView(context);
         img_vote_down.setId(R.id.img_vote_down);
         img_vote_down.setText(context.getResources().getString(R.string.md_thumb_down));
+        img_vote_down.setGravity(BOTTOM);
         img_vote_down.setTextColor(Color.parseColor(G.voteIconTheme));
-        setTextSize(img_vote_down, R.dimen.dp16);
-        LinearLayout.LayoutParams layout_877 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         img_vote_down.setLayoutParams(layout_877);
-        lyt_vote_down.addView(img_vote_down);
+        setTextSize(img_vote_down, R.dimen.dp14);
+
+        LinearLayout.LayoutParams layout_856 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         TextView txt_vote_down = new TextView(context);
         txt_vote_down.setId(R.id.txt_vote_down);
         txt_vote_down.setText("0");
+        txt_vote_down.setGravity(BOTTOM);
         txt_vote_down.setTextAppearance(context, R.style.ChatMessages_Time);
-        setTypeFace(txt_vote_down);
         txt_vote_down.setSingleLine(true);
         txt_vote_down.setTextColor(Color.parseColor(G.voteIconTheme));
-        LinearLayout.LayoutParams layout_856 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dpToPixel(16));
         txt_vote_down.setLayoutParams(layout_856);
+        setTypeFace(txt_vote_down);
+
+        lyt_vote_up.addView(txt_vote_up);
+        lyt_vote_up.addView(getHorizontalSpace(i_Dp(R.dimen.dp2)));
+        lyt_vote_up.addView(img_vote_up);
 
         lyt_vote_down.addView(txt_vote_down);
-        lyt_vote_sub.addView(lyt_vote_down);
-        lyt_vote.addView(lyt_vote_sub);
-        lyt_vote.addView(getForwardButton());
+        lyt_vote_down.addView(getHorizontalSpace(i_Dp(R.dimen.dp2)));
+        lyt_vote_down.addView(img_vote_down);
+
+        lyt_vote.addView(lyt_vote_down);
+        lyt_vote.addView(lyt_vote_up);
 
         return lyt_vote;
     }
 
-    private static View getForwardButton() {
-        LinearLayout lyt_vote_forward = new LinearLayout(context);
-        lyt_vote_forward.setGravity(CENTER);
-        lyt_vote_forward.setOrientation(VERTICAL);
+    static View getHorizontalSpace(int size) {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, ViewGroup.LayoutParams.MATCH_PARENT);
+        View view = new View(context);
+        view.setLayoutParams(params);
+        return view;
+    }
 
-
-        lyt_vote_forward.setBackgroundDrawable(G.context.getResources().getDrawable(R.drawable.circle_white));
-
-        GradientDrawable circleDarkColor = (GradientDrawable) lyt_vote_forward.getBackground();
-        circleDarkColor.setColor(Color.parseColor(G.appBarColor));
-
-        LinearLayout.LayoutParams layout_799_f = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp32), i_Dp(R.dimen.dp32));
-        layout_799_f.topMargin = i_Dp(R.dimen.dp8);
-        layout_799_f.bottomMargin = i_Dp(R.dimen.dp16);
-        layout_799_f.leftMargin = i_Dp(R.dimen.dp2);
-        lyt_vote_forward.setLayoutParams(layout_799_f);
-
-        MaterialDesignTextView img_vote_forward = new MaterialDesignTextView(context);
-        img_vote_forward.setId(R.id.img_vote_forward);
-        img_vote_forward.setPadding(i_Dp(R.dimen.dp2), i_Dp(R.dimen.dp4), 0, 0);
-        img_vote_forward.setGravity(CENTER);
-        LinearLayout.LayoutParams layout_216_f = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        img_vote_forward.setText(context.getResources().getString(R.string.md_forward));
-        img_vote_forward.setTextColor(Color.parseColor(G.voteIconTheme));
-        setTextSize(img_vote_forward, R.dimen.dp20);
-        img_vote_forward.setLayoutParams(layout_216_f);
-        lyt_vote_forward.addView(img_vote_forward);
-
-        return lyt_vote_forward;
+    static View getVerticalSpace(int size) {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, size);
+        View view = new View(context);
+        view.setLayoutParams(params);
+        return view;
     }
 
     static View getAudioItem() {
