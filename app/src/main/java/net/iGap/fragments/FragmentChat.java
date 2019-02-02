@@ -8832,16 +8832,21 @@ public class FragmentChat extends BaseFragment
                         structMessageInfos.add(StructMessageInfo.convert(getRealmChat(), realmRoomMessage));
                     }
 
+                    if (FragmentChat.BugUnreadMessage){
+                        if (!isWaitingForHistoryUp &&
+                                !isWaitingForHistoryDown){
+                            FragmentChat.BugUnreadMessage = false;
+                            resetMessagingValue();
+                            addToView = false;
+                            llScrollNavigate.performClick();
+                        }
+                        return;
+                    }
+
                     if (direction == UP) {
                         switchAddItem(structMessageInfos, true);
                     } else {
                         switchAddItem(structMessageInfos, false);
-                    }
-
-                    if (FragmentChat.BugUnreadMessage){
-                        FragmentChat.BugUnreadMessage = false;
-                        mAdapter.remove(mAdapter.getAdapterItemCount() - 1);
-                        llScrollNavigate.performClick();
                     }
 
                     //realm.close();
