@@ -9,6 +9,8 @@ import java.io.Serializable;
  */
 public class Card implements Serializable {
 
+    @SerializedName("club_id")
+    public String clubId;
     @SerializedName("card_number")
     public String cardNumber;
     @SerializedName("token")

@@ -9,13 +9,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,13 +21,10 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -37,13 +32,8 @@ import net.iGap.databinding.PaymentDialogBinding;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
-import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
-import net.iGap.module.EmojiEditTextE;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoWalletPaymentInit;
-import net.iGap.realm.RealmRoom;
-import net.iGap.request.RequestUserProfileSetNickname;
-import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletPaymentInit;
 import net.iGap.webservice.APIService;
 import net.iGap.webservice.ApiUtils;
@@ -51,9 +41,7 @@ import net.iGap.webservice.Post;
 
 import org.paygear.wallet.RaadApp;
 import org.paygear.wallet.WalletActivity;
-import org.paygear.wallet.fragment.CardFragment;
 import org.paygear.wallet.fragment.PaymentResultDialog;
-import org.paygear.wallet.fragment.SetCardPinFragment;
 import org.paygear.wallet.model.Card;
 import org.paygear.wallet.model.Payment;
 import org.paygear.wallet.model.PaymentAuth;
@@ -64,9 +52,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.ErrorManager;
 
-import ir.radsense.raadcore.app.AlertDialog;
 import ir.radsense.raadcore.model.Auth;
 import ir.radsense.raadcore.web.PostRequest;
 import okhttp3.MediaType;
@@ -78,7 +64,6 @@ import retrofit2.Response;
 import static android.app.Activity.RESULT_OK;
 import static net.iGap.G.context;
 import static net.iGap.G.fragmentActivity;
-import static net.iGap.G.smsNumbers;
 import static org.paygear.wallet.utils.RSAUtils.getRSA;
 
 public class PaymentFragment extends BaseFragment implements EventListener {
@@ -560,7 +545,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             map.put("old_password", data[0]);
         map.put("new_password", data[1]);
 
-        Web.getInstance().getWebService().setCreditCardPin(RaadApp.paygearCard.token, PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
+        Web.getInstance().getWebService().setCreditCardPin(RaadApp.paygearCard.token, Auth.getCurrentAuth().getId(), PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Boolean success = Web.checkResponse(PaymentFragment.this, call, response);

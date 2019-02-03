@@ -35,8 +35,10 @@ import org.paygear.wallet.R;
 import org.paygear.wallet.RaadApp;
 import org.paygear.wallet.WalletActivity;
 import org.paygear.wallet.model.Card;
+import org.paygear.wallet.model.MerchantsResult;
 import org.paygear.wallet.model.Payment;
 import org.paygear.wallet.model.PaymentAuth;
+import org.paygear.wallet.model.SearchedAccount;
 import org.paygear.wallet.utils.Utils;
 import org.paygear.wallet.web.Web;
 import org.paygear.wallet.widget.BankCardView;
@@ -49,8 +51,11 @@ import ir.radsense.raadcore.app.NavigationBarActivity;
 import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.model.Account;
 import ir.radsense.raadcore.model.Auth;
+import ir.radsense.raadcore.model.JWT;
 import ir.radsense.raadcore.utils.RaadCommonUtils;
 import ir.radsense.raadcore.utils.Typefaces;
+
+import ir.radsense.raadcore.web.WebBase;
 import ir.radsense.raadcore.widget.CircleImageTransform;
 import ir.radsense.raadcore.widget.ProgressLayout;
 import ir.radsense.raadcore.widget.RecyclerRefreshLayout;
@@ -71,6 +76,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
     LinearLayout cardsLayout;
     ScrollView scrollView;
     ArrayList<CardView> viewItems;
+    private ArrayList<SearchedAccount> merchantsList = new ArrayList<>();
 
     private ArrayList<Card> mCards;
 
@@ -340,6 +346,8 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
                     }
 
                     //collapsedItem = -1;
+                    if (RaadApp.me == null)
+                        loadMyAccount();
                     setAdapter();
                 } else {
                     if (mCards == null || mCards.size() == 0)
@@ -359,6 +367,72 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
             }
         });
 
+    }
+
+    private void GetMerchantsList(JWT jwt) {
+        merchantsList.clear();
+
+        Web.getInstance().getWebService().searchAccounts(200, 1, "admin", "finance").enqueue(new Callback<MerchantsResult>() {
+            @Override
+            public void onResponse(Call<MerchantsResult> call, Response<MerchantsResult> response) {
+
+                Boolean success = response.isSuccessful();
+                if (success == null)
+                    return;
+
+                if (success) {
+                    ArrayList<SearchedAccount> searchedAccounts = new ArrayList<>();
+                    searchedAccounts = response.body().getMerchants();
+                    if (searchedAccounts != null) {
+                        if (searchedAccounts.size() > 0) {
+                            for (SearchedAccount item : searchedAccounts) {
+                                if (item.getAccount_type() == 0) {
+                                    boolean isValid = false;
+                                    for (SearchedAccount.UsersBean userItem : item.getUsers()) {
+                                        if (userItem.getUser_id().equals(Auth.getCurrentAuth().getId()))
+                                            if (userItem.getRole().equals("finance") || userItem.getRole().equals("admin"))
+                                                isValid = true;
+
+                                    }
+                                    if (isValid)
+                                        merchantsList.add(item);
+                                }
+                            }
+                        }
+                    }
+                    RaadApp.merchants = merchantsList;
+                    loadCards();
+                } else {
+                    progress.setStatus(-1, getString(R.string.error));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MerchantsResult> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    private void loadMyAccount() {
+        Web.getInstance().getWebService().getAccountInfo(Auth.getCurrentAuth().getId(), 1).enqueue(new Callback<Account>() {
+            @Override
+            public void onResponse(Call<Account> call, Response<Account> response) {
+                Boolean success = Web.checkResponse(CardsFragment.this, call, response);
+                if (success == null)
+                    return;
+
+                if (success) {
+                    RaadApp.me = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Account> call, Throwable t) {
+
+            }
+        });
     }
 
     private void setAdapter() {
@@ -403,6 +477,9 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
 
         TextView balance = view.findViewById(R.id.balance);
         TextView unit = view.findViewById(R.id.unit);
+
+        ImageView imgQrCode = view.findViewById(R.id.imgQrCode);
+
 
         TextView cashableBalance = view.findViewById(R.id.chashable_balance);
         TextView cashableTitle = view.findViewById(R.id.cashable_title);
@@ -449,6 +526,14 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
             view.findViewById(R.id.charge_layout).setBackground(mDrawable);
         }
 
+
+        imgQrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((NavigationBarActivity) getActivity()).pushFullFragment(
+                        new ScannerFragment(), "ScannerFragment");
+            }
+        });
 
         history.setOnClickListener(new View.OnClickListener() {
             @Override

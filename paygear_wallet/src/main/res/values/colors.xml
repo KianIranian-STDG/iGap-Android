@@ -7,7 +7,10 @@
     <color name="colorPrimary">#3dbcb3</color>
     <color name="colorPrimaryDark">#37a9a1</color>
     <color name="colorAccent">#00B0Bf</color>
+    <color name="colorWhite">#fff</color>
 
+
+    <color name="register_gender_back_selected">#dff1ff</color>
     <color name="login_button_normal">#00e676</color>
     <color name="login_button_selected">#2ecc71</color>
     <color name="edit_text_border">#b2bec4</color>
@@ -26,4 +29,11 @@
     <color name="line_edit_text">#d2d2d2</color>
     <color name="hint_edit_text">#9b9b9b</color>
     <color name="text_edit_text">#000000</color>
+
+
+    <color name="tip_text_back">#2196f3</color>
+
+
+    <color name="transparent">#00ffffff</color>
+
 </resources>

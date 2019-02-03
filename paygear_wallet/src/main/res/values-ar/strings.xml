@@ -295,5 +295,14 @@
   <string name="your_password">رمز المرور  </string>
 
   <string name="Toast_time_wait">من فضلك انتظر حتى  :</string>
+    <string name="default_sheba_number">Default IBAN number</string>
+  <string name="default_sheba_number_message">Do you want to save this IBAN number as default IBAN number?\\n Attention! All Automatic normal cashout will use this IBAN Number until you change it,</string>
+  <string name="recover_password">Recover password</string>
+    <string name="cash_out_two_wallet_hint">Enter Cash out amount then your merchant balance will transfer to your personal wallet</string>
+  <string name="cash_to_wallet">to Personal wallet</string>
+    <string name="person">person</string>
+  <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
+    <string name="enter_four_digit_code">Enter Four digits code that we`ve sent to your phone number</string>
+  <string name="four_digit_code">Four digit code</string>
 
 </resources>

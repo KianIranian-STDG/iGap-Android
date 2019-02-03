@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.paygear.wallet.R;
+import org.paygear.wallet.RaadApp;
 import org.paygear.wallet.WalletActivity;
 import org.paygear.wallet.model.Card;
 
@@ -119,6 +120,8 @@ public class CashOutFragment extends Fragment {
                             isCashOut ? CashOutRequestFragment.REQUEST_CASH_OUT_NORMAL : CashOutRequestFragment.REQUEST_CASH_IN);
                 case 1:
                     return CashOutRequestFragment.newInstance(mCard, CashOutRequestFragment.REQUEST_CASH_OUT_IMMEDIATE);
+                case 2:
+                    return CashOutRequestFragment.newInstance(mCard,CashOutRequestFragment.REQUEST_CASH_OUT_TO_WALLET);
                 default:
                     return null;
             }
@@ -136,7 +139,7 @@ public class CashOutFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return isCashOut ? 2 : 1;
+            return isCashOut ? (RaadApp.selectedMerchant!=null?3:2) : 1;
         }
 
         public void notifyFragments(Fragment fragment, Bundle bundle) {
@@ -152,6 +155,8 @@ public class CashOutFragment extends Fragment {
                     return getString(isCashOut ? R.string.normal_cash_out : R.string.charge_paygear);
                 case 1:
                     return getString(R.string.immediate_cash_out);
+                case 2:
+                    return getString(R.string.cash_to_wallet);
                 default:
                     return "";
             }

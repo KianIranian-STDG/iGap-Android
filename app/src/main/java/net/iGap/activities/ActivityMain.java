@@ -1598,7 +1598,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
                     intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
                     intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                    intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+                    intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme_2);
                     intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
                     intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
                     intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);

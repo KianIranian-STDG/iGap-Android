@@ -8,6 +8,7 @@ import android.os.Build;
 
 import org.paygear.wallet.fragment.PaymentHistoryFragment;
 import org.paygear.wallet.model.Card;
+import org.paygear.wallet.model.SearchedAccount;
 import org.paygear.wallet.web.Web;
 
 import java.util.ArrayList;
@@ -45,6 +46,8 @@ public class RaadApp extends Application {
     public static Account me;
     public static Card paygearCard;
     public static ArrayList<Card> cards;
+    public static ArrayList<SearchedAccount> merchants;
+    public static SearchedAccount selectedMerchant;
     private String language;
 
     @Override
