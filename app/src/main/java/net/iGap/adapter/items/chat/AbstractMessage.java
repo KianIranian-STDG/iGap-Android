@@ -454,9 +454,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     holder.itemView.findViewById(R.id.messageSenderAvatar).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            if (FragmentChat.isInSelectionMode) {
+                                holder.itemView.performLongClick();
+                                return;
+                            }
+
                             messageClickListener.onSenderAvatarClick(v, mMessage, holder.getAdapterPosition());
                         }
                     });
+
+                    holder.itemView.findViewById(R.id.messageSenderAvatar).setOnLongClickListener(getLongClickPerform(holder));
 
                     //  String[] initialize =
                     HelperAvatar.getAvatar(null, Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, getRealmChat(), new OnAvatarGet() {
