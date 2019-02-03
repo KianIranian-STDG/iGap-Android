@@ -12,11 +12,14 @@ package net.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
@@ -24,6 +27,7 @@ import net.iGap.proto.ProtoGlobal;
 import java.util.List;
 
 import io.realm.Realm;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
@@ -49,7 +53,23 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
         }
 
         holder.text = (TextView) holder.itemView.findViewById(R.id.csll_txt_log_text);
-        holder.text.setMovementMethod(LinkMovementMethod.getInstance());
+        BetterLinkMovementMethod
+                .linkify(Linkify.ALL, holder.text)
+                .setOnLinkClickListener((tv, url) -> {
+
+                    Log.d("bagi" , "OntextLinkClick");
+                    // Handle clicks.
+                    if (FragmentChat.isInSelectionMode) {
+                        return true;
+                    }
+
+                    return false;
+                })
+                .setOnLinkLongClickListener((tv, url) -> {
+                    Log.d("bagi" , "OntextLinkLongClick");
+                    // Handle long-clicks.
+                    return true;
+                });
 
         super.bindView(holder, payloads);
         holder.text.setText(HelperLogMessage.deserializeLog(mMessage.logs, true));
