@@ -50,12 +50,6 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getImageItem(true));
-        }
-
-        holder.image = ((ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail));
         holder.image.setTag(getCacheId(mMessage));
 
         super.bindView(holder, payloads);
@@ -116,8 +110,10 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
         public ViewHolder(View view) {
             super(view);
-
-            //image = (ReserveSpaceRoundedImageView) view.findViewById(R.id.thumbnail);
+            if (itemView.findViewById(R.id.mainContainer) == null) {
+                ((ViewGroup) itemView).addView(ViewMaker.getImageItem(true));
+            }
+            image = ((ReserveSpaceRoundedImageView) itemView.findViewById(R.id.thumbnail));
         }
     }
 }

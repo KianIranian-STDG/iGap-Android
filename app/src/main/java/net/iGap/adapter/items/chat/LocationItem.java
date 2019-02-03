@@ -54,14 +54,6 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getLocationItem());
-
-        }
-
-        holder.imgMapPosition = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
-
         super.bindView(holder, payloads);
 
         holder.imgMapPosition.reserveSpace(G.context.getResources().getDimension(R.dimen.dp240), G.context.getResources().getDimension(R.dimen.dp120), getRoomType());
@@ -156,6 +148,10 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
         public ViewHolder(View view) {
             super(view);
+            if (itemView.findViewById(R.id.mainContainer) == null) {
+                ((ViewGroup) itemView).addView(ViewMaker.getLocationItem());
+            }
+            imgMapPosition = (ReserveSpaceRoundedImageView) itemView.findViewById(R.id.thumbnail);
         }
     }
 }

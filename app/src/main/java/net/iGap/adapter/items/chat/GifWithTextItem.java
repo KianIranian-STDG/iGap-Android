@@ -105,14 +105,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getGifItem(true));
-        }
-
-        holder.image = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);
         holder.image.setTag(getCacheId(mMessage));
-
         super.bindView(holder, payloads);
 
         String text = "";
@@ -200,7 +193,10 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
 
         public ViewHolder(View view) {
             super(view);
-            //image = (ReserveSpaceGifImageView) view.findViewById(R.id.thumbnail);
+            if (itemView.findViewById(R.id.mainContainer) == null) {
+                ((ViewGroup) itemView).addView(ViewMaker.getGifItem(true));
+            }
+            image = (ReserveSpaceGifImageView) itemView.findViewById(R.id.thumbnail);
         }
     }
 }

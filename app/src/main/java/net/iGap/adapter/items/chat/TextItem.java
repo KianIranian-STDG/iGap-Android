@@ -45,12 +45,6 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getTextItem());
-        }
-
-
         super.bindView(holder, payloads);
 
         String text;
@@ -60,24 +54,17 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
             text = mMessage.messageText;
         }
 
+        View msgView = holder.itemView.findViewById(R.id.messageSenderTextMessage);
         if (mMessage.hasEmojiInText) {
-
-            EmojiTextViewE textViewE = (EmojiTextViewE) holder.itemView.findViewById(R.id.messageSenderTextMessage);
-
             if (text.length() <= 2) {
-
                 if (EmojiUtils.emojisCount(text) == 1) {
+                    EmojiTextViewE textViewE = (EmojiTextViewE) msgView;
                     textViewE.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp28));
                 }
             }
-
-            setTextIfNeeded(textViewE, text);
-
-
-        } else {
-            setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
         }
 
+        setTextIfNeeded((TextView) msgView, text);
     }
 
     @Override
@@ -90,7 +77,9 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
         public ViewHolder(View view) {
             super(view);
-            // llTime = (LinearLayout) view.findViewById(R.id.csl_ll_time);
+            if (itemView.findViewById(R.id.mainContainer) == null) {
+                ((ViewGroup) itemView).addView(ViewMaker.getTextItem());
+            }
         }
     }
 }

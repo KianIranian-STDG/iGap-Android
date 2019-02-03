@@ -86,16 +86,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getVoiceItem());
-        }
-
-        holder.thumbnail = (ImageView) holder.itemView.findViewById(R.id.thumbnail);
-        holder.author = (TextView) holder.itemView.findViewById(R.id.cslv_txt_author);
-        holder.btnPlayMusic = (TextView) holder.itemView.findViewById(R.id.csla_btn_play_music);
-        holder.txt_Timer = (TextView) holder.itemView.findViewById(R.id.csla_txt_timer);
-        holder.musicSeekbar = (SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1);
         holder.musicSeekbar.setTag(mMessage.messageID);
         //tic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
 
@@ -312,72 +302,14 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         public ViewHolder(View view) {
             super(view);
-            /**
-             *  this commented code used with xml layout
-             */
-            //thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            //author = (TextView) view.findViewById(R.id.cslv_txt_author);
-            //btnPlayMusic = (TextView) view.findViewById(R.id.csla_btn_play_music);
-            //txt_Timer = (TextView) view.findViewById(R.id.csla_txt_timer);
-            //musicSeekbar = (SeekBar) view.findViewById(R.id.csla_seekBar1);
-            //
-            //complete = new OnComplete() {
-            //    @Override public void complete(boolean result, String messageOne, final String MessageTow) {
-            //
-            //        if (messageOne.equals("play")) {
-            //            btnPlayMusic.setText(R.string.md_play_arrow);
-            //        } else if (messageOne.equals("pause")) {
-            //            btnPlayMusic.setText(R.string.md_pause_button);
-            //        } else if (messageOne.equals("updateTime")) {
-            //            txt_Timer.post(new Runnable() {
-            //                @Override public void run() {
-            //                    txt_Timer.setText(MessageTow + "/" + mTimeMusic);
-            //
-            //                    if (HelperCalander.isPersianUnicode) txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
-            //
-            //                    musicSeekbar.setProgress(MusicPlayer.musicProgress);
-            //                }
-            //            });
-            //        }
-            //    }
-            //};
-            //
-            //btnPlayMusic.setOnClickListener(new View.OnClickListener() {
-            //    @Override public void onClick(View v) {
-            //
-            //        if (mFilePath.length() < 1) return;
-            //
-            //        if (mMessageID.equals(MusicPlayer.messageId)) {
-            //            MusicPlayer.onCompleteChat = complete;
-            //
-            //            if (MusicPlayer.mp != null) {
-            //                MusicPlayer.playAndPause();
-            //            } else {
-            //                MusicPlayer.startPlayer(mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, mMessageID);
-            //            }
-            //        } else {
-            //
-            //            MusicPlayer.stopSound();
-            //            MusicPlayer.onCompleteChat = complete;
-            //            MusicPlayer.startPlayer(mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, mMessageID);
-            //
-            //            mTimeMusic = MusicPlayer.musicTime;
-            //        }
-            //    }
-            //});
-            //
-            //musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
-            //
-            //    @Override public boolean onTouch(View v, MotionEvent event) {
-            //
-            //        if (event.getAction() == MotionEvent.ACTION_UP) {
-            //            if (mMessageID.equals(MusicPlayer.messageId)) {
-            //                MusicPlayer.setMusicProgress(musicSeekbar.getProgress());
-            //            }
-            //        }
-            //        return false;
-            //    }
-            //});
+            if (itemView.findViewById(R.id.mainContainer) == null) {
+                ((ViewGroup) itemView).addView(ViewMaker.getVoiceItem());
+            }
+            thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
+            author = (TextView) itemView.findViewById(R.id.cslv_txt_author);
+            btnPlayMusic = (TextView) itemView.findViewById(R.id.csla_btn_play_music);
+            txt_Timer = (TextView) itemView.findViewById(R.id.csla_txt_timer);
+            musicSeekbar = (SeekBar) itemView.findViewById(R.id.csla_seekBar1);
         }
     }
 }
