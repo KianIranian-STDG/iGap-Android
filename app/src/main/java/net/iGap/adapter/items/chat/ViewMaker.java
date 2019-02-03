@@ -790,7 +790,7 @@ public class ViewMaker {
         LinearLayout lyt_vote_up = new LinearLayout(context);
         lyt_vote_up.setId(R.id.lyt_vote_up);
         lyt_vote_up.setOrientation(HORIZONTAL);
-        lyt_vote_up.setPadding(i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4), 0);
+        lyt_vote_up.setPadding(i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp2));
         lyt_vote_up.setLayoutParams(layout_799);
 
         LinearLayout.LayoutParams layout_713 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -811,13 +811,13 @@ public class ViewMaker {
         img_vote_up.setGravity(BOTTOM);
         img_vote_up.setTextColor(Color.parseColor(G.voteIconTheme));
         img_vote_up.setLayoutParams(layout_216);
-        setTextSize(img_vote_up, R.dimen.dp14);
+        setTextSize(img_vote_up, R.dimen.dp12);
 
         LinearLayout.LayoutParams layout_221 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         LinearLayout lyt_vote_down = new LinearLayout(context);
         lyt_vote_down.setId(R.id.lyt_vote_down);
-        lyt_vote_down.setPadding(i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4), 0);
+        lyt_vote_down.setPadding(i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp2));
         lyt_vote_down.setOrientation(HORIZONTAL);
         lyt_vote_down.setLayoutParams(layout_221);
 
@@ -829,7 +829,7 @@ public class ViewMaker {
         img_vote_down.setGravity(BOTTOM);
         img_vote_down.setTextColor(Color.parseColor(G.voteIconTheme));
         img_vote_down.setLayoutParams(layout_877);
-        setTextSize(img_vote_down, R.dimen.dp14);
+        setTextSize(img_vote_down, R.dimen.dp12);
 
         LinearLayout.LayoutParams layout_856 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
