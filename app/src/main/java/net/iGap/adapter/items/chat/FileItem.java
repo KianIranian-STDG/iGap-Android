@@ -11,9 +11,7 @@
 package net.iGap.adapter.items.chat;
 
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,7 +19,6 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.AndroidUtils;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoomMessage;
@@ -120,16 +117,17 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemHolder {
         protected TextView cslf_txt_file_name;
         protected TextView cslf_txt_file_size;
         protected ImageView thumbnail;
 
         public ViewHolder(View view) {
             super(view);
-            if (itemView.findViewById(R.id.mainContainer) == null) {
-                ((ViewGroup) itemView).addView(ViewMaker.getFileItem());
+            if (m_container.findViewById(R.id.my_container) == null) {
+                m_container.addView(ViewMaker.getFileItem());
             }
+
             cslf_txt_file_name = (TextView) itemView.findViewById(R.id.songArtist);
             cslf_txt_file_size = (TextView) itemView.findViewById(R.id.fileSize);
             thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);

@@ -19,6 +19,7 @@
   <item name="mainContainer" type="id" />
   <item name="contentContainer" type="id" />
   <item name="m_container" type="id" />
+  <item name="my_container" type="id" />
   <item name="csliwt_layout_container_message" type="id" />
   <item name="audioPlayerViewContainer" type="id" />
   <item name="thumbnail" type="id" />

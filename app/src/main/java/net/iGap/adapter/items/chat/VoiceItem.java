@@ -13,14 +13,12 @@ package net.iGap.adapter.items.chat;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import net.iGap.G;
@@ -45,9 +43,6 @@ import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
 
 public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> {
-
-    private long roomId;
-
 
     public VoiceItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(realmChat, true, type, messageClickListener);
@@ -285,7 +280,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemHolder {
 
         protected ImageView thumbnail;
         //protected ImageView tic;
@@ -302,9 +297,11 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         public ViewHolder(View view) {
             super(view);
-            if (itemView.findViewById(R.id.mainContainer) == null) {
-                ((ViewGroup) itemView).addView(ViewMaker.getVoiceItem());
+
+            if (m_container.findViewById(R.id.my_container) == null) {
+                m_container.addView(ViewMaker.getVoiceItem());
             }
+
             thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
             author = (TextView) itemView.findViewById(R.id.cslv_txt_author);
             btnPlayMusic = (TextView) itemView.findViewById(R.id.csla_btn_play_music);

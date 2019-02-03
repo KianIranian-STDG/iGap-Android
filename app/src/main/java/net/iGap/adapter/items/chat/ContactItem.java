@@ -10,9 +10,7 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -57,15 +55,6 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
     @Override
     public void bindView(ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getContactItem());
-        }
-
-        holder.name = (TextView) holder.itemView.findViewById(R.id.name);
-        holder.number = (TextView) holder.itemView.findViewById(R.id.number);
-
-
         super.bindView(holder, payloads);
 
         if (mMessage.forwardedFrom != null) {
@@ -86,20 +75,19 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemHolder {
 
-        /**
-         * this commented code used with xml layout
-         */
         protected TextView name;
         protected TextView number;
-        //   protected ImageView image;
 
         public ViewHolder(View view) {
             super(view);
-            //name = (TextView) view.findViewById(R.id.name);
-            //number = (TextView) view.findViewById(R.id.number);
-            //image = (ImageView) view.findViewById(R.id.image);
+            if (m_container.findViewById(R.id.my_container) == null) {
+                m_container.addView(ViewMaker.getContactItem());
+            }
+
+            name = (TextView) itemView.findViewById(R.id.name);
+            number = (TextView) itemView.findViewById(R.id.number);
         }
     }
 }

@@ -12,15 +12,10 @@ package net.iGap.adapter.items.chat;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
@@ -187,15 +182,16 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemHolder {
 
         protected ReserveSpaceGifImageView image;
 
         public ViewHolder(View view) {
             super(view);
-            if (itemView.findViewById(R.id.mainContainer) == null) {
-                ((ViewGroup) itemView).addView(ViewMaker.getGifItem(true));
+            if (m_container.findViewById(R.id.my_container) == null) {
+                m_container.addView(ViewMaker.getGifItem(true));
             }
+
             image = (ReserveSpaceGifImageView) itemView.findViewById(R.id.thumbnail);
         }
     }

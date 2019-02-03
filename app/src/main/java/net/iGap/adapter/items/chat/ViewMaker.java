@@ -67,27 +67,9 @@ import static net.iGap.R.dimen.messageContainerPadding;
 
 public class ViewMaker {
 
-    static View getTextItem() {
-
-        LinearLayout mainContainer = new LinearLayout(context);
-        mainContainer.setId(R.id.mainContainer);
-        mainContainer.setOrientation(HORIZONTAL);
-        LinearLayout.LayoutParams layout_216 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mainContainer.setLayoutParams(layout_216);
-
-        LinearLayout linearLayout_683 = new LinearLayout(context);
-        linearLayout_683.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_584 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayout_683.setLayoutParams(layout_584);
-
-        LinearLayout contentContainer = new LinearLayout(context);
-        contentContainer.setId(R.id.contentContainer);
-        LinearLayout.LayoutParams layout_617 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        contentContainer.setLayoutParams(layout_617);
-        contentContainer.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
-
+    static LinearLayout getTextItem() {
         LinearLayout m_container = new LinearLayout(context);
-        m_container.setId(R.id.m_container);
+        m_container.setId(R.id.my_container);
         m_container.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         m_container.setLayoutParams(layout_842);
@@ -97,40 +79,18 @@ public class ViewMaker {
         csliwt_layout_container_message.setOrientation(HORIZONTAL);
         LinearLayout.LayoutParams layout_577 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         csliwt_layout_container_message.setLayoutParams(layout_577);
-
         m_container.addView(csliwt_layout_container_message);
-        contentContainer.addView(m_container);
-        linearLayout_683.addView(contentContainer);
 
-        mainContainer.addView(linearLayout_683);
+        return m_container;
 
-        return mainContainer;
     }
 
-    static View getVoiceItem() {
-
-        LinearLayout mainContainer = new LinearLayout(G.context);
-        mainContainer.setId(R.id.mainContainer);
-        mainContainer.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams layout_477 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mainContainer.setLayoutParams(layout_477);
-
-        LinearLayout linearLayout_349 = new LinearLayout(G.context);
-        linearLayout_349.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams layout_105 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayout_349.setLayoutParams(layout_105);
-
-        LinearLayout contentContainer = new LinearLayout(G.context);
-        contentContainer.setId(R.id.contentContainer);
-        LinearLayout.LayoutParams layout_942 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        contentContainer.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
-        contentContainer.setLayoutParams(layout_942);
-
-        LinearLayout m_container = new LinearLayout(G.context);
-        m_container.setId(R.id.m_container);
-        m_container.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams layout_148 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        m_container.setLayoutParams(layout_148);
+    static LinearLayout getVoiceItem() {
+        LinearLayout m_container = new LinearLayout(context);
+        m_container.setId(R.id.my_container);
+        m_container.setOrientation(VERTICAL);
+        LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_842);
 
         LinearLayout linearLayout_197 = new LinearLayout(G.context);
         linearLayout_197.setGravity(Gravity.CENTER_VERTICAL);
@@ -228,37 +188,15 @@ public class ViewMaker {
         audioPlayerViewContainer.addView(csla_txt_timer);
         linearLayout_197.addView(audioPlayerViewContainer);
         m_container.addView(linearLayout_197);
-        contentContainer.addView(m_container);
-        linearLayout_349.addView(contentContainer);
-        mainContainer.addView(linearLayout_349);
-
-        return mainContainer;
+        return m_container;
     }
 
-    static View getVideoItem(boolean withText) {
-
-        LinearLayout mainContainer = new LinearLayout(G.context);
-        mainContainer.setId(R.id.mainContainer);
-        mainContainer.setOrientation(HORIZONTAL);
-        LinearLayout.LayoutParams layout_882 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mainContainer.setLayoutParams(layout_882);
-
-        LinearLayout linearLayout_223 = new LinearLayout(G.context);
-        linearLayout_223.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_509 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayout_223.setLayoutParams(layout_509);
-
-        LinearLayout contentContainer = new LinearLayout(G.context);
-        LinearLayout.LayoutParams layout_5095 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        contentContainer.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
-        contentContainer.setLayoutParams(layout_5095);
-        contentContainer.setId(R.id.contentContainer);
-
-        LinearLayout m_container = new LinearLayout(G.context);
-        m_container.setId(R.id.m_container);
+    static LinearLayout getVideoItem(boolean withText) {
+        LinearLayout m_container = new LinearLayout(context);
+        m_container.setId(R.id.my_container);
         m_container.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_518 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        m_container.setLayoutParams(layout_518);
+        LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_842);
 
         FrameLayout frameLayout_642 = new FrameLayout(G.context);
         LinearLayout.LayoutParams layout_535 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -292,18 +230,12 @@ public class ViewMaker {
         frameLayout_642.addView(duration);
 
         frameLayout_642.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48), Gravity.CENTER));
-
         m_container.addView(frameLayout_642);
-
         if (withText) {
             m_container.addView(getTextView());
         }
 
-        contentContainer.addView(m_container);
-        linearLayout_223.addView(contentContainer);
-        mainContainer.addView(linearLayout_223);
-
-        return mainContainer;
+        return m_container;
     }
 
     static View getUnreadMessageItem() {
@@ -410,29 +342,12 @@ public class ViewMaker {
         return text;
     }
 
-    static View getLocationItem() {
-
-        LinearLayout mainContainer = new LinearLayout(G.context);
-        mainContainer.setId(R.id.mainContainer);
-        LinearLayout.LayoutParams layout_761 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mainContainer.setLayoutParams(layout_761);
-
-        LinearLayout linearLayout_532 = new LinearLayout(G.context);
-        linearLayout_532.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_639 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayout_532.setLayoutParams(layout_639);
-
-        LinearLayout contentContainer = new LinearLayout(G.context);
-        contentContainer.setId(R.id.contentContainer);
-        LinearLayout.LayoutParams layoutParamsContentContainer = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        contentContainer.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
-        contentContainer.setLayoutParams(layoutParamsContentContainer);
-
-        LinearLayout m_container = new LinearLayout(G.context);
-        m_container.setId(R.id.m_container);
+    static LinearLayout getLocationItem() {
+        LinearLayout m_container = new LinearLayout(context);
+        m_container.setId(R.id.my_container);
         m_container.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_788 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        m_container.setLayoutParams(layout_788);
+        LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_842);
 
         FrameLayout frameLayout = new FrameLayout(G.context);
         frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
@@ -444,39 +359,17 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         reserveSpaceRoundedImageView.setLayoutParams(layout_758);
 
-        mainContainer.addView(linearLayout_532);
-        linearLayout_532.addView(contentContainer);
-        contentContainer.addView(m_container);
-        m_container.addView(frameLayout);
-
         frameLayout.addView(reserveSpaceRoundedImageView);
-
-        return mainContainer;
+        m_container.addView(frameLayout);
+        return m_container;
     }
 
-    static View getGifItem(boolean withText) {
-
-        LinearLayout mainContainer = new LinearLayout(G.context);
-        mainContainer.setId(R.id.mainContainer);
-        LinearLayout.LayoutParams layout_761 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mainContainer.setLayoutParams(layout_761);
-
-        LinearLayout linearLayout_532 = new LinearLayout(G.context);
-        linearLayout_532.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_639 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayout_532.setLayoutParams(layout_639);
-
-        LinearLayout contentContainer = new LinearLayout(G.context);
-        contentContainer.setId(R.id.contentContainer);
-        LinearLayout.LayoutParams layout_893 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        contentContainer.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
-        contentContainer.setLayoutParams(layout_893);
-
-        LinearLayout m_container = new LinearLayout(G.context);
-        m_container.setId(R.id.m_container);
+    static LinearLayout getGifItem(boolean withText) {
+        LinearLayout m_container = new LinearLayout(context);
+        m_container.setId(R.id.my_container);
         m_container.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_788 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        m_container.setLayoutParams(layout_788);
+        LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_842);
 
         FrameLayout frameLayout = new FrameLayout(G.context);
         frameLayout.setLayoutParams(new LinearLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
@@ -488,19 +381,17 @@ public class ViewMaker {
 
         frameLayout.addView(reserveSpaceGifImageView);
         frameLayout.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+
         m_container.addView(frameLayout);
+
         if (withText) {
             m_container.addView(getTextView());
         }
-        contentContainer.addView(m_container);
-        linearLayout_532.addView(contentContainer);
-        mainContainer.addView(linearLayout_532);
 
-        return mainContainer;
+        return m_container;
     }
 
     static View getViewTime() {
-
         LinearLayout csl_ll_time = new LinearLayout(context);
         csl_ll_time.setId(R.id.csl_ll_time);
         csl_ll_time.setOrientation(HORIZONTAL);
@@ -560,7 +451,6 @@ public class ViewMaker {
     }
 
     static View getViewSeen() {
-
         LinearLayout lyt_see = new LinearLayout(context);
         lyt_see.setId(R.id.lyt_see);
         lyt_see.setGravity(Gravity.CENTER_VERTICAL);
@@ -871,30 +761,12 @@ public class ViewMaker {
         return view;
     }
 
-    static View getAudioItem() {
-
-        LinearLayout mainContainer = new LinearLayout(context);
-        mainContainer.setId(R.id.mainContainer);
-        mainContainer.setOrientation(HORIZONTAL);
-        LinearLayout.LayoutParams layout_859 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        mainContainer.setLayoutParams(layout_859);
-
-        LinearLayout linearLayout_880 = new LinearLayout(G.context);
-        linearLayout_880.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_525 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        linearLayout_880.setLayoutParams(layout_525);
-
-        LinearLayout contentContainer = new LinearLayout(G.context);
-        contentContainer.setId(R.id.contentContainer);
-        contentContainer.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
-        LinearLayout.LayoutParams layout_256 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        contentContainer.setLayoutParams(layout_256);
-
-        LinearLayout m_container = new LinearLayout(G.context);
-        m_container.setId(R.id.m_container);
+    static LinearLayout getAudioItem() {
+        LinearLayout m_container = new LinearLayout(context);
+        m_container.setId(R.id.my_container);
         m_container.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_520 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        m_container.setLayoutParams(layout_520);
+        LinearLayout.LayoutParams layout_84200 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_84200);
 
         LinearLayout audioBox = new LinearLayout(G.context);
         audioBox.setId(R.id.audioBox);
@@ -1037,45 +909,24 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_992 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp220), LinearLayout.LayoutParams.WRAP_CONTENT); // before width was -> LinearLayout.LayoutParams.MATCH_PARENT, for fix text scroll changed it
         csliwt_layout_container_message.setLayoutParams(layout_992);
         m_container.addView(csliwt_layout_container_message);
-        contentContainer.addView(m_container);
-        linearLayout_880.addView(contentContainer);
 
         linearLayout_916.addView(frameLayout);
         linearLayout_916.addView(fileSize);
         frameLayout.addView(imgThumbnail);
         frameLayout.addView(getProgressBar(R.dimen.dp48));
-        mainContainer.addView(linearLayout_880);
 
-        return mainContainer;
+        return m_container;
     }
 
-    static View getContactItem() {
-        LinearLayout lytMainContainer = new LinearLayout(context);
-        LinearLayout.LayoutParams layoutParamsMainContainer = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lytMainContainer.setId(R.id.mainContainer);
-        lytMainContainer.setOrientation(HORIZONTAL);
-        lytMainContainer.setLayoutParams(layoutParamsMainContainer);
-
-        LinearLayout lytContainer1 = new LinearLayout(context);
-        LinearLayout.LayoutParams layoutParamsContainer1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lytContainer1.setOrientation(VERTICAL);
-        lytContainer1.setLayoutParams(layoutParamsContainer1);
-
-        LinearLayout contentContainer = new LinearLayout(context);
-        contentContainer.setId(R.id.contentContainer);
-        LinearLayout.LayoutParams layoutParamsContentContainer = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        contentContainer.setLayoutParams(layoutParamsContentContainer);
-        contentContainer.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
-
+    static LinearLayout getContactItem() {
         LinearLayout m_container = new LinearLayout(context);
-        LinearLayout.LayoutParams layoutParamsM_container = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        m_container.setId(R.id.m_container);
+        m_container.setId(R.id.my_container);
         m_container.setOrientation(VERTICAL);
-        m_container.setLayoutParams(layoutParamsM_container);
+        LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_842);
 
         LinearLayout container2 = new LinearLayout(context);
         LinearLayout.LayoutParams layoutParamsContainer2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParamsContainer1.gravity = Gravity.CENTER_VERTICAL;
         container2.setOrientation(HORIZONTAL);
         container2.setPadding((int) G.context.getResources().getDimension(messageContainerPadding), 0, 5, 2);
         container2.setLayoutParams(layoutParamsContainer2);
@@ -1118,38 +969,16 @@ public class ViewMaker {
         container2.addView(image);
         container2.addView(container3);
         m_container.addView(container2);
-        contentContainer.addView(m_container);
-        lytContainer1.addView(contentContainer);
-        lytMainContainer.addView(lytContainer1);
 
-        return lytMainContainer;
+        return m_container;
     }
 
-    static View getFileItem() {
-
-        LinearLayout mainContainer = new LinearLayout(G.context);
-        mainContainer.setId(R.id.mainContainer);
-        mainContainer.setOrientation(HORIZONTAL);
-        LinearLayout.LayoutParams layout_106 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        mainContainer.setLayoutParams(layout_106);
-
-        LinearLayout linearLayout_768 = new LinearLayout(G.context);
-        linearLayout_768.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_577 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        linearLayout_768.setLayoutParams(layout_577);
-
-        LinearLayout contentContainer = new LinearLayout(G.context);
-        LinearLayout.LayoutParams layoutParamsContentContainer = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        contentContainer.setId(R.id.contentContainer);
-        contentContainer.setLayoutParams(layoutParamsContentContainer);
-        contentContainer.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
-        contentContainer.setLayoutParams(layoutParamsContentContainer);
-
-        LinearLayout m_container = new LinearLayout(G.context);
-        m_container.setId(R.id.m_container);
+    static LinearLayout getFileItem() {
+        LinearLayout m_container = new LinearLayout(context);
+        m_container.setId(R.id.my_container);
         m_container.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_346 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        m_container.setLayoutParams(layout_346);
+        LinearLayout.LayoutParams layout_84200 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_84200);
 
         LinearLayout linearLayout_784 = new LinearLayout(G.context);
         linearLayout_784.setGravity(Gravity.CENTER_VERTICAL);
@@ -1217,39 +1046,19 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_312 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         csliwt_layout_container_message.setLayoutParams(layout_312);
         m_container.addView(csliwt_layout_container_message);
-        contentContainer.addView(m_container);
-        linearLayout_768.addView(contentContainer);
 
         frameLayout.addView(imgThumbnail);
         frameLayout.addView(getProgressBar(R.dimen.dp52));
-        mainContainer.addView(linearLayout_768);
 
-        return mainContainer;
+        return m_container;
     }
 
-    static View getImageItem(boolean withText) {
-
-        LinearLayout mainContainer = new LinearLayout(G.context);
-        mainContainer.setId(R.id.mainContainer);
-        LinearLayout.LayoutParams layout_761 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        mainContainer.setLayoutParams(layout_761);
-
-        LinearLayout linearLayout_532 = new LinearLayout(G.context);
-        linearLayout_532.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_639 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        linearLayout_532.setLayoutParams(layout_639);
-
-        LinearLayout contentContainer = new LinearLayout(G.context);
-        contentContainer.setId(R.id.contentContainer);
-        LinearLayout.LayoutParams layoutParamsContentContainer = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        contentContainer.setPadding(i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4), i_Dp(R.dimen.dp4));
-        contentContainer.setLayoutParams(layoutParamsContentContainer);
-
-        LinearLayout m_container = new LinearLayout(G.context);
-        m_container.setId(R.id.m_container);
+    static LinearLayout getImageItem(boolean withText) {
+        LinearLayout m_container = new LinearLayout(context);
+        m_container.setId(R.id.my_container);
         m_container.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_788 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        m_container.setLayoutParams(layout_788);
+        LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        m_container.setLayoutParams(layout_842);
 
         FrameLayout frameLayout = new FrameLayout(G.context);
         frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
@@ -1261,9 +1070,6 @@ public class ViewMaker {
         LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         reserveSpaceRoundedImageView.setLayoutParams(layout_758);
 
-        mainContainer.addView(linearLayout_532);
-        linearLayout_532.addView(contentContainer);
-        contentContainer.addView(m_container);
         m_container.addView(frameLayout);
         if (withText) {
             m_container.addView(getTextView());
@@ -1271,7 +1077,7 @@ public class ViewMaker {
         frameLayout.addView(reserveSpaceRoundedImageView);
         frameLayout.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
 
-        return mainContainer;
+        return m_container;
     }
 
     static View makeTextViewMessage(int maxsize, boolean hasEmoji, boolean hasLink, RecyclerView.ViewHolder holder) {

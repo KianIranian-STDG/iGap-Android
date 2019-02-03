@@ -10,9 +10,7 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.iGap.G;
@@ -109,15 +107,16 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemHolder {
         protected ReserveSpaceRoundedImageView image;
         protected TextView duration;
 
         public ViewHolder(View view) {
             super(view);
-            if (itemView.findViewById(R.id.mainContainer) == null) {
-                ((ViewGroup) itemView).addView(ViewMaker.getVideoItem(true));
+            if (m_container.findViewById(R.id.my_container) == null) {
+                m_container.addView(ViewMaker.getVideoItem(true));
             }
+
             image = (ReserveSpaceRoundedImageView) itemView.findViewById(R.id.thumbnail);
             duration = (TextView) itemView.findViewById(R.id.duration);
         }

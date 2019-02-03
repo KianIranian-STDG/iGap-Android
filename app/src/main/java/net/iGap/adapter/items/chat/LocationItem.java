@@ -11,9 +11,7 @@
 package net.iGap.adapter.items.chat;
 
 import android.graphics.Bitmap;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -142,15 +140,16 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemHolder {
 
         ReserveSpaceRoundedImageView imgMapPosition;
 
         public ViewHolder(View view) {
             super(view);
-            if (itemView.findViewById(R.id.mainContainer) == null) {
-                ((ViewGroup) itemView).addView(ViewMaker.getLocationItem());
+            if (m_container.findViewById(R.id.my_container) == null) {
+                m_container.addView(ViewMaker.getLocationItem());
             }
+
             imgMapPosition = (ReserveSpaceRoundedImageView) itemView.findViewById(R.id.thumbnail);
         }
     }

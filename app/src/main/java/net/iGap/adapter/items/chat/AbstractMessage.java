@@ -12,22 +12,16 @@ package net.iGap.adapter.items.chat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.annotation.CallSuper;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.text.util.Linkify;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +36,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
-import com.squareup.picasso.Picasso;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -64,7 +57,6 @@ import net.iGap.messageprogress.OnMessageProgressClick;
 import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.MakeButtons;
@@ -81,7 +73,6 @@ import net.iGap.module.enums.SendingStep;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelExtraFields;
@@ -91,8 +82,6 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChannelAddMessageReaction;
-import net.iGap.request.RequestChatSendMessage;
-import net.iGap.response.ClientJoinByInviteLinkResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -103,11 +92,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
-import ir.radsense.raadcore.utils.Typefaces;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.view.Gravity.CENTER;
-import static android.widget.LinearLayout.HORIZONTAL;
 import static android.widget.LinearLayout.VERTICAL;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
@@ -123,7 +109,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
     private Gson gson;
-    private LinearLayout mainLayout;
     private LinearLayout childLayout;
     private HashMap<Integer, JSONArray> buttonList;
     private LinearLayout secondlayoutMessageContainer;
@@ -212,7 +197,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     private void addLayoutTime(VH holder) {
 
-        LinearLayout ll_containerTime = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer).getParent();
+        ChatItemHolder mHolder;
+        if (holder instanceof ChatItemHolder)
+            mHolder = (ChatItemHolder) holder;
+        else
+            return;
+        LinearLayout ll_containerTime = (LinearLayout) mHolder.contentContainer.getParent();
 
         if (holder.itemView.findViewById(R.id.csl_ll_time) != null) {
             ll_containerTime.removeView(holder.itemView.findViewById(R.id.csl_ll_time));
@@ -229,6 +219,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (holder instanceof ProgressWaiting.ViewHolder || holder instanceof UnreadMessage.ViewHolder || holder instanceof LogWallet.ViewHolder || holder instanceof LogItem.ViewHolder || holder instanceof TimeItem.ViewHolder) {
             return;
         }
+
+        ChatItemHolder mHolder;
+        if (holder instanceof ChatItemHolder)
+            mHolder = (ChatItemHolder) holder;
+        else
+            return;
+
 
         addLayoutTime(holder);
 
@@ -262,7 +259,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        holder.itemView.findViewById(R.id.mainContainer).setOnLongClickListener(new View.OnLongClickListener() {
+        mHolder.mainContainer.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 Log.d("bagi" , "itemViewLongClick");
@@ -277,7 +274,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         });
 
-        holder.itemView.findViewById(R.id.mainContainer).setOnClickListener(new View.OnClickListener() {
+        mHolder.mainContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("bagi" , "itemViewClick");
@@ -333,7 +330,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (FragmentChat.isInSelectionMode) {
                         holder.itemView.performLongClick();
                     } else {
-                        holder.itemView.findViewById(R.id.mainContainer).performClick();
+                        mHolder.mainContainer.performClick();
                     }
 
                 }
@@ -440,13 +437,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (type == ProtoGlobal.Room.Type.GROUP) {
             if (!mMessage.isSenderMe()) {
 
-                LinearLayout mainContainer = (LinearLayout) holder.itemView.findViewById(R.id.mainContainer);
-                if (mainContainer != null) {
+                if (mHolder.mainContainer != null) {
 
-                    addSenderNameToGroupIfNeed(holder.itemView, getRealmChat());
+                    addSenderNameToGroupIfNeed(mHolder, getRealmChat());
 
                     if (holder.itemView.findViewById(R.id.messageSenderAvatar) == null) {
-                        mainContainer.addView(ViewMaker.makeCircleImageView(), 0);
+                        mHolder.mainContainer.addView(ViewMaker.makeCircleImageView(), 0);
                     }
 
                     holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
@@ -598,17 +594,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    private void addSenderNameToGroupIfNeed(final View view, Realm realm) {
+    private void addSenderNameToGroupIfNeed(final ChatItemHolder holder, Realm realm) {
 
         if (G.showSenderNameInGroup) {
-            final LinearLayout mContainer = (LinearLayout) view.findViewById(R.id.m_container);
-            if (mContainer != null) {
+            if (holder.m_container != null) {
 
-                if (view.findViewById(R.id.messageSenderName) != null) {
-                    mContainer.removeView(view.findViewById(R.id.messageSenderName));
+                if (holder.itemView.findViewById(R.id.messageSenderName) != null) {
+                    holder.m_container.removeView(holder.itemView.findViewById(R.id.messageSenderName));
                 }
 
-                if (view.findViewById(R.id.messageSenderName) == null) {
+                if (holder.itemView.findViewById(R.id.messageSenderName) == null) {
                     RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmChat(), Long.parseLong(mMessage.senderID));
                     if (realmRegisteredInfo != null) {
                         final EmojiTextViewE _tv = (EmojiTextViewE) ViewMaker.makeHeaderTextView(realmRegisteredInfo.getDisplayName());
@@ -635,8 +630,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         if (minWith < maxWith) {
                             minWith = maxWith;
                         }
-                        mContainer.setMinimumWidth(Math.min(minWith, G.maxChatBox));
-                        mContainer.addView(_tv, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                        holder.m_container.setMinimumWidth(Math.min(minWith, G.maxChatBox));
+                        holder.m_container.addView(_tv, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     }
                 }
             }
@@ -668,7 +663,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             voteView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
         }
 
-        LinearLayout lytContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
         boolean showThump = G.showVoteChannelLayout && messageClickListener.getShowVoteChannel();
 
         LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
@@ -812,12 +806,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void updateLayoutForReceive(VH holder) {
-        ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
+        ChatItemHolder mHolder;
+        if (holder instanceof ChatItemHolder)
+            mHolder = (ChatItemHolder) holder;
+        else
+            return;
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
 
-        LinearLayout root = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer);
-        LinearLayout timeLayout = (LinearLayout) root.getParent();
+        LinearLayout timeLayout = (LinearLayout) mHolder.contentContainer.getParent();
         timeLayout.setGravity(Gravity.LEFT);
 
         if (messageText != null) {
@@ -832,14 +829,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
 
-        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.LEFT;
+        ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).gravity = Gravity.LEFT;
 
-        ((LinearLayout.LayoutParams) root.getLayoutParams()).gravity = Gravity.LEFT;
+        ((LinearLayout.LayoutParams) mHolder.contentContainer.getLayoutParams()).gravity = Gravity.LEFT;
 
         if (G.isDarkTheme) {
-            ((View) (holder.itemView.findViewById(R.id.contentContainer)).getParent()).setBackgroundResource(R.drawable.rectangel_white_round_dark);
+            ((View) (mHolder.contentContainer).getParent()).setBackgroundResource(R.drawable.rectangel_white_round_dark);
         } else {
-            ((View) (holder.itemView.findViewById(R.id.contentContainer)).getParent()).setBackgroundResource(R.drawable.rectangel_white_round);
+            ((View) (mHolder.contentContainer).getParent()).setBackgroundResource(R.drawable.rectangel_white_round);
         }
 
         /**
@@ -847,11 +844,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * set to mainContainer not itemView because of selecting item foreground
          */
 
-        GradientDrawable circleDarkColor = (GradientDrawable) ((View) root.getParent()).getBackground();
+        GradientDrawable circleDarkColor = (GradientDrawable) ((View) mHolder.contentContainer.getParent()).getBackground();
         circleDarkColor.setColor(Color.parseColor(G.bubbleChatReceive));
 
-        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp10);
-        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
+        ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp10);
+        ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
     }
 
     private void setTextColor(ImageView imageView, int color) {
@@ -869,14 +866,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void updateLayoutForSend(VH holder) {
+        ChatItemHolder mHolder;
+        if (holder instanceof ChatItemHolder)
+            mHolder = (ChatItemHolder) holder;
+        else
+            return;
+        ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).gravity = Gravity.RIGHT;
 
-        ViewGroup frameLayout = (ViewGroup) holder.itemView.findViewById(R.id.mainContainer);
-        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).gravity = Gravity.RIGHT;
-        LinearLayout root = (LinearLayout) holder.itemView.findViewById(R.id.contentContainer);
+        ((LinearLayout.LayoutParams) mHolder.contentContainer.getLayoutParams()).gravity = Gravity.RIGHT;
 
-        ((LinearLayout.LayoutParams) root.getLayoutParams()).gravity = Gravity.RIGHT;
-
-        LinearLayout timeLayout = (LinearLayout) root.getParent();
+        LinearLayout timeLayout = (LinearLayout) mHolder.contentContainer.getParent();
         timeLayout.setGravity(Gravity.RIGHT);
 
         ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
@@ -917,19 +916,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         if (G.isDarkTheme) {
-            ((View) (holder.itemView.findViewById(R.id.contentContainer)).getParent()).setBackgroundResource(R.drawable.rectangle_send_round_color_dark);
+            ((View) (mHolder.contentContainer).getParent()).setBackgroundResource(R.drawable.rectangle_send_round_color_dark);
         } else {
-            ((View) (holder.itemView.findViewById(R.id.contentContainer)).getParent()).setBackgroundResource(R.drawable.rectangle_send_round_color);
+            ((View) (mHolder.contentContainer).getParent()).setBackgroundResource(R.drawable.rectangle_send_round_color);
         }
-        GradientDrawable circleDarkColor = (GradientDrawable) ((View) root.getParent()).getBackground();
+        GradientDrawable circleDarkColor = (GradientDrawable) ((View) mHolder.contentContainer.getParent()).getBackground();
         circleDarkColor.setColor(Color.parseColor(G.bubbleChatSend));
 
         /**
          * add main layout margin to prevent getting match parent completely
          * set to mainContainer not itemView because of selecting item foreground
          */
-        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
-        ((FrameLayout.LayoutParams) frameLayout.getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp10);
+        ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).leftMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp28);
+        ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).rightMargin = (int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp10);
 
         //((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).rightMargin = (int) holder.itemView.getResources().getDimension(R.dimen.messageBox_minusLeftRightMargin);
         //((LinearLayout.LayoutParams) (holder.itemView.findViewById(R.id.contentContainer).getLayoutParams())).leftMargin = 0;
@@ -937,21 +936,25 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void replyMessageIfNeeded(VH holder, Realm realm) {
+        ChatItemHolder mHolder;
+        if (holder instanceof ChatItemHolder)
+            mHolder = (ChatItemHolder) holder;
+        else
+            return;
 
-        final LinearLayout mContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
-        if (mContainer == null) {
+        if (mHolder.m_container == null) {
             return;
         }
 
-        mContainer.setMinimumWidth(0);
-        mContainer.setMinimumHeight(0);
+        mHolder.m_container.setMinimumWidth(0);
+        mHolder.m_container.setMinimumHeight(0);
 
         /**
          * set replay container visible if message was replayed, otherwise, gone it
          */
 
         if (holder.itemView.findViewById(R.id.cslr_replay_layout) != null) {
-            mContainer.removeView(holder.itemView.findViewById(R.id.cslr_replay_layout));
+            mHolder.m_container.removeView(holder.itemView.findViewById(R.id.cslr_replay_layout));
         }
 
         if (mMessage.replayTo != null && mMessage.replayTo.isValid()) {
@@ -1031,9 +1034,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 minWith = maxWith;
-                mContainer.setMinimumWidth(Math.min(minWith, G.maxChatBox));
+                mHolder.m_container.setMinimumWidth(Math.min(minWith, G.maxChatBox));
 
-                mContainer.addView(replayView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                mHolder.m_container.addView(replayView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                 replayMessage.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 replyFrom.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -1043,9 +1046,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @CallSuper
     protected void forwardMessageIfNeeded(VH holder, Realm realm) {
-
-        final LinearLayout mContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
-        if (mContainer == null) {
+        ChatItemHolder mHolder;
+        if (holder instanceof ChatItemHolder)
+            mHolder = (ChatItemHolder) holder;
+        else
+            return;
+        if (mHolder.m_container == null) {
             return;
         }
 
@@ -1054,7 +1060,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if (holder.itemView.findViewById(R.id.cslr_ll_forward) != null) {
-            mContainer.removeView(holder.itemView.findViewById(R.id.cslr_ll_forward));
+            mHolder.m_container.removeView(holder.itemView.findViewById(R.id.cslr_ll_forward));
         }
 
         if (mMessage.forwardedFrom != null) {
@@ -1172,8 +1178,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (minWith < maxWith) {
                 minWith = maxWith;
             }
-            mContainer.setMinimumWidth(Math.min(minWith, G.maxChatBox));
-            mContainer.addView(forwardView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            mHolder.m_container.setMinimumWidth(Math.min(minWith, G.maxChatBox));
+            mHolder.m_container.addView(forwardView, 0, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         }
     }
 
@@ -1315,6 +1321,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * runs if message has attachment
          */
+        ChatItemHolder mHolder;
+        if (holder instanceof ChatItemHolder)
+            mHolder = (ChatItemHolder) holder;
+        else
+            return;
+
 
         if (attachment != null) {
 
@@ -1351,7 +1363,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                     int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight, type);
                     if (dimens[0] != 0 && dimens[1] != 0) {
-                        ((ViewGroup) holder.itemView.findViewById(R.id.m_container)).getLayoutParams().width = dimens[0];
+                        mHolder.m_container.getLayoutParams().width = dimens[0];
                     }
 
                     if (setDefualtImage) {
@@ -1371,7 +1383,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
 
                     int[] dimens = imageViewReservedSpace.reserveSpace(_with, _hight, type);
-                    ((ViewGroup) holder.itemView.findViewById(R.id.m_container)).getLayoutParams().width = dimens[0];
+                    ((ViewGroup) mHolder.m_container).getLayoutParams().width = dimens[0];
                 }
             }
 
