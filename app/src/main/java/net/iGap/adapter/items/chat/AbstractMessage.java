@@ -671,10 +671,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         LinearLayout lytContainer = (LinearLayout) holder.itemView.findViewById(R.id.m_container);
         boolean showThump = G.showVoteChannelLayout && messageClickListener.getShowVoteChannel();
 
-        if (showThump) {
-            lytContainer.setMinimumHeight((int) G.context.getResources().getDimension(R.dimen.dp130));
-        }
-
         LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
         if (lytVote != null) {
 

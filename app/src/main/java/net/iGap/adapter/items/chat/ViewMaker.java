@@ -1275,92 +1275,44 @@ public class ViewMaker {
     }
 
     static View makeTextViewMessage(int maxsize, boolean hasEmoji, boolean hasLink, RecyclerView.ViewHolder holder) {
-
+        TextView textView;
         if (hasEmoji) {
-            EmojiTextViewE emojiTextViewE = new EmojiTextViewE(context);
-            emojiTextViewE.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//            if (G.isDarkTheme) {
-            emojiTextViewE.setTextColor(Color.parseColor(G.textBubble));
-//            } else {
-//                emojiTextViewE.setTextColor(Color.parseColor("#333333"));
-//            }
-
-            emojiTextViewE.setId(R.id.messageSenderTextMessage);
-            emojiTextViewE.setPadding(10, 4, 10, 4);
-            emojiTextViewE.setTypeface(G.typeface_IRANSansMobile);
-            setTextSizeDirect(emojiTextViewE, G.userTextSize);
-            emojiTextViewE.setEmojiSize(i_Dp(R.dimen.dp18));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                emojiTextViewE.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
-            }
-            setLayoutDirection(emojiTextViewE, View.LAYOUT_DIRECTION_LOCALE);
-            if (hasLink) {
-                BetterLinkMovementMethod
-                        .linkify(Linkify.ALL, emojiTextViewE)
-                        .setOnLinkClickListener((tv, url) -> {
-
-                            Log.d("bagi" , "OnMessageLinkClick");
-                            // Handle clicks.
-                            if (FragmentChat.isInSelectionMode) {
-                                return true;
-                            }
-
-                            return false;
-                        })
-                        .setOnLinkLongClickListener((tv, url) -> {
-                            Log.d("bagi" , "OnMessageLinkLongClick");
-                            // Handle long-clicks.
-                            return true;
-                        });
-
-            }
-
-            if (maxsize > 0) {
-                emojiTextViewE.setMaxWidth(maxsize);
-            }
-
-            return emojiTextViewE;
+            EmojiTextViewE EmTextView = new EmojiTextViewE(context);
+            EmTextView.setPadding(10, 4, 10, 4);
+            EmTextView.setEmojiSize(i_Dp(R.dimen.dp18));
+            textView = EmTextView;
         } else {
-            TextView textView = new TextView(context);
-            textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-//            if (G.isDarkTheme) {
-            textView.setTextColor(Color.parseColor(G.textBubble));
-//            } else {
-//                textView.setTextColor(Color.parseColor("#333333"));
-//            }
-
-            textView.setId(R.id.messageSenderTextMessage);
+            textView = new TextView(context);
             textView.setPadding(10, 0, 10, 0);
-            textView.setTypeface(G.typeface_IRANSansMobile);
-            setTextSizeDirect(textView, G.userTextSize);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                textView.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
-            }
-            setLayoutDirection(textView, View.LAYOUT_DIRECTION_LOCALE);
-            if (hasLink) {
-                BetterLinkMovementMethod
-                        .linkify(Linkify.ALL, textView)
-                        .setOnLinkClickListener((tv, url) -> {
-                            Log.d("bagi" , "OnMessageLinkClick");
-                            // Handle clicks.
-                            if (FragmentChat.isInSelectionMode) {
-                                return true;
-                            }
-
-                            return false;
-                        })
-                        .setOnLinkLongClickListener((tv, url) -> {
-                            Log.d("bagi" , "OnMessageLinkLongClick");
-                            // Handle long-clicks.
-                            return true;
-                        });
-            }
-            if (maxsize > 0) {
-                textView.setMaxWidth(maxsize);
-            }
-
-            return textView;
         }
+        textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        textView.setTextColor(Color.parseColor(G.textBubble));
+
+        textView.setId(R.id.messageSenderTextMessage);
+        textView.setTypeface(G.typeface_IRANSansMobile);
+        setTextSizeDirect(textView, G.userTextSize);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+            textView.setTextDirection(View.TEXT_DIRECTION_FIRST_STRONG);
+
+        setLayoutDirection(textView, View.LAYOUT_DIRECTION_LOCALE);
+        if (hasLink) {
+            BetterLinkMovementMethod
+                    .linkify(Linkify.ALL, textView)
+                    .setOnLinkClickListener((tv, url) -> {
+                        Log.d("bagi" , "OnMessageLinkClick");
+                        return FragmentChat.isInSelectionMode;
+                    })
+                    .setOnLinkLongClickListener((tv, url) -> {
+                        Log.d("bagi" , "OnMessageLinkLongClick");
+                        return true;
+                    });
+        }
+
+        if (maxsize > 0)
+            textView.setMaxWidth(maxsize);
+
+
+        return textView;
     }
 
     static View makeHeaderTextView(String text) {
