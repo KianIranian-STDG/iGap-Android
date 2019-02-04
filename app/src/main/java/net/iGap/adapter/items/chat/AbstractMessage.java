@@ -241,21 +241,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        mHolder.mainContainer.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Log.d("bagi" , "itemViewLongClick");
-                if (!FragmentChat.isInSelectionMode && (
-                        holder instanceof VoiceItem.ViewHolder)
-                ) {
-                    return true;
-                }
-
-                holder.itemView.performLongClick();
-                return true;
-            }
-        });
-
         mHolder.mainContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

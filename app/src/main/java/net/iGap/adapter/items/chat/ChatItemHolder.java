@@ -1,12 +1,14 @@
 package net.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.messageprogress.MessageProgress;
 
 import static android.widget.LinearLayout.HORIZONTAL;
@@ -29,49 +31,71 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
     public ChatItemHolder(View view) {
         super(view);
 
+        LinearLayout.LayoutParams layout_216 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         mainContainer = new LinearLayout(context);
         mainContainer.setId(R.id.mainContainer);
         mainContainer.setOrientation(HORIZONTAL);
-        LinearLayout.LayoutParams layout_216 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         mainContainer.setLayoutParams(layout_216);
+
+        LinearLayout.LayoutParams layout_584 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         LinearLayout linearLayout_683 = new LinearLayout(context);
         linearLayout_683.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_584 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         linearLayout_683.setLayoutParams(layout_584);
+
         mainContainer.addView(linearLayout_683);
 
-        ((ViewGroup) itemView).addView(mainContainer);
+        LinearLayout.LayoutParams layout_617 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         contentContainer = new LinearLayout(context);
         contentContainer.setId(R.id.contentContainer);
         contentContainer.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_617 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         contentContainer.setLayoutParams(layout_617);
         contentContainer.setPadding(ViewMaker.i_Dp(R.dimen.dp4), ViewMaker.i_Dp(R.dimen.dp4), ViewMaker.i_Dp(R.dimen.dp4), ViewMaker.i_Dp(R.dimen.dp4));
+
         linearLayout_683.addView(contentContainer);
+
         csl_ll_time = ViewMaker.getViewTime();
-        linearLayout_683.addView(csl_ll_time, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        lyt_vote = ViewMaker.getViewVote();
+        lyt_vote.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
         lyt_see = ViewMaker.getViewSeen();
         lyt_see.setVisibility(View.GONE);
+
+        linearLayout_683.addView(csl_ll_time, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         csl_ll_time.addView(lyt_see, 0);
-        lyt_vote = ViewMaker.getViewVote();
         csl_ll_time.addView(lyt_vote, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        lyt_vote.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+        LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         m_container = new LinearLayout(context);
         m_container.setId(R.id.m_container);
         m_container.setOrientation(VERTICAL);
-        LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         m_container.setLayoutParams(layout_842);
+
         contentContainer.addView(m_container);
 
+        ((ViewGroup) itemView).addView(mainContainer);
+
+        mainContainer.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Log.d("bagi" , "itemViewLongClick");
+                if (!FragmentChat.isInSelectionMode && (
+                        ChatItemHolder.this instanceof VoiceItem.ViewHolder)
+                ) {
+                    return true;
+                }
+
+                itemView.performLongClick();
+                return true;
+            }
+        });
 
         progress = itemView.findViewById(R.id.progress);
         messageSenderAvatar = itemView.findViewById(R.id.messageSenderAvatar);
         messageSenderName = itemView.findViewById(R.id.messageSenderName);
         messageSenderTextMessage = itemView.findViewById(R.id.messageSenderTextMessage);
-        csl_ll_time = itemView.findViewById(R.id.csl_ll_time);
     }
 
     protected void setLayoutDirection(View view, int direction){
