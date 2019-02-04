@@ -28,6 +28,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -131,6 +132,7 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.ContactUtils;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUtils;
+import net.iGap.module.FixAppBarLayoutBehavior;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
@@ -675,6 +677,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
 
         appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
+        ((CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams()).setBehavior(new FixAppBarLayoutBehavior());
+
         final ViewGroup toolbar = (ViewGroup) findViewById(R.id.rootToolbar);
 
         appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
