@@ -60,6 +60,7 @@
         android:allowBackup="false"
         android:configChanges="locale"
         android:icon="@mipmap/icon"
+        android:roundIcon="@mipmap/icon_rounded"
         android:largeHeap="true"
 
         android:launchMode="singleTask"
