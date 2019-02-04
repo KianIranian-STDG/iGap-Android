@@ -10,10 +10,15 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.AppUtils;
@@ -22,6 +27,11 @@ import net.iGap.proto.ProtoGlobal;
 import java.util.List;
 
 import io.realm.Realm;
+
+import static android.widget.LinearLayout.HORIZONTAL;
+import static android.widget.LinearLayout.VERTICAL;
+import static net.iGap.G.context;
+import static net.iGap.R.dimen.messageContainerPadding;
 
 public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHolder> {
 
@@ -82,12 +92,51 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
         public ViewHolder(View view) {
             super(view);
-            if (m_container.findViewById(R.id.my_container) == null) {
-                m_container.addView(ViewMaker.getContactItem());
-            }
+            LinearLayout container2 = new LinearLayout(context);
+            LinearLayout.LayoutParams layoutParamsContainer2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            container2.setOrientation(HORIZONTAL);
+            container2.setPadding((int) G.context.getResources().getDimension(messageContainerPadding), 0, 5, 2);
+            container2.setLayoutParams(layoutParamsContainer2);
 
-            name = (TextView) itemView.findViewById(R.id.name);
-            number = (TextView) itemView.findViewById(R.id.number);
+            ImageView image = new ImageView(G.context);
+            LinearLayout.LayoutParams layoutParamsImage = new LinearLayout.LayoutParams(ViewMaker.i_Dp(R.dimen.dp48), ViewMaker.i_Dp(R.dimen.dp48));
+            layoutParamsImage.rightMargin = 14;
+            image.setId(R.id.image);
+            image.setContentDescription(null);
+            AppUtils.setImageDrawable(image, R.mipmap.user);
+            image.setLayoutParams(layoutParamsImage);
+
+            LinearLayout container3 = new LinearLayout(context);
+            LinearLayout.LayoutParams layoutParamsContainer3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            container3.setOrientation(VERTICAL);
+            container3.setLayoutParams(layoutParamsContainer3);
+
+            name = new TextView(G.context);
+            LinearLayout.LayoutParams layoutParamsName = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            name.setId(R.id.name);
+            name.setTextAppearance(context, android.R.style.TextAppearance_Medium);
+            name.setTextColor(Color.parseColor(G.textBubble));
+            name.setText("Contact Name");
+            ViewMaker.setTextSize(name, R.dimen.dp14);
+            ViewMaker.setTypeFace(name);
+            name.setLayoutParams(layoutParamsName);
+            container3.addView(name);
+
+            number = new TextView(G.context);
+            LinearLayout.LayoutParams layoutParamsNumber = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            number.setId(R.id.number);
+            number.setTextAppearance(context, android.R.style.TextAppearance_Small);
+            ViewMaker.setTypeFace(number);
+
+            number.setTextColor(Color.parseColor(G.textBubble));
+            number.setText("Contact Number");
+            number.setLayoutParams(layoutParamsNumber);
+
+            container3.addView(number);
+            container2.addView(image);
+            container2.addView(container3);
+
+            m_container.addView(container2);
         }
     }
 }

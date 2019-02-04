@@ -11,6 +11,7 @@
 package net.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -67,11 +68,8 @@ public class ProgressWaiting extends AbstractMessage<net.iGap.adapter.items.chat
 
         public ViewHolder(View view) {
             super(view);
-            if (itemView.findViewById(R.id.cslp_progress_bar_waiting) == null) {
-                ((ViewGroup) itemView).addView(ViewMaker.getProgressWaitingItem());
-            }
-
-            progressBar = (ProgressBar) itemView.findViewById(R.id.cslp_progress_bar_waiting);
+            progressBar = (ProgressBar) ViewMaker.getProgressWaitingItemView();
+            ((ViewGroup) itemView).addView(progressBar);
         }
     }
 }

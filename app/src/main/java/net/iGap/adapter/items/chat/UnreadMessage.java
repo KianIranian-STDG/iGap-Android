@@ -12,6 +12,7 @@ package net.iGap.adapter.items.chat;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -74,10 +75,8 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
 
         public ViewHolder(View view) {
             super(view);
-            if (itemView.findViewById(R.id.cslum_txt_unread_message) == null) {
-                ((ViewGroup) itemView).addView(ViewMaker.getUnreadMessageItem());
-            }
-            txtUnreadMessage = (TextView) itemView.findViewById(R.id.cslum_txt_unread_message);
+            txtUnreadMessage = (TextView) ViewMaker.getUnreadMessageItemView();
+            ((ViewGroup) itemView).addView(txtUnreadMessage);
         }
     }
 }

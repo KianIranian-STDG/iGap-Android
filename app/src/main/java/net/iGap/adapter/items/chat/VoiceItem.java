@@ -14,10 +14,14 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -297,16 +301,103 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         public ViewHolder(View view) {
             super(view);
+            LinearLayout linearLayout_197 = new LinearLayout(G.context);
+            linearLayout_197.setGravity(Gravity.CENTER_VERTICAL);
+            setLayoutDirection(linearLayout_197, View.LAYOUT_DIRECTION_LTR);
+            linearLayout_197.setMinimumHeight(i_Dp(R.dimen.dp95));
+            linearLayout_197.setMinimumWidth(i_Dp(R.dimen.dp220));
+            linearLayout_197.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams layout_80 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            linearLayout_197.setLayoutParams(layout_80);
 
-            if (m_container.findViewById(R.id.my_container) == null) {
-                m_container.addView(ViewMaker.getVoiceItem());
-            }
+            LinearLayout audioPlayerViewContainer = new LinearLayout(G.context);
+            audioPlayerViewContainer.setId(R.id.audioPlayerViewContainer);
+            audioPlayerViewContainer.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams layout_868 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            audioPlayerViewContainer.setLayoutParams(layout_868);
 
-            thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
-            author = (TextView) itemView.findViewById(R.id.cslv_txt_author);
-            btnPlayMusic = (TextView) itemView.findViewById(R.id.csla_btn_play_music);
-            txt_Timer = (TextView) itemView.findViewById(R.id.csla_txt_timer);
-            musicSeekbar = (SeekBar) itemView.findViewById(R.id.csla_seekBar1);
+            LinearLayout linearLayout_153 = new LinearLayout(G.context);
+            LinearLayout.LayoutParams layout_928 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            linearLayout_153.setLayoutParams(layout_928);
+
+            //****************************
+            FrameLayout frameLayout_161 = new FrameLayout(G.context);
+
+            int pading = i_Dp(R.dimen.dp4);
+            frameLayout_161.setPadding(pading, pading, pading, pading);
+
+            LinearLayout.LayoutParams layout_1488 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp40), i_Dp(R.dimen.dp40));
+            layout_1488.gravity = Gravity.CENTER;
+            frameLayout_161.setLayoutParams(layout_1488);
+
+            thumbnail = new ImageView(G.context);
+            thumbnail.setId(R.id.thumbnail);
+            FrameLayout.LayoutParams layout_152 = new FrameLayout.LayoutParams(i_Dp(R.dimen.dp20), i_Dp(R.dimen.dp20));
+            layout_152.gravity = Gravity.CENTER;
+            AppUtils.setImageDrawable(thumbnail, R.drawable.microphone_icon);
+            thumbnail.setLayoutParams(layout_152);
+            frameLayout_161.addView(thumbnail);
+
+            frameLayout_161.addView(getProgressBar(0));
+            linearLayout_153.addView(frameLayout_161);
+
+            author = new TextView(G.context);
+            author.setId(R.id.cslv_txt_author);
+            author.setText("recorded voice");
+            author.setTextColor(Color.parseColor(G.textBubble));
+            author.setSingleLine(true);
+            setTextSize(author, R.dimen.dp14);
+            author.setMaxLines(2);
+            setTypeFace(author);
+            // cslv_txt_author.setEllipsize(TextUtils.TruncateAt.END);
+            LinearLayout.LayoutParams layout_799 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layout_799.topMargin = i_Dp(R.dimen.dp12);
+            author.setLayoutParams(layout_799);
+            linearLayout_153.addView(author);
+            audioPlayerViewContainer.addView(linearLayout_153);
+
+            LinearLayout linearLayout_503 = new LinearLayout(G.context);
+            linearLayout_503.setGravity(Gravity.LEFT | Gravity.CENTER);
+            linearLayout_503.setMinimumHeight(i_Dp(R.dimen.dp32));
+            LinearLayout.LayoutParams layout_669 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
+            linearLayout_503.setLayoutParams(layout_669);
+
+            btnPlayMusic = new TextView(G.context);
+            btnPlayMusic.setId(R.id.csla_btn_play_music);
+            btnPlayMusic.setBackgroundResource(0);
+            btnPlayMusic.setGravity(Gravity.CENTER);
+            btnPlayMusic.setEnabled(false);
+            btnPlayMusic.setText(G.fragmentActivity.getResources().getString(R.string.md_play_arrow));
+            btnPlayMusic.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
+            setTextSize(btnPlayMusic, R.dimen.dp20);
+            btnPlayMusic.setTypeface(G.typeface_Fontico);
+            LinearLayout.LayoutParams layout_978 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp40), ViewGroup.LayoutParams.MATCH_PARENT);
+            btnPlayMusic.setLayoutParams(layout_978);
+            linearLayout_503.addView(btnPlayMusic);
+
+            musicSeekbar = new SeekBar(G.context);
+            musicSeekbar.setId(R.id.csla_seekBar1);
+            LinearLayout.LayoutParams layout_652 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+            musicSeekbar.setLayoutParams(layout_652);
+            linearLayout_503.addView(musicSeekbar);
+            audioPlayerViewContainer.addView(linearLayout_503);
+
+            txt_Timer = new TextView(G.context);
+            txt_Timer.setId(R.id.csla_txt_timer);
+            txt_Timer.setPadding(0, 0, i_Dp(R.dimen.dp8), 0);
+            txt_Timer.setText("00:00");
+            txt_Timer.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
+            setTextSize(txt_Timer, R.dimen.dp10);
+            setTypeFace(txt_Timer);
+            LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layout_758.gravity = Gravity.RIGHT;
+            layout_758.leftMargin = i_Dp(R.dimen.dp52);
+            txt_Timer.setLayoutParams(layout_758);
+
+            audioPlayerViewContainer.addView(txt_Timer);
+            linearLayout_197.addView(audioPlayerViewContainer);
+
+            m_container.addView(linearLayout_197);
         }
     }
 }

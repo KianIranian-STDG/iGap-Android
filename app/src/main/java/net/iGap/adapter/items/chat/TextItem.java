@@ -71,13 +71,10 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
     }
 
     protected static class ViewHolder extends ChatItemHolder {
-        //  protected LinearLayout llTime;
 
         public ViewHolder(View view) {
             super(view);
-            if (m_container.findViewById(R.id.my_container) == null) {
-                m_container.addView(ViewMaker.getTextItem());
-            }
+            m_container.addView(ViewMaker.getTextItemView());
         }
     }
 }

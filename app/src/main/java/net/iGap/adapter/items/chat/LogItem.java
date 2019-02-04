@@ -10,14 +10,18 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperLogMessage;
@@ -28,6 +32,9 @@ import java.util.List;
 
 import io.realm.Realm;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
+
+import static android.view.Gravity.CENTER;
+import static net.iGap.G.isDarkTheme;
 
 public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
@@ -62,10 +69,10 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
         public ViewHolder(View view) {
             super(view);
-            if (itemView.findViewById(R.id.csll_txt_log_text) == null) {
-                ((ViewGroup) itemView).addView(ViewMaker.getLogItem());
-            }
-            text = (TextView) itemView.findViewById(R.id.csll_txt_log_text);
+            text = (TextView) ViewMaker.getLogItemView();
+
+            ((ViewGroup) itemView).addView(text);
+
             text.setMovementMethod(LinkMovementMethod.getInstance());
             BetterLinkMovementMethod
                     .linkify(Linkify.ALL, text)

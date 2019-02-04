@@ -12,9 +12,15 @@ package net.iGap.adapter.items.chat;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.IMessageItem;
@@ -111,11 +117,8 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             text = mMessage.messageText;
         }
 
-        if (mMessage.hasEmojiInText) {
-            setTextIfNeeded((EmojiTextViewE) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
-        } else {
-            setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
-        }
+        setTextIfNeeded(holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+
 
         holder.itemView.findViewById(R.id.progress).setOnLongClickListener(getLongClickPerform(holder));
 
@@ -188,11 +191,24 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
 
         public ViewHolder(View view) {
             super(view);
-            if (m_container.findViewById(R.id.my_container) == null) {
-                m_container.addView(ViewMaker.getGifItem(true));
-            }
 
-            image = (ReserveSpaceGifImageView) itemView.findViewById(R.id.thumbnail);
+            boolean withText = true;
+            FrameLayout frameLayout = new FrameLayout(G.context);
+            frameLayout.setLayoutParams(new LinearLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+
+            image = new ReserveSpaceGifImageView(G.context);
+            image.setId(R.id.thumbnail);
+            FrameLayout.LayoutParams layout_758 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            image.setLayoutParams(layout_758);
+
+            frameLayout.addView(image);
+            frameLayout.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+
+            m_container.addView(frameLayout);
+
+            if (withText) {
+                m_container.addView(ViewMaker.getTextView());
+            }
         }
     }
 }

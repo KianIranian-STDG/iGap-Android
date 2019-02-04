@@ -195,22 +195,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return super.withIdentifier(identifier);
     }
 
-    private void addLayoutTime(VH holder) {
-
-        ChatItemHolder mHolder;
-        if (holder instanceof ChatItemHolder)
-            mHolder = (ChatItemHolder) holder;
-        else
-            return;
-        LinearLayout ll_containerTime = (LinearLayout) mHolder.contentContainer.getParent();
-
-        if (holder.itemView.findViewById(R.id.csl_ll_time) != null) {
-            ll_containerTime.removeView(holder.itemView.findViewById(R.id.csl_ll_time));
-        }
-
-        ll_containerTime.addView(ViewMaker.getViewTime(), new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-    }
-
     @Override
     @CallSuper
     public void bindView(final VH holder, List<Object> payloads) {
@@ -226,8 +210,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         else
             return;
 
-
-        addLayoutTime(holder);
 
         // remove text view if exist in view
         LinearLayout layoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
@@ -554,12 +536,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      */
     private void showVote(VH holder, Realm realm) {
         // add layout seen in channel
-        if (holder.itemView.findViewById(R.id.lyt_see) == null) {
-            LinearLayout ll_time_layout = (LinearLayout) holder.itemView.findViewById(R.id.csl_ll_time);
-            ll_time_layout.addView(ViewMaker.getViewSeen(), 0);
-        }
-
-        voteAction(holder, getRealmChat());
+        ((ChatItemHolder) holder).lyt_see.setVisibility(View.VISIBLE);
+        voteAction(((ChatItemHolder) holder), getRealmChat());
         getChannelMessageState();
     }
 
@@ -648,40 +626,25 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         };
     }
 
-    protected void voteAction(VH holder, Realm realm) {
-
-        LinearLayout csl_ll_time = (LinearLayout) holder.itemView.findViewById(R.id.csl_ll_time);
-
-        if (csl_ll_time == null)
-            return;
-
-        if (holder.itemView.findViewById(R.id.lyt_vote) == null) {
-            //   View voteView = LayoutInflater.from(G.context).inflate(R.layout.chat_sub_layout_messages_vote, null);
-            View voteView = ViewMaker.getViewVote();
-
-            csl_ll_time.addView(voteView, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            voteView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
-        }
-
+    protected void voteAction(ChatItemHolder mHolder, Realm realm) {
         boolean showThump = G.showVoteChannelLayout && messageClickListener.getShowVoteChannel();
 
-        LinearLayout lytVote = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote);
-        if (lytVote != null) {
+        if (mHolder.lyt_vote != null) {
 
-            LinearLayout lytVoteUp = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote_up);
-            LinearLayout lytVoteDown = (LinearLayout) holder.itemView.findViewById(R.id.lyt_vote_down);
-            TextView txtVoteUp = (TextView) holder.itemView.findViewById(R.id.txt_vote_up);
-            TextView txtVoteDown = (TextView) holder.itemView.findViewById(R.id.txt_vote_down);
-            TextView txtViewsLabel = (TextView) holder.itemView.findViewById(R.id.txt_views_label);
-            TextView txtSignature = (TextView) holder.itemView.findViewById(R.id.txt_signature);
+            LinearLayout lytVoteUp = (LinearLayout) mHolder.itemView.findViewById(R.id.lyt_vote_up);
+            LinearLayout lytVoteDown = (LinearLayout) mHolder.itemView.findViewById(R.id.lyt_vote_down);
+            TextView txtVoteUp = (TextView) mHolder.itemView.findViewById(R.id.txt_vote_up);
+            TextView txtVoteDown = (TextView) mHolder.itemView.findViewById(R.id.txt_vote_down);
+            TextView txtViewsLabel = (TextView) mHolder.itemView.findViewById(R.id.txt_views_label);
+            TextView txtSignature = (TextView) mHolder.itemView.findViewById(R.id.txt_signature);
 
             if (showThump) {
-                holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.VISIBLE);
+                mHolder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.VISIBLE);
             } else {
-                holder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.INVISIBLE);
+                mHolder.itemView.findViewById(R.id.lyt_vote).setVisibility(View.INVISIBLE);
             }
 
-            lytVote.setVisibility(View.VISIBLE);
+            mHolder.lyt_vote.setVisibility(View.VISIBLE);
 
             /**
              * userId != 0 means that this message is from channel
@@ -722,7 +685,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             if (txtSignature.getText().length() > 0) {
-                holder.itemView.findViewById(R.id.lyt_signature).setVisibility(View.VISIBLE);
+                mHolder.itemView.findViewById(R.id.lyt_signature).setVisibility(View.VISIBLE);
             }
 
             if (HelperCalander.isPersianUnicode) {
@@ -735,27 +698,27 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 @Override
                 public void onClick(View view) {
                     if (FragmentChat.isInSelectionMode) {
-                        holder.itemView.performLongClick();
+                        mHolder.itemView.performLongClick();
                     } else {
                         voteSend(ProtoGlobal.RoomMessageReaction.THUMBS_UP);
                     }
                 }
             });
 
-            lytVoteUp.setOnLongClickListener(getLongClickPerform(holder));
+            lytVoteUp.setOnLongClickListener(getLongClickPerform(mHolder));
 
             lytVoteDown.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (FragmentChat.isInSelectionMode) {
-                        holder.itemView.performLongClick();
+                        mHolder.itemView.performLongClick();
                     } else {
                         voteSend(ProtoGlobal.RoomMessageReaction.THUMBS_DOWN);
                     }
                 }
             });
 
-            lytVoteDown.setOnLongClickListener(getLongClickPerform(holder));
+            lytVoteDown.setOnLongClickListener(getLongClickPerform(mHolder));
         }
     }
 
