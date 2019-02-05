@@ -21,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -92,6 +93,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.widget.LinearLayout.VERTICAL;
@@ -208,14 +210,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         else
             return;
 
-
-        // remove text view if exist in view
-        LinearLayout layoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
-        if (layoutMessageContainer != null) {
-            layoutMessageContainer.removeAllViews();
-        }
-
-
         if (mMessage.additionalData != null) {
             if (mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
 
@@ -269,54 +263,49 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         });
 
 
-        if (holder instanceof TextItem.ViewHolder || holder instanceof ImageWithTextItem.ViewHolder || holder instanceof AudioItem.ViewHolder || holder instanceof FileItem.ViewHolder || holder instanceof VideoWithTextItem.ViewHolder || holder instanceof GifWithTextItem.ViewHolder) {
+        if (holder instanceof ChatItemWithTextHolder) {
+            ChatItemWithTextHolder withTextHolder = (ChatItemWithTextHolder) holder;
+            withTextHolder.removeButtonLayout();
             int maxsize = 0;
 
             if ((type == ProtoGlobal.Room.Type.CHANNEL) || (type == ProtoGlobal.Room.Type.CHAT) && mMessage.forwardedFrom != null) {
                 maxsize = G.maxChatBox;
             }
-
-            View messageView = ViewMaker.makeTextViewMessage(maxsize, mMessage.hasEmojiInText, mMessage.hasLinkInMessage);
-            layoutMessageContainer.addView(messageView);
-
-            messageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("bagi" , "OnClickMessage" + FragmentChat.isInSelectionMode);
-
-                    if (FragmentChat.isInSelectionMode) {
-                        holder.itemView.performLongClick();
-                    } else {
-                        mHolder.mainContainer.performClick();
-                    }
-
-                }
-            });
-
-            messageView.setOnLongClickListener(getLongClickPerform(holder));
+            if (maxsize > 0)
+                withTextHolder.messageView.setMaxWidth(maxsize);
+            if (mMessage.hasLinkInMessage) {
+                BetterLinkMovementMethod
+                    .linkify(Linkify.ALL, withTextHolder.messageView)
+                    .setOnLinkClickListener((tv, url) -> {
+                        Log.d("bagi" , "OnMessageLinkClick");
+                        return FragmentChat.isInSelectionMode;
+                    })
+                    .setOnLinkLongClickListener((tv, url) -> {
+                        Log.d("bagi" , "OnMessageLinkLongClick");
+                        return true;
+                    });
+            } else {
+                // remove BetterLinkMovementMethod
+            }
 
             try {
                 if (buttonList != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
-                    if (layoutMessageContainer != null) {
-
-
-                        for (int i = 0; i < buttonList.size(); i++) {
-                            for (int j = 0; j < buttonList.get(i).length(); j++) {
-                                try {
-                                    ButtonEntity btnEntery = new ButtonEntity();
-                                    btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
-                                    }.getType());
-                                    btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                                    childLayout = MakeButtons.addButtons(btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
-                                  //  childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(),this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                    for (int i = 0; i < buttonList.size(); i++) {
+                        for (int j = 0; j < buttonList.get(i).length(); j++) {
+                            try {
+                                ButtonEntity btnEntery = new ButtonEntity();
+                                btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
+                                }.getType());
+                                btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
+                                childLayout = MakeButtons.addButtons(btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
+                                //  childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(),this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            layoutMessageContainer.addView(childLayout);
-                            childLayout = MakeButtons.createLayout();
-
                         }
+                        withTextHolder.addButtonLayout(childLayout);
+                        childLayout = MakeButtons.createLayout();
+
                     }
                 }
 
@@ -461,8 +450,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             prepareAttachmentIfNeeded(holder, roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
         }
 
-        TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
-        if (messageText != null) {
+        if (holder instanceof ChatItemWithTextHolder) {
+            TextView messageText = ((ChatItemWithTextHolder) holder).messageView;
             if (messageText.getParent() instanceof LinearLayout) {
                 ((LinearLayout.LayoutParams) ((LinearLayout) messageText.getParent()).getLayoutParams()).gravity = AndroidUtils.isTextRtl(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessage() : mMessage.messageText) ? Gravity.RIGHT : Gravity.LEFT;
             }
@@ -724,13 +713,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder = (ChatItemHolder) holder;
         else
             return;
-        TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
 
         LinearLayout timeLayout = (LinearLayout) mHolder.contentContainer.getParent();
         timeLayout.setGravity(Gravity.LEFT);
 
-        if (messageText != null) {
-            messageText.setTextColor(Color.parseColor(G.textBubble));
+        if (holder instanceof ChatItemWithTextHolder) {
+            ((ChatItemWithTextHolder) holder).messageView.setTextColor(Color.parseColor(G.textBubble));
         }
         //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
@@ -790,11 +778,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         LinearLayout timeLayout = (LinearLayout) mHolder.contentContainer.getParent();
         timeLayout.setGravity(Gravity.RIGHT);
 
-        TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
         //  TextView iconHearing = (TextView) holder.itemView.findViewById(R.id.cslr_txt_hearing);
 
-        if (messageText != null) {
-            messageText.setTextColor(Color.parseColor(G.textBubble));
+        if (holder instanceof ChatItemWithTextHolder) {
+            ((ChatItemWithTextHolder) holder).messageView.setTextColor(Color.parseColor(G.textBubble));
         }
         //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 

@@ -349,7 +349,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
+    protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
         protected MessageProgress progress;
         protected ImageView thumbnail;
         protected TextView fileSize;
@@ -502,9 +502,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             m_container.addView(audioBox);
 
             LinearLayout.LayoutParams layout_992 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp220), LinearLayout.LayoutParams.WRAP_CONTENT); // before width was -> LinearLayout.LayoutParams.MATCH_PARENT, for fix text scroll changed it
-            LinearLayout csliwt_layout_container_message = ViewMaker.getTextView();
-            csliwt_layout_container_message.setLayoutParams(layout_992);
-            m_container.addView(csliwt_layout_container_message);
+            setLayoutMessageContainer(layout_992);
 
             linearLayout_916.addView(frameLayout);
             linearLayout_916.addView(fileSize);

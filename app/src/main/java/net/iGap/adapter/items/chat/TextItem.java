@@ -72,15 +72,12 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder {
+    protected static class ViewHolder extends ChatItemWithTextHolder {
 
         public ViewHolder(View view) {
             super(view);
-            LinearLayout csliwt_layout_container_message = ViewMaker.getTextView();
             LinearLayout.LayoutParams layout_577 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            csliwt_layout_container_message.setLayoutParams(layout_577);
-
-            m_container.addView(csliwt_layout_container_message);
+            setLayoutMessageContainer(layout_577);
         }
     }
 }

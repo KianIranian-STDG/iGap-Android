@@ -105,7 +105,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
+    protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
         protected ReserveSpaceRoundedImageView image;
         protected MessageProgress progress;
 
@@ -124,7 +124,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
             m_container.addView(frameLayout);
             if (withText) {
-                m_container.addView(ViewMaker.getTextView());
+                setLayoutMessageContainer();
             }
             frameLayout.addView(image);
             progress = getProgressBar(0);

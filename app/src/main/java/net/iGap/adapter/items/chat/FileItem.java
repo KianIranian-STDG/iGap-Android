@@ -129,7 +129,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
+    protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
         protected TextView cslf_txt_file_name;
         protected TextView cslf_txt_file_size;
         protected ImageView thumbnail;
@@ -198,7 +198,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             linearLayout_784.addView(linearLayout_780);
             m_container.addView(linearLayout_784);
 
-            m_container.addView(ViewMaker.getTextView());
+            setLayoutMessageContainer();
 
             progress = getProgressBar(R.dimen.dp52);
             frameLayout.addView(thumbnail);
