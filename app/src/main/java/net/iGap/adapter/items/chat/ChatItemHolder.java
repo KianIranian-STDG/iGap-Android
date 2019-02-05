@@ -1,11 +1,13 @@
 package net.iGap.adapter.items.chat;
 
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,6 +23,7 @@ import static android.view.Gravity.RIGHT;
 import static android.widget.LinearLayout.HORIZONTAL;
 import static android.widget.LinearLayout.VERTICAL;
 import static net.iGap.G.context;
+import static net.iGap.R.dimen.dp1_minus;
 import static net.iGap.R.dimen.dp4;
 import static net.iGap.R.dimen.dp52;
 
@@ -38,6 +41,10 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
     TextView txt_vote_up;
     TextView txt_signature;
     TextView txt_views_label;
+    TextView txtEditedIndicator;
+    TextView cslr_txt_time;
+    ImageView cslr_txt_tic;
+    View cslm_view_left_dis;
 
 
     public ChatItemHolder(View view) {
@@ -68,7 +75,64 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
 
         linearLayout_683.addView(contentContainer);
 
-        csl_ll_time = ViewMaker.getViewTime();
+
+        ////Time////
+        csl_ll_time = new LinearLayout(context);
+        csl_ll_time.setId(R.id.csl_ll_time);
+        csl_ll_time.setOrientation(HORIZONTAL);
+        LinearLayout.LayoutParams layout_189 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_189.bottomMargin = dpToPixel(4);
+        csl_ll_time.setPadding(dpToPixel(5), 0, dpToPixel(5), 0);
+        csl_ll_time.setLayoutParams(layout_189);
+
+        txtEditedIndicator = new TextView(context);
+        txtEditedIndicator.setId(R.id.txtEditedIndicator);
+        txtEditedIndicator.setPadding(i_Dp(dp4), 0, 0, 0);
+        txtEditedIndicator.setGravity(CENTER);
+        txtEditedIndicator.setSingleLine(true);
+        txtEditedIndicator.setText(context.getResources().getString(R.string.edited));
+        setTextSize(txtEditedIndicator, R.dimen.dp8);
+//        if (G.isDarkTheme) {
+//            txtEditedIndicator.setTextAppearance(context, R.style.text_sub_style_setting_dark);
+//        } else {
+//            txtEditedIndicator.setTextAppearance(context, R.style.ChatMessages_Time);
+//        }
+        txtEditedIndicator.setTextColor(Color.parseColor(G.textBubble));
+
+        setTypeFace(txtEditedIndicator);
+        LinearLayout.LayoutParams layout_927 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_927.rightMargin = i_Dp(dp4);
+        layout_927.topMargin = dpToPixel(4);
+        txtEditedIndicator.setLayoutParams(layout_927);
+
+        cslr_txt_time = new TextView(context);
+        cslr_txt_time.setId(R.id.cslr_txt_time);
+        cslr_txt_time.setGravity(CENTER);
+        cslr_txt_time.setPadding(dpToPixel(2), 0, dpToPixel(2), 0);
+        cslr_txt_time.setText("10:21");
+        cslr_txt_time.setSingleLine(true);
+        cslr_txt_time.setTextAppearance(context, R.style.ChatMessages_Time);
+        setTypeFace(cslr_txt_time);
+        LinearLayout.LayoutParams layout_638 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_638.topMargin = i_Dp(dp4);
+        cslr_txt_time.setLayoutParams(layout_638);
+
+        // ContextThemeWrapper newContext = new ContextThemeWrapper(G.context, R.style.ChatMessages_MaterialDesignTextView_Tick);
+        cslr_txt_tic = new ImageView(context);
+        cslr_txt_tic.setId(R.id.cslr_txt_tic);
+//        cslr_txt_tic.setColorFilter(context.getResources().getColor(R.color.colorOldBlack));
+        cslr_txt_tic.setColorFilter(Color.parseColor(G.textBubble), PorterDuff.Mode.SRC_IN);
+        //AppUtils.setImageDrawable(cslr_txt_tic, R.drawable.ic_double_check);
+        LinearLayout.LayoutParams layout_311 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp16), ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout_311.leftMargin = i_Dp(dp4);
+        layout_311.topMargin = i_Dp(dp1_minus);
+        cslr_txt_tic.setLayoutParams(layout_311);
+
+        csl_ll_time.addView(txtEditedIndicator);
+        csl_ll_time.addView(cslr_txt_time);
+        csl_ll_time.addView(cslr_txt_tic);
+
+        ////end////
 
         /////////////Vote////
         LinearLayout.LayoutParams layout_356 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -159,7 +223,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         LinearLayout.LayoutParams layout_865 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1);
         lyt_see.setLayoutParams(layout_865);
 
-        View cslm_view_left_dis = new View(context);
+        cslm_view_left_dis = new View(context);
         cslm_view_left_dis.setId(R.id.cslm_view_left_dis);
         cslm_view_left_dis.setVisibility(View.GONE);
         LinearLayout.LayoutParams layout_901 = new LinearLayout.LayoutParams(i_Dp(dp52), dpToPixel(1));

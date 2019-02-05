@@ -371,21 +371,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
              * check failed state ,because if is failed we want show to user even is in channel
              */
             if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL && ProtoGlobal.RoomMessageStatus.FAILED != ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status)) {
-                ((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic)).setVisibility(View.GONE);
+                mHolder.cslr_txt_tic.setVisibility(View.GONE);
             } else {
-                ((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic)).setVisibility(View.VISIBLE);
-                AppUtils.rightMessageStatus((ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic), ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType, mMessage.isSenderMe());
+                mHolder.cslr_txt_tic.setVisibility(View.VISIBLE);
+                AppUtils.rightMessageStatus(mHolder.cslr_txt_tic, ProtoGlobal.RoomMessageStatus.valueOf(mMessage.status), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType, mMessage.isSenderMe());
             }
         }
         /**
          * display 'edited' indicator beside message time if message was edited
          */
-        if (holder.itemView.findViewById(R.id.txtEditedIndicator) != null) {
-            if (mMessage.isEdited) {
-                holder.itemView.findViewById(R.id.txtEditedIndicator).setVisibility(View.VISIBLE);
-            } else {
-                holder.itemView.findViewById(R.id.txtEditedIndicator).setVisibility(View.GONE);
-            }
+        if (mMessage.isEdited) {
+            mHolder.txtEditedIndicator.setVisibility(View.VISIBLE);
+        } else {
+            mHolder.txtEditedIndicator.setVisibility(View.GONE);
         }
         /**
          * display user avatar only if chat type is GROUP
@@ -411,10 +409,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     if (holder.itemView.findViewById(R.id.messageSenderAvatar) == null) {
                         mHolder.mainContainer.addView(ViewMaker.makeCircleImageView(), 0);
                     }
+                    View messageSenderAvatar00 = holder.itemView.findViewById(R.id.messageSenderAvatar);
+                    messageSenderAvatar00.setVisibility(View.VISIBLE);
 
-                    holder.itemView.findViewById(R.id.messageSenderAvatar).setVisibility(View.VISIBLE);
-
-                    holder.itemView.findViewById(R.id.messageSenderAvatar).setOnClickListener(new View.OnClickListener() {
+                    messageSenderAvatar00.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if (FragmentChat.isInSelectionMode) {
@@ -426,7 +424,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         }
                     });
 
-                    holder.itemView.findViewById(R.id.messageSenderAvatar).setOnLongClickListener(getLongClickPerform(holder));
+                    messageSenderAvatar00.setOnLongClickListener(getLongClickPerform(holder));
 
                     //  String[] initialize =
                     HelperAvatar.getAvatar(null, Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, getRealmChat(), new OnAvatarGet() {
@@ -461,15 +459,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * set message time
          */
 
-        TextView txtTime = (TextView) holder.itemView.findViewById(R.id.cslr_txt_time);
-        if (txtTime != null) {
-            txtTime.setTextColor(Color.parseColor(G.textBubble));
-            txtTime.setText(HelperCalander.getClocktime(mMessage.time, false));
+        mHolder.cslr_txt_time.setTextColor(Color.parseColor(G.textBubble));
+        mHolder.cslr_txt_time.setText(HelperCalander.getClocktime(mMessage.time, false));
 
-            if (HelperCalander.isPersianUnicode) {
-                txtTime.setText(HelperCalander.convertToUnicodeFarsiNumber(txtTime.getText().toString()));
-            }
+        if (HelperCalander.isPersianUnicode) {
+            mHolder.cslr_txt_time.setText(HelperCalander.convertToUnicodeFarsiNumber(mHolder.cslr_txt_time.getText().toString()));
         }
+
 
         RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
         if (roomMessage != null) {
@@ -502,7 +498,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         showVote(holder, getRealmChat());
 
                         if (mMessage.isSenderMe()) {
-                            holder.itemView.findViewById(R.id.cslm_view_left_dis).setVisibility(View.VISIBLE);
+                            mHolder.cslm_view_left_dis.setVisibility(View.VISIBLE);
                         }
                     }
                 }
@@ -556,9 +552,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (G.showSenderNameInGroup) {
             if (holder.m_container != null) {
-
-                if (holder.itemView.findViewById(R.id.messageSenderName) != null) {
-                    holder.m_container.removeView(holder.itemView.findViewById(R.id.messageSenderName));
+                View messageSenderName = holder.itemView.findViewById(R.id.messageSenderName);
+                if (messageSenderName != null) {
+                    holder.m_container.removeView(messageSenderName);
                 }
 
                 if (holder.itemView.findViewById(R.id.messageSenderName) == null) {
@@ -743,7 +739,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder = (ChatItemHolder) holder;
         else
             return;
-        ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
 
         LinearLayout timeLayout = (LinearLayout) mHolder.contentContainer.getParent();
@@ -755,9 +750,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
         if (G.isDarkTheme) {
-            setTextColor(imgTick, R.color.white);
+            setTextColor(mHolder.cslr_txt_tic, R.color.white);
         } else {
-            setTextColor(imgTick, R.color.colorOldBlack);
+            setTextColor(mHolder.cslr_txt_tic, R.color.colorOldBlack);
         }
 
 
@@ -810,7 +805,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         LinearLayout timeLayout = (LinearLayout) mHolder.contentContainer.getParent();
         timeLayout.setGravity(Gravity.RIGHT);
 
-        ImageView imgTick = (ImageView) holder.itemView.findViewById(R.id.cslr_txt_tic);
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
         //  TextView iconHearing = (TextView) holder.itemView.findViewById(R.id.cslr_txt_hearing);
 
@@ -830,20 +824,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (status == ProtoGlobal.RoomMessageStatus.SEEN) {
-            imgTick.setColorFilter(Color.parseColor(G.SeenTickColor));
+            mHolder.cslr_txt_tic.setColorFilter(Color.parseColor(G.SeenTickColor));
 
         } else if (status == ProtoGlobal.RoomMessageStatus.LISTENED) {
             // iconHearing.setVisibility(View.VISIBLE);
             if (G.isDarkTheme) {
-                setTextColor(imgTick, R.color.iGapColor);
+                setTextColor(mHolder.cslr_txt_tic, R.color.iGapColor);
             } else {
-                setTextColor(imgTick, R.color.backgroundColorCall2);
+                setTextColor(mHolder.cslr_txt_tic, R.color.backgroundColorCall2);
             }
 
-            imgTick.setVisibility(View.VISIBLE);
+            mHolder.cslr_txt_tic.setVisibility(View.VISIBLE);
         } else {
 //            setTextColor(imgTick, Color.parseColor(G.txtIconCheck));
-            imgTick.setColorFilter(Color.parseColor(G.txtIconCheck));
+            mHolder.cslr_txt_tic.setColorFilter(Color.parseColor(G.txtIconCheck));
         }
 
 
@@ -884,9 +878,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * set replay container visible if message was replayed, otherwise, gone it
          */
+        View cslr_replay_layout = holder.itemView.findViewById(R.id.cslr_replay_layout);
 
-        if (holder.itemView.findViewById(R.id.cslr_replay_layout) != null) {
-            mHolder.m_container.removeView(holder.itemView.findViewById(R.id.cslr_replay_layout));
+        if (cslr_replay_layout != null) {
+            mHolder.m_container.removeView(cslr_replay_layout);
         }
 
         if (mMessage.replayTo != null && mMessage.replayTo.isValid()) {
@@ -990,9 +985,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * set forward container visible if message was forwarded, otherwise, gone it
          */
-
-        if (holder.itemView.findViewById(R.id.cslr_ll_forward) != null) {
-            mHolder.m_container.removeView(holder.itemView.findViewById(R.id.cslr_ll_forward));
+        View cslr_ll_forward22 = holder.itemView.findViewById(R.id.cslr_ll_forward);
+        if (cslr_ll_forward22 != null) {
+            mHolder.m_container.removeView(cslr_ll_forward22);
         }
 
         if (mMessage.forwardedFrom != null) {

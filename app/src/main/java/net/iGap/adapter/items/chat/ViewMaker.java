@@ -133,65 +133,6 @@ public class ViewMaker {
         return text;
     }
 
-    static LinearLayout getViewTime() {
-        LinearLayout csl_ll_time = new LinearLayout(context);
-        csl_ll_time.setId(R.id.csl_ll_time);
-        csl_ll_time.setOrientation(HORIZONTAL);
-        LinearLayout.LayoutParams layout_189 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layout_189.bottomMargin = dpToPixel(4);
-        csl_ll_time.setPadding(dpToPixel(5), 0, dpToPixel(5), 0);
-        csl_ll_time.setLayoutParams(layout_189);
-
-        TextView txtEditedIndicator = new TextView(context);
-        txtEditedIndicator.setId(R.id.txtEditedIndicator);
-        txtEditedIndicator.setPadding(i_Dp(dp4), 0, 0, 0);
-        txtEditedIndicator.setGravity(CENTER);
-        txtEditedIndicator.setSingleLine(true);
-        txtEditedIndicator.setText(context.getResources().getString(R.string.edited));
-        setTextSize(txtEditedIndicator, R.dimen.dp8);
-//        if (G.isDarkTheme) {
-//            txtEditedIndicator.setTextAppearance(context, R.style.text_sub_style_setting_dark);
-//        } else {
-//            txtEditedIndicator.setTextAppearance(context, R.style.ChatMessages_Time);
-//        }
-        txtEditedIndicator.setTextColor(Color.parseColor(G.textBubble));
-
-        setTypeFace(txtEditedIndicator);
-        LinearLayout.LayoutParams layout_927 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layout_927.rightMargin = i_Dp(dp4);
-        layout_927.topMargin = dpToPixel(4);
-        txtEditedIndicator.setLayoutParams(layout_927);
-
-        TextView cslr_txt_time = new TextView(context);
-        cslr_txt_time.setId(R.id.cslr_txt_time);
-        cslr_txt_time.setGravity(CENTER);
-        cslr_txt_time.setPadding(dpToPixel(2), 0, dpToPixel(2), 0);
-        cslr_txt_time.setText("10:21");
-        cslr_txt_time.setSingleLine(true);
-        cslr_txt_time.setTextAppearance(context, R.style.ChatMessages_Time);
-        setTypeFace(cslr_txt_time);
-        LinearLayout.LayoutParams layout_638 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layout_638.topMargin = i_Dp(dp4);
-        cslr_txt_time.setLayoutParams(layout_638);
-
-        // ContextThemeWrapper newContext = new ContextThemeWrapper(G.context, R.style.ChatMessages_MaterialDesignTextView_Tick);
-        ImageView cslr_txt_tic = new ImageView(context);
-        cslr_txt_tic.setId(R.id.cslr_txt_tic);
-//        cslr_txt_tic.setColorFilter(context.getResources().getColor(R.color.colorOldBlack));
-        cslr_txt_tic.setColorFilter(Color.parseColor(G.textBubble), PorterDuff.Mode.SRC_IN);
-        //AppUtils.setImageDrawable(cslr_txt_tic, R.drawable.ic_double_check);
-        LinearLayout.LayoutParams layout_311 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp16), ViewGroup.LayoutParams.WRAP_CONTENT);
-        layout_311.leftMargin = i_Dp(dp4);
-        layout_311.topMargin = i_Dp(dp1_minus);
-        cslr_txt_tic.setLayoutParams(layout_311);
-
-        csl_ll_time.addView(txtEditedIndicator);
-        csl_ll_time.addView(cslr_txt_time);
-        csl_ll_time.addView(cslr_txt_tic);
-
-        return csl_ll_time;
-    }
-
     static View getViewReplay() {
         LinearLayout cslr_replay_layout = new LinearLayout(context);
         cslr_replay_layout.setId(R.id.cslr_replay_layout);
