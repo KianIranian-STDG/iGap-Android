@@ -81,6 +81,7 @@ public class G extends MultiDexApplication {
     public static final String TEMP = "/.temp";
     public static final String CHAT_BACKGROUND = "/.chat_background";
     public static final String IMAGE_USER = "/.image_user";
+    public static final String STICKER = "/.sticker";
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static Context context;
     public static Handler handler;
@@ -122,6 +123,7 @@ public class G extends MultiDexApplication {
     public static String DIR_TEMP = DIR_APP + TEMP;
     public static String DIR_CHAT_BACKGROUND = DIR_APP + CHAT_BACKGROUND;
     public static String DIR_IMAGE_USER = DIR_APP + IMAGE_USER;
+    public static String DIR_STICKER = DIR_APP + STICKER;
     public static String CHAT_MESSAGE_TIME = "H:mm";
     public static String selectedLanguage = null;
     public static String symmetricMethod;
@@ -296,6 +298,7 @@ public class G extends MultiDexApplication {
     public static OnRefreshActivity onRefreshActivity;
     public static OnGetUserInfo onGetUserInfo;
     public static OnFileDownloaded onFileDownloaded;
+    public static OnStickerDownloaded onStickerDownloaded;
     public static OnUserInfoMyClient onUserInfoMyClient;
     public static OnChannelAddMessageReaction onChannelAddMessageReaction;
     public static OnChannelGetMessagesStats onChannelGetMessagesStats;

@@ -59,6 +59,7 @@ import static net.iGap.G.DIR_DOCUMENT;
 import static net.iGap.G.DIR_IMAGES;
 import static net.iGap.G.DIR_IMAGE_USER;
 import static net.iGap.G.DIR_MESSAGES;
+import static net.iGap.G.DIR_STICKER;
 import static net.iGap.G.DIR_TEMP;
 import static net.iGap.G.DIR_VIDEOS;
 import static net.iGap.G.IGAP;
@@ -185,6 +186,7 @@ public final class StartupActions {
 
             new File(DIR_CHAT_BACKGROUND).mkdirs();
             new File(DIR_IMAGE_USER).mkdirs();
+            new File(DIR_STICKER).mkdirs();
             new File(DIR_TEMP).mkdirs();
             new File(DIR_CHAT_BACKGROUND + "/" + file).createNewFile();
             new File(DIR_IMAGE_USER + "/" + file).createNewFile();
@@ -221,6 +223,7 @@ public final class StartupActions {
         DIR_TEMP = rootPath + G.TEMP;
         DIR_CHAT_BACKGROUND = rootPath + G.CHAT_BACKGROUND;
         DIR_IMAGE_USER = rootPath + G.IMAGE_USER;
+        DIR_STICKER = rootPath + G.STICKER;
     }
 
     private static String getSelectedStoragePath(String cashPath) {

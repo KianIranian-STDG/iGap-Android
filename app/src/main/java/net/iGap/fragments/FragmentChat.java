@@ -143,6 +143,11 @@ import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
+import net.iGap.helper.emoji.FragmentAddStickers;
+import net.iGap.helper.emoji.api.APIEmojiService;
+import net.iGap.helper.emoji.api.ApiEmojiUtils;
+import net.iGap.helper.emoji.struct.StructGroupSticker;
+import net.iGap.helper.emoji.struct.StructSticker;
 import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IDispatchTochEvent;
@@ -265,6 +270,8 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.realm.RealmStickers;
+import net.iGap.realm.RealmStickersDetails;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelEditMessage;
 import net.iGap.request.RequestChannelPinMessage;
@@ -312,6 +319,9 @@ import io.fotoapparat.view.CameraView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -386,6 +396,7 @@ public class FragmentChat extends BaseFragment
     private Bitmap icon;
     private boolean isRepley = false;
     private boolean swipeBack = false;
+    private List<StructGroupSticker> data;
 
     /**
      * *************************** common method ***************************
@@ -557,6 +568,7 @@ public class FragmentChat extends BaseFragment
     List<Favorite> items = new ArrayList<>();
     boolean isAnimateStart = false;
     boolean isScrollEnd = false;
+    private ArrayList<StructGroupSticker> stickerArrayList = new ArrayList<>();
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -3341,6 +3353,17 @@ public class FragmentChat extends BaseFragment
             @Override
             public boolean onLongClick(View view) {
 
+                Realm realm = Realm.getDefaultInstance();
+
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Log.i("CCCCCCCCCC", "deleteAllFromRealm : ");
+                        realm.where(RealmStickersDetails.class).findAll().deleteAllFromRealm();
+                        realm.where(RealmStickers.class).findAll().deleteAllFromRealm();
+                    }
+                });
+
                 if (ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     try {
                         HelperPermission.getMicroPhonePermission(G.fragmentActivity, null);
@@ -3375,7 +3398,11 @@ public class FragmentChat extends BaseFragment
                     setUpEmojiPopup();
                 }
 
+                getStickerFromServer();
+
                 emojiPopup.toggle();
+
+                new HelperFragment(FragmentAddStickers.newInstance()).setReplace(false).load();
             }
         });
 
@@ -3424,6 +3451,24 @@ public class FragmentChat extends BaseFragment
 
         //realm.close();
     }
+
+    private void getStickerFromServer() {
+        ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
+            @Override
+            public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
+
+                data = response.body().getData();
+
+
+            }
+
+            @Override
+            public void onFailure(Call<StructSticker> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     private void openWebViewForSpecialUrlChat(String mUrl) {
 

@@ -138,17 +138,24 @@ public class RequestFileDownload {
         public ProtoFileDownload.FileDownload.Selector selector;
         public long size;
         public long offset;
-        public boolean isFromHelperDownload;
+        public TypeDownload typeDownload;
         public ProtoGlobal.RoomMessageType type;
 
-        public IdentityFileDownload(ProtoGlobal.RoomMessageType type, String cacheId, String filepath, ProtoFileDownload.FileDownload.Selector selector, long size, long offset, boolean isFromHelperDownload) {
+        public IdentityFileDownload(ProtoGlobal.RoomMessageType type, String cacheId, String filepath, ProtoFileDownload.FileDownload.Selector selector, long size, long offset, TypeDownload typeDownload) {
             this.cacheId = cacheId;
             this.filepath = filepath;
             this.selector = selector;
             this.size = size;
             this.offset = offset;
-            this.isFromHelperDownload = isFromHelperDownload;
+            this.typeDownload = typeDownload;
             this.type=type;
         }
+    }
+
+    public enum TypeDownload {
+        FILE,
+        AVATAR,
+        STICKER,
+        STICKER_DETAIL,
     }
 }
