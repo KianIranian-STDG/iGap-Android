@@ -111,7 +111,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private Gson gson;
     private LinearLayout childLayout;
     private HashMap<Integer, JSONArray> buttonList;
-    private LinearLayout secondlayoutMessageContainer;
+    private LinearLayout layoutMessageContainer;
 
     /**
      * add this prt for video player
@@ -212,7 +212,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         // remove text view if exist in view
-        LinearLayout layoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
+        layoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
         if (layoutMessageContainer != null) {
             layoutMessageContainer.removeAllViews();
         }
@@ -223,11 +223,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 /** create Parent view */
 
-
-                secondlayoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
-                if (secondlayoutMessageContainer != null) {
-                    secondlayoutMessageContainer.removeAllViews();
-                    secondlayoutMessageContainer.setOrientation(VERTICAL);
+                if (layoutMessageContainer != null) {
+                    layoutMessageContainer.setOrientation(VERTICAL);
                 }
 
 
@@ -307,7 +304,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             try {
                 if (buttonList != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
-                    if (secondlayoutMessageContainer != null) {
+                    if (layoutMessageContainer != null) {
 
 
                         for (int i = 0; i < buttonList.size(); i++) {
@@ -323,7 +320,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                     e.printStackTrace();
                                 }
                             }
-                            secondlayoutMessageContainer.addView(childLayout);
+                            layoutMessageContainer.addView(childLayout);
                             childLayout = MakeButtons.createLayout();
 
                         }

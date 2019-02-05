@@ -501,10 +501,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             audioBox.addView(linearLayout_39);
             m_container.addView(audioBox);
 
-            LinearLayout csliwt_layout_container_message = new LinearLayout(G.context);
-            csliwt_layout_container_message.setId(R.id.csliwt_layout_container_message);
-            csliwt_layout_container_message.setOrientation(HORIZONTAL);
             LinearLayout.LayoutParams layout_992 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp220), LinearLayout.LayoutParams.WRAP_CONTENT); // before width was -> LinearLayout.LayoutParams.MATCH_PARENT, for fix text scroll changed it
+            LinearLayout csliwt_layout_container_message = ViewMaker.getTextView();
             csliwt_layout_container_message.setLayoutParams(layout_992);
             m_container.addView(csliwt_layout_container_message);
 

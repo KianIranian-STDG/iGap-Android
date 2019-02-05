@@ -11,6 +11,8 @@
 package net.iGap.adapter.items.chat;
 
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.vanniktech.emoji.EmojiUtils;
@@ -74,7 +76,11 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
         public ViewHolder(View view) {
             super(view);
-            m_container.addView(ViewMaker.getTextItemView());
+            LinearLayout csliwt_layout_container_message = ViewMaker.getTextView();
+            LinearLayout.LayoutParams layout_577 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            csliwt_layout_container_message.setLayoutParams(layout_577);
+
+            m_container.addView(csliwt_layout_container_message);
         }
     }
 }

@@ -198,12 +198,8 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             linearLayout_784.addView(linearLayout_780);
             m_container.addView(linearLayout_784);
 
-            LinearLayout csliwt_layout_container_message = new LinearLayout(G.context);
-            csliwt_layout_container_message.setId(R.id.csliwt_layout_container_message);
-            csliwt_layout_container_message.setOrientation(HORIZONTAL);
-            LinearLayout.LayoutParams layout_312 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            csliwt_layout_container_message.setLayoutParams(layout_312);
-            m_container.addView(csliwt_layout_container_message);
+            m_container.addView(ViewMaker.getTextView());
+
             progress = getProgressBar(R.dimen.dp52);
             frameLayout.addView(thumbnail);
             frameLayout.addView(progress);

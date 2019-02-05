@@ -67,16 +67,6 @@ import static net.iGap.R.dimen.messageContainerPadding;
 
 public class ViewMaker {
 
-    static View getTextItemView() {
-        LinearLayout csliwt_layout_container_message = new LinearLayout(context);
-        csliwt_layout_container_message.setId(R.id.csliwt_layout_container_message);
-        csliwt_layout_container_message.setOrientation(HORIZONTAL);
-        LinearLayout.LayoutParams layout_577 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        csliwt_layout_container_message.setLayoutParams(layout_577);
-
-        return csliwt_layout_container_message;
-    }
-
     public static View getUnreadMessageItemView() {
         TextView cslum_txt_unread_message = new TextView(G.context);
         cslum_txt_unread_message.setId(R.id.cslum_txt_unread_message);
@@ -376,7 +366,7 @@ public class ViewMaker {
     /**
      * return text view for items that have text (for example : image_text, video_text , ...)
      */
-    public static View getTextView() {
+    public static LinearLayout getTextView() {
         LinearLayout csliwt_layout_container_message = new LinearLayout(G.context);
         csliwt_layout_container_message.setId(R.id.csliwt_layout_container_message);
 //        csliwt_layout_container_message.setBackgroundColor(Color.parseColor(G.backgroundTheme));
