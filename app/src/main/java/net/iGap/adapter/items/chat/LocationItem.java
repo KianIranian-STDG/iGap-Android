@@ -145,7 +145,7 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
 
         ReserveSpaceRoundedImageView imgMapPosition;
 
@@ -163,6 +163,11 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
             frameLayout.addView(imgMapPosition);
             m_container.addView(frameLayout);
+        }
+
+        @Override
+        public ImageView getThumbNailImageView() {
+            return imgMapPosition;
         }
     }
 }

@@ -111,7 +111,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
         protected ReserveSpaceRoundedImageView image;
         protected TextView duration;
 
@@ -154,6 +154,11 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             if (withText) {
                 m_container.addView(ViewMaker.getTextView());
             }
+        }
+
+        @Override
+        public ImageView getThumbNailImageView() {
+            return image;
         }
     }
 }

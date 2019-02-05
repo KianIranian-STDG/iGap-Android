@@ -128,7 +128,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
         protected TextView cslf_txt_file_name;
         protected TextView cslf_txt_file_size;
         protected ImageView thumbnail;
@@ -205,6 +205,11 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
             frameLayout.addView(thumbnail);
             frameLayout.addView(getProgressBar(R.dimen.dp52));
+        }
+
+        @Override
+        public ImageView getThumbNailImageView() {
+            return thumbnail;
         }
     }
 }

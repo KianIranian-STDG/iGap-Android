@@ -104,7 +104,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
         protected ReserveSpaceRoundedImageView image;
 
         public ViewHolder(View view) {
@@ -126,6 +126,11 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
             }
             frameLayout.addView(image);
             frameLayout.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+        }
+
+        @Override
+        public ImageView getThumbNailImageView() {
+            return image;
         }
     }
 }

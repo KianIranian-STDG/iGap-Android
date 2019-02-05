@@ -284,7 +284,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
 
         protected ImageView thumbnail;
         //protected ImageView tic;
@@ -398,6 +398,11 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             linearLayout_197.addView(audioPlayerViewContainer);
 
             m_container.addView(linearLayout_197);
+        }
+
+        @Override
+        public ImageView getThumbNailImageView() {
+            return thumbnail;
         }
     }
 }

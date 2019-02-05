@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -185,7 +186,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
 
         protected ReserveSpaceGifImageView image;
 
@@ -209,6 +210,11 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             if (withText) {
                 m_container.addView(ViewMaker.getTextView());
             }
+        }
+
+        @Override
+        public ImageView getThumbNailImageView() {
+            return image;
         }
     }
 }
