@@ -103,15 +103,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
     public IMessageItem messageClickListener;
     public StructMessageInfo mMessage;
-    public boolean directionalBased = true;
-    public View messageView;
+    public boolean directionalBased;
     //protected Realm realmChat;
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
     private Gson gson;
     private LinearLayout childLayout;
     private HashMap<Integer, JSONArray> buttonList;
-    private LinearLayout layoutMessageContainer;
 
     /**
      * add this prt for video player
@@ -212,7 +210,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
 
         // remove text view if exist in view
-        layoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
+        LinearLayout layoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
         if (layoutMessageContainer != null) {
             layoutMessageContainer.removeAllViews();
         }
@@ -222,11 +220,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             if (mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
 
                 /** create Parent view */
-
-                if (layoutMessageContainer != null) {
-                    layoutMessageContainer.setOrientation(VERTICAL);
-                }
-
 
                 buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
 
@@ -283,7 +276,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 maxsize = G.maxChatBox;
             }
 
-            messageView = ViewMaker.makeTextViewMessage(maxsize, mMessage.hasEmojiInText, mMessage.hasLinkInMessage, holder);
+            View messageView = ViewMaker.makeTextViewMessage(maxsize, mMessage.hasEmojiInText, mMessage.hasLinkInMessage);
             layoutMessageContainer.addView(messageView);
 
             messageView.setOnClickListener(new View.OnClickListener() {

@@ -283,7 +283,7 @@ public class ViewMaker {
         return view;
     }
 
-    static View makeTextViewMessage(int maxsize, boolean hasEmoji, boolean hasLink, RecyclerView.ViewHolder holder) {
+    static View makeTextViewMessage(int maxsize, boolean hasEmoji, boolean hasLink) {
         TextView textView;
         if (hasEmoji) {
             EmojiTextViewE EmTextView = new EmojiTextViewE(context);
@@ -370,7 +370,7 @@ public class ViewMaker {
         LinearLayout csliwt_layout_container_message = new LinearLayout(G.context);
         csliwt_layout_container_message.setId(R.id.csliwt_layout_container_message);
 //        csliwt_layout_container_message.setBackgroundColor(Color.parseColor(G.backgroundTheme));
-        csliwt_layout_container_message.setOrientation(HORIZONTAL);
+        csliwt_layout_container_message.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_327 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         csliwt_layout_container_message.setLayoutParams(layout_327);
         return csliwt_layout_container_message;
