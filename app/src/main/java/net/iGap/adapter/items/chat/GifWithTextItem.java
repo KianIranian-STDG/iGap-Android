@@ -12,15 +12,17 @@ package net.iGap.adapter.items.chat;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
@@ -116,11 +118,8 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             text = mMessage.messageText;
         }
 
-        if (mMessage.hasEmojiInText) {
-            setTextIfNeeded((EmojiTextViewE) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
-        } else {
-            setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
-        }
+        setTextIfNeeded(holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+
 
         holder.itemView.findViewById(R.id.progress).setOnLongClickListener(getLongClickPerform(holder));
 
@@ -187,16 +186,43 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
 
         protected ReserveSpaceGifImageView image;
+        protected MessageProgress progress;
 
         public ViewHolder(View view) {
             super(view);
-            if (itemView.findViewById(R.id.mainContainer) == null) {
-                ((ViewGroup) itemView).addView(ViewMaker.getGifItem(true));
+
+            boolean withText = true;
+            FrameLayout frameLayout = new FrameLayout(G.context);
+            frameLayout.setLayoutParams(new LinearLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+
+            image = new ReserveSpaceGifImageView(G.context);
+            image.setId(R.id.thumbnail);
+            FrameLayout.LayoutParams layout_758 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            image.setLayoutParams(layout_758);
+
+            frameLayout.addView(image);
+            progress = getProgressBar(0);
+
+            frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+
+            m_container.addView(frameLayout);
+
+            if (withText) {
+                m_container.addView(ViewMaker.getTextView());
             }
-            image = (ReserveSpaceGifImageView) itemView.findViewById(R.id.thumbnail);
+        }
+
+        @Override
+        public ImageView getThumbNailImageView() {
+            return image;
+        }
+
+        @Override
+        public MessageProgress getProgress() {
+            return progress;
         }
     }
 }

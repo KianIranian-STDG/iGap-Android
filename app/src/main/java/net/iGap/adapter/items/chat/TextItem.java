@@ -10,9 +10,7 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.vanniktech.emoji.EmojiUtils;
@@ -72,14 +70,11 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
-        //  protected LinearLayout llTime;
+    protected static class ViewHolder extends ChatItemHolder {
 
         public ViewHolder(View view) {
             super(view);
-            if (itemView.findViewById(R.id.mainContainer) == null) {
-                ((ViewGroup) itemView).addView(ViewMaker.getTextItem());
-            }
+            m_container.addView(ViewMaker.getTextItemView());
         }
     }
 }

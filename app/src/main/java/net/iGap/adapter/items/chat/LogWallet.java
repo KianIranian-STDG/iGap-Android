@@ -16,22 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperRadius;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.ReserveSpaceRoundedImageView;
-import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 
-import java.util.Calendar;
 import java.util.List;
 
 import io.realm.Realm;
-
-import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> {
     private Realm mRealm;

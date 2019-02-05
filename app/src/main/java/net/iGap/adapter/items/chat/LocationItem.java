@@ -11,9 +11,12 @@
 package net.iGap.adapter.items.chat;
 
 import android.graphics.Bitmap;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -142,16 +145,29 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
 
         ReserveSpaceRoundedImageView imgMapPosition;
 
         public ViewHolder(View view) {
             super(view);
-            if (itemView.findViewById(R.id.mainContainer) == null) {
-                ((ViewGroup) itemView).addView(ViewMaker.getLocationItem());
-            }
-            imgMapPosition = (ReserveSpaceRoundedImageView) itemView.findViewById(R.id.thumbnail);
+            FrameLayout frameLayout = new FrameLayout(G.context);
+            frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+
+            imgMapPosition = new ReserveSpaceRoundedImageView(G.context);
+            imgMapPosition.setId(R.id.thumbnail);
+            imgMapPosition.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imgMapPosition.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
+            LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            imgMapPosition.setLayoutParams(layout_758);
+
+            frameLayout.addView(imgMapPosition);
+            m_container.addView(frameLayout);
+        }
+
+        @Override
+        public ImageView getThumbNailImageView() {
+            return imgMapPosition;
         }
     }
 }

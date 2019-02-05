@@ -14,12 +14,15 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import static android.support.design.R.id.center;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -29,9 +32,9 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
+import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.LocalFileType;
@@ -42,7 +45,18 @@ import java.util.List;
 
 import io.realm.Realm;
 
+import static android.R.attr.left;
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
+import static android.view.Gravity.BOTTOM;
+import static android.view.Gravity.CENTER;
+import static android.view.Gravity.CENTER_HORIZONTAL;
+import static android.view.Gravity.LEFT;
+import static android.view.Gravity.RIGHT;
+import static android.widget.LinearLayout.HORIZONTAL;
+import static android.widget.LinearLayout.VERTICAL;
+import static java.lang.Boolean.TRUE;
+import static net.iGap.G.context;
+import static net.iGap.R.dimen.messageContainerPadding;
 
 public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> {
 
@@ -87,24 +101,12 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getAudioItem());
-        }
-
         if (mMessage.forwardedFrom != null) {
             holder.mMessageID = mMessage.forwardedFrom.getMessageId() + "";
         } else {
             holder.mMessageID = mMessage.messageID;
         }
 
-        holder.btnPlayMusic = (MaterialDesignTextView) holder.itemView.findViewById(R.id.txt_play_music);
-        holder.txt_Timer = (TextView) holder.itemView.findViewById(R.id.csla_txt_timer);
-        holder.musicSeekbar = (SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1);
-        holder.fileName = (TextView) holder.itemView.findViewById(R.id.fileName);
-        holder.thumbnail = (ImageView) holder.itemView.findViewById(R.id.thumbnail);
-        holder.fileSize = (TextView) holder.itemView.findViewById(R.id.fileSize);
-        holder.songArtist = (TextView) holder.itemView.findViewById(R.id.songArtist);
         holder.musicSeekbar.setTag(holder.mMessageID);
 
         holder.complete = new OnComplete() {
@@ -262,11 +264,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             text = mMessage.messageText;
         }
 
-        if (mMessage.hasEmojiInText) {
-            setTextIfNeeded((EmojiTextViewE) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
-        } else {
-            setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
-        }
+        setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
 
         View audioBoxView = holder.itemView.findViewById(R.id.audioBox);
         if (G.isDarkTheme) {
@@ -351,7 +349,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
+        protected MessageProgress progress;
         protected ImageView thumbnail;
         protected TextView fileSize;
         protected TextView fileName;
@@ -367,80 +366,163 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
         public ViewHolder(final View view) {
             super(view);
-            /**
-             *  this commented code used with xml layout
-             */
+            LinearLayout audioBox = new LinearLayout(G.context);
+            audioBox.setId(R.id.audioBox);
+            setLayoutDirection(audioBox, View.LAYOUT_DIRECTION_LTR);
+            audioBox.setMinimumHeight((int) context.getResources().getDimension(R.dimen.dp130));
+            audioBox.setMinimumWidth(i_Dp(R.dimen.dp220));
+            audioBox.setOrientation(HORIZONTAL);
+            audioBox.setPadding(0, (int) G.context.getResources().getDimension(messageContainerPadding), 0, (int) G.context.getResources().getDimension(R.dimen.messageContainerPaddingBottom));
+            LinearLayout.LayoutParams layout_262 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            audioBox.setLayoutParams(layout_262);
 
-            //thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            //fileSize = (TextView) view.findViewById(R.id.fileSize);
-            //fileName = (TextView) view.findViewById(R.id.fileName);
-            //songArtist = (TextView) view.findViewById(R.id.songArtist);
-            //
-            //btnPlayMusic = (TextView) view.findViewById(R.id.txt_play_music);
-            //
-            //txt_Timer = (TextView) view.findViewById(R.id.csla_txt_timer);
-            //musicSeekbar = (SeekBar) view.findViewById(R.id.csla_seekBar1);
-            //
-            //complete = new OnComplete() {
-            //    @Override
-            //    public void complete(boolean result, String messageOne, final String MessageTow) {
-            //
-            //        if (messageOne.equals("play")) {
-            //            btnPlayMusic.setText(R.string.md_play_arrow);
-            //        } else if (messageOne.equals("pause")) {
-            //            btnPlayMusic.setText(R.string.md_pause_button);
-            //        } else if (messageOne.equals("updateTime")) {
-            //            txt_Timer.post(new Runnable() {
-            //                @Override
-            //                public void run() {
-            //                    txt_Timer.setText(MessageTow + "/" + mTimeMusic);
-            //                    musicSeekbar.setProgress(MusicPlayer.musicProgress);
-            //
-            //                    if (HelperCalander.isPersianUnicode) txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
-            //                }
-            //            });
-            //        }
-            //    }
-            //};
-            //
-            //btnPlayMusic.setOnClickListener(new View.OnClickListener() {
-            //    @Override
-            //    public void onClick(View v) {
-            //
-            //        if (mFilePath.length() < 1) return;
-            //
-            //        if (mMessageID.equals(MusicPlayer.messageId)) {
-            //            MusicPlayer.onCompleteChat = complete;
-            //
-            //            if (MusicPlayer.mp != null) {
-            //                MusicPlayer.playAndPause();
-            //            } else {
-            //                MusicPlayer.startPlayer(mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, mMessageID);
-            //            }
-            //        } else {
-            //
-            //            MusicPlayer.stopSound();
-            //            MusicPlayer.onCompleteChat = complete;
-            //
-            //            MusicPlayer.startPlayer(mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, mMessageID);
-            //            mTimeMusic = MusicPlayer.musicTime;
-            //        }
-            //    }
-            //});
-            //
-            //musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
-            //
-            //    @Override
-            //    public boolean onTouch(View v, MotionEvent event) {
-            //
-            //        if (event.getAction() == MotionEvent.ACTION_UP) {
-            //            if (mMessageID.equals(MusicPlayer.messageId)) {
-            //                MusicPlayer.setMusicProgress(musicSeekbar.getProgress());
-            //            }
-            //        }
-            //        return false;
-            //    }
-            //});
+            LinearLayout linearLayout_39 = new LinearLayout(G.context);
+            linearLayout_39.setOrientation(VERTICAL);
+            LinearLayout.LayoutParams layout_803 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            layout_803.leftMargin = (int) G.context.getResources().getDimension(R.dimen.dp8);
+            linearLayout_39.setLayoutParams(layout_803);
+
+            LinearLayout linearLayout_632 = new LinearLayout(G.context);
+            LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            linearLayout_632.setLayoutParams(layout_842);
+
+            LinearLayout linearLayout_916 = new LinearLayout(G.context);
+            linearLayout_916.setGravity(Gravity.CENTER_HORIZONTAL);
+            linearLayout_916.setOrientation(VERTICAL);
+            LinearLayout.LayoutParams layout_6 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            linearLayout_916.setLayoutParams(layout_6);
+
+            FrameLayout frameLayout = new FrameLayout(G.context);
+            frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+
+            thumbnail = new ImageView(G.context);
+            thumbnail.setId(R.id.thumbnail);
+            LinearLayout.LayoutParams thumbnailParams = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp48), (int) G.context.getResources().getDimension(R.dimen.dp48));
+            thumbnail.setAdjustViewBounds(true);
+            thumbnail.setScaleType(ImageView.ScaleType.FIT_XY);
+            AppUtils.setImageDrawable(thumbnail, R.drawable.green_music_note);
+            thumbnail.setLayoutParams(thumbnailParams);
+
+            fileSize = new TextView(G.context);
+            fileSize.setId(R.id.fileSize);
+            fileSize.setTextAppearance(context, android.R.style.TextAppearance_Small);
+            fileSize.setGravity(BOTTOM | CENTER_HORIZONTAL);
+            fileSize.setSingleLine(true);
+            fileSize.setText("3.2 mb");
+            fileSize.setAllCaps(TRUE);
+            fileSize.setTextColor(Color.parseColor(G.textChatMusic));
+            setTextSize(fileSize, R.dimen.dp12);
+            setTypeFace(fileSize);
+            LinearLayout.LayoutParams layout_996 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            fileSize.setLayoutParams(layout_996);
+            linearLayout_632.addView(linearLayout_916);
+
+            LinearLayout linearLayout_222 = new LinearLayout(G.context);
+            linearLayout_222.setOrientation(VERTICAL);
+            linearLayout_222.setPadding((int) G.context.getResources().getDimension(R.dimen.dp8), 0, 0, 0);
+            LinearLayout.LayoutParams layout_114 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            linearLayout_222.setLayoutParams(layout_114);
+
+            fileName = new TextView(G.context);
+            fileName.setId(R.id.fileName);
+            fileName.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+            fileName.setGravity(LEFT);
+            fileName.setSingleLine(true);
+            fileName.setTextAppearance(context, android.R.style.TextAppearance_Medium);
+            fileName.setMaxWidth((int) G.context.getResources().getDimension(R.dimen.dp160));
+            fileName.setText("file_name.ext");
+            fileName.setTextColor(Color.parseColor(G.textChatMusic));
+            setTextSize(fileName, R.dimen.dp14);
+            fileName.setTypeface(G.typeface_IRANSansMobile_Bold);
+            LinearLayout.LayoutParams layout_298 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            fileName.setLayoutParams(layout_298);
+            linearLayout_222.addView(fileName);
+
+            songArtist = new TextView(G.context);
+            songArtist.setId(R.id.songArtist);
+            songArtist.setTextAppearance(context, android.R.style.TextAppearance_Small);
+            songArtist.setSingleLine(true);
+            songArtist.setText("Artist");
+            setTypeFace(songArtist);
+            songArtist.setTextColor(Color.parseColor(G.textChatMusic));
+            LinearLayout.LayoutParams layout_757 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            songArtist.setLayoutParams(layout_757);
+            linearLayout_222.addView(songArtist);
+            linearLayout_632.addView(linearLayout_222);
+            linearLayout_39.addView(linearLayout_632);
+
+            LinearLayout audioPlayerViewContainer = new LinearLayout(G.context);
+            audioPlayerViewContainer.setId(R.id.audioPlayerViewContainer);
+            audioPlayerViewContainer.setOrientation(VERTICAL);
+            LinearLayout.LayoutParams layout_435 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            audioPlayerViewContainer.setLayoutParams(layout_435);
+
+            LinearLayout linearLayout_511 = new LinearLayout(G.context);
+            linearLayout_511.setGravity(left | center);
+            LinearLayout.LayoutParams layout_353 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int) G.context.getResources().getDimension(R.dimen.dp36));
+            linearLayout_511.setLayoutParams(layout_353);
+
+            btnPlayMusic = new MaterialDesignTextView(G.context);
+            btnPlayMusic.setId(R.id.txt_play_music);
+            btnPlayMusic.setBackgroundResource(0); //txt_play_music.setBackgroundResource(@null);
+            btnPlayMusic.setTypeface(G.typeface_Fontico);
+            btnPlayMusic.setGravity(CENTER);
+            btnPlayMusic.setText(G.fragmentActivity.getResources().getString(R.string.md_play_arrow));
+            btnPlayMusic.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
+            setTextSize(btnPlayMusic, R.dimen.dp20);
+            LinearLayout.LayoutParams layout_326 = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp32), LinearLayout.LayoutParams.MATCH_PARENT);
+            btnPlayMusic.setLayoutParams(layout_326);
+            linearLayout_511.addView(btnPlayMusic);
+
+            musicSeekbar = new SeekBar(G.context);
+            musicSeekbar.setId(R.id.csla_seekBar1);
+            LinearLayout.LayoutParams layout_990 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layout_990.weight = 1;
+            layout_990.gravity = CENTER;
+            musicSeekbar.setEnabled(false);
+            musicSeekbar.setLayoutParams(layout_990);
+            musicSeekbar.setProgress(0);
+            linearLayout_511.addView(musicSeekbar);
+            audioPlayerViewContainer.addView(linearLayout_511);
+
+            txt_Timer = new TextView(G.context);
+            txt_Timer.setId(R.id.csla_txt_timer);
+            txt_Timer.setPadding(0, 0, (int) G.context.getResources().getDimension(R.dimen.dp8), 0);
+            txt_Timer.setText("00:00");
+            txt_Timer.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
+            setTextSize(txt_Timer, R.dimen.dp10);
+            setTypeFace(txt_Timer);
+            LinearLayout.LayoutParams layout_637 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layout_637.gravity = RIGHT;
+            layout_637.leftMargin = (int) G.context.getResources().getDimension(R.dimen.dp52);
+            txt_Timer.setLayoutParams(layout_637);
+            audioPlayerViewContainer.addView(txt_Timer);
+            linearLayout_39.addView(audioPlayerViewContainer);
+            audioBox.addView(linearLayout_39);
+            m_container.addView(audioBox);
+
+            LinearLayout csliwt_layout_container_message = new LinearLayout(G.context);
+            csliwt_layout_container_message.setId(R.id.csliwt_layout_container_message);
+            csliwt_layout_container_message.setOrientation(HORIZONTAL);
+            LinearLayout.LayoutParams layout_992 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp220), LinearLayout.LayoutParams.WRAP_CONTENT); // before width was -> LinearLayout.LayoutParams.MATCH_PARENT, for fix text scroll changed it
+            csliwt_layout_container_message.setLayoutParams(layout_992);
+            m_container.addView(csliwt_layout_container_message);
+
+            linearLayout_916.addView(frameLayout);
+            linearLayout_916.addView(fileSize);
+            frameLayout.addView(thumbnail);
+            progress = getProgressBar(R.dimen.dp48);
+            frameLayout.addView(progress);
+        }
+
+        @Override
+        public ImageView getThumbNailImageView() {
+            return thumbnail;
+        }
+
+        @Override
+        public MessageProgress getProgress() {
+            return progress;
         }
     }
 }
