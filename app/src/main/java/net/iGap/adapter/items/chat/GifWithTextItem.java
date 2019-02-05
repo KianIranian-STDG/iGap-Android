@@ -186,9 +186,10 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
 
         protected ReserveSpaceGifImageView image;
+        protected MessageProgress progress;
 
         public ViewHolder(View view) {
             super(view);
@@ -203,7 +204,9 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
             image.setLayoutParams(layout_758);
 
             frameLayout.addView(image);
-            frameLayout.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+            progress = getProgressBar(0);
+
+            frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
 
             m_container.addView(frameLayout);
 
@@ -215,6 +218,11 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         @Override
         public ImageView getThumbNailImageView() {
             return image;
+        }
+
+        @Override
+        public MessageProgress getProgress() {
+            return progress;
         }
     }
 }

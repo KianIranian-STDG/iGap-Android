@@ -32,6 +32,7 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
+import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MaterialDesignTextView;
@@ -348,7 +349,8 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
+        protected MessageProgress progress;
         protected ImageView thumbnail;
         protected TextView fileSize;
         protected TextView fileName;
@@ -509,12 +511,18 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             linearLayout_916.addView(frameLayout);
             linearLayout_916.addView(fileSize);
             frameLayout.addView(thumbnail);
-            frameLayout.addView(getProgressBar(R.dimen.dp48));
+            progress = getProgressBar(R.dimen.dp48);
+            frameLayout.addView(progress);
         }
 
         @Override
         public ImageView getThumbNailImageView() {
             return thumbnail;
+        }
+
+        @Override
+        public MessageProgress getProgress() {
+            return progress;
         }
     }
 }

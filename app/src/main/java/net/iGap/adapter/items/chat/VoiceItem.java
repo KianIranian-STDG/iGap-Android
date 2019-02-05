@@ -31,6 +31,7 @@ import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
+import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.LocalFileType;
@@ -284,8 +285,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
 
+        protected MessageProgress progress;
         protected ImageView thumbnail;
         //protected ImageView tic;
         protected TextView btnPlayMusic;
@@ -337,8 +339,8 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             AppUtils.setImageDrawable(thumbnail, R.drawable.microphone_icon);
             thumbnail.setLayoutParams(layout_152);
             frameLayout_161.addView(thumbnail);
-
-            frameLayout_161.addView(getProgressBar(0));
+            progress = getProgressBar(0);
+            frameLayout_161.addView(progress);
             linearLayout_153.addView(frameLayout_161);
 
             author = new TextView(G.context);
@@ -403,6 +405,11 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         @Override
         public ImageView getThumbNailImageView() {
             return thumbnail;
+        }
+
+        @Override
+        public MessageProgress getProgress() {
+            return progress;
         }
     }
 }

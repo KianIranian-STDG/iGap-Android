@@ -111,7 +111,8 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
+        protected MessageProgress progress;
         protected ReserveSpaceRoundedImageView image;
         protected TextView duration;
 
@@ -148,8 +149,8 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             layout_49.topMargin = dpToPixel(7);
             duration.setLayoutParams(layout_49);
             frameLayout_642.addView(duration);
-
-            frameLayout_642.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48), Gravity.CENTER));
+            progress = getProgressBar(0);
+            frameLayout_642.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48), Gravity.CENTER));
             m_container.addView(frameLayout_642);
             if (withText) {
                 m_container.addView(ViewMaker.getTextView());
@@ -159,6 +160,11 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         @Override
         public ImageView getThumbNailImageView() {
             return image;
+        }
+
+        @Override
+        public MessageProgress getProgress() {
+            return progress;
         }
     }
 }

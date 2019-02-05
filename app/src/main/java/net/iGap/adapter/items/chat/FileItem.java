@@ -23,6 +23,7 @@ import android.widget.TextView;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.interfaces.IMessageItem;
+import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.enums.LocalFileType;
@@ -128,10 +129,11 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
         protected TextView cslf_txt_file_name;
         protected TextView cslf_txt_file_size;
         protected ImageView thumbnail;
+        protected MessageProgress progress;
 
         public ViewHolder(View view) {
             super(view);
@@ -202,14 +204,19 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             LinearLayout.LayoutParams layout_312 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             csliwt_layout_container_message.setLayoutParams(layout_312);
             m_container.addView(csliwt_layout_container_message);
-
+            progress = getProgressBar(R.dimen.dp52);
             frameLayout.addView(thumbnail);
-            frameLayout.addView(getProgressBar(R.dimen.dp52));
+            frameLayout.addView(progress);
         }
 
         @Override
         public ImageView getThumbNailImageView() {
             return thumbnail;
+        }
+
+        @Override
+        public MessageProgress getProgress() {
+            return progress;
         }
     }
 }

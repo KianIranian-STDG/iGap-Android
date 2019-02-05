@@ -24,6 +24,7 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperRadius;
 import net.iGap.interfaces.IMessageItem;
+import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
@@ -104,8 +105,9 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
         protected ReserveSpaceRoundedImageView image;
+        protected MessageProgress progress;
 
         public ViewHolder(View view) {
             super(view);
@@ -125,12 +127,18 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
                 m_container.addView(ViewMaker.getTextView());
             }
             frameLayout.addView(image);
-            frameLayout.addView(getProgressBar(0), new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+            progress = getProgressBar(0);
+            frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
         }
 
         @Override
         public ImageView getThumbNailImageView() {
             return image;
+        }
+
+        @Override
+        public MessageProgress getProgress() {
+            return progress;
         }
     }
 }
