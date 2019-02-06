@@ -42,15 +42,15 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        AppUtils.setImageDrawable(((ImageView) holder.itemView.findViewById(R.id.image)), R.drawable.black_contact);
+        AppUtils.setImageDrawable(holder.image, R.drawable.black_contact);
     }
 
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
-        ((TextView) holder.itemView.findViewById(R.id.name)).setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-        ((TextView) holder.itemView.findViewById(R.id.name)).setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-        AppUtils.setImageDrawable(((ImageView) holder.itemView.findViewById(R.id.image)), R.drawable.green_contact);
+        holder.name.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+        holder.name.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+        AppUtils.setImageDrawable(holder.image, R.drawable.green_contact);
     }
 
     @Override
@@ -89,6 +89,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
         protected TextView name;
         protected TextView number;
+        protected ImageView image;
 
         public ViewHolder(View view) {
             super(view);
@@ -98,7 +99,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             container2.setPadding((int) G.context.getResources().getDimension(messageContainerPadding), 0, 5, 2);
             container2.setLayoutParams(layoutParamsContainer2);
 
-            ImageView image = new ImageView(G.context);
+            image = new ImageView(G.context);
             LinearLayout.LayoutParams layoutParamsImage = new LinearLayout.LayoutParams(ViewMaker.i_Dp(R.dimen.dp48), ViewMaker.i_Dp(R.dimen.dp48));
             layoutParamsImage.rightMargin = 14;
             image.setId(R.id.image);

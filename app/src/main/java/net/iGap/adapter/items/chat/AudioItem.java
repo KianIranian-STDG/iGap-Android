@@ -264,9 +264,9 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             text = mMessage.messageText;
         }
 
-        setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+        setTextIfNeeded(holder.messageView, text);
 
-        View audioBoxView = holder.itemView.findViewById(R.id.audioBox);
+        View audioBoxView = holder.audioBox;
         if (G.isDarkTheme) {
             audioBoxView.setBackgroundResource(R.drawable.green_bg_rounded_corner_dark);
         } else {
@@ -363,10 +363,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         protected SeekBar musicSeekbar;
         protected OnComplete complete;
         protected TextView txt_Timer;
+        protected LinearLayout audioBox;
 
         public ViewHolder(final View view) {
             super(view);
-            LinearLayout audioBox = new LinearLayout(G.context);
+            audioBox = new LinearLayout(G.context);
             audioBox.setId(R.id.audioBox);
             setLayoutDirection(audioBox, View.LAYOUT_DIRECTION_LTR);
             audioBox.setMinimumHeight((int) context.getResources().getDimension(R.dimen.dp130));

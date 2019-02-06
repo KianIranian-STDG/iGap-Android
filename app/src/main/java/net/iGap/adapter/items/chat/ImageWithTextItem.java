@@ -66,7 +66,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
             text = mMessage.messageText;
         }
 
-        setTextIfNeeded(holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+        setTextIfNeeded(holder.messageView, text);
 
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override

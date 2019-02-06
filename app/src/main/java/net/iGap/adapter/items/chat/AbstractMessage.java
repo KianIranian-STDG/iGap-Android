@@ -261,6 +261,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (holder instanceof ChatItemWithTextHolder) {
             ChatItemWithTextHolder withTextHolder = (ChatItemWithTextHolder) holder;
+            withTextHolder.messageView.setHasEmoji(mMessage.hasEmojiInText);
+
             int maxsize = 0;
             withTextHolder.removeButtonLayout();
             if ((type == ProtoGlobal.Room.Type.CHANNEL) || (type == ProtoGlobal.Room.Type.CHAT) && mMessage.forwardedFrom != null) {

@@ -81,7 +81,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             text = mMessage.messageText;
         }
 
-        setTextIfNeeded(holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+        setTextIfNeeded(holder.messageView, text);
 
     }
 
@@ -97,11 +97,10 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
                 holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
             } else {
 
-                MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
-                AppUtils.setProgresColor(progress.progressBar);
+                AppUtils.setProgresColor(holder.progress.progressBar);
 
-                progress.setVisibility(View.VISIBLE);
-                progress.withDrawable(R.drawable.ic_play, true);
+                holder.progress.setVisibility(View.VISIBLE);
+                holder.progress.withDrawable(R.drawable.ic_play, true);
             }
         }
     }

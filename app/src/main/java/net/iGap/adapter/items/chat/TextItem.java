@@ -54,17 +54,15 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
             text = mMessage.messageText;
         }
 
-        View msgView = holder.itemView.findViewById(R.id.messageSenderTextMessage);
         if (mMessage.hasEmojiInText) {
             if (text.length() <= 2) {
                 if (EmojiUtils.emojisCount(text) == 1) {
-                    EmojiTextViewE textViewE = (EmojiTextViewE) msgView;
-                    textViewE.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp28));
+                    holder.messageView.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp28));
                 }
             }
         }
 
-        setTextIfNeeded((TextView) msgView, text);
+        setTextIfNeeded(holder.messageView, text);
     }
 
     @Override

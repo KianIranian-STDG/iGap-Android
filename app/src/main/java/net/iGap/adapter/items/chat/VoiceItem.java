@@ -87,7 +87,6 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
         holder.musicSeekbar.setTag(mMessage.messageID);
-        //tic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
 
         holder.complete = new OnComplete() {
             @Override
