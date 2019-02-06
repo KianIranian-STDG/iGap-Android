@@ -110,7 +110,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
     private Gson gson;
-    private LinearLayout childLayout;
     private HashMap<Integer, JSONArray> buttonList;
 
     /**
@@ -217,9 +216,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
 
-                childLayout = MakeButtons.createLayout();
-                // parsedList = parsJson(mMessage.additionalData.additionalData);
-
                 gson = new GsonBuilder().create();
 
             }
@@ -265,9 +261,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (holder instanceof ChatItemWithTextHolder) {
             ChatItemWithTextHolder withTextHolder = (ChatItemWithTextHolder) holder;
-            withTextHolder.removeButtonLayout();
             int maxsize = 0;
-
+            withTextHolder.removeButtonLayout();
+            LinearLayout childLayout = MakeButtons.createLayout();
             if ((type == ProtoGlobal.Room.Type.CHANNEL) || (type == ProtoGlobal.Room.Type.CHAT) && mMessage.forwardedFrom != null) {
                 maxsize = G.maxChatBox;
             }
@@ -304,7 +300,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             }
                         }
                         withTextHolder.addButtonLayout(childLayout);
-                        childLayout = MakeButtons.createLayout();
 
                     }
                 }
