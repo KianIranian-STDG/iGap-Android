@@ -263,7 +263,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             ChatItemWithTextHolder withTextHolder = (ChatItemWithTextHolder) holder;
             int maxsize = 0;
             withTextHolder.removeButtonLayout();
-            LinearLayout childLayout = MakeButtons.createLayout();
             if ((type == ProtoGlobal.Room.Type.CHANNEL) || (type == ProtoGlobal.Room.Type.CHAT) && mMessage.forwardedFrom != null) {
                 maxsize = G.maxChatBox;
             }
@@ -286,7 +285,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             try {
                 if (buttonList != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
+
                     for (int i = 0; i < buttonList.size(); i++) {
+                        LinearLayout childLayout = MakeButtons.createLayout();
                         for (int j = 0; j < buttonList.get(i).length(); j++) {
                             try {
                                 ButtonEntity btnEntery = new ButtonEntity();
