@@ -224,7 +224,8 @@ public class OrderView extends LinearLayout {
         }
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(order.createdMicroTime+ TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
+      //  calendar.setTimeInMillis(order.createdMicroTime+ TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
+        calendar.setTimeInMillis(order.createdMicroTime);
         date.setText(RaadCommonUtils.getLocaleFullDateTime(calendar));
 
 

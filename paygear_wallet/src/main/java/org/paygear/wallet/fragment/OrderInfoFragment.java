@@ -180,7 +180,8 @@ public class OrderInfoFragment extends Fragment {
 
         KeyValue keyValue5 = new KeyValue();
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(mOrder.paidMicroTime + TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
+       // calendar.setTimeInMillis(mOrder.paidMicroTime + TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
+        calendar.setTimeInMillis(mOrder.paidMicroTime);
         keyValue5.key = getString(R.string.date_time);
         keyValue5.value = RaadCommonUtils.getLocaleFullDateTime(calendar);
         keyValues.add(keyValue5);
@@ -238,11 +239,13 @@ public class OrderInfoFragment extends Fragment {
             Calendar calendar = Calendar.getInstance();
 
             if (mOrder.createdMicroTime > 0) {
-                calendar.setTimeInMillis(mOrder.createdMicroTime + TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
+              //  calendar.setTimeInMillis(mOrder.createdMicroTime + TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
+                calendar.setTimeInMillis(mOrder.createdMicroTime);
                 items.add(new PaymentEntryListItem(getString(R.string.request_time), RaadCommonUtils.getLocaleFullDateTime(calendar), null, true));
             }
             if (mOrder.paidMicroTime > 0) {
-                calendar.setTimeInMillis(mOrder.paidMicroTime + TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
+             //   calendar.setTimeInMillis(mOrder.paidMicroTime + TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
+                calendar.setTimeInMillis(mOrder.paidMicroTime );
                 items.add(new PaymentEntryListItem(getString(R.string.settlement_time), RaadCommonUtils.getLocaleFullDateTime(calendar), null, true));
             }
 

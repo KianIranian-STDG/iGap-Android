@@ -243,7 +243,8 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
         mCreditSwitch.setTextMarginLeft(RaadCommonUtils.getPx(6, getContext()));
         mCreditSwitch.setTextMarginRight(RaadCommonUtils.getPx(6, getContext()));
         mCreditSwitch.setTextMarginCenter(RaadCommonUtils.getPx(6, getContext()));
-        mCreditSwitch.setBezierScaleRatioValue(1);;
+        mCreditSwitch.setBezierScaleRatioValue(1);
+        ;
 
         progress = view.findViewById(R.id.progress);
         progress.setOnRetryButtonListener(new View.OnClickListener() {
@@ -670,7 +671,7 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
                     } catch (Exception e) {
 
                     }
-                }else {
+                } else {
                     try {
                         mOrder.amount = Long.parseLong(mPriceText.getText().toString().replaceAll(",", ""));
                         if (mOrder.amount <= card.balance) {
@@ -851,6 +852,14 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
                 podMap.put("to", payment.account.id);
                 podMap.put("amount", payment.getPaymentPrice());
 
+                /**
+                 * # peyman
+                 * this url must be use to redirect to our app done
+                 *
+                 *  podMap.put("callback_url","our i gap url);
+                 */
+                //         podMap.put("callback_url", "");
+
                 if (payment.orderType > -1) {
                     //map.put("pre_order", true);
                     podMap.put("order_type", payment.orderType);
@@ -968,7 +977,7 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
 
                                 dismiss();
                             }
-                        },"");
+                        }, "");
                         dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
                     }
                 } else {
