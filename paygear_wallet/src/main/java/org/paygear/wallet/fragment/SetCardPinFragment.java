@@ -156,8 +156,8 @@ public class SetCardPinFragment extends Fragment {
         }
         progressBar = view.findViewById(R.id.progress);
 
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, currentPassTitle, newPassTitle, confirmPassTitle, button);
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, currentPass, newPass, confirmPass);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM, currentPassTitle, newPassTitle, confirmPassTitle, button);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_LIGHT, currentPass, newPass, confirmPass);
 
 
         confirmPass.setOnEditorActionListener(new TextView.OnEditorActionListener() {

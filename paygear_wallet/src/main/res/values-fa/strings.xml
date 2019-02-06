@@ -296,14 +296,21 @@
 
 
   <string name="Toast_time_wait">لطفاً منتظر بمانید تا :</string>
-    <string name="default_sheba_number">Default IBAN number</string>
-  <string name="default_sheba_number_message">Do you want to save this IBAN number as default IBAN number?\\n Attention! All Automatic normal cashout will use this IBAN Number until you change it,</string>
-  <string name="recover_password">Recover password</string>
-    <string name="cash_out_two_wallet_hint">Enter Cash out amount then your merchant balance will transfer to your personal wallet</string>
-  <string name="cash_to_wallet">to Personal wallet</string>
-    <string name="person">person</string>
+    <string name="default_sheba_number">شماره شبا پیش فرض</string>
+  <string name="default_sheba_number_message">آیا مایل به ذخیره این شماره به عنوان شماره شبای پیش فرض خود هستید؟\n دقت کنید! در صورت انتخاب پیشفرض از این پس تمام برداشت های عادی اتوماتیک با شماره شبا پیشفرض انجام می شود.</string>
+  <string name="recover_password">فراموشی رمز</string>
+    <string name="cash_out_two_wallet_hint">مبلغ را وارد کنید تا موجودی فروشگاه به موجودی کیف پول شخصی شما انتقال یابد.</string>
+  <string name="cash_to_wallet">کیف ‌پولی</string>
+    <string name="person">نفر</string>
   <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
-    <string name="enter_four_digit_code">Enter Four digits code that we`ve sent to your phone number</string>
-  <string name="four_digit_code">Four digit code</string>
+    <string name="enter_four_digit_code">کد شش رقمی پیامک شده را وارد کنید</string>
+  <string name="four_digit_code">کد شش رقمی پیامک شده</string>
+    <string name="show_receipt">مشاهده رسید</string>
+  <string name="reciever_name">نام گیرنده</string>
+  <string name="date_time">تاریخ و ساعت</string>
+  <string name="transaction_type">نوع تراکنش</string>
+  <string name="purchase">خرید</string>
+  <string name="remaining_balance">موجودی باقیمانده</string>
+    <string name="refound">سند اصلاح واریز  مبلغ به کیف پول</string>
 
 </resources>

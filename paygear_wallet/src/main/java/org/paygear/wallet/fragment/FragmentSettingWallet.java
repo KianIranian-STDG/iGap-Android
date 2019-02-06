@@ -117,7 +117,7 @@ public class FragmentSettingWallet extends Fragment {
             btnForgotPassword.setBackground(mDrawableSetPassword);
         }
 
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, txtForgotPassword, txtSetPassword);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM, txtForgotPassword, txtSetPassword);
 
         btnSetPassword.setOnClickListener(new View.OnClickListener() {
             @Override

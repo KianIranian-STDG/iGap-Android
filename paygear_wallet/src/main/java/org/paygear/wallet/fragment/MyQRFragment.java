@@ -92,7 +92,7 @@ public class MyQRFragment extends Fragment {
 
         ImageView qrImage = view.findViewById(R.id.image);
         TextView hint = view.findViewById(R.id.hint);
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, hint);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_LIGHT, hint);
 
         ViewCompat.setBackground(qrImage,
                 RaadCommonUtils.getRectShape(getContext(), android.R.color.white, 8, 0));

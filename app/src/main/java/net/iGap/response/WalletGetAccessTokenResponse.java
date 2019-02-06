@@ -39,7 +39,7 @@ public class WalletGetAccessTokenResponse extends MessageHandler {
         super.handler();
 
         ProtoWalletGetAccessToken.WalletGetAccessTokenResponse.Builder builder = (ProtoWalletGetAccessToken.WalletGetAccessTokenResponse.Builder) message;
-        Auth auth = new Auth(builder.getAccessToken(), "bearer");
+        Auth auth = new Auth(builder.getAccessToken(), "bearer",null);
         if (auth.getJWT() == null) {
             return;
         }

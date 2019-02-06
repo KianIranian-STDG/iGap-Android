@@ -15,15 +15,15 @@ public class SettingHelper {
 	public static String SCANNER_TIPS = "scanner_tips";
 	public static String APP_LANGUAGE = "app_language";
 	public static String SERVER_ADDRESS = "server_address";
-	
-    
+
+
 	public static void putString(Context context, String name, String value) {
-		
+
 		SharedPreferences prefs;
 		prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(name, (String) value);
-        editor.commit();
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(name, (String) value);
+		editor.commit();
 	}
 
 	public static void putStringSet(Context context, String name, Set<String> value) {
@@ -34,34 +34,34 @@ public class SettingHelper {
 		editor.putStringSet(name, value);
 		editor.commit();
 	}
-	
+
 	public static void putInt(Context context, String name, int value) {
-		
+
 		SharedPreferences prefs;
 		prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(name, value);
-        editor.commit();  
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putInt(name, value);
+		editor.commit();
 	}
-	
+
 	public static void putLong(Context context, String name, long value) {
-		
+
 		SharedPreferences prefs;
 		prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(name, value);
-        editor.commit();
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putLong(name, value);
+		editor.commit();
 	}
-	
+
 	public static void putBoolean(Context context, String name, boolean value) {
-		
+
 		SharedPreferences prefs;
 		prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(name, value);
-        editor.commit();
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putBoolean(name, value);
+		editor.commit();
 	}
-	
+
 	public static String getString(Context context, String name, String defaultValue) {
 		SharedPreferences prefs;
 		prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -71,7 +71,7 @@ public class SettingHelper {
 		} catch (Exception e) {
 			value = defaultValue;
 		}
-        return value;
+		return value;
 	}
 
 	public static Set<String> getStringSet(Context context, String name, Set<String> defaultValue) {
@@ -85,7 +85,7 @@ public class SettingHelper {
 		}
 		return value;
 	}
-	
+
 	public static int getInt(Context context, String name, int defaultValue) {
 		SharedPreferences prefs;
 		prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -95,7 +95,7 @@ public class SettingHelper {
 		} catch (Exception e) {
 			value = defaultValue;
 		}
-        return value;
+		return value;
 	}
 
 	public static long getLong(Context context, String name, long defaultValue) {
@@ -107,9 +107,9 @@ public class SettingHelper {
 		} catch (Exception e) {
 			value = defaultValue;
 		}
-        return value;	
+		return value;
 	}
-	
+
 	public static boolean getBoolean(Context context, String name, boolean defaultValue) {
 		SharedPreferences prefs;
 		prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -119,15 +119,15 @@ public class SettingHelper {
 		} catch (Exception e) {
 			value = defaultValue;
 		}
-        return value;	
+		return value;
 	}
 
 	public static void remove(Context context, String name) {
 		SharedPreferences prefs;
 		prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.remove(name);
-        editor.commit();    
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.remove(name);
+		editor.commit();
 	}
-	
+
 }

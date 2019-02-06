@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -33,12 +34,14 @@ import com.squareup.picasso.Picasso;
 
 import org.paygear.wallet.R;
 import org.paygear.wallet.RaadApp;
+import org.paygear.wallet.RefreshLayout;
 import org.paygear.wallet.WalletActivity;
 import org.paygear.wallet.model.Card;
 import org.paygear.wallet.model.MerchantsResult;
 import org.paygear.wallet.model.Payment;
 import org.paygear.wallet.model.PaymentAuth;
 import org.paygear.wallet.model.SearchedAccount;
+import org.paygear.wallet.utils.SettingHelper;
 import org.paygear.wallet.utils.Utils;
 import org.paygear.wallet.web.Web;
 import org.paygear.wallet.widget.BankCardView;
@@ -64,7 +67,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class CardsFragment extends Fragment implements OnFragmentInteraction {
+public class CardsFragment extends Fragment implements OnFragmentInteraction, RefreshLayout {
 
     private static final int COLLAPSE = 60;
 
@@ -109,6 +112,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cards, container, false);
         mBinding = FragmentCardsBinding.bind(view);
+        WalletActivity.refreshLayout = this;
         return view;
     }
 
@@ -190,6 +194,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
 
     }
 
+
     @Override
     public void onFragmentResult(Fragment fragment, Bundle bundle) {
         if (fragment instanceof AddCardFragment ||
@@ -229,8 +234,8 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         //appBarTitle.setGravity(Gravity.CENTER);
         appBarTitle.setTextColor(Color.WHITE);
         appBarTitle.setText(getResources().getString(R.string.wallet));
-        appBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-        appBarTitle.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        appBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        appBarTitle.setTypeface(Typefaces.get(context, Typefaces.IRAN_MEDIUM));
         titleLayout.addView(appBarTitle);
 
         titleLayout.setOnClickListener(new View.OnClickListener() {
@@ -419,17 +424,27 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         Web.getInstance().getWebService().getAccountInfo(Auth.getCurrentAuth().getId(), 1).enqueue(new Callback<Account>() {
             @Override
             public void onResponse(Call<Account> call, Response<Account> response) {
-                Boolean success = Web.checkResponse(CardsFragment.this, call, response);
+                WebBase.checkResponseInsideActivity((AppCompatActivity) getActivity(), call, response);
+                Boolean success = response.isSuccessful();
                 if (success == null)
                     return;
 
                 if (success) {
                     RaadApp.me = response.body();
+                    SettingHelper.putString(getActivity().getApplicationContext(), "mobile", RaadApp.me.mobile);
+//                    loadCards();
+                    GetMerchantsList(Auth.getCurrentAuth().getJWT());
+                    //   logUser(response);
+
+                } else {
+                    progress.setStatus(-1, getString(R.string.error));
                 }
             }
 
             @Override
             public void onFailure(Call<Account> call, Throwable t) {
+
+                progress.setStatus(-1, getString(R.string.network_error));
 
             }
         });
@@ -509,8 +524,8 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         }
 
 
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, unit, cashableTitle, cashableBalance, giftTitle, giftBalance);
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, balanceTitle, balance, cashout, charge);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_LIGHT, unit, cashableTitle, cashableBalance, giftTitle, giftBalance);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM, balanceTitle, balance, cashout, charge);
 
 
         Drawable mDrawable = getResources().getDrawable(R.drawable.button_blue_selector_24dp);
@@ -596,8 +611,8 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         title2Params.weight = 1.0f;
         title2.setLayoutParams(title2Params);
         title2.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
-        title2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-        title2.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        title2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        title2.setTypeface(Typefaces.get(context, Typefaces.IRAN_LIGHT));
         title2.setText(R.string.my_cards);
         layout.addView(title2);
 
@@ -658,8 +673,8 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         textView.setLayoutParams(textViewParams);
         textView.setGravity(Gravity.CENTER);
         textView.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        textView.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_REGULAR));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        textView.setTypeface(Typefaces.get(context, Typefaces.IRAN_LIGHT));
         textView.setText(R.string.click_here_for_adding_card);
         cardView.addView(textView);
 
@@ -707,4 +722,13 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction {
         });
     }
 
+    @Override
+    public void setRefreshLayout(boolean refreshLayout) {
+        try {
+            if (mRefreshLayout != null)
+                load();
+        } catch (Exception e) {
+        }
+
+    }
 }

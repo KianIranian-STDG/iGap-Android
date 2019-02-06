@@ -9,10 +9,13 @@ import java.io.Serializable;
  */
 public class Card implements Serializable {
 
-    @SerializedName("club_id")
-    public String clubId;
     @SerializedName("card_number")
     public String cardNumber;
+
+    @SerializedName("club_id")
+    public String clubId;
+
+
     @SerializedName("token")
     public String token;
     @SerializedName("bank_code")
@@ -31,15 +34,21 @@ public class Card implements Serializable {
 
     @SerializedName("default")
     public boolean isDefault;
+
     @SerializedName("protected")
     public boolean isProtected;
+
     @SerializedName("cash_in")
     public boolean isCashIn;
+
     @SerializedName("cash_out")
     public boolean isCashOut;
+
     @SerializedName("cashable_balance")
     public long cashOutBalance;
+
     public long balance;
+
 
 
 
@@ -54,6 +63,7 @@ public class Card implements Serializable {
     }
 
     public boolean isRaadCard() {
-        return bankCode == 69;
+        return (bankCode == 69 && cardNumber.equals("پیگیر کارت"));
     }
 }
+

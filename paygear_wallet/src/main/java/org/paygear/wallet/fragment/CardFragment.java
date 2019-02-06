@@ -114,7 +114,7 @@ public class CardFragment extends Fragment {
         if (mPayment != null) {
             appBar.setTitle(getString(R.string.payment));
         } else {
-            appBar.setTitle(BankUtils.getBank(getContext(), mCard.bankCode).getName());
+            appBar.setTitle(BankUtils.getBank(getContext(), mCard.bankCode).getName(getActivity()));
         }
 
         cardView = view.findViewById(R.id.card_view);
@@ -157,9 +157,9 @@ public class CardFragment extends Fragment {
             paymentPriceText.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
         }
 
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, defaultCardTitle, button,
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM, defaultCardTitle, button,
                 pinTitle, cvv2Title, paymentPriceText);
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, pinText, cvv2Text);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_LIGHT, pinText, cvv2Text);
 
         int cardHeight = BankCardView.getDefaultCardHeight(getContext());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(

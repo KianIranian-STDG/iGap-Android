@@ -135,9 +135,11 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
             }
         }, false);
 
+        appBar.showBack();
+
         balanceText = view.findViewById(R.id.balance);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            balanceText.setBackgroundColor(Color.parseColor(WalletActivity.accentColor));
+            balanceText.setBackgroundColor(Color.parseColor(WalletActivity.primaryColor));
         }
         scanText = view.findViewById(R.id.scan);
         contentLayout = view.findViewById(R.id.content_layout);
@@ -149,8 +151,8 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         ViewCompat.setBackground(progressLayout, RaadCommonUtils.getRectShape(getContext(),
                 android.R.color.white, 8, 0));
 
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, balanceText);
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, scanText);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM, balanceText);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_LIGHT, scanText);
 
         boolean hasCamera = getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
 
@@ -163,7 +165,8 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
             Toast.makeText(getContext(), R.string.no_camera_found, Toast.LENGTH_SHORT).show();
         }
 
-        updateAppBar();
+        //updateAppBar();
+
         if (RaadApp.paygearCard != null) {
             balanceText.setText(getString(R.string.paygear_card_balance) + "\n" +
                     RaadCommonUtils.formatPrice(RaadApp.paygearCard.balance, true));
@@ -421,8 +424,8 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         //appBarTitle.setGravity(Gravity.CENTER);
         appBarTitle.setTextColor(Color.WHITE);
-        appBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-        appBarTitle.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        appBarTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        appBarTitle.setTypeface(Typefaces.get(context, Typefaces.IRAN_LIGHT));
         titleLayout.addView(appBarTitle);
 
     }
@@ -449,8 +452,8 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
         tipTextParams.gravity = gravity;
         tipText.setLayoutParams(tipTextParams);
         tipText.setTextColor(Color.WHITE);
-        tipText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        tipText.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_REGULAR));
+        tipText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        tipText.setTypeface(Typefaces.get(context, Typefaces.IRAN_LIGHT));
         ViewCompat.setBackground(tipText, RaadCommonUtils.getRectShape(context, R.color.tip_text_back, 8, 0));
         tipText.setPadding(dp16, dp8, dp16, dp8);
         tipText.setText(text);

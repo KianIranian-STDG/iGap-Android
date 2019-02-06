@@ -13,21 +13,27 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import org.paygear.wallet.R;
+import org.paygear.wallet.RaadApp;
 import org.paygear.wallet.WalletActivity;
 import org.paygear.wallet.model.Order;
 import org.paygear.wallet.model.PaymentEntryListItem;
+import org.paygear.wallet.model.PaymentResult;
 import org.paygear.wallet.web.Web;
 import org.paygear.wallet.widget.OrderView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import ir.radsense.raadcore.app.RaadToolBar;
 import ir.radsense.raadcore.model.Account;
 import ir.radsense.raadcore.model.Auth;
+import ir.radsense.raadcore.model.KeyValue;
 import ir.radsense.raadcore.utils.RaadCommonUtils;
+import ir.radsense.raadcore.utils.Typefaces;
 import ir.radsense.raadcore.widget.ProgressLayout;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,6 +48,7 @@ public class OrderInfoFragment extends Fragment {
 
     private String mOrderId;
     private Order mOrder;
+    private Button showReceiptButton;
 
     private PaymentEntryListAdapter adapter;
 
@@ -68,19 +75,20 @@ public class OrderInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_order_info, container, false);
-        ViewGroup rootView = view.findViewById(R.id.rootView);
+        /*ViewGroup rootView = view.findViewById(R.id.rootView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
-        }
+        }*/
         RaadToolBar appBar = view.findViewById(R.id.app_bar);
-        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape,true);
-        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor),PorterDuff.Mode.SRC_IN));
+        appBar.setToolBarBackgroundRes(R.drawable.app_bar_back_shape, true);
+        appBar.getBack().getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
         appBar.showBack();
         appBar.setTitle(getString(R.string.order_info));
 
         mOrderView = view.findViewById(R.id.order_view);
+        showReceiptButton = view.findViewById(R.id.show_receipt_button);
+        showReceiptButton.setTypeface(Typefaces.get(getContext(), Typefaces.IRAN_MEDIUM));
 
         mList = view.findViewById(R.id.list);
         progress = view.findViewById(R.id.progress);
@@ -101,7 +109,7 @@ public class OrderInfoFragment extends Fragment {
 
     private void loadOrder() {
         progress.setStatus(0);
-        Web.getInstance().getWebService().getSingleOrder(Auth.getCurrentAuth().getId(), mOrderId).enqueue(new Callback<Order>() {
+        Web.getInstance().getWebService().getSingleOrder(RaadApp.selectedMerchant == null ? Auth.getCurrentAuth().getId() : RaadApp.selectedMerchant.get_id(), mOrderId).enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
                 Boolean success = Web.checkResponse(OrderInfoFragment.this, call, response);
@@ -130,11 +138,79 @@ public class OrderInfoFragment extends Fragment {
 
         mOrderView.setOrder(mOrder);
 
+        showReceiptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showReceipt(mOrder);
+            }
+        });
+
         if (adapter == null) {
             setAdapter();
         } else {
             mList.setAdapter(adapter);
         }
+    }
+
+    private void showReceipt(Order mOrder) {
+        PaymentResult paymentResult = new PaymentResult();
+        paymentResult.amount = mOrder.amount;
+        paymentResult.invoiceNumber = mOrder.invoiceNumber;
+        ArrayList<KeyValue> keyValues = new ArrayList<>();
+
+        KeyValue keyValue1 = new KeyValue();
+        keyValue1.key = getString(R.string.price_rial);
+        keyValue1.value = RaadCommonUtils.formatPrice(mOrder.getTotalPrice(), true);
+        keyValues.add(keyValue1);
+
+        KeyValue keyValue2 = new KeyValue();
+        keyValue2.key = getString(R.string.reciever_name);
+        keyValue2.value = mOrder.receiver.name;
+        keyValues.add(keyValue2);
+
+        KeyValue keyValue3 = new KeyValue();
+        keyValue3.key = getString(R.string.trace_no);
+        keyValue3.value = String.valueOf(mOrder.traceNumber);
+        keyValues.add(keyValue3);
+
+        KeyValue keyValue4 = new KeyValue();
+        keyValue4.key = getString(R.string.reference_code);
+        keyValue4.value = String.valueOf(mOrder.invoiceNumber);
+        keyValues.add(keyValue4);
+
+        KeyValue keyValue5 = new KeyValue();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(mOrder.paidMicroTime + TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
+        keyValue5.key = getString(R.string.date_time);
+        keyValue5.value = RaadCommonUtils.getLocaleFullDateTime(calendar);
+        keyValues.add(keyValue5);
+
+//                                            KeyValue keyValue6=new KeyValue();
+//                                            keyValue6.key=getString(R.string.payable_price);
+//                                            keyValue6.value=String.valueOf(lastOrderDetail.paidAmount);
+//                                            keyValues.add(keyValue6);
+
+        KeyValue keyValue7 = new KeyValue();
+        keyValue7.key = getString(R.string.transaction_type);
+        keyValue7.value = getString(R.string.purchase);
+        keyValues.add(keyValue7);
+
+        paymentResult.result = keyValues.toArray(new KeyValue[0]);
+
+
+        paymentResult.traceNumber = mOrder.traceNumber;
+
+        final PaymentResultDialog dialog = PaymentResultDialog.newInstance(paymentResult);
+        dialog.setListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog.dismiss();
+
+            }
+        },"");
+        if (getActivity() != null)
+            dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
     }
 
     private void setAdapter() {
@@ -145,21 +221,28 @@ public class OrderInfoFragment extends Fragment {
             items.add(new PaymentEntryListItem(getString(R.string.destination_card), mOrder.targetCardNumber, null, true));
         if (!TextUtils.isEmpty(mOrder.targetShebaNumber))
             items.add(new PaymentEntryListItem(getString(R.string.destination_sheba_number), mOrder.targetShebaNumber, null, true));
+        if (mOrder.sender != null && mOrder.sender.id.equals(Auth.getCurrentAuth().getId()) && mOrder.sender.balance != null) {
+            items.add(new PaymentEntryListItem(getString(R.string.remaining_balance), RaadCommonUtils.formatPrice(mOrder.sender.balance, true), null, true));
+        }
 
+        if (mOrder.receiver != null && mOrder.receiver.id.equals(Auth.getCurrentAuth().getId()) && mOrder.receiver.balance != null) {
+            items.add(new PaymentEntryListItem(getString(R.string.remaining_balance), RaadCommonUtils.formatPrice(mOrder.receiver.balance, true), null, true));
+        }
         if (mOrder.traceNumber > 0)
             items.add(new PaymentEntryListItem(getString(R.string.trace_no), String.valueOf(mOrder.traceNumber), null, true));
         if (mOrder.invoiceNumber > 0)
             items.add(new PaymentEntryListItem(getString(R.string.reference_code), String.valueOf(mOrder.invoiceNumber), null, true));
 
+
         if (mOrder.orderType == Order.ORDER_TYPE_CASH_OUT) {
             Calendar calendar = Calendar.getInstance();
 
             if (mOrder.createdMicroTime > 0) {
-                calendar.setTimeInMillis(mOrder.createdMicroTime);
+                calendar.setTimeInMillis(mOrder.createdMicroTime + TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
                 items.add(new PaymentEntryListItem(getString(R.string.request_time), RaadCommonUtils.getLocaleFullDateTime(calendar), null, true));
             }
             if (mOrder.paidMicroTime > 0) {
-                calendar.setTimeInMillis(mOrder.paidMicroTime);
+                calendar.setTimeInMillis(mOrder.paidMicroTime + TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings());
                 items.add(new PaymentEntryListItem(getString(R.string.settlement_time), RaadCommonUtils.getLocaleFullDateTime(calendar), null, true));
             }
 

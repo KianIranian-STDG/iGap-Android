@@ -99,7 +99,7 @@ public class BankCardView extends CardView {
         //mTopCardNumberText.setGravity(Gravity.CENTER);
         mTopCardNumberText.setTextColor(ContextCompat.getColor(context, R.color.primary_text));
         mTopCardNumberText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        mTopCardNumberText.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        mTopCardNumberText.setTypeface(Typefaces.get(context, Typefaces.IRAN_BOLD));
         //mTopCardNumberText.setPadding(dp8, 0, dp8, 0);
         logoLayout.addView(mTopCardNumberText);
 
@@ -109,7 +109,7 @@ public class BankCardView extends CardView {
         //mTitleText.setGravity(Gravity.CENTER);
         mTitleText.setTextColor(ContextCompat.getColor(context, R.color.primary_text));
         mTitleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        mTitleText.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        mTitleText.setTypeface(Typefaces.get(context, Typefaces.IRAN_BOLD));
         //mTitleText.setPadding(dp8, 0, dp8, 0);
         logoLayout.addView(mTitleText);
 
@@ -141,7 +141,7 @@ public class BankCardView extends CardView {
         centerCardNumberLayout.setGravity(Gravity.CENTER);
         centerCardNumberLayout.setTextColor(Color.BLACK);
         centerCardNumberLayout.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-        centerCardNumberLayout.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        centerCardNumberLayout.setTypeface(Typefaces.get(context, Typefaces.IRAN_BOLD));
 
 
         mCardNumberText1 = new TextView(context);
@@ -152,7 +152,7 @@ public class BankCardView extends CardView {
         mCardNumberText1.setGravity(Gravity.CENTER);
         mCardNumberText1.setTextColor(Color.BLACK);
         mCardNumberText1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-        mCardNumberText1.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        mCardNumberText1.setTypeface(Typefaces.get(context, Typefaces.IRAN_BOLD));
         cardNumberLayout.addView(mCardNumberText1);
 
         mCardNumberText2 = new TextView(context);
@@ -162,8 +162,8 @@ public class BankCardView extends CardView {
         mCardNumberText2.setLayoutParams(cardNum2Params);
         mCardNumberText2.setGravity(Gravity.CENTER);
         mCardNumberText2.setTextColor(Color.BLACK);
-        mCardNumberText2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-        mCardNumberText2.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        mCardNumberText2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        mCardNumberText2.setTypeface(Typefaces.get(context, Typefaces.IRAN_MEDIUM));
         cardNumberLayout.addView(mCardNumberText2);
 
         mCardNumberText3 = new TextView(context);
@@ -173,8 +173,8 @@ public class BankCardView extends CardView {
         mCardNumberText3.setLayoutParams(cardNum3Params);
         mCardNumberText3.setGravity(Gravity.CENTER);
         mCardNumberText3.setTextColor(Color.BLACK);
-        mCardNumberText3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-        mCardNumberText3.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        mCardNumberText3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        mCardNumberText3.setTypeface(Typefaces.get(context, Typefaces.IRAN_MEDIUM));
         cardNumberLayout.addView(mCardNumberText3);
 
         mCardNumberText4 = new TextView(context);
@@ -184,8 +184,8 @@ public class BankCardView extends CardView {
         mCardNumberText4.setLayoutParams(cardNum4Params);
         mCardNumberText4.setGravity(Gravity.CENTER);
         mCardNumberText4.setTextColor(Color.BLACK);
-        mCardNumberText4.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-        mCardNumberText4.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        mCardNumberText4.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        mCardNumberText4.setTypeface(Typefaces.get(context, Typefaces.IRAN_MEDIUM));
         cardNumberLayout.addView(mCardNumberText4);
 
     }
@@ -207,7 +207,7 @@ public class BankCardView extends CardView {
                     .into(mBackImage);
         }
 
-        mTitleText.setText(bankInfo.getName());
+        mTitleText.setText(bankInfo.getName(context));
         mLogoImage.setImageResource(bankInfo.getLogoRes());
         if (mCard.bankCode != 69) {
 

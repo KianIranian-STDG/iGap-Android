@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 
 import org.paygear.wallet.fragment.PaymentHistoryFragment;
 import org.paygear.wallet.model.Card;
@@ -57,8 +59,8 @@ public class RaadApp extends Application {
         WebBase.isDebug = true;
         WebBase.onResponseListener = new OnWebResponseListener() {
             @Override
-            public boolean onResponse(Context context, Response response) {
-                /*if (context instanceof NavigationBarActivity) {
+            public boolean onResponse(Context context, Response response, Fragment fragment) {
+                 /*if (context instanceof NavigationBarActivity) {
                     if (response.code() == 401 || response.code() == 403) {
                         Utils.signOutAndGoLogin((NavigationBarActivity) context);
                         return false;
@@ -66,6 +68,12 @@ public class RaadApp extends Application {
                 }*/
                 return true;
             }
+
+            @Override
+            public boolean onActivityResponse(Context context, Response response, AppCompatActivity appCompatActivity) {
+                return false;
+            }
+
         };
 
         Raad.init(getApplicationContext());

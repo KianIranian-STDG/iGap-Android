@@ -253,7 +253,7 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
             }
         });
 
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD,
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM,
                 mTitleText, mSubtitleText, mNameText, mCountText, unit, mPriceText, button, mCardsTitle);
 
         button.setOnClickListener(this);

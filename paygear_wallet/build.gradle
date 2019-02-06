@@ -42,5 +42,6 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
     implementation 'com.nightonke:jellytogglebutton:1.0.2'
-    implementation project(':raadcore')
+    implementation 'me.zhanghai.android.customtabshelper:library:1.0.3'
+    implementation project(':paygearcore')
 }

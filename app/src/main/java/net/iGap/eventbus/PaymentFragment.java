@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -53,6 +54,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import ir.radsense.raadcore.app.NavigationBarActivity;
 import ir.radsense.raadcore.model.Auth;
 import ir.radsense.raadcore.web.PostRequest;
 import okhttp3.MediaType;
@@ -194,7 +196,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                     new android.os.Handler(getContext().getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            Web.getInstance().getWebService().getCredit(Auth.getCurrentAuth().getId()).enqueue(new Callback<ArrayList<Card>>() {
+                            Web.getInstance().getWebService().getCards(null, false).enqueue(new Callback<ArrayList<Card>>() {
                                 @Override
                                 public void onResponse(Call<ArrayList<Card>> call, Response<ArrayList<Card>> response) {
                                     if (progressDialog != null) progressDialog.dismiss();
@@ -329,6 +331,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         Map<String, String> finalInfoMap = new HashMap<>();
         finalInfoMap.put("token", paymentAuth.token);
         finalInfoMap.put("card_info", cardDataRSA);
+
 //        DialogMaker.makeDialog(getContext()).showDialog();
         showProgress();
         Web.getInstance().getWebService().pay(PostRequest.getRequestBody(finalInfoMap)).enqueue(new Callback<PaymentResult>() {
@@ -374,11 +377,14 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         Map<String, Object> map = new HashMap();
         map.put("t", System.currentTimeMillis());
         map.put("c", mCard.token);
-        map.put("bc", mCard.bankCode);
+        map.put("bc",mCard.bankCode);
         map.put("type", mCard.type);
         if (!TextUtils.isEmpty(cvv2)) {
             map.put("cv", cvv2);
         }
+
+        if (!TextUtils.isEmpty(cvv2))
+            map.put("cv", cvv2);
 
         if (pin2 != null) {
             map.put("p2", pin2);
@@ -632,6 +638,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             @Override
             public void onClick(View view) {
                 if (!TextUtils.isEmpty(newPassWord.getText().toString().trim())) {
+                  //  initPay(payment, pin, clubCard);
                     startPay(paymentAuth, newPassWord.getText().toString());
                     dialog.dismiss();
                 } else {
@@ -642,7 +649,101 @@ public class PaymentFragment extends BaseFragment implements EventListener {
 
         dialog.show();
     }
+ /*   private void initPay(final Payment payment, final String payGearPin, final Card clubCard) {
 
+        RequestBody requestBody;
+        if (merchantCard == null & RaadApp.selectedMerchant == null) {
+            if (payment == null && mOrder != null) {
+                Map<String, String> podMap = null;
+
+                Map<String, Object> map = new HashMap<>();
+                map.put("token", mOrder.id);
+                map.put("credit", mCreditSwitch.isChecked() && mOrder.amount <= RaadApp.paygearCard.balance);
+                map.put("transaction_type", 4);
+
+                requestBody = PostRequest.getRequestBody(map);
+            } else {
+
+
+                Map<String, Object> podMap = new HashMap<>();
+                podMap.put("to", payment.account.id);
+                podMap.put("amount", payment.getPaymentPrice());
+
+                if (payment.orderType > -1) {
+                    //map.put("pre_order", true);
+                    podMap.put("order_type", payment.orderType);
+                }
+
+                podMap.put("credit", payment.isCredit);
+
+                podMap.put("transaction_type", 4);
+                if (mTransport != null) {
+                    podMap.put("transport_id", mTransport.id);
+                }
+                if (qrResponse != null) {
+                    podMap.put("qr_code", qrResponse.sequenceNumber);
+                }
+
+                requestBody = PostRequest.getRequestBody(podMap);
+            }
+        } else {
+            Map<String, Object> map = new HashMap<>();
+            map.put("to", Auth.getCurrentAuth().getId());
+            map.put("from", RaadApp.selectedMerchant.get_id());
+            map.put("amount", mPrice);
+            map.put("credit", true);
+            requestBody = PostRequest.getRequestBody(map);
+        }
+        Web.getInstance().getWebService().initPayment(requestBody).enqueue(new Callback<PaymentAuth>() {
+            @Override
+            public void onResponse(Call<PaymentAuth> call, Response<PaymentAuth> response) {
+                Boolean success = Web.checkResponse(AccountPaymentDialog.this, call, response);
+                if (success == null)
+                    return;
+                setLoading(false);
+
+                if (success) {
+                    Payment newPayment = new Payment();
+                    if (payment != null) {
+                        payment.paymentAuth = response.body();
+                        newPayment = payment;
+                    } else {
+                        newPayment.paymentAuth = response.body();
+                    }
+
+                    if (mCreditSwitch.isChecked()) {
+                        if (merchantCard == null) {
+                            String cardDataRSA = RSAUtils.getCardDataRSA(newPayment, clubCard == null ? RaadApp.paygearCard : clubCard, payGearPin, null);
+                            startPay(cardDataRSA, newPayment.paymentAuth.token);
+                        } else {
+                            String cardDataRSA = RSAUtils.getCardDataRSA(newPayment, merchantCard, payGearPin, null);
+                            startPay(cardDataRSA, newPayment.paymentAuth.token);
+                        }
+                    } else {
+                        if (newPayment.paymentAuth.IPGUrl != null && !newPayment.paymentAuth.IPGUrl.replaceAll(" ", "").equals("")) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse(newPayment.paymentAuth.IPGUrl));
+                            startActivity(intent);
+                        } else {
+                            ((NavigationBarActivity) getActivity()).replaceFragment(
+                                    CardsFragment.newInstance(newPayment), "CardsFragment", true);
+                            dismiss();
+                        }
+                    }
+                } else {
+                    setLoading(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PaymentAuth> call, Throwable t) {
+                if (Web.checkFailureResponse(AccountPaymentDialog.this, call, t)) {
+                    setLoading(false);
+                }
+            }
+        });
+
+    }*/
     private void showProgress() {
         progressDialog = new MaterialDialog.Builder(fragmentActivity)
                 .content(R.string.please_wait)

@@ -94,7 +94,7 @@ public class CashOutFragment extends Fragment {
                         ViewGroup.LayoutParams.WRAP_CONTENT));
                 textView.setTextColor(Color.WHITE);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                textView.setTypeface(Typefaces.get(getContext(), Typefaces.IRAN_YEKAN_REGULAR));
+                textView.setTypeface(Typefaces.get(getContext(), Typefaces.IRAN_MEDIUM));
 
                 tab.setCustomView(textView);
             }

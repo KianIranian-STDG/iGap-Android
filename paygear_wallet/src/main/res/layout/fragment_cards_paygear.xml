@@ -20,15 +20,15 @@
             android:id="@+id/imgQrCode"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_action_ok"
-            android:padding="8dp"/>
+            android:src="@drawable/qr_logo"
+            android:padding="5dp"/>
         <TextView
             android:id="@+id/balance_title"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="#de000000"
-            android:textSize="22sp"
+            android:textSize="19sp"
             android:text="@string/paygear_balance"
             android:paddingRight="8dp"/>
 

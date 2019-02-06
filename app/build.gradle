@@ -157,7 +157,7 @@ dependencies {
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.2.0'
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
     implementation 'com.nightonke:jellytogglebutton:1.0.2'
-    implementation project(':raadcore')
+    implementation project(':paygearcore')
 }
 
 configurations.all {

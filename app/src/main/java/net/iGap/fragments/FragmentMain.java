@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -1116,65 +1117,74 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
     @Override
     public void isDeprecated() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                new MaterialDialog.Builder(getActivity())
-                        .cancelable(false)
-                        .title(R.string.new_version_alert).titleGravity(GravityEnum.CENTER)
-                        .titleColor(Color.parseColor("#f44336"))
-                        .content(R.string.deprecated)
-                        .contentGravity(GravityEnum.CENTER)
-                        .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive(new MaterialDialog.SingleButtonCallback() {
+        try {
+            if (G.fragmentActivity.hasWindowFocus()) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    public void run() {
+                        new MaterialDialog.Builder(getActivity())
+                                .cancelable(false)
+                                .title(R.string.new_version_alert).titleGravity(GravityEnum.CENTER)
+                                .titleColor(Color.parseColor("#f44336"))
+                                .content(R.string.deprecated)
+                                .contentGravity(GravityEnum.CENTER)
+                                .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                       // HelperUrl.openBrowser("http://d.igap.net/update");
-                        String url = "http://d.igap.net/update";
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        startActivity(i);
-
-
+                                // HelperUrl.openBrowser("http://d.igap.net/update");
+                                String url = "http://d.igap.net/update";
+                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                i.setData(Uri.parse(url));
+                                startActivity(i);
+                            }
+                        })
+                                .show();
                     }
-                })
-                        .show();
+                });
             }
-        });
+        } catch (Exception e) {
+        }
 
     }
 
     @Override
     public void isUpdateAvailable() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                new MaterialDialog.Builder(G.fragmentActivity)
-                        .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
-                        .titleGravity(GravityEnum.CENTER)
-                        .buttonsGravity(GravityEnum.CENTER)
-                        .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
-                        .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative(new MaterialDialog.SingleButtonCallback() {
+        try {
+            if (G.fragmentActivity.hasWindowFocus()) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    public void run() {
+                        new MaterialDialog.Builder(G.fragmentActivity)
+                                .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
+                                .titleGravity(GravityEnum.CENTER)
+                                .buttonsGravity(GravityEnum.CENTER)
+                                .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
+                                .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                        dialog.dismiss();
-                    }
-                }).positiveText(R.string.startUpdate).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                dialog.dismiss();
+                            }
+                        }).positiveText(R.string.startUpdate).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                       // HelperUrl.openBrowser("http://d.igap.net/update");
-                        String url = "http://d.igap.net/update";
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        startActivity(i);
-                        dialog.dismiss();
+                                // HelperUrl.openBrowser("http://d.igap.net/update");
+                                String url = "http://d.igap.net/update";
+                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                i.setData(Uri.parse(url));
+                                startActivity(i);
+                                dialog.dismiss();
+                            }
+                        })
+                                .show();
                     }
-                })
-                        .show();
+                });
+
             }
-        });
+        } catch (Exception e) {
+        }
     }
 
     public enum MainType {
