@@ -199,27 +199,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void bindView(final VH holder, List<Object> payloads) {
         super.bindView(holder, payloads);
 
-        if (holder instanceof ProgressWaiting.ViewHolder || holder instanceof UnreadMessage.ViewHolder || holder instanceof LogWallet.ViewHolder || holder instanceof LogItem.ViewHolder || holder instanceof TimeItem.ViewHolder) {
-            return;
-        }
-
         ChatItemHolder mHolder;
         if (holder instanceof ChatItemHolder)
             mHolder = (ChatItemHolder) holder;
         else
             return;
-
-        if (mMessage.additionalData != null) {
-            if (mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
-
-                /** create Parent view */
-
-                buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
-
-                gson = new GsonBuilder().create();
-
-            }
-        }
 
         mHolder.mainContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -286,29 +270,32 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
 
             try {
-                if (buttonList != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
+                if (mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
+                    buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
+                    gson = new GsonBuilder().create();
 
-                    for (int i = 0; i < buttonList.size(); i++) {
-                        LinearLayout childLayout = MakeButtons.createLayout();
-                        for (int j = 0; j < buttonList.get(i).length(); j++) {
-                            try {
-                                ButtonEntity btnEntery = new ButtonEntity();
-                                btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
-                                }.getType());
-                                btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                                childLayout = MakeButtons.addButtons(btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
-                                //  childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(),this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                    if (buttonList != null) {
+                        for (int i = 0; i < buttonList.size(); i++) {
+                            LinearLayout childLayout = MakeButtons.createLayout();
+                            for (int j = 0; j < buttonList.get(i).length(); j++) {
+                                try {
+                                    ButtonEntity btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
+                                    }.getType());
+                                    btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
+                                    childLayout = MakeButtons.addButtons(btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
+                                    //  childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(),this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
+                            withTextHolder.addButtonLayout(childLayout);
                         }
-                        withTextHolder.addButtonLayout(childLayout);
-
                     }
                 }
 
             } catch (Exception e) {
             }
+            ((LinearLayout.LayoutParams) ((LinearLayout) withTextHolder.messageView.getParent()).getLayoutParams()).gravity = AndroidUtils.isTextRtl(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessage() : mMessage.messageText) ? Gravity.RIGHT : Gravity.LEFT;
         }
 
         /**
@@ -447,14 +434,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (roomMessage != null) {
             prepareAttachmentIfNeeded(holder, roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
         }
-
-        if (holder instanceof ChatItemWithTextHolder) {
-            TextView messageText = ((ChatItemWithTextHolder) holder).messageView;
-            if (messageText.getParent() instanceof LinearLayout) {
-                ((LinearLayout.LayoutParams) ((LinearLayout) messageText.getParent()).getLayoutParams()).gravity = AndroidUtils.isTextRtl(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessage() : mMessage.messageText) ? Gravity.RIGHT : Gravity.LEFT;
-            }
-        }
-
 
         /**
          * show vote layout for channel otherwise hide layout also get message state for channel
