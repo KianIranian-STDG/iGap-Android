@@ -106,16 +106,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public IMessageItem messageClickListener;
     public StructMessageInfo mMessage;
     public boolean directionalBased;
-    //protected Realm realmChat;
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
-    private Gson gson;
-    private HashMap<Integer, JSONArray> buttonList;
     CharSequence myText;
-    RealmRoomMessage roomMessage;
-    RealmRoom realmRoom;
-    RealmChannelExtra realmChannelExtra;
-    RealmRoom realmRoomForwardedFrom;
+    private RealmRoomMessage roomMessage;
+    private RealmRoom realmRoom;
+    private RealmChannelExtra realmChannelExtra;
+    private RealmRoom realmRoomForwardedFrom;
     /**
      * add this prt for video player
      */
@@ -182,8 +179,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         this.mMessage = message;
 
         if ((mMessage.forwardedFrom != null)) {
+            long messageId = mMessage.forwardedFrom.getMessageId();
+            if (mMessage.forwardedFrom.getMessageId() < 0) {
+                messageId = messageId * (-1);
+            }
             realmRoomForwardedFrom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-            realmChannelExtra = getRealmChat().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, mMessage.forwardedFrom.getMessageId()).findFirst();
+            realmChannelExtra = getRealmChat().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+        } else {
+            realmRoomForwardedFrom = null;
+            realmChannelExtra = null;
         }
 
         realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
@@ -288,8 +292,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             try {
                 if (mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
-                    buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
-                    gson = new GsonBuilder().create();
+                    HashMap<Integer, JSONArray> buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
+                    Log.d("bagi", mMessage.additionalData.additionalData);
+                    Log.d("bagiSize", buttonList.size() + "");
+                    Gson gson = new GsonBuilder().create();
 
                     if (buttonList != null) {
                         for (int i = 0; i < buttonList.size(); i++) {
@@ -582,17 +588,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         if ((mMessage.forwardedFrom != null)) {
-
-            ProtoGlobal.Room.Type roomType = null;
-            if (realmRoomForwardedFrom != null) {
-                roomType = realmRoomForwardedFrom.getType();
-            }
-
-            if (roomType != null && roomType == ProtoGlobal.Room.Type.CHANNEL) {
-                long messageId = mMessage.forwardedFrom.getMessageId();
-                if (mMessage.forwardedFrom.getMessageId() < 0) {
-                    messageId = messageId * (-1);
-                }
+            if (realmRoomForwardedFrom != null && realmRoomForwardedFrom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                  if (realmChannelExtra != null) {
                     mHolder.txt_vote_up.setText(realmChannelExtra.getThumbsUp());
                     mHolder.txt_vote_down.setText(realmChannelExtra.getThumbsDown());

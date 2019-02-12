@@ -5,12 +5,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import net.iGap.G;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.module.EmojiTextViewE;
 
 public class ChatItemWithTextHolder extends ChatItemHolder {
     private LinearLayout layoutMessageContainer;
     EmojiTextViewE messageView;
+    LinearLayout BtnContainer;
 
     public ChatItemWithTextHolder(View view) {
         super(view);
@@ -20,6 +22,14 @@ public class ChatItemWithTextHolder extends ChatItemHolder {
         messageView = ViewMaker.makeTextViewMessage();
         layoutMessageContainer = ViewMaker.getTextView();
         layoutMessageContainer.addView(messageView);
+
+        BtnContainer = new LinearLayout(G.context);
+        BtnContainer.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams layout_327 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        BtnContainer.setLayoutParams(layout_327);
+
+        layoutMessageContainer.addView(BtnContainer);
+
         messageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,29 +66,11 @@ public class ChatItemWithTextHolder extends ChatItemHolder {
     }
 
     public void addButtonLayout(LinearLayout view) {
-        layoutMessageContainer.addView(view);
+        BtnContainer.addView(view);
     }
 
     public void removeButtonLayout() {
-        for (int i = 1; i < layoutMessageContainer.getChildCount(); i++) {
-            View child = layoutMessageContainer.getChildAt(i);
-            if (child instanceof ViewGroup) {
-                removeAllChildViews((ViewGroup) child);
-            }
-            layoutMessageContainer.removeView(child);
-
-        }
-    }
-
-    private void removeAllChildViews(ViewGroup viewGroup) {
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            View child = viewGroup.getChildAt(i);
-            if (child instanceof ViewGroup) {
-                removeAllChildViews(((ViewGroup) child));
-            } else {
-                viewGroup.removeView(child);
-            }
-        }
+        BtnContainer.removeAllViews();
     }
 
 }
