@@ -56,7 +56,7 @@ public class RealmStickers extends RealmObject {
             realmStickers.setCreatedBy(createdBy);
             realmStickers.setFavorite(isFavorite);
 
-            HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, RequestFileDownload.TypeDownload.STICKER);
+            HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER);
 
             RealmList<RealmStickersDetails> realmStickersDetails = new RealmList<>();
             for (StructItemSticker itemSticker : stickers) {

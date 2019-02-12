@@ -48,7 +48,7 @@ public class RealmStickersDetails extends RealmObject {
             realmStickersDetails.setSort(sort);
             realmStickersDetails.setGroupId(groupId);
 
-            HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, RequestFileDownload.TypeDownload.STICKER_DETAIL);
+            HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER_DETAIL);
         }
 
         realm.close();
