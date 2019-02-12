@@ -112,6 +112,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private Gson gson;
     private HashMap<Integer, JSONArray> buttonList;
     CharSequence myText;
+    RealmRoomMessage roomMessage;
+    RealmRoom realmRoom;
+    RealmChannelExtra realmChannelExtra;
+    RealmRoom realmRoomForwardedFrom;
     /**
      * add this prt for video player
      */
@@ -176,6 +180,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     public AbstractMessage setMessage(StructMessageInfo message) {
         this.mMessage = message;
+
+        if ((mMessage.forwardedFrom != null)) {
+            realmRoomForwardedFrom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+            realmChannelExtra = getRealmChat().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, mMessage.forwardedFrom.getMessageId()).findFirst();
+        }
+
+        realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
+        roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
+
         if (mMessage.forwardedFrom != null) {
             myText = mMessage.forwardedFrom.getMessage();
         } else {
@@ -334,7 +347,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (!mMessage.isTimeOrLogMessage()) {
-            RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
             /**
              * check failed state ,because if is failed we want show to user even is in channel
              */
@@ -434,7 +446,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
 
-        RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
         if (roomMessage != null) {
             prepareAttachmentIfNeeded(holder, roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
         }
@@ -452,8 +463,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         } else if ((type == ProtoGlobal.Room.Type.CHAT)) {
             if (mMessage.forwardedFrom != null) {
                 if (mMessage.forwardedFrom.getAuthorRoomId() > 0) {
-                    RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-                    if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                    if (realmRoomForwardedFrom != null && realmRoomForwardedFrom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                         showVote(holder, getRealmChat());
 
                         if (mMessage.isSenderMe()) {
@@ -483,9 +493,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private void getChannelMessageState() {
         if ((mMessage.forwardedFrom != null)) {
             ProtoGlobal.Room.Type roomType = null;
-            RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-            if (realmRoom != null) {
-                roomType = realmRoom.getType();
+            if (realmRoomForwardedFrom != null) {
+                roomType = realmRoomForwardedFrom.getType();
             }
             if ((mMessage.forwardedFrom != null) && (roomType == ProtoGlobal.Room.Type.CHANNEL)) {
                 /**
@@ -575,9 +584,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if ((mMessage.forwardedFrom != null)) {
 
             ProtoGlobal.Room.Type roomType = null;
-            RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-            if (realmRoom != null) {
-                roomType = realmRoom.getType();
+            if (realmRoomForwardedFrom != null) {
+                roomType = realmRoomForwardedFrom.getType();
             }
 
             if (roomType != null && roomType == ProtoGlobal.Room.Type.CHANNEL) {
@@ -585,8 +593,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (mMessage.forwardedFrom.getMessageId() < 0) {
                     messageId = messageId * (-1);
                 }
-                RealmChannelExtra realmChannelExtra = getRealmChat().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
-                if (realmChannelExtra != null) {
+                 if (realmChannelExtra != null) {
                     mHolder.txt_vote_up.setText(realmChannelExtra.getThumbsUp());
                     mHolder.txt_vote_down.setText(realmChannelExtra.getThumbsDown());
                     mHolder.txt_views_label.setText(realmChannelExtra.getViewsLabel());
@@ -865,7 +872,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 if (type == ProtoGlobal.Room.Type.CHANNEL) {
-                    RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
                     if (realmRoom != null) {
                         replyFrom.setText(realmRoom.getTitle());
                     }
@@ -1012,30 +1018,29 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             break;
                     }
                 } else {
-                    RealmRoom realmRoom1 = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-                    if (realmRoom1 != null) {
+                    if (realmRoomForwardedFrom != null) {
 
-                        switch (realmRoom1.getType()) {
+                        switch (realmRoomForwardedFrom.getType()) {
                             case CHANNEL:
-                                if (realmRoom1.getChannelRoom() != null && realmRoom1.getChannelRoom().getUsername() != null) {
-                                    mMessage.username = realmRoom1.getChannelRoom().getUsername();
+                                if (realmRoomForwardedFrom.getChannelRoom() != null && realmRoomForwardedFrom.getChannelRoom().getUsername() != null) {
+                                    mMessage.username = realmRoomForwardedFrom.getChannelRoom().getUsername();
                                 } else {
                                     mMessage.username = holder.itemView.getResources().getString(R.string.private_channel);
                                 }
 
                                 break;
                             case GROUP:
-                                mMessage.username = realmRoom1.getGroupRoom().getUsername();
+                                mMessage.username = realmRoomForwardedFrom.getGroupRoom().getUsername();
                                 break;
                         }
 
-                        if (RealmRoom.needUpdateRoomInfo(realmRoom1.getId())) {
-                            if (!updateForwardInfo.containsKey(realmRoom1.getId())) {
-                                updateForwardInfo.put(realmRoom1.getId(), mMessage.messageID);
+                        if (RealmRoom.needUpdateRoomInfo(realmRoomForwardedFrom.getId())) {
+                            if (!updateForwardInfo.containsKey(realmRoomForwardedFrom.getId())) {
+                                updateForwardInfo.put(realmRoomForwardedFrom.getId(), mMessage.messageID);
                             }
                         }
 
-                        txtForwardFrom.setText(realmRoom1.getTitle());
+                        txtForwardFrom.setText(realmRoomForwardedFrom.getTitle());
                         if (mMessage.isSenderMe()) {
                             txtForwardFrom.setTextColor(Color.parseColor(G.textBubble));
                         } else {
