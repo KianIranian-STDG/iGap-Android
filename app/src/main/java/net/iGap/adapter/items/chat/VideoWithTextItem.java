@@ -10,6 +10,8 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -18,6 +20,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -89,12 +95,13 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        if (holder.image != null && holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
+        if (holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
             if (fileType == LocalFileType.THUMBNAIL) {
-
-                G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-
-                holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.RGB_565;
+                DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
+                G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
+                        new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
             } else {
 
                 AppUtils.setProgresColor(holder.progress.progressBar);
@@ -127,7 +134,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             FrameLayout.LayoutParams layout_679 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             image.setLayoutParams(layout_679);
             image.setScaleType(ImageView.ScaleType.FIT_XY);
-            image.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
+            image.setCornerRadius(HelperRadius.computeRadius());
             frameLayout_642.addView(image);
 
             duration = new TextView(G.context);

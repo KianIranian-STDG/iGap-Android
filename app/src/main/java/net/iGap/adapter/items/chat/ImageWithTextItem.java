@@ -10,6 +10,8 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -18,6 +20,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -30,6 +36,7 @@ import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 
+import java.io.InputStream;
 import java.util.List;
 
 import io.realm.Realm;
@@ -93,10 +100,12 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
     @Override
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
-
-        if (holder.image != null && holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
-            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-            holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
+        if (holder.image.getTag() != null && holder.image.getTag().equals(tag)) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.RGB_565;
+            DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
+            G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
+                    new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
         }
     }
 
@@ -118,10 +127,9 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
             image = new ReserveSpaceRoundedImageView(G.context);
             image.setId(R.id.thumbnail);
             image.setScaleType(ImageView.ScaleType.FIT_XY);
-            image.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
             LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             image.setLayoutParams(layout_758);
-
+            image.setCornerRadius(HelperRadius.computeRadius());
             m_container.addView(frameLayout);
             if (withText) {
                 setLayoutMessageContainer();

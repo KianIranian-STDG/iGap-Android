@@ -2879,6 +2879,9 @@ public class FragmentChat extends BaseFragment
         recyclerView.setItemAnimator(null);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
       /*  icon = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.ic_launcher_foreground);*/
