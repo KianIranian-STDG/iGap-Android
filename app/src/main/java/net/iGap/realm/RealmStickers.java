@@ -47,6 +47,7 @@ public class RealmStickers extends RealmObject {
             realmStickers.setRefId(refId);
             realmStickers.setName(name);
             realmStickers.setAvatarToken(avatarToken);
+            realmStickers.setUri(HelperDownloadSticker.createPathFile(avatarToken , avatarName ));
             realmStickers.setAvatarSize(avatarSize);
             realmStickers.setAvatarName(avatarName);
             realmStickers.setPrice(price);
@@ -70,22 +71,6 @@ public class RealmStickers extends RealmObject {
 
         return realmStickers;
     }
-
-    public static void setAllDataIsDeleted() {
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<RealmStickers> realmStickers = realm.where(RealmStickers.class).findAll();
-        for (RealmStickers item : realmStickers) {
-            item.setFavorite(false);
-        }
-        realm.close();
-    }
-
-//    public static void removeandUpdateRealm() {
-//        Realm realm = Realm.getDefaultInstance();
-//        RealmResults<RealmStickers> realmStickers = realm.where(RealmStickers.class).equalTo("isDeleted", true).findAll();
-//        realmStickers.deleteAllFromRealm();
-//        realm.close();
-//    }
 
     public static List<com.vanniktech.emoji.sticker.struct.StructGroupSticker> getAllStickers(boolean isFavorite) {
         List<com.vanniktech.emoji.sticker.struct.StructGroupSticker> stickers = new ArrayList<>();

@@ -21,33 +21,10 @@ public class HelperDownloadSticker {
 
         try {
             String filePath = "";
-
             if (G.onStickerDownloaded == null)
                 G.onStickerDownloaded = new OnStickerDownloaded() {
                     @Override
                     public void onStickerDownloaded(String filePath, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, RequestFileDownload.TypeDownload type, int progress) {
-
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                String _newPath = filePath.replace(G.DIR_TEMP, G.DIR_STICKER);
-                                try {
-                                    AndroidUtils.cutFromTemp(filePath, _newPath);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                                switch (type) {
-                                    case STICKER:
-                                        RealmStickers.updateUri(token, _newPath);
-                                        break;
-                                    case STICKER_DETAIL:
-                                        RealmStickersDetails.updateUriStickersDetails(token, _newPath);
-                                        break;
-                                }
-                            }
-                        }, 200);
 
                     }
 
@@ -56,12 +33,22 @@ public class HelperDownloadSticker {
                     }
                 };
 
-            filePath = AndroidUtils.getFilePathWithCashId(token, extention, G.DIR_TEMP, false);
+            filePath = createPathFile(token, extention);
             new RequestFileDownload().download(token, 0, (int) avatarSize, selector, new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, token, filePath, selector, avatarSize, 0, type));
 
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String createPathFile(String token, String extension) {
+
+        String _mimeType = ".png";
+        int index = extension.lastIndexOf(".");
+        if (index >= 0) {
+            _mimeType = extension.substring(index);
+        }
+        return G.DIR_STICKER + "/" + token + _mimeType;
     }
 
 
