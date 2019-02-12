@@ -1,10 +1,10 @@
 package net.iGap.helper.emoji.api;
 
-import net.iGap.helper.emoji.struct.StructSticker;
+import com.vanniktech.emoji.sticker.struct.StructSticker;
 
-import okhttp3.RequestBody;
+import net.iGap.helper.emoji.struct.StructStickerResult;
+
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -21,10 +21,10 @@ import retrofit2.http.Path;
 public interface APIEmojiService {
 
     @POST("/stickers/{id}/favorite")
-    Call<String> addSticker(@Path("id") long groupId);
+    Call<StructStickerResult> addSticker(@Path("id") String groupId);
 
     @POST("/stickers/{id}/favorite")
-    Call<String> removeSticker(@Path("id") long groupId);
+    Call<StructStickerResult> removeSticker(@Path("id") String groupId);
 
     @GET("/stickers/favorite")
     Call<StructSticker> getFavoritSticker();

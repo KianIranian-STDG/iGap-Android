@@ -9,33 +9,20 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.emoji.api.APIEmojiService;
-import net.iGap.helper.emoji.api.ApiEmojiUtils;
-import net.iGap.helper.emoji.struct.StructItemSticker;
-import net.iGap.helper.emoji.struct.StructSticker;
-import net.iGap.interfaces.OnDownload;
 import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.proto.ProtoFileDownload;
 
-import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.

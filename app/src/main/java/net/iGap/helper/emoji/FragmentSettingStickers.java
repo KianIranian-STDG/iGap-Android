@@ -19,19 +19,22 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
+
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.emoji.api.APIEmojiService;
 import net.iGap.helper.emoji.api.ApiEmojiUtils;
-import net.iGap.helper.emoji.struct.StructGroupSticker;
-import net.iGap.helper.emoji.struct.StructSticker;
+import net.iGap.helper.emoji.struct.StructStickerResult;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.realm.RealmStickers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -48,8 +51,8 @@ public class FragmentSettingStickers extends BaseFragment {
     private APIEmojiService mAPIService;
     private AdapterSettingPage adapterSettingPage;
     private List<StructGroupSticker> data;
+    List<StructGroupSticker> stickerList = new ArrayList<>();
     private ProgressBar progressBar;
-    List<StructGroupSticker> stickerList;
 
     public FragmentSettingStickers() {
         // Required empty public constructor
@@ -69,22 +72,18 @@ public class FragmentSettingStickers extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_stickers, container, false);
+        return inflater.inflate(R.layout.fragment_remove_stickers, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-//        getDataStickers();
-
-        if (getArguments() != null) {
-            stickerList = (List<StructGroupSticker>) getArguments().getSerializable("GROUP_ID");
-        }
-
+        stickerList = data = RealmStickers.getAllStickers(true);
         progressBar = view.findViewById(R.id.progress_stricker);
-        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+        if (stickerList == null) stickerList = new ArrayList<>();
+        mAPIService = ApiEmojiUtils.getAPIService();
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_sticker_ripple_txtBack);
         rippleBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +129,8 @@ public class FragmentSettingStickers extends BaseFragment {
             if (!capitalCities.containsKey(item.getAvatarToken())) {
                 capitalCities.put(item.getAvatarToken(), item);
             }
-            G.imageLoader.displayImage(AndroidUtils.suitablePath(item.getUri()) ,holder.imgSticker);
+            if (item.getUri() == null) return;
+            G.imageLoader.displayImage(AndroidUtils.suitablePath(item.getUri()), holder.imgSticker);
             holder.txtName.setText(item.getName());
             holder.txtCount.setText(item.getStickers().size() + " " + "Stickers");
         }
@@ -141,8 +141,9 @@ public class FragmentSettingStickers extends BaseFragment {
             return mData.size();
         }
 
-        public void updateAdapter(List<StructGroupSticker> data) {
-            this.mData = data;
+        public void updateAdapter() {
+            this.mData = null;
+            this.mData = RealmStickers.getAllStickers(true);
             notifyDataSetChanged();
         }
 
@@ -166,44 +167,59 @@ public class FragmentSettingStickers extends BaseFragment {
                         new HelperFragment(FragmentDetailStickers.newInstance(mData.get(getAdapterPosition()).getStickers())).setReplace(false).load();
                     }
                 });
-                txtRemove.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AlertDialog.Builder builder;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
-                        } else {
-                            builder = new AlertDialog.Builder(context);
+
+                if (progressBar.getVisibility() == View.GONE)
+                    txtRemove.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            progressBar.setVisibility(View.VISIBLE);
+
+                            AlertDialog.Builder builder;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                            } else {
+                                builder = new AlertDialog.Builder(context);
+                            }
+                            builder.setTitle("Remove Sticker")
+                                    .setMessage("Are you sure you want to remove this stickers?")
+                                    .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            mAPIService.removeSticker(mData.get(getAdapterPosition()).getId()).enqueue(new Callback<StructStickerResult>() {
+                                                @Override
+                                                public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
+
+                                                    progressBar.setVisibility(View.GONE);
+                                                    if (response.body() != null && response.body().isSuccess()) {
+                                                        Log.i("CCCCCC", "onResponse: " + response.body().isSuccess());
+                                                        RealmStickers.updateFavorite(mData.get(getAdapterPosition()).getAvatarToken(), false);
+                                                        mData.remove(getAdapterPosition());
+                                                        updateAdapter();
+                                                        FragmentChat.onUpdateSticker.update();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<StructStickerResult> call, Throwable t) {
+                                                    progressBar.setVisibility(View.GONE);
+
+                                                    Log.i("CCCCCC", "onFailure: " + t.getMessage());
+                                                }
+                                            });
+                                        }
+                                    })
+                                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
                         }
-                        builder.setTitle("Remove Sticker")
-                                .setMessage("Are you sure you want to remove this stickers?")
-                                .setPositiveButton("ADD", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        mAPIService.removeSticker(itemView.getId()).enqueue(new Callback<String>() {
-                                            @Override
-                                            public void onResponse(Call<String> call, Response<String> response) {
-
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<String> call, Throwable t) {
-
-                                            }
-                                        });
-                                    }
-                                })
-                                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                })
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
-                    }
-                });
+                    });
             }
         }
     }

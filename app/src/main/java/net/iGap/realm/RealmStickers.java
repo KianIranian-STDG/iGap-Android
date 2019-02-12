@@ -1,9 +1,9 @@
 package net.iGap.realm;
 
 
+import com.vanniktech.emoji.sticker.struct.StructItemSticker;
+
 import net.iGap.helper.emoji.HelperDownloadSticker;
-import net.iGap.helper.emoji.struct.StructGroupSticker;
-import net.iGap.helper.emoji.struct.StructItemSticker;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.request.RequestFileDownload;
 
@@ -31,12 +31,13 @@ public class RealmStickers extends RealmObject {
     private int sort;
     private boolean approved;
     private long createdBy;
+    private boolean isFavorite;
     private RealmList<RealmStickersDetails> realmStickersDetails;
 
 
-    public static RealmStickers put(long createdAt, String st_id, long refId, String name, String avatarToken, long avatarSize, String avatarName, long price, boolean isVip, int sort, boolean approved, long createdBy, List<StructItemSticker> stickers) {
-        Realm realm = Realm.getDefaultInstance();
+    public static RealmStickers put(long createdAt, String st_id, long refId, String name, String avatarToken, long avatarSize, String avatarName, long price, boolean isVip, int sort, boolean approved, long createdBy, List<StructItemSticker> stickers, boolean isFavorite) {
 
+        Realm realm = Realm.getDefaultInstance();
         RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo("avatarToken", avatarToken).findFirst();
 
         if (realmStickers == null) {
@@ -53,6 +54,7 @@ public class RealmStickers extends RealmObject {
             realmStickers.setSort(sort);
             realmStickers.setApproved(approved);
             realmStickers.setCreatedBy(createdBy);
+            realmStickers.setFavorite(isFavorite);
 
             HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.SMALL_THUMBNAIL, RequestFileDownload.TypeDownload.STICKER);
 
@@ -69,16 +71,30 @@ public class RealmStickers extends RealmObject {
         return realmStickers;
     }
 
-
-
-    public static List<StructGroupSticker> getStructGroupSticker() {
-        List<StructGroupSticker> stickers = new ArrayList<>();
-
+    public static void setAllDataIsDeleted() {
         Realm realm = Realm.getDefaultInstance();
         RealmResults<RealmStickers> realmStickers = realm.where(RealmStickers.class).findAll();
+        for (RealmStickers item : realmStickers) {
+            item.setFavorite(false);
+        }
+        realm.close();
+    }
+
+//    public static void removeandUpdateRealm() {
+//        Realm realm = Realm.getDefaultInstance();
+//        RealmResults<RealmStickers> realmStickers = realm.where(RealmStickers.class).equalTo("isDeleted", true).findAll();
+//        realmStickers.deleteAllFromRealm();
+//        realm.close();
+//    }
+
+    public static List<com.vanniktech.emoji.sticker.struct.StructGroupSticker> getAllStickers(boolean isFavorite) {
+        List<com.vanniktech.emoji.sticker.struct.StructGroupSticker> stickers = new ArrayList<>();
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<RealmStickers> realmStickers = realm.where(RealmStickers.class).equalTo(RealmStickersFields.IS_FAVORITE, isFavorite).findAll();
 
         for (RealmStickers item : realmStickers) {
-            StructGroupSticker itemSticker = new StructGroupSticker();
+            com.vanniktech.emoji.sticker.struct.StructGroupSticker itemSticker = new com.vanniktech.emoji.sticker.struct.StructGroupSticker();
 
             itemSticker.setCreatedAt(item.getCreatedAt());
             itemSticker.setId(item.st_id);
@@ -93,11 +109,11 @@ public class RealmStickers extends RealmObject {
             itemSticker.setSort(item.sort);
             itemSticker.setCreatedBy(item.createdBy);
 
-            List<StructItemSticker> stickerDetails = new ArrayList<>();
+            List<com.vanniktech.emoji.sticker.struct.StructItemSticker> stickerDetails = new ArrayList<>();
 
             for (RealmStickersDetails it : item.getRealmStickersDetails()) {
 
-                StructItemSticker itemSticker1 = new StructItemSticker();
+                com.vanniktech.emoji.sticker.struct.StructItemSticker itemSticker1 = new com.vanniktech.emoji.sticker.struct.StructItemSticker();
                 itemSticker1.setId(it.getSt_id());
                 itemSticker1.setRefId(it.getRefId());
                 itemSticker1.setName(it.getName());
@@ -131,6 +147,22 @@ public class RealmStickers extends RealmObject {
             });
         }
 
+        realm.close();
+
+        return realmStickers;
+    }
+
+    public static RealmStickers updateFavorite(String token, boolean isFavorite) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmStickers realmStickers = realm.where(RealmStickers.class).equalTo("avatarToken", token).findFirst();
+        if (realmStickers != null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realmStickers.setFavorite(isFavorite);
+                }
+            });
+        }
         realm.close();
 
         return realmStickers;
@@ -256,4 +288,11 @@ public class RealmStickers extends RealmObject {
         this.realmStickersDetails = realmStickersDetails;
     }
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
 }

@@ -1401,5 +1401,6 @@
     <string name="startUpdate">update</string>
     <string name="sticker">Sticker</string>
     <string name="add_sticker">Add Sticker</string>
+    <string name="remove_sticker">Remove Sticker</string>
 
 </resources>

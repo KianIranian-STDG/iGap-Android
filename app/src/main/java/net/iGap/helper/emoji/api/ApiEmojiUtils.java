@@ -14,7 +14,7 @@ public class ApiEmojiUtils {
     private ApiEmojiUtils() {
     }
 
-    public static final String BASE_URL = "http://192.168.10.75:1337/";
+    public static final String BASE_URL = "https://sticker.igap.net/";
 //    public static final String BASE_URL = "https://postman-echo.com/";
 
     public static APIEmojiService getAPIService() {

@@ -93,8 +93,15 @@ import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
+import com.vanniktech.emoji.listeners.OnOpenPageStickerListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
+import com.vanniktech.emoji.listeners.OnStickerListener;
+import com.vanniktech.emoji.listeners.OnUpdateStickerListener;
+import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
+import com.vanniktech.emoji.sticker.struct.StructItemSticker;
+import com.vanniktech.emoji.sticker.struct.StructSticker;
+
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -144,10 +151,9 @@ import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
 import net.iGap.helper.emoji.FragmentAddStickers;
-import net.iGap.helper.emoji.api.APIEmojiService;
+import net.iGap.helper.emoji.FragmentSettingStickers;
+import net.iGap.helper.emoji.OnUpdateSticker;
 import net.iGap.helper.emoji.api.ApiEmojiUtils;
-import net.iGap.helper.emoji.struct.StructGroupSticker;
-import net.iGap.helper.emoji.struct.StructSticker;
 import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IDispatchTochEvent;
@@ -396,7 +402,8 @@ public class FragmentChat extends BaseFragment
     private Bitmap icon;
     private boolean isRepley = false;
     private boolean swipeBack = false;
-    private List<StructGroupSticker> data;
+    public static List<StructGroupSticker> data;
+
 
     /**
      * *************************** common method ***************************
@@ -445,7 +452,7 @@ public class FragmentChat extends BaseFragment
     private SearchHash searchHash;
     private MessagesAdapter<AbstractMessage> mAdapter;
     private ProtoGlobal.Room.Type chatType;
-    private EmojiPopup emojiPopup;
+    private static EmojiPopup emojiPopup;
     private GroupChatRole groupRole;
     private ChannelChatRole channelRole;
     private PopupWindow popupWindow;
@@ -569,6 +576,7 @@ public class FragmentChat extends BaseFragment
     boolean isAnimateStart = false;
     boolean isScrollEnd = false;
     private ArrayList<StructGroupSticker> stickerArrayList = new ArrayList<>();
+    public static OnUpdateSticker onUpdateSticker;
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -3397,14 +3405,22 @@ public class FragmentChat extends BaseFragment
                     initEmoji = true;
                     setUpEmojiPopup();
                 }
-
-                getStickerFromServer();
-
                 emojiPopup.toggle();
 
-                new HelperFragment(FragmentAddStickers.newInstance()).setReplace(false).load();
+                if (data != null) {
+                    emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
+                }
             }
         });
+
+        onUpdateSticker = new OnUpdateSticker() {
+            @Override
+            public void update() {
+
+                data = null;
+                data = RealmStickers.getAllStickers(true);
+            }
+        };
 
         edtChat.addTextChangedListener(new TextWatcher() {
             @Override
@@ -3452,21 +3468,43 @@ public class FragmentChat extends BaseFragment
         //realm.close();
     }
 
-    private void getStickerFromServer() {
+    private static void getStickerFromServer() {
         ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
             @Override
             public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
 
-                data = response.body().getData();
+                if (response.body() != null) {
+                    if (response.body().getOk() && response.body().getData().size() > 0){
+                        data = null;
+                        setStickerToRealm(response.body().getData(), true);
+                        data = RealmStickers.getAllStickers(true);
+                        if (data != null) {
+                            emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
+                        }
+                    }
 
-
+                }
             }
 
             @Override
             public void onFailure(Call<StructSticker> call, Throwable t) {
-
             }
         });
+    }
+
+    public static void setStickerToRealm(List<StructGroupSticker> mData, boolean isFavorite) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmStickers.setAllDataIsDeleted();
+                for (StructGroupSticker item : mData) {
+                    RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), isFavorite);
+                }
+//                RealmStickers.removeandUpdateRealm();
+            }
+        });
+        realm.close();
     }
 
 
@@ -5959,11 +5997,44 @@ public class FragmentChat extends BaseFragment
                     public void onKeyboardClose() {
                         emojiPopup.dismiss();
                     }
+                }).setOnStickerListener(new OnStickerListener() {
+                    @Override
+                    public void onItemSticker(StructItemSticker structItemSticker) {
+                        Log.i("CCCCC", "onStickerPath: " + structItemSticker);
+
+                    }
+
+                })
+                .setOnUpdateSticker(new OnUpdateStickerListener() {
+                    @Override
+                    public void onUpdateStickerPath(ArrayList<StructGroupSticker> categoryStickerList) {
+
+                    }
+
+                    @Override
+                    public void onRemoveSticker(String token) {
+                    }
+                })
+                .setOpenPageSticker(new OnOpenPageStickerListener() {
+                    @Override
+                    public void addSticker(String page) {
+                        new HelperFragment(FragmentAddStickers.newInstance()).setReplace(false).load();
+                    }
+
+                    @Override
+                    public void openSetting(ArrayList<StructGroupSticker> stickerList) {
+                        new HelperFragment(FragmentSettingStickers.newInstance(data)).setReplace(false).load();
+
+                    }
                 })
                 .setBackgroundColor(Color.parseColor(BackgroundColor))
                 .setIconColor(Color.parseColor(iconColor))
                 .setDividerColor(Color.parseColor(dividerColor))
                 .build(edtChat);
+
+        if (data == null) {
+            getStickerFromServer();
+        }
 
     }
 

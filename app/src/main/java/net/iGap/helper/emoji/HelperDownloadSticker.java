@@ -37,7 +37,6 @@ public class HelperDownloadSticker {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                                Log.i("CCCCCCCCCC", " type: " + type);
 
                                 switch (type) {
                                     case STICKER:
@@ -48,13 +47,12 @@ public class HelperDownloadSticker {
                                         break;
                                 }
                             }
-                        }, 1000);
+                        }, 200);
 
                     }
 
                     @Override
                     public void onError(int major, Object identity) {
-                        Log.i("CCCCCCCCCC", " onStickerDownloaded onError: " + major);
                     }
                 };
 
