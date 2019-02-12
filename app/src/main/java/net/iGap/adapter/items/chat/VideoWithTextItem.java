@@ -66,14 +66,10 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
 
         super.bindView(holder, payloads);
 
-        String text = "";
-
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
                 holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.forwardedFrom.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true)));
             }
-
-            text = mMessage.forwardedFrom.getMessage();
         } else {
             if (mMessage.attachment != null) {
 
@@ -84,10 +80,9 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
                     holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + ""));
                 }
             }
-            text = mMessage.messageText;
         }
 
-        setTextIfNeeded(holder.messageView, text);
+        setTextIfNeeded(holder.messageView);
 
     }
 

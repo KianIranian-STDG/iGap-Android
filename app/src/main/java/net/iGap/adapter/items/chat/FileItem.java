@@ -67,24 +67,19 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        String text = "";
-
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
                 holder.cslf_txt_file_name.setText(mMessage.forwardedFrom.getAttachment().getName());
                 holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
             }
-            text = mMessage.forwardedFrom.getMessage();
         } else {
             if (mMessage.attachment != null) {
                 holder.cslf_txt_file_name.setText(mMessage.attachment.name);
                 holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
             }
-
-            text = mMessage.messageText;
         }
 
-        setTextIfNeeded(holder.messageView, text);
+        setTextIfNeeded(holder.messageView);
 
         RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(mMessage.messageID)).findFirst());
         if (roomMessage != null) {

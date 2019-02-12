@@ -47,22 +47,15 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
     public void bindView(final ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        String text;
-        if (mMessage.forwardedFrom != null) {
-            text = mMessage.forwardedFrom.getMessage();
-        } else {
-            text = mMessage.messageText;
-        }
-
         if (mMessage.hasEmojiInText) {
-            if (text.length() <= 2) {
-                if (EmojiUtils.emojisCount(text) == 1) {
+            if (myText.length() <= 2) {
+                if (EmojiUtils.emojisCount((String) myText) == 1) {
                     holder.messageView.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp28));
                 }
             }
         }
 
-        setTextIfNeeded(holder.messageView, text);
+        setTextIfNeeded(holder.messageView);
     }
 
     @Override

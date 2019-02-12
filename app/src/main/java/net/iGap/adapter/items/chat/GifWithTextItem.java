@@ -109,15 +109,7 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         holder.image.setTag(getCacheId(mMessage));
         super.bindView(holder, payloads);
 
-        String text = "";
-
-        if (mMessage.forwardedFrom != null) {
-            text = mMessage.forwardedFrom.getMessage();
-        } else {
-            text = mMessage.messageText;
-        }
-
-        setTextIfNeeded(holder.messageView, text);
+        setTextIfNeeded(holder.messageView);
 
 
         holder.progress.setOnLongClickListener(getLongClickPerform(holder));

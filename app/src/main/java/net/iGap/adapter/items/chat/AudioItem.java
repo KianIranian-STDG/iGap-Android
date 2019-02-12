@@ -223,7 +223,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             AppUtils.setImageDrawable(holder.thumbnail, R.drawable.green_music_note);
         }
 
-        String text = "";
 
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
@@ -244,7 +243,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                 }
             }
 
-            text = mMessage.forwardedFrom.getMessage();
         } else {
             if (mMessage.attachment != null) {
                 if (mMessage.attachment.isFileExistsOnLocal()) {
@@ -260,11 +258,9 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             } else {
                 holder.songArtist.setText(holder.itemView.getResources().getString(R.string.unknown_artist));
             }
-
-            text = mMessage.messageText;
         }
 
-        setTextIfNeeded(holder.messageView, text);
+        setTextIfNeeded(holder.messageView);
 
         View audioBoxView = holder.audioBox;
         if (G.isDarkTheme) {

@@ -111,7 +111,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private int minWith = 0;
     private Gson gson;
     private HashMap<Integer, JSONArray> buttonList;
-
+    CharSequence myText;
     /**
      * add this prt for video player
      */
@@ -165,18 +165,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         // empty
     }
 
-    protected void setTextIfNeeded(TextView view, String msg) {
-
-        if (!TextUtils.isEmpty(msg)) {
-            if (mMessage.hasLinkInMessage) {
-                view.setText(HelperUrl.getLinkText(msg, mMessage.linkInfo, mMessage.messageID));
-            } else {
-
-                msg = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
-
-                view.setText(msg);
-            }
-
+    protected void setTextIfNeeded(TextView view) {
+        if (!TextUtils.isEmpty(myText)) {
+            view.setText(myText);
             view.setVisibility(View.VISIBLE);
         } else {
             view.setVisibility(View.GONE);
@@ -185,6 +176,19 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     public AbstractMessage setMessage(StructMessageInfo message) {
         this.mMessage = message;
+        if (mMessage.forwardedFrom != null) {
+            myText = mMessage.forwardedFrom.getMessage();
+        } else {
+            myText = mMessage.messageText;
+        }
+
+        if (!TextUtils.isEmpty(myText)) {
+            if (mMessage.hasLinkInMessage) {
+                myText = HelperUrl.getLinkText((String) myText, mMessage.linkInfo, mMessage.messageID);
+            } else {
+                myText = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber((String) myText) : myText;
+            }
+        }
 
         return this;
     }

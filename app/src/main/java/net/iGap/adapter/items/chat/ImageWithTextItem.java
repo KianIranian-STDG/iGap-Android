@@ -65,15 +65,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
         super.bindView(holder, payloads);
 
-        String text = "";
-
-        if (mMessage.forwardedFrom != null) {
-            text = mMessage.forwardedFrom.getMessage();
-        } else {
-            text = mMessage.messageText;
-        }
-
-        setTextIfNeeded(holder.messageView, text);
+        setTextIfNeeded(holder.messageView);
 
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override

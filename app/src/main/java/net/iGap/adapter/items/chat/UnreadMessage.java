@@ -62,7 +62,7 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
 
         super.bindView(holder, payloads);
 
-        setTextIfNeeded(holder.txtUnreadMessage, mMessage.messageText);
+        setTextIfNeeded(holder.txtUnreadMessage);
     }
 
     @Override
