@@ -402,7 +402,7 @@ public class FragmentChat extends BaseFragment
     private Bitmap icon;
     private boolean isRepley = false;
     private boolean swipeBack = false;
-    public static List<StructGroupSticker> data;
+    public static List<StructGroupSticker> data = new ArrayList<>();
 
 
     /**
@@ -3406,8 +3406,7 @@ public class FragmentChat extends BaseFragment
                     setUpEmojiPopup();
                 }
                 emojiPopup.toggle();
-
-                if (data != null) {
+                if (data != null && data.size() > 0) {
                     emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
                 }
             }
@@ -3417,8 +3416,11 @@ public class FragmentChat extends BaseFragment
             @Override
             public void update() {
 
-                data = null;
+                data.clear();
                 data = RealmStickers.getAllStickers(true);
+                if (data != null) {
+                    emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
+                }
             }
         };
 
@@ -3474,9 +3476,9 @@ public class FragmentChat extends BaseFragment
             public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
 
                 if (response.body() != null) {
-                    if (response.body().getOk() && response.body().getData().size() > 0){
-                        data = null;
-                        setStickerToRealm(response.body().getData(), true);
+                    if (response.body().getOk() && response.body().getData().size() > 0) {
+                        data.clear();
+                        setStickerToRealm(response.body().getData(), true);// add favorit sticker to db
                         data = RealmStickers.getAllStickers(true);
                         if (data != null) {
                             emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
@@ -3497,7 +3499,7 @@ public class FragmentChat extends BaseFragment
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmStickers.setAllDataIsDeleted();
+//                RealmStickers.setAllDataIsDeleted();
                 for (StructGroupSticker item : mData) {
                     RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), isFavorite);
                 }
@@ -6032,7 +6034,7 @@ public class FragmentChat extends BaseFragment
                 .setDividerColor(Color.parseColor(dividerColor))
                 .build(edtChat);
 
-        if (data == null) {
+        if (data.size() == 0) {
             getStickerFromServer();
         }
 

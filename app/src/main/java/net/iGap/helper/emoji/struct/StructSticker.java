@@ -2,6 +2,7 @@ package net.iGap.helper.emoji.struct;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 
 import java.util.List;
 

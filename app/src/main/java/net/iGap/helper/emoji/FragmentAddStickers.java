@@ -118,7 +118,6 @@ public class FragmentAddStickers extends BaseFragment {
             @Override
             public void onFailure(Call<StructSticker> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
-                Log.i("CCCCCC", "error message url: " + t.getMessage());
             }
         });
 
