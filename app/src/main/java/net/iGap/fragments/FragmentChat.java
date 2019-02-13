@@ -3281,7 +3281,6 @@ public class FragmentChat extends BaseFragment
                             if (roomMessage != null) {
                                 edtChat.setText("");
                                 lastMessageId = roomMessage.getMessageId();
-                                Log.d("bagi" , "Fuckkkkkkk");
                                 mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
                                 clearReplyView();
                                 scrollToEnd();
@@ -8599,7 +8598,6 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                Log.d("bagi" , "onScrolledCalled");
 
                 if (FragmentChat.BugUnreadMessage) {
                     return;

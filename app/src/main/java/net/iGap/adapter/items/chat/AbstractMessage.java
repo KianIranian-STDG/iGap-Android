@@ -97,7 +97,6 @@ import io.realm.Realm;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.widget.LinearLayout.VERTICAL;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
@@ -303,8 +302,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             try {
                 if (mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
                     HashMap<Integer, JSONArray> buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
-                    Log.d("bagi", mMessage.additionalData.additionalData);
-                    Log.d("bagiSize", buttonList.size() + "");
                     Gson gson = new GsonBuilder().create();
                     for (int i = 0; i < buttonList.size(); i++) {
                         LinearLayout childLayout = MakeButtons.createLayout();
@@ -382,7 +379,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * display user avatar only if chat type is GROUP
          */
-        View messageSenderAvatar = holder.itemView.findViewById(R.id.messageSenderAvatar);
+        View messageSenderAvatar = mHolder.m_container.findViewById(R.id.messageSenderAvatar);
         if (messageSenderAvatar != null) {
             messageSenderAvatar.setVisibility(View.GONE);
         }
@@ -452,13 +449,12 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * set message time
          */
 
-        mHolder.cslr_txt_time.setTextColor(Color.parseColor(G.textBubble));
-        mHolder.cslr_txt_time.setText(HelperCalander.getClocktime(mMessage.time, false));
-
+        String time = HelperCalander.getClocktime(mMessage.time, false);
         if (HelperCalander.isPersianUnicode) {
-            mHolder.cslr_txt_time.setText(HelperCalander.convertToUnicodeFarsiNumber(mHolder.cslr_txt_time.getText().toString()));
+            mHolder.cslr_txt_time.setText(HelperCalander.convertToUnicodeFarsiNumber(time));
+        } else {
+            mHolder.cslr_txt_time.setText(time);
         }
-
 
         if (realmAttachment != null) {
             prepareAttachmentIfNeeded(holder, realmAttachment, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
@@ -469,7 +465,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         mHolder.lyt_vote.setVisibility(View.GONE);
-
         mHolder.lyt_see.setVisibility(View.GONE);
 
         if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
@@ -637,8 +632,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         });
 
-        mHolder.lyt_vote_up.setOnLongClickListener(getLongClickPerform(mHolder));
-
         mHolder.lyt_vote_down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -649,8 +642,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             }
         });
-
-        mHolder.lyt_vote_down.setOnLongClickListener(getLongClickPerform(mHolder));
     }
 
     /**
@@ -714,20 +705,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
-        if (G.isDarkTheme) {
-            setTextColor(mHolder.cslr_txt_tic, R.color.white);
-        } else {
-            setTextColor(mHolder.cslr_txt_tic, R.color.colorOldBlack);
-        }
-
-
         ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).gravity = Gravity.LEFT;
 
         ((LinearLayout.LayoutParams) mHolder.contentContainer.getLayoutParams()).gravity = Gravity.LEFT;
 
         if (G.isDarkTheme) {
+            setTextColor(mHolder.cslr_txt_tic, R.color.white);
             ((View) (mHolder.contentContainer).getParent()).setBackgroundResource(R.drawable.rectangel_white_round_dark);
         } else {
+            setTextColor(mHolder.cslr_txt_tic, R.color.colorOldBlack);
             ((View) (mHolder.contentContainer).getParent()).setBackgroundResource(R.drawable.rectangel_white_round);
         }
 
@@ -832,17 +818,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         else
             return;
 
-        if (mHolder.m_container == null) {
-            return;
-        }
-
         mHolder.m_container.setMinimumWidth(0);
         mHolder.m_container.setMinimumHeight(0);
 
         /**
          * set replay container visible if message was replayed, otherwise, gone it
          */
-        View cslr_replay_layout = holder.itemView.findViewById(R.id.cslr_replay_layout);
+        View cslr_replay_layout = ((ChatItemHolder) holder).m_container.findViewById(R.id.cslr_replay_layout);
 
         if (cslr_replay_layout != null) {
             mHolder.m_container.removeView(cslr_replay_layout);
@@ -914,7 +896,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 replyFrom.measure(0, 0);       //must call measure!
                 replayMessage.measure(0, 0);
 
-                int maxWith = 0, withMessage = 0, withTitle = 0;
+                int maxWith, withMessage, withTitle;
                 withTitle = replyFrom.getMeasuredWidth();
                 withMessage = replayMessage.getMeasuredWidth();
                 maxWith = withTitle > withMessage ? withTitle : withMessage;
@@ -941,14 +923,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder = (ChatItemHolder) holder;
         else
             return;
-        if (mHolder.m_container == null) {
-            return;
-        }
-
         /**
          * set forward container visible if message was forwarded, otherwise, gone it
          */
-        View cslr_ll_forward22 = holder.itemView.findViewById(R.id.cslr_ll_forward);
+        View cslr_ll_forward22 = ((ChatItemHolder) holder).m_container.findViewById(R.id.cslr_ll_forward);
         if (cslr_ll_forward22 != null) {
             mHolder.m_container.removeView(cslr_ll_forward22);
         }
@@ -1214,7 +1192,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         else
             return;
 
-
         if (attachment != null) {
 
             if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
@@ -1383,9 +1360,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 prepareProgress(holder, attachment);
             }
 
-
-        } else {
-            Log.d("bagi" ,"attachment is null");
         }
     }
 
@@ -1772,6 +1746,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
     @Override
     public void onClick(View v) {
+        Log.d("bagi" , "ClickedCalled!!!!!!!!!!!");
         try {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
