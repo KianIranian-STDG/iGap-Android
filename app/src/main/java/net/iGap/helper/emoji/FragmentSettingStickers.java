@@ -194,7 +194,7 @@ public class FragmentSettingStickers extends BaseFragment {
                                                     progressBar.setVisibility(View.GONE);
                                                     if (response.body() != null && response.body().isSuccess()) {
                                                         Log.i("CCCCCC", "onResponse: " + response.body().isSuccess());
-                                                        RealmStickers.updateFavorite(mData.get(getAdapterPosition()).getAvatarToken(), false);
+                                                        RealmStickers.updateFavorite(mData.get(getAdapterPosition()).getId(), false);
                                                         mData.remove(getAdapterPosition());
                                                         updateAdapter();
                                                         FragmentChat.onUpdateSticker.update();

@@ -2,12 +2,15 @@ package net.iGap.helper.emoji.api;
 
 import com.vanniktech.emoji.sticker.struct.StructSticker;
 
+import net.iGap.helper.emoji.struct.StructEachSticker;
 import net.iGap.helper.emoji.struct.StructStickerResult;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /*
  * This is the source code of iGap for Android
@@ -30,8 +33,9 @@ public interface APIEmojiService {
     Call<StructSticker> getFavoritSticker();
 
     @GET("/stickers")
-    Call<StructSticker> getAllSticker();
+    Call<StructSticker> getAllSticker(@Query("skip") int skip,
+                                      @Query("limit") int limit);
 
     @GET("/stickers/{id}")
-    Call<StructSticker> getSticker(@Path("id") String groupId);
+    Call<StructEachSticker> getSticker(@Path("id") String groupId);
 }

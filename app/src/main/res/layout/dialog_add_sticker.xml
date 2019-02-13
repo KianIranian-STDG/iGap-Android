@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:ignore="MissingPrefix"
     android:background="@color/white"
-    >
+    android:orientation="vertical"
+    tools:ignore="MissingPrefix">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -29,7 +28,7 @@
                 android:gravity="center"
                 app:rv_alpha="200"
                 app:rv_centered="true"
-                app:rv_rippleDuration="0"
+                app:rv_rippleDuration="10"
                 app:rv_ripplePadding="5dp">
 
                 <net.iGap.module.MaterialDesignTextView
@@ -49,22 +48,39 @@
                 android:layout_weight="1"
                 android:gravity="center|left"
                 android:singleLine="true"
-                android:text="@string/add_sticker"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/dp18"
                 android:visibility="visible" />
 
+            <TextView
+                android:id="@+id/txtAddSticker"
+                fontPath="fonts/IRANSansMobile_Bold.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center|left"
+                android:singleLine="true"
+                android:text="@string/add_sticker"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/dp18"
+                android:layout_marginEnd="@dimen/dp20"
+                android:layout_marginRight="@dimen/dp20"
+                android:visibility="visible" />
+
+
         </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rcvSettingPage"
+            android:id="@+id/rcvAddStickerDialog"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -75,4 +91,5 @@
             android:layout_centerInParent="true" />
 
     </RelativeLayout>
+
 </LinearLayout>

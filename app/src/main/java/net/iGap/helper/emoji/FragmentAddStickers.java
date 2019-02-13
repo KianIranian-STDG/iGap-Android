@@ -32,6 +32,9 @@ import net.iGap.helper.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.emoji.struct.StructStickerResult;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.DeviceUtils;
+import net.iGap.module.EndlessRecyclerViewScrollListener;
+import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.realm.RealmStickers;
 
 import java.util.ArrayList;
@@ -51,6 +54,9 @@ public class FragmentAddStickers extends BaseFragment {
     private AdapterSettingPage adapterSettingPage;
     private List<StructGroupSticker> data;
     private ProgressBar progressBar;
+    private EndlessRecyclerViewScrollListener scrollListener;
+    private int page = 0;
+    private int limit = 2;
 
     public FragmentAddStickers() {
         // Required empty public constructor
@@ -92,16 +98,39 @@ public class FragmentAddStickers extends BaseFragment {
         RecyclerView rcvSettingPage = view.findViewById(R.id.rcvSettingPage);
         adapterSettingPage = new AdapterSettingPage(getActivity(), new ArrayList<>());
         rcvSettingPage.setAdapter(adapterSettingPage);
+
+        final PreCachingLayoutManager preCachingLayoutManager = new PreCachingLayoutManager(G.fragmentActivity, DeviceUtils.getScreenHeight(G.fragmentActivity));
+        rcvSettingPage.setLayoutManager(preCachingLayoutManager);
+        scrollListener = new EndlessRecyclerViewScrollListener(preCachingLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+
+                loadMoreSticker();
+            }
+        };
+
+        rcvSettingPage.addOnScrollListener(scrollListener);
         rcvSettingPage.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcvSettingPage.setHasFixedSize(true);
 
+    }
+
+    private void loadMoreSticker() {
+
+        getDataStickers();
     }
 
     private void getDataStickers() {
 
         mAPIService = ApiEmojiUtils.getAPIService();
 
-        mAPIService.getAllSticker().enqueue(new Callback<StructSticker>() {
+        mAPIService.getAllSticker(page, limit).enqueue(new Callback<StructSticker>() {
             @Override
             public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
                 progressBar.setVisibility(View.GONE);
@@ -111,6 +140,7 @@ public class FragmentAddStickers extends BaseFragment {
                         FragmentChat.setStickerToRealm(response.body().getData(), false);
                         data = RealmStickers.getAllStickers(false);
                         adapterSettingPage.updateAdapter(data);
+                        page++;
                     }
                 }
             }
@@ -169,6 +199,7 @@ public class FragmentAddStickers extends BaseFragment {
         public int getItemCount() {
             return mData.size();
         }
+
         public void updateAdapter(List<StructGroupSticker> data) {
             this.mData = data;
             notifyDataSetChanged();
@@ -219,7 +250,7 @@ public class FragmentAddStickers extends BaseFragment {
                                                     if (response.body() != null && response.body().isSuccess()) {
                                                         if (FragmentChat.onUpdateSticker != null) {
                                                             mData.get(getAdapterPosition()).setIsFavorite(true);
-                                                            RealmStickers.updateFavorite(mData.get(getAdapterPosition()).getAvatarToken(), true);
+                                                            RealmStickers.updateFavorite(mData.get(getAdapterPosition()).getId(), true);
                                                             notifyDataSetChanged();
                                                             FragmentChat.onUpdateSticker.update();
                                                         }
