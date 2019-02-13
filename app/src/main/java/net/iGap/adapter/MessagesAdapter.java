@@ -183,6 +183,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 if (item.mMessage.messageID != null) {
                     if (item.mMessage.messageID.equals(Long.toString(messageId))) {
                         item.mMessage.messageText = updatedText;
+                        item.updateMessageText(updatedText);
                         item.mMessage.isEdited = true;
                         item.mMessage.linkInfo = HelperUrl.getLinkInfo(updatedText);
                         set(i, item);

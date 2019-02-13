@@ -114,7 +114,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private RealmRoom realmRoom;
     private RealmChannelExtra realmChannelExtra;
     private RealmRoom realmRoomForwardedFrom;
-    MessagesAdapter<AbstractMessage> mAdapter;
+    private MessagesAdapter<AbstractMessage> mAdapter;
     /**
      * add this prt for video player
      */
@@ -199,22 +199,25 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         if (f != null){
             realmAttachment = f.getAttachment();
         }
-
         if (mMessage.forwardedFrom != null) {
             myText = mMessage.forwardedFrom.getMessage();
         } else {
             myText = mMessage.messageText;
         }
 
-        if (!TextUtils.isEmpty(myText)) {
-            if (mMessage.hasLinkInMessage) {
-                myText = HelperUrl.getLinkText((String) myText, mMessage.linkInfo, mMessage.messageID);
-            } else {
-                myText = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber((String) myText) : myText;
-            }
-        }
+        updateMessageText((String) myText);
 
         return this;
+    }
+
+    public void updateMessageText(String text) {
+        if (!TextUtils.isEmpty(text)) {
+            if (mMessage.hasLinkInMessage) {
+                myText = HelperUrl.getLinkText(text, mMessage.linkInfo, mMessage.messageID);
+            } else {
+                myText = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(text) : text;
+            }
+        }
     }
 
     @Override
@@ -303,24 +306,22 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     Log.d("bagi", mMessage.additionalData.additionalData);
                     Log.d("bagiSize", buttonList.size() + "");
                     Gson gson = new GsonBuilder().create();
-
-                    if (buttonList != null) {
-                        for (int i = 0; i < buttonList.size(); i++) {
-                            LinearLayout childLayout = MakeButtons.createLayout();
-                            for (int j = 0; j < buttonList.get(i).length(); j++) {
-                                try {
-                                    ButtonEntity btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
-                                    }.getType());
-                                    btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                                    childLayout = MakeButtons.addButtons(btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
-                                    //  childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(),this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                    for (int i = 0; i < buttonList.size(); i++) {
+                        LinearLayout childLayout = MakeButtons.createLayout();
+                        for (int j = 0; j < buttonList.get(i).length(); j++) {
+                            try {
+                                ButtonEntity btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
+                                }.getType());
+                                btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
+                                childLayout = MakeButtons.addButtons(btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
+                                //  childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(),this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            withTextHolder.addButtonLayout(childLayout);
                         }
+                        withTextHolder.addButtonLayout(childLayout);
                     }
+
                 }
 
             } catch (Exception e) {
