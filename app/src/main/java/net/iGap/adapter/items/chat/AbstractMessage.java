@@ -583,8 +583,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder.lyt_vote.setVisibility(View.INVISIBLE);
         }
 
-        mHolder.lyt_vote.setVisibility(View.VISIBLE);
-
         /**
          * userId != 0 means that this message is from channel
          * because for chat and group userId will be set
