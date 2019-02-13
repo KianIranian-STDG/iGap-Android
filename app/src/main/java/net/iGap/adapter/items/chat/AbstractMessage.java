@@ -40,6 +40,7 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
@@ -109,20 +110,22 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
     CharSequence myText;
-    private RealmRoomMessage roomMessage;
+    private RealmAttachment realmAttachment;
     private RealmRoom realmRoom;
     private RealmChannelExtra realmChannelExtra;
     private RealmRoom realmRoomForwardedFrom;
+    MessagesAdapter<AbstractMessage> mAdapter;
     /**
      * add this prt for video player
      */
     //@Override public void onPlayPauseVideo(VH holder, String localPath, int isHide, double time) {
     //    // empty
     //}
-    public AbstractMessage(Realm realmChat, boolean directionalBased, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+    public AbstractMessage(MessagesAdapter<AbstractMessage> mAdapter, boolean directionalBased, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         //this.realmChat = realmChat;
         this.directionalBased = directionalBased;
         this.type = type;
+        this.mAdapter = mAdapter;
         this.messageClickListener = messageClickListener;
 
     }
@@ -191,7 +194,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
-        roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
+        RealmRoomMessage f = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).
+                equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
+        if (f != null){
+            realmAttachment = f.getAttachment();
+        }
 
         if (mMessage.forwardedFrom != null) {
             myText = mMessage.forwardedFrom.getMessage();
@@ -452,8 +459,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
 
-        if (roomMessage != null) {
-            prepareAttachmentIfNeeded(holder, roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
+        if (realmAttachment != null) {
+            prepareAttachmentIfNeeded(holder, realmAttachment, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
         }
 
         /**

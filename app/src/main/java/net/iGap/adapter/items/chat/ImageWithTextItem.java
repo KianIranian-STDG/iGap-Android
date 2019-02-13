@@ -27,6 +27,7 @@ import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperRadius;
 import net.iGap.interfaces.IMessageItem;
@@ -45,8 +46,8 @@ import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageWithTextItem.ViewHolder> {
 
-    public ImageWithTextItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public ImageWithTextItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
     @Override

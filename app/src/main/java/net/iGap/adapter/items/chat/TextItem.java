@@ -19,6 +19,7 @@ import com.vanniktech.emoji.EmojiUtils;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.proto.ProtoGlobal;
@@ -29,8 +30,8 @@ import io.realm.Realm;
 
 public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
-    public TextItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public TextItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
     @Override

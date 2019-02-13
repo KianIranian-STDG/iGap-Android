@@ -3023,7 +3023,7 @@ public class FragmentChat extends BaseFragment
                     Log.d("bagi" , "BUGGGllScrollNavigatonClicke");
                     FragmentChat.BugUnreadMessage = true;
                     clearAdapterItems();
-                    mAdapter.add(new ProgressWaiting(getRealmChat(), FragmentChat.this).withIdentifier(progressIdentifierDown));
+                    mAdapter.add(new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierDown));
                     mAdapter.notifyAdapterDataSetChanged();
                     return;
                 }
@@ -3046,7 +3046,7 @@ public class FragmentChat extends BaseFragment
 
                     int position = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
                     if (position > 0) {
-                        mAdapter.add(position, new UnreadMessage(getRealmChat(), FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), makeUnreadMessage(countNewMessage))).withIdentifier(SUID.id().get()));
+                        mAdapter.add(position, new UnreadMessage(mAdapter, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), makeUnreadMessage(countNewMessage))).withIdentifier(SUID.id().get()));
                         isShowLayoutUnreadMessage = true;
                         LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
                         linearLayout.scrollToPositionWithOffset(position, 0);
@@ -3281,7 +3281,8 @@ public class FragmentChat extends BaseFragment
                             if (roomMessage != null) {
                                 edtChat.setText("");
                                 lastMessageId = roomMessage.getMessageId();
-                                mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
+                                Log.d("bagi" , "Fuckkkkkkk");
+                                mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
                                 clearReplyView();
                                 scrollToEnd();
 
@@ -4260,7 +4261,7 @@ public class FragmentChat extends BaseFragment
             structChannelExtra.signature = "";
         }
         messageInfo.channelExtra = structChannelExtra;
-        mAdapter.add(new VoiceItem(getRealmChat(), chatType, this).setMessage(messageInfo));
+        mAdapter.add(new VoiceItem(mAdapter, chatType, this).setMessage(messageInfo));
         //realm.close();
         scrollToEnd();
         clearReplyView();
@@ -4407,7 +4408,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void sendFromBot(Object message) {
         if (message instanceof RealmRoomMessage)
-            mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
+            mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
         else if (message instanceof String)
             openWebViewForSpecialUrlChat(message.toString());
 
@@ -8047,7 +8048,7 @@ public class FragmentChat extends BaseFragment
 
             if (finalMessageType == CONTACT) {
                 messageInfo.channelExtra = new StructChannelExtra();
-                mAdapter.add(new ContactItem(getRealmChat(), chatType, this).setMessage(messageInfo));
+                mAdapter.add(new ContactItem(mAdapter, chatType, this).setMessage(messageInfo));
             }
         }
 
@@ -8261,7 +8262,7 @@ public class FragmentChat extends BaseFragment
                                 break;
                             }
                         }
-                        mAdapter.add(0, new TimeItem(getRealmChat(), this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                        mAdapter.add(0, new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                         index = 1;
                     }
                 } else {
@@ -8288,10 +8289,10 @@ public class FragmentChat extends BaseFragment
                     if (messageInfo.showTime) {
                         if (mAdapter.getItemCount() > 0) {
                             if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDifferent(messageInfo.time, mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
-                                mAdapter.add(new TimeItem(getRealmChat(), this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                                mAdapter.add(new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                             }
                         } else {
-                            mAdapter.add(new TimeItem(getRealmChat(), this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                            mAdapter.add(new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                         }
                     }
                 }
@@ -8299,85 +8300,85 @@ public class FragmentChat extends BaseFragment
                 switch (messageType) {
                     case TEXT:
                         if (!addTop) {
-                            mAdapter.add(new TextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new TextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new TextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new TextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case WALLET:
                         if (!addTop) {
-                            mAdapter.add(new LogWallet(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new LogWallet(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new LogWallet(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new LogWallet(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case IMAGE:
                     case IMAGE_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new ImageWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new ImageWithTextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new ImageWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new ImageWithTextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case VIDEO:
                     case VIDEO_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new VideoWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new VideoWithTextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new VideoWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new VideoWithTextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case LOCATION:
                         if (!addTop) {
-                            mAdapter.add(new LocationItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new LocationItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new LocationItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new LocationItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case FILE:
                     case FILE_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new FileItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new FileItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new FileItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new FileItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case VOICE:
                         if (!addTop) {
-                            mAdapter.add(new VoiceItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new VoiceItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new VoiceItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new VoiceItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case AUDIO:
                     case AUDIO_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new AudioItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new AudioItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new AudioItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new AudioItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case CONTACT:
                         if (!addTop) {
-                            mAdapter.add(new ContactItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new ContactItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new ContactItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new ContactItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case GIF:
                     case GIF_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new GifWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new GifWithTextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new GifWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new GifWithTextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case LOG:
                         if (messageInfo.showMessage) {
                             if (!addTop) {
-                                mAdapter.add(new LogItem(getRealmChat(), this).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new LogItem(mAdapter, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(index, new LogItem(getRealmChat(), this).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(index, new LogItem(mAdapter, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
@@ -8961,7 +8962,7 @@ public class FragmentChat extends BaseFragment
         int unreadMessageCount = unreadCount;
         if (unreadMessageCount > 0) {
             RealmRoomMessage unreadMessage = RealmRoomMessage.makeUnreadMessage(unreadMessageCount);
-            mAdapter.add(0, new UnreadMessage(getRealmChat(), FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), unreadMessage)).withIdentifier(SUID.id().get()));
+            mAdapter.add(0, new UnreadMessage(mAdapter, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), unreadMessage)).withIdentifier(SUID.id().get()));
             isShowLayoutUnreadMessage = true;
 
         }
@@ -9021,10 +9022,10 @@ public class FragmentChat extends BaseFragment
                             public void run() {
                                 if (direction == DOWN && progressIdentifierDown == 0) {
                                     progressIdentifierDown = SUID.id().get();
-                                    mAdapter.add(new ProgressWaiting(getRealmChat(), FragmentChat.this).withIdentifier(progressIdentifierDown));
+                                    mAdapter.add(new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierDown));
                                 } else if (direction == UP && progressIdentifierUp == 0) {
                                     progressIdentifierUp = SUID.id().get();
-                                    mAdapter.add(0, new ProgressWaiting(getRealmChat(), FragmentChat.this).withIdentifier(progressIdentifierUp));
+                                    mAdapter.add(0, new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierUp));
                                 }
                             }
                         });
@@ -9171,7 +9172,7 @@ public class FragmentChat extends BaseFragment
                 openWebViewForSpecialUrlChat(message.toString());
             }
         } else if (message instanceof RealmRoomMessage) {
-            mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
+            mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
 
         }
 

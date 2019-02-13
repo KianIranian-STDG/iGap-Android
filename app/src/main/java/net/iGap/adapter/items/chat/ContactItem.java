@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
@@ -35,8 +36,8 @@ import static net.iGap.R.dimen.messageContainerPadding;
 
 public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHolder> {
 
-    public ContactItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public ContactItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
     @Override
