@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import com.vanniktech.emoji.EmojiUtils;
 
@@ -1063,10 +1062,10 @@ public class RealmRoomMessage extends RealmObject {
         realm.close();
     }
 
-    public static RealmRoomMessage makeAdditionalData(final long roomId, final long messageId, final String message, String additionalData, int additionalTaype, Realm realm) {
+    public static RealmRoomMessage makeAdditionalData(final long roomId, final long messageId, final String message, String additionalData, int additionalTaype, Realm realm,ProtoGlobal.RoomMessageType messageType) {
 
         RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
-        roomMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+        roomMessage.setMessageType(messageType);
         roomMessage.setRoomId(roomId);
         roomMessage.setMessage(message);
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());

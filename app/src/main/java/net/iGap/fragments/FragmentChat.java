@@ -102,7 +102,6 @@ import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 import com.vanniktech.emoji.sticker.struct.StructSticker;
 
-
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
@@ -124,6 +123,7 @@ import net.iGap.adapter.items.chat.LocationItem;
 import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.LogWallet;
 import net.iGap.adapter.items.chat.ProgressWaiting;
+import net.iGap.adapter.items.chat.StickerItem;
 import net.iGap.adapter.items.chat.TextItem;
 import net.iGap.adapter.items.chat.TimeItem;
 import net.iGap.adapter.items.chat.UnreadMessage;
@@ -248,6 +248,7 @@ import net.iGap.module.structs.StructChannelExtra;
 import net.iGap.module.structs.StructCompress;
 import net.iGap.module.structs.StructMessageAttachment;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.structs.StructSendSticker;
 import net.iGap.module.structs.StructUploadVideo;
 import net.iGap.module.structs.StructWebView;
 import net.iGap.module.webserviceDrBot.Favorite;
@@ -328,7 +329,6 @@ import io.realm.Sort;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -6001,9 +6001,25 @@ public class FragmentChat extends BaseFragment
                     }
                 }).setOnStickerListener(new OnStickerListener() {
                     @Override
-                    public void onItemSticker(StructItemSticker structItemSticker) {
-                        Log.i("CCCCC", "onStickerPath: " + structItemSticker);
+                    public void onItemSticker(StructItemSticker st) {
 
+                        String additional = new Gson().toJson(new StructSendSticker(st.getId(),st.getName(),st.getGroupId(),st.getToken()));
+
+                        getRealmChat().executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                Long identity = System.currentTimeMillis();
+                                RealmRoomMessage rm = RealmRoomMessage.makeAdditionalData(mRoomId, identity, st.getName(), additional, AdditionalType.STICKER, realm, ProtoGlobal.RoomMessageType.FILE_TEXT);
+                                rm.setAttachment(identity, st.getUri(), 0, 0, 0, "", 0, LocalFileType.FILE);
+                                G.chatSendMessageUtil.build(chatType, mRoomId, rm).attachment(st.getToken()).sendMessage(identity + "");
+
+                                StructMessageInfo sm = StructMessageInfo.convert(realm, rm);
+                                sm.filePath = st.getUri();
+
+                                mAdapter.add(new StickerItem(getRealmChat(), chatType, FragmentChat.this).setMessage(sm).withIdentifier(SUID.id().get()));
+                                scrollToEnd();
+                            }
+                        });
                     }
 
                 })
@@ -8440,10 +8456,19 @@ public class FragmentChat extends BaseFragment
                         break;
                     case FILE:
                     case FILE_TEXT:
-                        if (!addTop) {
-                            mAdapter.add(new FileItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                        } else {
-                            mAdapter.add(index, new FileItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+
+                        if(messageInfo.additionalData !=null && messageInfo.additionalData.AdditionalType==AdditionalType.STICKER ){
+                            if (!addTop) {
+                                mAdapter.add(new StickerItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new StickerItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
+                        }else {
+                            if (!addTop) {
+                                mAdapter.add(new FileItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new FileItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
                         }
                         break;
                     case VOICE:

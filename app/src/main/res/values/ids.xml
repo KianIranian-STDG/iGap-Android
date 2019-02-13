@@ -86,6 +86,7 @@
   <item name="swipeEdit" type="id" />
   <item name="rootRegisterContact" type="id" />
   <item name="animateCheckBoxContact" type="id" />
+  <item name="sticker_layout" type="id" />
 
 
 </resources>
