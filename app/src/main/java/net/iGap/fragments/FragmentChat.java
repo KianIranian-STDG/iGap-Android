@@ -8837,6 +8837,8 @@ public class FragmentChat extends BaseFragment
                     if (FragmentChat.BugUnreadMessage){
                         if (!isWaitingForHistoryUp &&
                                 !isWaitingForHistoryDown){
+                            Log.d("bagi" , "BugUnreadMessage = false");
+
                             FragmentChat.BugUnreadMessage = false;
                             resetMessagingValue();
                             addToView = false;
@@ -8844,6 +8846,8 @@ public class FragmentChat extends BaseFragment
                         }
                         return;
                     }
+
+                    Log.d("bagi" , "switchAddItem");
 
                     if (direction == UP) {
                         switchAddItem(structMessageInfos, true);
