@@ -81,7 +81,6 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
 
         if (holder.image != null && holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
             G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-            holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
         }
 
     }
@@ -105,7 +104,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
 
 
             image = itemView.findViewById(R.id.thumbnail);
-            image.reserveSpace(240,240,ProtoGlobal.Room.Type.CHAT);
+            image.reserveSpace(180,180,ProtoGlobal.Room.Type.CHAT);
 
         }
     }

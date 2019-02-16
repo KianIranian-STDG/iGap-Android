@@ -6041,21 +6041,30 @@ public class FragmentChat extends BaseFragment
 
                         String additional = new Gson().toJson(new StructSendSticker(st.getId(), st.getName(), st.getGroupId(), st.getToken()));
 
+                        final RealmRoomMessage[] rm = new RealmRoomMessage[1];
+                        Long identity = AppUtils.makeRandomId() ;
+
+                         int [] imageSize =   AndroidUtils.getImageDimens(st.getUri());
                         getRealmChat().executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                Long identity = System.currentTimeMillis();
-                                RealmRoomMessage rm = RealmRoomMessage.makeAdditionalData(mRoomId, identity, st.getName(), additional, AdditionalType.STICKER, realm, ProtoGlobal.RoomMessageType.FILE_TEXT);
-                                rm.setAttachment(identity, st.getUri(), 0, 0, 0, "", 0, LocalFileType.FILE);
-                                G.chatSendMessageUtil.build(chatType, mRoomId, rm).attachment(st.getToken()).sendMessage(identity + "");
+                                rm[0] = RealmRoomMessage.makeAdditionalData(mRoomId, identity, st.getName(), additional, AdditionalType.STICKER, realm, ProtoGlobal.RoomMessageType.FILE_TEXT);
+                                rm[0].setAttachment(identity, st.getUri(), imageSize[0], imageSize[1], new File(st.getUri()).length(), new File(st.getUri()).getName(), 0, LocalFileType.FILE);
+                                rm[0].getAttachment().setToken(st.getToken());
+                                rm[0].setAuthorHash(G.authorHash);
+                                rm[0].setShowMessage(true);
+                                rm[0].setCreateTime(TimeUtils.currentLocalTime());
 
-                                StructMessageInfo sm = StructMessageInfo.convert(realm, rm);
-                                sm.filePath = st.getUri();
-
-                                mAdapter.add(new StickerItem(getRealmChat(), chatType, FragmentChat.this).setMessage(sm).withIdentifier(SUID.id().get()));
-                                scrollToEnd();
                             }
                         });
+
+                        StructMessageInfo sm = StructMessageInfo.convert(getRealmChat(), rm[0]);
+                        mAdapter.add(new StickerItem(getRealmChat(), chatType, FragmentChat.this).setMessage(sm));
+                        scrollToEnd();
+
+                       new ChatSendMessageUtil().build(chatType, mRoomId,rm[0]).sendMessage(identity+"");
+
+
                     }
 
                 })
@@ -7309,7 +7318,13 @@ public class FragmentChat extends BaseFragment
             if (chatItem.forwardedFrom != null) {
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom);
 
-                String _text = AppUtils.conversionMessageType(chatItem.forwardedFrom.getMessageType());
+                String _text;
+                if(chatItem.forwardedFrom.getRealmAdditional() !=null &&  chatItem.forwardedFrom.getRealmAdditional().getAdditionalType() == 4) {
+                   _text = getString(R.string.sticker);
+               }else{
+                    _text = AppUtils.conversionMessageType(chatItem.forwardedFrom.getMessageType());
+                }
+
                 if (_text != null && _text.length() > 0) {
                     replayTo.setText(_text);
                 } else {
@@ -7319,7 +7334,13 @@ public class FragmentChat extends BaseFragment
                 RealmRoomMessage message = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(chatItem.messageID)).findFirst();
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message);
 
-                String _text = AppUtils.conversionMessageType(chatItem.messageType);
+                String _text;
+                if(message.getRealmAdditional() !=null &&  message.getRealmAdditional().getAdditionalType() == 4) {
+                    _text = getString(R.string.sticker);
+                }else{
+                    _text = AppUtils.conversionMessageType(chatItem.messageType);
+                }
+
                 if (_text != null && _text.length() > 0) {
                     replayTo.setText(_text);
                 } else {

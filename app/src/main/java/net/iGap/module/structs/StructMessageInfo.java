@@ -358,8 +358,10 @@ public class StructMessageInfo implements Parcelable {
             messageInfo.structWallet = StructWallet.convert(roomMessage.getRoomMessageWallet());
         }
 
-        if (roomMessage.getRealmAdditional()!=null){
+        if (roomMessage.getRealmAdditional()!=null ){
             messageInfo.additionalData=StructAdditionalData.convert(roomMessage.getRealmAdditional());
+        }else if( roomMessage.getForwardMessage()!=null && roomMessage.getForwardMessage().getRealmAdditional()!=null){
+            messageInfo.additionalData=StructAdditionalData.convert(roomMessage.getForwardMessage().getRealmAdditional());
         }
 
         messageInfo.replayTo = roomMessage.getReplyTo();
