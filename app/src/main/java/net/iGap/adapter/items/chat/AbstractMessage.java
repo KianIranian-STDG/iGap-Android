@@ -101,7 +101,7 @@ import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
-public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH>, View.OnClickListener {//IChatItemAvatar
+public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
     public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
     public IMessageItem messageClickListener;
     public StructMessageInfo mMessage;
@@ -310,7 +310,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 ButtonEntity btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
                                 }.getType());
                                 btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                                childLayout = MakeButtons.addButtons(btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
+                                childLayout = MakeButtons.addButtons(btnEntery, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        if (FragmentChat.isInSelectionMode) {
+                                            holder.itemView.performLongClick();
+                                            return;
+                                        }
+                                        onBotBtnClick(view);
+                                    }
+                                }, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
                                 //  childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(),this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -1741,10 +1750,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return "";
     }
 
-
-    @Override
-    public void onClick(View v) {
-        Log.d("bagi" , "ClickedCalled!!!!!!!!!!!");
+    public void onBotBtnClick(View v) {
         try {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
@@ -1779,6 +1785,5 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
     }
-
 
 }
