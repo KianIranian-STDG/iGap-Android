@@ -94,11 +94,12 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
         if (holder.image.getTag() != null && holder.image.getTag().equals(tag)) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.RGB_565;
-            DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
-            G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
-                    new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inPreferredConfig = Bitmap.Config.RGB_565;
+//            DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
+//            G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
+//                    new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
+            G.imageLoader.displayImage(suitablePath(localPath), holder.image);
         }
     }
 

@@ -93,11 +93,13 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
 
         if (holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
             if (fileType == LocalFileType.THUMBNAIL) {
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.RGB_565;
-                DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
-                G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
-                        new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
+//                BitmapFactory.Options options = new BitmapFactory.Options();
+//                options.inPreferredConfig = Bitmap.Config.RGB_565;
+//                DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
+//                G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
+//                        new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
+                G.imageLoader.displayImage(suitablePath(localPath), holder.image);
+
             } else {
 
                 AppUtils.setProgresColor(holder.progress.progressBar);
