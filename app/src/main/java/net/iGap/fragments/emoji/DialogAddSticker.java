@@ -1,6 +1,7 @@
 package net.iGap.fragments.emoji;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.emoji.api.APIEmojiService;
@@ -94,6 +96,9 @@ public class DialogAddSticker extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));
+
         if (getArguments() != null) {
             groupId = getArguments().getString("GROUP_ID");
             token = getArguments().getString("TOKEN");
@@ -143,26 +148,6 @@ public class DialogAddSticker extends DialogFragment {
         });
 
     }
-
-//    @Override
-//    public Dialog onCreateDialog(Bundle savedInstanceState) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setTitle("Add sticker");
-//        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dismiss();
-//            }
-//        });
-//
-//        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dismiss();
-//            }
-//        });
-//        return builder.create();
-//    }
 
     public class AdapterAddDialogSticker extends RecyclerView.Adapter<AdapterAddDialogSticker.ViewHolder> {
         private List<StructItemSticker> mData;

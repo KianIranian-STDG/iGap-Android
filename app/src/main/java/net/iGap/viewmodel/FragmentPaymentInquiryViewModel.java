@@ -86,7 +86,7 @@ public class FragmentPaymentInquiryViewModel {
         this.fragmentPaymentInquiryBinding = fragmentPaymentInquiryBinding;
         this.operatorType = operatorType;
 
-        Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green);
+        Drawable myIcon = G.context.getResources().getDrawable(R.drawable.oval_green_sticker);
         myIcon.setColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN);
         observeBackGround.set(myIcon);
 

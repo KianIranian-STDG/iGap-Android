@@ -23,7 +23,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:padding="7dp"
+            android:padding="@dimen/dp2"
             android:orientation="vertical">
 
             <TextView
@@ -54,7 +54,7 @@
             android:paddingLeft="25dp"
             android:paddingRight="25dp"
             android:textColor="@android:color/white"
-            android:background="@drawable/oval_green"
+            android:background="@drawable/oval_green_sticker"
             android:gravity="center"/>
 
     </LinearLayout>
@@ -62,5 +62,5 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/gray_9d"/>
+        style="?lineColorSettingTheme" />
 </LinearLayout>

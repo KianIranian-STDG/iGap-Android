@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:ignore="MissingPrefix"
-    android:background="@color/white"
+    style="?backgroundColorSettingTheme"
     >
 
     <android.support.design.widget.AppBarLayout

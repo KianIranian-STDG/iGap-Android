@@ -2,6 +2,8 @@ package net.iGap.fragments.emoji;
 
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -81,10 +83,9 @@ public class FragmentAddStickers extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));
 
         getDataStickers();
-
         progressBar = view.findViewById(R.id.progress_stricker);
         progressBar.setVisibility(View.VISIBLE);
         RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_sticker_ripple_txtBack);
@@ -227,6 +228,9 @@ public class FragmentAddStickers extends BaseFragment {
                 txtRemove = itemView.findViewById(R.id.txtRemoveSticker);
                 txtName = itemView.findViewById(R.id.txtName);
                 txtCount = itemView.findViewById(R.id.txtCount);
+
+                GradientDrawable backgroundGradient = (GradientDrawable) txtRemove.getBackground();
+                backgroundGradient.setColor(Color.parseColor(G.appBarColor));
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
