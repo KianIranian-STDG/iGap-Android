@@ -36,6 +36,7 @@ import com.squareup.picasso.Picasso;
 
 import org.paygear.wallet.R;
 import org.paygear.wallet.RaadApp;
+import org.paygear.wallet.WalletActivity;
 import org.paygear.wallet.model.AvailableClubs_Result;
 import org.paygear.wallet.model.Card;
 import org.paygear.wallet.model.Order;
@@ -370,7 +371,12 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
         if (getActivity() != null) {
             ((NavigationBarActivity) getContext()).broadcastMessage(
                     AccountPaymentDialog.this, null, ScannerFragment.class);
+
+            if (WalletActivity.refreshLayout!=null)
+                WalletActivity.refreshLayout.setRefreshLayout(true);
         }
+
+
     }
 
     private void init() {

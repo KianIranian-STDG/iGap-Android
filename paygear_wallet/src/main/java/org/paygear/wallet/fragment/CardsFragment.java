@@ -108,6 +108,13 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
 
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (WalletActivity.refreshLayout != null)
+            WalletActivity.refreshLayout = null;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cards, container, false);
@@ -725,7 +732,8 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
     @Override
     public void setRefreshLayout(boolean refreshLayout) {
         try {
-            if (mRefreshLayout != null)
+
+            if (isAdded() && mRefreshLayout != null)
                 load();
         } catch (Exception e) {
         }

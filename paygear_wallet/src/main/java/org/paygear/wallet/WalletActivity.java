@@ -1,5 +1,6 @@
 package org.paygear.wallet;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -138,5 +139,13 @@ public class WalletActivity extends NavigationBarActivity {
     @Override
     protected boolean isNavBarShowingOnSwitchFragment(String fragmentName) {
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+     /*   Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();*/
     }
 }
