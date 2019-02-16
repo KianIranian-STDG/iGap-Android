@@ -1,12 +1,11 @@
-package net.iGap.helper.emoji.api;
+package net.iGap.fragments.emoji.api;
 
 import com.vanniktech.emoji.sticker.struct.StructSticker;
 
-import net.iGap.helper.emoji.struct.StructEachSticker;
-import net.iGap.helper.emoji.struct.StructStickerResult;
+import net.iGap.fragments.emoji.struct.StructEachSticker;
+import net.iGap.fragments.emoji.struct.StructStickerResult;
 
 import retrofit2.Call;
-import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;

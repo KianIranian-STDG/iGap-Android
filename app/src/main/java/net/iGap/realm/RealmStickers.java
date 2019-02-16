@@ -3,7 +3,7 @@ package net.iGap.realm;
 
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
-import net.iGap.helper.emoji.HelperDownloadSticker;
+import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.request.RequestFileDownload;
 
@@ -57,7 +57,17 @@ public class RealmStickers extends RealmObject {
             realmStickers.setCreatedBy(createdBy);
             realmStickers.setFavorite(isFavorite);
 
-            HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER);
+            HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
+                @Override
+                public void OnProgress(String path, int progress) {
+
+                }
+
+                @Override
+                public void OnError(String token) {
+
+                }
+            });
 
             RealmList<RealmStickersDetails> realmStickersDetails = new RealmList<>();
             for (StructItemSticker itemSticker : stickers) {

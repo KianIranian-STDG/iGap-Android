@@ -1,7 +1,6 @@
-package net.iGap.helper.emoji.api;
+package net.iGap.fragments.emoji.api;
 
 import android.util.Base64;
-import android.util.Log;
 
 import net.iGap.G;
 

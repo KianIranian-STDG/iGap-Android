@@ -1,4 +1,4 @@
-package net.iGap.helper.emoji;
+package net.iGap.fragments.emoji;
 
 public interface OnUpdateSticker {
 

@@ -1,17 +1,13 @@
-package net.iGap.helper.emoji;
+package net.iGap.fragments.emoji;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 
 import net.iGap.G;
@@ -26,19 +24,19 @@ import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperFragment;
-import net.iGap.helper.emoji.api.APIEmojiService;
-import net.iGap.helper.emoji.api.ApiEmojiUtils;
-import net.iGap.helper.emoji.struct.StructStickerResult;
+import net.iGap.fragments.emoji.api.APIEmojiService;
+import net.iGap.fragments.emoji.api.ApiEmojiUtils;
+import net.iGap.fragments.emoji.struct.StructStickerResult;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
+import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmStickers;
+import net.iGap.request.RequestFileDownload;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -104,7 +102,6 @@ public class FragmentSettingStickers extends BaseFragment {
         private List<StructGroupSticker> mData;
         private Context context;
         private LayoutInflater mInflater;
-        HashMap<String, StructGroupSticker> capitalCities = new HashMap<String, StructGroupSticker>();
 
 
         // data is passed into the constructor
@@ -126,11 +123,24 @@ public class FragmentSettingStickers extends BaseFragment {
         public void onBindViewHolder(ViewHolder holder, int position) {
             StructGroupSticker item = mData.get(position);
 
-            if (!capitalCities.containsKey(item.getAvatarToken())) {
-                capitalCities.put(item.getAvatarToken(), item);
-            }
             if (item.getUri() == null) return;
-            G.imageLoader.displayImage(AndroidUtils.suitablePath(item.getUri()), holder.imgSticker);
+
+
+            if (item.getUri() == null || item.getUri().isEmpty()) {
+                HelperDownloadSticker.stickerDownload(item.getAvatarToken(), item.getName(), item.getAvatarSize(), ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
+                    @Override
+                    public void OnProgress(String path, int progress) {
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.imgSticker);
+                    }
+
+                    @Override
+                    public void OnError(String token) {
+
+                    }
+                });
+            } else {
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(item.getUri()), holder.imgSticker);
+            }
             holder.txtName.setText(item.getName());
             holder.txtCount.setText(item.getStickers().size() + " " + "Stickers");
         }
@@ -173,27 +183,20 @@ public class FragmentSettingStickers extends BaseFragment {
                         @Override
                         public void onClick(View v) {
 
-                            progressBar.setVisibility(View.VISIBLE);
-
-                            AlertDialog.Builder builder;
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
-                            } else {
-                                builder = new AlertDialog.Builder(context);
-                            }
-                            builder.setTitle("Remove Sticker")
-                                    .setMessage("Are you sure you want to remove this stickers?")
-                                    .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+                            new MaterialDialog.Builder(getActivity())
+                                    .title(getResources().getString(R.string.remove_sticker))
+                                    .content(getResources().getString(R.string.add_sticker_text))
+                                    .positiveText(getString(org.paygear.wallet.R.string.yes))
+                                    .negativeText(getString(org.paygear.wallet.R.string.no))
+                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
                                         @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-
+                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                            progressBar.setVisibility(View.VISIBLE);
                                             mAPIService.removeSticker(mData.get(getAdapterPosition()).getId()).enqueue(new Callback<StructStickerResult>() {
                                                 @Override
                                                 public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
-
                                                     progressBar.setVisibility(View.GONE);
                                                     if (response.body() != null && response.body().isSuccess()) {
-                                                        Log.i("CCCCCC", "onResponse: " + response.body().isSuccess());
                                                         RealmStickers.updateFavorite(mData.get(getAdapterPosition()).getId(), false);
                                                         mData.remove(getAdapterPosition());
                                                         updateAdapter();
@@ -204,19 +207,10 @@ public class FragmentSettingStickers extends BaseFragment {
                                                 @Override
                                                 public void onFailure(Call<StructStickerResult> call, Throwable t) {
                                                     progressBar.setVisibility(View.GONE);
-
-                                                    Log.i("CCCCCC", "onFailure: " + t.getMessage());
                                                 }
                                             });
                                         }
                                     })
-                                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    })
-                                    .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
                         }
                     });

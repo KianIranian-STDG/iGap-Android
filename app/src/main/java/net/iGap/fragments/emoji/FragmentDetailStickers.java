@@ -1,8 +1,7 @@
-package net.iGap.helper.emoji;
+package net.iGap.fragments.emoji;
 
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,10 +15,14 @@ import android.widget.ImageView;
 
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.helper.emoji.api.APIEmojiService;
+import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.AndroidUtils;
+import net.iGap.proto.ProtoFileDownload;
+import net.iGap.request.RequestFileDownload;
 
 import java.io.Serializable;
 import java.util.List;
@@ -113,8 +116,21 @@ public class FragmentDetailStickers extends BaseFragment {
         public void onBindViewHolder(AdapterSettingPage.ViewHolder holder, int position) {
             StructItemSticker item = mData.get(position);
 
-            Uri uri = Uri.parse(item.getUri());
-            holder.imgSticker.setImageURI(uri);
+            if (item.getUri() == null || item.getUri().isEmpty()) {
+                HelperDownloadSticker.stickerDownload(item.getToken(), item.getName(), item.getAvatarSize(), ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
+                    @Override
+                    public void OnProgress(String path, int progress) {
+                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.imgSticker);
+                    }
+
+                    @Override
+                    public void OnError(String token) {
+
+                    }
+                });
+            }else {
+                G.imageLoader.displayImage(AndroidUtils.suitablePath(item.getUri()), holder.imgSticker);
+            }
         }
 
         // total number of rows

@@ -1,18 +1,13 @@
-package net.iGap.helper.emoji;
+package net.iGap.fragments.emoji;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +20,10 @@ import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.helper.emoji.api.APIEmojiService;
-import net.iGap.helper.emoji.api.ApiEmojiUtils;
-import net.iGap.helper.emoji.struct.StructEachSticker;
-import net.iGap.helper.emoji.struct.StructStickerResult;
+import net.iGap.fragments.emoji.api.APIEmojiService;
+import net.iGap.fragments.emoji.api.ApiEmojiUtils;
+import net.iGap.fragments.emoji.struct.StructEachSticker;
+import net.iGap.fragments.emoji.struct.StructStickerResult;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.realm.RealmStickers;
 

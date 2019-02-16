@@ -1,4 +1,4 @@
-package net.iGap.helper.emoji.api;
+package net.iGap.fragments.emoji.api;
 
 /*
  * This is the source code of iGap for Android

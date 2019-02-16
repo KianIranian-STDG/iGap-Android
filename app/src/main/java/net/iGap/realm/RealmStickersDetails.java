@@ -1,21 +1,11 @@
 package net.iGap.realm;
 
-import android.util.Log;
-
-import net.iGap.G;
-import net.iGap.helper.emoji.HelperDownloadSticker;
-import net.iGap.interfaces.OnDownload;
-import net.iGap.interfaces.OnStickerDownloaded;
-import net.iGap.module.AndroidUtils;
+import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.proto.ProtoFileDownload;
-import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestFileDownload;
-
-import java.io.IOException;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 public class RealmStickersDetails extends RealmObject {
 
@@ -48,7 +38,17 @@ public class RealmStickersDetails extends RealmObject {
             realmStickersDetails.setSort(sort);
             realmStickersDetails.setGroupId(groupId);
 
-            HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER_DETAIL);
+            HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER_DETAIL, new HelperDownloadSticker.UpdateStickerListener() {
+                @Override
+                public void OnProgress(String path, int progress) {
+
+                }
+
+                @Override
+                public void OnError(String token) {
+
+                }
+            });
         }
 
         realm.close();

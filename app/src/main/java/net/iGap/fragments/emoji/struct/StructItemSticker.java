@@ -1,4 +1,4 @@
-package net.iGap.helper.emoji.struct;
+package net.iGap.fragments.emoji.struct;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

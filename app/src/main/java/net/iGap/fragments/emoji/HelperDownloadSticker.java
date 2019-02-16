@@ -1,23 +1,22 @@
-package net.iGap.helper.emoji;
-
-import android.util.Log;
+package net.iGap.fragments.emoji;
 
 import net.iGap.G;
-import net.iGap.interfaces.OnDownload;
 import net.iGap.interfaces.OnStickerDownloaded;
-import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmStickers;
-import net.iGap.realm.RealmStickersDetails;
 import net.iGap.request.RequestFileDownload;
 
-import java.io.IOException;
+import java.io.File;
 
 public class HelperDownloadSticker {
 
+    public interface UpdateStickerListener {
+        void OnProgress(String path, int progress);
 
-    public static void stickerDownload(String token, String extention, long avatarSize, ProtoFileDownload.FileDownload.Selector selector, RequestFileDownload.TypeDownload type) {
+        void OnError(String token);
+    }
+
+    public static void stickerDownload(String token, String extention, long avatarSize, ProtoFileDownload.FileDownload.Selector selector, RequestFileDownload.TypeDownload type, UpdateStickerListener updateStickerListener) {
 
         try {
             String filePath = "";
@@ -25,7 +24,8 @@ public class HelperDownloadSticker {
                 G.onStickerDownloaded = new OnStickerDownloaded() {
                     @Override
                     public void onStickerDownloaded(String filePath, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, RequestFileDownload.TypeDownload type, int progress) {
-
+                        if (updateStickerListener != null)
+                            updateStickerListener.OnProgress(filePath, 100);
                     }
 
                     @Override
@@ -34,6 +34,11 @@ public class HelperDownloadSticker {
                 };
 
             filePath = createPathFile(token, extention);
+            if (new File(filePath).exists()) {
+                if (updateStickerListener != null)
+                    updateStickerListener.OnProgress(filePath, 100);
+                return;
+            }
             new RequestFileDownload().download(token, 0, (int) avatarSize, selector, new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, token, filePath, selector, avatarSize, 0, type));
 
         } catch (RuntimeException e) {
