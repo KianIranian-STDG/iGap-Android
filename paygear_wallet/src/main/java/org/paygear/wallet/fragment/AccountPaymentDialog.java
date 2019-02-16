@@ -856,9 +856,11 @@ public class AccountPaymentDialog extends BottomSheetDialogFragment implements V
                  * # peyman
                  * this url must be use to redirect to our app done
                  *
-                 *  podMap.put("callback_url","our i gap url);
+                 *     podMap.put("callback_url","https://web.igap.net/#!/iG");
                  */
                 //         podMap.put("callback_url", "");
+
+
 
                 if (payment.orderType > -1) {
                     //map.put("pre_order", true);

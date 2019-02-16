@@ -383,9 +383,6 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             map.put("cv", cvv2);
         }
 
-        if (!TextUtils.isEmpty(cvv2))
-            map.put("cv", cvv2);
-
         if (pin2 != null) {
             map.put("p2", pin2);
         }
