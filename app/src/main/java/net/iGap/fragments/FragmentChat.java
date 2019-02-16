@@ -3024,6 +3024,8 @@ public class FragmentChat extends BaseFragment
                     mAdapter.add(new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierDown));
                     mAdapter.notifyAdapterDataSetChanged();
                     return;
+                } else {
+                    Log.d("bagi" , "NoBugInScrollNavigatonClicke");
                 }
 
                 latestButtonClickTime = System.currentTimeMillis();
@@ -3036,19 +3038,25 @@ public class FragmentChat extends BaseFragment
                      * unread layout otherwise should clear list and load from unread again
                      */
 
+                    Log.d("bagi" , "1111");
                     firstUnreadMessage = firstUnreadMessageInChat;
                     if (!firstUnreadMessage.isValid() || firstUnreadMessage.isDeleted()) {
+
+                        Log.d("bagi" , "77777");
                         resetAndGetFromEnd();
                         return;
                     }
 
+                    Log.d("bagi" , "2222");
                     int position = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
                     if (position > 0) {
+                        Log.d("bagi" , "88888");
                         mAdapter.add(position, new UnreadMessage(mAdapter, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), makeUnreadMessage(countNewMessage))).withIdentifier(SUID.id().get()));
                         isShowLayoutUnreadMessage = true;
                         LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
                         linearLayout.scrollToPositionWithOffset(position, 0);
                     } else {
+                        Log.d("bagi" , "99999");
                         resetMessagingValue();
                         unreadCount = countNewMessage;
                         firstUnreadMessage = firstUnreadMessageInChat;
@@ -3065,11 +3073,14 @@ public class FragmentChat extends BaseFragment
                             linearLayout.scrollToPositionWithOffset(position1 - 1, 0);
                         }
                     }
+
+                    Log.d("bagi" , "33333");
                     firstUnreadMessageInChat = null;
                     countNewMessage = 0;
                     txtNewUnreadMessage.setVisibility(View.GONE);
                     txtNewUnreadMessage.setText(countNewMessage + "");
                 } else {
+                    Log.d("bagi" , "44444");
                     llScrollNavigate.setVisibility(View.GONE);
                     /**
                      * if addToView is true this means that all new message is in adapter
@@ -3077,9 +3088,12 @@ public class FragmentChat extends BaseFragment
                      * items and reload again from bottom
                      */
                     if (!addToView) {
+
+                        Log.d("bagi" , "55555");
                         resetMessagingValue();
                         getMessages();
                     } else {
+                        Log.d("bagi" , "66666");
                         scrollToEnd();
                     }
                 }
