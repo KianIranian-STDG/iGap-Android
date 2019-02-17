@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructSticker;
 
@@ -39,6 +40,7 @@ import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmStickers;
 import net.iGap.request.RequestFileDownload;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -185,11 +187,15 @@ public class FragmentAddStickers extends BaseFragment {
                 holder.txtRemove.setVisibility(View.GONE);
             }
 
-            if (item.getUri() == null || item.getUri().isEmpty()) {
+            String path = HelperDownloadSticker.createPathFile(item.getAvatarToken(), item.getAvatarName());
+            if (!new File(path).exists()) {
                 HelperDownloadSticker.stickerDownload(item.getAvatarToken(), item.getName(), item.getAvatarSize(), ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
+
                     @Override
                     public void OnProgress(String path, int progress) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.imgSticker);
+                        Glide.with(context)
+                                .load(path)
+                                .into(holder.imgSticker);
                     }
 
                     @Override
@@ -198,8 +204,11 @@ public class FragmentAddStickers extends BaseFragment {
                     }
                 });
             } else {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(item.getUri()), holder.imgSticker);
+                Glide.with(context)
+                        .load(path)
+                        .into(holder.imgSticker);
             }
+
 
             holder.txtName.setText(item.getName());
             holder.txtCount.setText(item.getStickers().size() + " " + "Stickers");
