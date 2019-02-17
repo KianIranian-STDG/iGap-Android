@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
@@ -28,8 +29,8 @@ import io.realm.Realm;
 
 public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.ViewHolder> {
 
-    public UnreadMessage(Realm realmChat, IMessageItem messageClickListener) {
-        super(realmChat, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
+    public UnreadMessage(MessagesAdapter<AbstractMessage> mAdapter, IMessageItem messageClickListener) {
+        super(mAdapter, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class UnreadMessage extends AbstractMessage<UnreadMessage, UnreadMessage.
 
         super.bindView(holder, payloads);
 
-        setTextIfNeeded(holder.txtUnreadMessage, mMessage.messageText);
+        setTextIfNeeded(holder.txtUnreadMessage);
     }
 
     @Override

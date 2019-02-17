@@ -10,6 +10,8 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -19,8 +21,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperRadius;
 import net.iGap.interfaces.IMessageItem;
@@ -30,6 +37,7 @@ import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
 
+import java.io.InputStream;
 import java.util.List;
 
 import io.realm.Realm;
@@ -38,8 +46,8 @@ import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageWithTextItem.ViewHolder> {
 
-    public ImageWithTextItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public ImageWithTextItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
     @Override
@@ -58,15 +66,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
 
         super.bindView(holder, payloads);
 
-        String text = "";
-
-        if (mMessage.forwardedFrom != null) {
-            text = mMessage.forwardedFrom.getMessage();
-        } else {
-            text = mMessage.messageText;
-        }
-
-        setTextIfNeeded(holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+        setTextIfNeeded(holder.messageView);
 
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,10 +93,13 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
     @Override
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
-
-        if (holder.image != null && holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
+        if (holder.image.getTag() != null && holder.image.getTag().equals(tag)) {
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inPreferredConfig = Bitmap.Config.RGB_565;
+//            DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
+//            G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
+//                    new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
             G.imageLoader.displayImage(suitablePath(localPath), holder.image);
-            holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
         }
     }
 
@@ -105,7 +108,7 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
+    protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
         protected ReserveSpaceRoundedImageView image;
         protected MessageProgress progress;
 
@@ -118,13 +121,12 @@ public class ImageWithTextItem extends AbstractMessage<ImageWithTextItem, ImageW
             image = new ReserveSpaceRoundedImageView(G.context);
             image.setId(R.id.thumbnail);
             image.setScaleType(ImageView.ScaleType.FIT_XY);
-            image.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
             LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             image.setLayoutParams(layout_758);
-
+            image.setCornerRadius(HelperRadius.computeRadius());
             m_container.addView(frameLayout);
             if (withText) {
-                m_container.addView(ViewMaker.getTextView());
+                setLayoutMessageContainer();
             }
             frameLayout.addView(image);
             progress = getProgressBar(0);

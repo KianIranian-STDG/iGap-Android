@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.interfaces.IMessageItem;
@@ -38,8 +39,8 @@ import static net.iGap.G.isDarkTheme;
 
 public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
-    public LogItem(Realm realmChat, IMessageItem messageClickListener) {
-        super(realmChat, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
+    public LogItem(MessagesAdapter<AbstractMessage> mAdapter, IMessageItem messageClickListener) {
+        super(mAdapter, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
     }
 
     @Override

@@ -109,6 +109,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         cslr_txt_time.setId(R.id.cslr_txt_time);
         cslr_txt_time.setGravity(CENTER);
         cslr_txt_time.setPadding(dpToPixel(2), 0, dpToPixel(2), 0);
+        cslr_txt_time.setTextColor(Color.parseColor(G.textBubble));
         cslr_txt_time.setText("10:21");
         cslr_txt_time.setSingleLine(true);
         cslr_txt_time.setTextAppearance(context, R.style.ChatMessages_Time);
@@ -120,6 +121,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         // ContextThemeWrapper newContext = new ContextThemeWrapper(G.context, R.style.ChatMessages_MaterialDesignTextView_Tick);
         cslr_txt_tic = new ImageView(context);
         cslr_txt_tic.setId(R.id.cslr_txt_tic);
+
 //        cslr_txt_tic.setColorFilter(context.getResources().getColor(R.color.colorOldBlack));
         cslr_txt_tic.setColorFilter(Color.parseColor(G.textBubble), PorterDuff.Mode.SRC_IN);
         //AppUtils.setImageDrawable(cslr_txt_tic, R.drawable.ic_double_check);
@@ -297,10 +299,12 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
 
         ((ViewGroup) itemView).addView(mainContainer);
 
+        lyt_vote_up.setOnLongClickListener(getLongClickPerform());
+        lyt_vote_down.setOnLongClickListener(getLongClickPerform());
+
         mainContainer.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Log.d("bagi" , "itemViewLongClick");
                 if (!FragmentChat.isInSelectionMode && (
                         ChatItemHolder.this instanceof VoiceItem.ViewHolder)
                 ) {
@@ -311,6 +315,13 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
                 return true;
             }
         });
+    }
+
+    private View.OnLongClickListener getLongClickPerform(){
+        return view -> {
+            itemView.performLongClick();
+            return true;
+        };
     }
 
     protected void setLayoutDirection(View view, int direction){

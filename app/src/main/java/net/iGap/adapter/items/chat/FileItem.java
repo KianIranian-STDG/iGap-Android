@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AndroidUtils;
@@ -44,8 +45,8 @@ import static net.iGap.fragments.FragmentChat.getRealmChat;
 
 public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
 
-    public FileItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public FileItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
     @Override
@@ -67,24 +68,19 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        String text = "";
-
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
                 holder.cslf_txt_file_name.setText(mMessage.forwardedFrom.getAttachment().getName());
                 holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true));
             }
-            text = mMessage.forwardedFrom.getMessage();
         } else {
             if (mMessage.attachment != null) {
                 holder.cslf_txt_file_name.setText(mMessage.attachment.name);
                 holder.cslf_txt_file_size.setText(AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true));
             }
-
-            text = mMessage.messageText;
         }
 
-        setTextIfNeeded(holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+        setTextIfNeeded(holder.messageView);
 
         RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.valueOf(mMessage.messageID)).findFirst());
         if (roomMessage != null) {
@@ -129,7 +125,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
+    protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
         protected TextView cslf_txt_file_name;
         protected TextView cslf_txt_file_size;
         protected ImageView thumbnail;
@@ -198,7 +194,7 @@ public class FileItem extends AbstractMessage<FileItem, FileItem.ViewHolder> {
             linearLayout_784.addView(linearLayout_780);
             m_container.addView(linearLayout_784);
 
-            m_container.addView(ViewMaker.getTextView());
+            setLayoutMessageContainer();
 
             progress = getProgressBar(R.dimen.dp52);
             frameLayout.addView(thumbnail);

@@ -10,6 +10,8 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -19,8 +21,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.HelperRadius;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
@@ -40,8 +47,8 @@ import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoWithTextItem.ViewHolder> {
 
-    public VideoWithTextItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public VideoWithTextItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
     @Override
@@ -60,14 +67,10 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
 
         super.bindView(holder, payloads);
 
-        String text = "";
-
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
                 holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.forwardedFrom.getAttachment().getDuration() * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.forwardedFrom.getAttachment().getSize(), true)));
             }
-
-            text = mMessage.forwardedFrom.getMessage();
         } else {
             if (mMessage.attachment != null) {
 
@@ -78,10 +81,9 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
                     holder.duration.setText(String.format(holder.itemView.getResources().getString(R.string.video_duration), AndroidUtils.formatDuration((int) (mMessage.attachment.duration * 1000L)), AndroidUtils.humanReadableByteCount(mMessage.attachment.size, true) + ""));
                 }
             }
-            text = mMessage.messageText;
         }
 
-        setTextIfNeeded(holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+        setTextIfNeeded(holder.messageView);
 
     }
 
@@ -89,19 +91,21 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        if (holder.image != null && holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
+        if (holder.image.getTag() != null && (holder.image.getTag()).equals(tag)) {
             if (fileType == LocalFileType.THUMBNAIL) {
-
+//                BitmapFactory.Options options = new BitmapFactory.Options();
+//                options.inPreferredConfig = Bitmap.Config.RGB_565;
+//                DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder().decodingOptions(options);
+//                G.imageLoader.displayImage(suitablePath(localPath), new ImageViewAware(holder.image), builder.build(),
+//                        new ImageSize(holder.image.getMeasuredWidth(), holder.image.getMeasuredHeight()), null, null);
                 G.imageLoader.displayImage(suitablePath(localPath), holder.image);
 
-                holder.image.setCornerRadius(HelperRadius.computeRadius(localPath));
             } else {
 
-                MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
-                AppUtils.setProgresColor(progress.progressBar);
+                AppUtils.setProgresColor(holder.progress.progressBar);
 
-                progress.setVisibility(View.VISIBLE);
-                progress.withDrawable(R.drawable.ic_play, true);
+                holder.progress.setVisibility(View.VISIBLE);
+                holder.progress.withDrawable(R.drawable.ic_play, true);
             }
         }
     }
@@ -111,7 +115,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
+    protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
         protected MessageProgress progress;
         protected ReserveSpaceRoundedImageView image;
         protected TextView duration;
@@ -128,7 +132,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             FrameLayout.LayoutParams layout_679 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             image.setLayoutParams(layout_679);
             image.setScaleType(ImageView.ScaleType.FIT_XY);
-            image.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
+            image.setCornerRadius(HelperRadius.computeRadius());
             frameLayout_642.addView(image);
 
             duration = new TextView(G.context);
@@ -153,7 +157,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             frameLayout_642.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp48), i_Dp(R.dimen.dp48), Gravity.CENTER));
             m_container.addView(frameLayout_642);
             if (withText) {
-                m_container.addView(ViewMaker.getTextView());
+                setLayoutMessageContainer();
             }
         }
 

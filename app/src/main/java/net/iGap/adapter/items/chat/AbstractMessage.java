@@ -21,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -39,6 +40,7 @@ import com.mikepenz.fastadapter.items.AbstractItem;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
@@ -92,35 +94,37 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.widget.LinearLayout.VERTICAL;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
-public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH>, View.OnClickListener {//IChatItemAvatar
+public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
     public static ArrayMap<Long, String> updateForwardInfo = new ArrayMap<>();// after get user info or room info if need update view in chat activity
     public IMessageItem messageClickListener;
     public StructMessageInfo mMessage;
     public boolean directionalBased;
-    //protected Realm realmChat;
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
-    private Gson gson;
-    private LinearLayout childLayout;
-    private HashMap<Integer, JSONArray> buttonList;
-
+    CharSequence myText;
+    private RealmAttachment realmAttachment;
+    private RealmRoom realmRoom;
+    private RealmChannelExtra realmChannelExtra;
+    private RealmRoom realmRoomForwardedFrom;
+    private MessagesAdapter<AbstractMessage> mAdapter;
     /**
      * add this prt for video player
      */
     //@Override public void onPlayPauseVideo(VH holder, String localPath, int isHide, double time) {
     //    // empty
     //}
-    public AbstractMessage(Realm realmChat, boolean directionalBased, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+    public AbstractMessage(MessagesAdapter<AbstractMessage> mAdapter, boolean directionalBased, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         //this.realmChat = realmChat;
         this.directionalBased = directionalBased;
         this.type = type;
+        this.mAdapter = mAdapter;
         this.messageClickListener = messageClickListener;
 
     }
@@ -164,18 +168,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         // empty
     }
 
-    protected void setTextIfNeeded(TextView view, String msg) {
-
-        if (!TextUtils.isEmpty(msg)) {
-            if (mMessage.hasLinkInMessage) {
-                view.setText(HelperUrl.getLinkText(msg, mMessage.linkInfo, mMessage.messageID));
-            } else {
-
-                msg = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(msg) : msg;
-
-                view.setText(msg);
-            }
-
+    protected void setTextIfNeeded(TextView view) {
+        if (!TextUtils.isEmpty(myText)) {
+            view.setText(myText);
             view.setVisibility(View.VISIBLE);
         } else {
             view.setVisibility(View.GONE);
@@ -185,7 +180,43 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public AbstractMessage setMessage(StructMessageInfo message) {
         this.mMessage = message;
 
+        if ((mMessage.forwardedFrom != null)) {
+            long messageId = mMessage.forwardedFrom.getMessageId();
+            if (mMessage.forwardedFrom.getMessageId() < 0) {
+                messageId = messageId * (-1);
+            }
+            realmRoomForwardedFrom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+            realmChannelExtra = getRealmChat().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
+        } else {
+            realmRoomForwardedFrom = null;
+            realmChannelExtra = null;
+        }
+
+        realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
+        RealmRoomMessage f = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).
+                equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
+        if (f != null){
+            realmAttachment = f.getAttachment();
+        }
+        if (mMessage.forwardedFrom != null) {
+            myText = mMessage.forwardedFrom.getMessage();
+        } else {
+            myText = mMessage.messageText;
+        }
+
+        updateMessageText((String) myText);
+
         return this;
+    }
+
+    public void updateMessageText(String text) {
+        if (!TextUtils.isEmpty(text)) {
+            if (mMessage.hasLinkInMessage) {
+                myText = HelperUrl.getLinkText(text, mMessage.linkInfo, mMessage.messageID);
+            } else {
+                myText = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(text) : text;
+            }
+        }
     }
 
     @Override
@@ -198,38 +229,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public void bindView(final VH holder, List<Object> payloads) {
         super.bindView(holder, payloads);
 
-        if (holder instanceof ProgressWaiting.ViewHolder || holder instanceof UnreadMessage.ViewHolder || holder instanceof LogWallet.ViewHolder || holder instanceof LogItem.ViewHolder || holder instanceof TimeItem.ViewHolder) {
-            return;
-        }
-
         ChatItemHolder mHolder;
         if (holder instanceof ChatItemHolder)
             mHolder = (ChatItemHolder) holder;
         else
             return;
-
-
-        // remove text view if exist in view
-        LinearLayout layoutMessageContainer = (LinearLayout) holder.itemView.findViewById(R.id.csliwt_layout_container_message);
-        if (layoutMessageContainer != null) {
-            layoutMessageContainer.removeAllViews();
-        }
-
-
-        if (mMessage.additionalData != null) {
-            if (mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
-
-                /** create Parent view */
-
-                buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
-
-                childLayout = MakeButtons.createLayout();
-                // parsedList = parsJson(mMessage.additionalData.additionalData);
-
-                gson = new GsonBuilder().create();
-
-            }
-        }
 
         mHolder.mainContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -269,59 +273,66 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         });
 
 
-        if (holder instanceof TextItem.ViewHolder || holder instanceof ImageWithTextItem.ViewHolder || holder instanceof AudioItem.ViewHolder || holder instanceof FileItem.ViewHolder || holder instanceof VideoWithTextItem.ViewHolder || holder instanceof GifWithTextItem.ViewHolder) {
-            int maxsize = 0;
+        if (holder instanceof ChatItemWithTextHolder) {
+            ChatItemWithTextHolder withTextHolder = (ChatItemWithTextHolder) holder;
+            withTextHolder.messageView.setHasEmoji(mMessage.hasEmojiInText);
 
+            int maxsize = 0;
+            withTextHolder.removeButtonLayout();
             if ((type == ProtoGlobal.Room.Type.CHANNEL) || (type == ProtoGlobal.Room.Type.CHAT) && mMessage.forwardedFrom != null) {
                 maxsize = G.maxChatBox;
             }
-
-            View messageView = ViewMaker.makeTextViewMessage(maxsize, mMessage.hasEmojiInText, mMessage.hasLinkInMessage);
-            layoutMessageContainer.addView(messageView);
-
-            messageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("bagi" , "OnClickMessage" + FragmentChat.isInSelectionMode);
-
-                    if (FragmentChat.isInSelectionMode) {
-                        holder.itemView.performLongClick();
-                    } else {
-                        mHolder.mainContainer.performClick();
-                    }
-
-                }
-            });
-
-            messageView.setOnLongClickListener(getLongClickPerform(holder));
+            if (maxsize > 0)
+                withTextHolder.messageView.setMaxWidth(maxsize);
+            if (mMessage.hasLinkInMessage) {
+                BetterLinkMovementMethod
+                    .linkify(Linkify.ALL, withTextHolder.messageView)
+                    .setOnLinkClickListener((tv, url) -> {
+                        Log.d("bagi" , "OnMessageLinkClick");
+                        return FragmentChat.isInSelectionMode;
+                    })
+                    .setOnLinkLongClickListener((tv, url) -> {
+                        Log.d("bagi" , "OnMessageLinkLongClick");
+                        return true;
+                    });
+            } else {
+                // remove BetterLinkMovementMethod
+            }
 
             try {
-                if (buttonList != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
-                    if (layoutMessageContainer != null) {
-
-
-                        for (int i = 0; i < buttonList.size(); i++) {
-                            for (int j = 0; j < buttonList.get(i).length(); j++) {
-                                try {
-                                    ButtonEntity btnEntery = new ButtonEntity();
-                                    btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
-                                    }.getType());
-                                    btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
-                                    childLayout = MakeButtons.addButtons(btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
-                                  //  childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(),this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                if (mMessage.additionalData != null && mMessage.additionalData.AdditionalType == AdditionalType.UNDER_MESSAGE_BUTTON) {
+                    HashMap<Integer, JSONArray> buttonList = MakeButtons.parseData(mMessage.additionalData.additionalData);
+                    Gson gson = new GsonBuilder().create();
+                    for (int i = 0; i < buttonList.size(); i++) {
+                        LinearLayout childLayout = MakeButtons.createLayout();
+                        for (int j = 0; j < buttonList.get(i).length(); j++) {
+                            try {
+                                ButtonEntity btnEntery = gson.fromJson(buttonList.get(i).get(j).toString(), new TypeToken<ButtonEntity>() {
+                                }.getType());
+                                btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
+                                childLayout = MakeButtons.addButtons(btnEntery, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        if (FragmentChat.isInSelectionMode) {
+                                            holder.itemView.performLongClick();
+                                            return;
+                                        }
+                                        onBotBtnClick(view);
+                                    }
+                                }, buttonList.get(i).length(), .75f, i, childLayout, mMessage.additionalData.AdditionalType);
+                                //  childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(),this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), mMessage.additionalData.AdditionalType);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            layoutMessageContainer.addView(childLayout);
-                            childLayout = MakeButtons.createLayout();
-
                         }
+                        withTextHolder.addButtonLayout(childLayout);
                     }
+
                 }
 
             } catch (Exception e) {
             }
+            ((LinearLayout.LayoutParams) ((LinearLayout) withTextHolder.messageView.getParent()).getLayoutParams()).gravity = AndroidUtils.isTextRtl(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessage() : mMessage.messageText) ? Gravity.RIGHT : Gravity.LEFT;
         }
 
         /**
@@ -356,7 +367,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (!mMessage.isTimeOrLogMessage()) {
-            RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
             /**
              * check failed state ,because if is failed we want show to user even is in channel
              */
@@ -378,7 +388,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * display user avatar only if chat type is GROUP
          */
-        View messageSenderAvatar = holder.itemView.findViewById(R.id.messageSenderAvatar);
+        View messageSenderAvatar = mHolder.m_container.findViewById(R.id.messageSenderAvatar);
         if (messageSenderAvatar != null) {
             messageSenderAvatar.setVisibility(View.GONE);
         }
@@ -448,33 +458,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          * set message time
          */
 
-        mHolder.cslr_txt_time.setTextColor(Color.parseColor(G.textBubble));
-        mHolder.cslr_txt_time.setText(HelperCalander.getClocktime(mMessage.time, false));
-
+        String time = HelperCalander.getClocktime(mMessage.time, false);
         if (HelperCalander.isPersianUnicode) {
-            mHolder.cslr_txt_time.setText(HelperCalander.convertToUnicodeFarsiNumber(mHolder.cslr_txt_time.getText().toString()));
+            mHolder.cslr_txt_time.setText(HelperCalander.convertToUnicodeFarsiNumber(time));
+        } else {
+            mHolder.cslr_txt_time.setText(time);
         }
 
-
-        RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
-        if (roomMessage != null) {
-            if (holder instanceof StickerItem.ViewHolder) {
-                if (roomMessage.getAttachment().isFileExistsOnLocal()) {
-                    onLoadThumbnailFromLocal(holder, getCacheId(mMessage), roomMessage.getAttachment().getLocalFilePath(), LocalFileType.FILE);
-                } else {
-                    downLoadFile(holder, roomMessage.getAttachment(), 0);
-                }
-                hasProgress(holder);
+        if (holder instanceof StickerItem.ViewHolder) {
+            if (roomMessage.getAttachment().isFileExistsOnLocal()) {
+                onLoadThumbnailFromLocal(holder, getCacheId(mMessage), roomMessage.getAttachment().getLocalFilePath(), LocalFileType.FILE);
             } else {
-                prepareAttachmentIfNeeded(holder, roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
+                downLoadFile(holder, roomMessage.getAttachment(), 0);
             }
-        }
+            hasProgress(holder);
+        } else if (realmAttachment != null){
 
-        TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
-        if (messageText != null) {
-            if (messageText.getParent() instanceof LinearLayout) {
-                ((LinearLayout.LayoutParams) ((LinearLayout) messageText.getParent()).getLayoutParams()).gravity = AndroidUtils.isTextRtl(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessage() : mMessage.messageText) ? Gravity.RIGHT : Gravity.LEFT;
-            }
+            prepareAttachmentIfNeeded(holder, realmAttachment, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
         }
 
 
@@ -483,9 +483,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
          */
 
         mHolder.lyt_vote.setVisibility(View.GONE);
-
         mHolder.lyt_see.setVisibility(View.GONE);
-
         if (!(holder instanceof StickerItem.ViewHolder)) {
             if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
                 showVote(holder, getRealmChat());
@@ -493,11 +491,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 if (mMessage.forwardedFrom != null) {
                     if (mMessage.forwardedFrom.getAuthorRoomId() > 0) {
                         RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-                        if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                        if (realmRoomForwardedFrom != null && realmRoomForwardedFrom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
                             showVote(holder, getRealmChat());
 
                             if (mMessage.isSenderMe()) {
-                                holder.itemView.findViewById(R.id.cslm_view_left_dis).setVisibility(View.VISIBLE);
+                                mHolder.cslm_view_left_dis.setVisibility(View.VISIBLE);
                             }
                         }
                     }
@@ -523,9 +521,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private void getChannelMessageState() {
         if ((mMessage.forwardedFrom != null)) {
             ProtoGlobal.Room.Type roomType = null;
-            RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-            if (realmRoom != null) {
-                roomType = realmRoom.getType();
+            if (realmRoomForwardedFrom != null) {
+                roomType = realmRoomForwardedFrom.getType();
             }
             if ((mMessage.forwardedFrom != null) && (roomType == ProtoGlobal.Room.Type.CHANNEL)) {
                 /**
@@ -605,28 +602,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder.lyt_vote.setVisibility(View.INVISIBLE);
         }
 
-        mHolder.lyt_vote.setVisibility(View.VISIBLE);
-
         /**
          * userId != 0 means that this message is from channel
          * because for chat and group userId will be set
          */
 
         if ((mMessage.forwardedFrom != null)) {
-
-            ProtoGlobal.Room.Type roomType = null;
-            RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-            if (realmRoom != null) {
-                roomType = realmRoom.getType();
-            }
-
-            if (roomType != null && roomType == ProtoGlobal.Room.Type.CHANNEL) {
-                long messageId = mMessage.forwardedFrom.getMessageId();
-                if (mMessage.forwardedFrom.getMessageId() < 0) {
-                    messageId = messageId * (-1);
-                }
-                RealmChannelExtra realmChannelExtra = getRealmChat().where(RealmChannelExtra.class).equalTo(RealmChannelExtraFields.MESSAGE_ID, messageId).findFirst();
-                if (realmChannelExtra != null) {
+            if (realmRoomForwardedFrom != null && realmRoomForwardedFrom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                 if (realmChannelExtra != null) {
                     mHolder.txt_vote_up.setText(realmChannelExtra.getThumbsUp());
                     mHolder.txt_vote_down.setText(realmChannelExtra.getThumbsDown());
                     mHolder.txt_views_label.setText(realmChannelExtra.getViewsLabel());
@@ -666,8 +649,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         });
 
-        mHolder.lyt_vote_up.setOnLongClickListener(getLongClickPerform(mHolder));
-
         mHolder.lyt_vote_down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -678,8 +659,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
             }
         });
-
-        mHolder.lyt_vote_down.setOnLongClickListener(getLongClickPerform(mHolder));
     }
 
     /**
@@ -734,30 +713,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder = (ChatItemHolder) holder;
         else
             return;
-        TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
 
         LinearLayout timeLayout = (LinearLayout) mHolder.contentContainer.getParent();
         timeLayout.setGravity(Gravity.LEFT);
 
-        if (messageText != null) {
-            messageText.setTextColor(Color.parseColor(G.textBubble));
+        if (holder instanceof ChatItemWithTextHolder) {
+            ((ChatItemWithTextHolder) holder).messageView.setTextColor(Color.parseColor(G.textBubble));
         }
         //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
-
-        if (G.isDarkTheme) {
-            setTextColor(mHolder.cslr_txt_tic, R.color.white);
-        } else {
-            setTextColor(mHolder.cslr_txt_tic, R.color.colorOldBlack);
-        }
-
 
         ((FrameLayout.LayoutParams) mHolder.mainContainer.getLayoutParams()).gravity = Gravity.LEFT;
 
         ((LinearLayout.LayoutParams) mHolder.contentContainer.getLayoutParams()).gravity = Gravity.LEFT;
 
         if (G.isDarkTheme) {
+            setTextColor(mHolder.cslr_txt_tic, R.color.white);
             ((View) (mHolder.contentContainer).getParent()).setBackgroundResource(R.drawable.rectangel_white_round_dark);
         } else {
+            setTextColor(mHolder.cslr_txt_tic, R.color.colorOldBlack);
             ((View) (mHolder.contentContainer).getParent()).setBackgroundResource(R.drawable.rectangel_white_round);
         }
 
@@ -800,11 +773,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         LinearLayout timeLayout = (LinearLayout) mHolder.contentContainer.getParent();
         timeLayout.setGravity(Gravity.RIGHT);
 
-        TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
         //  TextView iconHearing = (TextView) holder.itemView.findViewById(R.id.cslr_txt_hearing);
 
-        if (messageText != null) {
-            messageText.setTextColor(Color.parseColor(G.textBubble));
+        if (holder instanceof ChatItemWithTextHolder) {
+            ((ChatItemWithTextHolder) holder).messageView.setTextColor(Color.parseColor(G.textBubble));
         }
         //   ProtoGlobal.RoomMessageType messageType = mMessage.forwardedFrom == null ? mMessage.messageType : mMessage.forwardedFrom.getMessageType();
 
@@ -863,17 +835,13 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         else
             return;
 
-        if (mHolder.m_container == null) {
-            return;
-        }
-
         mHolder.m_container.setMinimumWidth(0);
         mHolder.m_container.setMinimumHeight(0);
 
         /**
          * set replay container visible if message was replayed, otherwise, gone it
          */
-        View cslr_replay_layout = holder.itemView.findViewById(R.id.cslr_replay_layout);
+        View cslr_replay_layout = ((ChatItemHolder) holder).m_container.findViewById(R.id.cslr_replay_layout);
 
         if (cslr_replay_layout != null) {
             mHolder.m_container.removeView(cslr_replay_layout);
@@ -907,7 +875,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 }
 
                 if (type == ProtoGlobal.Room.Type.CHANNEL) {
-                    RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
                     if (realmRoom != null) {
                         replyFrom.setText(realmRoom.getTitle());
                     }
@@ -946,7 +913,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 replyFrom.measure(0, 0);       //must call measure!
                 replayMessage.measure(0, 0);
 
-                int maxWith = 0, withMessage = 0, withTitle = 0;
+                int maxWith, withMessage, withTitle;
                 withTitle = replyFrom.getMeasuredWidth();
                 withMessage = replayMessage.getMeasuredWidth();
                 maxWith = withTitle > withMessage ? withTitle : withMessage;
@@ -973,14 +940,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder = (ChatItemHolder) holder;
         else
             return;
-        if (mHolder.m_container == null) {
-            return;
-        }
-
         /**
          * set forward container visible if message was forwarded, otherwise, gone it
          */
-        View cslr_ll_forward22 = holder.itemView.findViewById(R.id.cslr_ll_forward);
+        View cslr_ll_forward22 = ((ChatItemHolder) holder).m_container.findViewById(R.id.cslr_ll_forward);
         if (cslr_ll_forward22 != null) {
             mHolder.m_container.removeView(cslr_ll_forward22);
         }
@@ -1054,30 +1017,29 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                             break;
                     }
                 } else {
-                    RealmRoom realmRoom1 = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-                    if (realmRoom1 != null) {
+                    if (realmRoomForwardedFrom != null) {
 
-                        switch (realmRoom1.getType()) {
+                        switch (realmRoomForwardedFrom.getType()) {
                             case CHANNEL:
-                                if (realmRoom1.getChannelRoom() != null && realmRoom1.getChannelRoom().getUsername() != null) {
-                                    mMessage.username = realmRoom1.getChannelRoom().getUsername();
+                                if (realmRoomForwardedFrom.getChannelRoom() != null && realmRoomForwardedFrom.getChannelRoom().getUsername() != null) {
+                                    mMessage.username = realmRoomForwardedFrom.getChannelRoom().getUsername();
                                 } else {
                                     mMessage.username = holder.itemView.getResources().getString(R.string.private_channel);
                                 }
 
                                 break;
                             case GROUP:
-                                mMessage.username = realmRoom1.getGroupRoom().getUsername();
+                                mMessage.username = realmRoomForwardedFrom.getGroupRoom().getUsername();
                                 break;
                         }
 
-                        if (RealmRoom.needUpdateRoomInfo(realmRoom1.getId())) {
-                            if (!updateForwardInfo.containsKey(realmRoom1.getId())) {
-                                updateForwardInfo.put(realmRoom1.getId(), mMessage.messageID);
+                        if (RealmRoom.needUpdateRoomInfo(realmRoomForwardedFrom.getId())) {
+                            if (!updateForwardInfo.containsKey(realmRoomForwardedFrom.getId())) {
+                                updateForwardInfo.put(realmRoomForwardedFrom.getId(), mMessage.messageID);
                             }
                         }
 
-                        txtForwardFrom.setText(realmRoom1.getTitle());
+                        txtForwardFrom.setText(realmRoomForwardedFrom.getTitle());
                         if (mMessage.isSenderMe()) {
                             txtForwardFrom.setTextColor(Color.parseColor(G.textBubble));
                         } else {
@@ -1247,7 +1209,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         else
             return;
 
-
         if (attachment != null) {
 
             if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
@@ -1416,9 +1377,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 prepareProgress(holder, attachment);
             }
 
-
-        } else {
-            Log.d("bagi" ,"attachment is null");
         }
     }
 
@@ -1802,9 +1760,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return "";
     }
 
-
-    @Override
-    public void onClick(View v) {
+    public void onBotBtnClick(View v) {
         try {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
                 HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
@@ -1839,6 +1795,5 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
     }
-
 
 }
