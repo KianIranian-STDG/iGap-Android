@@ -117,21 +117,24 @@ public class FragmentSettingWallet extends Fragment {
             btnForgotPassword.setBackground(mDrawableSetPassword);
         }
 
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, txtForgotPassword, txtSetPassword);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM, txtForgotPassword, txtSetPassword);
 
         btnSetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                ((NavigationBarActivity) getActivity()).replaceFullFragment(
-                        new SetCardPinFragment(), "SetCardPinFragment", true);
+                ((NavigationBarActivity) getActivity()).replaceFullFragment(new SetCardPinFragment(), "SetCardPinFragment", true);
             }
         });
 
         btnForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                expireTime = ( mPressed + TIME - System.currentTimeMillis());
+
+                ((NavigationBarActivity) getActivity()).replaceFullFragment(SetCardPinFragment.newInstance(true), "SetCardPinFragment", true);
+
+
+       /*         expireTime = ( mPressed + TIME - System.currentTimeMillis());
 
                 if (mPressed + TIME < System.currentTimeMillis()){
                     mPressed = System.currentTimeMillis();
@@ -165,13 +168,13 @@ public class FragmentSettingWallet extends Fragment {
                             .show();
                 }else {
                     CountDownExpireTimer();
-                }
+                }*/
 
             }
         });
     }
 
-    private void CountDownExpireTimer(){
+    private void CountDownExpireTimer() {
 
 
         final MaterialDialog dialogWait = new MaterialDialog.Builder(getContext()).title(R.string.please_wait).customView(R.layout.dialog_remind_time, true).positiveText(R.string.ok).autoDismiss(true).canceledOnTouchOutside(true).cancelable(true).onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -183,19 +186,19 @@ public class FragmentSettingWallet extends Fragment {
         }).show();
         View v = dialogWait.getCustomView();
         if (v != null) {
-             final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
+            final TextView remindTime = (TextView) v.findViewById(R.id.remindTime);
             remindTime.setTextColor(Color.BLACK);
-            final CountDownTimer countDownTimer = new CountDownTimer(expireTime,1000) { // wait for verify sms
+            final CountDownTimer countDownTimer = new CountDownTimer(expireTime, 1000) { // wait for verify sms
                 public void onTick(long millisUntilFinished) {
 
-                    long seconds =  millisUntilFinished/1000 % 60;
-                    remindTime.setText(""+ seconds);
-                    expireTime= millisUntilFinished;
+                    long seconds = millisUntilFinished / 1000 % 60;
+                    remindTime.setText("" + seconds);
+                    expireTime = millisUntilFinished;
                 }
 
                 public void onFinish() {
 
-                    expireTime= 0;
+                    expireTime = 0;
                     dialogWait.dismiss();
                 }
             };
@@ -207,8 +210,6 @@ public class FragmentSettingWallet extends Fragment {
                 }
             });
         }
-
-
 
 
     }

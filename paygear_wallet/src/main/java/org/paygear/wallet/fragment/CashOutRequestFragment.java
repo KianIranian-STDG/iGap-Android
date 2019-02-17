@@ -1,15 +1,21 @@
 package org.paygear.wallet.fragment;
 
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -38,23 +44,29 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import org.chromium.customtabsclient.CustomTabsActivityHelper;
 import org.paygear.wallet.R;
 import org.paygear.wallet.RaadApp;
+import org.paygear.wallet.RefreshLayout;
 import org.paygear.wallet.WalletActivity;
 import org.paygear.wallet.model.Card;
 import org.paygear.wallet.model.CashoutUserConfirm;
 import org.paygear.wallet.model.CreditLimit;
+import org.paygear.wallet.model.Iban;
 import org.paygear.wallet.model.Order;
 import org.paygear.wallet.model.Payment;
 import org.paygear.wallet.model.PaymentAuth;
+import org.paygear.wallet.model.QRResponse;
 import org.paygear.wallet.utils.Utils;
 import org.paygear.wallet.web.Web;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import ir.radsense.raadcore.app.AlertDialog;
 import ir.radsense.raadcore.app.NavigationBarActivity;
 import ir.radsense.raadcore.model.Account;
 import ir.radsense.raadcore.model.Auth;
@@ -62,6 +74,7 @@ import ir.radsense.raadcore.utils.RaadCommonUtils;
 import ir.radsense.raadcore.utils.Typefaces;
 import ir.radsense.raadcore.web.PostRequest;
 import ir.radsense.raadcore.widget.ProgressLayout;
+import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,7 +85,8 @@ public class CashOutRequestFragment extends Fragment {
     public static final int REQUEST_CASH_IN = 0;
     public static final int REQUEST_CASH_OUT_NORMAL = 1;
     public static final int REQUEST_CASH_OUT_IMMEDIATE = 2;
-    public static final int REQUEST_P2P_PAYMENT = 3;
+    public static final int REQUEST_CASH_OUT_TO_WALLET = 3;
+    public static final int REQUEST_P2P_PAYMENT = 4;
 
 
     ProgressLayout progress;
@@ -80,6 +94,7 @@ public class CashOutRequestFragment extends Fragment {
     TextView button;
     TextView limitTextView1;
     TextView limitTextView2;
+    private TextView getSheba;
 
     TextView priceTitle;
     EditText priceText;
@@ -90,7 +105,7 @@ public class CashOutRequestFragment extends Fragment {
     TextView hintText;
 
 
-    Card mCard;
+    public static Card mCard;
     int mRequestType;
 
     String mPrice = "";
@@ -98,6 +113,8 @@ public class CashOutRequestFragment extends Fragment {
 
     ArrayList<Card> mCards;
     Card mSelectedCard;
+    private List<Iban> mIbans;
+    private Iban mSelectedIban;
 
     public CashOutRequestFragment() {
     }
@@ -124,6 +141,8 @@ public class CashOutRequestFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         View view = inflater.inflate(R.layout.fragment_cash_out_request, container, false);
 
         ViewGroup rootView = view.findViewById(R.id.rootView);
@@ -177,12 +196,23 @@ public class CashOutRequestFragment extends Fragment {
                                 Toast.makeText(getContext(), R.string.enter_info_completely, Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                            showPinConfirm();
+                            if (mSelectedIban != null) {
+                                if (!mSelectedIban.isDefault) {
+                                    askMakeDefaultDialog(mSelectedIban.iban);
+                                } else {
+                                    showPinConfirm();
+                                }
+                            } else {
+                                askMakeDefaultDialog(numberText.getText().toString());
+                            }
+
                         }
                         break;
                     case REQUEST_CASH_OUT_IMMEDIATE:
                         startUserConfirm();
                         break;
+                    case REQUEST_CASH_OUT_TO_WALLET:
+                        cashOutToPersonalWallet(mCard);
                 }
                 Utils.hideKeyboard(getContext(), priceText);
             }
@@ -190,6 +220,7 @@ public class CashOutRequestFragment extends Fragment {
 
         limitTextView1 = view.findViewById(R.id.limit1);
         limitTextView2 = view.findViewById(R.id.limit2);
+
 
         priceTitle = view.findViewById(R.id.price_title);
         ViewGroup rootPrice = view.findViewById(R.id.rootPrice);
@@ -200,6 +231,15 @@ public class CashOutRequestFragment extends Fragment {
         numberText = view.findViewById(R.id.number);
 
         hintText = view.findViewById(R.id.hint);
+        getSheba = view.findViewById(R.id.get_sheba);
+
+        getSheba.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //   Utils.showCustomTab(getActivity(), "https://paygear.ir/iban");
+                openBrowser("https://paygear.ir/iban");
+            }
+        });
 
 
         if (WalletActivity.isDarkTheme) {
@@ -214,8 +254,8 @@ public class CashOutRequestFragment extends Fragment {
         }
 
 
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, button, limitTextView2, priceTitle, numberTitle);
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, limitTextView1, priceText, numberText, hintText);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM, button, limitTextView2, priceTitle, numberTitle);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_LIGHT, limitTextView1, priceText, numberText, hintText);
 
         limitTextView1.setText(getString(R.string.paygear_account_balance) + ":   " +
                 RaadCommonUtils.formatPrice(RaadApp.paygearCard.balance, true));
@@ -297,6 +337,144 @@ public class CashOutRequestFragment extends Fragment {
         return view;
     }
 
+    private void openBrowser(String url) {
+        final CustomTabsHelperFragment mCustomTabsHelperFragment = CustomTabsHelperFragment.attachTo((FragmentActivity) getActivity());
+
+        int mColorPrimary = Color.parseColor(WalletActivity.darkPrimaryColor);
+        final Uri PROJECT_URI = Uri.parse(url);
+
+        CustomTabsIntent mCustomTabsIntent = new CustomTabsIntent.Builder().enableUrlBarHiding().setToolbarColor(mColorPrimary).setShowTitle(true).build();
+
+        mCustomTabsHelperFragment.setConnectionCallback(new CustomTabsActivityHelper.ConnectionCallback() {
+            @Override
+            public void onCustomTabsConnected() {
+                mCustomTabsHelperFragment.mayLaunchUrl(PROJECT_URI, null, null);
+            }
+
+            @Override
+            public void onCustomTabsDisconnected() {
+            }
+        });
+
+        CustomTabsHelperFragment.open(getActivity(), mCustomTabsIntent, PROJECT_URI, new CustomTabsActivityHelper.CustomTabsFallback() {
+            @Override
+            public void openUri(Activity activity, Uri uri) {
+                try {
+                    activity.startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void cashOutToPersonalWallet(Card mCard) {
+        /*if (getActivity() != null)
+            AccountPaymentDialog.newInstance(new QRResponse("", 8, Auth.getCurrentAuth().getId(), null, null, true),  Long.parseLong(mPrice), true, mCard).show(
+                    getActivity().getSupportFragmentManager(), "AccountPaymentDialog");*/
+    }
+
+
+    private void askMakeDefaultDialog(final String iban) {
+        new AlertDialog()
+                .setTitle(getString(R.string.default_sheba_number))
+                .setMessage(getString(R.string.default_sheba_number_message))
+                .setPositiveAction(getString(R.string.yes))
+                .setNegativeAction(getString(R.string.no))
+                .setOnActionListener(new AlertDialog.OnAlertActionListener() {
+                    @Override
+                    public boolean onAction(int i, Object o) {
+                        if (i == 1) {
+                            makeDefaultShebaNumber(iban);
+                        } else {
+                            showPinConfirm();
+                        }
+                        return true;
+
+                    }
+                })
+                .show(getActivity().getSupportFragmentManager());
+    }
+
+    private void makeDefaultShebaNumber(String iban) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("default", true);
+        map.put("iban", iban);
+        Web.getInstance().getWebService().addNewIban(RaadApp.selectedMerchant == null ? Auth.getCurrentAuth().getId() : RaadApp.selectedMerchant.get_id(), PostRequest.getRequestBody(map)).enqueue(new Callback<Iban>() {
+            @Override
+            public void onResponse(Call<Iban> call, Response<Iban> response) {
+                Boolean success = Web.checkResponse(CashOutRequestFragment.this, call, response);
+                if (success == null)
+                    return;
+
+                showPinConfirm();
+            }
+
+            @Override
+            public void onFailure(Call<Iban> call, Throwable t) {
+                if (Web.checkFailureResponse(CashOutRequestFragment.this, call, t)) {
+                    showPinConfirm();
+                }
+            }
+        });
+
+    }
+
+
+  /*  private void showPinConfirm() {
+
+        if (RaadApp.selectedMerchant == null) {
+            new AlertDialog()
+                    .setMode(AlertDialog.MODE_INPUT)
+                    .setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD)
+                    .setTitle(getString(R.string.paygear_card_pin))
+                    .setPositiveAction(getString(R.string.ok))
+                    .setNegativeAction(getString(R.string.cancel))
+                    .setOnActionListener(new AlertDialog.OnAlertActionListener() {
+                        @Override
+                        public boolean onAction(int i, Object o) {
+                            if (i == 1) {
+                                String pin = (String) o;
+                                if (pin != null)
+                                    if (!TextUtils.isEmpty(pin.trim())) {
+                                        startRequest(pin);
+                                    }
+                            }
+                            return true;
+                        }
+                    }).show(getActivity().getSupportFragmentManager());
+        } else {
+            new AlertDialog()
+                    .setMode(AlertDialog.MODE_INPUT)
+                    .setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD)
+                    .setTitle(getString(R.string.paygear_card_pin))
+                    .setPositiveAction(getString(R.string.ok))
+                    .setNegativeAction(getString(R.string.cancel))
+                    .setCustomAction(getString(R.string.recover_password))
+                    .setOnActionListener(new AlertDialog.OnAlertActionListener() {
+                        @Override
+                        public boolean onAction(int i, Object o) {
+                            if (i == 1) {
+
+                                String pin = (String) o;
+                                if (pin != null)
+
+                                    if (!TextUtils.isEmpty(pin.trim())) {
+                                        startRequest(pin);
+                                    }
+                            } else if (i == 2) {
+                                if (getActivity() instanceof NavigationBarActivity) {
+                                    ((NavigationBarActivity) getActivity()).pushFullFragment(
+                                            SetCardPinFragment.newInstance(true, (mCard == null ? RaadApp.paygearCard : mCard)), "SetCardPinFragment");
+                                }
+
+                            }
+                            return true;
+                        }
+                    }).show(getActivity().getSupportFragmentManager());
+        }
+    }*/
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -319,6 +497,7 @@ public class CashOutRequestFragment extends Fragment {
                 numberTitle.setText(R.string.enter_your_sheba_number);
                 hintText.setText(R.string.cash_out_normal_hint);
                 numberText.setHint(R.string.sheba_20_digits);
+                getSheba.setVisibility(View.VISIBLE);
                 numberText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(26)});
                 break;
             case REQUEST_CASH_OUT_IMMEDIATE:
@@ -326,7 +505,15 @@ public class CashOutRequestFragment extends Fragment {
                 numberTitle.setText(R.string.enter_your_card_number);
                 hintText.setText(R.string.cash_out_immediate_hint);
                 numberText.setHint(R.string.card_16_digits);
+                getSheba.setVisibility(View.GONE);
                 numberText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(25)});
+                break;
+            case REQUEST_CASH_OUT_TO_WALLET:
+                priceTitle.setText(R.string.enter_cash_out_price);
+                numberTitle.setVisibility(View.GONE);
+                numberText.setVisibility(View.GONE);
+                hintText.setText(R.string.cash_out_two_wallet_hint);
+                hintText.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -419,7 +606,7 @@ public class CashOutRequestFragment extends Fragment {
 
         setLoading(true);
 
-        Web.getInstance().getWebService().getCashOutUserConfirm(Auth.getCurrentAuth().getId(), mPrice, mSelectedCard != null ? null : mNumber, mSelectedCard != null ? mSelectedCard.token : null).enqueue(new Callback<CashoutUserConfirm>() {
+        Web.getInstance().getWebService().getCashOutUserConfirm(RaadApp.selectedMerchant == null ? Auth.getCurrentAuth().getId() : RaadApp.selectedMerchant.get_id(), mPrice, mSelectedCard != null ? null : mNumber, mSelectedCard != null ? mSelectedCard.token : null).enqueue(new Callback<CashoutUserConfirm>() {
             @Override
             public void onResponse(Call<CashoutUserConfirm> call, Response<CashoutUserConfirm> response) {
                 Boolean success = Web.checkResponse(CashOutRequestFragment.this, call, response);
@@ -440,6 +627,41 @@ public class CashOutRequestFragment extends Fragment {
             }
         });
     }
+
+    /*private void startUserConfirm() {
+        if (TextUtils.isEmpty(priceText.getText()) || (mRequestType != REQUEST_CASH_IN && TextUtils.isEmpty(numberText.getText()))) {
+            Toast.makeText(getContext(), R.string.enter_info_completely, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!mCard.isProtected) {
+            showSetPinConfirm();
+            return;
+        }
+
+        setLoading(true);
+
+        Web.getInstance().getWebService().getCashOutUserConfirm(Auth.getCurrentAuth().getId(), mPrice, mSelectedCard != null ? null : mNumber, mSelectedCard != null ? mSelectedCard.token : null).enqueue(new Callback<CashoutUserConfirm>() {
+            @Override
+            public void onResponse(Call<CashoutUserConfirm> call, Response<CashoutUserConfirm> response) {
+                Boolean success = Web.checkResponse(CashOutRequestFragment.this, call, response);
+                if (success == null)
+                    return;
+
+                if (success) {
+                    showUserConfirmSummary(response.body());
+                }
+                setLoading(false);
+            }
+
+            @Override
+            public void onFailure(Call<CashoutUserConfirm> call, Throwable t) {
+                if (Web.checkFailureResponse(CashOutRequestFragment.this, call, t)) {
+                    setLoading(false);
+                }
+            }
+        });
+    }*/
 
     private void showUserConfirmSummary(CashoutUserConfirm info) {
         long amount = 0;
@@ -486,21 +708,95 @@ public class CashOutRequestFragment extends Fragment {
         sb.append(" ");
         sb.append(info.owner.lastName);
 
-
-        new MaterialDialog.Builder(getActivity())
-                .title(getString(R.string.cashout_request))
-                .content(sb.toString())
-                .positiveText(getString(R.string.ok))
-                .negativeText(getString(R.string.cancel))
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+        new AlertDialog()
+                .setTitle(getString(R.string.cashout_request))
+                .setMessage(sb.toString())
+                .setPositiveAction(getString(R.string.ok))
+                .setNegativeAction(getString(R.string.cancel))
+                .setOnActionListener(new AlertDialog.OnAlertActionListener() {
                     @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        showPinConfirm();
+                    public boolean onAction(int i, Object o) {
+                        if (i == 1) {
+                            showPinConfirm();
+                        }
+                        return true;
                     }
-                })
-                .show();
+                }).show(getActivity().getSupportFragmentManager());
 
     }
+
+    /*private void showPinConfirm() {
+
+        if (RaadApp.selectedMerchant == null) {
+            new AlertDialog()
+                    .setMode(AlertDialog.MODE_INPUT)
+                    .setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD)
+                    .setTitle(getString(R.string.paygear_card_pin))
+                    .setPositiveAction(getString(R.string.ok))
+                    .setNegativeAction(getString(R.string.cancel))
+                    .setOnActionListener(new AlertDialog.OnAlertActionListener() {
+                        @Override
+                        public boolean onAction(int i, Object o) {
+                            if (i == 1) {
+                                String pin = (String) o;
+                                if (pin != null)
+                                    if (!TextUtils.isEmpty(pin.trim())) {
+                                        startRequest(pin);
+                                    }
+                            }
+                            return true;
+                        }
+                    }).show(getActivity().getSupportFragmentManager());
+        } else {
+            new AlertDialog()
+                    .setMode(AlertDialog.MODE_INPUT)
+                    .setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD)
+                    .setTitle(getString(R.string.paygear_card_pin))
+                    .setPositiveAction(getString(R.string.ok))
+                    .setNegativeAction(getString(R.string.cancel))
+                    .setCustomAction(getString(R.string.recover_password))
+                    .setOnActionListener(new AlertDialog.OnAlertActionListener() {
+                        @Override
+                        public boolean onAction(int i, Object o) {
+                            if (i == 1) {
+
+                                String pin = (String) o;
+                                if (pin != null)
+
+                                    if (!TextUtils.isEmpty(pin.trim())) {
+                                        startRequest(pin);
+                                    }
+                            } else if (i == 2) {
+                                if (getActivity() instanceof NavigationBarActivity) {
+                                    ((NavigationBarActivity) getActivity()).pushFullFragment(
+                                            SetCardPinFragment.newInstance(true, (mCard == null ? RaadApp.paygearCard : mCard)), "SetCardPinFragment");
+                                }
+
+                            }
+                            return true;
+                        }
+                    }).show(getActivity().getSupportFragmentManager());
+        }
+    }
+
+    private void showSetPinConfirm() {
+        new AlertDialog()
+                .setTitle(getString(R.string.set_card_pin))
+                .setMessage(getString(R.string.credit_card_set_pin_confirm))
+                .setPositiveAction(getString(R.string.yes))
+                .setNegativeAction(getString(R.string.no))
+                .setOnActionListener(new AlertDialog.OnAlertActionListener() {
+                    @Override
+                    public boolean onAction(int i, Object o) {
+                        if (i == 1) {
+                            ((NavigationBarActivity) getActivity()).pushFullFragment(
+                                    SetCardPinFragment.newInstance(mCard), "SetCardPinFragment");
+                        }
+                        return true;
+                    }
+                })
+                .show(getActivity().getSupportFragmentManager());
+    }*/
 
     private void showPinConfirm() {
 
@@ -558,7 +854,7 @@ public class CashOutRequestFragment extends Fragment {
             map.put("is_instant", true);
         }
 
-        Web.getInstance().getWebService().requestCashOut(Auth.getCurrentAuth().getId(), mCard.token, PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
+        Web.getInstance().getWebService().requestCashOut(RaadApp.selectedMerchant == null ? Auth.getCurrentAuth().getId() : RaadApp.selectedMerchant.get_id(), mCard.token, PostRequest.getRequestBody(map)).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 Boolean success = Web.checkResponse(CashOutRequestFragment.this, call, response);
@@ -571,7 +867,13 @@ public class CashOutRequestFragment extends Fragment {
                         ((NavigationBarActivity) getActivity()).broadcastMessage(
                                 CashOutRequestFragment.this, null, CardsFragment.class);
                     }
+
+
                     getActivity().getSupportFragmentManager().popBackStack();
+                    if (WalletActivity.refreshLayout != null)
+                        WalletActivity.refreshLayout.setRefreshLayout(true);
+
+
                 } else {
                     setLoading(false);
                 }
@@ -586,6 +888,7 @@ public class CashOutRequestFragment extends Fragment {
         });
     }
 
+
     private void initPay(final Payment payment) {
         setLoading(true);
         Web.getInstance().getWebService().initPayment(payment.getRequestBody()).enqueue(new Callback<PaymentAuth>() {
@@ -597,7 +900,11 @@ public class CashOutRequestFragment extends Fragment {
 
                 if (success) {
                     payment.paymentAuth = response.body();
-                    if (getActivity() instanceof NavigationBarActivity) {
+                    if (payment.paymentAuth.IPGUrl != null && !payment.paymentAuth.IPGUrl.replaceAll(" ", "").equals("")) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(payment.paymentAuth.IPGUrl));
+                        startActivity(intent);
+                    } else if (getActivity() instanceof NavigationBarActivity) {
                         ((NavigationBarActivity) getActivity()).replaceFullFragment(
                                 CardsFragment.newInstance(payment), "CardsFragment", true);
                     }
@@ -615,6 +922,47 @@ public class CashOutRequestFragment extends Fragment {
         });
 
     }
+/*    private void initPay(final Payment payment) {
+        setLoading(true);
+        Web.getInstance().getWebService().initPayment(payment.getRequestBody()).enqueue(new Callback<PaymentAuth>() {
+            @Override
+            public void onResponse(Call<PaymentAuth> call, Response<PaymentAuth> response) {
+                Boolean success = Web.checkResponse(CashOutRequestFragment.this, call, response);
+                if (success == null)
+                    return;
+
+               *//* if (success) {
+                    payment.paymentAuth = response.body();
+                    if (getActivity() instanceof NavigationBarActivity) {
+                        ((NavigationBarActivity) getActivity()).replaceFullFragment(
+                                CardsFragment.newInstance(payment), "CardsFragment", true);
+                    }
+                } *//*
+                if (success) {
+                    payment.paymentAuth = response.body();
+                    if (payment.paymentAuth.IPGUrl != null && !payment.paymentAuth.IPGUrl.replaceAll(" ", "").equals("")) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(payment.paymentAuth.IPGUrl));
+                        startActivity(intent);
+                    } else if (getActivity() instanceof NavigationBarActivity) {
+                        ((NavigationBarActivity) getActivity()).replaceFullFragment(
+                                CardsFragment.newInstance(payment), "CardsFragment", true);
+                    }
+                }
+                else {
+                    setLoading(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PaymentAuth> call, Throwable t) {
+                if (Web.checkFailureResponse(CashOutRequestFragment.this, call, t)) {
+                    setLoading(false);
+                }
+            }
+        });
+
+    }*/
 
     private void setLoading(boolean loading) {
         progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
@@ -653,8 +1001,8 @@ public class CashOutRequestFragment extends Fragment {
                         LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                 //textView.setGravity(Gravity.CENTER);
                 textView.setTextColor(ContextCompat.getColor(getContext(), R.color.primary_text));
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-                textView.setTypeface(Typefaces.get(getContext(), Typefaces.IRAN_YEKAN_REGULAR));
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                textView.setTypeface(Typefaces.get(getContext(), Typefaces.IRAN_LIGHT));
                 textView.setPadding(dp8, 0, dp8, 0);
             } else {
                 textView = (TextView) view;
@@ -768,6 +1116,9 @@ public class CashOutRequestFragment extends Fragment {
                 String pin = newPassWord.getText().toString();
                 if (!TextUtils.isEmpty(pin.trim())) {
                     startRequest(pin);
+                    dialog.hide();
+                    dialog.dismiss();
+
                 }
             }
         });

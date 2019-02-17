@@ -123,6 +123,7 @@ import net.iGap.interfaces.OnUserSessionLogout;
 import net.iGap.interfaces.OnVerifyNewDevice;
 import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
+import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -191,7 +192,7 @@ import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -199,6 +200,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static final int requestCodePaymentBill = 199;
     public static final int requestCodeQrCode = 200;
     public static final int requestCodeBarcode = 201;
+    private static final int WALLET_REQUEST_CODE = 1024;
 
     public static boolean isMenuButtonAddShown = false;
     public static boolean isOpenChatBeforeSheare = false;
@@ -361,6 +363,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (G.imageLoader != null) {
             G.imageLoader.clearMemoryCache();
         }
+        if (G.refreshWalletBalance != null) {
+            G.refreshWalletBalance = null;
+        }
         RealmRoom.clearAllActions();
         if (G.onAudioFocusChangeListener != null) {
             G.onAudioFocusChangeListener.onAudioFocusChangeListener(AudioManager.AUDIOFOCUS_LOSS);
@@ -434,6 +439,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         MyPhonStateService myPhonStateService = new MyPhonStateService();
 
         registerReceiver(myPhonStateService, intentFilter);
+        G.refreshWalletBalance = this;
 
         BroadcastReceiver receiver = new BroadcastReceiver() {
             @Override
@@ -894,6 +900,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 if (result.getContents() != null) {
                     new RequestUserVerifyNewDevice().verifyNewDevice(result.getContents());
                 }
+                break;
+            case WALLET_REQUEST_CODE:
+                try {
+                    getUserCredit();
+                } catch (Exception e) {
+                }
+
                 break;
         }
     }
@@ -1602,11 +1615,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     intent.putExtra(WalletActivity.LANGUAGE, G.selectedLanguage);
                     intent.putExtra(WalletActivity.PROGRESSBAR, G.progressColor);
                     intent.putExtra(WalletActivity.LINE_BORDER, G.lineBorder);
-                    intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme);
+                    intent.putExtra(WalletActivity.BACKGROUND, G.backgroundTheme_2);
                     intent.putExtra(WalletActivity.BACKGROUND_2, G.backgroundTheme_2);
                     intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
                     intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
-                    startActivity(intent);
+                    startActivityForResult(intent, WALLET_REQUEST_CODE);
                 }
             }
         });
@@ -3066,6 +3079,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
     }
 
+    @Override
+    public void setRefreshBalance() {
+        try {
+            getUserCredit();
+        } catch (Exception e) {
+        }
+    }
+
 
     public enum MainAction {
         downScrool, clinetCondition
@@ -3127,8 +3148,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         G.cardamount = G.selectedCard.cashOutBalance;
 
                         if (G.selectedCard != null) {
-                            itemCash.setVisibility(View.VISIBLE);
-                            itemCash.setText("" + getResources().getString(R.string.wallet_Your_credit) + " " + String.valueOf(G.cardamount) + " " + getResources().getString(R.string.wallet_Reial));
+                            if (itemCash != null) {
+                                itemCash.setVisibility(View.VISIBLE);
+                                itemCash.setText("" + getResources().getString(R.string.wallet_Your_credit) + " " + String.valueOf(G.cardamount) + " " + getResources().getString(R.string.wallet_Reial));
+                            }
+
                         }
                     }
                 }

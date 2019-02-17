@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 
 import org.paygear.wallet.fragment.PaymentHistoryFragment;
 import org.paygear.wallet.model.Card;
+import org.paygear.wallet.model.SearchedAccount;
 import org.paygear.wallet.web.Web;
 
 import java.util.ArrayList;
@@ -45,6 +48,8 @@ public class RaadApp extends Application {
     public static Account me;
     public static Card paygearCard;
     public static ArrayList<Card> cards;
+    public static ArrayList<SearchedAccount> merchants;
+    public static SearchedAccount selectedMerchant;
     private String language;
 
     @Override
@@ -54,8 +59,8 @@ public class RaadApp extends Application {
         WebBase.isDebug = true;
         WebBase.onResponseListener = new OnWebResponseListener() {
             @Override
-            public boolean onResponse(Context context, Response response) {
-                /*if (context instanceof NavigationBarActivity) {
+            public boolean onResponse(Context context, Response response, Fragment fragment) {
+                 /*if (context instanceof NavigationBarActivity) {
                     if (response.code() == 401 || response.code() == 403) {
                         Utils.signOutAndGoLogin((NavigationBarActivity) context);
                         return false;
@@ -63,6 +68,12 @@ public class RaadApp extends Application {
                 }*/
                 return true;
             }
+
+            @Override
+            public boolean onActivityResponse(Context context, Response response, AppCompatActivity appCompatActivity) {
+                return false;
+            }
+
         };
 
         Raad.init(getApplicationContext());

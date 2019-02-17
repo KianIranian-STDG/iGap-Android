@@ -1,39 +1,40 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/rootView"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/rootView"
+    android:background="@android:color/white"
     android:clickable="true"
     tools:context=".fragment.OrderInfoFragment">
 
-  <!--<android.support.v7.widget.CardView-->
-  <!--android:id="@+id/app_bar_layout"-->
-  <!--android:layout_width="match_parent"-->
-  <!--android:layout_height="wrap_content"-->
-  <!--app:cardCornerRadius="1dp"-->
-  <!--app:cardPreventCornerOverlap="false"-->
-  <!--app:cardMaxElevation="0dp"-->
-  <!--app:cardElevation="@dimen/app_bar_card_view_elevation"-->
-  <!--android:layout_marginTop="-8dp">-->
+<!--    <android.support.v7.widget.CardView
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardMaxElevation="0dp"
+        app:cardElevation="@dimen/app_bar_card_view_elevation"
+        android:layout_marginTop="-8dp">-->
 
         <ir.radsense.raadcore.app.RaadToolBar
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize">
-        </ir.radsense.raadcore.app.RaadToolBar>
+            android:layout_height="?actionBarSize"
+          />
 
-  <!--</android.support.v7.widget.CardView>-->
+   <!-- </android.support.v7.widget.CardView>-->
 
     <LinearLayout
-
+        android:layout_below="@+id/app_bar"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <!--<include layout="@layout/fragment_payment_history_list_item" />-->
-        <org.paygear.widget.OrderView
+        <org.paygear.wallet.widget.OrderView
             android:id="@+id/order_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -44,6 +45,23 @@
             android:layout_height="wrap_content"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
+
+        <Button
+            android:id="@+id/show_receipt_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:text="@string/show_receipt"
+            android:background="@drawable/button_blue_selector"/>
+
+
+
+
     </LinearLayout>
 
     <ir.radsense.raadcore.widget.ProgressLayout
@@ -51,6 +69,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-       />
+        android:layout_below="@+id/app_bar" />
 
 </RelativeLayout>

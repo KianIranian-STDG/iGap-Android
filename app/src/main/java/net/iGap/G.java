@@ -408,6 +408,7 @@ public class G extends MultiDexApplication {
     public static boolean isHandsFreeConnected = false;
     public static SpeakerControlListener speakerControlListener;
     public static VideoCallListener videoCallListener;
+    public static RefreshWalletBalance refreshWalletBalance;
     public static OnHoldBackgroundChanegeListener onHoldBackgroundChanegeListener;
     public static boolean isWebRtcConnected = false;
     public static boolean isDepricatedApp = false;

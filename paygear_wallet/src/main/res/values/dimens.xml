@@ -74,5 +74,9 @@
   <dimen name="md_listitem_textsize" tools:override="true">16dp</dimen>
   <dimen name="md_title_textsize" tools:override="true">18dp</dimen>
   <dimen name="md_content_padding_bottom" tools:override="true">6dp</dimen>
+  <dimen name="coupon_qr_size">140dp</dimen>
+  <dimen name="app_bar_card_view_elevation">0dp</dimen>
+  <dimen name="image">64dp</dimen>
+
 
 </resources>
