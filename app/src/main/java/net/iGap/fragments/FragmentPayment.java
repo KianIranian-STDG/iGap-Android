@@ -42,7 +42,6 @@ public class FragmentPayment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("bagi", "BagiSavePlace");
         initDataBinding(getArguments());
     }
 

@@ -1630,7 +1630,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("bagi" , "BagiSavePlace");
                 new HelperFragment(FragmentPayment.newInstance()).load();
                 lockNavigation();
             }

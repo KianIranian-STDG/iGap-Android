@@ -634,7 +634,6 @@ public class FragmentChat extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
-        Log.d("bagi", "onCreateView");
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
 
         return attachToSwipeBack(rootView);
@@ -715,7 +714,6 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("bagi", "onViewCreated");
 
         realmChat = Realm.getDefaultInstance();
 
@@ -731,7 +729,6 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onStart() {
         super.onStart();
-        Log.d("bagi", "onStart");
 
 
         G.handler.postDelayed(new Runnable() {
@@ -790,7 +787,6 @@ public class FragmentChat extends BaseFragment
     public void onResume() {
         super.onResume();
 
-        Log.d("bagi", "onResume");
 
         if (FragmentShearedMedia.list != null && FragmentShearedMedia.list.size() > 0) {
             deleteSelectedMessageFromAdapter(FragmentShearedMedia.list);
@@ -1015,7 +1011,6 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onPause() {
         storingLastPosition();
-        Log.d("bagi", "onPause");
         super.onPause();
 
         lastChatRoomId = 0;
@@ -1032,7 +1027,6 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onStop() {
 
-        Log.d("bagi", "onStop");
         canUpdateAfterDownload = false;
         if (G.onChatSendMessage != null)
             G.onChatSendMessage = null;
@@ -1059,7 +1053,6 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onDestroy() {
-        Log.d("bagi", "onDestroy");
 
         super.onDestroy();
 
@@ -1081,8 +1074,6 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("bagi", "onActivityResult");
-
         /**
          * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
          * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
@@ -1592,16 +1583,7 @@ public class FragmentChat extends BaseFragment
                 if (item != null && item.getResult() == 1) {
 
                     items = item.getFavorite();
-                    Favorite fav = new Favorite();
-                    fav.setFavoriteBgColor("#555555");
-                    fav.setFavoriteColor("#000000");
-                    fav.setFavoriteEnable(true);
-                    fav.setFavoriteImage("");
-                    fav.setFavoriteValue("$financial");
-                    fav.setFavoriteOrderId(222);
-                    fav.setFavoriteName("آیتم جدید");
 
-                    items.add(fav);
                     if (items.size() == 0) {
                         return;
                     }
@@ -1629,7 +1611,7 @@ public class FragmentChat extends BaseFragment
                                 public void run() {
                                     if (!isChatReadOnly) {
                                         if (item.getFavoriteValue().equals("$financial")) {
-                                            new HelperFragment(FragmentPayment.newInstance()).load();
+                                            new HelperFragment(FragmentPayment.newInstance()).setReplace(false).load();
                                             //lockNavigation();
                                             return;
                                         }
