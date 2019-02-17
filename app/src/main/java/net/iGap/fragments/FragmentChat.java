@@ -355,7 +355,7 @@ public class FragmentChat extends BaseFragment
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged,
         OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick {
 
-    private static boolean BugUnreadMessage;
+    private static boolean isLoadingMoreMessage;
     public static FinishActivity finishActivity;
     public static OnComplete onMusicListener;
     public static IUpdateLogItem iUpdateLogItem;
@@ -3019,7 +3019,7 @@ public class FragmentChat extends BaseFragment
 
                 if (isWaitingForHistoryUp || isWaitingForHistoryDown) {
                     Log.d("bagi" , "BUGGGllScrollNavigatonClicke");
-                    FragmentChat.BugUnreadMessage = true;
+                    FragmentChat.isLoadingMoreMessage = true;
                     clearAdapterItems();
                     mAdapter.add(new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierDown));
                     mAdapter.notifyAdapterDataSetChanged();
@@ -8611,7 +8611,7 @@ public class FragmentChat extends BaseFragment
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (FragmentChat.BugUnreadMessage) {
+                if (FragmentChat.isLoadingMoreMessage) {
                     return;
                 }
 
@@ -8804,6 +8804,20 @@ public class FragmentChat extends BaseFragment
                         sort = Sort.ASCENDING;
                         isWaitingForHistoryDown = false;
                     }
+
+                    if (FragmentChat.isLoadingMoreMessage){
+                        if (!isWaitingForHistoryUp &&
+                                !isWaitingForHistoryDown){
+                            Log.d("bagi" , "isLoadingMoreMessage = false");
+
+                            FragmentChat.isLoadingMoreMessage = false;
+                            resetMessagingValue();
+                            addToView = false;
+                            llScrollNavigate.performClick();
+                        }
+                        return;
+                    }
+
                     realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, sort);
                     MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN, getRealmChat());
 
@@ -8846,19 +8860,6 @@ public class FragmentChat extends BaseFragment
                     final ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
                     for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
                         structMessageInfos.add(StructMessageInfo.convert(getRealmChat(), realmRoomMessage));
-                    }
-
-                    if (FragmentChat.BugUnreadMessage){
-                        if (!isWaitingForHistoryUp &&
-                                !isWaitingForHistoryDown){
-                            Log.d("bagi" , "BugUnreadMessage = false");
-
-                            FragmentChat.BugUnreadMessage = false;
-                            resetMessagingValue();
-                            addToView = false;
-                            llScrollNavigate.performClick();
-                        }
-                        return;
                     }
 
                     Log.d("bagi" , "switchAddItem");
@@ -8916,7 +8917,20 @@ public class FragmentChat extends BaseFragment
                         } else {
                             isWaitingForHistoryDown = false;
                         }
-                        getOnlineMessageAfterTimeOut(messageIdGetHistory, direction);
+                    }
+
+                    if (FragmentChat.isLoadingMoreMessage){
+                        if (!isWaitingForHistoryUp &&
+                                !isWaitingForHistoryDown){
+                            FragmentChat.isLoadingMoreMessage = false;
+                            resetMessagingValue();
+                            addToView = false;
+                            llScrollNavigate.performClick();
+                        }
+                    } else {
+                        if (majorCode == 5) {
+                            getOnlineMessageAfterTimeOut(messageIdGetHistory, direction);
+                        }
                     }
                 }
             });
