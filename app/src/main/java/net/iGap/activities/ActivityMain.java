@@ -40,6 +40,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -1629,6 +1630,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("bagi" , "BagiSavePlace");
                 new HelperFragment(FragmentPayment.newInstance()).load();
                 lockNavigation();
             }
