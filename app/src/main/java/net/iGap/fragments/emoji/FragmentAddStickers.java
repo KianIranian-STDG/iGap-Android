@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -263,7 +264,15 @@ public class FragmentAddStickers extends BaseFragment {
                                                         mData.get(getAdapterPosition()).setIsFavorite(true);
                                                         RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId);
                                                         if (realmStickers == null) {
-                                                            RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
+                                                            Realm realm = Realm.getDefaultInstance();
+                                                            realm.executeTransaction(new Realm.Transaction() {
+                                                                @Override
+                                                                public void execute(Realm realm) {
+                                                                    RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
+                                                                }
+                                                            });
+                                                            realm.close();
+
                                                         } else {
                                                             RealmStickers.updateFavorite(mData.get(getAdapterPosition()).getId(), true);
                                                         }
