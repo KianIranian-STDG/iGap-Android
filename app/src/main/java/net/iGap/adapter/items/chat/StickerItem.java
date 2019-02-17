@@ -11,8 +11,12 @@
 package net.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -90,20 +94,23 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemHolder {
         protected ReserveSpaceRoundedImageView image;
 
         public ViewHolder(View view) {
             super(view);
 
-            if (itemView.findViewById(R.id.mainContainer) == null) {
-                ((ViewGroup) itemView).addView(ViewMaker.getImageItem(true));
-            }
+            FrameLayout frameLayout = new FrameLayout(G.context);
+            frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
-
-
-
-            image = itemView.findViewById(R.id.thumbnail);
+            image = new ReserveSpaceRoundedImageView(G.context);
+            image.setId(R.id.thumbnail);
+            image.setScaleType(ImageView.ScaleType.FIT_XY);
+            image.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
+            LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            image.setLayoutParams(layout_758);
+            m_container.addView(frameLayout);
+            frameLayout.addView(image);
             image.reserveSpace(180,180,ProtoGlobal.Room.Type.CHAT);
 
         }
