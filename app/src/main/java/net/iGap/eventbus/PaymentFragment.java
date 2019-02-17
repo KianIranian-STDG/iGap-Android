@@ -363,9 +363,9 @@ public class PaymentFragment extends BaseFragment implements EventListener {
                         }
                     }, G.appBarColor);
                     dialog.show(getActivity().getSupportFragmentManager(), "PaymentSuccessDialog");
-                    if (G.refreshWalletBalance != null) {
+                  /*  if (G.refreshWalletBalance != null) {
                         G.refreshWalletBalance.setRefreshBalance();
-                    }
+                    }*/
                 }
             }
 

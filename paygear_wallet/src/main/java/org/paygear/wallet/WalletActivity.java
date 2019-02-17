@@ -144,8 +144,6 @@ public class WalletActivity extends NavigationBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-     /*   Intent returnIntent = new Intent();
-        setResult(Activity.RESULT_OK,returnIntent);
-        finish();*/
+
     }
 }

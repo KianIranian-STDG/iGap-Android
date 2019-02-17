@@ -732,7 +732,6 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
     @Override
     public void setRefreshLayout(boolean refreshLayout) {
         try {
-
             if (isAdded() && mRefreshLayout != null)
                 load();
         } catch (Exception e) {
