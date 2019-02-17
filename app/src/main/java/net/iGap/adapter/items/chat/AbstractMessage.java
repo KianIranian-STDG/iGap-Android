@@ -458,7 +458,16 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         RealmRoomMessage roomMessage = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
         if (roomMessage != null) {
-            prepareAttachmentIfNeeded(holder, roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
+            if (holder instanceof StickerItem.ViewHolder) {
+                if (roomMessage.getAttachment().isFileExistsOnLocal()) {
+                    onLoadThumbnailFromLocal(holder, getCacheId(mMessage), roomMessage.getAttachment().getLocalFilePath(), LocalFileType.FILE);
+                } else {
+                    downLoadFile(holder, roomMessage.getAttachment(), 0);
+                }
+                hasProgress(holder);
+            } else {
+                prepareAttachmentIfNeeded(holder, roomMessage.getAttachment(), mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
+            }
         }
 
         TextView messageText = (TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage);
@@ -477,23 +486,24 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         mHolder.lyt_see.setVisibility(View.GONE);
 
-        if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
-            showVote(holder, getRealmChat());
-        } else if ((type == ProtoGlobal.Room.Type.CHAT)) {
-            if (mMessage.forwardedFrom != null) {
-                if (mMessage.forwardedFrom.getAuthorRoomId() > 0) {
-                    RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
-                    if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                        showVote(holder, getRealmChat());
+        if (!(holder instanceof StickerItem.ViewHolder)) {
+            if ((type == ProtoGlobal.Room.Type.CHANNEL)) {
+                showVote(holder, getRealmChat());
+            } else if ((type == ProtoGlobal.Room.Type.CHAT)) {
+                if (mMessage.forwardedFrom != null) {
+                    if (mMessage.forwardedFrom.getAuthorRoomId() > 0) {
+                        RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.forwardedFrom.getAuthorRoomId()).findFirst();
+                        if (realmRoom != null && realmRoom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
+                            showVote(holder, getRealmChat());
 
-                        if (mMessage.isSenderMe()) {
-                            mHolder.cslm_view_left_dis.setVisibility(View.VISIBLE);
+                            if (mMessage.isSenderMe()) {
+                                holder.itemView.findViewById(R.id.cslm_view_left_dis).setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 }
             }
         }
-
     }
 
     /**
@@ -908,8 +918,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }
 
-                String forwardMessage = AppUtils.replyTextMessage(mMessage.replayTo, holder.itemView.getResources());
-                ((EmojiTextViewE) replayView.findViewById(R.id.chslr_txt_replay_message)).setText(forwardMessage);
+                String replayText = AppUtils.replyTextMessage(mMessage.replayTo, holder.itemView.getResources());
+                replayMessage.setText(replayText);
 
                 if (mMessage.isSenderMe() && type != ProtoGlobal.Room.Type.CHANNEL) {
 
@@ -1806,7 +1816,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm);
+                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm ,ProtoGlobal.RoomMessageType.TEXT);
                             G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
                             messageClickListener.sendFromBot(realmRoomMessage);
                         }
