@@ -23,8 +23,7 @@ public class FileDownloadResponse extends MessageHandler {
     public int actionId;
     public Object message;
     public Object identity;
-    public boolean isFromHelperDownload = false;
-
+    public RequestFileDownload.TypeDownload type = RequestFileDownload.TypeDownload.FILE;
     private long nextOffset;
 
     public FileDownloadResponse(int actionId, Object protoClass, Object identity) {
@@ -45,18 +44,15 @@ public class FileDownloadResponse extends MessageHandler {
         long fileSize = identityFileDownload.size;
         String filePath = identityFileDownload.filepath;
         int previousOffset = (int) identityFileDownload.offset;
-        isFromHelperDownload = identityFileDownload.isFromHelperDownload;
-
+        type = identityFileDownload.typeDownload;
 
         //  String type = filePath.substring(filePath.lastIndexOf(".") + 1);
-
-
         nextOffset = previousOffset + builder.getBytes().size();
 
 
         boolean connectivityType = true;
         try {
-            if (HelperCheckInternetConnection.currentConnectivityType!=null){
+            if (HelperCheckInternetConnection.currentConnectivityType != null) {
                 if (HelperCheckInternetConnection.currentConnectivityType == HelperCheckInternetConnection.ConnectivityType.WIFI)
                     connectivityType = true;
                 else
@@ -76,14 +72,23 @@ public class FileDownloadResponse extends MessageHandler {
 
         AndroidUtils.writeBytesToFile(filePath, builder.getBytes().toByteArray());
 
-        if (isFromHelperDownload) {
-            if (G.onFileDownloadResponse != null) {
-                G.onFileDownloadResponse.onFileDownload(cacheId, nextOffset, identityFileDownload.selector, (int) progress);
-            }
-        } else {
-            if (G.onFileDownloaded != null) {
-                G.onFileDownloaded.onFileDownload(filePath, cacheId, fileSize, nextOffset, identityFileDownload.selector, (int) progress);
-            }
+        switch (type) {
+            case FILE:
+                if (G.onFileDownloadResponse != null) {
+                    G.onFileDownloadResponse.onFileDownload(cacheId, nextOffset, identityFileDownload.selector, (int) progress);
+                }
+                break;
+            case AVATAR:
+                if (G.onFileDownloaded != null) {
+                    G.onFileDownloaded.onFileDownload(filePath, cacheId, fileSize, nextOffset, identityFileDownload.selector, (int) progress);
+                }
+                break;
+            case STICKER:
+            case STICKER_DETAIL:
+                if (G.onStickerDownloaded != null) {
+                    G.onStickerDownloaded.onStickerDownloaded(filePath, cacheId, fileSize, nextOffset, identityFileDownload.selector ,identityFileDownload.typeDownload , (int) 0);
+                }
+                break;
         }
     }
 
@@ -100,16 +105,21 @@ public class FileDownloadResponse extends MessageHandler {
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
         RequestFileDownload.IdentityFileDownload identityFileDownload = ((RequestFileDownload.IdentityFileDownload) identity);
-        isFromHelperDownload = identityFileDownload.isFromHelperDownload;
+        type = identityFileDownload.typeDownload;
 
-        if (isFromHelperDownload) {
+        if (type == RequestFileDownload.TypeDownload.FILE) {
             if (G.onFileDownloadResponse != null) {
                 G.onFileDownloadResponse.onError(majorCode, minorCode, identityFileDownload.cacheId, identityFileDownload.selector);
             }
-        } else {
+        } else if (type == RequestFileDownload.TypeDownload.AVATAR) {
             if (G.onFileDownloaded != null) {
                 G.onFileDownloaded.onError(majorCode, identity);
             }
+        } else if (type == RequestFileDownload.TypeDownload.STICKER|| type == RequestFileDownload.TypeDownload.STICKER_DETAIL) {
+            if (G.onStickerDownloaded != null) {
+                G.onStickerDownloaded.onError(majorCode, identity);
+            }
+
         }
     }
 }

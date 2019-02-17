@@ -42,6 +42,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatDelegate;
@@ -93,8 +94,14 @@ import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
+import com.vanniktech.emoji.listeners.OnOpenPageStickerListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
+import com.vanniktech.emoji.listeners.OnStickerListener;
+import com.vanniktech.emoji.listeners.OnUpdateStickerListener;
+import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
+import com.vanniktech.emoji.sticker.struct.StructItemSticker;
+import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -117,6 +124,7 @@ import net.iGap.adapter.items.chat.LocationItem;
 import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.LogWallet;
 import net.iGap.adapter.items.chat.ProgressWaiting;
+import net.iGap.adapter.items.chat.StickerItem;
 import net.iGap.adapter.items.chat.TextItem;
 import net.iGap.adapter.items.chat.TimeItem;
 import net.iGap.adapter.items.chat.UnreadMessage;
@@ -143,6 +151,11 @@ import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
+import net.iGap.fragments.emoji.DialogAddSticker;
+import net.iGap.fragments.emoji.FragmentAddStickers;
+import net.iGap.fragments.emoji.FragmentSettingStickers;
+import net.iGap.fragments.emoji.OnUpdateSticker;
+import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IDispatchTochEvent;
@@ -237,6 +250,7 @@ import net.iGap.module.structs.StructChannelExtra;
 import net.iGap.module.structs.StructCompress;
 import net.iGap.module.structs.StructMessageAttachment;
 import net.iGap.module.structs.StructMessageInfo;
+import net.iGap.module.structs.StructSendSticker;
 import net.iGap.module.structs.StructUploadVideo;
 import net.iGap.module.structs.StructWebView;
 import net.iGap.module.webserviceDrBot.Favorite;
@@ -265,6 +279,8 @@ import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.realm.RealmStickers;
+import net.iGap.realm.RealmStickersDetails;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelEditMessage;
 import net.iGap.request.RequestChannelPinMessage;
@@ -288,6 +304,8 @@ import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.viewmodel.ActivityCallViewModel;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.io.File;
@@ -312,7 +330,9 @@ import io.fotoapparat.view.CameraView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
-
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -387,6 +407,8 @@ public class FragmentChat extends BaseFragment
     private Bitmap icon;
     private boolean isRepley = false;
     private boolean swipeBack = false;
+    public static List<StructGroupSticker> data = new ArrayList<>();
+
 
     /**
      * *************************** common method ***************************
@@ -435,7 +457,7 @@ public class FragmentChat extends BaseFragment
     private SearchHash searchHash;
     private MessagesAdapter<AbstractMessage> mAdapter;
     private ProtoGlobal.Room.Type chatType;
-    private EmojiPopup emojiPopup;
+    private static EmojiPopup emojiPopup;
     private GroupChatRole groupRole;
     private ChannelChatRole channelRole;
     private PopupWindow popupWindow;
@@ -558,6 +580,8 @@ public class FragmentChat extends BaseFragment
     List<Favorite> items = new ArrayList<>();
     boolean isAnimateStart = false;
     boolean isScrollEnd = false;
+    private ArrayList<StructGroupSticker> stickerArrayList = new ArrayList<>();
+    public static OnUpdateSticker onUpdateSticker;
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -3348,6 +3372,16 @@ public class FragmentChat extends BaseFragment
             @Override
             public boolean onLongClick(View view) {
 
+                Realm realm = Realm.getDefaultInstance();
+
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.where(RealmStickersDetails.class).findAll().deleteAllFromRealm();
+                        realm.where(RealmStickers.class).findAll().deleteAllFromRealm();
+                    }
+                });
+
                 if (ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     try {
                         HelperPermission.getMicroPhonePermission(G.fragmentActivity, null);
@@ -3381,10 +3415,24 @@ public class FragmentChat extends BaseFragment
                     initEmoji = true;
                     setUpEmojiPopup();
                 }
-
                 emojiPopup.toggle();
+                if (data != null && data.size() > 0) {
+                    emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
+                }
             }
         });
+
+        onUpdateSticker = new OnUpdateSticker() {
+            @Override
+            public void update() {
+
+                data.clear();
+                data = RealmStickers.getAllStickers(true);
+                if (data != null && emojiPopup != null) {
+                    emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
+                }
+            }
+        };
 
         edtChat.addTextChangedListener(new TextWatcher() {
             @Override
@@ -3431,6 +3479,46 @@ public class FragmentChat extends BaseFragment
 
         //realm.close();
     }
+
+    public static void getStickerFromServer() {
+        ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
+            @Override
+            public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
+
+                if (response.body() != null) {
+                    if (response.body().getOk() && response.body().getData().size() > 0) {
+                        data.clear();
+                        setStickerToRealm(response.body().getData(), true);// add favorit sticker to db
+                        data = RealmStickers.getAllStickers(true);
+                        if (data != null && emojiPopup != null) {
+                            emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StructSticker> call, Throwable t) {
+            }
+        });
+    }
+
+    public static void setStickerToRealm(List<StructGroupSticker> mData, boolean isFavorite) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+//                RealmStickers.setAllDataIsDeleted();
+                for (StructGroupSticker item : mData) {
+                    RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), isFavorite);
+                }
+//                RealmStickers.removeandUpdateRealm();
+            }
+        });
+        realm.close();
+    }
+
 
     private void openWebViewForSpecialUrlChat(String mUrl) {
 
@@ -4293,6 +4381,13 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void onOpenClick(View view, StructMessageInfo message, int pos) {
+
+
+        if (message.additionalData.AdditionalType == 4) {
+            checkSticker(message);
+            return;
+        }
+
         ProtoGlobal.RoomMessageType messageType = message.forwardedFrom != null ? message.forwardedFrom.getMessageType() : message.messageType;
         //+Realm realm = Realm.getDefaultInstance();
         if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == IMAGE_TEXT) {
@@ -4305,6 +4400,32 @@ public class FragmentChat extends BaseFragment
             }
         } else if (messageType == ProtoGlobal.RoomMessageType.FILE || messageType == ProtoGlobal.RoomMessageType.FILE_TEXT) {
             openMessage(message);
+        }
+    }
+
+    private void checkSticker(StructMessageInfo message) {
+
+        try {
+            JSONObject jObject = new JSONObject(message.additionalData.additionalData);
+            String groupId = jObject.getString("groupId");
+            String token = jObject.getString("token");
+
+            RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId);
+            if (realmStickers == null || !realmStickers.isFavorite()) {
+                openFragmentAddStickerToFavorite(groupId, token);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void openFragmentAddStickerToFavorite(String groupId, String token) {
+
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        DialogAddSticker dialogFragment = new DialogAddSticker().newInstance(groupId, token);
+        if (fm != null) {
+            dialogFragment.show(fm, "dialogFragment");
         }
     }
 
@@ -5925,11 +6046,69 @@ public class FragmentChat extends BaseFragment
                     public void onKeyboardClose() {
                         emojiPopup.dismiss();
                     }
+                }).setOnStickerListener(new OnStickerListener() {
+                    @Override
+                    public void onItemSticker(StructItemSticker st) {
+
+                        String additional = new Gson().toJson(new StructSendSticker(st.getId(), st.getName(), st.getGroupId(), st.getToken()));
+
+                        final RealmRoomMessage[] rm = new RealmRoomMessage[1];
+                        Long identity = AppUtils.makeRandomId() ;
+
+                         int [] imageSize =   AndroidUtils.getImageDimens(st.getUri());
+                        getRealmChat().executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                rm[0] = RealmRoomMessage.makeAdditionalData(mRoomId, identity, st.getName(), additional, AdditionalType.STICKER, realm, ProtoGlobal.RoomMessageType.FILE_TEXT);
+                                rm[0].setAttachment(identity, st.getUri(), imageSize[0], imageSize[1], new File(st.getUri()).length(), new File(st.getUri()).getName(), 0, LocalFileType.FILE);
+                                rm[0].getAttachment().setToken(st.getToken());
+                                rm[0].setAuthorHash(G.authorHash);
+                                rm[0].setShowMessage(true);
+                                rm[0].setCreateTime(TimeUtils.currentLocalTime());
+
+                            }
+                        });
+
+                        StructMessageInfo sm = StructMessageInfo.convert(getRealmChat(), rm[0]);
+                        mAdapter.add(new StickerItem(getRealmChat(), chatType, FragmentChat.this).setMessage(sm));
+                        scrollToEnd();
+
+                       new ChatSendMessageUtil().build(chatType, mRoomId,rm[0]).sendMessage(identity+"");
+
+
+                    }
+
+                })
+                .setOnUpdateSticker(new OnUpdateStickerListener() {
+                    @Override
+                    public void onUpdateStickerPath(ArrayList<StructGroupSticker> categoryStickerList) {
+
+                    }
+
+                    @Override
+                    public void onRemoveSticker(String token) {
+                    }
+                })
+                .setOpenPageSticker(new OnOpenPageStickerListener() {
+                    @Override
+                    public void addSticker(String page) {
+                        new HelperFragment(FragmentAddStickers.newInstance()).setReplace(false).load();
+                    }
+
+                    @Override
+                    public void openSetting(ArrayList<StructGroupSticker> stickerList) {
+                        new HelperFragment(FragmentSettingStickers.newInstance(data)).setReplace(false).load();
+
+                    }
                 })
                 .setBackgroundColor(Color.parseColor(BackgroundColor))
                 .setIconColor(Color.parseColor(iconColor))
                 .setDividerColor(Color.parseColor(dividerColor))
                 .build(edtChat);
+
+        if (data.size() == 0) {
+            getStickerFromServer();
+        }
 
     }
 
@@ -7150,7 +7329,13 @@ public class FragmentChat extends BaseFragment
             if (chatItem.forwardedFrom != null) {
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom);
 
-                String _text = AppUtils.conversionMessageType(chatItem.forwardedFrom.getMessageType());
+                String _text;
+                if(chatItem.forwardedFrom.getRealmAdditional() !=null &&  chatItem.forwardedFrom.getRealmAdditional().getAdditionalType() == 4) {
+                   _text = getString(R.string.sticker);
+               }else{
+                    _text = AppUtils.conversionMessageType(chatItem.forwardedFrom.getMessageType());
+                }
+
                 if (_text != null && _text.length() > 0) {
                     replayTo.setText(_text);
                 } else {
@@ -7160,7 +7345,13 @@ public class FragmentChat extends BaseFragment
                 RealmRoomMessage message = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(chatItem.messageID)).findFirst();
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message);
 
-                String _text = AppUtils.conversionMessageType(chatItem.messageType);
+                String _text;
+                if(message.getRealmAdditional() !=null &&  message.getRealmAdditional().getAdditionalType() == 4) {
+                    _text = getString(R.string.sticker);
+                }else{
+                    _text = AppUtils.conversionMessageType(chatItem.messageType);
+                }
+
                 if (_text != null && _text.length() > 0) {
                     replayTo.setText(_text);
                 } else {
@@ -8333,10 +8524,19 @@ public class FragmentChat extends BaseFragment
                         break;
                     case FILE:
                     case FILE_TEXT:
-                        if (!addTop) {
-                            mAdapter.add(new FileItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+
+                        if (messageInfo.additionalData != null && messageInfo.additionalData.AdditionalType == AdditionalType.STICKER) {
+                            if (!addTop) {
+                                mAdapter.add(new StickerItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new StickerItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
                         } else {
-                            mAdapter.add(index, new FileItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            if (!addTop) {
+                                mAdapter.add(new FileItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            } else {
+                                mAdapter.add(index, new FileItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            }
                         }
                         break;
                     case VOICE:

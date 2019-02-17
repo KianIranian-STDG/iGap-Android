@@ -1402,5 +1402,10 @@
     <string name="stop">Stop Bot</string>
     <string name="stop_message_bot">Are you sure you want to stop this bot?</string>
     <string name="startUpdate">update</string>
+    <string name="sticker">Sticker</string>
+    <string name="add_sticker">Add Sticker</string>
+    <string name="remove_sticker">Remove Sticker</string>
+    <string name="remove_sticker_text">Are you sure you want to remove this stickers?</string>
+    <string name="add_sticker_text">Are you sure you want to install this stickers?</string>
 
 </resources>

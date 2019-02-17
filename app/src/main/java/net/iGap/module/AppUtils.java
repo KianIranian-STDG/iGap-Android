@@ -66,6 +66,7 @@ import io.realm.Sort;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static net.iGap.G.context;
+import static net.iGap.module.AndroidUtils.suitablePath;
 
 public final class AppUtils {
     private AppUtils() throws InstantiationException {
@@ -130,20 +131,26 @@ public final class AppUtils {
                 case FILE:
                 case FILE_TEXT:
 
-                    if (attachment != null) {
-                        if (attachment.getName().toLowerCase().endsWith(".pdf")) {
-                            setImageDrawable(view, R.drawable.pdf_icon);
-                        } else if (attachment.getName().toLowerCase().endsWith(".txt")) {
-                            setImageDrawable(view, R.drawable.txt_icon);
-                        } else if (attachment.getName().toLowerCase().endsWith(".exe")) {
-                            setImageDrawable(view, R.drawable.exe_icon);
-                        } else if (attachment.getName().toLowerCase().endsWith(".docs")) {
-                            setImageDrawable(view, R.drawable.docx_icon);
+                    if (message != null && message.getRealmAdditional() != null && message.getRealmAdditional().getAdditionalType() == 4) {
+                        if (attachment != null && attachment.getLocalFilePath() != null) {
+                            G.imageLoader.displayImage(suitablePath(attachment.getLocalFilePath()), view);
+                        }
+                    }else {
+                        if (attachment != null) {
+                            if (attachment.getName().toLowerCase().endsWith(".pdf")) {
+                                setImageDrawable(view, R.drawable.pdf_icon);
+                            } else if (attachment.getName().toLowerCase().endsWith(".txt")) {
+                                setImageDrawable(view, R.drawable.txt_icon);
+                            } else if (attachment.getName().toLowerCase().endsWith(".exe")) {
+                                setImageDrawable(view, R.drawable.exe_icon);
+                            } else if (attachment.getName().toLowerCase().endsWith(".docs")) {
+                                setImageDrawable(view, R.drawable.docx_icon);
+                            } else {
+                                setImageDrawable(view, R.drawable.file_icon);
+                            }
                         } else {
                             setImageDrawable(view, R.drawable.file_icon);
                         }
-                    } else {
-                        setImageDrawable(view, R.drawable.file_icon);
                     }
 
                     break;
@@ -523,7 +530,12 @@ public final class AppUtils {
                     if (message.getAttachment() == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.file_message);
+                    if (message.getRealmAdditional() != null && message.getRealmAdditional().getAdditionalType() == 4) {
+                        messageText = resources.getString(R.string.sticker);
+                    } else {
+                        messageText = resources.getString(R.string.file_message);
+                    }
+
                     break;
                 case GIF_TEXT:
                 case GIF:

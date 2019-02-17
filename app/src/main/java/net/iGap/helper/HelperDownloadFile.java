@@ -13,6 +13,7 @@ package net.iGap.helper;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.downloader.Error;
 import com.downloader.OnCancelListener;
@@ -25,7 +26,10 @@ import com.downloader.Progress;
 import com.downloader.utils.Utils;
 
 import net.iGap.G;
+import net.iGap.interfaces.OnDownload;
 import net.iGap.interfaces.OnFileDownloadResponse;
+import net.iGap.interfaces.OnFileDownloaded;
+import net.iGap.interfaces.OnStickerDownloaded;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -492,7 +496,7 @@ public class HelperDownloadFile {
         if (item.url != null && !item.url.isEmpty()) {
             startDownloadManager(item);
         } else {
-            new RequestFileDownload().download(item.Token, item.offset, (int) item.size, item.selector, new RequestFileDownload.IdentityFileDownload(item.type, item.cashId, item.path, item.selector, item.size, item.offset, true));
+            new RequestFileDownload().download(item.Token, item.offset, (int) item.size, item.selector, new RequestFileDownload.IdentityFileDownload(item.type, item.cashId, item.path, item.selector, item.size, item.offset, RequestFileDownload.TypeDownload.FILE));
         }
     }
 
