@@ -754,6 +754,7 @@ public class FragmentChat extends BaseFragment
     public void onStart() {
         super.onStart();
 
+
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -809,6 +810,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
+
 
         if (FragmentShearedMedia.list != null && FragmentShearedMedia.list.size() > 0) {
             deleteSelectedMessageFromAdapter(FragmentShearedMedia.list);
@@ -1096,7 +1098,6 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         /**
          * If it's in the app and the screen lock is activated after receiving the result of the camera and .... The page code is displayed.
          * The wizard will  be set ActivityMain.isUseCamera = true to prevent the page from being opened....
@@ -1606,6 +1607,7 @@ public class FragmentChat extends BaseFragment
                 if (item != null && item.getResult() == 1) {
 
                     items = item.getFavorite();
+
                     if (items.size() == 0) {
                         return;
                     }
@@ -1632,6 +1634,11 @@ public class FragmentChat extends BaseFragment
                                 @Override
                                 public void run() {
                                     if (!isChatReadOnly) {
+                                        if (item.getFavoriteValue().equals("$financial")) {
+                                            new HelperFragment(FragmentPayment.newInstance()).setReplace(false).load();
+                                            //lockNavigation();
+                                            return;
+                                        }
                                         edtChat.setText(item.getFavoriteValue());
                                         imvSendButton.performClick();
                                         scrollToEnd();
