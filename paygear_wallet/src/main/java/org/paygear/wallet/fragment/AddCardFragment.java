@@ -72,7 +72,7 @@ public class AddCardFragment extends Fragment {
         ViewGroup rootView = view.findViewById(R.id.rootView);
         ViewGroup rootCardView = view.findViewById(R.id.rootCardView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
             rootCardView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         }
 
