@@ -3078,7 +3078,7 @@ public class FragmentChat extends BaseFragment
 
                     int position = mAdapter.findPositionByMessageId(firstUnreadMessage.getMessageId());
                     if (position > 0) {
-                        mAdapter.add(position, new UnreadMessage(getRealmChat(), FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), makeUnreadMessage(countNewMessage))).withIdentifier(SUID.id().get()));
+                        mAdapter.add(position, new UnreadMessage(mAdapter, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), makeUnreadMessage(countNewMessage))).withIdentifier(SUID.id().get()));
                         isShowLayoutUnreadMessage = true;
                         LinearLayoutManager linearLayout = (LinearLayoutManager) recyclerView.getLayoutManager();
                         linearLayout.scrollToPositionWithOffset(position, 0);

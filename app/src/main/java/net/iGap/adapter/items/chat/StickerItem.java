@@ -10,8 +10,6 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -20,8 +18,8 @@ import android.widget.LinearLayout;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.helper.HelperRadius;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
@@ -29,14 +27,12 @@ import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
 
-import io.realm.Realm;
-
 import static net.iGap.module.AndroidUtils.suitablePath;
 
 public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHolder> {
 
-    public StickerItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public StickerItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
     @Override
