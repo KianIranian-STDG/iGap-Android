@@ -466,10 +466,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
 
         if (holder instanceof StickerItem.ViewHolder) {
-            if (roomMessage.getAttachment().isFileExistsOnLocal()) {
-                onLoadThumbnailFromLocal(holder, getCacheId(mMessage), roomMessage.getAttachment().getLocalFilePath(), LocalFileType.FILE);
+            if (realmAttachment.isFileExistsOnLocal()) {
+                onLoadThumbnailFromLocal(holder, getCacheId(mMessage), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
             } else {
-                downLoadFile(holder, roomMessage.getAttachment(), 0);
+                downLoadFile(holder, realmAttachment, 0);
             }
             hasProgress(holder);
         } else if (realmAttachment != null){
