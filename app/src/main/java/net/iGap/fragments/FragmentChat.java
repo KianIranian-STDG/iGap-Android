@@ -3425,6 +3425,13 @@ public class FragmentChat extends BaseFragment
                     emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
                 }
             }
+
+            @Override
+            public void updateRecentlySticker(ArrayList<String> structAllStickers) {
+                if (structAllStickers != null) emojiPopup.onUpdateRecentSticker(structAllStickers);
+            }
+
+
         };
 
         edtChat.addTextChangedListener(new TextWatcher() {
@@ -6042,9 +6049,9 @@ public class FragmentChat extends BaseFragment
                         String additional = new Gson().toJson(new StructSendSticker(st.getId(), st.getName(), st.getGroupId(), st.getToken()));
 
                         final RealmRoomMessage[] rm = new RealmRoomMessage[1];
-                        Long identity = AppUtils.makeRandomId() ;
+                        Long identity = AppUtils.makeRandomId();
 
-                         int [] imageSize =   AndroidUtils.getImageDimens(st.getUri());
+                        int[] imageSize = AndroidUtils.getImageDimens(st.getUri());
                         getRealmChat().executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
@@ -6062,7 +6069,7 @@ public class FragmentChat extends BaseFragment
                         mAdapter.add(new StickerItem(getRealmChat(), chatType, FragmentChat.this).setMessage(sm));
                         scrollToEnd();
 
-                       new ChatSendMessageUtil().build(chatType, mRoomId,rm[0]).sendMessage(identity+"");
+                        new ChatSendMessageUtil().build(chatType, mRoomId, rm[0]).sendMessage(identity + "");
 
                     }
                 })
@@ -6089,10 +6096,11 @@ public class FragmentChat extends BaseFragment
                     }
 
                     @Override
-                    public void openSetting(ArrayList<StructGroupSticker> stickerList) {
-                        new HelperFragment(FragmentSettingStickers.newInstance(data)).setReplace(false).load();
-
+                    public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
+                        new HelperFragment(FragmentSettingStickers.newInstance(data, recentStickerList)).setReplace(false).load();
                     }
+
+
                 })
                 .setBackgroundColor(Color.parseColor(BackgroundColor))
                 .setIconColor(Color.parseColor(iconColor))
@@ -7323,9 +7331,9 @@ public class FragmentChat extends BaseFragment
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom);
 
                 String _text;
-                if(chatItem.forwardedFrom.getRealmAdditional() !=null &&  chatItem.forwardedFrom.getRealmAdditional().getAdditionalType() == 4) {
-                   _text = getString(R.string.sticker);
-               }else{
+                if (chatItem.forwardedFrom.getRealmAdditional() != null && chatItem.forwardedFrom.getRealmAdditional().getAdditionalType() == 4) {
+                    _text = getString(R.string.sticker);
+                } else {
                     _text = AppUtils.conversionMessageType(chatItem.forwardedFrom.getMessageType());
                 }
 
@@ -7339,9 +7347,9 @@ public class FragmentChat extends BaseFragment
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message);
 
                 String _text;
-                if(message.getRealmAdditional() !=null &&  message.getRealmAdditional().getAdditionalType() == 4) {
+                if (message.getRealmAdditional() != null && message.getRealmAdditional().getAdditionalType() == 4) {
                     _text = getString(R.string.sticker);
-                }else{
+                } else {
                     _text = AppUtils.conversionMessageType(chatItem.messageType);
                 }
 

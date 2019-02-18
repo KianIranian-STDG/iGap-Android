@@ -54,25 +54,34 @@
                 android:textSize="@dimen/dp18"
                 android:visibility="visible" />
 
+            <net.iGap.module.MaterialDesignTextView
+                android:id="@+id/txtDelete"
+                fontPath="fonts/IRANSansMobile_Bold.ttf"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/md_rubbish_delete_file"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/dp18"
+                android:visibility="gone" />
+
         </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="@color/gray_f2"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rcvSettingPage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-        <ProgressBar
-            android:id="@+id/progress_stricker"
-            android:layout_width="@dimen/dp60"
-            android:layout_height="@dimen/dp60"
-            android:layout_centerInParent="true" />
-
-    </RelativeLayout>
 
 </LinearLayout>
