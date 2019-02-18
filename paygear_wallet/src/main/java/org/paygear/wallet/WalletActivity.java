@@ -114,9 +114,9 @@ public class WalletActivity extends NavigationBarActivity {
         backgroundTheme = intent.getStringExtra(BACKGROUND);
         backgroundTheme_2 = intent.getStringExtra(BACKGROUND_2);
 
-//        if (backgroundTheme_2.length() == 9) {
-//            backgroundTheme_2 = "#FF" + backgroundTheme_2.substring(3);
-//        }
+        if (backgroundTheme_2.length() == 9) {
+            backgroundTheme_2 = "#FF" + backgroundTheme_2.substring(3);
+        }
 
         if (backgroundTheme.length() == 9) {
             backgroundTheme = "#FF" + backgroundTheme.substring(3);
