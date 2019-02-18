@@ -388,7 +388,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         /**
          * display user avatar only if chat type is GROUP
          */
-        View messageSenderAvatar = mHolder.m_container.findViewById(R.id.messageSenderAvatar);
+        View messageSenderAvatar = mHolder.mainContainer.findViewById(R.id.messageSenderAvatar);
         if (messageSenderAvatar != null) {
             messageSenderAvatar.setVisibility(View.GONE);
         }
