@@ -1634,6 +1634,7 @@ public class FragmentChat extends BaseFragment
                                     if (!isChatReadOnly) {
                                         edtChat.setText(item.getFavoriteValue());
                                         imvSendButton.performClick();
+                                        scrollToEnd();
                                     }
                                 }
                             });
