@@ -524,23 +524,16 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
             balanceTitle.setTextColor(Color.parseColor(WalletActivity.textTitleTheme));
         }
 
-        if (WalletActivity.isDarkTheme) {
-            balanceLayout.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.backgroundTheme), PorterDuff.Mode.SRC_IN));
-        } else {
-            balanceLayout.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-        }
 
+        balanceLayout.getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
 
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_LIGHT, unit, cashableTitle, cashableBalance, giftTitle, giftBalance);
         Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM, balanceTitle, balance, cashout, charge);
 
 
         Drawable mDrawable = getResources().getDrawable(R.drawable.button_blue_selector_24dp);
-        if (WalletActivity.isDarkTheme) {
-            mDrawable.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.backgroundTheme), PorterDuff.Mode.SRC_IN));
-        } else {
-            mDrawable.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-        }
+        mDrawable.setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
+
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -587,15 +580,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
 
         if (giftPrice == 0) {
             view.findViewById(R.id.bals_layout).setVisibility(View.GONE);
-
-            if (WalletActivity.isDarkTheme) {
-                view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.backgroundTheme_2), PorterDuff.Mode.SRC_IN));
-
-            } else {
-                view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
-
-            }
-
+            view.findViewById(R.id.balance_layout).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(WalletActivity.primaryColor), PorterDuff.Mode.SRC_IN));
         }
     }
 
