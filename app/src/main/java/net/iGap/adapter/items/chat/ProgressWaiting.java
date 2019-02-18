@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
@@ -27,8 +28,8 @@ import io.realm.Realm;
 
 public class ProgressWaiting extends AbstractMessage<net.iGap.adapter.items.chat.ProgressWaiting, net.iGap.adapter.items.chat.ProgressWaiting.ViewHolder> {
 
-    public ProgressWaiting(Realm realmChat, IMessageItem messageClickListener) {
-        super(realmChat, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
+    public ProgressWaiting(MessagesAdapter<AbstractMessage> mAdapter, IMessageItem messageClickListener) {
+        super(mAdapter, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
     }
 
     @Override

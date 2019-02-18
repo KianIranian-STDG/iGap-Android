@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.IMessageItem;
@@ -60,8 +61,8 @@ import static net.iGap.R.dimen.messageContainerPadding;
 
 public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> {
 
-    public AudioItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public AudioItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
     @Override
@@ -223,7 +224,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             AppUtils.setImageDrawable(holder.thumbnail, R.drawable.green_music_note);
         }
 
-        String text = "";
 
         if (mMessage.forwardedFrom != null) {
             if (mMessage.forwardedFrom.getAttachment() != null) {
@@ -244,7 +244,6 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
                 }
             }
 
-            text = mMessage.forwardedFrom.getMessage();
         } else {
             if (mMessage.attachment != null) {
                 if (mMessage.attachment.isFileExistsOnLocal()) {
@@ -260,13 +259,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             } else {
                 holder.songArtist.setText(holder.itemView.getResources().getString(R.string.unknown_artist));
             }
-
-            text = mMessage.messageText;
         }
 
-        setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
+        setTextIfNeeded(holder.messageView);
 
-        View audioBoxView = holder.itemView.findViewById(R.id.audioBox);
+        View audioBoxView = holder.audioBox;
         if (G.isDarkTheme) {
             audioBoxView.setBackgroundResource(R.drawable.green_bg_rounded_corner_dark);
         } else {
@@ -349,7 +346,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
+    protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
         protected MessageProgress progress;
         protected ImageView thumbnail;
         protected TextView fileSize;
@@ -363,10 +360,11 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         protected SeekBar musicSeekbar;
         protected OnComplete complete;
         protected TextView txt_Timer;
+        protected LinearLayout audioBox;
 
         public ViewHolder(final View view) {
             super(view);
-            LinearLayout audioBox = new LinearLayout(G.context);
+            audioBox = new LinearLayout(G.context);
             audioBox.setId(R.id.audioBox);
             setLayoutDirection(audioBox, View.LAYOUT_DIRECTION_LTR);
             audioBox.setMinimumHeight((int) context.getResources().getDimension(R.dimen.dp130));
@@ -502,9 +500,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             m_container.addView(audioBox);
 
             LinearLayout.LayoutParams layout_992 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp220), LinearLayout.LayoutParams.WRAP_CONTENT); // before width was -> LinearLayout.LayoutParams.MATCH_PARENT, for fix text scroll changed it
-            LinearLayout csliwt_layout_container_message = ViewMaker.getTextView();
-            csliwt_layout_container_message.setLayoutParams(layout_992);
-            m_container.addView(csliwt_layout_container_message);
+            setLayoutMessageContainer(layout_992);
 
             linearLayout_916.addView(frameLayout);
             linearLayout_916.addView(fileSize);

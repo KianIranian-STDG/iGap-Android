@@ -375,7 +375,7 @@ public class FragmentChat extends BaseFragment
         OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged,
         OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick {
 
-    private static boolean BugUnreadMessage;
+    private static boolean isLoadingMoreMessage;
     public static FinishActivity finishActivity;
     public static OnComplete onMusicListener;
     public static IUpdateLogItem iUpdateLogItem;
@@ -2904,6 +2904,7 @@ public class FragmentChat extends BaseFragment
         recyclerView.setItemAnimator(null);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);
+        recyclerView.setItemViewCacheSize(20);
 
       /*  icon = BitmapFactory.decodeResource(this.getResources(),
                 R.drawable.ic_launcher_foreground);*/
@@ -3043,11 +3044,13 @@ public class FragmentChat extends BaseFragment
 
                 if (isWaitingForHistoryUp || isWaitingForHistoryDown) {
                     Log.d("bagi" , "BUGGGllScrollNavigatonClicke");
-                    FragmentChat.BugUnreadMessage = true;
+                    FragmentChat.isLoadingMoreMessage = true;
                     clearAdapterItems();
-                    mAdapter.add(new ProgressWaiting(getRealmChat(), FragmentChat.this).withIdentifier(progressIdentifierDown));
+                    mAdapter.add(new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierDown));
                     mAdapter.notifyAdapterDataSetChanged();
                     return;
+                } else {
+                    Log.d("bagi" , "NoBugInScrollNavigatonClicke");
                 }
 
                 latestButtonClickTime = System.currentTimeMillis();
@@ -3303,7 +3306,7 @@ public class FragmentChat extends BaseFragment
                             if (roomMessage != null) {
                                 edtChat.setText("");
                                 lastMessageId = roomMessage.getMessageId();
-                                mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
+                                mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), roomMessage)).withIdentifier(SUID.id().get()));
                                 clearReplyView();
                                 scrollToEnd();
 
@@ -4346,7 +4349,7 @@ public class FragmentChat extends BaseFragment
             structChannelExtra.signature = "";
         }
         messageInfo.channelExtra = structChannelExtra;
-        mAdapter.add(new VoiceItem(getRealmChat(), chatType, this).setMessage(messageInfo));
+        mAdapter.add(new VoiceItem(mAdapter, chatType, this).setMessage(messageInfo));
         //realm.close();
         scrollToEnd();
         clearReplyView();
@@ -4526,7 +4529,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void sendFromBot(Object message) {
         if (message instanceof RealmRoomMessage)
-            mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
+            mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
         else if (message instanceof String)
             openWebViewForSpecialUrlChat(message.toString());
 
@@ -8236,7 +8239,7 @@ public class FragmentChat extends BaseFragment
 
             if (finalMessageType == CONTACT) {
                 messageInfo.channelExtra = new StructChannelExtra();
-                mAdapter.add(new ContactItem(getRealmChat(), chatType, this).setMessage(messageInfo));
+                mAdapter.add(new ContactItem(mAdapter, chatType, this).setMessage(messageInfo));
             }
         }
 
@@ -8450,7 +8453,7 @@ public class FragmentChat extends BaseFragment
                                 break;
                             }
                         }
-                        mAdapter.add(0, new TimeItem(getRealmChat(), this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                        mAdapter.add(0, new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                         index = 1;
                     }
                 } else {
@@ -8477,10 +8480,10 @@ public class FragmentChat extends BaseFragment
                     if (messageInfo.showTime) {
                         if (mAdapter.getItemCount() > 0) {
                             if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDifferent(messageInfo.time, mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
-                                mAdapter.add(new TimeItem(getRealmChat(), this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                                mAdapter.add(new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                             }
                         } else {
-                            mAdapter.add(new TimeItem(getRealmChat(), this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+                            mAdapter.add(new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
                         }
                     }
                 }
@@ -8488,39 +8491,39 @@ public class FragmentChat extends BaseFragment
                 switch (messageType) {
                     case TEXT:
                         if (!addTop) {
-                            mAdapter.add(new TextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new TextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new TextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new TextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case WALLET:
                         if (!addTop) {
-                            mAdapter.add(new LogWallet(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new LogWallet(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new LogWallet(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new LogWallet(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case IMAGE:
                     case IMAGE_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new ImageWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new ImageWithTextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new ImageWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new ImageWithTextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case VIDEO:
                     case VIDEO_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new VideoWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new VideoWithTextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new VideoWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new VideoWithTextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case LOCATION:
                         if (!addTop) {
-                            mAdapter.add(new LocationItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new LocationItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new LocationItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new LocationItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case FILE:
@@ -8528,54 +8531,54 @@ public class FragmentChat extends BaseFragment
 
                         if (messageInfo.additionalData != null && messageInfo.additionalData.AdditionalType == AdditionalType.STICKER) {
                             if (!addTop) {
-                                mAdapter.add(new StickerItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(index, new StickerItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(index, new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         } else {
                             if (!addTop) {
-                                mAdapter.add(new FileItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new FileItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(index, new FileItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(index, new FileItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
                     case VOICE:
                         if (!addTop) {
-                            mAdapter.add(new VoiceItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new VoiceItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new VoiceItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new VoiceItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case AUDIO:
                     case AUDIO_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new AudioItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new AudioItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new AudioItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new AudioItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case CONTACT:
                         if (!addTop) {
-                            mAdapter.add(new ContactItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new ContactItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new ContactItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new ContactItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case GIF:
                     case GIF_TEXT:
                         if (!addTop) {
-                            mAdapter.add(new GifWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(new GifWithTextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
-                            mAdapter.add(index, new GifWithTextItem(getRealmChat(), chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                            mAdapter.add(index, new GifWithTextItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
                         break;
                     case LOG:
                         if (messageInfo.showMessage) {
                             if (!addTop) {
-                                mAdapter.add(new LogItem(getRealmChat(), this).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(new LogItem(mAdapter, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
-                                mAdapter.add(index, new LogItem(getRealmChat(), this).setMessage(messageInfo).withIdentifier(identifier));
+                                mAdapter.add(index, new LogItem(mAdapter, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
                         }
                         break;
@@ -8798,7 +8801,7 @@ public class FragmentChat extends BaseFragment
                 super.onScrolled(recyclerView, dx, dy);
                 Log.d("bagi" , "onScrolledCalled");
 
-                if (FragmentChat.BugUnreadMessage) {
+                if (FragmentChat.isLoadingMoreMessage) {
                     return;
                 }
 
@@ -8991,6 +8994,20 @@ public class FragmentChat extends BaseFragment
                         sort = Sort.ASCENDING;
                         isWaitingForHistoryDown = false;
                     }
+
+                    if (FragmentChat.isLoadingMoreMessage){
+                        if (!isWaitingForHistoryUp &&
+                                !isWaitingForHistoryDown){
+                            Log.d("bagi" , "isLoadingMoreMessage = false");
+
+                            FragmentChat.isLoadingMoreMessage = false;
+                            resetMessagingValue();
+                            addToView = false;
+                            llScrollNavigate.performClick();
+                        }
+                        return;
+                    }
+
                     realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, sort);
                     MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN, getRealmChat());
 
@@ -9033,17 +9050,6 @@ public class FragmentChat extends BaseFragment
                     final ArrayList<StructMessageInfo> structMessageInfos = new ArrayList<>();
                     for (RealmRoomMessage realmRoomMessage : realmRoomMessages) {
                         structMessageInfos.add(StructMessageInfo.convert(getRealmChat(), realmRoomMessage));
-                    }
-
-                    if (FragmentChat.BugUnreadMessage){
-                        if (!isWaitingForHistoryUp &&
-                                !isWaitingForHistoryDown){
-                            FragmentChat.BugUnreadMessage = false;
-                            resetMessagingValue();
-                            addToView = false;
-                            llScrollNavigate.performClick();
-                        }
-                        return;
                     }
 
                     if (direction == UP) {
@@ -9099,7 +9105,20 @@ public class FragmentChat extends BaseFragment
                         } else {
                             isWaitingForHistoryDown = false;
                         }
-                        getOnlineMessageAfterTimeOut(messageIdGetHistory, direction);
+                    }
+
+                    if (FragmentChat.isLoadingMoreMessage){
+                        if (!isWaitingForHistoryUp &&
+                                !isWaitingForHistoryDown){
+                            FragmentChat.isLoadingMoreMessage = false;
+                            resetMessagingValue();
+                            addToView = false;
+                            llScrollNavigate.performClick();
+                        }
+                    } else {
+                        if (majorCode == 5) {
+                            getOnlineMessageAfterTimeOut(messageIdGetHistory, direction);
+                        }
                     }
                 }
             });
@@ -9159,7 +9178,7 @@ public class FragmentChat extends BaseFragment
         int unreadMessageCount = unreadCount;
         if (unreadMessageCount > 0) {
             RealmRoomMessage unreadMessage = RealmRoomMessage.makeUnreadMessage(unreadMessageCount);
-            mAdapter.add(0, new UnreadMessage(getRealmChat(), FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), unreadMessage)).withIdentifier(SUID.id().get()));
+            mAdapter.add(0, new UnreadMessage(mAdapter, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), unreadMessage)).withIdentifier(SUID.id().get()));
             isShowLayoutUnreadMessage = true;
 
         }
@@ -9219,10 +9238,10 @@ public class FragmentChat extends BaseFragment
                             public void run() {
                                 if (direction == DOWN && progressIdentifierDown == 0) {
                                     progressIdentifierDown = SUID.id().get();
-                                    mAdapter.add(new ProgressWaiting(getRealmChat(), FragmentChat.this).withIdentifier(progressIdentifierDown));
+                                    mAdapter.add(new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierDown));
                                 } else if (direction == UP && progressIdentifierUp == 0) {
                                     progressIdentifierUp = SUID.id().get();
-                                    mAdapter.add(0, new ProgressWaiting(getRealmChat(), FragmentChat.this).withIdentifier(progressIdentifierUp));
+                                    mAdapter.add(0, new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierUp));
                                 }
                             }
                         });
@@ -9369,7 +9388,7 @@ public class FragmentChat extends BaseFragment
                 openWebViewForSpecialUrlChat(message.toString());
             }
         } else if (message instanceof RealmRoomMessage) {
-            mAdapter.add(new TextItem(getRealmChat(), chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
+            mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
 
         }
 

@@ -16,6 +16,11 @@ import net.iGap.R;
 
 public class HelperRadius {
 
+
+    public static int computeRadius() {
+        return (int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius);
+    }
+
     public static int computeRadius(String localPath) {
         /*BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;

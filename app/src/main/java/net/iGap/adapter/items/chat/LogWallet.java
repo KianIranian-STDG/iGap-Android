@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.ReserveSpaceRoundedImageView;
@@ -30,8 +31,8 @@ import io.realm.Realm;
 public class LogWallet extends AbstractMessage<LogWallet, LogWallet.ViewHolder> {
     private Realm mRealm;
 
-    public LogWallet(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public LogWallet(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
     @Override

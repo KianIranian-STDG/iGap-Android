@@ -1,4 +1,2 @@
 configurations.maybeCreate("default")
 artifacts.add("default", file('paygearcore.aar'))
-dependencies {
-}

@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
 
@@ -34,8 +35,8 @@ import static net.iGap.G.isDarkTheme;
 
 public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
 
-    public TimeItem(Realm realmChat, IMessageItem messageClickListener) {
-        super(realmChat, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
+    public TimeItem(MessagesAdapter<AbstractMessage> mAdapter, IMessageItem messageClickListener) {
+        super(mAdapter, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
     }
 
     @Override
@@ -52,7 +53,7 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
     public void bindView(ViewHolder holder, List payloads) {
         super.bindView(holder, payloads);
 
-        setTextIfNeeded(holder.text, mMessage.messageText);
+        setTextIfNeeded(holder.text);
     }
 
     @Override
