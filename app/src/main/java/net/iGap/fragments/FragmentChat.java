@@ -6081,7 +6081,7 @@ public class FragmentChat extends BaseFragment
                         });
 
                         StructMessageInfo sm = StructMessageInfo.convert(getRealmChat(), rm[0]);
-                        mAdapter.add(new StickerItem(getRealmChat(), chatType, FragmentChat.this).setMessage(sm));
+                        mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
                         scrollToEnd();
 
                        new ChatSendMessageUtil().build(chatType, mRoomId,rm[0]).sendMessage(identity+"");
