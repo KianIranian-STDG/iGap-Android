@@ -6092,13 +6092,21 @@ public class FragmentChat extends BaseFragment
                 })
                 .setOnUpdateSticker(new OnUpdateStickerListener() {
                     @Override
-                    public void onUpdateStickerPath(ArrayList<StructGroupSticker> categoryStickerList) {
+                    public void onUpdateSticker(String token, String extention, long avatarSize, int positionAdapter) {
 
                     }
 
                     @Override
-                    public void onRemoveSticker(String token) {
+                    public void onUpdateRecentSticker() {
+
                     }
+
+                    @Override
+                    public void onUpdateTabSticker(String token, String extention, long avatarSize, int positionAdapter) {
+
+                    }
+
+
                 })
                 .setOpenPageSticker(new OnOpenPageStickerListener() {
                     @Override
@@ -6107,7 +6115,7 @@ public class FragmentChat extends BaseFragment
                     }
 
                     @Override
-                    public void openSetting(ArrayList<StructGroupSticker> stickerList) {
+                    public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
                         new HelperFragment(FragmentSettingStickers.newInstance(data)).setReplace(false).load();
 
                     }
