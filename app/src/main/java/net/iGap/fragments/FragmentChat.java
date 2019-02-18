@@ -4394,7 +4394,7 @@ public class FragmentChat extends BaseFragment
     public void onOpenClick(View view, StructMessageInfo message, int pos) {
 
 
-        if (message.additionalData.AdditionalType == 4) {
+        if (message.additionalData != null && message.additionalData.AdditionalType == 4) {
             checkSticker(message);
             return;
         }
