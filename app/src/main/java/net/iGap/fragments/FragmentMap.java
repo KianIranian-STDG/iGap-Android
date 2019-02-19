@@ -69,12 +69,15 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmUserInfo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import io.realm.Realm;
 
@@ -426,8 +429,6 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         }
 
 
-
-
         LatLng latLng = new LatLng(latitude, longitude);
 
         marker = mMap.addMarker(new MarkerOptions().position(latLng).title("position"));
@@ -626,6 +627,9 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             switch (view.getId()) {
                 case R.id.mf_rv_send_position:
                     try {
+                        if (G.locationListenerResponse != null)
+                            G.locationListenerResponse.setLocationResponse(latitude, longitude);
+
                         mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
                             @Override
                             public void onSnapshotReady(Bitmap bitmap) {

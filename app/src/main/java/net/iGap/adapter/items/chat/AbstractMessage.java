@@ -15,8 +15,10 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.location.LocationManager;
 import android.os.CountDownTimer;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
@@ -32,9 +34,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.google.protobuf.Extension;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
@@ -42,23 +47,32 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetMessageState;
+import net.iGap.helper.HelperLog;
+import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IChatItemAttachment;
 import net.iGap.interfaces.IMessageItem;
+import net.iGap.interfaces.LocationListener;
+import net.iGap.interfaces.LocationListenerResponse;
 import net.iGap.interfaces.OnAvatarGet;
+import net.iGap.interfaces.OnComplete;
+import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnProgressUpdate;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnMessageProgressClick;
 import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.AttachFile;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.MakeButtons;
@@ -83,12 +97,14 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelAddMessageReaction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,6 +115,7 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
+import static net.iGap.fragments.FragmentChat.onComplete;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
 public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
@@ -114,6 +131,8 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     private RealmChannelExtra realmChannelExtra;
     private RealmRoom realmRoomForwardedFrom;
     private MessagesAdapter<AbstractMessage> mAdapter;
+
+
     /**
      * add this prt for video player
      */
@@ -195,7 +214,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mMessage.roomId).findFirst();
         RealmRoomMessage f = RealmRoomMessage.getFinalMessage(getRealmChat().where(RealmRoomMessage.class).
                 equalTo(RealmRoomMessageFields.MESSAGE_ID, Long.parseLong(mMessage.messageID)).findFirst());
-        if (f != null){
+        if (f != null) {
             realmAttachment = f.getAttachment();
         }
         if (mMessage.forwardedFrom != null) {
@@ -238,7 +257,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         mHolder.mainContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("bagi" , "itemViewClick");
+                Log.d("bagi", "itemViewClick");
                 new CountDownTimer(300, 100) {
 
                     public void onTick(long millisUntilFinished) {
@@ -250,7 +269,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     }
                 }.start();
 
-                if (FragmentChat.isInSelectionMode){
+                if (FragmentChat.isInSelectionMode) {
                     holder.itemView.performLongClick();
                 } else {
                     if (G.isLinkClicked) {
@@ -260,7 +279,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                     if (messageClickListener != null && mMessage != null && mMessage.senderID != null && !mMessage.senderID.equalsIgnoreCase("-1")) {
                         if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                            return ;
+                            return;
                         }
                         if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
                             messageClickListener.onFailedMessageClick(view, mMessage, holder.getAdapterPosition());
@@ -286,15 +305,15 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 withTextHolder.messageView.setMaxWidth(maxsize);
             if (mMessage.hasLinkInMessage) {
                 BetterLinkMovementMethod
-                    .linkify(Linkify.ALL, withTextHolder.messageView)
-                    .setOnLinkClickListener((tv, url) -> {
-                        Log.d("bagi" , "OnMessageLinkClick");
-                        return FragmentChat.isInSelectionMode;
-                    })
-                    .setOnLinkLongClickListener((tv, url) -> {
-                        Log.d("bagi" , "OnMessageLinkLongClick");
-                        return true;
-                    });
+                        .linkify(Linkify.ALL, withTextHolder.messageView)
+                        .setOnLinkClickListener((tv, url) -> {
+                            Log.d("bagi", "OnMessageLinkClick");
+                            return FragmentChat.isInSelectionMode;
+                        })
+                        .setOnLinkLongClickListener((tv, url) -> {
+                            Log.d("bagi", "OnMessageLinkLongClick");
+                            return true;
+                        });
             } else {
                 // remove BetterLinkMovementMethod
             }
@@ -472,7 +491,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 downLoadFile(holder, realmAttachment, 0);
             }
             hasProgress(holder);
-        } else if (realmAttachment != null){
+        } else if (realmAttachment != null) {
 
             prepareAttachmentIfNeeded(holder, realmAttachment, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
         }
@@ -584,7 +603,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
     }
 
-    protected View.OnLongClickListener getLongClickPerform(final RecyclerView.ViewHolder holder){
+    protected View.OnLongClickListener getLongClickPerform(final RecyclerView.ViewHolder holder) {
         return new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -609,7 +628,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if ((mMessage.forwardedFrom != null)) {
             if (realmRoomForwardedFrom != null && realmRoomForwardedFrom.getType() == ProtoGlobal.Room.Type.CHANNEL) {
-                 if (realmChannelExtra != null) {
+                if (realmChannelExtra != null) {
                     mHolder.txt_vote_up.setText(realmChannelExtra.getThumbsUp());
                     mHolder.txt_vote_down.setText(realmChannelExtra.getThumbsDown());
                     mHolder.txt_views_label.setText(realmChannelExtra.getViewsLabel());
@@ -1074,7 +1093,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      * @return true if item has a progress
      */
     private boolean hasProgress(VH holder) {
-        if (holder instanceof IProgress){
+        if (holder instanceof IProgress) {
             MessageProgress _Progress = ((IProgress) holder).getProgress();
             _Progress.setTag(mMessage.messageID);
             _Progress.setVisibility(View.GONE);
@@ -1780,7 +1799,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 } catch (Exception e) {
                 }
-            } else if (v.getId() ==  ButtonActionType.JOIN_LINK) {
+            } else if (v.getId() == ButtonActionType.JOIN_LINK) {
                 HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
 
             } else if (v.getId() == ButtonActionType.WEB_LINK) {
@@ -1788,6 +1807,67 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
             } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
                 messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0).toString());
+            } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
+                try {
+                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_numer).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Long identity = System.currentTimeMillis();
+                            Realm realm = Realm.getDefaultInstance();
+
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
+                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                    G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
+                                    messageClickListener.sendFromBot(realmRoomMessage);
+                                }
+                            });
+                        }
+                    }).show();
+
+
+                } catch (Exception e) {
+                }
+
+            } else if (v.getId() == ButtonActionType.REQUEST_LOCATION) {
+                try {
+                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_location).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Boolean response = false;
+                            if (G.locationListener != null)
+                                response = G.locationListener.requestLocation();
+
+
+                            G.locationListenerResponse = new LocationListenerResponse() {
+                                @Override
+                                public void setLocationResponse(Double latitude, Double longitude) {
+                                    Long identity = System.currentTimeMillis();
+                                    Realm realm = Realm.getDefaultInstance();
+
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
+                                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, latitude + "," + longitude, ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                            G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
+                                            messageClickListener.sendFromBot(realmRoomMessage);
+                                        }
+                                    });
+                                }
+                            };
+
+
+                        }
+                    }).show();
+
+
+                } catch (Exception e) {
+                }
+
+
             }
 
         } catch (Exception e) {

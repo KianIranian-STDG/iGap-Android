@@ -12,7 +12,10 @@ public enum Additional {
     STREAM_TYPE(6),
     GET_VALUE_BY_KEYBOARD_TYPE(7),
     FORM_BUILDER(8),
-    WEB_VIEW(9);
+    WEB_VIEW(9),
+    REQUEST_PHONE(10),
+    REQUEST_LOCATION(11);
+
 
     private final int shortCode;
 

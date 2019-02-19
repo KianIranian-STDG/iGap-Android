@@ -165,6 +165,7 @@ import net.iGap.interfaces.IPickFile;
 import net.iGap.interfaces.IResendMessage;
 import net.iGap.interfaces.ISendPosition;
 import net.iGap.interfaces.IUpdateLogItem;
+import net.iGap.interfaces.LocationListener;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnBackgroundChanged;
@@ -372,7 +373,7 @@ import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
         implements IMessageItem, OnChatClearMessageResponse, OnPinedMessage, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
-        OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged,
+        OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged, LocationListener,
         OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick {
 
     private static boolean isLoadingMoreMessage;
@@ -658,6 +659,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
+        G.locationListener = this;
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
 
         return attachToSwipeBack(rootView);
@@ -1085,6 +1087,9 @@ public class FragmentChat extends BaseFragment
         if (G.fragmentActivity != null && G.fragmentActivity instanceof ActivityMain) {
             ((ActivityMain) G.fragmentActivity).resume();
         }
+
+        if (G.locationListener != null)
+            G.locationListener = null;
 
 
         if (realmChat != null && !realmChat.isClosed()) {
@@ -2932,7 +2937,7 @@ public class FragmentChat extends BaseFragment
                     //   if (!((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage.isTimeOrLogMessage())
                     try {
                         if (isRepley)
-                        replay(((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage);
+                            replay(((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage);
                     } catch (NullPointerException e) {
                     } catch (Exception e) {
                     }
@@ -3587,7 +3592,7 @@ public class FragmentChat extends BaseFragment
                                   int actionState, boolean isCurrentlyActive) {
 
 
-        if (dX <- ViewMaker.dpToPixel(140) && !isRepley ) {
+        if (dX < -ViewMaker.dpToPixel(140) && !isRepley) {
             isRepley = true;
 
             Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
@@ -8994,8 +8999,8 @@ public class FragmentChat extends BaseFragment
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (FragmentChat.isLoadingMoreMessage){
-                                if (!isWaitingForHistoryUp && !isWaitingForHistoryDown){
+                            if (FragmentChat.isLoadingMoreMessage) {
+                                if (!isWaitingForHistoryUp && !isWaitingForHistoryDown) {
 
                                     FragmentChat.isLoadingMoreMessage = false;
                                     resetMessagingValue();
@@ -9109,9 +9114,9 @@ public class FragmentChat extends BaseFragment
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (FragmentChat.isLoadingMoreMessage){
+                            if (FragmentChat.isLoadingMoreMessage) {
                                 if (!isWaitingForHistoryUp &&
-                                        !isWaitingForHistoryDown){
+                                        !isWaitingForHistoryDown) {
                                     FragmentChat.isLoadingMoreMessage = false;
                                     resetMessagingValue();
                                     addToView = false;
@@ -9396,6 +9401,18 @@ public class FragmentChat extends BaseFragment
         } else if (message instanceof RealmRoomMessage) {
             mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
 
+        }
+
+    }
+
+    @Override
+    public boolean requestLocation() {
+        try {
+            attachFile.requestGetPosition(complete, FragmentChat.this);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
 
     }
