@@ -105,11 +105,11 @@ dependencies {
     implementation 'com.hanks.animatecheckbox:library:0.1'
     implementation 'org.parceler:parceler-api:1.1.9'
     implementation 'com.android.support:gridlayout-v7:28.0.0'
-    implementation 'com.google.zxing:core:3.3.0'
+    implementation 'com.google.zxing:core:3.3.2'
     implementation('com.journeyapps:zxing-android-embedded:3.6.0') { transitive = false }
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
-    implementation 'com.google.android.gms:play-services-analytics:16.0.6'
-    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.gms:play-services-analytics:16.0.7'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
     implementation 'me.zhanghai.android.customtabshelper:library:1.0.3'
     implementation 'com.readystatesoftware.systembartint:systembartint:1.0.4'
     implementation 'cat.ereza:customactivityoncrash:2.1.0'
@@ -126,7 +126,7 @@ dependencies {
     implementation 'com.github.krokyze:ucropnedit:2.2.2'
     implementation 'info.androidhive:imagefilters:1.0.7'
     implementation 'com.mindorks.android:prdownloader:0.4.0'
-    implementation 'com.google.firebase:firebase-core:16.0.6'
+    implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation('com.github.KianIranian-STDG:Compress:1.2.1') {
         exclude group: 'com.googlecode.mp4parser', module: 'isoparser'

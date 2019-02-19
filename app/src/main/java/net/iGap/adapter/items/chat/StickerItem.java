@@ -10,6 +10,7 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -30,7 +31,7 @@ import java.util.List;
 
 import static net.iGap.module.AndroidUtils.suitablePath;
 
-public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHolder> implements  IProgress{
+public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHolder> {
 
     public StickerItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(mAdapter, true, type, messageClickListener);
@@ -73,6 +74,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
         });
 
         holder.image.setOnLongClickListener(getLongClickPerform(holder));
+        holder.progress.setVisibility(View.GONE);
     }
 
 
@@ -91,13 +93,9 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
         return new ViewHolder(v);
     }
 
-    @Override
-    public MessageProgress getProgress() {
-        return null;
-    }
-
-    protected static class ViewHolder extends ChatItemHolder {
+    protected static class ViewHolder extends ChatItemHolder implements IProgress{
         protected ReserveSpaceRoundedImageView image;
+        protected MessageProgress progress;
 
         public ViewHolder(View view) {
             super(view);
@@ -115,6 +113,14 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
             frameLayout.addView(image);
             image.reserveSpace(180,180,ProtoGlobal.Room.Type.CHAT);
 
+            progress = getProgressBar(0);
+            frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+
+        }
+
+        @Override
+        public MessageProgress getProgress() {
+            return progress;
         }
     }
 }
