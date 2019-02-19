@@ -93,7 +93,7 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends ChatItemHolder implements IProgress{
+    protected static class ViewHolder extends ChatItemHolder implements IProgress, IThumbNailItem{
         protected ReserveSpaceRoundedImageView image;
         protected MessageProgress progress;
 
@@ -121,6 +121,11 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
         @Override
         public MessageProgress getProgress() {
             return progress;
+        }
+
+        @Override
+        public ImageView getThumbNailImageView() {
+            return image;
         }
     }
 }

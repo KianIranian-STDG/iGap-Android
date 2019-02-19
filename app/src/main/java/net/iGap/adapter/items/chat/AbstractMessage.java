@@ -465,18 +465,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             mHolder.cslr_txt_time.setText(time);
         }
 
-        if (holder instanceof StickerItem.ViewHolder) {
-            if (realmAttachment.isFileExistsOnLocal()) {
-                onLoadThumbnailFromLocal(holder, getCacheId(mMessage), realmAttachment.getLocalFilePath(), LocalFileType.FILE);
-            } else {
-                downLoadFile(holder, realmAttachment, 0);
-            }
-            hasProgress(holder);
-        } else if (realmAttachment != null){
-
-            prepareAttachmentIfNeeded(holder, realmAttachment, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
-        }
-
+        prepareAttachmentIfNeeded(holder, realmAttachment, mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getMessageType() : mMessage.messageType);
 
         /**
          * show vote layout for channel otherwise hide layout also get message state for channel
@@ -1075,9 +1064,6 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
      */
     private boolean hasProgress(VH holder) {
         if (holder instanceof IProgress){
-            MessageProgress _Progress = ((IProgress) holder).getProgress();
-            _Progress.setTag(mMessage.messageID);
-            _Progress.setVisibility(View.GONE);
             return true;
         } else {
             return false;
@@ -1211,7 +1197,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
         if (attachment != null) {
 
-            if (messageType == ProtoGlobal.RoomMessageType.IMAGE || messageType == ProtoGlobal.RoomMessageType.IMAGE_TEXT || messageType == ProtoGlobal.RoomMessageType.VIDEO || messageType == ProtoGlobal.RoomMessageType.VIDEO_TEXT) {
+            if (mHolder instanceof VideoWithTextItem.ViewHolder || mHolder instanceof ImageWithTextItem.ViewHolder || mHolder instanceof StickerItem.ViewHolder) {
                 ReserveSpaceRoundedImageView imageViewReservedSpace = (ReserveSpaceRoundedImageView) ((IThumbNailItem) holder).getThumbNailImageView();
                 int _with = attachment.getWidth();
                 int _hight = attachment.getHeight();
@@ -1283,14 +1269,23 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     onLoadThumbnailFromLocal(holder, getCacheId(mMessage), attachment.getLocalThumbnailPath(), LocalFileType.THUMBNAIL);
                 } else {
                     if (messageType != ProtoGlobal.RoomMessageType.CONTACT) {
-                        downLoadThumbnail(holder, attachment);
+                        if (mHolder instanceof StickerItem.ViewHolder) {
+                            downLoadFile(holder, attachment, 0);
+                        } else {
+                            downLoadThumbnail(holder, attachment);
+                        }
                     }
                 }
             }
 
             if (hasProgress(holder)) {
-
                 final MessageProgress _Progress = ((IProgress) holder).getProgress();
+                _Progress.setTag(mMessage.messageID);
+                _Progress.setVisibility(View.GONE);
+
+                if (mHolder instanceof StickerItem.ViewHolder)
+                    return;
+
                 AppUtils.setProgresColor(_Progress.progressBar);
 
                 _Progress.withOnMessageProgress(new OnMessageProgressClick() {
