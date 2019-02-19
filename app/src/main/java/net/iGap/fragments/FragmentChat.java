@@ -407,7 +407,6 @@ public class FragmentChat extends BaseFragment
 
     private Bitmap icon;
     private boolean isRepley = false;
-    private boolean swipeBack = false;
     public static List<StructGroupSticker> data = new ArrayList<>();
 
 
@@ -2918,33 +2917,21 @@ public class FragmentChat extends BaseFragment
             ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 @Override
                 public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                    //awesome code when user grabs recycler card to reorder
-
                     return true;
                 }
 
                 @Override
                 public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
                     super.clearView(recyclerView, viewHolder);
-
-                    //  recyclerView.getAdapter().notifyItemChanged(viewHolder.getAdapterPosition());
-                    //    recyclerView.getAdapter().notifyDataSetChanged();
-
-                    //   if (!((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage.isTimeOrLogMessage())
                     try {
                         if (isRepley)
-                        replay(((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage);
-                    } catch (NullPointerException e) {
-                    } catch (Exception e) {
-                    }
+                            replay((mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage);
+                    } catch (Exception ignored) { }
                     isRepley = false;
-                    //awesome code to run when user drops card and completes reorder
                 }
 
                 @Override
                 public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                    //awesome code when swiping right to remove recycler card and delete SQLite data
-
                 }
 
                 @Override
@@ -2954,14 +2941,9 @@ public class FragmentChat extends BaseFragment
                                         float dX, float dY,
                                         int actionState, boolean isCurrentlyActive) {
 
-                    if (actionState == ACTION_STATE_SWIPE) {
-
+                    if (actionState == ACTION_STATE_SWIPE)
                         setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-
-                    }
                     super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-
-
                 }
 
                 @Override
@@ -2971,26 +2953,11 @@ public class FragmentChat extends BaseFragment
 
                 @Override
                 public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                    Log.d("bagiReply", "getSwipeDirs");
                     if (viewHolder instanceof ChatItemHolder) {
                         return super.getSwipeDirs(recyclerView, viewHolder);
                     }
                     // we disable swipe with returning Zero
                     return 0;
-                }
-
-                @Override
-                public int convertToAbsoluteDirection(int flags, int layoutDirection) {
-                    if (swipeBack) {
-                        swipeBack = false;
-                        return 0;
-                    }
-                    return super.convertToAbsoluteDirection(flags, layoutDirection);
-                }
-
-                @Override
-                public boolean isItemViewSwipeEnabled() {
-                    return true;
                 }
             };
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
@@ -3578,7 +3545,7 @@ public class FragmentChat extends BaseFragment
                                   int actionState, boolean isCurrentlyActive) {
 
 
-        if (dX <- ViewMaker.dpToPixel(140) && !isRepley ) {
+        if (dX <- ViewMaker.dpToPixel(140)) {
             isRepley = true;
 
             Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
@@ -3594,7 +3561,8 @@ public class FragmentChat extends BaseFragment
            /* if (!goToPositionWithAnimation(replyMessage.getMessageId(), 1000)) {
                 goToPositionWithAnimation(replyMessage.getMessageId() * (-1), 1000);
             }*/
-
+        } else {
+            isRepley = false;
         }
 
        /* icon.setBounds(viewHolder.itemView.getRight() - 0, 0, viewHolder.itemView.getRight() - 0, 0 + icon.getIntrinsicHeight());
@@ -3617,8 +3585,6 @@ public class FragmentChat extends BaseFragment
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-                swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
                 return false;
             }
         });
