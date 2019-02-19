@@ -21,6 +21,7 @@ import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.IMessageItem;
+import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.ReserveSpaceRoundedImageView;
 import net.iGap.module.enums.LocalFileType;
 import net.iGap.proto.ProtoGlobal;
@@ -29,7 +30,7 @@ import java.util.List;
 
 import static net.iGap.module.AndroidUtils.suitablePath;
 
-public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHolder> {
+public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHolder> implements  IProgress{
 
     public StickerItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
         super(mAdapter, true, type, messageClickListener);
@@ -88,6 +89,11 @@ public class StickerItem extends AbstractMessage<StickerItem, StickerItem.ViewHo
     @Override
     public ViewHolder getViewHolder(View v) {
         return new ViewHolder(v);
+    }
+
+    @Override
+    public MessageProgress getProgress() {
+        return null;
     }
 
     protected static class ViewHolder extends ChatItemHolder {
