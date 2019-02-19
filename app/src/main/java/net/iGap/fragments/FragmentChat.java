@@ -116,6 +116,7 @@ import net.iGap.adapter.MessagesAdapter;
 import net.iGap.adapter.items.AdapterBottomSheetForward;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.AudioItem;
+import net.iGap.adapter.items.chat.ChatItemHolder;
 import net.iGap.adapter.items.chat.ContactItem;
 import net.iGap.adapter.items.chat.FileItem;
 import net.iGap.adapter.items.chat.GifWithTextItem;
@@ -2914,7 +2915,7 @@ public class FragmentChat extends BaseFragment
                 R.drawable.ic_launcher_foreground);*/
 
         if (realmRoom != null && !realmRoom.getReadOnly()) {
-            ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
+            ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 @Override
                 public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                     //awesome code when user grabs recycler card to reorder
@@ -2969,23 +2970,13 @@ public class FragmentChat extends BaseFragment
                 }
 
                 @Override
-                public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-
-                    if (mAdapter == null) {
-                        return makeMovementFlags(0, 0);
+                public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                    Log.d("bagiReply", "getSwipeDirs");
+                    if (viewHolder instanceof ChatItemHolder) {
+                        return super.getSwipeDirs(recyclerView, viewHolder);
                     }
-                    try {
-                        AbstractMessage abstractMessage = mAdapter.getItem(viewHolder.getAdapterPosition());
-
-                        if (abstractMessage != null && abstractMessage.mMessage != null && !abstractMessage.mMessage.isTimeOrLogMessage()) {
-                            return makeMovementFlags(0, ItemTouchHelper.LEFT);
-                        } else {
-                            return makeMovementFlags(0, 0);
-                        }
-                    } catch (NullPointerException e) {
-                    } catch (Exception e1) {
-                    }
-                    return makeMovementFlags(0, 0);
+                    // we disable swipe with returning Zero
+                    return 0;
                 }
 
                 @Override
