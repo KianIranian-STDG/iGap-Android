@@ -3587,7 +3587,7 @@ public class FragmentChat extends BaseFragment
                                   int actionState, boolean isCurrentlyActive) {
 
 
-        if (dX <- ViewMaker.dpToPixel(140) && !isRepley) {
+        if (dX <- ViewMaker.dpToPixel(140) && !isRepley ) {
             isRepley = true;
 
             Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
