@@ -3364,17 +3364,6 @@ public class FragmentChat extends BaseFragment
         imvMicButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-
-                Realm realm = Realm.getDefaultInstance();
-
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.where(RealmStickersDetails.class).findAll().deleteAllFromRealm();
-                        realm.where(RealmStickers.class).findAll().deleteAllFromRealm();
-                    }
-                });
-
                 if (ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     try {
                         HelperPermission.getMicroPhonePermission(G.fragmentActivity, null);
