@@ -12,6 +12,7 @@ package net.iGap.realm;
 
 import io.realm.DynamicRealm;
 import io.realm.FieldAttribute;
+import io.realm.RealmList;
 import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
 
@@ -366,7 +367,7 @@ public class RealmMigration implements io.realm.RealmMigration {
         }
 
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 26
+        if (oldVersion == 26) {
 
             RealmObjectSchema realmAdditional = schema.create(RealmAdditional.class.getSimpleName())
                     .addField("id", long.class, FieldAttribute.REQUIRED)
@@ -378,6 +379,41 @@ public class RealmMigration implements io.realm.RealmMigration {
             if (realmRoomMessageSchema != null) {
                 realmRoomMessageSchema.addRealmObjectField("realmAdditional", realmAdditional);
             }
+
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 27
+
+            RealmObjectSchema realmStickerDetails = schema.create(RealmStickersDetails.class.getSimpleName())
+                    .addField("id", long.class, FieldAttribute.REQUIRED)
+                    .addField("refId", long.class, FieldAttribute.REQUIRED)
+                    .addField("fileSize", long.class, FieldAttribute.REQUIRED)
+                    .addField("st_id", String.class)
+                    .addField("name", String.class)
+                    .addField("token", String.class)
+                    .addField("uri", String.class)
+                    .addField("fileName", String.class)
+                    .addField("groupId", String.class)
+                    .addField("sort", int.class, FieldAttribute.REQUIRED);
+
+            schema.create(RealmStickersDetails.class.getSimpleName())
+                    .addField("id", long.class, FieldAttribute.REQUIRED)
+                    .addField("createdAt", long.class, FieldAttribute.REQUIRED)
+                    .addField("refId", long.class, FieldAttribute.REQUIRED)
+                    .addField("avatarSize", long.class, FieldAttribute.REQUIRED)
+                    .addField("createdBy", long.class, FieldAttribute.REQUIRED)
+                    .addField("price", long.class, FieldAttribute.REQUIRED)
+                    .addField("st_id", String.class)
+                    .addField("name", String.class)
+                    .addField("avatarToken", String.class)
+                    .addField("uri", String.class)
+                    .addField("avatarName", String.class)
+                    .addField("isVip", boolean.class, FieldAttribute.REQUIRED)
+                    .addField("approved", boolean.class, FieldAttribute.REQUIRED)
+                    .addField("isFavorite", boolean.class, FieldAttribute.REQUIRED)
+                    .addField("sort", int.class, FieldAttribute.REQUIRED)
+                    .addRealmListField("realmStickersDetails",realmStickerDetails);
 
             oldVersion++;
         }

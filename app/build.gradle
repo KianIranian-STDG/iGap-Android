@@ -153,7 +153,7 @@ dependencies {
     implementation 'yogesh.firzen:MukkiyaSevaigal:1.0.6'
     implementation 'me.saket:better-link-movement-method:2.2.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
-    implementation 'com.github.molareza:sticker:0.0077'
+    implementation 'com.github.molareza.sticker:emoji-one:0.0077'
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
     implementation 'com.nightonke:jellytogglebutton:1.0.2'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.2.0'
