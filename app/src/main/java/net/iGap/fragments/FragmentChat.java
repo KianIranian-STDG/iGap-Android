@@ -2931,6 +2931,7 @@ public class FragmentChat extends BaseFragment
 
                     //   if (!((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage.isTimeOrLogMessage())
                     try {
+                        if (isRepley)
                         replay(((AbstractMessage) mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage);
                     } catch (NullPointerException e) {
                     } catch (Exception e) {
@@ -3586,7 +3587,7 @@ public class FragmentChat extends BaseFragment
                                   int actionState, boolean isCurrentlyActive) {
 
 
-        if (dX < -150 && !isRepley) {
+        if (dX <- ViewMaker.dpToPixel(140) && !isRepley) {
             isRepley = true;
 
             Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
