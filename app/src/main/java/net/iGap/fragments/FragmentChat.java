@@ -407,6 +407,7 @@ public class FragmentChat extends BaseFragment
 
     private Bitmap icon;
     private boolean isRepley = false;
+    private boolean swipeBack = false;
     public static List<StructGroupSticker> data = new ArrayList<>();
 
 
@@ -2941,8 +2942,13 @@ public class FragmentChat extends BaseFragment
                                         float dX, float dY,
                                         int actionState, boolean isCurrentlyActive) {
 
-                    if (actionState == ACTION_STATE_SWIPE)
+                    if (actionState == ACTION_STATE_SWIPE && isCurrentlyActive) {
                         setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                    }
+                    dX = dX + ViewMaker.dpToPixel(25);
+                    if (dX > 0)
+                        dX = 0;
+
                     super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
                 }
 
@@ -2958,6 +2964,20 @@ public class FragmentChat extends BaseFragment
                     }
                     // we disable swipe with returning Zero
                     return 0;
+                }
+
+                @Override
+                public int convertToAbsoluteDirection(int flags, int layoutDirection) {
+                    if (swipeBack) {
+                        swipeBack = false;
+                        return 0;
+                    }
+                    return super.convertToAbsoluteDirection(flags, layoutDirection);
+                }
+
+                @Override
+                public boolean isItemViewSwipeEnabled() {
+                    return true;
                 }
             };
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
@@ -3546,16 +3566,17 @@ public class FragmentChat extends BaseFragment
 
 
         if (dX <- ViewMaker.dpToPixel(140)) {
-            isRepley = true;
+            if (!isRepley) {
+                Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
-            Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                v.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.PARCELABLE_WRITE_RETURN_VALUE));
-            } else {
-                //deprecated in API 26
-                v.vibrate(50);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    v.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.PARCELABLE_WRITE_RETURN_VALUE));
+                } else {
+                    //deprecated in API 26
+                    v.vibrate(50);
+                }
             }
+            isRepley = true;
 
             // replay(message);
            /* if (!goToPositionWithAnimation(replyMessage.getMessageId(), 1000)) {
@@ -3585,6 +3606,7 @@ public class FragmentChat extends BaseFragment
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
                 return false;
             }
         });
