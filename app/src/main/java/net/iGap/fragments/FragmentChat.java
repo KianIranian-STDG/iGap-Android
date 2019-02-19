@@ -754,7 +754,6 @@ public class FragmentChat extends BaseFragment
     public void onStart() {
         super.onStart();
 
-
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -810,7 +809,6 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-
 
         if (FragmentShearedMedia.list != null && FragmentShearedMedia.list.size() > 0) {
             deleteSelectedMessageFromAdapter(FragmentShearedMedia.list);
@@ -1607,7 +1605,6 @@ public class FragmentChat extends BaseFragment
                 if (item != null && item.getResult() == 1) {
 
                     items = item.getFavorite();
-
                     if (items.size() == 0) {
                         return;
                     }
@@ -3047,17 +3044,13 @@ public class FragmentChat extends BaseFragment
         llScrollNavigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("bagi" , "llScrollNavigatonClicke");
 
                 if (isWaitingForHistoryUp || isWaitingForHistoryDown) {
-                    Log.d("bagi" , "BUGGGllScrollNavigatonClicke");
                     FragmentChat.isLoadingMoreMessage = true;
                     clearAdapterItems();
                     mAdapter.add(new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierDown));
                     mAdapter.notifyAdapterDataSetChanged();
                     return;
-                } else {
-                    Log.d("bagi" , "NoBugInScrollNavigatonClicke");
                 }
 
                 latestButtonClickTime = System.currentTimeMillis();
@@ -3382,17 +3375,6 @@ public class FragmentChat extends BaseFragment
         imvMicButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-
-                Realm realm = Realm.getDefaultInstance();
-
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.where(RealmStickersDetails.class).findAll().deleteAllFromRealm();
-                        realm.where(RealmStickers.class).findAll().deleteAllFromRealm();
-                    }
-                });
-
                 if (ContextCompat.checkSelfPermission(G.fragmentActivity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                     try {
                         HelperPermission.getMicroPhonePermission(G.fragmentActivity, null);
@@ -3443,6 +3425,13 @@ public class FragmentChat extends BaseFragment
                     emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
                 }
             }
+
+            @Override
+            public void updateRecentlySticker(ArrayList<String> structAllStickers) {
+                if (structAllStickers != null) emojiPopup.onUpdateRecentSticker(structAllStickers);
+            }
+
+
         };
 
         edtChat.addTextChangedListener(new TextWatcher() {
@@ -3587,7 +3576,6 @@ public class FragmentChat extends BaseFragment
             public void onReceivedSslError(final WebView view, final SslErrorHandler handler, SslError error) {
             }
         });
-        System.out.println(urlWebViewForSpecialUrlChat);
         webViewChatPage.loadUrl(urlWebViewForSpecialUrlChat);
     }
 
@@ -6064,9 +6052,9 @@ public class FragmentChat extends BaseFragment
                         String additional = new Gson().toJson(new StructSendSticker(st.getId(), st.getName(), st.getGroupId(), st.getToken()));
 
                         final RealmRoomMessage[] rm = new RealmRoomMessage[1];
-                        Long identity = AppUtils.makeRandomId() ;
+                        Long identity = AppUtils.makeRandomId();
 
-                         int [] imageSize =   AndroidUtils.getImageDimens(st.getUri());
+                        int[] imageSize = AndroidUtils.getImageDimens(st.getUri());
                         getRealmChat().executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
@@ -6084,11 +6072,9 @@ public class FragmentChat extends BaseFragment
                         mAdapter.add(new StickerItem(mAdapter, chatType, FragmentChat.this).setMessage(sm));
                         scrollToEnd();
 
-                       new ChatSendMessageUtil().build(chatType, mRoomId,rm[0]).sendMessage(identity+"");
-
+                        new ChatSendMessageUtil().build(chatType, mRoomId, rm[0]).sendMessage(identity + "");
 
                     }
-
                 })
                 .setOnUpdateSticker(new OnUpdateStickerListener() {
                     @Override
@@ -6105,8 +6091,6 @@ public class FragmentChat extends BaseFragment
                     public void onUpdateTabSticker(String token, String extention, long avatarSize, int positionAdapter) {
 
                     }
-
-
                 })
                 .setOpenPageSticker(new OnOpenPageStickerListener() {
                     @Override
@@ -6116,9 +6100,10 @@ public class FragmentChat extends BaseFragment
 
                     @Override
                     public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
-                        new HelperFragment(FragmentSettingStickers.newInstance(data)).setReplace(false).load();
-
+                        new HelperFragment(FragmentSettingStickers.newInstance(data, recentStickerList)).setReplace(false).load();
                     }
+
+
                 })
                 .setBackgroundColor(Color.parseColor(BackgroundColor))
                 .setIconColor(Color.parseColor(iconColor))
@@ -7349,9 +7334,9 @@ public class FragmentChat extends BaseFragment
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom);
 
                 String _text;
-                if(chatItem.forwardedFrom.getRealmAdditional() !=null &&  chatItem.forwardedFrom.getRealmAdditional().getAdditionalType() == 4) {
-                   _text = getString(R.string.sticker);
-               }else{
+                if (chatItem.forwardedFrom.getRealmAdditional() != null && chatItem.forwardedFrom.getRealmAdditional().getAdditionalType() == 4) {
+                    _text = getString(R.string.sticker);
+                } else {
                     _text = AppUtils.conversionMessageType(chatItem.forwardedFrom.getMessageType());
                 }
 
@@ -7365,9 +7350,9 @@ public class FragmentChat extends BaseFragment
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message);
 
                 String _text;
-                if(message.getRealmAdditional() !=null &&  message.getRealmAdditional().getAdditionalType() == 4) {
+                if (message.getRealmAdditional() != null && message.getRealmAdditional().getAdditionalType() == 4) {
                     _text = getString(R.string.sticker);
-                }else{
+                } else {
                     _text = AppUtils.conversionMessageType(chatItem.messageType);
                 }
 
@@ -8637,7 +8622,6 @@ public class FragmentChat extends BaseFragment
      * manage save changeState , unread message , load from local or need get message from server and finally load message
      */
     private void getMessages() {
-        Log.d("bagi" ,"getMessagesCalled");
         //+Realm realm = Realm.getDefaultInstance();
 
         ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction;
@@ -8814,12 +8798,10 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                Log.d("bagi" , "onScrolledCalled");
 
                 if (FragmentChat.isLoadingMoreMessage) {
                     return;
                 }
-
                 LinearLayoutManager linearLayoutManager = ((LinearLayoutManager) recyclerView.getLayoutManager());
                 int firstVisiblePosition = linearLayoutManager.findFirstVisibleItemPosition();
                 View view = linearLayoutManager.getChildAt(0);
@@ -8985,7 +8967,6 @@ public class FragmentChat extends BaseFragment
             MessageLoader.getOnlineMessage(getRealmChat(), mRoomId, oldMessageId, reachMessageId, limit, direction, new OnMessageReceive() {
                 @Override
                 public void onMessage(final long roomId, long startMessageId, long endMessageId, boolean gapReached, boolean jumpOverLocal, ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction direction) {
-                    Log.d("bagi" , "getOnlineMessage+onMessage");
                     if (roomId != mRoomId) {
                         return;
                     }
@@ -9013,9 +8994,7 @@ public class FragmentChat extends BaseFragment
                         @Override
                         public void run() {
                             if (FragmentChat.isLoadingMoreMessage){
-                                if (!isWaitingForHistoryUp &&
-                                        !isWaitingForHistoryDown){
-                                    Log.d("bagi" , "isLoadingMoreMessage = false");
+                                if (!isWaitingForHistoryUp && !isWaitingForHistoryDown){
 
                                     FragmentChat.isLoadingMoreMessage = false;
                                     resetMessagingValue();
