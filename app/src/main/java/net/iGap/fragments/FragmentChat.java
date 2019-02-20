@@ -4379,8 +4379,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onOpenClick(View view, StructMessageInfo message, int pos) {
 
-
-        if (message.additionalData != null && message.additionalData.AdditionalType == 4) {
+        if(message.messageType==ProtoGlobal.RoomMessageType.STICKER){
             checkSticker(message);
             return;
         }
@@ -4656,6 +4655,7 @@ public class FragmentChat extends BaseFragment
                 break;
             case FILE:
             case IMAGE:
+            case STICKER:
             case VIDEO:
             case AUDIO:
             case GIF:
@@ -6056,7 +6056,7 @@ public class FragmentChat extends BaseFragment
                         getRealmChat().executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                rm[0] = RealmRoomMessage.makeAdditionalData(mRoomId, identity, st.getName(), additional, AdditionalType.STICKER, realm, ProtoGlobal.RoomMessageType.FILE_TEXT);
+                                rm[0] = RealmRoomMessage.makeAdditionalData(mRoomId, identity, st.getName(), additional, AdditionalType.STICKER, realm, ProtoGlobal.RoomMessageType.STICKER);
                                 rm[0].setAttachment(identity, st.getUri(), imageSize[0], imageSize[1], new File(st.getUri()).length(), new File(st.getUri()).getName(), 0, LocalFileType.FILE);
                                 rm[0].getAttachment().setToken(st.getToken());
                                 rm[0].setAuthorHash(G.authorHash);
@@ -7328,14 +7328,7 @@ public class FragmentChat extends BaseFragment
             thumbnail.setVisibility(View.VISIBLE);
             if (chatItem.forwardedFrom != null) {
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom);
-
-                String _text;
-                if (chatItem.forwardedFrom.getRealmAdditional() != null && chatItem.forwardedFrom.getRealmAdditional().getAdditionalType() == 4) {
-                    _text = getString(R.string.sticker);
-                } else {
-                    _text = AppUtils.conversionMessageType(chatItem.forwardedFrom.getMessageType());
-                }
-
+                String _text = AppUtils.conversionMessageType(chatItem.forwardedFrom.getMessageType());
                 if (_text != null && _text.length() > 0) {
                     replayTo.setText(_text);
                 } else {
@@ -7344,14 +7337,7 @@ public class FragmentChat extends BaseFragment
             } else {
                 RealmRoomMessage message = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(chatItem.messageID)).findFirst();
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message);
-
-                String _text;
-                if (message.getRealmAdditional() != null && message.getRealmAdditional().getAdditionalType() == 4) {
-                    _text = getString(R.string.sticker);
-                } else {
-                    _text = AppUtils.conversionMessageType(chatItem.messageType);
-                }
-
+                String _text = AppUtils.conversionMessageType(chatItem.messageType);
                 if (_text != null && _text.length() > 0) {
                     replayTo.setText(_text);
                 } else {
@@ -8524,21 +8510,19 @@ public class FragmentChat extends BaseFragment
                         break;
                     case FILE:
                     case FILE_TEXT:
-
-                        if (messageInfo.additionalData != null && messageInfo.additionalData.AdditionalType == AdditionalType.STICKER) {
-                            if (!addTop) {
-                                mAdapter.add(new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(index, new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
-                        } else {
                             if (!addTop) {
                                 mAdapter.add(new FileItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             } else {
                                 mAdapter.add(index, new FileItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                             }
-                        }
                         break;
+                    case STICKER :
+                        if (!addTop) {
+                            mAdapter.add(new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(index, new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
+                    break ;
                     case VOICE:
                         if (!addTop) {
                             mAdapter.add(new VoiceItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));

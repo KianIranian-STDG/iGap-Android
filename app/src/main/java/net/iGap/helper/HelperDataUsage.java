@@ -241,6 +241,7 @@ public class HelperDataUsage {
                 break;
             case FILE_TEXT:
             case FILE:
+            case STICKER:
                 if (connectivityType)
                     HelperDataUsage.wDownloadedFileSize += downloadByte;
                 else
@@ -289,6 +290,7 @@ public class HelperDataUsage {
                 break;
             case FILE_TEXT:
             case FILE:
+            case STICKER:
                 if (connectivityType)
                     HelperDataUsage.wUploadedFileSize += nextOffset;
                 else

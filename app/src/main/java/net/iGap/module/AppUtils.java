@@ -128,29 +128,27 @@ public final class AppUtils {
                 case AUDIO_TEXT:
                     setImageDrawable(view, R.drawable.green_music_note);
                     break;
+                case STICKER:
+                    if (attachment != null && attachment.getLocalFilePath() != null) {
+                        G.imageLoader.displayImage(suitablePath(attachment.getLocalFilePath()), view);
+                    }
+                    break;
                 case FILE:
                 case FILE_TEXT:
-
-                    if (message != null && message.getRealmAdditional() != null && message.getRealmAdditional().getAdditionalType() == 4) {
-                        if (attachment != null && attachment.getLocalFilePath() != null) {
-                            G.imageLoader.displayImage(suitablePath(attachment.getLocalFilePath()), view);
-                        }
-                    }else {
-                        if (attachment != null) {
-                            if (attachment.getName().toLowerCase().endsWith(".pdf")) {
-                                setImageDrawable(view, R.drawable.pdf_icon);
-                            } else if (attachment.getName().toLowerCase().endsWith(".txt")) {
-                                setImageDrawable(view, R.drawable.txt_icon);
-                            } else if (attachment.getName().toLowerCase().endsWith(".exe")) {
-                                setImageDrawable(view, R.drawable.exe_icon);
-                            } else if (attachment.getName().toLowerCase().endsWith(".docs")) {
-                                setImageDrawable(view, R.drawable.docx_icon);
-                            } else {
-                                setImageDrawable(view, R.drawable.file_icon);
-                            }
+                    if (attachment != null) {
+                        if (attachment.getName().toLowerCase().endsWith(".pdf")) {
+                            setImageDrawable(view, R.drawable.pdf_icon);
+                        } else if (attachment.getName().toLowerCase().endsWith(".txt")) {
+                            setImageDrawable(view, R.drawable.txt_icon);
+                        } else if (attachment.getName().toLowerCase().endsWith(".exe")) {
+                            setImageDrawable(view, R.drawable.exe_icon);
+                        } else if (attachment.getName().toLowerCase().endsWith(".docs")) {
+                            setImageDrawable(view, R.drawable.docx_icon);
                         } else {
                             setImageDrawable(view, R.drawable.file_icon);
                         }
+                    } else {
+                        setImageDrawable(view, R.drawable.file_icon);
                     }
 
                     break;
@@ -220,6 +218,9 @@ public final class AppUtils {
                 break;
             case WALLET:
                 result = G.fragmentActivity.getResources().getString(R.string.wallet_message);
+                break;
+            case STICKER:
+                result = G.fragmentActivity.getResources().getString(R.string.sticker);
                 break;
             default:
                 break;
@@ -490,6 +491,9 @@ public final class AppUtils {
                 case WALLET:
                     messageText = "wallet"; // need to fill messageText with a String because in return check null. this string isn't important.
                     break;
+                case STICKER:
+                    messageText = G.fragmentActivity.getResources().getString(R.string.sticker);
+                    break;
                 default:
                     messageText = null;
                     break;
@@ -530,12 +534,10 @@ public final class AppUtils {
                     if (message.getAttachment() == null) {
                         return null;
                     }
-                    if (message.getRealmAdditional() != null && message.getRealmAdditional().getAdditionalType() == 4) {
-                        messageText = resources.getString(R.string.sticker);
-                    } else {
-                        messageText = resources.getString(R.string.file_message);
-                    }
-
+                   messageText = resources.getString(R.string.file_message);
+                    break;
+                case STICKER:
+                    messageText = resources.getString(R.string.sticker);
                     break;
                 case GIF_TEXT:
                 case GIF:
