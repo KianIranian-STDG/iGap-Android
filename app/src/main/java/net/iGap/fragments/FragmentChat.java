@@ -1045,6 +1045,8 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = null;
 
         unRegisterListener();
+
+        RealmRoom.setCount(mRoomId, 0);
     }
 
     @Override
