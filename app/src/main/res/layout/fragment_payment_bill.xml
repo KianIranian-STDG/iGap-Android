@@ -121,7 +121,7 @@
 
           <EditText
             android:id="@+id/fpb_edt_bill_id"
-            style="?hintColorSettingTheme"
+            style="@style/hint_style_setting_black"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp44"
             android:layout_weight="1"
@@ -162,7 +162,7 @@
 
           <EditText
             android:id="@+id/fpb_edt_pay_id"
-            style="?hintColorSettingTheme"
+            style="@style/hint_style_setting_black"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp44"
             android:layout_weight="1"
@@ -200,7 +200,7 @@
 
           <EditText
             android:id="@+id/fpb_edt_price"
-            style="?hintColorSettingTheme"
+            style="@style/hint_style_setting_black"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp44"
             android:layout_weight="1"

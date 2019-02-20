@@ -119,7 +119,7 @@
 
             <EditText
               android:id="@+id/fpc_editText_phone_number"
-              style="?hintColorSettingTheme"
+              style="@style/hint_style_setting_black"
               android:layout_width="match_parent"
               android:layout_height="@dimen/dp44"
               android:background="@drawable/oval_gray"

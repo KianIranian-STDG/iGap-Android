@@ -151,7 +151,7 @@
 
               <EditText
                 android:id="@+id/fpi_edt_mci"
-                style="?hintColorSettingTheme"
+                style="@style/hint_style_setting_black"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp44"
                 android:background="@drawable/oval_gray"
@@ -208,7 +208,7 @@
 
                 <EditText
                   android:id="@+id/fpi_edt_telecom_area"
-                  style="?hintColorSettingTheme"
+                  style="@style/hint_style_setting_black"
                   android:layout_width="match_parent"
                   android:layout_height="@dimen/dp44"
                   android:background="@drawable/oval_gray"
@@ -258,7 +258,7 @@
 
                 <EditText
                   android:id="@+id/fpi_edt_telecom"
-                  style="?hintColorSettingTheme"
+                  style="@style/hint_style_setting_black"
                   android:layout_width="match_parent"
                   android:layout_height="@dimen/dp44"
                   android:background="@drawable/oval_gray"

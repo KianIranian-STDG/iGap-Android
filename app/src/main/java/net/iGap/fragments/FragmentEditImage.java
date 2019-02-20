@@ -469,7 +469,9 @@ public class FragmentEditImage extends BaseFragment {
     }
 
     private void setEmojiColor(View view,String BackgroundColor, String iconColor, String dividerColor) {
-
+        if (BackgroundColor.length() == 9) {
+            BackgroundColor = "#FF" + BackgroundColor.substring(3);
+        }
         emojiPopup = EmojiPopup.Builder.fromRootView(view.findViewById(R.id.ac_ll_parent))
                 .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
 

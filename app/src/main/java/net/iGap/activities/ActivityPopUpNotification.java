@@ -164,6 +164,9 @@ public class ActivityPopUpNotification extends AppCompatActivity {
     }
 
     private void setEmojiColor(String BackgroundColor, String iconColor, String dividerColor) {
+        if (BackgroundColor.length() == 9) {
+            BackgroundColor = "#FF" + BackgroundColor.substring(3);
+        }
         emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent_notification)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
             @Override
             public void onEmojiBackspaceClick(View v) {
