@@ -3017,7 +3017,11 @@ public class FragmentChat extends BaseFragment
             }
         });
 
-        AndroidUtils.setBackgroundShapeColor(txtNewUnreadMessage, Color.parseColor(G.notificationColor));
+        if (G.isDarkTheme) {
+            AndroidUtils.setBackgroundShapeColor(txtNewUnreadMessage, Color.parseColor(Theme.default_notificationColor));
+        } else {
+            AndroidUtils.setBackgroundShapeColor(txtNewUnreadMessage, Color.parseColor(G.notificationColor));
+        }
 
         MaterialDesignTextView txtNavigationLayout = (MaterialDesignTextView) rootView.findViewById(R.id.ac_txt_down_navigation);
         AndroidUtils.setBackgroundShapeColor(txtNavigationLayout, Color.parseColor(G.appBarColor));

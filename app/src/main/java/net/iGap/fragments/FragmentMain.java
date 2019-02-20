@@ -35,6 +35,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -1331,7 +1332,11 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                     if (mInfo.getMute()) {
                         AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor("#c6c1c1"));
                     } else {
-                        AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(G.notificationColor));
+                        if (G.isDarkTheme) {
+                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(Theme.default_notificationColor));
+                        } else {
+                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(G.notificationColor));
+                        }
                     }
                 }
 
