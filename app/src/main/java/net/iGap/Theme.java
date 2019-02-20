@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.google.GoogleEmojiProvider;
 import com.vanniktech.emoji.ios.IosEmojiProvider;
 
 import net.iGap.module.SHP_SETTING;
