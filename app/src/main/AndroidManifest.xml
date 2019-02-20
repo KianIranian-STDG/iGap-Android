@@ -61,7 +61,6 @@
         android:configChanges="locale"
         android:icon="@mipmap/icon"
         android:largeHeap="true"
-
         android:launchMode="singleTask"
         android:manageSpaceActivity=".activities.ActivityManageSpace"
         android:supportsRtl="true"

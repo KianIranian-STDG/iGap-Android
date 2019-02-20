@@ -196,6 +196,7 @@ public class FragmentAddStickers extends BaseFragment {
                         Glide.with(context)
                                 .load(path)
                                 .into(holder.imgSticker);
+                        notifyDataSetChanged();
                     }
 
                     @Override

@@ -65,9 +65,10 @@ public class DialogAddSticker extends DialogFragment {
                 public void onResponse(Call<StructEachSticker> call, Response<StructEachSticker> response) {
                     progressBar.setVisibility(View.GONE);
                     if (response.body() != null) {
-                        if (response.body().getOk()) {
-                            StructGroupSticker item = response.body().getData();
 
+                        if (response.body().getOk() && response.body().getData() !=null) {
+
+                            StructGroupSticker item = response.body().getData();
                             Realm realm = Realm.getDefaultInstance();
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
@@ -182,6 +183,8 @@ public class DialogAddSticker extends DialogFragment {
         @Override
         public void onBindViewHolder(AdapterAddDialogSticker.ViewHolder holder, int position) {
             StructItemSticker item = mData.get(position);
+
+
 
             Uri uri = Uri.parse(item.getUri());
             holder.imgSticker.setImageURI(uri);

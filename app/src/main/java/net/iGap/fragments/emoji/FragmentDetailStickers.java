@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.G;
@@ -120,7 +121,10 @@ public class FragmentDetailStickers extends BaseFragment {
                 HelperDownloadSticker.stickerDownload(item.getToken(), item.getName(), item.getAvatarSize(), ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
                     @Override
                     public void OnProgress(String path, int progress) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(path), holder.imgSticker);
+                        Glide.with(context)
+                                .load(path)
+                                .into(holder.imgSticker);
+                        notifyDataSetChanged();
                     }
 
                     @Override
@@ -128,8 +132,10 @@ public class FragmentDetailStickers extends BaseFragment {
 
                     }
                 });
-            }else {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(item.getUri()), holder.imgSticker);
+            } else {
+                Glide.with(context)
+                        .load(item.getUri())
+                        .into(holder.imgSticker);
             }
         }
 
