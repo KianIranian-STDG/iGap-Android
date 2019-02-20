@@ -1836,9 +1836,9 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                     new MaterialDialog.Builder(G.currentActivity).title(R.string.access_location).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                            Boolean response = false;
+
                             if (G.locationListener != null)
-                                response = G.locationListener.requestLocation();
+                              G.locationListener.requestLocation();
 
 
                             G.locationListenerResponse = new LocationListenerResponse() {
