@@ -62,7 +62,6 @@
         android:icon="@mipmap/icon"
         android:roundIcon="@mipmap/icon_rounded"
         android:largeHeap="true"
-
         android:launchMode="singleTask"
         android:manageSpaceActivity=".activities.ActivityManageSpace"
         android:supportsRtl="true"

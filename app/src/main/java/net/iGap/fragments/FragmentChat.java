@@ -94,11 +94,11 @@ import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.listeners.OnEmojiBackspaceClickListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupDismissListener;
 import com.vanniktech.emoji.listeners.OnEmojiPopupShownListener;
-import com.vanniktech.emoji.listeners.OnOpenPageStickerListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardCloseListener;
 import com.vanniktech.emoji.listeners.OnSoftKeyboardOpenListener;
-import com.vanniktech.emoji.listeners.OnStickerListener;
-import com.vanniktech.emoji.listeners.OnUpdateStickerListener;
+import com.vanniktech.emoji.sticker.OnOpenPageStickerListener;
+import com.vanniktech.emoji.sticker.OnStickerListener;
+import com.vanniktech.emoji.sticker.OnUpdateStickerListener;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 import com.vanniktech.emoji.sticker.struct.StructSticker;
@@ -6082,8 +6082,6 @@ public class FragmentChat extends BaseFragment
                     public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
                         new HelperFragment(FragmentSettingStickers.newInstance(data, recentStickerList)).setReplace(false).load();
                     }
-
-
                 })
                 .setBackgroundColor(Color.parseColor(BackgroundColor))
                 .setIconColor(Color.parseColor(iconColor))

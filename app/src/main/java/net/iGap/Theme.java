@@ -6,8 +6,8 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.one.EmojiOneProvider;
+import com.vanniktech.emoji.google.GoogleEmojiProvider;
+import com.vanniktech.emoji.ios.IosEmojiProvider;
 
 import net.iGap.module.SHP_SETTING;
 
@@ -142,7 +142,7 @@ public class Theme extends Application {
         } else {
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
         }*/
-        EmojiManager.install(new EmojiOneProvider());
+        EmojiManager.install(new IosEmojiProvider());
 
 
         switch (G.themeColor) {

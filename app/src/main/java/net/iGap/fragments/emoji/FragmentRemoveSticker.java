@@ -128,6 +128,7 @@ public class FragmentRemoveSticker extends BaseFragment {
                         Glide.with(context)
                                 .load(path)
                                 .into(holder.imgSticker);
+                        notifyDataSetChanged();
                     }
 
                     @Override
