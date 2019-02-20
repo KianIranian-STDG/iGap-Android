@@ -627,8 +627,6 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             switch (view.getId()) {
                 case R.id.mf_rv_send_position:
                     try {
-                        if (G.locationListenerResponse != null)
-                            G.locationListenerResponse.setLocationResponse(latitude, longitude);
 
                         mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
                             @Override

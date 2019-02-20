@@ -237,6 +237,7 @@ import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.VoiceRecord;
 import net.iGap.module.additionalData.AdditionalType;
+import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.enums.Additional;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
@@ -1087,6 +1088,8 @@ public class FragmentChat extends BaseFragment
         if (G.fragmentActivity != null && G.fragmentActivity instanceof ActivityMain) {
             ((ActivityMain) G.fragmentActivity).resume();
         }
+        if (G.locationListenerResponse != null)
+            G.locationListenerResponse = null;
 
         if (G.locationListener != null)
             G.locationListener = null;
@@ -2110,7 +2113,11 @@ public class FragmentChat extends BaseFragment
         G.iSendPositionChat = new ISendPosition() {
             @Override
             public void send(Double latitude, Double longitude, String imagePath) {
-                sendPosition(latitude, longitude, imagePath);
+                if (isBot) {
+                    if (G.locationListenerResponse != null)
+                        G.locationListenerResponse.setLocationResponse(latitude, longitude);
+                } else
+                    sendPosition(latitude, longitude, imagePath);
             }
         };
     }
@@ -8277,24 +8284,42 @@ public class FragmentChat extends BaseFragment
 
     public void sendPosition(final Double latitude, final Double longitude, final String imagePath) {
         sendCancelAction();
-
-        if (isShowLayoutUnreadMessage) {
-            removeLayoutUnreadMessage();
-        }
-        final long messageId = AppUtils.makeRandomId();
-        RealmRoomMessage.makePositionMessage(mRoomId, messageId, replyMessageId(), latitude, longitude, imagePath);
-
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                RealmRoomMessage roomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
-                switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(getRealmChat(), roomMessage))), false);
-                chatSendMessageUtil.build(chatType, mRoomId, roomMessage);
-                scrollToEnd();
+/*        if (isBot) {
+            try {
+                Long identity = System.currentTimeMillis();
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mRoomId, identity, latitude + "," + longitude, null, 3, realm, ProtoGlobal.RoomMessageType.TEXT);
+                        chatSendMessageUtil.build(chatType, mRoomId, realmRoomMessage).sendMessage(identity + "");
+                        if (G.onBotClick != null) {
+                            G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
+                        }
+                    }
+                });
+            } catch (Exception e) {
             }
-        }, 300);
+        } else {*/
 
-        clearReplyView();
+            if (isShowLayoutUnreadMessage) {
+                removeLayoutUnreadMessage();
+            }
+            final long messageId = AppUtils.makeRandomId();
+            RealmRoomMessage.makePositionMessage(mRoomId, messageId, replyMessageId(), latitude, longitude, imagePath);
+
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    RealmRoomMessage roomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
+                    switchAddItem(new ArrayList<>(Collections.singletonList(StructMessageInfo.convert(getRealmChat(), roomMessage))), false);
+                    chatSendMessageUtil.build(chatType, mRoomId, roomMessage);
+                    scrollToEnd();
+                }
+            }, 300);
+
+            clearReplyView();
+     //   }
     }
 
     /**
