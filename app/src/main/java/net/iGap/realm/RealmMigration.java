@@ -397,7 +397,7 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("groupId", String.class)
                     .addField("sort", int.class, FieldAttribute.REQUIRED);
 
-            schema.create(RealmStickersDetails.class.getSimpleName())
+            schema.create(RealmStickers.class.getSimpleName())
                     .addField("id", long.class, FieldAttribute.REQUIRED)
                     .addField("createdAt", long.class, FieldAttribute.REQUIRED)
                     .addField("refId", long.class, FieldAttribute.REQUIRED)
