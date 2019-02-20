@@ -166,6 +166,7 @@ import net.iGap.interfaces.IPickFile;
 import net.iGap.interfaces.IResendMessage;
 import net.iGap.interfaces.ISendPosition;
 import net.iGap.interfaces.IUpdateLogItem;
+import net.iGap.interfaces.LocationListener;
 import net.iGap.interfaces.OnActivityChatStart;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnBackgroundChanged;
@@ -237,6 +238,7 @@ import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.VoiceRecord;
 import net.iGap.module.additionalData.AdditionalType;
+import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.enums.Additional;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
@@ -373,7 +375,7 @@ import static net.iGap.realm.RealmRoomMessage.makeUnreadMessage;
 
 public class FragmentChat extends BaseFragment
         implements IMessageItem, OnChatClearMessageResponse, OnPinedMessage, OnChatSendMessageResponse, OnChatUpdateStatusResponse, OnChatMessageSelectionChanged<AbstractMessage>, OnChatMessageRemove, OnVoiceRecord,
-        OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged,
+        OnUserInfoResponse, OnSetAction, OnUserUpdateStatus, OnLastSeenUpdateTiming, OnGroupAvatarResponse, OnChannelAddMessageReaction, OnChannelGetMessagesStats, OnChatDelete, OnBackgroundChanged, LocationListener,
         OnConnectionChangeStateChat, OnChannelUpdateReactionStatus, OnBotClick {
 
     private static boolean isLoadingMoreMessage;
@@ -659,6 +661,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
+        G.locationListener = this;
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
 
         return attachToSwipeBack(rootView);
@@ -1086,6 +1089,11 @@ public class FragmentChat extends BaseFragment
         if (G.fragmentActivity != null && G.fragmentActivity instanceof ActivityMain) {
             ((ActivityMain) G.fragmentActivity).resume();
         }
+        if (G.locationListenerResponse != null)
+            G.locationListenerResponse = null;
+
+        if (G.locationListener != null)
+            G.locationListener = null;
 
 
         if (realmChat != null && !realmChat.isClosed()) {
@@ -2106,7 +2114,11 @@ public class FragmentChat extends BaseFragment
         G.iSendPositionChat = new ISendPosition() {
             @Override
             public void send(Double latitude, Double longitude, String imagePath) {
-                sendPosition(latitude, longitude, imagePath);
+                if (isBot) {
+                    if (G.locationListenerResponse != null)
+                        G.locationListenerResponse.setLocationResponse(latitude, longitude);
+                } else
+                    sendPosition(latitude, longitude, imagePath);
             }
         };
     }
@@ -9373,6 +9385,18 @@ public class FragmentChat extends BaseFragment
         } else if (message instanceof RealmRoomMessage) {
             mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
 
+        }
+
+    }
+
+    @Override
+    public boolean requestLocation() {
+        try {
+            attachFile.requestGetPosition(complete, FragmentChat.this);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
 
     }

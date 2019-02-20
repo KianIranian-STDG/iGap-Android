@@ -4,6 +4,7 @@ package net.iGap.module;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -23,6 +26,7 @@ import net.iGap.R;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.Ipromote;
+import net.iGap.interfaces.LocationListenerResponse;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
@@ -32,6 +36,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientGetPromote;
 import net.iGap.request.RequestClientGetRoom;
@@ -299,7 +304,7 @@ public class BotInit implements View.OnClickListener {
                     }.getType());
                     btnEntery.setJsonObject(buttonList.get(i).get(j).toString());
                     childLayout = MakeButtons.addButtons(btnEntery, this, buttonList.get(i).length(), .75f, i, childLayout, type);
-                 //   childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(), this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), type);
+                    //   childLayout = MakeButtons.addButtons(buttonList.get(i).get(j).toString(), this, buttonList.get(i).length(), .75f, btnEntery.getLable(), btnEntery.getLable(), btnEntery.getImageUrl(), i, btnEntery.getValue(), childLayout, btnEntery.getActionType(), type);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (Exception e) {
@@ -380,11 +385,10 @@ public class BotInit implements View.OnClickListener {
                 try {
                     Long identity = System.currentTimeMillis();
                     Realm realm = Realm.getDefaultInstance();
-
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm ,ProtoGlobal.RoomMessageType.TEXT);
+                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
                             G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
                             if (G.onBotClick != null) {
                                 G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
@@ -399,7 +403,70 @@ public class BotInit implements View.OnClickListener {
                 HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
             } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
                 G.onBotClick.onBotCommandText(((ArrayList<String>) v.getTag()).get(0).toString(), ButtonActionType.WEBVIEW_LINK);
+            } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
+                try {
+                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_numer).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Long identity = System.currentTimeMillis();
+                            Realm realm = Realm.getDefaultInstance();
+
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
+                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                    G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
+                                    if (G.onBotClick != null) {
+                                        G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
+                                    }
+                                }
+                            });
+                        }
+                    }).show();
+
+
+                } catch (Exception e) {
+                }
+
+            } else if (v.getId() == ButtonActionType.REQUEST_LOCATION) {
+                try {
+                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_location).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            Boolean response = false;
+                            if (G.locationListener != null)
+                                response = G.locationListener.requestLocation();
+
+                            G.locationListenerResponse = new LocationListenerResponse() {
+                                @Override
+                                public void setLocationResponse(Double latitude, Double longitude) {
+                                    Long identity = System.currentTimeMillis();
+                                    Realm realm = Realm.getDefaultInstance();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, latitude + "," + longitude, ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                            G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
+                                            if (G.onBotClick != null) {
+                                                G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
+                                            }
+                                        }
+                                    });
+                                }
+                            };
+
+
+                        }
+                    }).show();
+
+
+                } catch (Exception e) {
+                }
+
+
             }
+
         } catch (Exception e) {
             Toast.makeText(G.context, "دستور با خطا مواجه شد", Toast.LENGTH_LONG).show();
         }

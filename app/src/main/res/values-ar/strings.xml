@@ -2356,5 +2356,7 @@
     <string name="stop">توقف</string>
     <string name="stop_message_bot">هل أنت متأكد من أنك تريد إيقاف الروبوت؟</string>
     <string name="startUpdate">تحديث</string>
+    <string name="access_phone_numer">There is a request to get your phone number</string>
+    <string name="access_location">There is request to get your location</string>
 
 </resources>

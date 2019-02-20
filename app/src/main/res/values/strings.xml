@@ -1407,5 +1407,7 @@
     <string name="remove_sticker">Remove Sticker</string>
     <string name="remove_sticker_text">Are you sure you want to remove this stickers?</string>
     <string name="add_sticker_text">Are you sure you want to install this stickers?</string>
+    <string name="access_phone_numer">There is a request to get your phone number</string>
+    <string name="access_location">There is request to get your location</string>
 
 </resources>

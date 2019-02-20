@@ -11,5 +11,8 @@ public abstract class AdditionalType {
     public static final int KEYBOARD_TYPE=7;
     public static final int FORM_BUILDER=8;
     public static final int WEBVIEW_SHOW=9;
+    public static final int REQUEST_PHONE=10;
+    public static final int REQUEST_LOCATION=11;
+
 }
 

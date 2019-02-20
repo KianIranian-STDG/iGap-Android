@@ -743,7 +743,6 @@ public class AttachFile {
     }
 
     private void getPosition(Fragment fragment) {
-
         try {
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 showSettingsAlert(fragment);
