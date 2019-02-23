@@ -153,10 +153,9 @@ dependencies {
     implementation 'yogesh.firzen:MukkiyaSevaigal:1.0.6'
     implementation 'me.saket:better-link-movement-method:2.2.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
-    implementation 'com.github.molareza.sticker:emoji-one:0.0077'
     implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
     implementation 'com.nightonke:jellytogglebutton:1.0.2'
-    implementation 'com.github.molareza.sticker:emoji-ios:0.0092'
+    implementation 'com.github.molareza.sticker:emoji-ios:0.0093'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.2.0'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     implementation project(':paygearcore')
