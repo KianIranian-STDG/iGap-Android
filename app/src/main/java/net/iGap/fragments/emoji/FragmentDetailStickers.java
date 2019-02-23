@@ -141,7 +141,7 @@ public class FragmentDetailStickers extends BaseFragment {
                 });
             } else {
                 Glide.with(context)
-                        .load(item.getUri())
+                        .load(path)
                         .into(holder.imgSticker);
             }
         }
