@@ -122,94 +122,107 @@
 
         </RelativeLayout>
 
-        <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical">
-
-          <TextView
-            android:id="@+id/pu_txt_title_desc"
-            fontPath="fonts/IRANSansMobile.ttf"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp52"
-            android:layout_marginRight="@dimen/dp52"
-            android:layout_marginTop="@dimen/dp8"
-            android:gravity="center"
-            android:text="@string/transfer_amount_hint"
-            android:textColor="@color/confirm_country"
-            android:textSize="@dimen/dp14" />
+            android:layout_height="match_parent">
 
-          <net.iGap.module.EditTextAdjustPan
-            android:id="@+id/amount"
-            fontPath="fonts/IRANSansMobile.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp32"
-            android:layout_marginStart="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp32"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:hint="@string/amount_in_rial"
-            android:inputType="numberDecimal"
-            android:lines="1"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@color/black_register"
-            android:textColorHint="@color/pu_edtHintText"
-            android:textSize="@dimen/dp14"
-            app:errorTextAppearance="@style/remove_error_appearance" />
+          <LinearLayout
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:gravity="center"
+              android:layout_height="match_parent">
 
-          <TextView
-            android:id="@+id/txtDescriptionMap"
-            fontPath="fonts/IRANSansMobile.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp52"
-            android:layout_marginRight="@dimen/dp52"
-            android:layout_marginTop="@dimen/dp24"
-            android:gravity="center"
-            android:text="@string/desc"
-            android:textColor="@color/confirm_country"
-            android:textSize="@dimen/dp14" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-          <net.iGap.module.EditTextAdjustPan
-            android:id="@+id/edtDescription"
-            fontPath="fonts/IRANSansMobile.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp32"
-            android:layout_marginStart="@dimen/dp32"
-            android:layout_marginTop="@dimen/dp10"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:hint="@string/desc"
-            android:inputType="text"
-            android:lines="1"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@color/black_register"
-            android:textColorHint="@color/pu_edtHintText"
-            android:textSize="@dimen/dp14"
-            app:errorTextAppearance="@style/remove_error_appearance" />
+              <TextView
+                  android:id="@+id/pu_txt_title_desc"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="@dimen/dp52"
+                  android:layout_marginRight="@dimen/dp52"
+                  android:layout_marginTop="@dimen/dp8"
+                  android:gravity="center"
+                  android:text="@string/transfer_amount_hint"
+                  android:textColor="@color/confirm_country"
+                  android:textSize="@dimen/dp14" />
 
-        </LinearLayout>
+              <net.iGap.module.EditTextAdjustPan
+                  android:id="@+id/amount"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginEnd="@dimen/dp32"
+                  android:layout_marginStart="@dimen/dp32"
+                  android:layout_marginTop="@dimen/dp32"
+                  android:background="@android:color/transparent"
+                  android:gravity="center"
+                  android:hint="@string/amount_in_rial"
+                  android:inputType="numberDecimal"
+                  android:lines="1"
+                  android:maxLines="1"
+                  android:singleLine="true"
+                  android:textColor="@color/black_register"
+                  android:textColorHint="@color/pu_edtHintText"
+                  android:textSize="@dimen/dp14"
+                  app:errorTextAppearance="@style/remove_error_appearance" />
 
-        <Button
-          android:id="@+id/pay_button"
-          fontPath="fonts/IRANSansMobile.ttf"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="@dimen/dp10"
-          android:layout_marginTop="@dimen/dp32"
-          android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-          android:paddingBottom="@dimen/dp12"
-          android:paddingLeft="@dimen/dp36"
-          android:paddingRight="@dimen/dp36"
-          android:paddingTop="@dimen/dp12"
-          android:text="@string/pay"
-          android:textColor="@color/white"
-          android:textSize="@dimen/dp16" />
+              <TextView
+                  android:id="@+id/txtDescriptionMap"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="@dimen/dp52"
+                  android:layout_marginRight="@dimen/dp52"
+                  android:layout_marginTop="@dimen/dp24"
+                  android:gravity="center"
+                  android:text="@string/desc"
+                  android:textColor="@color/confirm_country"
+                  android:textSize="@dimen/dp14" />
+
+              <net.iGap.module.EditTextAdjustPan
+                  android:id="@+id/edtDescription"
+                  fontPath="fonts/IRANSansMobile.ttf"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginEnd="@dimen/dp32"
+                  android:layout_marginStart="@dimen/dp32"
+                  android:layout_marginTop="@dimen/dp10"
+                  android:background="@android:color/transparent"
+                  android:gravity="center"
+                  android:hint="@string/desc"
+                  android:inputType="text"
+                  android:lines="1"
+                  android:maxLines="1"
+                  android:singleLine="true"
+                  android:textColor="@color/black_register"
+                  android:textColorHint="@color/pu_edtHintText"
+                  android:textSize="@dimen/dp14"
+                  app:errorTextAppearance="@style/remove_error_appearance" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/pay_button"
+                fontPath="fonts/IRANSansMobile.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp10"
+                android:layout_marginTop="@dimen/dp32"
+                android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                android:paddingBottom="@dimen/dp12"
+                android:paddingLeft="@dimen/dp36"
+                android:paddingRight="@dimen/dp36"
+                android:paddingTop="@dimen/dp12"
+                android:text="@string/pay"
+                android:textColor="@color/white"
+                android:textSize="@dimen/dp16" />
+
+          </LinearLayout>
+        </ScrollView>
 
 
       </LinearLayout>
