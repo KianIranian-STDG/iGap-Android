@@ -2739,7 +2739,7 @@ public class FragmentChat extends BaseFragment
                         mAdapter.clear();
                         recyclerView.removeAllViews();
 
-                        llScrollNavigate.setVisibility(View.GONE);
+                        setDownBtnGone();
 
                         recyclerView.addOnScrollListener(scrollListener);
 
@@ -3096,7 +3096,7 @@ public class FragmentChat extends BaseFragment
                     txtNewUnreadMessage.setVisibility(View.GONE);
                     txtNewUnreadMessage.setText(countNewMessage + "");
                 } else {
-                    llScrollNavigate.setVisibility(View.GONE);
+                    setDownBtnGone();
                     /**
                      * if addToView is true this means that all new message is in adapter
                      * and just need go to end position in list otherwise we should clear all
@@ -3116,13 +3116,13 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 int visibleItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getChildCount();
                 int totalItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getItemCount();
                 int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
 
                 if (pastVisibleItems + visibleItemCount >= totalItemCount && !isAnimateStart) {
+                    Log.d("bagi" , "Case1Goneing");
                     isScrollEnd = false;
                     isAnimateStart = true;
                     llScrollNavigate.animate()
@@ -3139,9 +3139,9 @@ public class FragmentChat extends BaseFragment
                             });
 
                 } else if (!isScrollEnd && !isAnimateStart) {
-                    isScrollEnd = true;
+                    Log.d("bagi" , "Case2Visible");
                     isAnimateStart = true;
-                    llScrollNavigate.setVisibility(View.VISIBLE);
+                    setDownBtnVisible();
                     llScrollNavigate.animate()
                             .alpha(1.0f)
                             .translationY(0)
@@ -3523,7 +3523,7 @@ public class FragmentChat extends BaseFragment
 
 
         try {
-            llScrollNavigate.setVisibility(View.GONE);
+            setDownBtnGone();
         } catch (NullPointerException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -5340,7 +5340,7 @@ public class FragmentChat extends BaseFragment
      * clear history for this room
      */
     public void clearHistory(long roomId) {
-        llScrollNavigate.setVisibility(View.GONE);
+        setDownBtnGone();
         saveMessageIdPositionState(0);
         RealmRoomMessage.clearHistoryMessage(roomId);
         addToView = true;
@@ -5459,7 +5459,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void resetAndGetFromEnd() {
-        llScrollNavigate.setVisibility(View.GONE);
+        setDownBtnGone();
         firstUnreadMessageInChat = null;
         resetMessagingValue();
         countNewMessage = 0;
@@ -5843,6 +5843,16 @@ public class FragmentChat extends BaseFragment
         isShowLayoutUnreadMessage = false;
     }
 
+    private void setDownBtnVisible() {
+        llScrollNavigate.setVisibility(View.VISIBLE);
+        isScrollEnd = true;
+    }
+
+    private void setDownBtnGone() {
+        llScrollNavigate.setVisibility(View.GONE);
+        isScrollEnd = false;
+    }
+
     private void setBtnDownVisible(RealmRoomMessage realmRoomMessage) {
         if (isEnd()) {
             scrollToEnd();
@@ -5852,7 +5862,7 @@ public class FragmentChat extends BaseFragment
                 firstUnreadMessageInChat = realmRoomMessage;
             }
             countNewMessage++;
-            llScrollNavigate.setVisibility(View.VISIBLE);
+            setDownBtnVisible();
             txtNewUnreadMessage.setText(countNewMessage + "");
             txtNewUnreadMessage.setVisibility(View.VISIBLE);
         }
@@ -8638,7 +8648,7 @@ public class FragmentChat extends BaseFragment
                     countNewMessage = unreadCount;
                     txtNewUnreadMessage.setVisibility(View.VISIBLE);
                     txtNewUnreadMessage.setText(countNewMessage + "");
-                    llScrollNavigate.setVisibility(View.VISIBLE);
+                    setDownBtnVisible();
                     firstUnreadMessageInChat = firstUnreadMessage;
                 }
             } else {
