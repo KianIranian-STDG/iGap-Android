@@ -441,14 +441,12 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         viewNewPassword.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
-        TextInputLayout inputNewPassWord = new TextInputLayout(G.fragmentActivity);
+        TextInputLayout inputNewPassWord = new TextInputLayout(G.fragmentActivity, null, R.attr.hintColorSettingTheme);
         final EditText newPassWord = new EditText(G.fragmentActivity);
         newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
         newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         newPassWord.setTypeface(G.typeface_IRANSansMobile);
         newPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
-        newPassWord.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
-        newPassWord.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
         newPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         newPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
         newPassWord.setPadding(0, 8, 0, 8);
@@ -461,7 +459,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
             newPassWord.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
         }
 
-        TextInputLayout inputConfirmPassWord = new TextInputLayout(G.fragmentActivity);
+        TextInputLayout inputConfirmPassWord = new TextInputLayout(G.fragmentActivity, null, R.attr.hintColorSettingTheme);
         final EditText confirmPassWord = new EditText(G.fragmentActivity);
         confirmPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_re_enter_your_password));
         confirmPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
@@ -469,8 +467,6 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         confirmPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
         confirmPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         confirmPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        confirmPassWord.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
-        confirmPassWord.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
         confirmPassWord.setPadding(0, 8, 0, 8);
         confirmPassWord.setMaxLines(1);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -591,14 +587,12 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 
-        TextInputLayout inputNewPassWord = new TextInputLayout(G.fragmentActivity);
+        TextInputLayout inputNewPassWord = new TextInputLayout(G.fragmentActivity, null, R.attr.hintColorSettingTheme);
         final EditText newPassWord = new EditText(G.fragmentActivity);
         newPassWord.setHint(G.fragmentActivity.getResources().getString(R.string.please_enter_your_password));
         newPassWord.setImeOptions(EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         newPassWord.setTypeface(G.typeface_IRANSansMobile);
         newPassWord.setTextSize(TypedValue.COMPLEX_UNIT_PX, G.context.getResources().getDimension(R.dimen.dp14));
-        newPassWord.setTextColor(G.context.getResources().getColor(R.color.text_edit_text));
-        newPassWord.setHintTextColor(G.context.getResources().getColor(R.color.hint_edit_text));
         newPassWord.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         newPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
         newPassWord.setPadding(0, 8, 0, 8);

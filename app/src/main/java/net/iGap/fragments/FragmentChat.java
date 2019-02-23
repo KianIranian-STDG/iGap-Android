@@ -4520,11 +4520,12 @@ public class FragmentChat extends BaseFragment
 
     @Override
     public void sendFromBot(Object message) {
-        if (message instanceof RealmRoomMessage)
+        if (message instanceof RealmRoomMessage) {
             mAdapter.add(new TextItem(mAdapter, chatType, FragmentChat.this).setMessage(StructMessageInfo.convert(getRealmChat(), (RealmRoomMessage) message)).withIdentifier(SUID.id().get()));
-        else if (message instanceof String)
+            scrollToEnd();
+        } else if (message instanceof String) {
             openWebViewForSpecialUrlChat(message.toString());
-
+        }
     }
 
     @Override

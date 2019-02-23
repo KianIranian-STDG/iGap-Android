@@ -774,16 +774,20 @@ public class HelperNotification {
                     text = AppUtils.conversionMessageType(roomMessage.getReplyTo().getMessageType());
                 }
             } else {
-                text = roomMessage.hasForwardFrom() ? roomMessage.getForwardFrom().getMessage() : roomMessage.getMessage();
-            }
+                ProtoGlobal.RoomMessage rm = roomMessage;
+                if (roomMessage.hasForwardFrom()) {
+                    rm = roomMessage.getForwardFrom();
+                } else if (roomMessage.hasReplyTo()) {
+                    rm = roomMessage.getReplyTo();
+                }
 
-            if (text.length() < 1) {
-                if (roomMessage.hasReplyTo())
-                    text = roomMessage.getReplyTo().getMessage();
-            }
+                text = rm.getMessage();
 
-            if (text.length() < 1) {
-                text = getTextOfMessageType(roomMessage.getMessageType());
+                if (rm.getMessageType() == ProtoGlobal.RoomMessageType.STICKER) {
+                    text = G.context.getString(R.string.sticker_message) + " : " + text;
+                } else if (text.length() < 1) {
+                    text = getTextOfMessageType(rm.getMessageType());
+                }
             }
 
         } catch (NullPointerException e) {

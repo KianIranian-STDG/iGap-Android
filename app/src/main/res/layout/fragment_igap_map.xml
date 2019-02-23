@@ -308,8 +308,6 @@
                         app:menu_radius="@dimen/dp60"
                         app:menu_color="@color/green"
                         app:menu_angle="@integer/ANGLE_NEARBY_ARC_MENU"
-
-
                         app:menu_scr="@drawable/ic_gps_layer">
 
                         <android.support.design.widget.FloatingActionButton
