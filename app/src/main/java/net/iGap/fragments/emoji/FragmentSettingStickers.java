@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -92,6 +93,9 @@ public class FragmentSettingStickers extends BaseFragment {
 
         stickerList = (List<StructGroupSticker>) getArguments().getSerializable("GROUP_ID");
         recentStickerList = (ArrayList<StructItemSticker>) getArguments().getSerializable("RECENT");
+
+        AppBarLayout appBarLayout = view.findViewById(R.id.appBarLayout);
+        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         txtDelete = view.findViewById(R.id.txtDelete);
         txtDelete.setVisibility(View.GONE);

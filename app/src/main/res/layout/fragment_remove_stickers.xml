@@ -10,13 +10,13 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
+        android:id="@+id/appBarLayout"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/fc_layot_title"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp60"
-            android:background="@color/green"
             android:layoutDirection="ltr"
             android:orientation="horizontal">
 
