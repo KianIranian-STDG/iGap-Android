@@ -1405,8 +1405,8 @@
     <string name="stop">توقف</string>
     <string name="stop_message_bot">آیا مطمئن هستید که میخواهید ربات را متوقف کنید؟</string>
     <string name="startUpdate">به روز رسانی</string>
-    <string name="access_phone_numer">There is a request to get your phone number</string>
-    <string name="access_location">There is request to get your location</string>
+    <string name="access_phone_number">آیا از ارسال شماره تلفن خود اطمینان دارید ؟ </string>
+    <string name="access_location"> آیا از ارسال مکان خود اطمینان دارید؟ </string>
     <string name="sticker_message">پیام استیکر</string>
 
 </resources>

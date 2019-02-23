@@ -26,7 +26,6 @@ import net.iGap.R;
 import net.iGap.activities.ActivityPopUpNotification;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.Ipromote;
-import net.iGap.interfaces.LocationListenerResponse;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.module.additionalData.AdditionalType;
 import net.iGap.module.additionalData.ButtonActionType;
@@ -405,7 +404,7 @@ public class BotInit implements View.OnClickListener {
                 G.onBotClick.onBotCommandText(((ArrayList<String>) v.getTag()).get(0).toString(), ButtonActionType.WEBVIEW_LINK);
             } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
                 try {
-                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_numer).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_number).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Long identity = System.currentTimeMillis();

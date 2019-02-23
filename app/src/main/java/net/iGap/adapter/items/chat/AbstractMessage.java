@@ -15,7 +15,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
-import android.location.LocationManager;
 import android.os.CountDownTimer;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
@@ -24,7 +23,6 @@ import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +37,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.google.protobuf.Extension;
 import com.lalongooo.videocompressor.video.MediaController;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
@@ -47,32 +44,23 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetMessageState;
-import net.iGap.helper.HelperLog;
-import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IChatItemAttachment;
 import net.iGap.interfaces.IMessageItem;
-import net.iGap.interfaces.LocationListener;
-import net.iGap.interfaces.LocationListenerResponse;
 import net.iGap.interfaces.OnAvatarGet;
-import net.iGap.interfaces.OnComplete;
-import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnProgressUpdate;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnMessageProgressClick;
 import net.iGap.messageprogress.OnProgress;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.AttachFile;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.FileUploadStructure;
 import net.iGap.module.MakeButtons;
@@ -104,7 +92,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -115,7 +102,6 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
-import static net.iGap.fragments.FragmentChat.onComplete;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
 
 public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH extends RecyclerView.ViewHolder> extends AbstractItem<Item, VH> implements IChatItemAttachment<VH> {//IChatItemAvatar
@@ -1801,7 +1787,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                 messageClickListener.sendFromBot(((ArrayList<String>) v.getTag()).get(0).toString());
             } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
                 try {
-                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_numer).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_number).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Long identity = System.currentTimeMillis();
