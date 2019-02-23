@@ -968,6 +968,11 @@ public class FragmentChat extends BaseFragment
                         @Override
                         public void run() {
                             int start = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+                            if (start < 0) {
+                                start = 0;
+                            }
+
                             for (int i = start; i < mAdapter.getItemCount() && i < start + 15; i++) {
                                 try {
                                     if (mAdapter.getItem(i).mMessage != null && mAdapter.getItem(i).mMessage.messageID.equals(messageId)) {
@@ -4457,6 +4462,10 @@ public class FragmentChat extends BaseFragment
     public void onDownloadAllEqualCashId(String cashId, String messageID) {
 
         int start = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+        if (start < 0) {
+            start = 0;
+        }
 
         for (int i = start; i < mAdapter.getItemCount() && i < start + 15; i++) {
             try {
