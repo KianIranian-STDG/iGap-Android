@@ -418,7 +418,7 @@ public class G extends MultiDexApplication {
     public static boolean appChangeRinggerMode = false;
 
     public static LocationListener locationListener;
-    public static LocationListenerResponse locationListenerResponse;
+    //public static LocationListenerResponse locationListenerResponse;
 
     @Override
     public void onCreate() {

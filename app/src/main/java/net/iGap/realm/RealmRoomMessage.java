@@ -429,9 +429,9 @@ public class RealmRoomMessage extends RealmObject {
         }
 
 
-        if (input.getAdditionalType() !=0 && !input.getAdditionalData().isEmpty()){
-            if (message.getRealmAdditional() ==null){
-                message.setRealmAdditional(RealmAdditional.put(input ));
+        if (input.getAdditionalType() != 0 && !input.getAdditionalData().isEmpty()) {
+            if (message.getRealmAdditional() == null) {
+                message.setRealmAdditional(RealmAdditional.put(input));
             }
         }
 
@@ -1062,7 +1062,7 @@ public class RealmRoomMessage extends RealmObject {
         realm.close();
     }
 
-    public static RealmRoomMessage makeAdditionalData(final long roomId, final long messageId, final String message, String additionalData, int additionalTaype, Realm realm,ProtoGlobal.RoomMessageType messageType) {
+    public static RealmRoomMessage makeAdditionalData(final long roomId, final long messageId, final String message, String additionalData, int additionalTaype, Realm realm, ProtoGlobal.RoomMessageType messageType) {
 
         RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
         roomMessage.setMessageType(messageType);
@@ -1071,7 +1071,8 @@ public class RealmRoomMessage extends RealmObject {
         roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
         roomMessage.setUserId(G.userId);
         roomMessage.setCreateTime(TimeUtils.currentLocalTime());
-        roomMessage.setRealmAdditional(RealmAdditional.put(additionalData, additionalTaype));
+        if (additionalData != null)
+            roomMessage.setRealmAdditional(RealmAdditional.put(additionalData, additionalTaype));
 
         return roomMessage;
     }
