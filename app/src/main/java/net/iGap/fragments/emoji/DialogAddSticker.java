@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
@@ -27,8 +28,11 @@ import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.struct.StructEachSticker;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmStickers;
+import net.iGap.request.RequestFileDownload;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +70,7 @@ public class DialogAddSticker extends DialogFragment {
                     progressBar.setVisibility(View.GONE);
                     if (response.body() != null) {
 
-                        if (response.body().getOk() && response.body().getData() !=null) {
+                        if (response.body().getOk() && response.body().getData() != null) {
 
                             StructGroupSticker item = response.body().getData();
                             Realm realm = Realm.getDefaultInstance();
@@ -87,7 +91,7 @@ public class DialogAddSticker extends DialogFragment {
                     progressBar.setVisibility(View.GONE);
                 }
             });
-        }else {
+        } else {
             progressBar.setVisibility(View.GONE);
             StructGroupSticker eachSticker = RealmStickers.getEachSticker(groupID);
             if (eachSticker != null) {
@@ -142,9 +146,9 @@ public class DialogAddSticker extends DialogFragment {
                         if (response.body() != null && response.body().isSuccess()) {
                             RealmStickers.updateFavorite(groupId, true);
                             if (FragmentChat.onUpdateSticker != null) {
-                                    FragmentChat.onUpdateSticker.update();
-                                    getDialog().dismiss();
-                                }
+                                FragmentChat.onUpdateSticker.update();
+                                getDialog().dismiss();
+                            }
                         }
                     }
 
@@ -184,10 +188,32 @@ public class DialogAddSticker extends DialogFragment {
         public void onBindViewHolder(AdapterAddDialogSticker.ViewHolder holder, int position) {
             StructItemSticker item = mData.get(position);
 
+            String path = HelperDownloadSticker.createPathFile(item.getToken(), item.getAvatarName());
+            if (!new File(path).exists()) {
+                HelperDownloadSticker.stickerDownload(item.getToken(), item.getName(), item.getAvatarSize(), ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
+                    @Override
+                    public void OnProgress(String path, int progress) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Glide.with(context)
+                                        .load(path)
+                                        .into(holder.imgSticker);
+                            }
+                        });
 
+                    }
 
-            Uri uri = Uri.parse(item.getUri());
-            holder.imgSticker.setImageURI(uri);
+                    @Override
+                    public void OnError(String token) {
+
+                    }
+                });
+            } else {
+                Glide.with(context)
+                        .load(path)
+                        .into(holder.imgSticker);
+            }
         }
 
         // total number of rows
