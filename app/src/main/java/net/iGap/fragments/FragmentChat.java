@@ -3044,9 +3044,7 @@ public class FragmentChat extends BaseFragment
 
                 if (isWaitingForHistoryUp || isWaitingForHistoryDown) {
                     FragmentChat.isLoadingMoreMessage = true;
-                    clearAdapterItems();
-                    mAdapter.add(new ProgressWaiting(mAdapter, FragmentChat.this).withIdentifier(progressIdentifierDown));
-                    mAdapter.notifyAdapterDataSetChanged();
+                    prgWaiting.setVisibility(View.VISIBLE);
                     return;
                 }
 
@@ -8978,8 +8976,7 @@ public class FragmentChat extends BaseFragment
                                 if (!isWaitingForHistoryUp && !isWaitingForHistoryDown){
 
                                     FragmentChat.isLoadingMoreMessage = false;
-                                    resetMessagingValue();
-                                    addToView = false;
+                                    hideProgress();
                                     llScrollNavigate.performClick();
                                 }
                                 return;
@@ -9093,8 +9090,7 @@ public class FragmentChat extends BaseFragment
                                 if (!isWaitingForHistoryUp &&
                                         !isWaitingForHistoryDown){
                                     FragmentChat.isLoadingMoreMessage = false;
-                                    resetMessagingValue();
-                                    addToView = false;
+                                    hideProgress();
                                     llScrollNavigate.performClick();
                                 }
                             } else {
