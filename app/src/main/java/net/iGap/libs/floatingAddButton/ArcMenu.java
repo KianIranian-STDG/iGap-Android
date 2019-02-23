@@ -117,12 +117,13 @@ public class ArcMenu extends FrameLayout {
         //    mColorStateList = ColorStateList.valueOf(getThemeAccentColor(getContext(), R.attr.colorAccent));
         //}
         if (mMenuSideEnum == MenuSideEnum.ARC_LEFT) {
-            if (revConfig)
+            if (revConfig) {
                 if (!HelperCalander.isPersianUnicode)
                     mQuadrantAngle = -mQuadrantAngle;
-            else
+            } else {
                 if (HelperCalander.isPersianUnicode)
                     mQuadrantAngle = -mQuadrantAngle;
+            }
 
         } else {
             mQuadrantAngle = -mQuadrantAngle;
