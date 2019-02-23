@@ -457,9 +457,7 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         if (G.isDarkTheme) {
             newPassWord.setTextColor(G.context.getResources().getColor(R.color.white));
         }
-        if (G.isDarkTheme) {
-            newPassWord.setTextColor(G.context.getResources().getColor(R.color.white));
-        }
+
         final View viewConfirmPassWord = new View(G.fragmentActivity);
         viewConfirmPassWord.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
