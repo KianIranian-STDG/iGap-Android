@@ -3122,7 +3122,6 @@ public class FragmentChat extends BaseFragment
 
 
                 if (pastVisibleItems + visibleItemCount >= totalItemCount && !isAnimateStart) {
-                    Log.d("bagi" , "Case1Goneing");
                     isScrollEnd = false;
                     isAnimateStart = true;
                     llScrollNavigate.animate()
@@ -3139,7 +3138,6 @@ public class FragmentChat extends BaseFragment
                             });
 
                 } else if (!isScrollEnd && !isAnimateStart) {
-                    Log.d("bagi" , "Case2Visible");
                     isAnimateStart = true;
                     setDownBtnVisible();
                     llScrollNavigate.animate()
