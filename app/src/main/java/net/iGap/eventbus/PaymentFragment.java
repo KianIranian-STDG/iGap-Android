@@ -453,6 +453,13 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         newPassWord.setMaxLines(1);
         inputNewPassWord.addView(newPassWord);
         inputNewPassWord.addView(viewNewPassword, viewParams);
+
+        if (G.isDarkTheme) {
+            newPassWord.setTextColor(G.context.getResources().getColor(R.color.white));
+        }
+        if (G.isDarkTheme) {
+            newPassWord.setTextColor(G.context.getResources().getColor(R.color.white));
+        }
         final View viewConfirmPassWord = new View(G.fragmentActivity);
         viewConfirmPassWord.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -471,6 +478,9 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         confirmPassWord.setMaxLines(1);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             confirmPassWord.setBackground(G.context.getResources().getDrawable(android.R.color.transparent));
+        }
+        if (G.isDarkTheme) {
+            confirmPassWord.setTextColor(G.context.getResources().getColor(R.color.white));
         }
         inputConfirmPassWord.addView(confirmPassWord);
         inputConfirmPassWord.addView(viewConfirmPassWord, viewParams);
@@ -597,6 +607,9 @@ public class PaymentFragment extends BaseFragment implements EventListener {
         newPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
         newPassWord.setPadding(0, 8, 0, 8);
         newPassWord.setMaxLines(1);
+        if (G.isDarkTheme) {
+            newPassWord.setTextColor(G.context.getResources().getColor(R.color.white));
+        }
         inputNewPassWord.addView(newPassWord);
         inputNewPassWord.addView(viewFirstName, viewParams);
         final View viewLastName = new View(G.fragmentActivity);
