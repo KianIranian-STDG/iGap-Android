@@ -843,10 +843,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         long time = 0;
         if (BuildConfig.DEBUG) {
             time = 2 * DateUtils.SECOND_IN_MILLIS;
-        } else if (FragmentRegister.smsPermission) {
-            time = Config.COUNTER_TIMER;
         } else {
-            time = 5 * DateUtils.SECOND_IN_MILLIS;
+            time = 60 * DateUtils.SECOND_IN_MILLIS;
         }
 
         CountDownTimer countDownTimer = new CountDownTimer(time, Config.COUNTER_TIMER_DELAY) { // wait for verify sms
