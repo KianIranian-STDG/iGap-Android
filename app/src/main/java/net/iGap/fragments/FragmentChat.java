@@ -2963,6 +2963,10 @@ public class FragmentChat extends BaseFragment
                     if (dX > 0)
                         dX = 0;
 
+                    if (dX < -ViewMaker.dpToPixel(150)) {
+                        dX =  -ViewMaker.dpToPixel(150);
+                    }
+
                     super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
                 }
 
