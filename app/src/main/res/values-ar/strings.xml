@@ -2358,5 +2358,6 @@
     <string name="startUpdate">تحديث</string>
     <string name="access_phone_numer">There is a request to get your phone number</string>
     <string name="access_location">There is request to get your location</string>
+    <string name="sticker_message">رسالة لاصقة</string>
 
 </resources>
