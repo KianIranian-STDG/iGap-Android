@@ -1811,7 +1811,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                 @Override
                                 public void execute(Realm realm) {
                                     RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
-                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(mMessage.roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(),null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
                                     G.chatSendMessageUtil.build(type, mMessage.roomId, realmRoomMessage).sendMessage(identity + "");
                                     messageClickListener.sendFromBot(realmRoomMessage);
                                 }
@@ -1833,7 +1833,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                               G.locationListener.requestLocation();
 
 
-                            G.locationListenerResponse = new LocationListenerResponse() {
+                   /*         G.locationListenerResponse = new LocationListenerResponse() {
                                 @Override
                                 public void setLocationResponse(Double latitude, Double longitude) {
                                     Long identity = System.currentTimeMillis();
@@ -1849,7 +1849,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                                         }
                                     });
                                 }
-                            };
+                            };*/
 
 
                         }

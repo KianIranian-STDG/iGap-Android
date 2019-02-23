@@ -415,7 +415,7 @@ public class BotInit implements View.OnClickListener {
                                 @Override
                                 public void execute(Realm realm) {
                                     RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
-                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(),null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
                                     G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
                                     if (G.onBotClick != null) {
                                         G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
@@ -438,7 +438,7 @@ public class BotInit implements View.OnClickListener {
                             if (G.locationListener != null)
                                 response = G.locationListener.requestLocation();
 
-                            G.locationListenerResponse = new LocationListenerResponse() {
+              /*              G.locationListenerResponse = new LocationListenerResponse() {
                                 @Override
                                 public void setLocationResponse(Double latitude, Double longitude) {
                                     Long identity = System.currentTimeMillis();
@@ -454,7 +454,7 @@ public class BotInit implements View.OnClickListener {
                                         }
                                     });
                                 }
-                            };
+                            };*/
 
 
                         }

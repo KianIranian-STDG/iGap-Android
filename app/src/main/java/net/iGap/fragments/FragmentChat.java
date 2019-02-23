@@ -1091,8 +1091,8 @@ public class FragmentChat extends BaseFragment
         if (G.fragmentActivity != null && G.fragmentActivity instanceof ActivityMain) {
             ((ActivityMain) G.fragmentActivity).resume();
         }
-        if (G.locationListenerResponse != null)
-            G.locationListenerResponse = null;
+   /*     if (G.locationListenerResponse != null)
+            G.locationListenerResponse = null;*/
 
         if (G.locationListener != null)
             G.locationListener = null;
@@ -2116,10 +2116,10 @@ public class FragmentChat extends BaseFragment
         G.iSendPositionChat = new ISendPosition() {
             @Override
             public void send(Double latitude, Double longitude, String imagePath) {
-                if (isBot) {
+            /*    if (isBot) {
                     if (G.locationListenerResponse != null)
                         G.locationListenerResponse.setLocationResponse(latitude, longitude);
-                } else
+                } else*/
                     sendPosition(latitude, longitude, imagePath);
             }
         };
