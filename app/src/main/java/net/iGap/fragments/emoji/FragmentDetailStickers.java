@@ -25,6 +25,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.request.RequestFileDownload;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
@@ -117,14 +118,20 @@ public class FragmentDetailStickers extends BaseFragment {
         public void onBindViewHolder(AdapterSettingPage.ViewHolder holder, int position) {
             StructItemSticker item = mData.get(position);
 
-            if (item.getUri() == null || item.getUri().isEmpty()) {
+            String path = HelperDownloadSticker.createPathFile(item.getToken(), item.getAvatarName());
+            if (!new File(path).exists()) {
                 HelperDownloadSticker.stickerDownload(item.getToken(), item.getName(), item.getAvatarSize(), ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
                     @Override
                     public void OnProgress(String path, int progress) {
-                        Glide.with(context)
-                                .load(path)
-                                .into(holder.imgSticker);
-                        notifyDataSetChanged();
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Glide.with(context)
+                                        .load(path)
+                                        .into(holder.imgSticker);
+                            }
+                        });
+
                     }
 
                     @Override

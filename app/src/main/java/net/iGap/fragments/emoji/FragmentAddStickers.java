@@ -193,10 +193,14 @@ public class FragmentAddStickers extends BaseFragment {
 
                     @Override
                     public void OnProgress(String path, int progress) {
-                        Glide.with(context)
-                                .load(path)
-                                .into(holder.imgSticker);
-                        notifyDataSetChanged();
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Glide.with(context)
+                                        .load(path)
+                                        .into(holder.imgSticker);
+                            }
+                        });
                     }
 
                     @Override

@@ -57,7 +57,8 @@ public class FragmentRemoveRecentSticker extends BaseFragment {
     private List<StructItemSticker> data;
     public List<StructItemSticker> stickerList = new ArrayList<>();
     private ProgressBar progressBar;
-    public static ArrayList<String> removeStickerList=  new ArrayList<>() ;
+    public static ArrayList<String> removeStickerList = new ArrayList<>();
+
     public FragmentRemoveRecentSticker() {
         // Required empty public constructor
     }
@@ -69,6 +70,7 @@ public class FragmentRemoveRecentSticker extends BaseFragment {
         fragmentDetailStickers.setArguments(bundle);
         return fragmentDetailStickers;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,7 +91,7 @@ public class FragmentRemoveRecentSticker extends BaseFragment {
         RecyclerView rcvSettingPage = view.findViewById(R.id.rcvSettingPage);
         adapterSettingPage = new AdapterSettingPage(getActivity(), stickerList);
         rcvSettingPage.setAdapter(adapterSettingPage);
-        rcvSettingPage.setLayoutManager(new GridLayoutManager(getActivity(),4));
+        rcvSettingPage.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         rcvSettingPage.setHasFixedSize(true);
 
     }
@@ -127,10 +129,14 @@ public class FragmentRemoveRecentSticker extends BaseFragment {
 
                     @Override
                     public void OnProgress(String path, int progress) {
-                        Glide.with(context)
-                                .load(path)
-                                .into(holder.imgSticker);
-                        notifyDataSetChanged();
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Glide.with(context)
+                                        .load(path)
+                                        .into(holder.imgSticker);
+                            }
+                        });
                     }
 
                     @Override
@@ -164,11 +170,11 @@ public class FragmentRemoveRecentSticker extends BaseFragment {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (animateCheckBox.isChecked()){
+                        if (animateCheckBox.isChecked()) {
                             animateCheckBox.setChecked(false);
                             removeStickerList.remove(mData.get(getAdapterPosition()).getId());
 
-                        }else {
+                        } else {
                             animateCheckBox.setChecked(true);
                             removeStickerList.add(mData.get(getAdapterPosition()).getId());
 
