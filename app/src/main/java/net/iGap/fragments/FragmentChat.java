@@ -23,7 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -66,11 +65,9 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
-import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -105,6 +102,7 @@ import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.Config;
 import net.iGap.G;
+import net.iGap.MyWebViewClient;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityCall;
@@ -238,7 +236,6 @@ import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.VoiceRecord;
 import net.iGap.module.additionalData.AdditionalType;
-import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.enums.Additional;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
@@ -283,7 +280,6 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmStickers;
-import net.iGap.realm.RealmStickersDetails;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelEditMessage;
 import net.iGap.request.RequestChannelPinMessage;
@@ -3554,6 +3550,9 @@ public class FragmentChat extends BaseFragment
         webViewChatPage.getSettings().setLoadsImagesAutomatically(true);
         webViewChatPage.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webViewChatPage.clearCache(true);
+        webViewChatPage.clearHistory();
+        webViewChatPage.clearView();
+        webViewChatPage.clearFormData();
         webViewChatPage.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webViewChatPage.getSettings().setJavaScriptEnabled(true);
         webViewChatPage.getSettings().setDomStorageEnabled(true);
@@ -3572,14 +3571,45 @@ public class FragmentChat extends BaseFragment
                 }
             }
         });
-        webViewChatPage.setWebViewClient(new WebViewClient() {
+        webViewChatPage.setWebViewClient(new MyWebViewClient() {
 
             @Override
-            public void onReceivedSslError(final WebView view, final SslErrorHandler handler, SslError error) {
+            protected void onReceivedError(WebView webView, String url, int errorCode, String description) {
+            }
+
+            @Override
+            protected boolean handleUri(WebView webView, Uri uri) {
+                final String host = uri.getHost();
+                final String scheme = uri.getScheme();
+                // Returning false means that you are going to load this url in the webView itself
+                // Returning true means that you need to handle what to do with the url e.g. open web page in a Browser
+
+                // final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                // startActivity(intent);
+                return false;
+
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                if (url.toLowerCase().equals("igap://close")) {
+                    if (webViewChatPage != null) {
+                        closeWebViewForSpecialUrlChat(false);
+                    }
+                }
             }
         });
+
         webViewChatPage.loadUrl(urlWebViewForSpecialUrlChat);
     }
+
 
     private void setTouchListener(Canvas c,
                                   RecyclerView recyclerView,
