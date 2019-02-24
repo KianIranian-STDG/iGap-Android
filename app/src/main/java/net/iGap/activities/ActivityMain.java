@@ -62,6 +62,8 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
+import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -82,6 +84,7 @@ import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
+import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
@@ -152,6 +155,7 @@ import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
+import net.iGap.realm.RealmStickers;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.realm.RealmWallpaper;
 import net.iGap.request.RequestChatGetRoom;
@@ -817,7 +821,45 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (backGroundPath.isEmpty()) {
             getWallpaperAsDefault();
         }
+
+        getStickerFromServer();
     }
+
+    public static void getStickerFromServer() {
+        ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
+            @Override
+            public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
+
+                if (response.body() != null) {
+                    if (response.body().getOk() && response.body().getData().size() > 0) {
+                        setStickerToRealm(response.body().getData(), true);// add favorit sticker to db
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<StructSticker> call, Throwable t) {
+            }
+        });
+    }
+
+    public static void setStickerToRealm(List<StructGroupSticker> mData, boolean isFavorite) {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+//                RealmStickers.setAllDataIsDeleted();
+                for (StructGroupSticker item : mData) {
+                    RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), isFavorite);
+                }
+//                RealmStickers.removeandUpdateRealm();
+            }
+        });
+        realm.close();
+    }
+
+
 
     private void getWallpaperAsDefault() {
         try {

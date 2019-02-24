@@ -101,7 +101,6 @@ import com.vanniktech.emoji.sticker.OnStickerListener;
 import com.vanniktech.emoji.sticker.OnUpdateStickerListener;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
-import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.Config;
 import net.iGap.G;
@@ -134,6 +133,7 @@ import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.databinding.PaymentDialogBinding;
 import net.iGap.eventbus.PaymentFragment;
+import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -156,7 +156,6 @@ import net.iGap.fragments.emoji.DialogAddSticker;
 import net.iGap.fragments.emoji.FragmentAddStickers;
 import net.iGap.fragments.emoji.FragmentSettingStickers;
 import net.iGap.fragments.emoji.OnUpdateSticker;
-import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IDispatchTochEvent;
@@ -238,7 +237,6 @@ import net.iGap.module.SUID;
 import net.iGap.module.TimeUtils;
 import net.iGap.module.VoiceRecord;
 import net.iGap.module.additionalData.AdditionalType;
-import net.iGap.module.additionalData.ButtonActionType;
 import net.iGap.module.enums.Additional;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.ConnectionState;
@@ -283,7 +281,6 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageContact;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmStickers;
-import net.iGap.realm.RealmStickersDetails;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestChannelEditMessage;
 import net.iGap.request.RequestChannelPinMessage;
@@ -298,6 +295,7 @@ import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientRoomReport;
 import net.iGap.request.RequestClientSubscribeToRoom;
 import net.iGap.request.RequestClientUnsubscribeFromRoom;
+import net.iGap.request.RequestFileDownload;
 import net.iGap.request.RequestGroupEditMessage;
 import net.iGap.request.RequestGroupPinMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
@@ -333,9 +331,6 @@ import io.fotoapparat.view.CameraView;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -3401,6 +3396,9 @@ public class FragmentChat extends BaseFragment
             }
         });
 
+        if (data.size() == 0) {
+            fillStickerList();
+        }
         // to toggle between keyboard and emoji popup
         imvSmileButton.setOnClickListener(new View.OnClickListener() {
 
@@ -3482,43 +3480,13 @@ public class FragmentChat extends BaseFragment
         //realm.close();
     }
 
-    public static void getStickerFromServer() {
-        ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
-            @Override
-            public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
+    public static void fillStickerList() {
 
-                if (response.body() != null) {
-                    if (response.body().getOk() && response.body().getData().size() > 0) {
-                        data.clear();
-                        setStickerToRealm(response.body().getData(), true);// add favorit sticker to db
-                        data = RealmStickers.getAllStickers(true);
-                        if (data != null && emojiPopup != null) {
-                            emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
-                        }
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<StructSticker> call, Throwable t) {
-            }
-        });
-    }
-
-    public static void setStickerToRealm(List<StructGroupSticker> mData, boolean isFavorite) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-//                RealmStickers.setAllDataIsDeleted();
-                for (StructGroupSticker item : mData) {
-                    RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), isFavorite);
-                }
-//                RealmStickers.removeandUpdateRealm();
-            }
-        });
-        realm.close();
+        data.clear();
+        data = RealmStickers.getAllStickers(true);
+        if (data != null && emojiPopup != null) {
+            emojiPopup.updateStickerAdapter((ArrayList<StructGroupSticker>) data);
+        }
     }
 
 
@@ -6096,6 +6064,24 @@ public class FragmentChat extends BaseFragment
                     @Override
                     public void onUpdateSticker(String token, String extention, long avatarSize, int positionAdapter) {
 
+                        HashMap<String, Integer> updateList = new HashMap<>();
+                        updateList.put(token, positionAdapter);
+                        HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
+
+                            @Override
+                            public void OnProgress(String path, String token, int progress) {
+
+                                if (updateList.get(token) != null) {
+                                    emojiPopup.onUpdateSticker(updateList.get(token));
+                                    updateList.remove(token);
+                                }
+                            }
+
+                            @Override
+                            public void OnError(String token) {
+
+                            }
+                        });
                     }
 
                     @Override
@@ -6105,6 +6091,25 @@ public class FragmentChat extends BaseFragment
 
                     @Override
                     public void onUpdateTabSticker(String token, String extention, long avatarSize, int positionAdapter) {
+                        HashMap<String, Integer> updateList = new HashMap<>();
+                        updateList.put(token, positionAdapter);
+
+                        HelperDownloadSticker.stickerDownload(token, extention, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
+
+                            @Override
+                            public void OnProgress(String path, String token, int progress) {
+
+                                if (updateList.get(token) != null && token != null) {
+                                    emojiPopup.onUpdateTabSticker(updateList.get(token));
+                                    updateList.remove(token);
+                                }
+                            }
+
+                            @Override
+                            public void OnError(String token) {
+
+                            }
+                        });
 
                     }
                 })
@@ -6123,10 +6128,6 @@ public class FragmentChat extends BaseFragment
                 .setIconColor(Color.parseColor(iconColor))
                 .setDividerColor(Color.parseColor(dividerColor))
                 .build(edtChat);
-
-        if (data.size() == 0) {
-            getStickerFromServer();
-        }
 
     }
 

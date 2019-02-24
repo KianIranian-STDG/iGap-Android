@@ -19,7 +19,7 @@ public class HelperDownloadSticker {
     public static HashMap<String, UpdateStickerListener> hashMap = new HashMap<>();
 
     public interface UpdateStickerListener {
-        void OnProgress(String path, int progress);
+        void OnProgress(String path, String token, int progress);
 
         void OnError(String token);
     }
@@ -35,7 +35,7 @@ public class HelperDownloadSticker {
                 public void onStickerDownloaded(String filePath, String token, long fileSize, long offset, ProtoFileDownload.FileDownload.Selector selector, RequestFileDownload.TypeDownload type, int progress) {
                     UpdateStickerListener updateStickerListener1 = hashMap.get(token);
                     if (updateStickerListener1 != null) {
-                        updateStickerListener1.OnProgress(filePath, 100 );
+                        updateStickerListener1.OnProgress(filePath, token, 100);
                         hashMap.remove(token);
                     }
                 }
@@ -49,7 +49,7 @@ public class HelperDownloadSticker {
             filePath = createPathFile(token, extention);
             if (new File(filePath).exists()) {
                 if (updateStickerListener != null)
-                    updateStickerListener.OnProgress(filePath, 100);
+                    updateStickerListener.OnProgress(filePath, token, 100);
                 return;
             }
             new RequestFileDownload().download(token, 0, (int) avatarSize, selector, new RequestFileDownload.IdentityFileDownload(ProtoGlobal.RoomMessageType.IMAGE, token, filePath, selector, avatarSize, 0, type));

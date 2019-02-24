@@ -1,12 +1,15 @@
 package net.iGap.realm;
 
 
+import android.util.Log;
+
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.request.RequestFileDownload;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,8 +62,7 @@ public class RealmStickers extends RealmObject {
 
             HelperDownloadSticker.stickerDownload(avatarToken, avatarName, avatarSize, ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
                 @Override
-                public void OnProgress(String path, int progress) {
-
+                public void OnProgress(String path, String token, int progress) {
                 }
 
                 @Override
@@ -71,7 +73,6 @@ public class RealmStickers extends RealmObject {
 
             RealmList<RealmStickersDetails> realmStickersDetails = new RealmList<>();
             for (StructItemSticker itemSticker : stickers) {
-
                 realmStickersDetails.add(RealmStickersDetails.put(itemSticker.getId(), itemSticker.getRefId(), itemSticker.getName(), itemSticker.getToken(), "", itemSticker.getAvatarSize(), itemSticker.getAvatarName(), itemSticker.getSort(), itemSticker.getGroupId()));
             }
             realmStickers.setRealmStickersDetails(realmStickersDetails);
