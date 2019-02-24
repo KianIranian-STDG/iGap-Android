@@ -2,6 +2,7 @@ package net.iGap.fragments.emoji;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
@@ -39,6 +41,7 @@ public class FragmentDetailStickers extends BaseFragment {
     private String groupId = "";
     List<StructItemSticker> stickerList;
     private AdapterSettingPage adapterSettingPage;
+    private LinearLayout fcLayoutTitle;
 
     public FragmentDetailStickers() {
         // Required empty public constructor
@@ -66,7 +69,8 @@ public class FragmentDetailStickers extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
+        fcLayoutTitle = view.findViewById(R.id.fc_layot_title);
+        fcLayoutTitle.setBackgroundColor(Color.parseColor(G.appBarColor));
         if (getArguments() != null) {
             stickerList = (List<StructItemSticker>) getArguments().getSerializable("GROUP_ID");
         }
