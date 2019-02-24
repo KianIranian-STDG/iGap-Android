@@ -101,7 +101,7 @@ import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.Config;
 import net.iGap.G;
-import net.iGap.MyWebViewClient;
+import net.iGap.libs.MyWebViewClient;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityCall;

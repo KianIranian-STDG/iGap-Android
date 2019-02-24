@@ -1,4 +1,4 @@
-package net.iGap;
+package net.iGap.libs;
 
 import android.annotation.TargetApi;
 import android.net.Uri;
