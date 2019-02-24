@@ -1410,5 +1410,6 @@
     <string name="access_phone_number">Are you sure to send your phone number?</string>
     <string name="access_location">Are you sure to send your location?</string>
     <string name="sticker_message">Sticker message</string>
+    <string name="Sticker_added_successfully">Sticker added successfully</string>
 
 </resources>

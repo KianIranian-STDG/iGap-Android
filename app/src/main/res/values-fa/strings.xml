@@ -1408,5 +1408,6 @@
     <string name="access_phone_number">آیا از ارسال شماره تلفن خود اطمینان دارید ؟ </string>
     <string name="access_location"> آیا از ارسال مکان خود اطمینان دارید؟ </string>
     <string name="sticker_message">پیام استیکر</string>
+    <string name="Sticker_added_successfully">استیکر با موفقیت اضافه شد</string>
 
 </resources>

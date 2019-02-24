@@ -174,6 +174,8 @@ public class FragmentAddStickers extends BaseFragment {
         // binds the data to the TextView in each row
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
+            holder.setIsRecyclable(false);
+
             StructGroupSticker item = mData.get(position);
 
             if (!capitalCities.containsKey(item.getAvatarToken())) {

@@ -2359,5 +2359,6 @@
     <string name="access_phone_number">هل أنت متأكد من إرسال رقم هاتفك؟</string>
     <string name="access_location">هل أنت متأكد من إرسال موقعك؟</string>
     <string name="sticker_message">رسالة لاصقة</string>
+    <string name="Sticker_added_successfully">تمت إضافة الملصق بنجاح</string>
 
 </resources>

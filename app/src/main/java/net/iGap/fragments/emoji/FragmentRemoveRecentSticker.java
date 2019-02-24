@@ -119,6 +119,8 @@ public class FragmentRemoveRecentSticker extends BaseFragment {
         // binds the data to the TextView in each row
         @Override
         public void onBindViewHolder(AdapterSettingPage.ViewHolder holder, int position) {
+            holder.setIsRecyclable(false);
+
             StructItemSticker item = mData.get(position);
 
             if (item == null) return;

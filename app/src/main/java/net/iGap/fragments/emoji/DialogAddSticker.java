@@ -27,6 +27,7 @@ import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.struct.StructEachSticker;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
+import net.iGap.helper.HelperError;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmStickers;
@@ -148,6 +149,8 @@ public class DialogAddSticker extends DialogFragment {
                             if (FragmentChat.onUpdateSticker != null) {
                                 FragmentChat.onUpdateSticker.update();
                                 getDialog().dismiss();
+
+                                HelperError.showSnackMessage(getResources().getString(R.string.Sticker_added_successfully) ,false);
                             }
                         }
                     }
