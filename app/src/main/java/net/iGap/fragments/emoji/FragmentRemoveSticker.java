@@ -124,7 +124,7 @@ public class FragmentRemoveSticker extends BaseFragment {
                 HelperDownloadSticker.stickerDownload(item.getAvatarToken(), item.getName(), item.getAvatarSize(), ProtoFileDownload.FileDownload.Selector.FILE, RequestFileDownload.TypeDownload.STICKER, new HelperDownloadSticker.UpdateStickerListener() {
 
                     @Override
-                    public void OnProgress(String path, int progress) {
+                    public void OnProgress(String path, String token, int progress) {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {

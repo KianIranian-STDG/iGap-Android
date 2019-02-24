@@ -1,2 +1,2 @@
-include ':app', ':pecpayment-release', ':raadcore', ':paygear_wallet', ':paygearcore'
+include ':app', ':raadcore', ':paygear_wallet', ':paygearcore', ':pecpayment-release'
 include ':lvl'
