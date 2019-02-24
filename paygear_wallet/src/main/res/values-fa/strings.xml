@@ -303,7 +303,7 @@
   <string name="cash_to_wallet">کیف ‌پولی</string>
     <string name="person">نفر</string>
   <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
-    <string name="enter_four_digit_code">کد شش رقمی پیامک شده را وارد کنید</string>
+    <string name="enter_four_digit_code">کد چهار رقمی  را وارد کنید</string>
   <string name="four_digit_code">کد شش رقمی پیامک شده</string>
     <string name="show_receipt">مشاهده رسید</string>
   <string name="reciever_name">نام گیرنده</string>

@@ -162,7 +162,7 @@
   <string name="cashout_today_limit">سقف برداشت امروز</string>
   <string name="cash_out_request_done">درخواست تسویه انجام شد</string>
   <string name="cashout_request">درخواست تسویه</string>
-  <string name="paygear_card_pin">رمز کیف پولکارت</string>
+  <string name="paygear_card_pin">رمز کیف پول</string>
   <string name="qr">کیوآر</string>
   <string name="scanner">اسکنر</string>
   <string name="wallet">کیف پول</string>
