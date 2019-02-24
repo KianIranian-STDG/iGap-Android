@@ -54,7 +54,7 @@ public class FragmentDataUsage extends Fragment implements DataUsageListener {
         txtDataUsageHeader = (TextView) view.findViewById(R.id.txtDataUsageHeader);
 
         rvMainDataUsage = (RelativeLayout) view.findViewById(R.id.rvMainDataUsage);
-        rvMainDataUsage.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
+        rvMainDataUsage.setBackgroundColor(G.getThemeBackgroundColor());
 
 
         AppBarLayout appBarDataUsage = (AppBarLayout) view.findViewById(R.id.appBarDataUsage);

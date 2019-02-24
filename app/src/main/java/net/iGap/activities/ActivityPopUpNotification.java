@@ -156,17 +156,14 @@ public class ActivityPopUpNotification extends AppCompatActivity {
             case Theme.TEAL_COMPLETE:
             case Theme.DARK:
 
-                setEmojiColor(G.backgroundTheme_2, G.textTitleTheme, G.textTitleTheme);
+                setEmojiColor(G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
                 break;
             default:
-                setEmojiColor("#eceff1", "#61000000", "#61000000");
+                setEmojiColor(Color.parseColor("#eceff1"), "#61000000", "#61000000");
         }
     }
 
-    private void setEmojiColor(String BackgroundColor, String iconColor, String dividerColor) {
-        if (BackgroundColor.length() == 9) {
-            BackgroundColor = "#FF" + BackgroundColor.substring(3);
-        }
+    private void setEmojiColor(int BackgroundColor, String iconColor, String dividerColor) {
         emojiPopup = EmojiPopup.Builder.fromRootView(findViewById(R.id.ac_ll_parent_notification)).setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
             @Override
             public void onEmojiBackspaceClick(View v) {
@@ -193,7 +190,7 @@ public class ActivityPopUpNotification extends AppCompatActivity {
                 emojiPopup.dismiss();
             }
         })
-                .setBackgroundColor(Color.parseColor(BackgroundColor))
+                .setBackgroundColor(BackgroundColor)
                 .setIconColor(Color.parseColor(iconColor))
                 .setDividerColor(Color.parseColor(dividerColor))
                 .build(edtChat);

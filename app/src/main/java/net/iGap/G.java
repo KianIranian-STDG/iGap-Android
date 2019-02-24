@@ -15,6 +15,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Build;
@@ -460,6 +461,22 @@ public class G extends MultiDexApplication {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(updateResources(base));
         new MultiDexUtils().getLoadedExternalDexClasses(this);
+    }
+
+    private static int makeColorTransparent100(String color) {
+        if (color.length() == 9) {
+            return Color.parseColor("#FF" + color.substring(3));
+        } else {
+            return Color.parseColor(color);
+        }
+    }
+
+    public static int getTheme2BackgroundColor() {
+        return makeColorTransparent100(backgroundTheme_2);
+    }
+
+    public static int getThemeBackgroundColor() {
+        return makeColorTransparent100(backgroundTheme);
     }
 
     public static Context updateResources(Context baseContext) {
