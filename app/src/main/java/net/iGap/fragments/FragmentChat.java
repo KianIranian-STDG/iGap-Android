@@ -3114,41 +3114,46 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int visibleItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getChildCount();
-                int totalItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getItemCount();
-                int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+//                int visibleItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getChildCount();
+//                int totalItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getItemCount();
+//                int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
 
-                if (pastVisibleItems + visibleItemCount >= totalItemCount && !isAnimateStart) {
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisible = layoutManager.findLastVisibleItemPosition();
+
+                boolean endHasBeenReached = lastVisible + 5 >= totalItemCount;
+
+                if (endHasBeenReached  && !isAnimateStart) {
                     isScrollEnd = false;
                     isAnimateStart = true;
-                    llScrollNavigate.animate()
-                            .alpha(0.0f)
-                            .translationY(llScrollNavigate.getHeight() / 2)
-                            .setDuration(200)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    isAnimateStart = false;
-                                    llScrollNavigate.setVisibility(View.GONE);
-                                }
-                            });
+                    isAnimateStart = false;
+                    llScrollNavigate.setVisibility(View.GONE);
+//                    llScrollNavigate.animate()
+//                            .alpha(0.0f)
+//                            .translationY(llScrollNavigate.getHeight() / 2)
+//                            .setDuration(200)
+//                            .setListener(new AnimatorListenerAdapter() {
+//                                @Override
+//                                public void onAnimationEnd(Animator animation) {
+//                                    super.onAnimationEnd(animation);
+//                                }
+//                            });
 
                 } else if (!isScrollEnd && !isAnimateStart) {
                     isAnimateStart = true;
                     setDownBtnVisible();
-                    llScrollNavigate.animate()
-                            .alpha(1.0f)
-                            .translationY(0)
-                            .setDuration(200)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    isAnimateStart = false;
-                                }
-                            });
+                    isAnimateStart = false;
+//                    llScrollNavigate.animate()
+//                            .alpha(1.0f)
+//                            .translationY(0)
+//                            .setDuration(200)
+//                            .setListener(new AnimatorListenerAdapter() {
+//                                @Override
+//                                public void onAnimationEnd(Animator animation) {
+//                                    super.onAnimationEnd(animation);
+//                                }
+//                            });
 
                     txtNewUnreadMessage.setText(countNewMessage + "");
                     if (countNewMessage == 0) {
