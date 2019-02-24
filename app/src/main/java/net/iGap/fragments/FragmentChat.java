@@ -6086,6 +6086,9 @@ public class FragmentChat extends BaseFragment
                                 rm[0].setShowMessage(true);
                                 rm[0].setCreateTime(TimeUtils.currentLocalTime());
 
+                                if(isReply()) {
+                                    rm[0].setReplyTo(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst());
+                                }
                             }
                         });
 
@@ -6094,6 +6097,11 @@ public class FragmentChat extends BaseFragment
                         scrollToEnd();
 
                         new ChatSendMessageUtil().build(chatType, mRoomId, rm[0]).sendMessage(identity + "");
+
+                        if(isReply()) {
+                            mReplayLayout.setTag(null);
+                            mReplayLayout.setVisibility(View.GONE);
+                        }
 
                     }
                 })
