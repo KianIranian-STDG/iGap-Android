@@ -192,11 +192,16 @@
     </LinearLayout>
   </RelativeLayout>
 
+  <android.support.v4.view.ViewPager
+      android:id="@+id/int_viewPager_introduce"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+
   <RelativeLayout
     android:id="@+id/int_layoutParentCircleImage"
     android:layout_width="wrap_content"
     android:layout_height="0dp"
-    android:layout_above="@+id/int_btnStart"
+    android:layout_below="@+id/int_layout_1"
     android:layoutDirection="ltr"
     app:layout_heightPercent="8%">
 
@@ -209,17 +214,11 @@
       android:layout_marginLeft="@dimen/dp28" />
   </RelativeLayout>
 
-  <android.support.v4.view.ViewPager
-    android:id="@+id/int_viewPager_introduce"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
-
-
   <Button
     android:id="@+id/int_btnStart"
     android:layout_width="@dimen/dp200"
     android:layout_height="@dimen/dp32"
-    android:layout_below="@+id/int_layout_1"
+    android:layout_below="@+id/int_layoutParentCircleImage"
     android:layout_centerInParent="true"
     android:layout_gravity="center_horizontal"
     android:background="@drawable/int_button_interduce"
@@ -231,22 +230,5 @@
     android:textSize="@dimen/dp16"
     android:visibility="visible"
       />
-
-
-  <!--<TextView-->
-    <!--android:id="@+id/int_txt_skip"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:layout_alignParentTop="true"-->
-    <!--android:layout_alignTop="@+id/int_layoutParentCircleImage"-->
-    <!--android:layout_marginTop="@dimen/dp4"-->
-    <!--android:background="@drawable/background_skip"-->
-    <!--android:gravity="center"-->
-    <!--android:minWidth="@dimen/dp60"-->
-    <!--android:padding="@dimen/dp4"-->
-    <!--android:text="@string/B_skip"-->
-    <!--android:textColor="@color/white"-->
-    <!--android:textSize="@dimen/dp14" />-->
 
 </android.support.percent.PercentRelativeLayout>
