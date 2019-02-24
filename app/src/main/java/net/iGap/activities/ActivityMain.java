@@ -24,6 +24,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -821,27 +822,29 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (backGroundPath.isEmpty()) {
             getWallpaperAsDefault();
         }
-
-        getStickerFromServer();
+        new StickerFromServer().execute();
     }
 
-    public static void getStickerFromServer() {
-        ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
-            @Override
-            public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
+    private class StickerFromServer extends AsyncTask<Void, Void, Void> {
 
-                if (response.body() != null) {
-                    if (response.body().getOk() && response.body().getData().size() > 0) {
-                        setStickerToRealm(response.body().getData(), true);// add favorit sticker to db
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
+                @Override
+                public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
+
+                    if (response.body() != null) {
+                        if (response.body().getOk() && response.body().getData().size() > 0) {
+                            setStickerToRealm(response.body().getData(), true);// add favorit sticker to db
+                        }
                     }
-
                 }
-            }
-
-            @Override
-            public void onFailure(Call<StructSticker> call, Throwable t) {
-            }
-        });
+                @Override
+                public void onFailure(Call<StructSticker> call, Throwable t) {
+                }
+            });
+            return null;
+        }
     }
 
     public static void setStickerToRealm(List<StructGroupSticker> mData, boolean isFavorite) {
@@ -858,7 +861,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
         realm.close();
     }
-
 
 
     private void getWallpaperAsDefault() {
