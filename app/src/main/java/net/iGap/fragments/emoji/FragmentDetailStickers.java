@@ -92,6 +92,7 @@ public class FragmentDetailStickers extends BaseFragment {
         RecyclerView rcvSettingPage = view.findViewById(R.id.rcvSettingPage);
         adapterSettingPage = new AdapterSettingPage(getActivity(), stickerList);
         rcvSettingPage.setAdapter(adapterSettingPage);
+        rcvSettingPage.setBackgroundColor(G.getThemeBackgroundColor());
         rcvSettingPage.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         rcvSettingPage.setHasFixedSize(true);
 
