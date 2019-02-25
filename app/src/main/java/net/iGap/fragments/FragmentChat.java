@@ -2959,7 +2959,7 @@ public class FragmentChat extends BaseFragment
 
                 @Override
                 public boolean isItemViewSwipeEnabled() {
-                    return true;
+                    return !FragmentChat.isInSelectionMode;
                 }
             };
             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
