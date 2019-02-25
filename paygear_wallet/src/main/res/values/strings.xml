@@ -314,5 +314,6 @@
   <string name="purchase">Purchase</string>
   <string name="remaining_balance">Remaining balance</string>
   <string name="refound">money transferred to your wallet</string>
-
+  <string name="Recently_Sticker">Recently</string>
+  <string name="Favorite_Sticker">Favorite</string>
 </resources>

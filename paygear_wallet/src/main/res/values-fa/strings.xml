@@ -312,5 +312,6 @@
   <string name="purchase">خرید</string>
   <string name="remaining_balance">موجودی باقیمانده</string>
     <string name="refound">سند اصلاح واریز  مبلغ به کیف پول</string>
-
+  <string name="Recently_Sticker">به تازگی</string>
+  <string name="Favorite_Sticker">مورد علاقه</string>
 </resources>

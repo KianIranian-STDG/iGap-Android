@@ -189,10 +189,10 @@ public class FragmentSettingStickers extends BaseFragment {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Favorite";
+                    return getString(R.string.Favorite_Sticker);
                 case 1:
                 default:
-                    return "Recently";
+                    return getString(R.string.Recently_Sticker);
             }
         }
     }
