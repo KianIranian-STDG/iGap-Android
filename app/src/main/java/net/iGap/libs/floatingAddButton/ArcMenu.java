@@ -268,8 +268,9 @@ public class ArcMenu extends FrameLayout {
             height += (radius + maxHeight);
         }
 
-        width += menuMargin;
-        height += menuMargin;
+        Resources resources = getResources();
+        width += menuMargin + resources.getDimension(R.dimen.dp4);
+        height += menuMargin + resources.getDimension(R.dimen.dp4);
         setMeasuredDimension(width, height);
     }
 
