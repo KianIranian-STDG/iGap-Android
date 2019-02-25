@@ -1114,9 +1114,7 @@ public class FragmentChat extends BaseFragment
         if (resultCode == RESULT_CANCELED) {
             HelperSetAction.sendCancel(messageId);
 
-            if (prgWaiting != null) {
-                prgWaiting.setVisibility(View.GONE);
-            }
+            hideProgress();
         }
 
         if (requestCode == AttachFile.request_code_position && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -1327,14 +1325,7 @@ public class FragmentChat extends BaseFragment
                                 FragmentEditImage.insertItemList(AttachFile.getFilePathFromUriAndCheckForAndroid7(uri, HelperGetDataFromOtherApp.FileType.image), true);
                                 new HelperFragment(FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
 
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (prgWaiting != null) {
-                                            prgWaiting.setVisibility(View.GONE);
-                                        }
-                                    }
-                                });
+                                hideProgress();
                             } else {
 //                                listPathString.set(0, attachFile.saveGalleryPicToLocal(listPathString.get(0)));
                                 Uri uri = Uri.parse(listPathString.get(0));
@@ -1342,14 +1333,7 @@ public class FragmentChat extends BaseFragment
 
                                 new HelperFragment(FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
 
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (prgWaiting != null) {
-                                            prgWaiting.setVisibility(View.GONE);
-                                        }
-                                    }
-                                });
+                                hideProgress();
                             }
                         } else {
                             //# get gif there
@@ -1362,6 +1346,7 @@ public class FragmentChat extends BaseFragment
 
                                             sendMessage(requestCode, listPathString.get(0));
                                             prgWaiting.setVisibility(View.GONE);
+                                            visibilityTextEmptyMessages();
 
                                         } catch (Exception e) {
                                         }
@@ -1387,27 +1372,13 @@ public class FragmentChat extends BaseFragment
                             FragmentEditImage.insertItemList(listPathString.get(0), true);
 
                             new HelperFragment(FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (prgWaiting != null) {
-                                        prgWaiting.setVisibility(View.GONE);
-                                    }
-                                }
-                            });
+                            hideProgress();
                         } else {
                             ImageHelper.correctRotateImage(listPathString.get(0), true);
 
                             FragmentEditImage.insertItemList(listPathString.get(0), true);
                             new HelperFragment(FragmentEditImage.newInstance(null, true, false, 0)).setReplace(false).load();
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (prgWaiting != null) {
-                                        prgWaiting.setVisibility(View.GONE);
-                                    }
-                                }
-                            });
+                            hideProgress();
                         }
                     } else {
                         showDraftLayout();
@@ -2734,18 +2705,13 @@ public class FragmentChat extends BaseFragment
                     public void onClick(View v) {
                         dialog.dismiss();
                         RealmRoomMessage.ClearAllMessage(getRealmChat(), false, mRoomId);
-                        mAdapter.clear();
-                        recyclerView.removeAllViews();
-
+                        resetMessagingValue();
                         setDownBtnGone();
-
                         recyclerView.addOnScrollListener(scrollListener);
-
                         saveMessageIdPositionState(0);
                         /**
                          * get history from server
                          */
-                        resetMessagingValue();
                         topMore = true;
                         getOnlineMessage(0, UP);
                     }
@@ -3642,7 +3608,7 @@ public class FragmentChat extends BaseFragment
     }
 
     private void visibilityTextEmptyMessages() {
-        if (mAdapter.getItemCount() > 0) {
+        if (mAdapter.getItemCount() > 0 || (prgWaiting != null && prgWaiting.getVisibility() == View.VISIBLE)) {
             txtEmptyMessages.setVisibility(View.GONE);
         } else {
             txtEmptyMessages.setVisibility(View.VISIBLE);
@@ -5407,6 +5373,7 @@ public class FragmentChat extends BaseFragment
             public void run() {
                 if (prgWaiting != null) {
                     prgWaiting.setVisibility(View.GONE);
+                    visibilityTextEmptyMessages();
                 }
             }
         });
@@ -9341,9 +9308,8 @@ public class FragmentChat extends BaseFragment
      * reset to default value for reload message again
      */
     private void resetMessagingValue() {
-        clearAdapterItems();
-
         prgWaiting.setVisibility(View.VISIBLE);
+        clearAdapterItems();
 
         addToView = true;
         topMore = false;
