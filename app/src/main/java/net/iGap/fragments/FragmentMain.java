@@ -198,6 +198,8 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d("bagi" ,"FragmentMain:onViewCreated:start");
+
         //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         this.mView = view;
         mComplete = this;
@@ -224,6 +226,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             initListener();
             pbLoading.setVisibility(View.GONE);
         }
+        Log.d("bagi" ,"FragmentMain:onViewCreated:end");
 
 
     }
@@ -1051,6 +1054,8 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     public void onResume() {
         super.onResume();
 
+        Log.d("bagi" ,"FragmentMain:onResume:start");
+
         G.onSetActionInRoom = this;
         G.onDateChanged = this;
         if (G.isDepricatedApp)
@@ -1114,6 +1119,8 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             }
         }
 //        BotInit.checkDrIgap();
+
+        Log.d("bagi" ,"FragmentMain:onResume:end");
     }
 
     @Override

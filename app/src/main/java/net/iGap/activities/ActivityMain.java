@@ -440,6 +440,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
+        Log.d("bagi" ,"ActivityMain:onCreate:start");
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.intent.action.PHONE_STATE");
         MyPhonStateService myPhonStateService = new MyPhonStateService();
@@ -823,6 +824,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             getWallpaperAsDefault();
         }
         new StickerFromServer().execute();
+
+        Log.d("bagi" ,"ActivityMain:onCreate:end");
     }
 
     private class StickerFromServer extends AsyncTask<Void, Void, Void> {
@@ -1442,6 +1445,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d("bagi" ,"ActivityMain:onstart:start");
 
         if (!G.isFirstPassCode) {
             openActivityPassCode();
@@ -1454,6 +1458,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //        G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), message.getRoomId(), message.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
         //    }
         //});
+
+        Log.d("bagi" ,"ActivityMain:onstart:end");
     }
 
     @SuppressLint("MissingSuperCall")
@@ -2516,10 +2522,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("bagi" ,"ActivityMain:onResume:start");
 
         resume();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        Log.d("bagi" ,"ActivityMain:onResume:end");
     }
 
     public void resume() {

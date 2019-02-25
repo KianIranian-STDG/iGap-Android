@@ -424,6 +424,7 @@ public class G extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d("bagi" ,"Application:onCreate:start");
 
         G.firstTimeEnterToApp = true;
 
@@ -455,6 +456,8 @@ public class G extends MultiDexApplication {
             WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);
         } catch (Exception e) {
         }*/
+
+        Log.d("bagi" ,"Application:onCreate:end");
     }
 
     @Override
