@@ -834,9 +834,6 @@ public class FragmentChat extends BaseFragment
                     public void execute(Realm realm) {
                         final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (room != null) {
-                            if (G.onClearUnread != null) {
-                                G.onClearUnread.onClearUnread(mRoomId);
-                            }
 
                             if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                                 setConnectionText(G.connectionState);
@@ -4119,9 +4116,6 @@ public class FragmentChat extends BaseFragment
                                                 firstUnreadMessage = realmRoomMessage;
                                             }
                                             room.setUnreadCount(0);
-                                            if (G.onClearUnread != null) {
-                                                G.onClearUnread.onClearUnread(roomId);
-                                            }
                                         }
                                     }
                                 });
@@ -4151,11 +4145,6 @@ public class FragmentChat extends BaseFragment
                                                  * I'm in the room, so unread messages count is 0. it means, I read all messages
                                                  */
                                                 RealmRoom room = RealmRoom.setCount(realm, mRoomId, 0);
-                                                if (room != null) {
-                                                    if (G.onClearUnread != null) {
-                                                        G.onClearUnread.onClearUnread(roomId);
-                                                    }
-                                                }
 
                                                 if (realmRoomMessage.isValid() && !realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
                                                     realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
