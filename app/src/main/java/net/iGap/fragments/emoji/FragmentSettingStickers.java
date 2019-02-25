@@ -119,7 +119,7 @@ public class FragmentSettingStickers extends BaseFragment {
                             })
                             .show();
                 } else {
-                    HelperError.showSnackMessage("Please Select at limit one sticker", false);
+                    HelperError.showSnackMessage(getResources().getString(R.string.Please_select_an_option), false);
                 }
             }
         });

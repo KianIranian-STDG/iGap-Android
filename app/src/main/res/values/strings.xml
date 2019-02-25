@@ -1411,5 +1411,6 @@
     <string name="access_location">Are you sure to send your location?</string>
     <string name="sticker_message">Sticker message</string>
     <string name="Sticker_added_successfully">Sticker added successfully</string>
+    <string name="Please_select_an_option">Please select an option</string>
 
 </resources>

@@ -1409,5 +1409,8 @@
     <string name="access_location"> آیا از ارسال مکان خود اطمینان دارید؟ </string>
     <string name="sticker_message">پیام استیکر</string>
     <string name="Sticker_added_successfully">استیکر با موفقیت اضافه شد</string>
+    <string name="Please_select_an_option"> لطفا یک گزینه را انتخاب کنید</string>
+
+
 
 </resources>
