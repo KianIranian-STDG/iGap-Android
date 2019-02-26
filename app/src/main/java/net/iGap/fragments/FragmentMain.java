@@ -53,7 +53,6 @@ import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDateChanged;
 import net.iGap.interfaces.OnDraftMessage;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
-import net.iGap.interfaces.OnMute;
 import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
 import net.iGap.interfaces.OnSelectMenu;
@@ -108,7 +107,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnDraftMessage, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnMute, OnClearRoomHistory, OnDateChanged {
+public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnDraftMessage, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnClearRoomHistory, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static boolean isMenuButtonAddShown = false;
@@ -960,18 +959,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         //            }
         //            getAdapterMain(roomId).add(0, new RoomItem(mComplete, type).setInfo(realmRoom).withIdentifier(realmRoom.getId()));
         //        }
-        //    }
-        //});
-    }
-
-    @Override
-    public void onChangeMuteState(final long roomId, boolean mute) {
-        //fastAdapter
-        //G.handler.post(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        adapterHashMap.get(all).updateItem(roomId);
-        //        getAdapterMain(roomId).updateItem(roomId);
         //    }
         //});
     }

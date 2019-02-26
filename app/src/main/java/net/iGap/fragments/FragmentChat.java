@@ -5789,10 +5789,6 @@ public class FragmentChat extends BaseFragment
             ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.mute);
             iconMute.setVisibility(View.GONE);
         }
-
-        if (G.onMute != null) {
-            G.onMute.onChangeMuteState(mRoomId, isMuteNotification);
-        }
         //realm.close();
     }
 
