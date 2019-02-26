@@ -572,12 +572,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setContentView(R.layout.activity_main);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        FrameLayout _mainframe = (FrameLayout) findViewById(R.id.frame_main);
 
         if (G.isAppRtl) {
-            ViewCompat.setLayoutDirection(_mainframe, ViewCompat.LAYOUT_DIRECTION_RTL);
+            ViewCompat.setLayoutDirection(drawer, ViewCompat.LAYOUT_DIRECTION_RTL);
         } else {
-            ViewCompat.setLayoutDirection(_mainframe, ViewCompat.LAYOUT_DIRECTION_LTR);
+            ViewCompat.setLayoutDirection(drawer, ViewCompat.LAYOUT_DIRECTION_LTR);
         }
 
 
@@ -1611,22 +1610,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 closeDrawer();
             }
         });
-
-//        ViewGroup igapSearch = (ViewGroup) findViewById(R.id.lm_ll_igap_search);
-//        igapSearch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final Fragment fragment = FragmentIgapSearch.newInstance();
-//                try {
-//                    new HelperFragment(fragment).load();
-//                } catch (Exception e) {
-//                    e.getStackTrace();
-//                }
-//
-//                lockNavigation();
-//                closeDrawer();
-//            }
-//        });
 
         ViewGroup itemNavContacts = (ViewGroup) findViewById(R.id.lm_ll_contacts);
         itemNavContacts.setOnClickListener(new View.OnClickListener() {
