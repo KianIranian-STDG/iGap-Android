@@ -432,19 +432,23 @@ public class G extends MultiDexApplication {
             }
         }).start();
 
+        Log.d("bagi" ,"Application:onCreate:start2");
         context = getApplicationContext();
         handler = new Handler();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        Log.d("bagi" ,"Application:onCreate:start3");
         Raad.init(getApplicationContext());
         Utils.setInstart(context, "fa");
         WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
 
+        Log.d("bagi" ,"Application:onCreate:start4");
         try {
             AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
             mainRingerMode = am.getRingerMode();
         } catch (Exception e) {
         }
+        Log.d("bagi" ,"Application:onCreate:start5");
         new StartupActions();
      /*   try {
             WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);

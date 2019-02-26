@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.downloader.PRDownloader;
@@ -89,24 +90,34 @@ public final class StartupActions {
     public StartupActions() {
 
         detectDeviceType();
+
+        Log.d("bagi" ,"StartupActions:start1");
         //  EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
         initializeGlobalVariables();
+
+        Log.d("bagi" ,"StartupActions:start111");
         realmConfiguration();
+        Log.d("bagi" ,"StartupActions:start2");
         mainUserInfo();
         connectToServer();
         manageSettingPreferences();
+        Log.d("bagi" ,"StartupActions:start3");
         makeFolder();
         ConnectionManager.manageConnection();
+        Log.d("bagi" ,"StartupActions:start4");
         configDownloadManager();
         manageTime();
+        Log.d("bagi" ,"StartupActions:start5");
         getiGapAccountInstance();
 
+        Log.d("bagi" ,"StartupActions:start6");
         new CallObserver();
         /**
          * initialize download and upload listeners
          */
         new HelperUploadFile();
         checkDataUsage();
+        Log.d("bagi" ,"StartupActions:start7");
     }
 
     private void checkDataUsage() {
@@ -546,7 +557,7 @@ public final class StartupActions {
          * before call RealmConfiguration client need to Realm.init(context);
          */
         Realm.init(context);
-
+        Log.d("bagi" ,"realmConfiguration1");
 
         //  new SecureRandom().nextBytes(key);
 
@@ -560,10 +571,14 @@ public final class StartupActions {
                 .schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
         DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);*/
 
-        Realm configuredRealm = getInstance();
+        Realm configuredRealm = getInstance();//ohhhhhh
+
+        Log.d("bagi" ,"realmConfiguration22222");
+
         DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuredRealm.getConfiguration());
 
 
+        Log.d("bagi" ,"realmConfiguration2");
 
         /*if (configuration!=null)
             Realm.deleteRealm(configuration);*/
@@ -578,14 +593,22 @@ public final class StartupActions {
             Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
 
         }
+
+        Log.d("bagi" ,"realmConfiguration3");
         dynamicRealm.close();
         configuredRealm.close();
+        Log.d("bagi" ,"realmConfiguration4");
         try {
-            Realm.compactRealm(configuredRealm.getConfiguration());
+            RealmConfiguration aa = configuredRealm.getConfiguration();
+            Log.d("bagi" ,"realmConfiguration444444");
+            Realm.compactRealm(aa);//oohhhh
+            Log.d("bagi" ,"realmConfiguration55555555");
 
         } catch (UnsupportedOperationException e) {
             e.printStackTrace();
         }
+
+        Log.d("bagi" ,"realmConfiguration5");
     }
 
     public Realm getPlainInstance() {
@@ -595,7 +618,7 @@ public final class StartupActions {
 
     public Realm getInstance() {
         SharedPreferences sharedPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
-
+        Log.d("bagi", "getInstance1");
         String stringArray = sharedPreferences.getString("myByteArray", null);
         if (stringArray == null) {
             byte[] key = new byte[64];
@@ -605,6 +628,7 @@ public final class StartupActions {
             editor.putString("myByteArray", saveThis);
             editor.commit();
         }
+        Log.d("bagi", "getInstance2");
 
         byte[] mKey = Base64.decode(sharedPreferences.getString("myByteArray", null), Base64.DEFAULT);
         RealmConfiguration newConfig = new RealmConfiguration.Builder()
@@ -614,9 +638,11 @@ public final class StartupActions {
                 .migration(new RealmMigration())
                 .build();
 
+        Log.d("bagi", "getInstance3");
         File newRealmFile = new File(newConfig.getPath());
         if (newRealmFile.exists()) {
-            return Realm.getInstance(newConfig);
+            Log.d("bagi", "getInstance4");
+            return Realm.getInstance(newConfig);//ohhhhh
         } else {
             Realm realm = null;
             try {
@@ -628,15 +654,21 @@ public final class StartupActions {
                 realm.writeEncryptedCopyTo(newRealmFile, mKey);
                 realm.close();
                 Realm.deleteRealm(configuration);
+                Log.d("bagi", "getInstance5");
                 return Realm.getInstance(newConfig);
             } catch (OutOfMemoryError oom) {
+                Log.d("bagi", "getInstance6");
                 realm.close();
+                Log.d("bagi", "getInstance8");
                 return getPlainInstance();
             } catch (Exception e) {
+                Log.d("bagi", "getInstance7");
                 realm.close();
+                Log.d("bagi", "getInstance9");
                 return getPlainInstance();
 
             }
         }
+
     }
 }
