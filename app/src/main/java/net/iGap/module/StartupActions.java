@@ -85,7 +85,6 @@ import static net.iGap.G.userTextSize;
  * all actions that need doing after open app
  */
 public final class StartupActions {
-    private RealmConfiguration configuration;
 
     public StartupActions() {
 
@@ -566,7 +565,6 @@ public final class StartupActions {
 
         DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuredRealm.getConfiguration());
 
-
         /*if (configuration!=null)
             Realm.deleteRealm(configuration);*/
 
@@ -578,19 +576,29 @@ public final class StartupActions {
             //   Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
         } else {
             Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
-
         }
 
         dynamicRealm.close();
         configuredRealm.close();
-//        try {
-//            RealmConfiguration aa = configuredRealm.getConfiguration();
-//            Realm.compactRealm(aa);// ohhhh
-//
-//        } catch (UnsupportedOperationException e) {
-//            e.printStackTrace();
-//        }
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences("Counter", Context.MODE_PRIVATE);
+        int index = sharedPreferences.getInt("C", 0);
+        if (index == 10) {
+            index = 1;
+            try {
+                RealmConfiguration aa = configuredRealm.getConfiguration();
+                Realm.compactRealm(aa);// ohhhh
 
+            } catch (UnsupportedOperationException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            index = index +1;
+        }
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("C", index);
+        editor.apply();
     }
 
     public Realm getPlainInstance() {
@@ -624,7 +632,7 @@ public final class StartupActions {
         } else {
             Realm realm = null;
             try {
-                configuration = new RealmConfiguration.Builder().name(context.getResources().getString(R.string.planDB))
+                RealmConfiguration configuration = new RealmConfiguration.Builder().name(context.getResources().getString(R.string.planDB))
                         .schemaVersion(REALM_SCHEMA_VERSION)
                         .compactOnLaunch()
                         .migration(new RealmMigration()).build();
