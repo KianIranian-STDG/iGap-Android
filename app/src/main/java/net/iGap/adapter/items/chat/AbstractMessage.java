@@ -176,6 +176,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     protected void setTextIfNeeded(TextView view) {
         if (!TextUtils.isEmpty(myText)) {
             view.setText(myText);
+            // if this not work then use view.requestLayout();
             view.forceLayout();
             view.setVisibility(View.VISIBLE);
         } else {
