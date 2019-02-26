@@ -269,43 +269,49 @@ public class FragmentAddStickers extends BaseFragment {
                                     .onPositive(new MaterialDialog.SingleButtonCallback() {
                                         @Override
                                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                            progressBar.setVisibility(View.VISIBLE);
-                                            StructGroupSticker item = mData.get(getAdapterPosition());
-                                            String groupId = mData.get(getAdapterPosition()).getId();
-                                            mAPIService.addSticker(groupId).enqueue(new Callback<StructStickerResult>() {
-                                                @Override
-                                                public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
-                                                    progressBar.setVisibility(View.GONE);
-                                                    if (response.body() != null && response.body().isSuccess()) {
-                                                        mData.get(getAdapterPosition()).setIsFavorite(true);
-                                                        RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId);
-                                                        if (realmStickers == null) {
-                                                            Realm realm = Realm.getDefaultInstance();
-                                                            realm.executeTransaction(new Realm.Transaction() {
-                                                                @Override
-                                                                public void execute(Realm realm) {
-                                                                    RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
-                                                                }
-                                                            });
-                                                            realm.close();
 
-                                                        } else {
-                                                            RealmStickers.updateFavorite(mData.get(getAdapterPosition()).getId(), true);
+                                            try {
+                                                progressBar.setVisibility(View.VISIBLE);
+                                                StructGroupSticker item = mData.get(getAdapterPosition());
+                                                String groupId = mData.get(getAdapterPosition()).getId();
+                                                mAPIService.addSticker(groupId).enqueue(new Callback<StructStickerResult>() {
+                                                    @Override
+                                                    public void onResponse(Call<StructStickerResult> call, Response<StructStickerResult> response) {
+                                                        progressBar.setVisibility(View.GONE);
+                                                        if (response.body() != null && response.body().isSuccess()) {
+                                                            mData.get(getAdapterPosition()).setIsFavorite(true);
+                                                            RealmStickers realmStickers = RealmStickers.checkStickerExist(groupId);
+                                                            if (realmStickers == null) {
+                                                                Realm realm = Realm.getDefaultInstance();
+                                                                realm.executeTransaction(new Realm.Transaction() {
+                                                                    @Override
+                                                                    public void execute(Realm realm) {
+                                                                        RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), true);
+                                                                    }
+                                                                });
+                                                                realm.close();
+
+                                                            } else {
+                                                                RealmStickers.updateFavorite(mData.get(getAdapterPosition()).getId(), true);
+                                                            }
+                                                            if (FragmentChat.onUpdateSticker != null) {
+                                                                FragmentChat.onUpdateSticker.update();
+                                                            }
+                                                            notifyDataSetChanged();
                                                         }
-                                                        if (FragmentChat.onUpdateSticker != null) {
-                                                            FragmentChat.onUpdateSticker.update();
-                                                        }
-                                                        notifyDataSetChanged();
                                                     }
-                                                }
 
-                                                @Override
-                                                public void onFailure(Call<StructStickerResult> call, Throwable t) {
-                                                    progressBar.setVisibility(View.GONE);
+                                                    @Override
+                                                    public void onFailure(Call<StructStickerResult> call, Throwable t) {
+                                                        progressBar.setVisibility(View.GONE);
 
-                                                }
-                                            });
-
+                                                    }
+                                                });
+                                            } catch (ArrayIndexOutOfBoundsException e) {
+                                                e.printStackTrace();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
                                         }
                                     }).show();
                         }
