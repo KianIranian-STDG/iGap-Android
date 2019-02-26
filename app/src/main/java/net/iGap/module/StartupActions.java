@@ -607,7 +607,7 @@ public final class StartupActions {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             String saveThis = Base64.encodeToString(key, Base64.DEFAULT);
             editor.putString("myByteArray", saveThis);
-            editor.commit();
+            editor.apply();
         }
 
         byte[] mKey = Base64.decode(sharedPreferences.getString("myByteArray", null), Base64.DEFAULT);
