@@ -1,37 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/root_List_contact"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:clickable="true"
-  android:orientation="vertical">
-
-  <TextView
-    android:id="@+id/txtName"
-    android:layout_width="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/liContactItem"
+    style="?backgroundColorSettingTheme"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="start"
-    android:layout_marginEnd="20dp"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginStart="20dp"
-    android:text="name"
-    android:textSize="@dimen/dp18"
-    style="?textTitleColorSettingTheme"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dp52"
+    android:paddingEnd="@dimen/dp20"
+    android:paddingRight="@dimen/dp52">
 
-    />
 
-  <TextView
-    android:id="@+id/txtPhone"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="start"
-    android:layout_marginEnd="20dp"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    android:layout_marginStart="20dp"
-    style="?textSubColorSettingTheme"
-    android:text="phone"
-    android:textSize="@dimen/dp13" />
+    <View
+        android:id="@+id/topLine"
+        style="?lineColorSettingTheme"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="@dimen/dp8"
+        android:layout_marginLeft="@dimen/dp8"
+        android:layout_marginEnd="@dimen/dp20"
+        android:layout_marginRight="@dimen/dp20" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp16"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imgContact"
+            android:layout_width="@dimen/dp48"
+            android:layout_height="@dimen/dp48"
+            app:srcCompat="@drawable/add_chat_background" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp8"
+            android:layout_marginLeft="@dimen/dp8"
+            android:orientation="vertical">
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/title"
+                style="?textTitleColorSettingTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|start"
+                android:singleLine="true"
+                android:text="Dominika Faniz"
+                android:textSize="@dimen/dp16" />
+
+            <net.iGap.module.CustomTextViewMedium
+                android:id="@+id/subtitle"
+                style="?textSubColorSettingTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|start"
+                android:singleLine="true"
+                android:text="@string/last_seen_recently"
+                android:textSize="@dimen/dp14" />
+
+            <View
+                android:id="@+id/bottomLine"
+                style="?lineColorSettingTheme"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
+

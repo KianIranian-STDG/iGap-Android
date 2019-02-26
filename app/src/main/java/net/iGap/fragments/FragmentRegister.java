@@ -16,9 +16,11 @@ import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,20 +34,20 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.vicmikhailau.maskededittext.MaskedEditText;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.ActivityRegisterBinding;
 import net.iGap.helper.HelperCalander;
-import net.iGap.helper.HelperPermission;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnSmsReceive;
 import net.iGap.module.AppUtils;
-import net.iGap.module.IncomingSms;
+import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.viewmodel.FragmentRegisterViewModel;
-
-import java.io.IOException;
 
 public class FragmentRegister extends BaseFragment {
 
@@ -60,18 +62,20 @@ public class FragmentRegister extends BaseFragment {
     public static MaskedEditText edtPhoneNumber;
     public static TextView btnOk;
     public static int positionRadioButton = -1;
-    public static boolean smsPermission = true;
+
     public static OnStartAnimationRegister onStartAnimationRegister;
     private TextView txtAgreement_register;
     private ViewGroup layout_verify;
     //Array List for Store List of StructCountry Object
-    private IncomingSms smsReceiver;
+
     private FragmentActivity mActivity;
     private ScrollView scrollView;
     private int headerLayoutHeight;
     private LinearLayout headerLayout;
     private FragmentRegisterViewModel fragmentRegisterViewModel;
     private ActivityRegisterBinding fragmentRegisterBinding;
+    public static final String TAG = FragmentRegister.class.getSimpleName();
+    private SMSReceiver smsReceiver;
 
     @Nullable
     @Override
@@ -85,45 +89,9 @@ public class FragmentRegister extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         initBindView();
 
-        final IntentFilter filter = new IntentFilter();
-        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
-
-
-        smsReceiver = new IncomingSms(new OnSmsReceive() {
-
-            @Override
-            public void onSmsReceive(final String phoneNumber, final String message) {
-                try {
-                    if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
-                        //rg_txt_verify_sms.setText(message);
-                        fragmentRegisterViewModel.receiveVerifySms(message);
-                    }
-                } catch (Exception e1) {
-                    e1.getStackTrace();
-                }
-            }
-        });
-
-        try {
-            HelperPermission.getSmsPermision(G.fragmentActivity, new OnGetPermission() {
-                @Override
-                public void Allow() {
-                    smsPermission = true;
-                    G.fragmentActivity.registerReceiver(smsReceiver, filter);
-                }
-
-                @Override
-                public void deny() {
-                    smsPermission = false;
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        startSMSListener();
 
         TextView txtTitleToolbar = fragmentRegisterBinding.rgTxtTitleToolbar;
         Typeface titleTypeface;
@@ -210,6 +178,73 @@ public class FragmentRegister extends BaseFragment {
 
     }
 
+
+    private void startSMSListener() {
+        try {
+            smsReceiver = new SMSReceiver();
+            smsReceiver.setOTPListener(new SMSReceiver.OTPReceiveListener() {
+                @Override
+                public void onOTPReceived(String message) {
+
+                    try {
+                        if (message != null && message.length()>0) {
+                            fragmentRegisterViewModel.receiveVerifySms(message);
+                        }
+                    } catch (Exception e1) {
+                        e1.getStackTrace();
+                    }
+
+                    unregisterReceiver();
+                }
+
+                @Override
+                public void onOTPTimeOut() {
+                    Log.e(TAG,"OTP Time out");
+                }
+
+                @Override
+                public void onOTPReceivedError(String error) {
+                    Log.e(TAG,error);
+                }
+            });
+
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
+            G.fragmentActivity.registerReceiver(smsReceiver, intentFilter);
+
+            SmsRetrieverClient client = SmsRetriever.getClient(getActivity());
+
+            Task<Void> task = client.startSmsRetriever();
+            task.addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.e(TAG,"sms API successfully started   ");
+                }
+            });
+
+            task.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG,"sms Fail to start API   ");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void unregisterReceiver(){
+        try {
+            if(smsReceiver !=null){
+                G.fragmentActivity.unregisterReceiver(smsReceiver);
+                smsReceiver=null;
+            }
+        }catch (RuntimeException e){
+            e.printStackTrace();
+        }
+    }
+
     private void initBindView() {
         fragmentRegisterViewModel = new FragmentRegisterViewModel(this, fragmentRegisterBinding.getRoot(), mActivity);
         fragmentRegisterBinding.setFragmentRegisterViewModel(fragmentRegisterViewModel);
@@ -267,17 +302,7 @@ public class FragmentRegister extends BaseFragment {
     public void onStop() {
         super.onStop();
 
-
-        try {
-            if (smsPermission) {
-                if (G.fragmentActivity.isRestricted()) {
-                    G.fragmentActivity.unregisterReceiver(smsReceiver);
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        unregisterReceiver();
         fragmentRegisterViewModel.onStop();
         super.onStop();
     }

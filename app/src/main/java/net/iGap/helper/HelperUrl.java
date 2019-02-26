@@ -68,12 +68,10 @@ import net.iGap.request.RequestClientResolveUsername;
 
 import org.chromium.customtabsclient.CustomTabsActivityHelper;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -350,7 +348,7 @@ public class HelperUrl {
                 String botCommandText = strBuilder.toString().substring(start, end);
 
                 if (G.onBotClick != null) {
-                    G.onBotClick.onBotCommandText(botCommandText);
+                    G.onBotClick.onBotCommandText(botCommandText, 0);
                 }
             }
 
@@ -672,7 +670,7 @@ public class HelperUrl {
     }
 
     private static boolean isDigitLink(String text) {
-        return text.matches("\\d{5,}");
+        return text.matches("^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{2,4})(?:[-.x ]*(\\d+))?)\\s*$");
     }
 
     private static boolean isBotLink(String text) {
@@ -708,7 +706,7 @@ public class HelperUrl {
         return result;
     }
 
-    private static void checkAndJoinToRoom(final String token) {
+    public static void checkAndJoinToRoom(final String token) {
 
         if (token == null || token.length() < 0 || isInCurrentChat(token)) return;
 

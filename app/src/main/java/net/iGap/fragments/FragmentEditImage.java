@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -306,10 +307,8 @@ public class FragmentEditImage extends BaseFragment {
                 }
                 closeKeyboard(v);
                 v.setVisibility(View.GONE);
-
             }
         });
-
 
         edtChat.requestFocus();
 
@@ -459,17 +458,17 @@ public class FragmentEditImage extends BaseFragment {
             case Theme.TEAL_COMPLETE:
             case Theme.DARK:
 
-                setEmojiColor(view,G.backgroundTheme_2, G.textTitleTheme, G.textTitleTheme);
+                setEmojiColor(view,G.getTheme2BackgroundColor(), G.textTitleTheme, G.textTitleTheme);
                 break;
             default:
-                setEmojiColor(view,"#eceff1", "#61000000", "#61000000");
+                setEmojiColor(view,Color.parseColor("#eceff1"), "#61000000", "#61000000");
 
 
         }
 
     }
 
-    private void setEmojiColor(View view,String BackgroundColor, String iconColor, String dividerColor) {
+    private void setEmojiColor(View view,int BackgroundColor, String iconColor, String dividerColor) {
 
         emojiPopup = EmojiPopup.Builder.fromRootView(view.findViewById(R.id.ac_ll_parent))
                 .setOnEmojiBackspaceClickListener(new OnEmojiBackspaceClickListener() {
@@ -501,7 +500,7 @@ public class FragmentEditImage extends BaseFragment {
                         emojiPopup.dismiss();
                     }
                 })
-                .setBackgroundColor(Color.parseColor(BackgroundColor))
+                .setBackgroundColor(BackgroundColor)
                 .setIconColor(Color.parseColor(iconColor))
                 .setDividerColor(Color.parseColor(dividerColor))
                 .build(edtChat);
@@ -716,10 +715,19 @@ public class FragmentEditImage extends BaseFragment {
         int po = (viewPager.getCurrentItem());
 
         if (textImageList.containsKey(itemGalleryList.get(po).getPath())) {
-            textImageList.get(itemGalleryList.get(po).getPath()).setPath(path);
-        }
-        itemGalleryList.get(viewPager.getCurrentItem()).setPath(path);
 
+            String message = textImageList.get(itemGalleryList.get(po).getPath()).getText();
+            int id = textImageList.get(itemGalleryList.get(po).getPath()).getId();
+
+            textImageList.remove(itemGalleryList.get(po).getPath());
+            StructBottomSheet item = new StructBottomSheet();
+            item.setPath(path);
+            item.setText(message);
+            item.setId(id);
+
+            textImageList.put(path, item);
+        }
+        itemGalleryList.get(po).setPath(path);
 
         mAdapter.notifyDataSetChanged();
 

@@ -77,7 +77,7 @@ class PaymentEntryListAdapter extends RecyclerView.Adapter<PaymentEntryListAdapt
             title2 = view.findViewById(R.id.title2);
             value = view.findViewById(R.id.value);
             divider = view.findViewById(R.id.divider);
-            Typefaces.setTypeface(mContext, Typefaces.IRAN_YEKAN_REGULAR, title1, title2, value);
+            Typefaces.setTypeface(mContext, Typefaces.IRAN_MEDIUM, title1, title2, value);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

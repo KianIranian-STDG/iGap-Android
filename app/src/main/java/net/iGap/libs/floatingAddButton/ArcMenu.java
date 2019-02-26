@@ -30,8 +30,6 @@ import java.util.List;
 @CoordinatorLayout.DefaultBehavior(MoveUpwardBehaviour.class)
 public class ArcMenu extends FrameLayout {
 
-    private static final double POSITIVE_QUADRANT = 90;
-    private static final double NEGATIVE_QUADRANT = -90;
     private static final double ANGLE_FOR_ONE_SUB_MENU = 0;
     private static final int ANIMATION_TIME = 300; //This time is in milliseconds
 
@@ -95,6 +93,7 @@ public class ArcMenu extends FrameLayout {
 
         mFinalRadius = attr.getDimension(R.styleable.ArcMenu_menu_radius, resources.getDimension(R.dimen.dp100));
         mElevation = attr.getDimension(R.styleable.ArcMenu_menu_elevation, resources.getDimension(R.dimen.dp6));
+        mQuadrantAngle = attr.getInteger(R.styleable.ArcMenu_menu_angle, 90);
         mMenuSideEnum = MenuSideEnum.fromId(attr.getInt(R.styleable.ArcMenu_menu_open, 0));
         mAnimationTime = attr.getInteger(R.styleable.ArcMenu_menu_animation_time, ANIMATION_TIME);
         revConfig = attr.getBoolean(R.styleable.ArcMenu_menu_config, false);
@@ -117,25 +116,17 @@ public class ArcMenu extends FrameLayout {
         //if (mColorStateList == null) {
         //    mColorStateList = ColorStateList.valueOf(getThemeAccentColor(getContext(), R.attr.colorAccent));
         //}
-
         if (mMenuSideEnum == MenuSideEnum.ARC_LEFT) {
-
             if (revConfig) {
-                if (!HelperCalander.isPersianUnicode) {
-                    mQuadrantAngle = -90;
-                } else {
-                    mQuadrantAngle = +90;
-                }
+                if (!HelperCalander.isPersianUnicode)
+                    mQuadrantAngle = -mQuadrantAngle;
             } else {
-                if (!HelperCalander.isPersianUnicode) {
-                    mQuadrantAngle = +90;
-                } else {
-                    mQuadrantAngle = -90;
-                }
+                if (HelperCalander.isPersianUnicode)
+                    mQuadrantAngle = -mQuadrantAngle;
             }
 
         } else {
-            mQuadrantAngle = NEGATIVE_QUADRANT;
+            mQuadrantAngle = -mQuadrantAngle;
         }
 
         menuMargin = attr.getDimensionPixelSize(R.styleable.ArcMenu_menu_margin, resources.getDimensionPixelSize(R.dimen.dp8));
@@ -277,8 +268,9 @@ public class ArcMenu extends FrameLayout {
             height += (radius + maxHeight);
         }
 
-        width += menuMargin;
-        height += menuMargin;
+        Resources resources = getResources();
+        width += menuMargin + resources.getDimension(R.dimen.dp4);
+        height += menuMargin + resources.getDimension(R.dimen.dp4);
         setMeasuredDimension(width, height);
     }
 

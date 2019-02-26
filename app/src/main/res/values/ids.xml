@@ -50,7 +50,6 @@
   <item name="cslr_txt_prefix_forward" type="id" />
   <item name="cslr_txt_forward_from" type="id" />
   <item name="lyt_vote" type="id" />
-  <item name="lyt_vote_sub" type="id" />
   <item name="lyt_vote_up" type="id" />
   <item name="txt_vote_up" type="id" />
   <item name="img_vote_up" type="id" />
@@ -86,6 +85,7 @@
   <item name="swipeEdit" type="id" />
   <item name="rootRegisterContact" type="id" />
   <item name="animateCheckBoxContact" type="id" />
+  <item name="sticker_layout" type="id" />
 
 
 </resources>

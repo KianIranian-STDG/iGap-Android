@@ -10,15 +10,16 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.vanniktech.emoji.EmojiUtils;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.proto.ProtoGlobal;
@@ -29,8 +30,8 @@ import io.realm.Realm;
 
 public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
-    public TextItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public TextItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
     @Override
@@ -45,66 +46,17 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getTextItem());
-        }
-
-
         super.bindView(holder, payloads);
 
-        String text;
-        if (mMessage.forwardedFrom != null) {
-            text = mMessage.forwardedFrom.getMessage();
-        } else {
-            text = mMessage.messageText;
-        }
-
         if (mMessage.hasEmojiInText) {
-
-            EmojiTextViewE textViewE = (EmojiTextViewE) holder.itemView.findViewById(R.id.messageSenderTextMessage);
-
-            if (text.length() <= 2) {
-
-                if (EmojiUtils.emojisCount(text) == 1) {
-                    textViewE.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp28));
+            if (myText.length() <= 2) {
+                if (EmojiUtils.emojisCount((String) myText) == 1) {
+                    holder.messageView.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp28));
                 }
             }
-
-            setTextIfNeeded(textViewE, text);
-
-
-        } else {
-            setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
         }
 
-        messageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                holder.itemView.performLongClick();
-                return false;
-            }
-        });
-
-        messageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (G.isLinkClicked) {
-                    G.isLinkClicked = false;
-                    return;
-                }
-                if (!isSelected()) {
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                        return;
-                    }
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
-                    } else {
-                        messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
-                    }
-                }
-            }
-        });
+        setTextIfNeeded(holder.messageView);
     }
 
     @Override
@@ -112,12 +64,12 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
-        //  protected LinearLayout llTime;
+    protected static class ViewHolder extends ChatItemWithTextHolder {
 
         public ViewHolder(View view) {
             super(view);
-            // llTime = (LinearLayout) view.findViewById(R.id.csl_ll_time);
+            LinearLayout.LayoutParams layout_577 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            setLayoutMessageContainer(layout_577);
         }
     }
 }

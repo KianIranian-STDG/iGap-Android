@@ -1,11 +1,14 @@
 package org.paygear.wallet;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -53,9 +56,17 @@ public class WalletActivity extends NavigationBarActivity {
     public static String LANGUAGE = "LANGUAGE";
     public static boolean isDarkTheme = false;
     public static String selectedLanguage = "en";
-    public static boolean isResetPassword = false;
+    public static RefreshLayout refreshLayout;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        WalletActivity.setRefresh = false;
+    }
+
     public static String SH_SETTING = "SH_SETTING";
     public static String RESET_PASSWORD = "RESET_PASSWORD";
+    public static boolean setRefresh = false;
 
 
     @Override
@@ -65,20 +76,26 @@ public class WalletActivity extends NavigationBarActivity {
         navBarView.setVisibility(View.GONE);
 
 
-   //     Utils.setLocale(this, "fa");
+        //     Utils.setLocale(this, "fa");
 
         WebBase.apiKey = Web.API_KEY;
         WebBase.isDebug = true;
         WebBase.onResponseListener = new OnWebResponseListener() {
+
             @Override
-            public boolean onResponse(Context context, Response response) {
-                /*if (context instanceof NavigationBarActivity) {
+            public boolean onResponse(Context context, Response response, Fragment fragment) {
+                   /*if (context instanceof NavigationBarActivity) {
                     if (response.code() == 401 || response.code() == 403) {
                         Utils.signOutAndGoLogin((NavigationBarActivity) context);
                         return false;
                     }
                 }*/
                 return true;
+            }
+
+            @Override
+            public boolean onActivityResponse(Context context, Response response, AppCompatActivity appCompatActivity) {
+                return false;
             }
         };
 
@@ -96,6 +113,15 @@ public class WalletActivity extends NavigationBarActivity {
         lineBorder = intent.getStringExtra(LINE_BORDER);
         backgroundTheme = intent.getStringExtra(BACKGROUND);
         backgroundTheme_2 = intent.getStringExtra(BACKGROUND_2);
+
+        if (backgroundTheme_2.length() == 9) {
+            backgroundTheme_2 = "#FF" + backgroundTheme_2.substring(3);
+        }
+
+        if (backgroundTheme.length() == 9) {
+            backgroundTheme = "#FF" + backgroundTheme.substring(3);
+        }
+
         textTitleTheme = intent.getStringExtra(TEXT_TITLE);
         textSubTheme = intent.getStringExtra(TEXT_SUB_TITLE);
 
@@ -122,5 +148,11 @@ public class WalletActivity extends NavigationBarActivity {
     @Override
     protected boolean isNavBarShowingOnSwitchFragment(String fragmentName) {
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

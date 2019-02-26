@@ -10,13 +10,21 @@
 
 package net.iGap.adapter.items.chat;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperLogMessage;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.proto.ProtoGlobal;
@@ -24,11 +32,15 @@ import net.iGap.proto.ProtoGlobal;
 import java.util.List;
 
 import io.realm.Realm;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
+
+import static android.view.Gravity.CENTER;
+import static net.iGap.G.isDarkTheme;
 
 public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
-    public LogItem(Realm realmChat, IMessageItem messageClickListener) {
-        super(realmChat, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
+    public LogItem(MessagesAdapter<AbstractMessage> mAdapter, IMessageItem messageClickListener) {
+        super(mAdapter, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
     }
 
     @Override
@@ -43,14 +55,6 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
     @Override
     public void bindView(ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.csll_txt_log_text) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getLogItem());
-        }
-
-        holder.text = (TextView) holder.itemView.findViewById(R.id.csll_txt_log_text);
-        holder.text.setMovementMethod(LinkMovementMethod.getInstance());
-
         super.bindView(holder, payloads);
         holder.text.setText(HelperLogMessage.deserializeLog(mMessage.logs, true));
     }
@@ -66,11 +70,21 @@ public class LogItem extends AbstractMessage<LogItem, LogItem.ViewHolder> {
 
         public ViewHolder(View view) {
             super(view);
-            /**
-             *  this commented code used with xml layout
-             */
-            //text = (TextView) view.findViewById(R.id.csll_txt_log_text);
-            //text.setMovementMethod(LinkMovementMethod.getInstance());
+            text = (TextView) ViewMaker.getLogItemView();
+
+            ((ViewGroup) itemView).addView(text);
+
+            text.setMovementMethod(LinkMovementMethod.getInstance());
+            BetterLinkMovementMethod
+                    .linkify(Linkify.ALL, text)
+                    .setOnLinkClickListener((tv, url) -> {
+                        Log.d("bagi" , "OnTextLinkClick");
+                        return FragmentChat.isInSelectionMode;
+                    })
+                    .setOnLinkLongClickListener((tv, url) -> {
+                        Log.d("bagi" , "OnTextLinkLongClick");
+                        return true;
+                    });
         }
     }
 }

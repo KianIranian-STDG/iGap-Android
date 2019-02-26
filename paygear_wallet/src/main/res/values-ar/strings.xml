@@ -162,7 +162,7 @@
   <string name="cashout_today_limit">سقف برداشت امروز</string>
   <string name="cash_out_request_done">درخواست تسویه انجام شد</string>
   <string name="cashout_request">درخواست تسویه</string>
-  <string name="paygear_card_pin">رمز کیف پولکارت</string>
+  <string name="paygear_card_pin">رمز کیف پول</string>
   <string name="qr">کیوآر</string>
   <string name="scanner">اسکنر</string>
   <string name="wallet">کیف پول</string>
@@ -295,5 +295,22 @@
   <string name="your_password">رمز المرور  </string>
 
   <string name="Toast_time_wait">من فضلك انتظر حتى  :</string>
-
+    <string name="default_sheba_number">Default IBAN number</string>
+  <string name="default_sheba_number_message">Do you want to save this IBAN number as default IBAN number?\\n Attention! All Automatic normal cashout will use this IBAN Number until you change it,</string>
+  <string name="recover_password">Recover password</string>
+    <string name="cash_out_two_wallet_hint">Enter Cash out amount then your merchant balance will transfer to your personal wallet</string>
+  <string name="cash_to_wallet">to Personal wallet</string>
+    <string name="person">person</string>
+  <string name="club_balance_not_enough">مبلغ از موجودی این کارت  بیشتر است.</string>
+  <string name="enter_four_digit_code">Enter Four digits code that we`ve sent to your phone number</string>
+  <string name="four_digit_code">Four digit code</string>
+  <string name="show_receipt">مشاهده رسید</string>
+  <string name="reciever_name">Receiver</string>
+  <string name="date_time">date and time</string>
+  <string name="transaction_type">Transaction Type</string>
+  <string name="purchase">Purchase</string>
+  <string name="remaining_balance">Remaining balance</string>
+  <string name="refound">money transferred to your wallet</string>
+  <string name="Recently_Sticker">مؤخرا</string>
+  <string name="Favorite_Sticker">مفضل</string>
 </resources>

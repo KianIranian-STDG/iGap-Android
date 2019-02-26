@@ -30,8 +30,18 @@ public class BankUtils {
         return code;
     }
 
-    public String getName() {
-        return name;
+    public String getName(Context context) {
+        if (code != 69)
+            return name;
+        else if (cardNumber != null) {
+            if (cardNumber.equals("پیگیر کارت"))
+                return name;
+            else {
+                return cardNumber;
+            }
+        }else {
+            return name;
+        }
     }
 
     public String getCardNumber() {
@@ -142,6 +152,29 @@ public class BankUtils {
                 return getBank(context, 0);
         }
 
+    }
+
+    public static BankUtils getBank(Context context, int code, String cardNumber) {
+
+        if (code != 69) {
+            return getBank(context, code);
+        } else {
+            BankUtils bank;
+            if (dp10 == 0)
+                dp10 = RaadCommonUtils.getPx(10, context);
+            if (cardNumber.equals("پیگیر کارت"))
+                return getBank(context, code);
+            else {
+                bank = new BankUtils();
+                bank.code = 69;
+                bank.name = context.getString(R.string.paygear_card);
+                bank.logoRes = 0;//R.drawable.paygear_logo_wide;
+                bank.color = Color.BLACK;
+                bank.backgroundDrawable = getBack(bank.color);
+                bank.cardNumber = cardNumber;
+                return bank;
+            }
+        }
     }
 
     public static BankUtils getBank(Context context, int code) {
@@ -440,7 +473,6 @@ public class BankUtils {
                 bank.backgroundDrawable = getBack(bank.color);
                 break;
         }
-
 
 
         return bank;

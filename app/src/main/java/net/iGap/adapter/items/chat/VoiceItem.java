@@ -13,21 +13,26 @@ package net.iGap.adapter.items.chat;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnComplete;
+import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.enums.LocalFileType;
@@ -45,11 +50,8 @@ import static net.iGap.fragments.FragmentChat.getRealmChat;
 
 public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> {
 
-    private long roomId;
-
-
-    public VoiceItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public VoiceItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
 
@@ -85,18 +87,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getVoiceItem());
-        }
-
-        holder.thumbnail = (ImageView) holder.itemView.findViewById(R.id.thumbnail);
-        holder.author = (TextView) holder.itemView.findViewById(R.id.cslv_txt_author);
-        holder.btnPlayMusic = (TextView) holder.itemView.findViewById(R.id.csla_btn_play_music);
-        holder.txt_Timer = (TextView) holder.itemView.findViewById(R.id.csla_txt_timer);
-        holder.musicSeekbar = (SeekBar) holder.itemView.findViewById(R.id.csla_seekBar1);
         holder.musicSeekbar.setTag(mMessage.messageID);
-        //tic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
 
         holder.complete = new OnComplete() {
             @Override
@@ -142,16 +133,15 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             }
         };
 
-        holder.itemView.findViewById(R.id.mainContainer).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        holder.btnPlayMusic.setOnLongClickListener(getLongClickPerform(holder));
 
         holder.btnPlayMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (FragmentChat.isInSelectionMode) {
+                    holder.itemView.performLongClick();
+                    return;
+                }
 
                 if (holder.mFilePath.length() < 1) return;
 
@@ -184,8 +174,11 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
                 if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (FragmentChat.isInSelectionMode) {
+                        holder.itemView.performLongClick();
+                        return true;
+                    }
                     if (holder.mMessageID.equals(MusicPlayer.messageId)) {
                         MusicPlayer.setMusicProgress(holder.musicSeekbar.getProgress());
                     }
@@ -292,8 +285,9 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
 
+        protected MessageProgress progress;
         protected ImageView thumbnail;
         //protected ImageView tic;
         protected TextView btnPlayMusic;
@@ -309,72 +303,113 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
 
         public ViewHolder(View view) {
             super(view);
-            /**
-             *  this commented code used with xml layout
-             */
-            //thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            //author = (TextView) view.findViewById(R.id.cslv_txt_author);
-            //btnPlayMusic = (TextView) view.findViewById(R.id.csla_btn_play_music);
-            //txt_Timer = (TextView) view.findViewById(R.id.csla_txt_timer);
-            //musicSeekbar = (SeekBar) view.findViewById(R.id.csla_seekBar1);
-            //
-            //complete = new OnComplete() {
-            //    @Override public void complete(boolean result, String messageOne, final String MessageTow) {
-            //
-            //        if (messageOne.equals("play")) {
-            //            btnPlayMusic.setText(R.string.md_play_arrow);
-            //        } else if (messageOne.equals("pause")) {
-            //            btnPlayMusic.setText(R.string.md_pause_button);
-            //        } else if (messageOne.equals("updateTime")) {
-            //            txt_Timer.post(new Runnable() {
-            //                @Override public void run() {
-            //                    txt_Timer.setText(MessageTow + "/" + mTimeMusic);
-            //
-            //                    if (HelperCalander.isPersianUnicode) txt_Timer.setText(HelperCalander.convertToUnicodeFarsiNumber(txt_Timer.getText().toString()));
-            //
-            //                    musicSeekbar.setProgress(MusicPlayer.musicProgress);
-            //                }
-            //            });
-            //        }
-            //    }
-            //};
-            //
-            //btnPlayMusic.setOnClickListener(new View.OnClickListener() {
-            //    @Override public void onClick(View v) {
-            //
-            //        if (mFilePath.length() < 1) return;
-            //
-            //        if (mMessageID.equals(MusicPlayer.messageId)) {
-            //            MusicPlayer.onCompleteChat = complete;
-            //
-            //            if (MusicPlayer.mp != null) {
-            //                MusicPlayer.playAndPause();
-            //            } else {
-            //                MusicPlayer.startPlayer(mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, mMessageID);
-            //            }
-            //        } else {
-            //
-            //            MusicPlayer.stopSound();
-            //            MusicPlayer.onCompleteChat = complete;
-            //            MusicPlayer.startPlayer(mFilePath, ActivityChat.titleStatic, ActivityChat.mRoomIdStatic, true, mMessageID);
-            //
-            //            mTimeMusic = MusicPlayer.musicTime;
-            //        }
-            //    }
-            //});
-            //
-            //musicSeekbar.setOnTouchListener(new View.OnTouchListener() {
-            //
-            //    @Override public boolean onTouch(View v, MotionEvent event) {
-            //
-            //        if (event.getAction() == MotionEvent.ACTION_UP) {
-            //            if (mMessageID.equals(MusicPlayer.messageId)) {
-            //                MusicPlayer.setMusicProgress(musicSeekbar.getProgress());
-            //            }
-            //        }
-            //        return false;
-            //    }
-            //});
+            LinearLayout linearLayout_197 = new LinearLayout(G.context);
+            linearLayout_197.setGravity(Gravity.CENTER_VERTICAL);
+            setLayoutDirection(linearLayout_197, View.LAYOUT_DIRECTION_LTR);
+            linearLayout_197.setMinimumHeight(i_Dp(R.dimen.dp95));
+            linearLayout_197.setMinimumWidth(i_Dp(R.dimen.dp220));
+            linearLayout_197.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams layout_80 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            linearLayout_197.setLayoutParams(layout_80);
+
+            LinearLayout audioPlayerViewContainer = new LinearLayout(G.context);
+            audioPlayerViewContainer.setId(R.id.audioPlayerViewContainer);
+            audioPlayerViewContainer.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams layout_868 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            audioPlayerViewContainer.setLayoutParams(layout_868);
+
+            LinearLayout linearLayout_153 = new LinearLayout(G.context);
+            LinearLayout.LayoutParams layout_928 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            linearLayout_153.setLayoutParams(layout_928);
+
+            //****************************
+            FrameLayout frameLayout_161 = new FrameLayout(G.context);
+
+            int pading = i_Dp(R.dimen.dp4);
+            frameLayout_161.setPadding(pading, pading, pading, pading);
+
+            LinearLayout.LayoutParams layout_1488 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp40), i_Dp(R.dimen.dp40));
+            layout_1488.gravity = Gravity.CENTER;
+            frameLayout_161.setLayoutParams(layout_1488);
+
+            thumbnail = new ImageView(G.context);
+            thumbnail.setId(R.id.thumbnail);
+            FrameLayout.LayoutParams layout_152 = new FrameLayout.LayoutParams(i_Dp(R.dimen.dp20), i_Dp(R.dimen.dp20));
+            layout_152.gravity = Gravity.CENTER;
+            AppUtils.setImageDrawable(thumbnail, R.drawable.microphone_icon);
+            thumbnail.setLayoutParams(layout_152);
+            frameLayout_161.addView(thumbnail);
+            progress = getProgressBar(0);
+            frameLayout_161.addView(progress);
+            linearLayout_153.addView(frameLayout_161);
+
+            author = new TextView(G.context);
+            author.setId(R.id.cslv_txt_author);
+            author.setText("recorded voice");
+            author.setTextColor(Color.parseColor(G.textBubble));
+            author.setSingleLine(true);
+            setTextSize(author, R.dimen.dp14);
+            author.setMaxLines(2);
+            setTypeFace(author);
+            // cslv_txt_author.setEllipsize(TextUtils.TruncateAt.END);
+            LinearLayout.LayoutParams layout_799 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layout_799.topMargin = i_Dp(R.dimen.dp12);
+            author.setLayoutParams(layout_799);
+            linearLayout_153.addView(author);
+            audioPlayerViewContainer.addView(linearLayout_153);
+
+            LinearLayout linearLayout_503 = new LinearLayout(G.context);
+            linearLayout_503.setGravity(Gravity.LEFT | Gravity.CENTER);
+            linearLayout_503.setMinimumHeight(i_Dp(R.dimen.dp32));
+            LinearLayout.LayoutParams layout_669 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
+            linearLayout_503.setLayoutParams(layout_669);
+
+            btnPlayMusic = new TextView(G.context);
+            btnPlayMusic.setId(R.id.csla_btn_play_music);
+            btnPlayMusic.setBackgroundResource(0);
+            btnPlayMusic.setGravity(Gravity.CENTER);
+            btnPlayMusic.setEnabled(false);
+            btnPlayMusic.setText(G.fragmentActivity.getResources().getString(R.string.md_play_arrow));
+            btnPlayMusic.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
+            setTextSize(btnPlayMusic, R.dimen.dp20);
+            btnPlayMusic.setTypeface(G.typeface_Fontico);
+            LinearLayout.LayoutParams layout_978 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp40), ViewGroup.LayoutParams.MATCH_PARENT);
+            btnPlayMusic.setLayoutParams(layout_978);
+            linearLayout_503.addView(btnPlayMusic);
+
+            musicSeekbar = new SeekBar(G.context);
+            musicSeekbar.setId(R.id.csla_seekBar1);
+            LinearLayout.LayoutParams layout_652 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+            musicSeekbar.setLayoutParams(layout_652);
+            linearLayout_503.addView(musicSeekbar);
+            audioPlayerViewContainer.addView(linearLayout_503);
+
+            txt_Timer = new TextView(G.context);
+            txt_Timer.setId(R.id.csla_txt_timer);
+            txt_Timer.setPadding(0, 0, i_Dp(R.dimen.dp8), 0);
+            txt_Timer.setText("00:00");
+            txt_Timer.setTextColor(G.context.getResources().getColor(R.color.toolbar_background));
+            setTextSize(txt_Timer, R.dimen.dp10);
+            setTypeFace(txt_Timer);
+            LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            layout_758.gravity = Gravity.RIGHT;
+            layout_758.leftMargin = i_Dp(R.dimen.dp52);
+            txt_Timer.setLayoutParams(layout_758);
+
+            audioPlayerViewContainer.addView(txt_Timer);
+            linearLayout_197.addView(audioPlayerViewContainer);
+
+            m_container.addView(linearLayout_197);
+        }
+
+        @Override
+        public ImageView getThumbNailImageView() {
+            return thumbnail;
+        }
+
+        @Override
+        public MessageProgress getProgress() {
+            return progress;
         }
     }
 }

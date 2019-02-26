@@ -29,16 +29,19 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-//        implementation(name: 'raadcore', ext: 'aar')
+    //        implementation(name: 'raadcore', ext: 'aar')
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
     implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation project(':raadcore')
+    implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
+    implementation 'com.nightonke:jellytogglebutton:1.0.2'
+    implementation 'me.zhanghai.android.customtabshelper:library:1.0.3'
+    implementation project(':paygearcore')
 }

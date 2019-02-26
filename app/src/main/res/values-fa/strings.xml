@@ -4,31 +4,35 @@
     <string name="text_i_introduce_page1">"گپ"</string>
     <string name="text_line_1_introduce_page1">"آی"</string>
     <string name="text_line_2_introduce_page1">"ارتباطی بی حد و مرز"</string>
-    <string name="text_line_3_introduce_page1">"هم اکنون دنیای خود را با آی گپ بسازید."</string>
+    <string name="text_line_3_introduce_page1">"هم اکنون دنیای خود را با آیگپ بسازید."</string>
     <string name="text_line_4_introduce_page1">"فقط چند دقیقه زمان میبرد تا شما هم به جمع آی گپی ها بپیوندید."</string>
 
     <!-- Page 2 introduce app -->
-    <string name="text_line_1_introduce_page2">"امنیت در آی گپ"</string>
-    <string name="text_line_2_introduce_page2">"آی گپ یک ارتباط امن و مطمئن را بین شما، دوستان و خانوادتان برقرار میکند. پیام رسانِ آی گپ با استفاده از الگوریتم های رمزنگاری منحصربفرد در جابجایی همه داده های شما حداکثر امنیت را برای حفظ حریم خصوصی شما فراهم آورده است."</string>
+    <string name="text_line_1_introduce_page2">"امنیت در آیگپ"</string>
+    <string name="text_line_2_introduce_page2">"آیگپ یک ارتباط امن و مطمئن را بین شما، دوستان و خانوادتان برقرار میکند. پیام رسانِ آیگپ با استفاده از الگوریتم های رمزنگاری منحصربفرد در جابجایی همه داده های شما حداکثر امنیت را برای حفظ حریم خصوصی شما فراهم آورده است."</string>
 
 
     <!-- Page 3 introduce app -->
-    <string name="text_line_1_introduce_page3">"گفتگو در آی گپ"</string>
-    <string name="text_line_2_introduce_page3">"شما میتوانید در آی گپ بصورت دونفره و یا گروهی به گفتگو بپردازید و خیالتان راحت باشد که همیشه به گفتگو های خود دسترسی دارید، همچنین میتوانید کانال بسازید و در آن عضو بگیرید و اطلاعات خود را بین میلیون ها کاربر دیگر نیز به اشتراک بگذارید."</string>
+    <string name="text_line_1_introduce_page3">"گفتگو در آیگپ"</string>
+    <string name="text_line_2_introduce_page3">"شما میتوانید در آیگپ بصورت دونفره و یا گروهی به گفتگو بپردازید و خیالتان راحت باشد که همیشه به گفتگو های خود دسترسی دارید، همچنین میتوانید کانال بسازید و در آن عضو بگیرید و اطلاعات خود را بین میلیون ها کاربر دیگر نیز به اشتراک بگذارید."</string>
 
     <!-- Page 4 introduce app -->
-    <string name="text_line_1_introduce_page4">"انتقال فایل در آی گپ"</string>
+    <string name="text_line_1_introduce_page4">"انتقال فایل در آیگپ"</string>
     <string name="text_line_2_introduce_page4">"شما می توانید هر فایلی را با هر پسوند و حجمی انتقال دهید و یا در بستر ابری خود ذخیره کنید. هر آنچه دوست دارید را بدون محدودیت با هر کس که می خواهید به اشتراک بگذارید."</string>
 
 
     <!-- Page 5 introduce app -->
-    <string name="text_line_1_introduce_page5">"تماس صوتی در آی گپ"</string>
-    <string name="text_line_2_introduce_page5">"شما میتوانید بر بستر آی گپ با سایر کاربرانِ آی گپ تماس صوتیِ کاملاً رایگان و امن برقرار کنید و در هزینه های خود صرفه جویی نمایید، همچنین تماس صوتی آی گپ P2P بوده و حتی سرور های آی گپ هم در جابجایی صدای شما دخالت ندارند."</string>
+    <string name="text_line_1_introduce_page5">"تماس صوتی و تصویری در آیگپ"</string>
+    <string name="text_line_2_introduce_page5">"شما میتوانید بر بستر آیگپ با سایر کاربرانِ آیگپ تماس صوتیِ و تصویری کاملاً رایگان و امن برقرار کنید و در هزینه های خود صرفه جویی نمایید، همچنین تماس ها در آیگپ P2P بوده و حتی سرور های آیگپ هم در جابجایی صدا و تصویر شما دخالت ندارند."</string>
 
     <!-- Page 6 introduce app -->
     <string name="btn_start_page6">"همین حالا شروع کنید"</string>
-    <string name="text_line_1_introduce_page6">"همه چیز رایگان در آی گپ!"</string>
-    <string name="text_line_2_introduce_page6">"آی گپ همیشه رایگان بوده و هست. پس بیش از این منتظر نمی مانیم. همین حالا دنیای خود را در آی گپ بسازید."</string>
+    <string name="text_line_1_introduce_page6">"همه چیز رایگان در آیگپ!"</string>
+    <string name="text_line_2_introduce_page6">"آیگپ همیشه رایگان بوده و هست. پس بیش از این منتظر نمی مانیم. همین حالا دنیای خود را در آیگپ بسازید."</string>
+
+
+    <string name="text_line_1_introduce_page7">اطراف من</string>
+    <string name="text_line_2_introduce_page7">با اطراف من پا به دنیای جدید بگذارید. در اطرافتان دوستان خود، مراکز تفریحی، هنری، تجاری و ... را پیدا کنید و از لحظه های خود لذت ببرید ...</string>
 
 
     <!-- Fill Profile User  -->
@@ -53,9 +57,9 @@
     <string name="Re_dialog_verify_number_part1">"شما شماره زیر را وارد کردید:</string>
     <string name="Re_dialog_verify_number_part2">"اگر شماره تلفن صحیح است تأیید کرده و در غیر اینصورت براحتی تغییرش دهید"</string>
     <string name="Re_Enter_Verify_Code_Please">"لطفاً کد تأیید را دستی وارد کنید"</string>
-    <string name="verify_socket_message">‫شما با دستگاه دیگری در حساب خود هستید ، آی گپ کد فعال سازی را توسط سیستم اطلاع رسانی خود به اکانت شما ارسال کرد، لطفاً دستگاه دیگر را چک کرده و کد را بصورت دستی وارد کنید.</string>
+    <string name="verify_socket_message">‫شما با دستگاه دیگری در حساب خود هستید ، آیگپ کد فعال سازی را توسط سیستم اطلاع رسانی خود به اکانت شما ارسال کرد، لطفاً دستگاه دیگر را چک کرده و کد را بصورت دستی وارد کنید.</string>
     ‬‬‬‬‬‬
-    <string name="verify_time_out_message">"آی گپ بصورت خودکار پیام تأیید را تشخیص داده و وارد می کند، در غیر اینصورت شما آن را دریافت کرده و می توانید به صورت دستی وارد نمایید، در صورت عدم دریافت کد تأیید، درخواست ارسال مجدد را انتخاب کنید."</string>
+    <string name="verify_time_out_message">"آیگپ بصورت خودکار پیام تأیید را تشخیص داده و وارد می کند، در غیر اینصورت شما آن را دریافت کرده و می توانید به صورت دستی وارد نمایید، در صورت عدم دریافت کد تأیید، درخواست ارسال مجدد را انتخاب کنید."</string>
     <string name="verify_invalid_code_message">متأسفیم، کد تأیید شما نامعتبر است، لطفاً کد صحیح را مجدد وارد نمایید.</string>
     <string name="resend_message">"ارسال مجدد کد فعال سازی"</string>
     <string name="phone_number">"شماره تلفن"</string>
@@ -77,7 +81,7 @@
     <string name="delete_account_text_desc">(در صورتیکه اکانت خود را حذف کنید، همه فایل هایی که به صورت پیام دریافت کرده اید نیز به طور دائم حذف خواهند شد.)</string>
     <string name="Destruction_Code">تخریب</string>
     <string name="Destruction_Des">شما اکنون در حال تلاش برای تخریب اکانت خود هستید ، شماره تلفن شما برابر است با : </string>
-    <string name="iGap_autofill_Destruction_Code">آی گپ بصورت خودکار کد را تشخیص داده و جای خالی را پر میکند در صورتی که نتوانست به صورت دستی وارد کنید.</string>
+    <string name="iGap_autofill_Destruction_Code">آیگپ بصورت خودکار کد را تشخیص داده و جای خالی را پر میکند در صورتی که نتوانست به صورت دستی وارد کنید.</string>
 
     <!-- Message Type and Status -->
     <string name="video_message">پیام ویدئویی</string>
@@ -117,13 +121,13 @@
     <string name="delete_group">حذف گروه</string>
 
     <!-- Public String -->
-    <string name="app_name">"آی گپ"</string>
-    <string name="call_name">تماس صوتی آی گپ</string>
+    <string name="app_name">"آیگپ"</string>
+    <string name="call_name">تماس صوتی آیگپ</string>
     <string name="chat">"گفتگو"</string>
     <string name="group">"گروه"</string>
     <string name="channel">"کانال"</string>
-    <string name="igap">"آی گپ"</string>
-    <string name="igapChanel">"آی گپ"</string>
+    <string name="igap">"آیگپ"</string>
+    <string name="igapChanel">"آیگپ"</string>
     <string name="search">"جستجو"</string>
     <string name="d_of_d" formatted="false">"%d از %d"</string>
     <string name="add_to_contact">"افزودن به مخاطبین"</string>
@@ -631,7 +635,7 @@
     <string name="members">اعضا</string>
     <string name="skip">رد کردن</string>
     <string name="settings">تنظیمات</string>
-    <string name="iGap_settings">تنظیمات حساب آی گپ</string>
+    <string name="iGap_settings">تنظیمات حساب آیگپ</string>
     <string name="please_write_your_message">لطفاْ پیام خود را بنویسید!</string>
     <string name="share_audio_file">به اشتراک گذاشتن فایل صوتی</string>
     <string name="share_image">به اشتراک گذاشتن تصویر</string>
@@ -662,11 +666,11 @@
     <string name="female">خانم</string>
     <string name="share_via">به اشتراک گذاشتن از طریق</string>
     <string name="error">خطا</string>
-    <string name="please_enter_code_for_verify">لطفاْ به منظور تأیید کد را وارد کنید.</string>
+    <string name="please_enter_code_for_verify">کد را وارد کنید.</string>
     <string name="server_do_not_response">سرور پاسخ نمی‌دهد.</string>
     <string name="share_image_from_igap">به اشتراک گذاشتن تصویر از آی‌گپ</string>
     <string name="TERMINATE">لغو</string>
-    <string name="iGap_version">آی گپ اندروید نسخه</string>
+    <string name="iGap_version">آیگپ اندروید نسخه</string>
     <string name="Bazzar">کافه بازار</string>
     <string name="do_you_want_left_this">آیااز ترک ایتم انتخاب شده اطمینان دارید؟</string>
 
@@ -764,8 +768,8 @@
 
 
     <string name="prefix">"توسط"</string>
-    <string name="USER_JOINED">"به آی گپ پیوست"</string>
-    <string name="USER_DELETED">" آی گپ را ترک کرد"</string>
+    <string name="USER_JOINED">"به آیگپ پیوست"</string>
+    <string name="USER_DELETED">" آیگپ را ترک کرد"</string>
     <string name="ROOM_CREATED">"ایجاد شد"</string>
     <string name="MEMBER_ADDED">"اضافه شد"</string>
     <string name="MEMBER_KICKED">"حذف شد"</string>
@@ -794,9 +798,9 @@
     <string name="permission_record_audio">ضبط صدا را بدهید</string>
     <string name="permission_phone">گوشی را بدهید</string>
     <string name="permission_sms">پیامک ها را بدهید</string>
-    <string name="st_privacy_blog">بلاگ رسمی آی گپ</string>
+    <string name="st_privacy_blog">بلاگ رسمی آیگپ</string>
     <string name="st_privacy_create_ticket">درخواست پشتیبانی</string>
-    <string name="st_privacy_iGap_home">صفحه رسمی آی گپ</string>
+    <string name="st_privacy_iGap_home">صفحه رسمی آیگپ</string>
 
 
     <string name="channel_public_hint_revoke">لینک عمومی کانال</string>
@@ -835,8 +839,8 @@
     <string name="text_is_empty">پیام خالی است.</string>
     <string name="please_try_again">لطفاً مجدداً تلاش نمایید</string>
     <string name="room_not_exist">صفحه ای با این شناسه یافت نشد</string>
-    <string name="app_theme">رنگ پوسته آی گپ</string>
-    <string name="app_notif_color">رنگ اعلانات در آی گپ</string>g>
+    <string name="app_theme">رنگ پوسته آیگپ</string>
+    <string name="app_notif_color">رنگ اعلانات در آیگپ</string>g>
     <string name="theme">رنگ بندی</string>
 
     <string name="is"></string>
@@ -855,7 +859,7 @@
     <string name="igap_search">‫بگرد و کشف کن</string>‬‬‬‬‬‬
     <string name="set_color_to_default">برگرداندن رنگ ها به پیش فرض</string>
     <string name="empty_message"> لطفاً 5 کاراکتر ابتدایی نام کاربری را وارد کنید</string>‬‬‬‬‬‬
-    <string name="empty_message3"> برای جستجو حداقل 3 کاراکتر وارد کنید</string>‬‬‬‬‬‬
+    <string name="empty_message3"> برای جستجو حداقل 5 کاراکتر وارد کنید</string>‬‬‬‬‬‬
     <string name="there_is_no_any_result">نتیجه ای یافت نشد</string>
     <string name="there_is_no_connection_to_server">ارتباط با سرور برقرار نیست</string>
     <string name="empty_room">هنوز پیامی ندارید</string>
@@ -884,11 +888,11 @@
     <string name="text_limit_Create_Group">شما اجازه دارید نهایتاً ۲۵ گروه و یا کانال بسازید</string>
     <string name="show_sender_name_in_group">نمایش نام فرستنده پیام در گروه</string>
     <string name="calls">لیست تماس</string>
-    <string name="voice_calls">تماس صوتی</string>
-    <string name="video_calls">تماس تصویری</string>
+    <string name="voice_calls">تماس صوتی آیگپ</string>
+    <string name="video_calls">تماس تصویری آیگپ</string>
     <string name="map">نقشه</string>
     <string name="igap_nearby">اطراف من</string>
-    <string name="igap_call">تماس صوتی آی گپ</string>
+    <string name="igap_call">تماس صوتی آیگپ</string>
     <string name="No_messages_here_yet">در حال حاضر پیامی وجود ندارد</string>
     <string name="clean_log">پاک کردن تاریخچه تماس صوتی</string>
     <string name="mandatory">(الزامی)</string>
@@ -965,7 +969,7 @@
     <string name="not_answer">بدون پاسخ</string>
     <string name="e_906_1">شما اجازه تماس با این مخاطب را ندارید.</string>
 
-    <string name="iGap_has_crashed">آی گپ با خطای پیش بینی نشده برخورد کرده است!</string>
+    <string name="iGap_has_crashed">آیگپ با خطای پیش بینی نشده برخورد کرده است!</string>
     <string name="iGap_has_crashed_reload">شروع مجدد</string>
     <string name="iGap_has_crashed_desc">خطای پیش بینی نشده ای پیش آمده که منجر به از کار افتادن برنامه شده است. ‫‫‏‫ما از خطای پیش آمده آگاهی داریم  و در حال برطرف کردن آن هستیم، ‫ تنها کاری که باید انجام دهید کلیک بر روی گزینهٔ «شروع مجدد» است.</string>
 
@@ -1041,8 +1045,8 @@
     <string name="data_storage"> ذخیره سازی اطلاعات</string>
     <string name="keep_media">نگهداری و حفظ رسانه ها</string>
 
-    <string name="invite_friend">این مخاطب هنوز به آی گپ نپیوسته. آیا مایلید ایشان را دعوت کنید؟</string>
-    <string name="clean_up_description">پاک کردن پایگاه دادهٔ برنامه منجر به حذف پیام های متنی ذخیره شده در حافظهٔ نهان و فشرده شدن پایگاه داده به منظور ذخیرهٔ فضای داخلی خواهد شد. آی گپ برای کارکردن به مقداری از اطلاعات نیاز دارد، بنابراین حجم پایگاه داده کاملاً خالی نخواهد شد و به صفر نمیرسد. تکمیل این عملیات چند دقیقه زمان می برد.</string>
+    <string name="invite_friend">این مخاطب هنوز به آیگپ نپیوسته. آیا مایلید ایشان را دعوت کنید؟</string>
+    <string name="clean_up_description">پاک کردن پایگاه دادهٔ برنامه منجر به حذف پیام های متنی ذخیره شده در حافظهٔ نهان و فشرده شدن پایگاه داده به منظور ذخیرهٔ فضای داخلی خواهد شد. آیگپ برای کارکردن به مقداری از اطلاعات نیاز دارد، بنابراین حجم پایگاه داده کاملاً خالی نخواهد شد و به صفر نمیرسد. تکمیل این عملیات چند دقیقه زمان می برد.</string>
     <string name="list_contacts">لیست مخاطبین شما</string>
 
     <string name="limit_for_set_username">محدودیت زمانی برای تغییر نام کاربری</string>
@@ -1384,5 +1388,36 @@
      https://www.igap.net
     شناسه دعوت کننده هست :</string>
 
+    <string name="namma_per_uh">FileLister</string>
+    <string name="Please_enter_valid_folder_name">لطفا نام پوشه را وارد کنید</string>
+    <string name="This_folder_already_exists">"این پوشه در حال حاضر وجود دارد لطفا نام دیگری انتخاب کنید"</string>
+    <string name="Select_directory">یک دایرکتوری را انتخاب کنید</string>
+    <string name="Select_Video_file">یک فایل ویدیویی را انتخاب کنید</string>
+    <string name="Select_Image_file">> یک فایل تصویر را انتخاب کنید</string>
+    <string name="Select_Audio_file">فایل صوتی را انتخاب کنید</string>
+    <string name="Select_file">یک فایل را انتخاب کنید</string>
+    <string name="Default_Dir">مسیر پیش فرض</string>
+    <string name="Select">انتخاب</string>
+    <string name="Create_new_Folder_here">در اینجا یک پوشه جدید ایجاد کنید</string>
+    <string name="Powered_by_iGap">طراحی شده توسط آیگپ</string>
+    <string name="on_hold">call on hold...</string>
+    <string name="switchTo">switch To :</string>
+    <string name="stop">توقف</string>
+    <string name="stop_message_bot">آیا مطمئن هستید که میخواهید ربات را متوقف کنید؟</string>
+    <string name="startUpdate">به روز رسانی</string>
+    <string name="access_phone_number">آیا از ارسال شماره تلفن خود اطمینان دارید ؟ </string>
+    <string name="access_location"> آیا از ارسال مکان خود اطمینان دارید؟ </string>
+    <string name="sticker_message">پیام استیکر</string>
+    <string name="Sticker_added_successfully">استیکر با موفقیت اضافه شد</string>
+    <string name="Please_select_an_option"> لطفا یک گزینه را انتخاب کنید</string>
 
+
+
+    <string name="sticker">استیکر</string>
+    <string name="add_sticker">اضافه کردن استیکر</string>
+    <string name="remove_sticker">حذف استیکر</string>
+    <string name="remove_sticker_text">آیا مطمئن هستید که میخواهید این استیکرها را حذف کنید؟</string>
+    <string name="add_sticker_text">آیا مطمئن هستید که میخواهید این استیکرها را نصب کنید؟</string>
+    <string name="Add">اضافه</string>
+    <string name="Remove">حذف</string>
 </resources>

@@ -11,12 +11,12 @@ import javax.crypto.Cipher;
 
 public class ApiControl {
 
-    public static String apiKey = "unknown_webservice_key";
+    public static String apiKey = "XXX";
     public static String encryption(String text) {
         String encryptedMsg = null;
         try {
             byte[] expBytes = Base64.decode("AQAB".getBytes(), Base64.DEFAULT);
-            byte[] modBytes = Base64.decode("oqWFs4s4Xvt3wQYT5f4M4JoEgjXALjHjAEqJgUYFkF71NI0DKZSAF8Zp8Ydz0HFsQqqnCf56GL9nAfZuDxF9xDsteHxGmkDLMbnymhJmXBSc0BlRgbLtWcX7c5AlryK35tj1ureAisbRYCc77bBsDoGTW8vSQ+il1EQMtUBxrFM=".getBytes(), Base64.DEFAULT);
+            byte[] modBytes = Base64.decode("XXX".getBytes(), Base64.DEFAULT);
             BigInteger modulus = new BigInteger(1, modBytes);
             BigInteger pubExp = new BigInteger(1, expBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");

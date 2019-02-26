@@ -92,7 +92,7 @@ public class PaymentResultDialog extends DialogFragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 
             if (colorAppBar != null) {
-                statusView.setBackgroundColor(Color.parseColor(colorAppBar));
+                statusView.setBackgroundColor(Color.parseColor(WalletActivity.primaryColor));
             } else {
                 statusView.setBackgroundColor(Color.parseColor(WalletActivity.primaryColor));
             }

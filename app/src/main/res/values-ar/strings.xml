@@ -39,9 +39,9 @@
     <!-- Page 5 introduce app -->
 
 
-    <string name="text_line_1_introduce_page5">"الاتصال الصوتي في آي كب"</string>
+    <string name="text_line_1_introduce_page5">"الصوت والفيديو مكالمة في آي كب"</string>
 
-    <string name="text_line_2_introduce_page5">"يمكنك الاتصال الصوتي بشكل مجان و آمن تماماً بواسطة استخدام تطبيق آي كب و بالتالي التوفير في تكاليفك. إضافة إلى ذلك إنّ الاتصال الصوتي لطبيق آي كب هو من نوع p2p و لاتتدخّل حتى مزود خدمة الانترنت في هذه الاتصال"</string>
+    <string name="text_line_2_introduce_page5">"يمكنك الصوت والفيديو مكالمة بشكل مجان و آمن تماماً بواسطة استخدام تطبيق آي كب و بالتالي التوفير في تكاليفك. إضافة إلى ذلك إنّ الصوت والفيديو مكالمة لطبيق آي كب هو من نوع p2p و لاتتدخّل حتى مزود خدمة الانترنت في هذه الاتصال"</string>
 
     <!-- Page 6 introduce app -->
 
@@ -51,6 +51,10 @@
     <string name="text_line_1_introduce_page6">"كلّ شيء مجان في آي كب!"</string>
 
     <string name="text_line_2_introduce_page6">"آي كب كان ولايزال مجانا. فتعالوا لانتمهّل أكثر من هذا. فاصنع عالمك بواسطة آي كب الآن."</string>
+
+
+    <string name="text_line_1_introduce_page7">ميزة قريبة</string>
+    <string name="text_line_2_introduce_page7">اترك عالماً جديداً حولي. من حولك ، اعثر على أصدقائك ومراكز الترفيه والفن والأعمال ... واستمتع بلحظاتك ...</string>
 
     <!-- Fill Profile User -->
 
@@ -1248,7 +1252,7 @@
 
     <string name="error">خطأ </string>
 
-    <string name="please_enter_code_for_verify">من فضلك أدخل الرمز لأجل التأكيد</string>
+    <string name="please_enter_code_for_verify">ادخل الرمز.</string>
 
     <string name="server_do_not_response">لم يتم استلام الرد من مزود خدمة الانترنت.</string>
 
@@ -1604,7 +1608,7 @@
 
     <string name="empty_message"> من فضلك إدخل 5 حروف بداية اسم المستخدم</string>
     ‬‬‬‬‬‬
-    <string name="empty_message3">أدخل 3 حروف على الحدّ الأدنى للقيام بالبحث</string>
+    <string name="empty_message3">أدخل 5 حروف على الحدّ الأدنى للقيام بالبحث</string>
     ‬‬‬‬‬‬
     <string name="there_is_no_any_result">لم يتمّ العثور على أية نتائج</string>
 
@@ -1661,8 +1665,8 @@
     <string name="show_sender_name_in_group">إظهار اسم المرسل في المجموعة </string>
 
     <string name="calls">قائمة المكالمات </string>
-    <string name="voice_calls">مكالمة الصوتي</string>
-    <string name="video_calls">مكالمة فيديو</string>
+    <string name="voice_calls">مكالمة الصوتي ای کب</string>
+    <string name="video_calls"> مكالمة فيديو ای کب</string>
 
     <string name="map">الخريطة </string>
 
@@ -2334,5 +2338,36 @@
     يمكنك تسجيل الدخول عبر الرابط أدناه
     https://www.igap.net
 هناك معرف عضوية:   </string>
+
+    <string name="namma_per_uh">FileLister</string>
+    <string name="Please_enter_valid_folder_name">يرجى إدخال اسم مجلد صالح</string>
+    <string name="This_folder_already_exists">هذا المجلد موجود بالفعل.يرجى تقديم اسم آخر للمجلد</string>
+    <string name="Select_directory">اختر دليلا</string>
+    <string name="Select_Video_file">اختر ملف فيديو</string>
+    <string name="Select_Image_file">حدد ملف الصورة</string>
+    <string name="Select_Audio_file">حدد ملف صوتي</string>
+    <string name="Select_file">حدد ملف</string>
+    <string name="Default_Dir">الافتراضي دير</string>
+    <string name="Select">تحديد</string>
+    <string name="Create_new_Folder_here">قم بإنشاء مجلد جديد هنا</string>
+    <string name="Powered_by_iGap">مدعوم من آی کب</string>
+    <string name="on_hold">call on hold...</string>
+    <string name="switchTo">switch To :</string>
+    <string name="stop">توقف</string>
+    <string name="stop_message_bot">هل أنت متأكد من أنك تريد إيقاف الروبوت؟</string>
+    <string name="startUpdate">تحديث</string>
+    <string name="access_phone_number">هل أنت متأكد من إرسال رقم هاتفك؟</string>
+    <string name="access_location">هل أنت متأكد من إرسال موقعك؟</string>
+    <string name="sticker_message">رسالة لاصقة</string>
+    <string name="Sticker_added_successfully">تمت إضافة الملصق بنجاح</string>
+    <string name="sticker">لاصقة</string>
+    <string name="add_sticker">أضف ملصقا</string>
+    <string name="remove_sticker">إزالة اللاصق</string>
+    <string name="remove_sticker_text">هل أنت متأكد من أنك تريد إزالة هذه الملصقات؟</string>
+    <string name="add_sticker_text">هل أنت متأكد من أنك تريد تثبيت هذه الملصقات؟</string>
+    <string name="Add">إضافة</string>
+    <string name="Remove">إزالة</string>
+    <string name="Please_select_an_option">يرجى تحديد خيار</string>
+
 
 </resources>

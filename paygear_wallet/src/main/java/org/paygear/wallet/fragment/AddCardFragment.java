@@ -72,7 +72,7 @@ public class AddCardFragment extends Fragment {
         ViewGroup rootView = view.findViewById(R.id.rootView);
         ViewGroup rootCardView = view.findViewById(R.id.rootCardView);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme_2));
+            rootView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
             rootCardView.setBackgroundColor(Color.parseColor(WalletActivity.backgroundTheme));
         }
 
@@ -117,8 +117,8 @@ public class AddCardFragment extends Fragment {
 
         progressBar = view.findViewById(R.id.progress);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor(WalletActivity.progressColorWhite), PorterDuff.Mode.SRC_IN);
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_BOLD, cardNumberTitle, monthTitle, yearTitle, defaultCardTitle, button);
-        Typefaces.setTypeface(getContext(), Typefaces.IRAN_YEKAN_REGULAR, cardNumberText, monthText, yearText);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_MEDIUM, cardNumberTitle, monthTitle, yearTitle, defaultCardTitle, button);
+        Typefaces.setTypeface(getContext(), Typefaces.IRAN_LIGHT, cardNumberText, monthText, yearText);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

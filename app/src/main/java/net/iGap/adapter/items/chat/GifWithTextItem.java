@@ -12,13 +12,19 @@ package net.iGap.adapter.items.chat;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.module.AppUtils;
@@ -42,27 +48,26 @@ import static net.iGap.fragments.FragmentChat.getRealmChat;
 
 public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTextItem.ViewHolder> {
 
-    public GifWithTextItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public GifWithTextItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
     @Override
     public void onPlayPauseGIF(ViewHolder holder, String localPath) throws ClassCastException {
         super.onPlayPauseGIF(holder, localPath);
 
-        MessageProgress progress = (MessageProgress) holder.itemView.findViewById(R.id.progress);
-        AppUtils.setProgresColor(progress.progressBar);
+        AppUtils.setProgresColor(holder.progress.progressBar);
 
-        progress.withDrawable(R.mipmap.photogif, true);
+        holder.progress.withDrawable(R.mipmap.photogif, true);
 
         GifDrawable gifDrawable = (GifDrawable) holder.image.getDrawable();
         if (gifDrawable != null) {
             if (gifDrawable.isPlaying()) {
                 gifDrawable.pause();
-                holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                holder.progress.setVisibility(View.VISIBLE);
             } else {
                 gifDrawable.start();
-                holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
+                holder.progress.setVisibility(View.GONE);
             }
         }
     }
@@ -81,19 +86,19 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
     public void onLoadThumbnailFromLocal(final ViewHolder holder, final String tag, final String localPath, LocalFileType fileType) {
         super.onLoadThumbnailFromLocal(holder, tag, localPath, fileType);
 
-        if (holder.image != null && holder.image.getTag() != null && holder.image.getTag().equals(tag)) {
+        if (holder.image.getTag() != null && holder.image.getTag().equals(tag)) {
             holder.image.setImageURI(Uri.fromFile(new File(localPath)));
 
             if (fileType == LocalFileType.FILE) {
                 SharedPreferences sharedPreferences = holder.itemView.getContext().getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
                 if (sharedPreferences.getInt(SHP_SETTING.KEY_AUTOPLAY_GIFS, SHP_SETTING.Defaults.KEY_AUTOPLAY_GIFS) == 1) {
-                    holder.itemView.findViewById(R.id.progress).setVisibility(View.GONE);
+                    holder.progress.setVisibility(View.GONE);
                 } else {
                     if (holder.image.getDrawable() instanceof GifDrawable) {
                         GifDrawable gifDrawable = (GifDrawable) holder.image.getDrawable();
                         // to get first frame
                         gifDrawable.stop();
-                        holder.itemView.findViewById(R.id.progress).setVisibility(View.VISIBLE);
+                        holder.progress.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -102,38 +107,22 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getGifItem(true));
-        }
-
-        holder.image = (ReserveSpaceGifImageView) holder.itemView.findViewById(R.id.thumbnail);
         holder.image.setTag(getCacheId(mMessage));
-
         super.bindView(holder, payloads);
 
-        String text = "";
+        setTextIfNeeded(holder.messageView);
 
-        if (mMessage.forwardedFrom != null) {
-            text = mMessage.forwardedFrom.getMessage();
-        } else {
-            text = mMessage.messageText;
-        }
 
-        if (mMessage.hasEmojiInText) {
-            setTextIfNeeded((EmojiTextViewE) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
-        } else {
-            setTextIfNeeded((TextView) holder.itemView.findViewById(R.id.messageSenderTextMessage), text);
-        }
+        holder.progress.setOnLongClickListener(getLongClickPerform(holder));
 
-        holder.itemView.findViewById(R.id.progress).setOnClickListener(new View.OnClickListener() {
+        holder.progress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isSelected()) {
+                if (!FragmentChat.isInSelectionMode) {
                     if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                         if (!hasFileSize(mMessage.forwardedFrom != null ? mMessage.forwardedFrom.getAttachment().getLocalFilePath() :
                                 mMessage.attachment.getLocalFilePath())) {
-                            messageClickListener.onUploadOrCompressCancel(holder.itemView.findViewById(R.id.progress), mMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
+                            messageClickListener.onUploadOrCompressCancel(holder.progress, mMessage, holder.getAdapterPosition(), SendingStep.CORRUPTED_FILE);
                         }
                         return;
                     }
@@ -164,6 +153,8 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
                             }
                         }
                     }
+                } else {
+                    holder.itemView.performLongClick();
                 }
             }
         });
@@ -171,46 +162,15 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.itemView.findViewById(R.id.progress).performClick();
-            }
-        });
-
-        holder.image.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                holder.itemView.performLongClick();
-                return false;
-            }
-        });
-
-
-        messageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                holder.itemView.performLongClick();
-                return false;
-            }
-        });
-
-        messageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (G.isLinkClicked) {
-                    G.isLinkClicked = false;
-                    return;
-                }
-                if (!isSelected()) {
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                        return;
-                    }
-                    if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                        messageClickListener.onFailedMessageClick(v, mMessage, holder.getAdapterPosition());
-                    } else {
-                        messageClickListener.onContainerClick(v, mMessage, holder.getAdapterPosition());
-                    }
+                if (FragmentChat.isInSelectionMode){
+                    holder.itemView.performLongClick();
+                } else {
+                    holder.progress.performClick();
                 }
             }
         });
+
+        holder.image.setOnLongClickListener(getLongClickPerform(holder));
     }
 
     @Override
@@ -218,13 +178,43 @@ public class GifWithTextItem extends AbstractMessage<GifWithTextItem, GifWithTex
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
 
         protected ReserveSpaceGifImageView image;
+        protected MessageProgress progress;
 
         public ViewHolder(View view) {
             super(view);
-            //image = (ReserveSpaceGifImageView) view.findViewById(R.id.thumbnail);
+
+            boolean withText = true;
+            FrameLayout frameLayout = new FrameLayout(G.context);
+            frameLayout.setLayoutParams(new LinearLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+
+            image = new ReserveSpaceGifImageView(G.context);
+            image.setId(R.id.thumbnail);
+            FrameLayout.LayoutParams layout_758 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            image.setLayoutParams(layout_758);
+
+            frameLayout.addView(image);
+            progress = getProgressBar(0);
+
+            frameLayout.addView(progress, new FrameLayout.LayoutParams(i_Dp(R.dimen.dp60), i_Dp(R.dimen.dp60), Gravity.CENTER));
+
+            m_container.addView(frameLayout);
+
+            if (withText) {
+                setLayoutMessageContainer();
+            }
+        }
+
+        @Override
+        public ImageView getThumbNailImageView() {
+            return image;
+        }
+
+        @Override
+        public MessageProgress getProgress() {
+            return progress;
         }
     }
 }

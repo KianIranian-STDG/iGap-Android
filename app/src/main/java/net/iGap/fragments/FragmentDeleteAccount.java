@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
@@ -18,6 +18,7 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,26 +29,26 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import net.iGap.BuildConfig;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperString;
-import net.iGap.interfaces.OnGetPermission;
-import net.iGap.interfaces.OnSmsReceive;
 import net.iGap.interfaces.OnUserDelete;
 import net.iGap.interfaces.OnUserGetDeleteToken;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AppUtils;
 import net.iGap.module.EditTextAdjustPan;
-import net.iGap.module.IncomingSms;
+import net.iGap.module.SmsRetriver.SMSReceiver;
 import net.iGap.proto.ProtoUserDelete;
 import net.iGap.request.RequestUserDelete;
 import net.iGap.request.RequestUserGetDeleteToken;
-
-import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,7 +57,6 @@ public class FragmentDeleteAccount extends BaseFragment {
 
     private String regex = null;
     private String smsMessage = null;
-    private IncomingSms smsReceiver;
     private EditTextAdjustPan edtDeleteAccount;
     private RippleView txtSet;
     private CountDownTimer countDownTimer;
@@ -64,61 +64,13 @@ public class FragmentDeleteAccount extends BaseFragment {
     private ViewGroup ltTime;
     private ProgressBar prgWaiting;
     private boolean isFirstClick = true;
+    public static final String TAG = FragmentDeleteAccount.class.getSimpleName();
+    private SMSReceiver smsReceiver;
 
     public FragmentDeleteAccount() {
         // Required empty public constructor
     }
 
-    @Override
-    public void onResume() {
-
-        final IntentFilter filter = new IntentFilter();
-        filter.addAction("android.provider.Telephony.SMS_RECEIVED");
-        smsReceiver = new IncomingSms(new OnSmsReceive() {
-
-            @Override
-            public void onSmsReceive(final String phoneNumber, final String message) {
-                try {
-                    if (message != null && !message.isEmpty() && !message.equals("null") && !message.equals("")) {
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                smsMessage = message;
-                                setCode();
-                            }
-                        }, 500);
-
-                        //G.handler.postDelayed(new Runnable() {
-                        //    @Override
-                        //    public void run() {
-                        //        IncomingSms.markMessageRead(phoneNumber, message);
-                        //    }
-                        //}, 2000);
-
-                    }
-                } catch (Exception e1) {
-                    e1.getStackTrace();
-                }
-            }
-        });
-
-        try {
-            HelperPermission.getSmsPermision(G.fragmentActivity, new OnGetPermission() {
-                @Override
-                public void Allow() {
-                    G.fragmentActivity.registerReceiver(smsReceiver, filter);
-                }
-
-                @Override
-                public void deny() {
-
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        super.onResume();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -313,7 +265,82 @@ public class FragmentDeleteAccount extends BaseFragment {
                 countDownTimer.start();
             }
         });
+
+        startSMSListener();
+
     }
+
+
+    private void startSMSListener() {
+        try {
+            smsReceiver = new SMSReceiver();
+            smsReceiver.setOTPListener(new SMSReceiver.OTPReceiveListener() {
+                @Override
+                public void onOTPReceived(String message) {
+
+                    try {
+                        G.handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                smsMessage = message;
+                                setCode();
+                            }
+                        }, 500);
+                    } catch (Exception e1) {
+                        e1.getStackTrace();
+                    }
+
+                    unregisterReceiver();
+
+                }
+
+                @Override
+                public void onOTPTimeOut() {
+                    Log.e(TAG, "OTP Time out");
+                }
+
+                @Override
+                public void onOTPReceivedError(String error) {
+                    Log.e(TAG, error);
+                }
+            });
+
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
+            G.fragmentActivity.registerReceiver(smsReceiver, intentFilter);
+
+            SmsRetrieverClient client = SmsRetriever.getClient(getActivity());
+
+            Task<Void> task = client.startSmsRetriever();
+            task.addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.e(TAG, "sms API successfully started   ");
+                }
+            });
+
+            task.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "sms Fail to start API   ");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void unregisterReceiver() {
+        try {
+            if (smsReceiver != null) {
+                G.fragmentActivity.unregisterReceiver(smsReceiver);
+                smsReceiver = null;
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void setCode() {
         if (smsMessage != null && regex != null) {
@@ -327,13 +354,9 @@ public class FragmentDeleteAccount extends BaseFragment {
     }
 
     @Override
-    public void onPause() {
-        try {
-            G.fragmentActivity.unregisterReceiver(smsReceiver);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        super.onPause();
+    public void onStop() {
+        super.onStop();
+        unregisterReceiver();
     }
 
     private void showProgressBar() {

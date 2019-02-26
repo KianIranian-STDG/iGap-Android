@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal">
+
+
+
+        <ImageView
+            android:id="@+id/imgSticker"
+            android:layout_width="52dp"
+            android:layout_gravity="center"
+            android:layout_height="52dp" />
+
+        <com.hanks.library.AnimateCheckBox
+            android:id="@+id/cig_checkBox_select_user"
+            android:layout_width="@dimen/dp24"
+            android:layout_height="@dimen/dp24"
+            android:visibility="visible"
+            app:animDuration="200"
+            app:checkedColor="#28B463"
+            app:lineColor="#fff"
+            app:lineWidth="1.2dp"
+            app:unCheckColor="@android:color/transparent"
+            android:background="@android:color/transparent"
+            android:layout_alignEnd="@+id/imgSticker"
+            android:layout_alignRight="@+id/imgSticker" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        style="?lineColorSettingTheme" />
+</LinearLayout>

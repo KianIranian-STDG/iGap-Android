@@ -77,12 +77,14 @@ public class UserLoginResponse extends MessageHandler {
                     if (G.onVersionCallBack != null) {
                         G.onVersionCallBack.isDeprecated();
                         isDeprecated = true;
+                        G.isDepricatedApp = true;
                     }
                 }
             }, 1000);
 
+        } else {
+            G.isDepricatedApp = false;
         }
-
 
 
         G.currentServerTime = builder.getResponse().getTimestamp();

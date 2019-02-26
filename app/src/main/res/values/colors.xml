@@ -8,7 +8,7 @@
   <color name="light_gray">#adadadad</color>
   <color name="red">#f23131</color>
   <color name="red_swipe">#ac3328</color>
-  <color name="green">#00B0BF</color>
+  <color name="green">#C4D838</color>
   <color name="green_20">#2000B0BF</color>
   <color name="verify_color">#1da1f2</color>
   <color name="sky_blue">#7f9fff</color>
@@ -144,11 +144,18 @@
   <color name="background_checkbox_bottomSheet">#758b8b8b</color>
   <color name="background_check_gps">#85565656</color>
 
-  <color name="background_setting_dark">#151515</color>
-  <color name="background_setting_dark_2">#101010</color>
+  <color name="background_setting_dark">#2c363f</color>
+  <color name="background_setting_dark_2">#602c363f</color>
+
+  <color name="background_setting_light">#f4f0e8</color>
+  <color name="background_setting_light_2">#60f7f7f7</color>
+
+
   <color name="textColorCall">#f8f4df</color>
   <color name="backgroundColorCall">#00B0BF</color>
   <color name="backgroundColorCall2">#0098cc</color>
   <color name="colorEditImageBlack">#87000000</color>
   <color name="background_payment">#b7000000</color>
+  <color name="launch_app_color">#f4f0e8 </color>
+  <color name="color_powered_by">#84ffffff</color>
 </resources>

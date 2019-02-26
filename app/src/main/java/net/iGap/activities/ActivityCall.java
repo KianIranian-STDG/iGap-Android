@@ -1,27 +1,37 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.activities;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothHeadset;
+import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.media.AudioRecord;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,22 +44,34 @@ import android.widget.LinearLayout;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.ActivityCallBinding;
 import net.iGap.helper.HelperPermission;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.interfaces.OnHoldBackgroundChanegeListener;
 import net.iGap.interfaces.OnVideoCallFrame;
+import net.iGap.interfaces.VideoCallListener;
 import net.iGap.module.MaterialDesignTextView;
+import net.iGap.module.audioManagement.BluethoothIntentReceiver;
+import net.iGap.module.audioManagement.MusicIntentReceiver;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.viewmodel.ActivityCallViewModel;
 import net.iGap.webrtc.WebRTC;
 
 import org.webrtc.EglBase;
+import org.webrtc.RendererCommon;
 import org.webrtc.VideoFrame;
+import org.webrtc.voiceengine.WebRtcAudioEffects;
+import org.webrtc.voiceengine.WebRtcAudioUtils;
 
 import java.io.IOException;
 
-public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, OnVideoCallFrame {
+
+
+import static android.bluetooth.BluetoothProfile.HEADSET;
+
+public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, OnVideoCallFrame, BluetoothProfile.ServiceListener {
 
     public static final String USER_ID_STR = "USER_ID";
     public static final String INCOMING_CALL_STR = "INCOMING_CALL_STR";
@@ -83,6 +105,19 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     private ActivityCallBinding activityCallBinding;
     private ProtoSignalingOffer.SignalingOffer.Type callTYpe;
 
+    private int frameWidth;
+    private int frameHeight;
+    private int rotateFrame;
+    private int phoneWidth;
+    private int phoneHeight;
+    private float screenScale;
+    private boolean isRotated = false;
+    private boolean isFrameChange = true;
+    private boolean isVerticalOrient = true;
+    private boolean isFirst = true;
+    private boolean isHiddenButtons = false;
+
+
     /**
      * Enables/Disables all child views in a view group.
      *
@@ -107,9 +142,23 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     protected void onDestroy() {
         super.onDestroy();
 
+        if (G.speakerControlListener != null) {
+            G.speakerControlListener = null;
+        }
+
         if (activityCallViewModel != null) {
             activityCallViewModel.onDestroy();
+
         }
+        if (G.onHoldBackgroundChanegeListener != null) {
+            G.onHoldBackgroundChanegeListener = null;
+        }
+
+
+       /* if (G.onRejectCallStatus != null) {
+            G.onRejectCallStatus = null;
+        }*/
+
     }
 
     @Override
@@ -126,9 +175,64 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         // requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON | LayoutParams.FLAG_DISMISS_KEYGUARD | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
+
+        /** register receiver for headset*/
+        registerReceiver(new MusicIntentReceiver(), new IntentFilter(Intent.ACTION_HEADSET_PLUG));
+
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+        filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+
+        registerReceiver(new BluethoothIntentReceiver(), filter);
+
+
+        //  registerReceiver(new BluethoothIntentReceiver(), new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+
+
+        /** First Check Is Headset Connected or Not */
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager.isWiredHeadsetOn()) {
+            G.isHandsFreeConnected = true;
+        }
+
+
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null) {
+            // Device does not support Bluetooth
+
+        } else {
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            if (mBluetoothAdapter.getProfileConnectionState(HEADSET) == BluetoothAdapter.STATE_CONNECTED) {
+                G.isBluetoothConnected = true;
+                am.setSpeakerphoneOn(false);
+            } else {
+                G.isBluetoothConnected = false;
+                if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING)
+                    am.setSpeakerphoneOn(true);
+            }
+        }
+
         super.onCreate(savedInstanceState);
+
+        /** to get in pixel
+         DisplayMetrics displayMetrics = new DisplayMetrics();
+         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+         int height = displayMetrics.heightPixels;
+         int width = displayMetrics.widthPixels;*/
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            phoneHeight = displayMetrics.heightPixels;
+            phoneWidth = displayMetrics.widthPixels;
+        } else {
+            phoneHeight = displayMetrics.widthPixels;
+            phoneWidth = displayMetrics.heightPixels;
+        }
 
         if (isGoingfromApp) {
             isGoingfromApp = false;
@@ -160,6 +264,13 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                             @Override
                             public void Allow() throws IOException {
                                 init();
+                         /*       G.onRejectCallStatus = new OnRejectCallStatus() {
+                                    @Override
+                                    public void setReject(boolean state) {
+                                        if (state)
+                                            doReject();
+                                    }
+                                };*/
                             }
 
                             @Override
@@ -174,6 +285,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
                     } else {
                         init();
+
+
                     }
                 }
 
@@ -204,9 +317,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                         activityCallBinding.fcrSurfaceRemote.release();
                     }
                 } catch (RuntimeException e) {
-
+                    e.printStackTrace();
                 }
-
 
                 finish();
             }
@@ -217,13 +329,21 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         WebRTC.getInstance().setCallType(callTYpe);
         //setContentView(R.layout.activity_call);
         activityCallBinding = DataBindingUtil.setContentView(ActivityCall.this, R.layout.activity_call);
-        activityCallViewModel = new ActivityCallViewModel(ActivityCall.this, userId, isIncomingCall, activityCallBinding);
+        activityCallViewModel = new ActivityCallViewModel(ActivityCall.this, userId, isIncomingCall, activityCallBinding, callTYpe);
         activityCallBinding.setActivityCallViewModel(activityCallViewModel);
         initComponent();
         //initCallBack();
         G.onCallLeaveView = ActivityCall.this;
         if (!isIncomingCall) {
             WebRTC.getInstance().createOffer(userId);
+        }
+    }
+
+    private void doReject() {
+        G.isInCall = false;
+        finish();
+        if (isIncomingCall) {
+            WebRTC.getInstance().leaveCall();
         }
     }
 
@@ -254,17 +374,86 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             activityCallBinding.fcrSurfacePeer.init(rootEglBase.getEglBaseContext(), null);
             activityCallBinding.fcrSurfacePeer.setEnableHardwareScaler(true);
             activityCallBinding.fcrSurfacePeer.setMirror(true);
+            activityCallBinding.fcrSurfacePeer.setZOrderMediaOverlay(true);
+            activityCallBinding.fcrSurfacePeer.setZOrderOnTop(true);
             activityCallBinding.fcrSurfacePeer.setVisibility(View.VISIBLE);
 
             activityCallBinding.fcrSurfaceRemote.init(rootEglBase.getEglBaseContext(), null);
             activityCallBinding.fcrSurfaceRemote.setEnableHardwareScaler(true);
-            activityCallBinding.fcrSurfaceRemote.setMirror(true);
+            activityCallBinding.fcrSurfaceRemote.setMirror(false);
             activityCallBinding.fcrSurfaceRemote.setVisibility(View.VISIBLE);
 
-            activityCallBinding.fcrImvBackground.setVisibility(View.GONE);
-            activityCallBinding.fcrTxtCallType.setText(getResources().getString(R.string.video_calls));
 
+            activityCallBinding.fcrImvBackground.setVisibility(View.VISIBLE);
+            activityCallBinding.fcrTxtCallType.setText(getResources().getString(R.string.video_calls));
+            activityCallBinding.fcrTxtCallType.setShadowLayer(10, 0, 3, Color.BLACK);
             activityCallBinding.fcrBtnSwichCamera.setVisibility(View.VISIBLE);
+            activityCallBinding.poweredBy.setVisibility(View.VISIBLE);
+            activityCallBinding.poweredBy.setShadowLayer(10, 0, 3, Color.BLACK);
+
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                if (activityCallBinding.poweredBy != null)
+                    activityCallBinding.poweredBy.setVisibility(View.GONE);
+            }
+
+
+            G.videoCallListener = new VideoCallListener() {
+                @Override
+                public void notifyBackgroundChange() {
+
+                    // activityCallBinding.fcrSurfaceRemote.setVisibility(View.VISIBLE);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+                                    activityCallBinding.fcrImvBackground.setVisibility(View.GONE);
+
+                                }
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+
+                }
+            };
+
+            try {
+
+                activityCallBinding.fcrSurfaceRemote.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (G.isWebRtcConnected) {
+
+                            if (!isHiddenButtons) {
+                                activityCallBinding.fcrBtnChat.setVisibility(View.INVISIBLE);
+                                activityCallBinding.fcrBtnSpeaker.setVisibility(View.INVISIBLE);
+                                activityCallBinding.fcrBtnEnd.setVisibility(View.INVISIBLE);
+                                activityCallBinding.fcrBtnChat.setVisibility(View.INVISIBLE);
+                                activityCallBinding.fcrBtnMic.setVisibility(View.INVISIBLE);
+                                activityCallBinding.fcrBtnSwichCamera.setVisibility(View.INVISIBLE);
+
+                                isHiddenButtons = true;
+                            } else {
+                                activityCallBinding.fcrBtnChat.setVisibility(View.VISIBLE);
+                                activityCallBinding.fcrBtnSpeaker.setVisibility(View.VISIBLE);
+                                activityCallBinding.fcrBtnEnd.setVisibility(View.VISIBLE);
+                                activityCallBinding.fcrBtnChat.setVisibility(View.VISIBLE);
+                                activityCallBinding.fcrBtnMic.setVisibility(View.VISIBLE);
+                                activityCallBinding.fcrBtnSwichCamera.setVisibility(View.VISIBLE);
+                                isHiddenButtons = false;
+                            }
+
+                        }
+                    }
+                });
+
+            } catch (Exception e) {
+            }
+
         } else {
             activityCallBinding.fcrBtnSwichCamera.setVisibility(View.GONE);
         }
@@ -356,7 +545,12 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             btnAnswer.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
+                    G.isWebRtcConnected = true;
+                    // activityCallBinding.fcrSurfaceRemote.setVisibility(View.VISIBLE);
+                    activityCallBinding.fcrImvBackground.setVisibility(View.GONE);
+                    G.isVideoCallRinging = false;
                     setUpSwap(layoutAnswer);
+
                     return false;
                 }
             });
@@ -366,7 +560,26 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
          * *********************************************
          */
 
+        G.onHoldBackgroundChanegeListener = new OnHoldBackgroundChanegeListener() {
+            @Override
+            public void notifyBakcgroundChanege(boolean isHold) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isHold) {
+                            activityCallBinding.fcrSurfaceRemote.setVisibility(View.INVISIBLE);
+                            activityCallBinding.fcrImvBackground.setVisibility(View.VISIBLE);
+                        } else {
+                            activityCallBinding.fcrImvBackground.setVisibility(View.GONE);
+                            activityCallBinding.fcrSurfaceRemote.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+            }
+        };
+
         setAnimation();
+
 
     }
 
@@ -381,6 +594,11 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
             WebRTC.getInstance().createAnswer();
             cancelRingtone();
+        /*    try {
+                AudioManager am = (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
+                am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+            } catch (Exception e) {
+            }*/
 
             btnEndCall.setOnTouchListener(null);
 
@@ -519,12 +737,56 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             G.onVideoCallFrame = ActivityCall.this;
-            WebRTC.getInstance().startVideoCapture();
+            if (!G.isCalling) {
+                WebRTC.getInstance().startVideoCapture();
+                WebRTC.getInstance().unMuteSound();
+            }
+
         }
 
         mSensorManager.registerListener(sensorEventListener, mProximity, SensorManager.SENSOR_DELAY_NORMAL);
         IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
         registerReceiver(headsetPluginReciver, filter);
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        try {
+
+            if (activityCallBinding.poweredBy != null) {
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+                    activityCallBinding.poweredBy.setVisibility(View.VISIBLE);
+                } else {
+                    activityCallBinding.poweredBy.setVisibility(View.GONE);
+
+                }
+            }
+        } catch (NullPointerException e) {
+        } catch (Exception e) {
+        }
+
+        rotateScreen(frameWidth, frameHeight);
+        rotatePeer();
+
+    }
+
+    private void rotatePeer() {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+            android.widget.FrameLayout.LayoutParams
+                    params = new android.widget.FrameLayout.LayoutParams(ViewMaker.dpToPixel(100), ViewMaker.dpToPixel(140));
+            activityCallBinding.fcrSurfacePeer.setLayoutParams(params);
+            params.gravity = Gravity.TOP | Gravity.RIGHT;
+
+        } else {
+            android.widget.FrameLayout.LayoutParams
+                    params = new android.widget.FrameLayout.LayoutParams(ViewMaker.dpToPixel(140), ViewMaker.dpToPixel(100));
+            activityCallBinding.fcrSurfacePeer.setLayoutParams(params);
+            params.gravity = Gravity.TOP | Gravity.RIGHT;
+        }
     }
 
     @Override
@@ -553,11 +815,83 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     @Override
     public void onRemoteFrame(VideoFrame videoFrame) {
         activityCallBinding.fcrSurfaceRemote.onFrame(videoFrame);
+        if (isFrameChange) {
+            frameWidth = videoFrame.getRotatedWidth();
+            frameHeight = videoFrame.getRotatedHeight();
+            rotateFrame = videoFrame.getRotation();
+            isFrameChange = false;
+        }
+
+        if (isFirst) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    rotateScreen(videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight());
+                }
+            });
+
+            isFirst = false;
+        }
+
+        if (rotateFrame != videoFrame.getRotation()) {
+            int height = 0;
+            int width = 0;
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    isVerticalOrient = true;
+                    rotateScreen(videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight());
+                }
+            });
+
+
+            isFrameChange = true;
+
+
+        }
     }
+
+    public void rotateScreen(int frameWidth, int frameHeight) {
+
+        float dpWidth = (Integer) phoneWidth / ((float) getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        float dpHeight = phoneHeight / ((float) getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        float dpFrameHeight = frameHeight / ((float) getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        float dpFrameWidth = frameWidth / ((float) getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+            android.widget.FrameLayout.LayoutParams
+                    params = new android.widget.FrameLayout.LayoutParams(phoneWidth, (int) (frameHeight * (dpWidth / dpFrameWidth)));
+            activityCallBinding.fcrSurfaceRemote.setLayoutParams(params);
+            params.gravity = Gravity.CENTER;
+
+        } else {
+            android.widget.FrameLayout.LayoutParams
+                    params = new android.widget.FrameLayout.LayoutParams((int) (frameWidth * (dpWidth / dpFrameHeight)), phoneWidth);
+            activityCallBinding.fcrSurfaceRemote.setLayoutParams(params);
+            params.gravity = Gravity.CENTER;
+
+
+        }
+    }
+
 
     @Override
     public void onPeerFrame(VideoFrame videoFrame) {
+
         activityCallBinding.fcrSurfacePeer.onFrame(videoFrame);
+
+    }
+
+    @Override
+    public void onServiceConnected(int profile, BluetoothProfile proxy) {
+        Log.i("#peymanProxy", "Activity call");
+    }
+
+    @Override
+    public void onServiceDisconnected(int profile) {
+
     }
 
     //***************************************************************************************

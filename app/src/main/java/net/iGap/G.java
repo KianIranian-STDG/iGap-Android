@@ -15,7 +15,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -36,6 +38,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCheckInternetConnection;
+import net.iGap.helper.HelperDownloadFile;
 import net.iGap.interfaces.*;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ChatUpdateStatusUtil;
@@ -48,6 +51,7 @@ import net.iGap.request.RequestWrapper;
 
 import org.paygear.wallet.model.Card;
 import org.paygear.wallet.utils.Utils;
+import org.webrtc.voiceengine.WebRtcAudioUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -78,9 +82,13 @@ public class G extends MultiDexApplication {
     public static final String TEMP = "/.temp";
     public static final String CHAT_BACKGROUND = "/.chat_background";
     public static final String IMAGE_USER = "/.image_user";
+    public static final String STICKER = "/.sticker";
     public static final String DIR_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static Context context;
     public static Handler handler;
+    public static boolean isCalling = false;
+    public static boolean isVideoCallRinging = false;
+    //public static OnRejectCallStatus onRejectCallStatus;
     public static long mLastClickTime = SystemClock.elapsedRealtime();
     public static LayoutInflater inflater;
     public static ConcurrentHashMap<String, RequestWrapper> requestQueueMap = new ConcurrentHashMap<>();
@@ -116,6 +124,7 @@ public class G extends MultiDexApplication {
     public static String DIR_TEMP = DIR_APP + TEMP;
     public static String DIR_CHAT_BACKGROUND = DIR_APP + CHAT_BACKGROUND;
     public static String DIR_IMAGE_USER = DIR_APP + IMAGE_USER;
+    public static String DIR_STICKER = DIR_APP + STICKER;
     public static String CHAT_MESSAGE_TIME = "H:mm";
     public static String selectedLanguage = null;
     public static String symmetricMethod;
@@ -127,7 +136,10 @@ public class G extends MultiDexApplication {
     public static String textChatMusic;
     public static String notificationColor;
     public static String toggleButtonColor;
+    public static String roomSenderTextColor;
+    public static String SeenTickColor;
     public static String attachmentColor;
+    public static String roomMessageTypeColor;
     public static String iconColorBottomSheet;
     public static String progressColor;
     public static String headerTextColor;
@@ -287,6 +299,7 @@ public class G extends MultiDexApplication {
     public static OnRefreshActivity onRefreshActivity;
     public static OnGetUserInfo onGetUserInfo;
     public static OnFileDownloaded onFileDownloaded;
+    public static OnStickerDownloaded onStickerDownloaded;
     public static OnUserInfoMyClient onUserInfoMyClient;
     public static OnChannelAddMessageReaction onChannelAddMessageReaction;
     public static OnChannelGetMessagesStats onChannelGetMessagesStats;
@@ -392,9 +405,21 @@ public class G extends MultiDexApplication {
     public static Card selectedCard = null;
     public static long cardamount;
     public static String jwt = null;
+    public static boolean isBluetoothConnected = false;
+    public static boolean isHandsFreeConnected = false;
+    public static SpeakerControlListener speakerControlListener;
+    public static VideoCallListener videoCallListener;
+    public static RefreshWalletBalance refreshWalletBalance;
+    public static OnHoldBackgroundChanegeListener onHoldBackgroundChanegeListener;
+    public static boolean isWebRtcConnected = false;
+    public static boolean isDepricatedApp = false;
 
     public static int rotationState;
+    public static int mainRingerMode = 0;
+    public static boolean appChangeRinggerMode = false;
 
+    public static LocationListener locationListener;
+    //public static LocationListenerResponse locationListenerResponse;
 
     @Override
     public void onCreate() {
@@ -418,14 +443,40 @@ public class G extends MultiDexApplication {
         Utils.setInstart(context, "fa");
         WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
 
+        try {
+            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+            mainRingerMode = am.getRingerMode();
+        } catch (Exception e) {
+        }
         new StartupActions();
-
+     /*   try {
+            WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
+            WebRtcAudioUtils.setWebRtcBasedNoiseSuppressor(true);
+            WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);
+        } catch (Exception e) {
+        }*/
     }
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(updateResources(base));
         new MultiDexUtils().getLoadedExternalDexClasses(this);
+    }
+
+    private static int makeColorTransparent100(String color) {
+        if (color.length() == 9) {
+            return Color.parseColor("#FF" + color.substring(3));
+        } else {
+            return Color.parseColor(color);
+        }
+    }
+
+    public static int getTheme2BackgroundColor() {
+        return makeColorTransparent100(backgroundTheme_2);
+    }
+
+    public static int getThemeBackgroundColor() {
+        return makeColorTransparent100(backgroundTheme);
     }
 
     public static Context updateResources(Context baseContext) {

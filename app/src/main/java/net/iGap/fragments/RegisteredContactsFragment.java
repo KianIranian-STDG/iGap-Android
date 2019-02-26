@@ -41,6 +41,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Adapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -53,6 +55,7 @@ import com.hanks.library.AnimateCheckBox;
 import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
 import com.mikepenz.fastadapter.items.AbstractItem;
+import com.squareup.picasso.Picasso;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
@@ -93,17 +96,22 @@ import net.iGap.request.RequestUserContactsGetList;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Case;
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
 import static net.iGap.R.string.contacts;
+import static net.iGap.R.string.of;
 
 public class RegisteredContactsFragment extends BaseFragment implements OnUserContactDelete, OnPhoneContact {
 
@@ -112,7 +120,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     RealmResults<RealmContacts> results;
     private TextView menu_txt_titleToolbar;
     private ViewGroup vgAddContact, vgRoot;
-    private RecyclerView realmRecyclerView;
+    private RecyclerView realmRecyclerView, rcvListContact;
     private SharedPreferences sharedPreferences;
     private boolean isImportContactList = false;
     private Realm realm;
@@ -133,6 +141,10 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     private long index = 2500;
     public onClickRecyclerView onCliclRecyclerView;
     public onLongClickRecyclerView onLongClickRecyclerView;
+    AdapterListContact adapterListContact;
+    public boolean isLongClick = false;
+
+    public ArrayList<StructListOfContact> phoneContactsList = new ArrayList<>();
 
 
     public static RegisteredContactsFragment newInstance() {
@@ -433,7 +445,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             }
         };
 
-        RecyclerView rcvListContact = (RecyclerView) view.findViewById(R.id.rcv_friends_to_invite);
+        rcvListContact = (RecyclerView) view.findViewById(R.id.rcv_friends_to_invite);
         fastItemAdapter = new FastItemAdapter();
 
         try {
@@ -494,15 +506,18 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
         rcvListContact.setLayoutManager(new LinearLayoutManager(getContext()));
         rcvListContact.setItemAnimator(new DefaultItemAnimator());
-        rcvListContact.setAdapter(fastItemAdapter);
+        adapterListContact = new AdapterListContact(phoneContactsList);
+        rcvListContact.setAdapter(adapterListContact);
         rcvListContact.setNestedScrollingEnabled(false);
 
+/*
         fastItemAdapter.getItemFilter().withFilterPredicate(new IItemAdapter.Predicate<AdapterListContact>() {
             @Override
             public boolean filter(AdapterListContact item, CharSequence constraint) {
                 return item.item.toLowerCase().startsWith(String.valueOf(constraint));
             }
         });
+*/
 
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
@@ -785,6 +800,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         private boolean isSwipe = false;
         RealmResults<RealmContacts> usersList;
 
+
         ContactListAdapter(RealmResults<RealmContacts> realmResults) {
             super(realmResults, true);
             count = realmResults.size();
@@ -894,15 +910,20 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
             if (selectedList.containsKey(usersList.get(i).getPhone())) {
                 viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
-                viewHolder.animateCheckBox.setCircleColor(G.context.getResources().getColor(R.color.green));
-                viewHolder.animateCheckBox.setLineColor(G.context.getResources().getColor(R.color.white));
+                //  viewHolder.animateCheckBox.setChecked(true);
+                //  viewHolder.animateCheckBox.setLineColor(G.context.getResources().getColor(R.color.white));
                 viewHolder.animateCheckBox.setChecked(true);
 
 //                viewHolder.root.setBackgroundColor(ContextCompat.getColor(G.context, R.color.gray_9d));
             } else {
-                viewHolder.animateCheckBox.setCircleColor(G.context.getResources().getColor(R.color.green));
-                viewHolder.animateCheckBox.setChecked(false);
-                viewHolder.animateCheckBox.setVisibility(View.INVISIBLE);
+                //    viewHolder.animateCheckBox.setCircleColor(G.context.getResources().getColor(R.color.green));
+                if (isLongClick) {
+                    viewHolder.animateCheckBox.setChecked(false);
+                    viewHolder.animateCheckBox.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.animateCheckBox.setChecked(false);
+                    viewHolder.animateCheckBox.setVisibility(View.INVISIBLE);
+                }
 //                viewHolder.root.setBackgroundColor(ContextCompat.getColor(G.context, R.color.white));
             }
 
@@ -936,13 +957,13 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             private RealmContacts realmContacts;
             private SwipeLayout swipeLayout;
             private LinearLayout root;
-            private AnimateCheckBox animateCheckBox;
+            private CheckBox animateCheckBox;
 
             public ViewHolder(View view) {
                 super(view);
 
                 root = (LinearLayout) view.findViewById(R.id.mainContainer);
-                animateCheckBox = (AnimateCheckBox) view.findViewById(R.id.animateCheckBoxContact);
+                animateCheckBox = (CheckBox) view.findViewById(R.id.animateCheckBoxContact);
                 image = (CircleImageView) view.findViewById(R.id.imageView);
                 title = (TextView) view.findViewById(R.id.title);
                 txtDelete = (ViewGroup) view.findViewById(R.id.swipeDelete);
@@ -954,8 +975,12 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                 root.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        if (onLongClickRecyclerView != null)
+                        if (onLongClickRecyclerView != null) {
                             onLongClickRecyclerView.onClick(v, getAdapterPosition());
+                            isLongClick = true;
+                            ;
+                        }
+
                         return false;
                     }
                 });
@@ -1216,11 +1241,44 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         }
     }
 
-    public class AdapterListContact extends AbstractItem<AdapterListContact, AdapterListContact.ViewHolder> {
+/*    private class ContactListStickyHeader implements StickyRecyclerHeadersAdapter {
+
+        ArrayList<StructListOfContact> contactLists;
+
+        ContactListStickyHeader(ArrayList<StructListOfContact> contactLists) {
+            this.contactLists = contactLists;
+        }
+
+        @Override
+        public long getHeaderId(int position) {
+            return contactLists.get(position).getDisplayName().toUpperCase().charAt(0);
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_header_item, parent, false);
+            return new RecyclerView.ViewHolder(view) {
+            };
+        }
+
+        @Override
+        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+            CustomTextViewMedium textView = (CustomTextViewMedium) holder.itemView;
+            textView.setText(contactLists.get(position).getDisplayName().toUpperCase().substring(0, 1));
+        }
+
+        @Override
+        public int getItemCount() {
+            return contactLists.size();
+        }
+    }*/
+
+    public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.ViewHolder> {
 
         public String item;
         public String phone;
-
+        ArrayList<StructListOfContact> mPhoneContactList;
         //public String getItem() {
         //    return item;
         //}
@@ -1230,36 +1288,31 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             this.phone = phone;
         }
 
-        //public void setItem(String item) {
-        //    this.item = item;
-        //}
+        public AdapterListContact(ArrayList<StructListOfContact> mPhoneContactList) {
+            this.mPhoneContactList = mPhoneContactList;
 
-        //The unique ID for this type of item
-        @Override
-        public int getType() {
-            return R.id.root_List_contact;
         }
 
-        //The layout to be used for this type of item
+        @NonNull
         @Override
-        public int getLayoutRes() {
-            return R.layout.adapter_list_cobtact;
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View view = layoutInflater.inflate(R.layout.adapter_list_cobtact, parent, false);
+            return new ViewHolder(view);
         }
 
-        //The logic to bind your data to the view
-
         @Override
-        public void bindView(ViewHolder holder, List payloads) {
-            super.bindView(holder, payloads);
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-            holder.txtName.setText(item);
-            holder.txtPhone.setText(phone);
+            holder.title.setText(mPhoneContactList.get(position).getDisplayName());
+            holder.subtitle.setText(mPhoneContactList.get(position).getPhone());
+            //  G.imageLoader.displayImage(AndroidUtils.suitablePath(holder.image), hashMapAvatar.get(mPhoneContactList.get(position).getDisplayName().charAt(0)));
 
-            holder.root.setOnClickListener(new View.OnClickListener() {
+
+            holder.mRoot.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
                     new MaterialDialog.Builder(G.fragmentActivity)
                             .title(G.fragmentActivity.getResources()
                                     .getString(R.string.igap))
@@ -1283,28 +1336,61 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                 }
             });
 
+    /*        rcvListContact.post(new Runnable() {
+                @Override
+                public void run() {
+                    rcvListContact.removeItemDecoration(decoration);
+                    decoration = new StickyRecyclerHeadersDecoration(new ContactListStickyHeader(mPhoneContactList));
+                    rcvListContact.addItemDecoration(decoration);
+                }
+            });*/
 
         }
 
+/*        @Override
+        public long getHeaderId(int position) {
+            return position;
+        }
+
         @Override
-        public ViewHolder getViewHolder(View v) {
-            return new ViewHolder(v);
+        public ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+            return null;
+        }
+
+        @Override
+        public void onBindHeaderViewHolder(ViewHolder holder, int position) {
+
+        }*/
+
+        @Override
+        public int getItemCount() {
+            return mPhoneContactList.size();
         }
 
         //The viewHolder used for this item. This viewHolder is always reused by the RecyclerView so scrolling is blazing fast
         protected class ViewHolder extends RecyclerView.ViewHolder {
 
 
-            private TextView txtName;
-            private TextView txtPhone;
-            private ViewGroup root;
+           // private CircleImageView imgContact;
+            private TextView title;
+            private TextView subtitle;
+            /*  private ViewGroup txtDelete;
+              private ViewGroup txtEdit;*/
+          /*  protected View topLine;
+            private RealmContacts realmContacts;
+            private SwipeLayout swipeLayout;*/
+            private ViewGroup mRoot;
+            // private AnimateCheckBox animateCheckBox;
 
             public ViewHolder(View view) {
                 super(view);
 
-                txtName = (TextView) view.findViewById(R.id.txtName);
-                txtPhone = (TextView) view.findViewById(R.id.txtPhone);
-                root = (ViewGroup) view.findViewById(R.id.root_List_contact);
+                mRoot = (ViewGroup) view.findViewById(R.id.liContactItem);
+              //  imgContact = (CircleImageView) view.findViewById(R.id.imgContact);
+                title = (TextView) view.findViewById(R.id.title);
+                subtitle = (TextView) view.findViewById(R.id.subtitle);
+              /*  topLine = (View) view.findViewById(R.id.topLine);
+                topLine.setVisibility(View.VISIBLE);*/
 
             }
         }
@@ -1328,8 +1414,53 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         @Override
         protected void onPostExecute(Void aVoid) {
             for (int i = 0; i < contacts.size(); i++) {
-                fastItemAdapter.add(new AdapterListContact(contacts.get(i).getDisplayName(), contacts.get(i).getPhone()).withIdentifier(index++));
+                //   fastItemAdapter.add(new AdapterListContact(contacts.get(i).getDisplayName(), contacts.get(i).getPhone()).withIdentifier(index++));
+
+                String s = contacts.get(i).getPhone();
+                s = s.replaceAll("\\A0|\\+|\\-?", "");
+                if (s.contains(" "))
+                    s = s.replace(" ", "");
+                if (!s.startsWith("98"))
+                    s = "98" + s;
+                contacts.get(i).setPhone(s);
+                //  phoneContactsList.add(contacts.get(i));
+
             }
+
+            //   getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+            RealmResults<RealmContacts> mList = getRealm().where(RealmContacts.class).findAll().sort(RealmContactsFields.DISPLAY_NAME);
+
+
+            ArrayList<StructListOfContact> slc = new ArrayList();
+
+
+            for (int i = 0; i < contacts.size(); i++) {
+                boolean helpIndex = false;
+                for (int j = 0; j < mList.size(); j++) {
+                    if (contacts.get(i).getPhone().equalsIgnoreCase(String.valueOf(mList.get(j).getPhone()))) {
+                        helpIndex = true;
+                        break;
+                    }
+                }
+                if (!helpIndex) {
+                    slc.add(contacts.get(i));
+                }
+            }
+
+
+            //  phoneContactsList.clear();
+            phoneContactsList.addAll(slc);
+
+     /*       Collections.sort(phoneContactsList, new Comparator<StructListOfContact>() {
+                @Override
+                public int compare(StructListOfContact o1, StructListOfContact o2) {
+                    String s1 = o1.displayName;
+                    String s2 = o2.displayName;
+                    return s1.compareToIgnoreCase(s2);
+                }
+            });*/
+
+            adapterListContact.notifyDataSetChanged();
             if (isEnd) {
                 prgWaitingLiadList.setVisibility(View.GONE);
             }
@@ -1416,6 +1547,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         public void onDestroyActionMode(ActionMode mode) {
             mActionMode = null;
             isMultiSelect = false;
+            isLongClick = false;
             selectedList.clear();
             refreshAdapter(0, true);
             toolbar.setVisibility(View.VISIBLE);
@@ -1430,4 +1562,5 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         void onClick(View view, int position);
     }
 }
+
 

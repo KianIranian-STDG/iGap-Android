@@ -2,6 +2,8 @@ package org.paygear.wallet.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.paygear.wallet.RaadApp;
+
 import java.io.Serializable;
 
 import ir.radsense.raadcore.model.Account;
@@ -61,6 +63,14 @@ public class Order implements Serializable {
 
     @SerializedName("is_paid")
     public boolean isPaid;
+
+    @SerializedName("init_app_id")
+    public String app_id;
+
+
+    @SerializedName("status")
+    public int state;
+
     @SerializedName("is_pre_order")
     public boolean isPreOrder;
 
@@ -95,9 +105,9 @@ public class Order implements Serializable {
 
     public Boolean isPay() {
         if (sender != null) {
-            return sender.id.equals(Auth.getCurrentAuth().getId());
+            return sender.id.equals(RaadApp.selectedMerchant==null?Auth.getCurrentAuth().getId(): RaadApp.selectedMerchant.get_id());
         } else if (receiver != null) {
-            return !receiver.id.equals(Auth.getCurrentAuth().getId());
+            return !receiver.id.equals(RaadApp.selectedMerchant==null?Auth.getCurrentAuth().getId():RaadApp.selectedMerchant.get_id());
         }
 
         return null;

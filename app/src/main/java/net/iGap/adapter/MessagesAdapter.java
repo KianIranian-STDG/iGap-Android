@@ -1,38 +1,45 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.adapter;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.mikepenz.fastadapter.FastAdapter;
 import com.mikepenz.fastadapter.IAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
+import com.mikepenz.fastadapter.listeners.ClickEventHook;
 import com.mikepenz.fastadapter.listeners.OnClickListener;
 import com.mikepenz.fastadapter.listeners.OnLongClickListener;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.LogItem;
 import net.iGap.adapter.items.chat.LogWallet;
 import net.iGap.adapter.items.chat.TimeItem;
+import net.iGap.eventbus.ErrorHandler;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnChatMessageRemove;
 import net.iGap.interfaces.OnChatMessageSelectionChanged;
 import net.iGap.module.AndroidUtils;
+import net.iGap.module.AppUtils;
 import net.iGap.module.structs.StructMessageAttachment;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.proto.ProtoGlobal;
@@ -40,6 +47,8 @@ import net.iGap.realm.RealmRegisteredInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.ErrorManager;
 
 public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapter<Item> implements OnLongClickListener<Item> {
     // contain sender id
@@ -52,7 +61,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     private OnLongClickListener longClickListener = new OnLongClickListener<Item>() {
         @Override
         public boolean onLongClick(View v, IAdapter<Item> adapter, Item item, int position) {
-
             if (item instanceof TimeItem || item instanceof LogItem || item instanceof LogWallet) {
                 if (item.isSelected()) v.performLongClick();
             } else {
@@ -90,7 +98,6 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         withOnClickListener(new OnClickListener<Item>() {
             @Override
             public boolean onClick(View v, IAdapter<Item> adapter, Item item, int position) {
-
                 new CountDownTimer(300, 100) {
 
                     public void onTick(long millisUntilFinished) {
@@ -102,23 +109,13 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                     }
                 }.start();
 
+                AppUtils.closeKeyboard(v);
 
                 if ((item instanceof LogWallet)) {
                     return false;
                 }
 
-                if (getSelectedItems().size() == 0) {
-                    if (iMessageItem != null && item.mMessage != null && item.mMessage.senderID != null && !item.mMessage.senderID.equalsIgnoreCase("-1")) {
-                        if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                            return true;
-                        }
-                        if (item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                            iMessageItem.onFailedMessageClick(v, item.mMessage, position);
-                        } else {
-                            iMessageItem.onContainerClick(v, item.mMessage, position);
-                        }
-                    }
-                } else {
+                if (getSelectedItems().size() != 0) {
                     if (!(item instanceof TimeItem)) {
                         if (item.mMessage != null && item.mMessage.status != null && !item.mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
                             v.performLongClick();
@@ -186,6 +183,7 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
                 if (item.mMessage.messageID != null) {
                     if (item.mMessage.messageID.equals(Long.toString(messageId))) {
                         item.mMessage.messageText = updatedText;
+                        item.updateMessageText(updatedText);
                         item.mMessage.isEdited = true;
                         item.mMessage.linkInfo = HelperUrl.getLinkInfo(updatedText);
                         set(i, item);
@@ -407,10 +405,13 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
     @Override
     public void deselect() {
         super.deselect();
-
-        if (onChatMessageSelectionChanged != null) {
-            onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
+        try {
+            if (onChatMessageSelectionChanged != null) {
+                onChatMessageSelectionChanged.onChatMessageSelectionChanged(getSelectedItems().size(), getSelectedItems());
+            }
+        } catch (Exception e) {
         }
+
     }
 
     private void makeSelected(View v) {

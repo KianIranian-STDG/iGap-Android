@@ -11,11 +11,13 @@
 package net.iGap.adapter.items.chat;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
@@ -26,8 +28,8 @@ import io.realm.Realm;
 
 public class ProgressWaiting extends AbstractMessage<net.iGap.adapter.items.chat.ProgressWaiting, net.iGap.adapter.items.chat.ProgressWaiting.ViewHolder> {
 
-    public ProgressWaiting(Realm realmChat, IMessageItem messageClickListener) {
-        super(realmChat, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
+    public ProgressWaiting(MessagesAdapter<AbstractMessage> mAdapter, IMessageItem messageClickListener) {
+        super(mAdapter, false, ProtoGlobal.Room.Type.CHAT, messageClickListener);
     }
 
     @Override
@@ -43,17 +45,12 @@ public class ProgressWaiting extends AbstractMessage<net.iGap.adapter.items.chat
     @Override
     public void bindView(net.iGap.adapter.items.chat.ProgressWaiting.ViewHolder holder, List payloads) {
 
-        if (holder.itemView.findViewById(R.id.cslp_progress_bar_waiting) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getProgressWaitingItem());
-        }
-
-        holder.progressBar = (ProgressBar) holder.itemView.findViewById(R.id.cslp_progress_bar_waiting);
         AppUtils.setProgresColler(holder.progressBar);
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                return false;
+                return true;
             }
         });
 
@@ -72,11 +69,8 @@ public class ProgressWaiting extends AbstractMessage<net.iGap.adapter.items.chat
 
         public ViewHolder(View view) {
             super(view);
-            /**
-             *  this commented code used with xml layout
-             */
-            //progressBar = (ProgressBar) view.findViewById(R.id.cslp_progress_bar_waiting);
-            //AppUtils.setProgresColler(progressBar);
+            progressBar = (ProgressBar) ViewMaker.getProgressWaitingItemView();
+            ((ViewGroup) itemView).addView(progressBar);
         }
     }
 }

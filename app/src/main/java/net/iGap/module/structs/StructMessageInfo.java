@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.module.structs;
 
@@ -16,6 +16,7 @@ import android.os.Parcelable;
 import net.iGap.G;
 import net.iGap.module.MyType;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAdditional;
 import net.iGap.realm.RealmChannelExtra;
 import net.iGap.realm.RealmChannelExtraFields;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -83,6 +84,8 @@ public class StructMessageInfo implements Parcelable {
     public long time;
     public String authorHash;
     public StructChannelExtra channelExtra;
+    public StructAdditionalData additionalData;
+
 
     public StructMessageInfo() {
     }
@@ -95,6 +98,7 @@ public class StructMessageInfo implements Parcelable {
         RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realmChat, Long.parseLong(senderID));
         this.senderAvatar = realmRegisteredInfo != null ? StructMessageAttachment.convert(realmRegisteredInfo.getLastAvatar()) : null;
         //realm.close();
+
 
         this.senderID = senderID;
         this.status = status;
@@ -136,6 +140,8 @@ public class StructMessageInfo implements Parcelable {
         this.fileHash = fileHash;
         this.time = time;
         this.replayTo = realmChat.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, replayToMessageId).findFirst();
+
+
         //realm.close();
     }
 
@@ -303,6 +309,7 @@ public class StructMessageInfo implements Parcelable {
         messageInfo.linkInfo = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().getLinkInfo() : roomMessage.getLinkInfo();
         messageInfo.hasEmojiInText = roomMessage.getForwardMessage() != null ? roomMessage.getForwardMessage().isHasEmojiInText() : roomMessage.isHasEmojiInText();
 
+
         messageInfo.messageID = Long.toString(roomMessage.getMessageId());
         messageInfo.isEdited = roomMessage.isEdited();
         if (!roomMessage.isSenderMe()) {
@@ -349,6 +356,12 @@ public class StructMessageInfo implements Parcelable {
 
         if (roomMessage.getRoomMessageWallet() != null) {
             messageInfo.structWallet = StructWallet.convert(roomMessage.getRoomMessageWallet());
+        }
+
+        if (roomMessage.getRealmAdditional()!=null ){
+            messageInfo.additionalData=StructAdditionalData.convert(roomMessage.getRealmAdditional());
+        }else if( roomMessage.getForwardMessage()!=null && roomMessage.getForwardMessage().getRealmAdditional()!=null){
+            messageInfo.additionalData=StructAdditionalData.convert(roomMessage.getForwardMessage().getRealmAdditional());
         }
 
         messageInfo.replayTo = roomMessage.getReplyTo();

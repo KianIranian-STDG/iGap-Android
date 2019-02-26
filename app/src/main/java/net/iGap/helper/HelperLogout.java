@@ -22,6 +22,8 @@ import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.SHP_SETTING;
 
+import ir.radsense.raadcore.model.Auth;
+
 
 /**
  * truncate realm and go to ActivityIntroduce for register again

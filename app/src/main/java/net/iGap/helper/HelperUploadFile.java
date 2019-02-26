@@ -50,6 +50,7 @@ import static net.iGap.proto.ProtoGlobal.ClientAction.SENDING_VOICE;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.CONTACT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.GIF_TEXT;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.IMAGE_TEXT;
+import static net.iGap.proto.ProtoGlobal.RoomMessageType.STICKER;
 import static net.iGap.proto.ProtoGlobal.RoomMessageType.VIDEO_TEXT;
 
 public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusResponse {
@@ -231,6 +232,8 @@ public class HelperUploadFile implements OnFileUpload, OnFileUploadStatusRespons
             action = SENDING_LOCATION;
         } else if (type == CONTACT) {
             action = CHOOSING_CONTACT;
+        }else if(type==STICKER){
+            action = SENDING_IMAGE ;
         }
 
         return action;

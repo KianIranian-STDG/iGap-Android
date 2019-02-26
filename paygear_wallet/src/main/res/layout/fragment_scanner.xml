@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fragment_back"
+    android:orientation="vertical"
+    android:clickable="true"
+    tools:context=".fragment.ScannerFragment">
+
+    <!--<android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardMaxElevation="0dp"
+        app:cardElevation="@dimen/app_bar_card_view_elevation"
+        android:layout_marginTop="-8dp">-->
+
+    <ir.radsense.raadcore.app.RaadToolBar
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+       />
+
+    <!--</android.support.v7.widget.CardView>-->
+    <RelativeLayout
+        android:id="@+id/root_current"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:layout_marginTop="2dp">
+    <TextView
+        android:id="@+id/balance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="#1e96ff"
+        android:gravity="center_horizontal"
+        android:padding="14dp"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+
+    <RelativeLayout
+        android:id="@+id/content_layout"
+        android:layout_below="@+id/balance"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.journeyapps.barcodescanner.BarcodeView
+            android:id="@+id/zxing_barcode_surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/scan_frame"
+            android:layout_centerHorizontal="true"
+            android:text="@string/scan"
+            android:textColor="@android:color/white"
+            android:textSize="38sp" />
+
+        <ImageView
+            android:id="@+id/scan_frame"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_centerInParent="true"
+            android:layout_margin="16dp"
+            android:src="@drawable/scanner_frame" />
+
+        <!--  <ImageView
+              android:layout_width="56dp"
+              android:layout_height="56dp"
+              android:layout_centerInParent="true"
+              android:src="@drawable/ic_scanner_paygear_logo"/>-->
+
+        <FrameLayout
+            android:id="@+id/progress_layout"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
+
+
+        <ImageView
+            android:id="@+id/flash"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="24dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/ic_scanner_flash" />
+
+        <ImageView
+            android:id="@+id/code"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="24dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/ic_scanner_code" />
+
+    </RelativeLayout>
+
+    </RelativeLayout>
+    <!--<LinearLayout
+        android:id="@+id/code_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/enter_code_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:text="@string/enter_receiver_code"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:id="@+id/code_back"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/ok_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:background="?android:attr/selectableItemBackground"
+                android:textSize="22sp"
+                android:textColor="#2196f3"
+                android:text="@string/ok"
+                android:padding="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"/>
+
+            <EditText
+                android:id="@+id/code_text"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:textColor="#212121"
+                android:inputType="number"
+                android:hint="@string/receiver_code"
+                android:background="@android:color/transparent"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>-->
+
+
+</LinearLayout>

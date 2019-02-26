@@ -20,13 +20,16 @@
     <string name="text_line_2_introduce_page4">You have an authority to transfer any file with any size and type or save them on your cloud storage; and then share anything you’d like to with anyone you’d want to.</string>
 
     <!-- Page 5 introduce app -->
-    <string name="text_line_1_introduce_page5">Voice Call</string>
-    <string name="text_line_2_introduce_page5">You can make thoroughly free and secure voice calls to anyone on iGap and save your money. iGap voice call is P2P-based with no server\'s interference in voice transmission.</string>
+    <string name="text_line_1_introduce_page5">Voice and video Call</string>
+    <string name="text_line_2_introduce_page5">You can make thoroughly free and secure voice and video calls to anyone on iGap and save your money. iGap voice and video call is P2P-based with no server\'s interference in voice and video transmission.</string>
 
     <!-- Page 6 introduce app -->
     <string name="btn_start_page6">Start Now</string>
     <string name="text_line_1_introduce_page6">Everything for Free in iGap!</string>
     <string name="text_line_2_introduce_page6">Let’s stop waiting! \n iGap is thoroughly free. So, just now build your own world freely.</string>
+
+    <string name="text_line_1_introduce_page7">Nearby Feature</string>
+    <string name="text_line_2_introduce_page7">Leave a new world around me. Around you, find your friends, entertainment centers, art, business and other and enjoy your moments ...</string>
 
 
     <!--Fill Profile User -->
@@ -679,7 +682,7 @@
     <string name="female">Female</string>
     <string name="share_via">Share via</string>
     <string name="error">Error</string>
-    <string name="please_enter_code_for_verify">"Please enter code to verify."</string>
+    <string name="please_enter_code_for_verify">"Enter Code."</string>
     <string name="server_do_not_response">Server don\'t response</string>
     <string name="share_image_from_igap">Share image from iGap</string>
     <string name="TERMINATE">"TERMINATE"</string>
@@ -887,7 +890,7 @@
     <string name="igap_search">Look and Find</string>
     <string name="set_color_to_default">Reset Colors Back to Default</string>
     <string name="empty_message">Please try to enter the first 5 characters of username</string>
-    <string name="empty_message3">Enter at least 3 characters to search</string>
+    <string name="empty_message3">Enter at least 5 characters to search</string>
     <string name="there_is_no_any_result">No Result</string>
     <string name="there_is_no_connection_to_server">Server not found</string>
     <string name="empty_room">No Messages Yet</string>
@@ -917,8 +920,8 @@
     <string name="text_limit_Create_Group">You are allowed to create up to 25 Groups and/or Channels</string>
     <string name="show_sender_name_in_group">Show Sender Name in Groups</string>
     <string name="calls">Call list</string>
-    <string name="voice_calls">Voice Call</string>
-    <string name="video_calls">Video Call</string>
+    <string name="voice_calls">iGap Voice Call</string>
+    <string name="video_calls">iGap Video Call</string>
     <string name="map">Map</string>
     <string name="igap_nearby">Nearby</string>
     <string name="igap_call">iGap Voice Call</string>
@@ -1382,6 +1385,36 @@
     <string name="permission_auto_start">please select and active iGap from menu to receive messages when even app is not in background</string>
     <string name="dont_show_again">Do not show again</string>
     <string name="invitation_message">\Hey Join iGap : https://www.igap.net/ I\'m waiting for you!\ \n Reagent ID is : </string>
-
+    <string name="namma_per_uh">FileLister</string>
+    <string name="Please_enter_valid_folder_name">Please enter a valid folder name</string>
+    <string name="This_folder_already_exists">"This folder already exists.\n Please provide another name for the folder"</string>
+    <string name="Select_directory">Select a directory</string>
+    <string name="Select_Video_file">Select a Video file</string>
+    <string name="Select_Image_file">Select an Image file</string>
+    <string name="Select_Audio_file">Select Audio file</string>
+    <string name="Select_file">Select a file</string>
+    <string name="Default_Dir">Default Dir</string>
+    <string name="Select">Select</string>
+    <string name="Create_new_Folder_here">Create a new Folder here</string>
+    <string name="Powered_by_iGap">Powered by iGap</string>
+    <string name="on_hold">call on hold...</string>
+    <string name="switchTo">switch To :</string>
+    <string name="stop">Stop Bot</string>
+    <string name="stop_message_bot">Are you sure you want to stop this bot?</string>
+    <string name="startUpdate">update</string>
+    <string name="sticker">Sticker</string>
+    <string name="add_sticker">Add Sticker</string>
+    <string name="remove_sticker">Remove Sticker</string>
+    <string name="remove_sticker_text">Are you sure you want to remove this stickers?</string>
+    <string name="add_sticker_text">Are you sure you want to install this stickers?</string>
+    <string name="access_phone_number">Are you sure to send your phone number?</string>
+    <string name="access_location">Are you sure to send your location?</string>
+    <string name="sticker_message">Sticker message</string>
+    <string name="Sticker_added_successfully">Sticker added successfully</string>
+    <string name="Add">Add</string>
+    <string name="Remove">Remove</string>
+    <string name="Recently">Recently</string>
+    <string name="Favorite">Favorite</string>
+    <string name="Please_select_an_option">Please select an option</string>
 
 </resources>

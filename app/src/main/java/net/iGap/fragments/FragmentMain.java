@@ -1,7 +1,9 @@
 package net.iGap.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +35,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.ViewMaker;
@@ -41,6 +44,7 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
+import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
@@ -88,6 +92,7 @@ import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestUserContactsUnblock;
+import net.iGap.request.RequestUserLogin;
 
 import java.util.HashMap;
 import java.util.List;
@@ -1048,6 +1053,9 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
         G.onSetActionInRoom = this;
         G.onDateChanged = this;
+        if (G.isDepricatedApp)
+            isDeprecated();
+
         //G.onSelectMenu = this;
         //G.onRemoveFragment = this;
         //G.onDraftMessage = this;
@@ -1110,40 +1118,74 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
     @Override
     public void isDeprecated() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                new MaterialDialog.Builder(getActivity())
-                        .cancelable(false)
-                        .title(R.string.new_version_alert).titleGravity(GravityEnum.CENTER)
-                        .titleColor(Color.parseColor("#f44336"))
-                        .content(R.string.deprecated)
-                        .contentGravity(GravityEnum.CENTER)
-                        .show();
+        try {
+            if (G.fragmentActivity.hasWindowFocus()) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        new MaterialDialog.Builder(getActivity())
+                                .cancelable(false)
+                                .title(R.string.new_version_alert).titleGravity(GravityEnum.CENTER)
+                                .titleColor(Color.parseColor("#f44336"))
+                                .content(R.string.deprecated)
+                                .contentGravity(GravityEnum.CENTER)
+                                .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                // HelperUrl.openBrowser("http://d.igap.net/update");
+                                String url = "http://d.igap.net/update";
+                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                i.setData(Uri.parse(url));
+                                startActivity(i);
+                            }
+                        })
+                                .show();
+                    }
+                });
             }
-        });
+        } catch (Exception e) {
+        }
 
     }
 
     @Override
     public void isUpdateAvailable() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                new MaterialDialog.Builder(G.fragmentActivity)
-                        .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
-                        .titleGravity(GravityEnum.CENTER)
-                        .buttonsGravity(GravityEnum.CENTER)
-                        .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
-                        .positiveText(R.string.ignore).onPositive(new MaterialDialog.SingleButtonCallback() {
+        try {
+            if (G.fragmentActivity.hasWindowFocus()) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
+                    public void run() {
+                        new MaterialDialog.Builder(G.fragmentActivity)
+                                .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
+                                .titleGravity(GravityEnum.CENTER)
+                                .buttonsGravity(GravityEnum.CENTER)
+                                .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
+                                .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                dialog.dismiss();
+                            }
+                        }).positiveText(R.string.startUpdate).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                // HelperUrl.openBrowser("http://d.igap.net/update");
+                                String url = "http://d.igap.net/update";
+                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                i.setData(Uri.parse(url));
+                                startActivity(i);
+                                dialog.dismiss();
+                            }
+                        })
+                                .show();
                     }
-                })
-               .show();
+                });
+
             }
-        });
+        } catch (Exception e) {
+        }
     }
 
     public enum MainType {
@@ -1261,7 +1303,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                     //if (mInfo.getChatRoom() != null && RealmRoom.isBot(mInfo.getChatRoom().getPeerId())) {
 
                     if (mInfo != null && RealmRoom.isPromote(mInfo.getId())) {
-          //              holder.rootChat.setBackgroundColor(G.context.getResources().getColor(R.color.green_20));
+                        //              holder.rootChat.setBackgroundColor(G.context.getResources().getColor(R.color.green_20));
                         holder.txtPinIcon.setVisibility(View.GONE);
                     } else {
                         holder.txtPinIcon.setVisibility(View.VISIBLE);
@@ -1290,7 +1332,11 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                     if (mInfo.getMute()) {
                         AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor("#c6c1c1"));
                     } else {
-                        AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(G.notificationColor));
+                        if (G.isDarkTheme) {
+                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(Theme.default_notificationColor));
+                        } else {
+                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(G.notificationColor));
+                        }
                     }
                 }
 
@@ -1323,7 +1369,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         }*/
 
 
-
         private String subStringInternal(String text) {
             if (text == null || text.length() == 0) {
                 return "";
@@ -1353,15 +1398,11 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
 
                 holder.txtLastMessage.setText(subStringInternal(mInfo.getDraft().getMessage()));
-                holder.txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
+                holder.txtLastMessage.setTextColor(Color.parseColor(G.textSubTheme));
 
                 holder.lastMessageSender.setVisibility(View.VISIBLE);
                 holder.lastMessageSender.setText(R.string.txt_draft);
-                if (G.isDarkTheme) {
-                    holder.lastMessageSender.setTextColor(Color.parseColor(G.textSubTheme));
-                } else {
-                    holder.lastMessageSender.setTextColor(Color.parseColor(G.appBarColor));
-                }
+                holder.lastMessageSender.setTextColor(Color.parseColor(G.roomSenderTextColor));
 
                 holder.lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
             } else {
@@ -1432,11 +1473,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                             holder.lastMessageSender.setVisibility(View.VISIBLE);
 
                             holder.lastMessageSender.setText(lastMessageSender);
-                            if (G.isDarkTheme) {
-                                holder.lastMessageSender.setTextColor(Color.parseColor(G.textSubTheme));
-                            } else {
-                                holder.lastMessageSender.setTextColor(Color.parseColor(G.appBarColor));
-                            }
+                            holder.lastMessageSender.setTextColor(Color.parseColor(G.roomSenderTextColor));
 
                         } else {
                             holder.lastMessageSender.setVisibility(View.GONE);
@@ -1477,14 +1514,14 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                                 e.printStackTrace();
                             }
 
-                            String result = AppUtils.conversionMessageType(_type, holder.txtLastMessage, R.color.room_message_blue);
+                            String result = AppUtils.conversionMessageType(_type, holder.txtLastMessage, G.roomMessageTypeColor);
                             if (result.isEmpty()) {
                                 if (!HelperCalander.isPersianUnicode) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                                         holder.txtLastMessage.setTextDirection(View.TEXT_DIRECTION_LTR);
                                     }
                                 }
-                                holder.txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_gray));
+                                holder.txtLastMessage.setTextColor(Color.parseColor(G.textSubTheme));
                                 holder.txtLastMessage.setText(subStringInternal(lastMessage));
                                 holder.txtLastMessage.setEllipsize(TextUtils.TruncateAt.END);
                             } else {
@@ -1692,7 +1729,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
                                 if (!G.fragmentActivity.isFinishing()) {
                                     long peerId = mInfo.getChatRoom() != null ? mInfo.getChatRoom().getPeerId() : 0;
-                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId,mInfo, new OnComplete() {
+                                    MyDialog.showDialogMenuItemRooms(G.fragmentActivity, mInfo.getTitle(), mInfo.getType(), mInfo.getMute(), role, peerId, mInfo, new OnComplete() {
                                         @Override
                                         public void complete(boolean result, String messageOne, String MessageTow) {
                                             onSelectRoomMenu(messageOne, mInfo);

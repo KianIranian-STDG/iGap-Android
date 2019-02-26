@@ -1,16 +1,62 @@
 package net.iGap.module;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+
+import net.iGap.G;
+import net.iGap.request.RequestSignalingSessionHold;
+import net.iGap.webrtc.WebRTC;
+
 
 public class MyPhoneStateListener extends PhoneStateListener {
 
     public static int lastPhoneState = TelephonyManager.CALL_STATE_IDLE;
     public static boolean isBlutoothOn = false;
 
+
     public void onCallStateChanged(int state, String incomingNumber) {
+        if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+          /*  if (G.onRejectCallStatus != null)
+                G.onRejectCallStatus.setReject(true);*/
+    /*        try {
+                WebRTC.getInstance().leaveCall();
+            }catch (Exception e){}*/
+
+            new RequestSignalingSessionHold().signalingSessionHold(true);
+            WebRTC.getInstance().muteSound();
+            WebRTC.getInstance().pauseVideoCapture();
+
+
+            G.isCalling = true;
+        } else if (state == TelephonyManager.CALL_STATE_RINGING) {
+
+            if (G.isVideoCallRinging) {
+                try {
+                    WebRTC.getInstance().leaveCall();
+                } catch (Exception e) {
+                }
+
+              /*  if (G.onRejectCallStatus != null)
+                    G.onRejectCallStatus.setReject(true);*/
+            }
+            G.isCalling = true;
+            G.isVideoCallRinging = false;
+        } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+            WebRTC.getInstance().unMuteSound();
+            WebRTC.getInstance().startVideoCapture();
+
+            new RequestSignalingSessionHold().signalingSessionHold(false);
+            WebRTC.getInstance().unMuteSound();
+            WebRTC.getInstance().startVideoCapture();
+
+            G.isCalling = false;
+        }
+
 
         if (lastPhoneState == state || !MusicPlayer.isMusicPlyerEnable) {
+
             return;
         } else {
 
@@ -18,6 +64,7 @@ public class MyPhoneStateListener extends PhoneStateListener {
 
             if (state == TelephonyManager.CALL_STATE_RINGING) {
                 pauseSoundIfPlay();
+
             } else if (state == TelephonyManager.CALL_STATE_IDLE) {
 
                 if (MusicPlayer.pauseSoundFromCall) {

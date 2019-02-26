@@ -4,7 +4,7 @@
 
   <item
     android:id="@+id/action_delete"
-    android:icon="@drawable/ic_check"
+    android:icon="@drawable/ic_garbage"
     android:iconTint="@color/black"
     android:title="@string/delete_item_dialog"
     app:showAsAction="always" />

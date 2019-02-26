@@ -142,6 +142,7 @@
                 android:paddingBottom="16dp"
                 android:paddingLeft="24dp"
                 android:paddingRight="24dp"
+                android:visibility="gone"
                 android:text="@string/edit_profile_hint"/>
 
             <TextView

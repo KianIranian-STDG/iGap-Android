@@ -1,10 +1,30 @@
 package org.paygear.wallet.utils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.RGBLuminanceSource;
+import com.google.zxing.Reader;
+import com.google.zxing.Result;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.HybridBinarizer;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import org.paygear.wallet.R;
+import org.paygear.wallet.fragment.AccountPaymentDialog;
 import org.paygear.wallet.model.Card;
 import org.paygear.wallet.model.Payment;
 
@@ -23,7 +43,15 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import ir.radsense.raadcore.model.Account;
 import ir.radsense.raadcore.model.Auth;
+import ir.radsense.raadcore.model.Coupon;
+import ir.radsense.raadcore.model.QR;
+import ir.radsense.raadcore.utils.RaadCommonUtils;
+
+import static ir.radsense.raadcore.model.QR.QR_TYPE_ACCOUNT;
+import static ir.radsense.raadcore.model.QR.QR_TYPE_COUPON;
+import static ir.radsense.raadcore.model.QR.QR_TYPE_DIRECT_PAY;
 
 /**
  * Created by Ghaisar on 4/18/2016 AD.

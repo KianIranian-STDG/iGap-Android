@@ -51,7 +51,7 @@ public class HelperPermission {
     private static OnGetPermission ResultLocation;
     private static OnGetPermission ResultRecordAudio;
     private static OnGetPermission ResultPhone;
-    private static OnGetPermission ResultSms;
+//    private static OnGetPermission ResultSms;
 
     //************************************************************************************************************
     public static void getCameraPermission(Context context, OnGetPermission onGetPermission) throws IOException {
@@ -289,35 +289,34 @@ public class HelperPermission {
         }
     }
 
-    //************************************************************************************************************
-    public static void getSmsPermision(Context context, OnGetPermission onGetPermission) throws IOException {
+//    //************************************************************************************************************
+//    public static void getSmsPermision(Context context, OnGetPermission onGetPermission) throws IOException {
+//
+//        if (checkApi()) {
+//            if (onGetPermission != null) onGetPermission.Allow();
+//            return;
+//        }
+//
+//        ResultSms = onGetPermission;
+//
+//        ArrayList<String> needPermission = null;
+//
+//        int permissionReceiveSms = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS);
+//
+//        if (permissionReceiveSms != PackageManager.PERMISSION_GRANTED) {
+//            needPermission = new ArrayList<>();
+//            needPermission.add(Manifest.permission.RECEIVE_SMS);
+//        }
+//
+//        if (needPermission != null) {
+//            String[] mStringArray = new String[needPermission.size()];
+//            mStringArray = needPermission.toArray(mStringArray);
+//            getPermission(context, mStringArray, MY_PERMISSIONS_Sms, context.getResources().getString(R.string.permission_sms), ResultSms);
+//        } else {
+//            if (onGetPermission != null) onGetPermission.Allow();
+//        }
+//    }
 
-        if (checkApi()) {
-            if (onGetPermission != null) onGetPermission.Allow();
-            return;
-        }
-
-        ResultSms = onGetPermission;
-
-        ArrayList<String> needPermission = null;
-
-        int permissionReceiveSms = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS);
-
-        if (permissionReceiveSms != PackageManager.PERMISSION_GRANTED) {
-            needPermission = new ArrayList<>();
-            needPermission.add(Manifest.permission.RECEIVE_SMS);
-        }
-
-        if (needPermission != null) {
-            String[] mStringArray = new String[needPermission.size()];
-            mStringArray = needPermission.toArray(mStringArray);
-            getPermission(context, mStringArray, MY_PERMISSIONS_Sms, context.getResources().getString(R.string.permission_sms), ResultSms);
-        } else {
-            if (onGetPermission != null) onGetPermission.Allow();
-        }
-    }
-
-    //************************************************************************************************************
     //************************************************************************************************************
     private static boolean checkApi() {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -398,9 +397,9 @@ public class HelperPermission {
             case MY_PERMISSIONS_Phone:
                 actionResultBack(grantResults, ResultPhone);
                 break;
-            case MY_PERMISSIONS_Sms:
-                actionResultBack(grantResults, ResultSms);
-                break;
+//            case MY_PERMISSIONS_Sms:
+//                actionResultBack(grantResults, ResultSms);
+//                break;
         }
     }
 

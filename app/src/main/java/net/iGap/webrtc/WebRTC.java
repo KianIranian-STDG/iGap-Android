@@ -59,6 +59,7 @@ public class WebRTC {
     private PeerConnection peerConnection;
     private PeerConnectionFactory peerConnectionFactory;
     private MediaStream mediaStream;
+
     private String offerSdp;
     private MediaConstraints mediaConstraints;
     private MediaConstraints audioConstraints;
@@ -73,6 +74,7 @@ public class WebRTC {
     public static WebRTC getInstance() {
         if (webRTCInstance == null) {
             webRTCInstance = new WebRTC();
+
         }
         return webRTCInstance;
     }
@@ -135,9 +137,12 @@ public class WebRTC {
                 public void onFrame(VideoFrame videoFrame) {
                     if (G.onVideoCallFrame != null) {
                         G.onVideoCallFrame.onPeerFrame(videoFrame);
+                    /*    Log.i("#peymanW2",videoFrame.getRotatedWidth()+"");
+                        Log.i("#peymanH2",videoFrame.getRotatedHeight()+"");*/
                     }
                 }
             });
+
 
             mediaStream.addTrack(videoTrackFromCamera);
         }
@@ -199,36 +204,60 @@ public class WebRTC {
     private PeerConnectionFactory peerConnectionFactoryInstance() {
         if (peerConnectionFactory == null) {
 
-            Set<String> HARDWARE_AEC_WHITELIST = new HashSet<String>() {{
-                add("D5803");
-                add("FP1");
-                add("SM-A500FU");
-                add("XT1092");
-            }};
-
-            Set<String> OPEN_SL_ES_WHITELIST = new HashSet<String>() {{
-            }};
-
-            if (Build.VERSION.SDK_INT >= 11) {
-                if (HARDWARE_AEC_WHITELIST.contains(Build.MODEL)) {
-                    WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(false);
-                } else {
-                    WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
-                }
-
-                if (OPEN_SL_ES_WHITELIST.contains(Build.MODEL)) {
-                    WebRtcAudioManager.setBlacklistDeviceForOpenSLESUsage(false);
-                } else {
-                    WebRtcAudioManager.setBlacklistDeviceForOpenSLESUsage(true);
-                }
-            }
-
+            initializePeerConnectionFactory();
 
             PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
             peerConnectionFactory = PeerConnectionFactory.builder().createPeerConnectionFactory();
 
         }
         return peerConnectionFactory;
+    }
+
+    private void initializePeerConnectionFactory() {
+        try {
+            Set<String> HARDWARE_AEC_BLACKLIST = new HashSet<String>() {{
+                add("Pixel");
+                add("Pixel XL");
+                add("Moto G5");
+                add("Moto G (5S) Plus");
+                add("Moto G4");
+                add("TA-1053");
+                add("Mi A1");
+                add("E5823"); // Sony z5 compact
+            }};
+
+            Set<String> OPEN_SL_ES_WHITELIST = new HashSet<String>() {{
+                add("Pixel");
+                add("Pixel XL");
+            }};
+
+
+            if (WebRtcAudioUtils.isAcousticEchoCancelerSupported()) {
+                WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
+            }
+
+            if (WebRtcAudioUtils.isAutomaticGainControlSupported()) {
+                WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);
+            }
+
+            if (WebRtcAudioUtils.isNoiseSuppressorSupported()) {
+                WebRtcAudioUtils.setWebRtcBasedNoiseSuppressor(true);
+            }
+
+//            if (HARDWARE_AEC_BLACKLIST.contains(Build.MODEL)) {
+//                    WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
+//            }
+
+            if (!OPEN_SL_ES_WHITELIST.contains(Build.MODEL)) {
+                WebRtcAudioManager.setBlacklistDeviceForOpenSLESUsage(true);
+            }
+
+            PeerConnectionFactory.initialize(PeerConnectionFactory.InitializationOptions.builder(G.context).createInitializationOptions());
+        } catch (UnsatisfiedLinkError e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     PeerConnection peerConnectionInstance() {
@@ -246,6 +275,7 @@ public class WebRTC {
             configuration.rtcpMuxPolicy = PeerConnection.RtcpMuxPolicy.REQUIRE;
             configuration.iceTransportsType = PeerConnection.IceTransportsType.RELAY;
 
+
             PeerConnection.Observer observer = new PeerConnectionObserver();
             MediaConstraints mediaConstraints = mediaConstraintsGetInstance();
 
@@ -255,6 +285,7 @@ public class WebRTC {
             addAudioTrack(mediaStream);
             addVideoTrack(mediaStream);
             peerConnection.addStream(mediaStream);
+
         }
 
         return peerConnection;
@@ -372,14 +403,16 @@ public class WebRTC {
     }
 
     public void close() {
-        if (peerConnection != null) {
-            peerConnection.close();
-        }
-    }
 
-    void dispose() {
         try {
+
+            if (videoCapturer != null) {
+                videoCapturer.stopCapture();
+                videoCapturer = null;
+            }
+
             if (peerConnection != null) {
+                peerConnection.close();
                 peerConnection.dispose();
             }
 
@@ -387,21 +420,15 @@ public class WebRTC {
                 peerConnectionFactory.dispose();
             }
 
-            if (videoCapturer != null) {
-                videoCapturer.stopCapture();
-                videoCapturer = null;
-            }
+            peerConnectionFactory = null;
+            peerConnection = null;
+            webRTCInstance = null;
 
         } catch (RuntimeException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
 
-    void clearConnection() {
-        peerConnectionFactory = null;
-        peerConnection = null;
-        webRTCInstance = null;
     }
 }

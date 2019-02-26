@@ -11,12 +11,17 @@
 package net.iGap.adapter.items.chat;
 
 import android.graphics.Bitmap;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
@@ -37,8 +42,8 @@ import io.realm.Realm;
 
 public class LocationItem extends AbstractMessage<LocationItem, LocationItem.ViewHolder> {
 
-    public LocationItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public LocationItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
     @Override
@@ -53,14 +58,6 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
 
     @Override
     public void bindView(final ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getLocationItem());
-
-        }
-
-        holder.imgMapPosition = (ReserveSpaceRoundedImageView) holder.itemView.findViewById(R.id.thumbnail);
-
         super.bindView(holder, payloads);
 
         holder.imgMapPosition.reserveSpace(G.context.getResources().getDimension(R.dimen.dp240), G.context.getResources().getDimension(R.dimen.dp120), getRoomType());
@@ -94,9 +91,16 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
             }
 
             final RealmRoomMessageLocation finalItem = item;
+            holder.imgMapPosition.setOnLongClickListener(getLongClickPerform(holder));
+
             holder.imgMapPosition.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (FragmentChat.isInSelectionMode) {
+                        holder.itemView.performLongClick();
+                        return;
+                    }
+
                     try {
                         HelperPermission.getLocationPermission(G.currentActivity, new OnGetPermission() {
 
@@ -142,12 +146,29 @@ public class LocationItem extends AbstractMessage<LocationItem, LocationItem.Vie
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem {
 
         ReserveSpaceRoundedImageView imgMapPosition;
 
         public ViewHolder(View view) {
             super(view);
+            FrameLayout frameLayout = new FrameLayout(G.context);
+            frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+
+            imgMapPosition = new ReserveSpaceRoundedImageView(G.context);
+            imgMapPosition.setId(R.id.thumbnail);
+            imgMapPosition.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imgMapPosition.setCornerRadius((int) G.context.getResources().getDimension(R.dimen.messageBox_cornerRadius));
+            LinearLayout.LayoutParams layout_758 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            imgMapPosition.setLayoutParams(layout_758);
+
+            frameLayout.addView(imgMapPosition);
+            m_container.addView(frameLayout);
+        }
+
+        @Override
+        public ImageView getThumbNailImageView() {
+            return imgMapPosition;
         }
     }
 }

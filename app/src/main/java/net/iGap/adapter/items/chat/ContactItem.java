@@ -10,13 +10,17 @@
 
 package net.iGap.adapter.items.chat;
 
-import android.support.v7.widget.RecyclerView;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.MessagesAdapter;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
@@ -25,24 +29,29 @@ import java.util.List;
 
 import io.realm.Realm;
 
+import static android.widget.LinearLayout.HORIZONTAL;
+import static android.widget.LinearLayout.VERTICAL;
+import static net.iGap.G.context;
+import static net.iGap.R.dimen.messageContainerPadding;
+
 public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHolder> {
 
-    public ContactItem(Realm realmChat, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
-        super(realmChat, true, type, messageClickListener);
+    public ContactItem(MessagesAdapter<AbstractMessage> mAdapter, ProtoGlobal.Room.Type type, IMessageItem messageClickListener) {
+        super(mAdapter, true, type, messageClickListener);
     }
 
     @Override
     protected void updateLayoutForSend(ViewHolder holder) {
         super.updateLayoutForSend(holder);
-        AppUtils.setImageDrawable(((ImageView) holder.itemView.findViewById(R.id.image)), R.drawable.black_contact);
+        AppUtils.setImageDrawable(holder.image, R.drawable.black_contact);
     }
 
     @Override
     protected void updateLayoutForReceive(ViewHolder holder) {
         super.updateLayoutForReceive(holder);
-        ((TextView) holder.itemView.findViewById(R.id.name)).setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-        ((TextView) holder.itemView.findViewById(R.id.name)).setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
-        AppUtils.setImageDrawable(((ImageView) holder.itemView.findViewById(R.id.image)), R.drawable.green_contact);
+        holder.name.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+        holder.name.setTextColor(holder.itemView.getResources().getColor(R.color.colorOldBlack));
+        AppUtils.setImageDrawable(holder.image, R.drawable.green_contact);
     }
 
     @Override
@@ -57,15 +66,6 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
     @Override
     public void bindView(ViewHolder holder, List payloads) {
-
-        if (holder.itemView.findViewById(R.id.mainContainer) == null) {
-            ((ViewGroup) holder.itemView).addView(ViewMaker.getContactItem());
-        }
-
-        holder.name = (TextView) holder.itemView.findViewById(R.id.name);
-        holder.number = (TextView) holder.itemView.findViewById(R.id.number);
-
-
         super.bindView(holder, payloads);
 
         if (mMessage.forwardedFrom != null) {
@@ -86,20 +86,59 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
         return new ViewHolder(v);
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends ChatItemHolder {
 
-        /**
-         * this commented code used with xml layout
-         */
         protected TextView name;
         protected TextView number;
-        //   protected ImageView image;
+        protected ImageView image;
 
         public ViewHolder(View view) {
             super(view);
-            //name = (TextView) view.findViewById(R.id.name);
-            //number = (TextView) view.findViewById(R.id.number);
-            //image = (ImageView) view.findViewById(R.id.image);
+            LinearLayout container2 = new LinearLayout(context);
+            LinearLayout.LayoutParams layoutParamsContainer2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            container2.setOrientation(HORIZONTAL);
+            container2.setPadding((int) G.context.getResources().getDimension(messageContainerPadding), 0, 5, 2);
+            container2.setLayoutParams(layoutParamsContainer2);
+
+            image = new ImageView(G.context);
+            LinearLayout.LayoutParams layoutParamsImage = new LinearLayout.LayoutParams(ViewMaker.i_Dp(R.dimen.dp48), ViewMaker.i_Dp(R.dimen.dp48));
+            layoutParamsImage.rightMargin = 14;
+            image.setId(R.id.image);
+            image.setContentDescription(null);
+            AppUtils.setImageDrawable(image, R.mipmap.user);
+            image.setLayoutParams(layoutParamsImage);
+
+            LinearLayout container3 = new LinearLayout(context);
+            LinearLayout.LayoutParams layoutParamsContainer3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            container3.setOrientation(VERTICAL);
+            container3.setLayoutParams(layoutParamsContainer3);
+
+            name = new TextView(G.context);
+            LinearLayout.LayoutParams layoutParamsName = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            name.setId(R.id.name);
+            name.setTextAppearance(context, android.R.style.TextAppearance_Medium);
+            name.setTextColor(Color.parseColor(G.textBubble));
+            name.setText("Contact Name");
+            ViewMaker.setTextSize(name, R.dimen.dp14);
+            ViewMaker.setTypeFace(name);
+            name.setLayoutParams(layoutParamsName);
+            container3.addView(name);
+
+            number = new TextView(G.context);
+            LinearLayout.LayoutParams layoutParamsNumber = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            number.setId(R.id.number);
+            number.setTextAppearance(context, android.R.style.TextAppearance_Small);
+            ViewMaker.setTypeFace(number);
+
+            number.setTextColor(Color.parseColor(G.textBubble));
+            number.setText("Contact Number");
+            number.setLayoutParams(layoutParamsNumber);
+
+            container3.addView(number);
+            container2.addView(image);
+            container2.addView(container3);
+
+            m_container.addView(container2);
         }
     }
 }

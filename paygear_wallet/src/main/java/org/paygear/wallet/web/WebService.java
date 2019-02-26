@@ -1,10 +1,15 @@
 package org.paygear.wallet.web;
 
 
+import android.support.annotation.Nullable;
+
+import org.paygear.wallet.model.AvailableClubs_Result;
 import org.paygear.wallet.model.Card;
 import org.paygear.wallet.model.CashoutUserConfirm;
 import org.paygear.wallet.model.CreditLimit;
 import org.paygear.wallet.model.CreditResult;
+import org.paygear.wallet.model.Iban;
+import org.paygear.wallet.model.MerchantsResult;
 import org.paygear.wallet.model.OTPVerifyResult;
 import org.paygear.wallet.model.Order;
 import org.paygear.wallet.model.PaymentAuth;
@@ -14,6 +19,7 @@ import org.paygear.wallet.model.QRResponse;
 import org.paygear.wallet.model.Transport;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ir.radsense.raadcore.model.Account;
 import ir.radsense.raadcore.model.City;
@@ -39,6 +45,14 @@ import retrofit2.http.Query;
  */
 
 public interface WebService {
+    @POST("payment/v3/accounts/{account_id}/ibans")
+    Call<Iban>addNewIban(@Path("account_id") String accountId, @Body RequestBody iban);
+
+    @GET("club/v3/custom/clubs")
+    Call<List<AvailableClubs_Result>>getAvailableClubs(@Query("merchant_id") String merchantId, @Query("member_id")String userId);
+
+    @GET("users/v3/merchants")
+    Call<MerchantsResult>searchAccounts(@Query("per_page")  @Nullable Integer perPage, @Query("page") @Nullable Integer page, @Query("role") String role, @Query("role") String role2);
 
     @POST("users/v3/auth/otp")
     Call<Void> getOTP(@Body RequestBody phoneJsonBody);
@@ -166,8 +180,8 @@ public interface WebService {
     @GET("qrcode/v3/qr/{data}")
     Call<QRResponse> getQRData(@Path("data") String data);
 
-    @PUT("credit/v3/password/{card_token}")
-    Call<Void> setCreditCardPin(@Path("card_token") String cardToken,
+    @PUT("credit/v3/password/{card_token}/accounts/{account_id}")
+    Call<Void> setCreditCardPin(@Path("card_token") String cardToken,@Path("account_id") String accountId,
                                 @Body RequestBody cardInfoJsonBody);
 
     @PUT("credit/v3/password/{card_token}/accounts/{account_id}")
@@ -175,6 +189,11 @@ public interface WebService {
                                 @Path("account_id") String account_id,
                                 @Body RequestBody cardInfoJsonBody);
 
+    @PUT("credit/v3/password/{paygear_card_token}/accounts/{account_id}")
+    Call<Void>setNewPassword(@Path("paygear_card_token") String PGCardToken,@Path("account_id") String accountId,@Body RequestBody passwordJson) ;
+
+    @GET("credit/v3/password/{paygear_card_token}/accounts/{account_id}")
+    Call<Void>getRecoverPasswordOTP(@Path("paygear_card_token") String PGCardToken,@Path("account_id") String accountId);
 
     @POST("users/v3/thirdparty/auth")
     Call<OTPVerifyResult> getIGapToken(@Body RequestBody requestBody, @Header("abcdef") String ip);

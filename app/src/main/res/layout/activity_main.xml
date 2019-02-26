@@ -223,6 +223,7 @@
               android:layout_gravity="bottom|end"
               app:borderWidth="0dp"
               app:menu_color="@color/green"
+              app:menu_angle="@integer/ANGLE_MAIN_ARC_MENU"
               app:menu_scr="@mipmap/plus">
 
               <android.support.design.widget.FloatingActionButton

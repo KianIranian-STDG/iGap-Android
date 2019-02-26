@@ -11,6 +11,7 @@ import okhttp3.RequestBody;
 public class Payment implements Serializable {
 
     public static final long MAX_PRICE_CVV2 = 2000000L;
+    public static final long MIN_PRICE_CVV2=20000L;
 
     public Account account;
     public PaymentAuth paymentAuth;
@@ -42,6 +43,9 @@ public class Payment implements Serializable {
 
         map.put("credit", isCredit);
 
+        map.put("transaction_type",4);
+
         return PostRequest.getRequestBody(map);
     }
 }
+

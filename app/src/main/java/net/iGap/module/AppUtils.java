@@ -37,6 +37,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.Theme;
 import net.iGap.fragments.FragmentMap;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLogMessage;
@@ -65,6 +66,7 @@ import io.realm.Sort;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 import static net.iGap.G.context;
+import static net.iGap.module.AndroidUtils.suitablePath;
 
 public final class AppUtils {
     private AppUtils() throws InstantiationException {
@@ -126,9 +128,13 @@ public final class AppUtils {
                 case AUDIO_TEXT:
                     setImageDrawable(view, R.drawable.green_music_note);
                     break;
+                case STICKER:
+                    if (attachment != null && attachment.getLocalFilePath() != null) {
+                        G.imageLoader.displayImage(suitablePath(attachment.getLocalFilePath()), view);
+                    }
+                    break;
                 case FILE:
                 case FILE_TEXT:
-
                     if (attachment != null) {
                         if (attachment.getName().toLowerCase().endsWith(".pdf")) {
                             setImageDrawable(view, R.drawable.pdf_icon);
@@ -177,7 +183,7 @@ public final class AppUtils {
     /**
      * convert message type to appropriate text and setText if textView isn't null
      */
-    public static String conversionMessageType(ProtoGlobal.RoomMessageType type, @Nullable TextView textView, int colorId) {
+    private static String returnConversionMessageType(ProtoGlobal.RoomMessageType type){
         String result = "";
 
         switch (type) {
@@ -213,15 +219,31 @@ public final class AppUtils {
             case WALLET:
                 result = G.fragmentActivity.getResources().getString(R.string.wallet_message);
                 break;
+            case STICKER:
+                result = G.fragmentActivity.getResources().getString(R.string.sticker);
+                break;
             default:
                 break;
         }
 
+        return result;
+    }
+
+    public static String conversionMessageType(ProtoGlobal.RoomMessageType type, @Nullable TextView textView, String colorStr) {
+        String result = returnConversionMessageType(type);
+        if (textView != null && !result.isEmpty()) {
+            textView.setTextColor(Color.parseColor(colorStr));
+            textView.setText(result);
+        }
+        return result;
+    }
+
+    public static String conversionMessageType(ProtoGlobal.RoomMessageType type, @Nullable TextView textView, int colorId) {
+        String result = returnConversionMessageType(type);
         if (textView != null && !result.isEmpty()) {
             textView.setTextColor(ContextCompat.getColor(context, colorId));
             textView.setText(result);
         }
-
         return result;
     }
 
@@ -314,9 +336,8 @@ public final class AppUtils {
                 view.setColorFilter(view.getContext().getResources().getColor(R.color.red));
                 break;
             case SEEN:
-
                 setImageDrawable(view, R.drawable.ic_double_check);
-                view.setColorFilter(view.getContext().getResources().getColor(R.color.iGapColor));
+                view.setColorFilter(Color.parseColor(G.SeenTickColor));
                 break;
             case SENDING:
 //                view.setColorFilter(view.getContext().getResources().getColor(R.color.black_register));
@@ -470,6 +491,9 @@ public final class AppUtils {
                 case WALLET:
                     messageText = "wallet"; // need to fill messageText with a String because in return check null. this string isn't important.
                     break;
+                case STICKER:
+                    messageText = G.fragmentActivity.getResources().getString(R.string.sticker);
+                    break;
                 default:
                     messageText = null;
                     break;
@@ -510,7 +534,10 @@ public final class AppUtils {
                     if (message.getAttachment() == null) {
                         return null;
                     }
-                    messageText = resources.getString(R.string.file_message);
+                   messageText = resources.getString(R.string.file_message);
+                    break;
+                case STICKER:
+                    messageText = resources.getString(R.string.sticker);
                     break;
                 case GIF_TEXT:
                 case GIF:

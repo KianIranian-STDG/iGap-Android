@@ -37,6 +37,9 @@ public class BankCardView extends CardView {
     private TextView mCardNumberText3;
     private TextView mCardNumberText4;
 
+
+    private TextView centerCardNumberLayout;
+
     private Card mCard;
 
     public BankCardView(Context context) {
@@ -96,7 +99,7 @@ public class BankCardView extends CardView {
         //mTopCardNumberText.setGravity(Gravity.CENTER);
         mTopCardNumberText.setTextColor(ContextCompat.getColor(context, R.color.primary_text));
         mTopCardNumberText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-        mTopCardNumberText.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        mTopCardNumberText.setTypeface(Typefaces.get(context, Typefaces.IRAN_BOLD));
         //mTopCardNumberText.setPadding(dp8, 0, dp8, 0);
         logoLayout.addView(mTopCardNumberText);
 
@@ -106,7 +109,7 @@ public class BankCardView extends CardView {
         //mTitleText.setGravity(Gravity.CENTER);
         mTitleText.setTextColor(ContextCompat.getColor(context, R.color.primary_text));
         mTitleText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        mTitleText.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        mTitleText.setTypeface(Typefaces.get(context, Typefaces.IRAN_BOLD));
         //mTitleText.setPadding(dp8, 0, dp8, 0);
         logoLayout.addView(mTitleText);
 
@@ -127,6 +130,19 @@ public class BankCardView extends CardView {
         cardNumberLayout.setPadding(dp16, 0, dp16, 0);
         addView(cardNumberLayout);
 
+        centerCardNumberLayout = new TextView(context);
+        cardNumberLayout.setOrientation(LinearLayout.HORIZONTAL);
+        CardView.LayoutParams centerCardNumerLayoutParams = new CardView.LayoutParams(
+                CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
+        centerCardNumerLayoutParams.gravity = Gravity.CENTER_VERTICAL;
+        centerCardNumberLayout.setLayoutParams(cardNumerLayoutParams);
+        centerCardNumberLayout.setPadding(dp16, 0, dp16, 0);
+        addView(centerCardNumberLayout);
+        centerCardNumberLayout.setGravity(Gravity.CENTER);
+        centerCardNumberLayout.setTextColor(Color.BLACK);
+        centerCardNumberLayout.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        centerCardNumberLayout.setTypeface(Typefaces.get(context, Typefaces.IRAN_BOLD));
+
 
         mCardNumberText1 = new TextView(context);
         LinearLayout.LayoutParams cardNum1Params = new LinearLayout.LayoutParams(
@@ -136,7 +152,7 @@ public class BankCardView extends CardView {
         mCardNumberText1.setGravity(Gravity.CENTER);
         mCardNumberText1.setTextColor(Color.BLACK);
         mCardNumberText1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-        mCardNumberText1.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        mCardNumberText1.setTypeface(Typefaces.get(context, Typefaces.IRAN_BOLD));
         cardNumberLayout.addView(mCardNumberText1);
 
         mCardNumberText2 = new TextView(context);
@@ -146,8 +162,8 @@ public class BankCardView extends CardView {
         mCardNumberText2.setLayoutParams(cardNum2Params);
         mCardNumberText2.setGravity(Gravity.CENTER);
         mCardNumberText2.setTextColor(Color.BLACK);
-        mCardNumberText2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-        mCardNumberText2.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        mCardNumberText2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        mCardNumberText2.setTypeface(Typefaces.get(context, Typefaces.IRAN_MEDIUM));
         cardNumberLayout.addView(mCardNumberText2);
 
         mCardNumberText3 = new TextView(context);
@@ -157,8 +173,8 @@ public class BankCardView extends CardView {
         mCardNumberText3.setLayoutParams(cardNum3Params);
         mCardNumberText3.setGravity(Gravity.CENTER);
         mCardNumberText3.setTextColor(Color.BLACK);
-        mCardNumberText3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-        mCardNumberText3.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        mCardNumberText3.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        mCardNumberText3.setTypeface(Typefaces.get(context, Typefaces.IRAN_MEDIUM));
         cardNumberLayout.addView(mCardNumberText3);
 
         mCardNumberText4 = new TextView(context);
@@ -168,8 +184,8 @@ public class BankCardView extends CardView {
         mCardNumberText4.setLayoutParams(cardNum4Params);
         mCardNumberText4.setGravity(Gravity.CENTER);
         mCardNumberText4.setTextColor(Color.BLACK);
-        mCardNumberText4.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-        mCardNumberText4.setTypeface(Typefaces.get(context, Typefaces.IRAN_YEKAN_BOLD));
+        mCardNumberText4.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        mCardNumberText4.setTypeface(Typefaces.get(context, Typefaces.IRAN_MEDIUM));
         cardNumberLayout.addView(mCardNumberText4);
 
     }
@@ -180,30 +196,44 @@ public class BankCardView extends CardView {
         BankUtils bankInfo = BankUtils.getBank(getContext(), card.bankCode);
 
         if (!TextUtils.isEmpty(mCard.backgroundImage)) {
-            Picasso.with(context)
+            Picasso.get()
                     .load(RaadCommonUtils.getImageUrl(mCard.backgroundImage))
                     .fit()
                     .into(mBackImage);
         } else {
-            Picasso.with(context)
+            Picasso.get()
                     .load(R.drawable.default_card_pattern)
                     .fit()
                     .into(mBackImage);
         }
 
-        mTitleText.setText(bankInfo.getName());
+        mTitleText.setText(bankInfo.getName(context));
         mLogoImage.setImageResource(bankInfo.getLogoRes());
+        if (mCard.bankCode != 69) {
 
-        if (full) {
-            mCardNumberText1.setText(mCard.cardNumber.substring(0, 4));
-            mCardNumberText2.setText(mCard.cardNumber.substring(4, 8));
-            mCardNumberText3.setText(mCard.cardNumber.substring(8, 12));
-            mCardNumberText4.setText(mCard.cardNumber.substring(12, 16));
+            if (full) {
+                mCardNumberText1.setText(mCard.cardNumber.substring(0, 4));
+                mCardNumberText2.setText(mCard.cardNumber.substring(4, 8));
+                mCardNumberText3.setText(mCard.cardNumber.substring(8, 12));
+                mCardNumberText4.setText(mCard.cardNumber.substring(12, 16));
+            } else {
+                mTopCardNumberText.setText(card.cardNumber.length() == 16 ? "**** " + card.cardNumber.substring(12, 16) : card.cardNumber);
+            }
         } else {
-            mTopCardNumberText.setText(card.cardNumber.length() == 16 ? "**** " + card.cardNumber.substring(12, 16) : card.cardNumber);
+
+            if (full) {
+                centerCardNumberLayout.setText(mCard.cardNumber);
+                mTopCardNumberText.setText(RaadCommonUtils.formatPrice(card.balance, true));
+                mTitleText.setVisibility(GONE);
+                mTopCardNumberText.setVisibility(GONE);
+                centerCardNumberLayout.setVisibility(GONE);
+            } else {
+                mTopCardNumberText.setText(RaadCommonUtils.formatPrice(card.balance, true));
+                mTopCardNumberText.setVisibility(GONE);
+                mTitleText.setVisibility(GONE);
+            }
+
         }
-
-
         if (!TextUtils.isEmpty(card.textColor)) {
             int textColor = RaadCommonUtils.formatColor(mCard.textColor);
             mTitleText.setTextColor(textColor);

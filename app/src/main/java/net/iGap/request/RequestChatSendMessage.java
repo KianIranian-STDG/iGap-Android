@@ -12,6 +12,7 @@ package net.iGap.request;
 
 import net.iGap.proto.ProtoChatSendMessage;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmAdditional;
 
 public class RequestChatSendMessage {
     // builder to force use newBuilder
@@ -39,6 +40,7 @@ public class RequestChatSendMessage {
         return this;
     }
 
+
     public RequestChatSendMessage contact(ProtoGlobal.RoomMessageContact value) {
         chatSendMessage.setContact(value);
         return this;
@@ -54,6 +56,12 @@ public class RequestChatSendMessage {
         return this;
     }
 
+    public RequestChatSendMessage additionalData(RealmAdditional realmAdditional) {
+        chatSendMessage.setAdditionalData(realmAdditional.getAdditionalData());
+        chatSendMessage.setAdditionalType(realmAdditional.getAdditionalType());
+        return this;
+    }
+
     public RequestChatSendMessage sendMessage(String fakeMessageIdAsIdentity) {
         chatSendMessage.setRandomId(Long.parseLong(fakeMessageIdAsIdentity));
         RequestWrapper requestWrapper = new RequestWrapper(201, chatSendMessage, fakeMessageIdAsIdentity);
@@ -63,6 +71,26 @@ public class RequestChatSendMessage {
             e.printStackTrace();
         }
         return this;
+    }
+
+    public void sendMessage(long roomId, String message, String additionalData, int additionalType) {
+
+        ProtoChatSendMessage.ChatSendMessage.Builder chatSendMessage = ProtoChatSendMessage.ChatSendMessage.newBuilder();
+        chatSendMessage.setMessageType(ProtoGlobal.RoomMessageType.TEXT);
+        chatSendMessage.setRoomId(roomId);
+        chatSendMessage.setMessage(message);
+        chatSendMessage.setAdditionalData(additionalData);
+        chatSendMessage.setAdditionalType(additionalType);
+        String identity = Long.toString(System.currentTimeMillis());
+        chatSendMessage.setRandomId(Long.parseLong(identity));
+
+        RequestWrapper requestWrapper = new RequestWrapper(201, chatSendMessage, identity);
+        try {
+            RequestQueue.sendRequest(requestWrapper);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
     }
 }
 

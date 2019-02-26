@@ -82,6 +82,7 @@ public class RealmRoomMessage extends RealmObject {
     private RealmRoomMessageLocation location;
     private RealmRoomMessageContact roomMessageContact;
     private RealmRoomMessageWallet roomMessageWallet;
+    private RealmAdditional realmAdditional;
     private boolean edited;
     private long createTime;
     private long updateTime;
@@ -425,6 +426,13 @@ public class RealmRoomMessage extends RealmObject {
 
         if (input.hasWallet()) {
             message.setRoomMessageWallet(RealmRoomMessageWallet.put(input.getWallet()));
+        }
+
+
+        if (input.getAdditionalType() != 0 && !input.getAdditionalData().isEmpty()) {
+            if (message.getRealmAdditional() == null) {
+                message.setRealmAdditional(RealmAdditional.put(input));
+            }
         }
 
         message.setMessageType(input.getMessageType());
@@ -1054,6 +1062,21 @@ public class RealmRoomMessage extends RealmObject {
         realm.close();
     }
 
+    public static RealmRoomMessage makeAdditionalData(final long roomId, final long messageId, final String message, String additionalData, int additionalTaype, Realm realm, ProtoGlobal.RoomMessageType messageType) {
+
+        RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
+        roomMessage.setMessageType(messageType);
+        roomMessage.setRoomId(roomId);
+        roomMessage.setMessage(message);
+        roomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SENDING.toString());
+        roomMessage.setUserId(G.userId);
+        roomMessage.setCreateTime(TimeUtils.currentLocalTime());
+        if (additionalData != null)
+            roomMessage.setRealmAdditional(RealmAdditional.put(additionalData, additionalTaype));
+
+        return roomMessage;
+    }
+
     public static RealmRoomMessage makeVoiceMessage(Realm realm, final long roomId, final long messageId, final long duration, final long updateTime, final String filepath, final String message) {
         RealmRoomMessage roomMessage = realm.createObject(RealmRoomMessage.class, messageId);
         roomMessage.setMessageType(ProtoGlobal.RoomMessageType.VOICE);
@@ -1270,6 +1293,14 @@ public class RealmRoomMessage extends RealmObject {
 
     private void setRoomMessageWallet(RealmRoomMessageWallet roomMessageWallet) {
         this.roomMessageWallet = roomMessageWallet;
+    }
+
+    public RealmAdditional getRealmAdditional() {
+        return realmAdditional;
+    }
+
+    public void setRealmAdditional(RealmAdditional realmAdditional) {
+        this.realmAdditional = realmAdditional;
     }
 
     public boolean isEdited() {

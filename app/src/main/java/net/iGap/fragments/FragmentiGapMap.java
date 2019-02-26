@@ -78,6 +78,7 @@ import net.iGap.interfaces.OnLocationChanged;
 import net.iGap.interfaces.OnMapClose;
 import net.iGap.interfaces.OnMapRegisterState;
 import net.iGap.interfaces.OnMapUsersGet;
+import net.iGap.libs.KeyboardUtils;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -440,6 +441,25 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         realmMapUsers = Realm.getDefaultInstance();
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
 
+        KeyboardUtils.addKeyboardToggleListener(getActivity(), new KeyboardUtils.SoftKeyboardToggleListener() {
+            @Override
+            public void onToggleSoftKeyboard(boolean isVisible)
+            {
+                if (isVisible && fabStateSwitcher.isMenuOpened()) {
+                    fabStateSwitcher.toggleMenu();
+                }
+
+                if (isVisible && orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE){
+                    btnSatelliteView.setVisibility(View.GONE);
+                    btnOrginView.setVisibility(View.GONE);
+                    fabGps.setVisibility(View.GONE);
+                } else {
+                    btnSatelliteView.setVisibility(View.VISIBLE);
+                    btnOrginView.setVisibility(View.VISIBLE);
+                    fabGps.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         return inflater.inflate(R.layout.fragment_igap_map, container, false);
     }
