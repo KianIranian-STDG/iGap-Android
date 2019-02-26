@@ -317,10 +317,6 @@ public class RealmRoom extends RealmObject {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null) {
                     realmRoom.setDraft(RealmRoomDraft.put(realm, message, replyToMessageId));
-
-                    if (G.onDraftMessage != null) {
-                        G.onDraftMessage.onDraftMessage(roomId, message);
-                    }
                 }
             }
         });

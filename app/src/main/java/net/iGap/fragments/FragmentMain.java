@@ -51,7 +51,6 @@ import net.iGap.interfaces.OnClearRoomHistory;
 import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDateChanged;
-import net.iGap.interfaces.OnDraftMessage;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
 import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
@@ -107,7 +106,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnDraftMessage, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnClearRoomHistory, OnDateChanged {
+public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnClearRoomHistory, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static boolean isMenuButtonAddShown = false;
@@ -867,18 +866,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     }
 
     @Override
-    public void onDraftMessage(final long roomId, String draftMessage) {
-        //G.handler.post(new Runnable() {
-        //fastAdapter
-        //    @Override
-        //    public void run() {
-        //        adapterHashMap.get(all).updateItem(roomId);
-        //        getAdapterMain(roomId).updateItem(roomId);
-        //    }
-        //});
-    }
-
-    @Override
     public void onChatUpdateStatus(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, long statusVersion) {
         //fastAdapter
         //G.handler.postDelayed(new Runnable() {
@@ -1031,7 +1018,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
         //G.onSelectMenu = this;
         //G.onRemoveFragment = this;
-        //G.onDraftMessage = this;
         //G.onChatDeleteInRoomList = this;
         //G.onGroupDeleteInRoomList = this;
         //G.onChannelDeleteInRoomList = this;

@@ -6289,9 +6289,6 @@ public class FragmentChat extends BaseFragment
                 } else if (chatType == CHANNEL) {
                     new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, message, replyToMessageId);
                 }
-                if (G.onDraftMessage != null) {
-                    G.onDraftMessage.onDraftMessage(mRoomId, message);
-                }
             } else {
                 clearDraftRequest();
             }

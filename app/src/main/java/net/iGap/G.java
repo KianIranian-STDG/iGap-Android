@@ -258,7 +258,6 @@ public class G extends MultiDexApplication {
     public static OnDeleteChatFinishActivity onDeleteChatFinishActivity;
     public static OnClientGetRoomHistoryResponse onClientGetRoomHistoryResponse;
     public static OnUserAvatarDelete onUserAvatarDelete;
-    public static OnDraftMessage onDraftMessage;
     public static OnUserDelete onUserDelete;
     public static OnUserProfileCheckUsername onUserProfileCheckUsername;
     public static OnUserProfileUpdateUsername onUserProfileUpdateUsername;
