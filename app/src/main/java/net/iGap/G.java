@@ -348,7 +348,6 @@ public class G extends MultiDexApplication {
     public static OnGroupDeleteInRoomList onGroupDeleteInRoomList;
     public static OnChannelDeleteInRoomList onChannelDeleteInRoomList;
     public static OnClientGetRoomResponseRoomList onClientGetRoomResponseRoomList;
-    public static OnClearRoomHistory onClearRoomHistory;
     public static OnReport onReport;
     public static OnPhoneContact onPhoneContact;
     public static OnContactFetchForServer onContactFetchForServer;

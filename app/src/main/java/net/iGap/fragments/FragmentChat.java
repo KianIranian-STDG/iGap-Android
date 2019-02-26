@@ -5312,9 +5312,6 @@ public class FragmentChat extends BaseFragment
         RealmRoomMessage.clearHistoryMessage(roomId);
         addToView = true;
 
-        if (G.onClearRoomHistory != null) {
-            G.onClearRoomHistory.onClearRoomHistory(roomId);
-        }
         if (botInit != null)
             botInit.updateCommandList(false, "clear", getActivity(), false, null, 0, false);
     }

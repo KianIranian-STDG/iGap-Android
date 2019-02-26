@@ -47,7 +47,6 @@ import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnChatUpdateStatusResponse;
-import net.iGap.interfaces.OnClearRoomHistory;
 import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDateChanged;
@@ -106,7 +105,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnClearRoomHistory, OnDateChanged {
+public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static boolean isMenuButtonAddShown = false;
@@ -951,11 +950,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     }
 
     @Override
-    public void onClearRoomHistory(long roomId) {
-        clearHistory(roomId);
-    }
-
-    @Override
     public void Error(int majorCode, int minorCode) {
 
     }
@@ -1021,10 +1015,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         //G.onChatDeleteInRoomList = this;
         //G.onGroupDeleteInRoomList = this;
         //G.onChannelDeleteInRoomList = this;
-        //G.onClearUnread = this;
         //onClientGetRoomResponseRoomList = this;
-        //G.onMute = this;
-        //G.onClearRoomHistory = this;
         //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponseFragmentMain(this);
         //G.chatSendMessageUtil.setOnChatSendMessageResponseFragmentMainRoomList(this);
 
