@@ -1,5 +1,6 @@
 package net.iGap.fragments.emoji;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -161,6 +162,14 @@ public class DialogAddSticker extends DialogFragment {
 
                     }
                 });
+            }
+        });
+
+        TextView iconAddSticker = view.findViewById(R.id.iconAddSticker);
+        iconAddSticker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtAddSticker.performLongClick();
             }
         });
 
