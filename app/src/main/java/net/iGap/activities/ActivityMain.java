@@ -1223,13 +1223,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (adapter.getItem(position) instanceof FragmentMain) {
 
-            findViewById(R.id.amr_ripple_search).setVisibility(View.VISIBLE);
+            findViewById(R.id.amr_btn_search).setVisibility(View.VISIBLE);
             findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
             arcMenu.setVisibility(View.VISIBLE);
             setFabIcon(R.mipmap.plus);
         } else if (adapter.getItem(position) instanceof FragmentCall) {
 
-            findViewById(R.id.amr_ripple_search).setVisibility(View.GONE);
+            findViewById(R.id.amr_btn_search).setVisibility(View.GONE);
             findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
             setFabIcon(R.drawable.ic_call_black_24dp);
             arcMenu.setVisibility(View.VISIBLE);
@@ -2217,10 +2217,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        RippleView rippleSearch = (RippleView) findViewById(R.id.amr_ripple_search);
-        rippleSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        View amr_btn_search = findViewById(R.id.amr_btn_search);
+        amr_btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(RippleView rippleView) {
+            public void onClick(View v) {
                 Fragment fragment = SearchFragment.newInstance();
 
                 try {
