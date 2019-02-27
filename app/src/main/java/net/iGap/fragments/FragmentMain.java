@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -8,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -46,20 +44,15 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
-import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnChatUpdateStatusResponse;
-import net.iGap.interfaces.OnClearRoomHistory;
-import net.iGap.interfaces.OnClearUnread;
 import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDateChanged;
-import net.iGap.interfaces.OnDraftMessage;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
-import net.iGap.interfaces.OnMute;
 import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
 import net.iGap.interfaces.OnSelectMenu;
@@ -68,7 +61,6 @@ import net.iGap.interfaces.OnVersionCallBack;
 import net.iGap.libs.Tuple;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
-import net.iGap.module.BotInit;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
@@ -94,8 +86,6 @@ import net.iGap.request.RequestClientMuteRoom;
 import net.iGap.request.RequestClientPinRoom;
 import net.iGap.request.RequestGroupDelete;
 import net.iGap.request.RequestGroupLeft;
-import net.iGap.request.RequestUserContactsUnblock;
-import net.iGap.request.RequestUserLogin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,7 +109,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnDraftMessage, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClearUnread, OnClientGetRoomResponseRoomList, OnMute, OnClearRoomHistory, OnDateChanged {
+public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static boolean isMenuButtonAddShown = false;
@@ -202,6 +192,8 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d("bagi" ,"FragmentMain:onViewCreated:start");
+
         //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         this.mView = view;
         mComplete = this;
@@ -228,6 +220,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             initListener();
             pbLoading.setVisibility(View.GONE);
         }
+        Log.d("bagi" ,"FragmentMain:onViewCreated:end");
 
 
     }
@@ -876,18 +869,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     }
 
     @Override
-    public void onDraftMessage(final long roomId, String draftMessage) {
-        //G.handler.post(new Runnable() {
-        //fastAdapter
-        //    @Override
-        //    public void run() {
-        //        adapterHashMap.get(all).updateItem(roomId);
-        //        getAdapterMain(roomId).updateItem(roomId);
-        //    }
-        //});
-    }
-
-    @Override
     public void onChatUpdateStatus(final long roomId, long messageId, ProtoGlobal.RoomMessageStatus status, long statusVersion) {
         //fastAdapter
         //G.handler.postDelayed(new Runnable() {
@@ -950,18 +931,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     }
 
     @Override
-    public void onClearUnread(final long roomId) {
-        //fastAdapter
-        //G.handler.postDelayed(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        adapterHashMap.get(all).updateItem(roomId);
-        //        getAdapterMain(roomId).updateItem(roomId);
-        //    }
-        //}, 200);
-    }
-
-    @Override
     public void onClientGetRoomResponse(final long roomId) {
         //fastAdapter
         //G.handler.post(new Runnable() {
@@ -982,23 +951,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         //        }
         //    }
         //});
-    }
-
-    @Override
-    public void onChangeMuteState(final long roomId, boolean mute) {
-        //fastAdapter
-        //G.handler.post(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        adapterHashMap.get(all).updateItem(roomId);
-        //        getAdapterMain(roomId).updateItem(roomId);
-        //    }
-        //});
-    }
-
-    @Override
-    public void onClearRoomHistory(long roomId) {
-        clearHistory(roomId);
     }
 
     @Override
@@ -1055,6 +1007,8 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     public void onResume() {
         super.onResume();
 
+        Log.d("bagi" ,"FragmentMain:onResume:start");
+
         G.onSetActionInRoom = this;
         G.onDateChanged = this;
         if (G.isDepricatedApp)
@@ -1062,14 +1016,10 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
         //G.onSelectMenu = this;
         //G.onRemoveFragment = this;
-        //G.onDraftMessage = this;
         //G.onChatDeleteInRoomList = this;
         //G.onGroupDeleteInRoomList = this;
         //G.onChannelDeleteInRoomList = this;
-        //G.onClearUnread = this;
         //onClientGetRoomResponseRoomList = this;
-        //G.onMute = this;
-        //G.onClearRoomHistory = this;
         //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponseFragmentMain(this);
         //G.chatSendMessageUtil.setOnChatSendMessageResponseFragmentMainRoomList(this);
 
@@ -1118,6 +1068,8 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             }
         }
 //        BotInit.checkDrIgap();
+
+        Log.d("bagi" ,"FragmentMain:onResume:end");
     }
 
     @Override

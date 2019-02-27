@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.downloader.PRDownloader;
@@ -84,13 +85,14 @@ import static net.iGap.G.userTextSize;
  * all actions that need doing after open app
  */
 public final class StartupActions {
-    private RealmConfiguration configuration;
 
     public StartupActions() {
 
         detectDeviceType();
+
         //  EmojiManager.install(new EmojiOneProvider()); // This line needs to be executed before any usage of EmojiTextView or EmojiEditText.
         initializeGlobalVariables();
+
         realmConfiguration();
         mainUserInfo();
         connectToServer();
@@ -547,7 +549,6 @@ public final class StartupActions {
          */
         Realm.init(context);
 
-
         //  new SecureRandom().nextBytes(key);
 
 
@@ -561,9 +562,8 @@ public final class StartupActions {
         DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuration);*/
 
         Realm configuredRealm = getInstance();
+
         DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuredRealm.getConfiguration());
-
-
 
         /*if (configuration!=null)
             Realm.deleteRealm(configuration);*/
@@ -576,16 +576,29 @@ public final class StartupActions {
             //   Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
         } else {
             Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
-
         }
+
         dynamicRealm.close();
         configuredRealm.close();
-        try {
-            Realm.compactRealm(configuredRealm.getConfiguration());
+        SharedPreferences sharedPreferences = G.context.getSharedPreferences("Counter", Context.MODE_PRIVATE);
+        int index = sharedPreferences.getInt("C", 0);
+        if (index == 10) {
+            index = 1;
+            try {
+                RealmConfiguration aa = configuredRealm.getConfiguration();
+                Realm.compactRealm(aa);// ohhhh
 
-        } catch (UnsupportedOperationException e) {
-            e.printStackTrace();
+            } catch (UnsupportedOperationException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            index = index +1;
         }
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("C", index);
+        editor.apply();
     }
 
     public Realm getPlainInstance() {
@@ -595,7 +608,6 @@ public final class StartupActions {
 
     public Realm getInstance() {
         SharedPreferences sharedPreferences = G.context.getSharedPreferences("AES-256", Context.MODE_PRIVATE);
-
         String stringArray = sharedPreferences.getString("myByteArray", null);
         if (stringArray == null) {
             byte[] key = new byte[64];
@@ -603,7 +615,7 @@ public final class StartupActions {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             String saveThis = Base64.encodeToString(key, Base64.DEFAULT);
             editor.putString("myByteArray", saveThis);
-            editor.commit();
+            editor.apply();
         }
 
         byte[] mKey = Base64.decode(sharedPreferences.getString("myByteArray", null), Base64.DEFAULT);
@@ -616,11 +628,11 @@ public final class StartupActions {
 
         File newRealmFile = new File(newConfig.getPath());
         if (newRealmFile.exists()) {
-            return Realm.getInstance(newConfig);
+            return Realm.getInstance(newConfig);// ohhhhh
         } else {
             Realm realm = null;
             try {
-                configuration = new RealmConfiguration.Builder().name(context.getResources().getString(R.string.planDB))
+                RealmConfiguration configuration = new RealmConfiguration.Builder().name(context.getResources().getString(R.string.planDB))
                         .schemaVersion(REALM_SCHEMA_VERSION)
                         .compactOnLaunch()
                         .migration(new RealmMigration()).build();
@@ -638,5 +650,6 @@ public final class StartupActions {
 
             }
         }
+
     }
 }

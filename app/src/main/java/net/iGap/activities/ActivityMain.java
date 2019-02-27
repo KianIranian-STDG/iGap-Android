@@ -440,6 +440,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
+        Log.d("bagi" ,"ActivityMain:onCreate:start");
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.intent.action.PHONE_STATE");
         MyPhonStateService myPhonStateService = new MyPhonStateService();
@@ -571,12 +572,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         setContentView(R.layout.activity_main);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        FrameLayout _mainframe = (FrameLayout) findViewById(R.id.frame_main);
 
         if (G.isAppRtl) {
-            ViewCompat.setLayoutDirection(_mainframe, ViewCompat.LAYOUT_DIRECTION_RTL);
+            ViewCompat.setLayoutDirection(drawer, ViewCompat.LAYOUT_DIRECTION_RTL);
         } else {
-            ViewCompat.setLayoutDirection(_mainframe, ViewCompat.LAYOUT_DIRECTION_LTR);
+            ViewCompat.setLayoutDirection(drawer, ViewCompat.LAYOUT_DIRECTION_LTR);
         }
 
 
@@ -823,6 +823,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             getWallpaperAsDefault();
         }
         new StickerFromServer().execute();
+
+        Log.d("bagi" ,"ActivityMain:onCreate:end");
     }
 
     private class StickerFromServer extends AsyncTask<Void, Void, Void> {
@@ -1221,13 +1223,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (adapter.getItem(position) instanceof FragmentMain) {
 
-            findViewById(R.id.amr_ripple_search).setVisibility(View.VISIBLE);
+            findViewById(R.id.amr_btn_search).setVisibility(View.VISIBLE);
             findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
             arcMenu.setVisibility(View.VISIBLE);
             setFabIcon(R.mipmap.plus);
         } else if (adapter.getItem(position) instanceof FragmentCall) {
 
-            findViewById(R.id.amr_ripple_search).setVisibility(View.GONE);
+            findViewById(R.id.amr_btn_search).setVisibility(View.GONE);
             findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
             setFabIcon(R.drawable.ic_call_black_24dp);
             arcMenu.setVisibility(View.VISIBLE);
@@ -1442,6 +1444,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d("bagi" ,"ActivityMain:onstart:start");
 
         if (!G.isFirstPassCode) {
             openActivityPassCode();
@@ -1454,6 +1457,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //        G.chatUpdateStatusUtil.sendUpdateStatus(room.getType(), message.getRoomId(), message.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
         //    }
         //});
+
+        Log.d("bagi" ,"ActivityMain:onstart:end");
     }
 
     @SuppressLint("MissingSuperCall")
@@ -1605,22 +1610,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 closeDrawer();
             }
         });
-
-//        ViewGroup igapSearch = (ViewGroup) findViewById(R.id.lm_ll_igap_search);
-//        igapSearch.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                final Fragment fragment = FragmentIgapSearch.newInstance();
-//                try {
-//                    new HelperFragment(fragment).load();
-//                } catch (Exception e) {
-//                    e.getStackTrace();
-//                }
-//
-//                lockNavigation();
-//                closeDrawer();
-//            }
-//        });
 
         ViewGroup itemNavContacts = (ViewGroup) findViewById(R.id.lm_ll_contacts);
         itemNavContacts.setOnClickListener(new View.OnClickListener() {
@@ -2228,10 +2217,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        RippleView rippleSearch = (RippleView) findViewById(R.id.amr_ripple_search);
-        rippleSearch.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        View amr_btn_search = findViewById(R.id.amr_btn_search);
+        amr_btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(RippleView rippleView) {
+            public void onClick(View v) {
                 Fragment fragment = SearchFragment.newInstance();
 
                 try {
@@ -2516,10 +2505,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("bagi" ,"ActivityMain:onResume:start");
 
         resume();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        Log.d("bagi" ,"ActivityMain:onResume:end");
     }
 
     public void resume() {

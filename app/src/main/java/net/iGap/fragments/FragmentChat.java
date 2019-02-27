@@ -834,9 +834,6 @@ public class FragmentChat extends BaseFragment
                     public void execute(Realm realm) {
                         final RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
                         if (room != null) {
-                            if (G.onClearUnread != null) {
-                                G.onClearUnread.onClearUnread(mRoomId);
-                            }
 
                             if (G.connectionState == ConnectionState.CONNECTING || G.connectionState == ConnectionState.WAITING_FOR_NETWORK) {
                                 setConnectionText(G.connectionState);
@@ -4117,9 +4114,6 @@ public class FragmentChat extends BaseFragment
                                                 firstUnreadMessage = realmRoomMessage;
                                             }
                                             room.setUnreadCount(0);
-                                            if (G.onClearUnread != null) {
-                                                G.onClearUnread.onClearUnread(roomId);
-                                            }
                                         }
                                     }
                                 });
@@ -4149,11 +4143,6 @@ public class FragmentChat extends BaseFragment
                                                  * I'm in the room, so unread messages count is 0. it means, I read all messages
                                                  */
                                                 RealmRoom room = RealmRoom.setCount(realm, mRoomId, 0);
-                                                if (room != null) {
-                                                    if (G.onClearUnread != null) {
-                                                        G.onClearUnread.onClearUnread(roomId);
-                                                    }
-                                                }
 
                                                 if (realmRoomMessage.isValid() && !realmRoomMessage.getStatus().equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SEEN.toString())) {
                                                     realmRoomMessage.setStatus(ProtoGlobal.RoomMessageStatus.SEEN.toString());
@@ -5321,9 +5310,6 @@ public class FragmentChat extends BaseFragment
         RealmRoomMessage.clearHistoryMessage(roomId);
         addToView = true;
 
-        if (G.onClearRoomHistory != null) {
-            G.onClearRoomHistory.onClearRoomHistory(roomId);
-        }
         if (botInit != null)
             botInit.updateCommandList(false, "clear", getActivity(), false, null, 0, false);
     }
@@ -5797,10 +5783,6 @@ public class FragmentChat extends BaseFragment
         } else {
             ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.mute);
             iconMute.setVisibility(View.GONE);
-        }
-
-        if (G.onMute != null) {
-            G.onMute.onChangeMuteState(mRoomId, isMuteNotification);
         }
         //realm.close();
     }
@@ -6301,9 +6283,6 @@ public class FragmentChat extends BaseFragment
                     new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, message, replyToMessageId);
                 } else if (chatType == CHANNEL) {
                     new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, message, replyToMessageId);
-                }
-                if (G.onDraftMessage != null) {
-                    G.onDraftMessage.onDraftMessage(mRoomId, message);
                 }
             } else {
                 clearDraftRequest();
