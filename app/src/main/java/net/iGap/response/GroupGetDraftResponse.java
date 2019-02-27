@@ -30,7 +30,7 @@ public class GroupGetDraftResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoGroupGetDraft.GroupGetDraftResponse.Builder groupGetDraft = (ProtoGroupGetDraft.GroupGetDraftResponse.Builder) message;
-        RealmRoom.convertAndSetDraft(Long.parseLong(identity), groupGetDraft.getDraft().getMessage(), groupGetDraft.getDraft().getReplyTo());
+        RealmRoom.convertAndSetDraft(Long.parseLong(identity), groupGetDraft.getDraft().getMessage(), groupGetDraft.getDraft().getReplyTo(), groupGetDraft.getDraft().getDraftTime());
     }
 
     @Override

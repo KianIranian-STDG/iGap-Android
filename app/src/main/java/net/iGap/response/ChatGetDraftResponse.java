@@ -30,7 +30,7 @@ public class ChatGetDraftResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoChatGetDraft.ChatGetDraftResponse.Builder chatGetDraft = (ProtoChatGetDraft.ChatGetDraftResponse.Builder) message;
-        RealmRoom.convertAndSetDraft(Long.parseLong(identity), chatGetDraft.getDraft().getMessage(), chatGetDraft.getDraft().getReplyTo());
+        RealmRoom.convertAndSetDraft(Long.parseLong(identity), chatGetDraft.getDraft().getMessage(), chatGetDraft.getDraft().getReplyTo(), chatGetDraft.getDraft().getDraftTime());
     }
 
     @Override

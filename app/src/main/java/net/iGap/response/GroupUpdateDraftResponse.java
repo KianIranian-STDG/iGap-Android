@@ -35,7 +35,7 @@ public class GroupUpdateDraftResponse extends MessageHandler {
          * if another account get UpdateDraftResponse set draft to RealmRoom
          */
         if (updateDraft.getResponse().getId().isEmpty()) {
-            RealmRoom.convertAndSetDraft(updateDraft.getRoomId(), updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo());
+            RealmRoom.convertAndSetDraft(updateDraft.getRoomId(), updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo(), updateDraft.getDraft().getDraftTime());
         }
     }
 

@@ -32,7 +32,7 @@ public class ChannelUpdateDraftResponse extends MessageHandler {
         super.handler();
         ProtoChannelUpdateDraft.ChannelUpdateDraftResponse.Builder builder = (ProtoChannelUpdateDraft.ChannelUpdateDraftResponse.Builder) message;
         if (builder.getResponse().getId().isEmpty()) {
-            RealmRoom.convertAndSetDraft(builder.getRoomId(), builder.getDraft().getMessage(), builder.getDraft().getReplyTo());
+            RealmRoom.convertAndSetDraft(builder.getRoomId(), builder.getDraft().getMessage(), builder.getDraft().getReplyTo(), builder.getDraft().getDraftTime());
         }
     }
 

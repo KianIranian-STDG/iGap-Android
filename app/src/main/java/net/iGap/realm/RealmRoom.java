@@ -13,6 +13,7 @@ package net.iGap.realm;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -27,8 +28,11 @@ import net.iGap.module.enums.RoomType;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientGetPromote;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.request.RequestChannelUpdateDraft;
+import net.iGap.request.RequestChatUpdateDraft;
 import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientGetRoomMessage;
+import net.iGap.request.RequestGroupUpdateDraft;
 
 import java.util.List;
 
@@ -236,7 +240,9 @@ public class RealmRoom extends RealmObject {
             }
         }
 
-        realmRoom.setDraft(RealmRoomDraft.putOrUpdate(realm, realmRoom.getDraft(), room.getDraft().getMessage(), room.getDraft().getReplyTo()));
+        realmRoom.setDraft(RealmRoomDraft.putOrUpdate(realm, realmRoom.getDraft(), room.getDraft().getMessage(), room.getDraft().getReplyTo(), room.getDraft().getDraftTime()));
+        Log.i("CCCCCC", "2 put: " + realmRoom.getUpdatedTime());
+
 
         return realmRoom;
     }
@@ -308,7 +314,7 @@ public class RealmRoom extends RealmObject {
         });
     }
 
-    public static void convertAndSetDraft(final long roomId, final String message, final long replyToMessageId) {
+    public static void convertAndSetDraft(final long roomId, final String message, final long replyToMessageId, int draftTime) {
         Realm realm = Realm.getDefaultInstance();
 
         realm.executeTransaction(new Realm.Transaction() {
@@ -316,7 +322,15 @@ public class RealmRoom extends RealmObject {
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null) {
-                    realmRoom.setDraft(RealmRoomDraft.put(realm, message, replyToMessageId));
+                    realmRoom.setDraft(RealmRoomDraft.put(realm, message, replyToMessageId, draftTime));
+                    if (!message.isEmpty() && draftTime != 0) {
+                        realmRoom.setUpdatedTime(draftTime * (DateUtils.SECOND_IN_MILLIS));
+                    }
+                    if (realmRoom.getDraft() == null) {
+                        realmRoom.setDraft(RealmRoomDraft.put(realm, message, replyToMessageId, draftTime));
+                    } else {
+                        realmRoom.setDraft(RealmRoomDraft.putOrUpdate(realm, realmRoom.getDraft(), message, replyToMessageId, draftTime));
+                    }
                 }
             }
         });
@@ -898,23 +912,21 @@ public class RealmRoom extends RealmObject {
         setLastScrollPosition(roomId, 0, 0);
     }
 
-    public static void setDraft(final long roomId, final String message, final long replyToMessageId) {
+    public static void setDraft(final long roomId, final String message, final long replyToMessageId, ProtoGlobal.Room.Type chatType) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                if (realmRoom != null) {
-                    realmRoom.setDraft(RealmRoomDraft.put(realm, message, replyToMessageId));
+        RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
 
-                //    if (realmRoom.getLastMessage() != null && realmRoom.getLastMessage().getUpdateTime() == 0) {
-                        realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
-                //    } else {
-                //        realmRoom.setUpdatedTime(TimeUtils.currentLocalTime());
-               //     }
+        if (realmRoom != null) {
+            if (realmRoom.getDraft() == null || realmRoom.getDraft().getMessage() == null || !realmRoom.getDraft().getMessage().equals(message)) {
+                if (chatType == CHAT) {
+                    new RequestChatUpdateDraft().chatUpdateDraft(roomId, message, replyToMessageId);
+                } else if (chatType == GROUP) {
+                    new RequestGroupUpdateDraft().groupUpdateDraft(roomId, message, replyToMessageId);
+                } else if (chatType == CHANNEL) {
+                    new RequestChannelUpdateDraft().channelUpdateDraft(roomId, message, replyToMessageId);
                 }
             }
-        });
+        }
         realm.close();
     }
 
@@ -950,9 +962,6 @@ public class RealmRoom extends RealmObject {
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
                 if (realmRoom != null) {
-                    realmRoom.setDraft(null);
-                    realmRoom.setDraftFile(null);
-
                     if (realmRoom.getLastMessage().getUpdateTime() == 0) {
                         realmRoom.setUpdatedTime(realmRoom.getLastMessage().getCreateTime());
                     } else {
