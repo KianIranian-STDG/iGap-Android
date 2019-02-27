@@ -13,16 +13,25 @@ package net.iGap.adapter.items.chat;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.CountDownTimer;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.text.HtmlCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.StyleSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +65,7 @@ import net.iGap.interfaces.IChatItemAttachment;
 import net.iGap.interfaces.IMessageItem;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnProgressUpdate;
+import net.iGap.libs.Tuple;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnMessageProgressClick;
 import net.iGap.messageprogress.OnProgress;
@@ -111,7 +121,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
     public boolean directionalBased;
     public ProtoGlobal.Room.Type type;
     private int minWith = 0;
-    CharSequence myText;
+    SpannableString myText;
     private RealmAttachment realmAttachment;
     private RealmRoom realmRoom;
     private RealmChannelExtra realmChannelExtra;
@@ -206,22 +216,83 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             realmAttachment = f.getAttachment();
         }
         if (mMessage.forwardedFrom != null) {
-            myText = mMessage.forwardedFrom.getMessage();
+            myText = new SpannableString(mMessage.forwardedFrom.getMessage());
         } else {
-            myText = mMessage.messageText;
+            myText = new SpannableString(mMessage.messageText);
         }
 
-        updateMessageText((String) myText);
+        updateMessageText();
 
         return this;
     }
 
+    private ArrayList<Tuple<Integer, Integer>> MessageBoldSetup(String text) {
+        ArrayList<Tuple<Integer, Integer>> result = new ArrayList<>();
+        int start = -1;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '*' && (i + 1) < text.length() && text.charAt(i+1) == '*') {
+                if (start == -1) {
+                    start = i;
+                } else {
+                    Tuple<Integer, Integer> t = new Tuple<>(start, i);
+                    result.add(t);
+                    start = -1;
+                }
+                i += 1;
+            }
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        if (result.size() == 0)
+            stringBuilder.append(text);
+        else {
+            for (int i = 0 ; i < result.size(); i++) {
+                Tuple<Integer, Integer> point = result.get(i);
+                Tuple<Integer, Integer> previousPoint = null;
+
+                if (i != 0)
+                    previousPoint = result.get(i - 1);
+
+                if (previousPoint == null)
+                    stringBuilder.append(text.substring(0, point.x));
+                else
+                    stringBuilder.append(text.substring(previousPoint.y + 2, point.x));
+
+                stringBuilder.append(text.substring(point.x + 2, point.y));
+
+                if (i == result.size() - 1)
+                    stringBuilder.append(text.substring(point.y + 2));
+            }
+        }
+
+        for (int i = 0 ; i < result.size(); i++) {
+            Tuple<Integer, Integer> point = result.get(i);
+            point.x = point.x - i * 4;
+            point.y = point.y - i * 4 - 2;
+        }
+
+        myText = new SpannableString(stringBuilder);
+        return result;
+    }
+
     public void updateMessageText(String text) {
-        if (!TextUtils.isEmpty(text)) {
+        myText = new SpannableString(text);
+        updateMessageText();
+    }
+
+    public void updateMessageText() {
+        if (!TextUtils.isEmpty(myText)) {
+            ArrayList<Tuple<Integer, Integer>> results = MessageBoldSetup(myText.toString());
             if (mMessage.hasLinkInMessage) {
-                myText = HelperUrl.getLinkText(text, mMessage.linkInfo, mMessage.messageID);
+                myText = SpannableString.valueOf(HelperUrl.getLinkText(myText.toString(), mMessage.linkInfo, mMessage.messageID));
             } else {
-                myText = HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(text) : text;
+                myText = new SpannableString(HelperCalander.isPersianUnicode ? HelperCalander.convertToUnicodeFarsiNumber(myText.toString()) : myText);
+            }
+
+            for (int i = 0; i < results.size(); i++) {
+                Tuple<Integer, Integer> point = results.get(i);
+                myText.setSpan(new StyleSpan(Typeface.BOLD), point.x, point.y, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
     }

@@ -50,7 +50,7 @@ public class TextItem extends AbstractMessage<TextItem, TextItem.ViewHolder> {
 
         if (mMessage.hasEmojiInText) {
             if (myText.length() <= 2) {
-                if (EmojiUtils.emojisCount((String) myText) == 1) {
+                if (EmojiUtils.emojisCount(myText.toString()) == 1) {
                     holder.messageView.setEmojiSize((int) G.context.getResources().getDimension(R.dimen.dp28));
                 }
             }
