@@ -12,6 +12,7 @@ package net.iGap.response;
 
 import net.iGap.proto.ProtoChatUpdateDraft;
 import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomDraft;
 
 public class ChatUpdateDraftResponse extends MessageHandler {
 
@@ -37,9 +38,9 @@ public class ChatUpdateDraftResponse extends MessageHandler {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (updateDraft.getResponse().getId().isEmpty()) {
-                    RealmRoom.convertAndSetDraft(updateDraft.getRoomId(), updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo());
-                }
+//                if (updateDraft.getResponse().getId().isEmpty()) {
+                    RealmRoom.convertAndSetDraft(updateDraft.getRoomId(), updateDraft.getDraft().getMessage(), updateDraft.getDraft().getReplyTo(), updateDraft.getDraft().getDraftTime());
+//                }
             }
         }).start();
     }

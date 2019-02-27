@@ -6279,15 +6279,7 @@ public class FragmentChat extends BaseFragment
             String message = edtChat.getText().toString();
             if (!message.trim().isEmpty() || ((mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE))) {
                 hasDraft = true;
-                RealmRoom.setDraft(mRoomId, message, replyToMessageId);
-
-                if (chatType == CHAT) {
-                    new RequestChatUpdateDraft().chatUpdateDraft(mRoomId, message, replyToMessageId);
-                } else if (chatType == GROUP) {
-                    new RequestGroupUpdateDraft().groupUpdateDraft(mRoomId, message, replyToMessageId);
-                } else if (chatType == CHANNEL) {
-                    new RequestChannelUpdateDraft().channelUpdateDraft(mRoomId, message, replyToMessageId);
-                }
+                RealmRoom.setDraft(mRoomId, message, replyToMessageId ,chatType);
             } else {
                 clearDraftRequest();
             }
@@ -6305,7 +6297,7 @@ public class FragmentChat extends BaseFragment
             }
         }
         //realm.close();
-        clearLocalDraft();
+//        clearLocalDraft();
     }
 
     private void clearLocalDraft() {
