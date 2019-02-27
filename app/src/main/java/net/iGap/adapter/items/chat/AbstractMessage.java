@@ -226,7 +226,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return this;
     }
 
-    private ArrayList<Tuple<Integer, Integer>> MessageBoldSetup(String text) {
+    public static ArrayList<Tuple<Integer, Integer>> getBoldPlaces(String text) {
         ArrayList<Tuple<Integer, Integer>> result = new ArrayList<>();
         int start = -1;
         for (int i = 0; i < text.length(); i++) {
@@ -242,17 +242,20 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
             }
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
+        return result;
+    }
 
-        if (result.size() == 0)
+    public static String removeBoldMark(String text, ArrayList<Tuple<Integer, Integer>> boldPlaces) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (boldPlaces.size() == 0)
             stringBuilder.append(text);
         else {
-            for (int i = 0 ; i < result.size(); i++) {
-                Tuple<Integer, Integer> point = result.get(i);
+            for (int i = 0 ; i < boldPlaces.size(); i++) {
+                Tuple<Integer, Integer> point = boldPlaces.get(i);
                 Tuple<Integer, Integer> previousPoint = null;
 
                 if (i != 0)
-                    previousPoint = result.get(i - 1);
+                    previousPoint = boldPlaces.get(i - 1);
 
                 if (previousPoint == null)
                     stringBuilder.append(text.substring(0, point.x));
@@ -261,19 +264,26 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 stringBuilder.append(text.substring(point.x + 2, point.y));
 
-                if (i == result.size() - 1)
+                if (i == boldPlaces.size() - 1)
                     stringBuilder.append(text.substring(point.y + 2));
             }
         }
+        return stringBuilder.toString();
+    }
 
-        for (int i = 0 ; i < result.size(); i++) {
-            Tuple<Integer, Integer> point = result.get(i);
+    private void updateBoldPlaces(ArrayList<Tuple<Integer, Integer>> boldPlaces) {
+        for (int i = 0 ; i < boldPlaces.size(); i++) {
+            Tuple<Integer, Integer> point = boldPlaces.get(i);
             point.x = point.x - i * 4;
             point.y = point.y - i * 4 - 2;
         }
+    }
 
-        myText = new SpannableString(stringBuilder);
-        return result;
+    private ArrayList<Tuple<Integer, Integer>> MessageBoldSetup(String text) {
+        ArrayList<Tuple<Integer, Integer>> boldPlaces = getBoldPlaces(text);
+        myText = new SpannableString(removeBoldMark(text, boldPlaces));
+        updateBoldPlaces(boldPlaces);
+        return boldPlaces;
     }
 
     public void updateMessageText(String text) {

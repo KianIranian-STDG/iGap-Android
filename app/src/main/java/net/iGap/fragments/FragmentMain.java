@@ -17,6 +17,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -38,6 +39,7 @@ import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
+import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
@@ -63,6 +65,7 @@ import net.iGap.interfaces.OnRemoveFragment;
 import net.iGap.interfaces.OnSelectMenu;
 import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnVersionCallBack;
+import net.iGap.libs.Tuple;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.BotInit;
@@ -94,6 +97,7 @@ import net.iGap.request.RequestGroupLeft;
 import net.iGap.request.RequestUserContactsUnblock;
 import net.iGap.request.RequestUserLogin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1374,6 +1378,9 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                 return "";
             }
 
+            ArrayList<Tuple<Integer, Integer>> boldPlaces = AbstractMessage.getBoldPlaces(text);
+            text = AbstractMessage.removeBoldMark(text, boldPlaces);
+
             int subLength = 150;
             if (text.length() > subLength) {
                 return text.substring(0, subLength);
@@ -1396,8 +1403,8 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                 holder.txtLastMessage.setTextColor(ContextCompat.getColor(context, R.color.room_message_blue));
                 holder.txtLastMessage.setEllipsize(TextUtils.TruncateAt.MIDDLE);
             } else if (mInfo.getDraft() != null && !TextUtils.isEmpty(mInfo.getDraft().getMessage())) {
-
-                holder.txtLastMessage.setText(subStringInternal(mInfo.getDraft().getMessage()));
+                ArrayList<Tuple<Integer, Integer>> boldPlaces = AbstractMessage.getBoldPlaces(mInfo.getDraft().getMessage());
+                holder.txtLastMessage.setText(subStringInternal(AbstractMessage.removeBoldMark(mInfo.getDraft().getMessage(), boldPlaces)));
                 holder.txtLastMessage.setTextColor(Color.parseColor(G.textSubTheme));
 
                 holder.lastMessageSender.setVisibility(View.VISIBLE);
