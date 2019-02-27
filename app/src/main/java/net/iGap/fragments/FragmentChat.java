@@ -1559,6 +1559,10 @@ public class FragmentChat extends BaseFragment
     }
 
     private void initDrBot() {
+        llScrollNavigate = (FrameLayout) rootView.findViewById(R.id.ac_ll_scrool_navigate);
+        FrameLayout.LayoutParams param = (FrameLayout.LayoutParams) llScrollNavigate.getLayoutParams();
+        param.bottomMargin =  (int) getResources().getDimension(R.dimen.dp60);
+
         rcvDrBot = rootView.findViewById(R.id.rcvDrBot);
         rcvDrBot.setLayoutManager(new LinearLayoutManager(G.context, LinearLayoutManager.HORIZONTAL, false));
         AdapterDrBot adapterDrBot = new AdapterDrBot(items);
