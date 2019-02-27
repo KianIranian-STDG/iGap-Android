@@ -438,6 +438,7 @@ public class CardsFragment extends Fragment implements OnFragmentInteraction, Re
 
                 if (success) {
                     RaadApp.me = response.body();
+                    if(isAdded())
                     SettingHelper.putString(getActivity().getApplicationContext(), "mobile", RaadApp.me.mobile);
 //                    loadCards();
                     GetMerchantsList(Auth.getCurrentAuth().getJWT());

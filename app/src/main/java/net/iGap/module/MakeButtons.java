@@ -11,6 +11,7 @@ import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -94,7 +95,7 @@ public class MakeButtons {
         return linearLayout_179;
     }
 
-    public static LinearLayout addButtons(ButtonEntity entity, View.OnClickListener clickListener, int culmn, float wightSum,  int btnId,  LinearLayout mainLayout,  Integer additionalType) {
+    public static LinearLayout addButtons(ButtonEntity entity, View.OnClickListener clickListener, int culmn, float wightSum, int btnId, LinearLayout mainLayout, Integer additionalType) {
         float weight = wightSum / culmn;
         float weightSum = 0;
         float textWeight = 0f;
@@ -126,7 +127,7 @@ public class MakeButtons {
                 weightSum = 3f;
                 textWeight = 3f;
             }
-        }else if (culmn == 4) {
+        } else if (culmn == 4) {
             if (!entity.getImageUrl().equals("")) {
                 weightSum = 4f;
                 textWeight = 2.6f;
@@ -161,8 +162,6 @@ public class MakeButtons {
         }
 
 
-
-
         //    card.setForeground(getSelectedItemDrawable());
         //  card.setBackgroundResource(getSelectedItemDrawable());
 
@@ -171,10 +170,10 @@ public class MakeButtons {
         int backgroundResource = typedArray.getResourceId(0, 0);
         card.setBackgroundResource(backgroundResource);
         typedArray.recycle();*/
-        card.setForeground(getSelectedItemDrawable());
+        //      card.setForeground(getSelectedItemDrawable());
 
         //  card.setFocusable(true);
-        card.setClickable(true);
+        //    card.setClickable(true);
         // card.setCardElevation(3);
 
 
@@ -237,6 +236,7 @@ public class MakeButtons {
             linearLayout_529.addView(btn1);
         }
         card.addView(linearLayout_529);
+
         ArrayList<String> actions = new ArrayList<>();
         actions.add(entity.getValue());
         actions.add(entity.getLable());
@@ -245,16 +245,46 @@ public class MakeButtons {
 
 
         card.setId(entity.getActionType());
+/** add this section to make inside effect
+            /*    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && additionalType != AdditionalType.UNDER_KEYBOARD_BUTTON) {
+                  StateListAnimator stateListAnimator = AnimatorInflater
+                  .loadStateListAnimator(G.context, R.animator.lift_on_touch);
+                  card.setStateListAnimator(stateListAnimator);
+ }*/
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && additionalType != AdditionalType.UNDER_KEYBOARD_BUTTON) {
-            StateListAnimator stateListAnimator = AnimatorInflater
-                    .loadStateListAnimator(G.context, R.animator.lift_on_touch);
-            card.setStateListAnimator(stateListAnimator);
-        }
+        //    card.setLongClickable(false);
 
+/*        card.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                card.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                return true;
+            }
+        });*/
+        card.setFocusableInTouchMode(false);
+        card.setOnTouchListener(new View.OnTouchListener() {
+                                    @Override
+                                    public boolean onTouch(View v, MotionEvent event) {
+                                        if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+                                            card.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                                        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                                            //    event.addBatch(0,0,0,0,0,0);
+                                            //            card.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                                        } else if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+
+                                            card.setCardBackgroundColor(Color.parseColor("#20000000"));
+
+                                        } else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                                            /* Reset Color */
+                                            card.setCardBackgroundColor(Color.parseColor("#ffffff"));
+                                            //  card.setOnClickListener(clickListener);
+
+                                        }
+                                        return false;
+                                    }
+                                }
+        );
         card.setOnClickListener(clickListener);
-
-
         mainLayout.addView(card);
         return mainLayout;
 
