@@ -2140,8 +2140,6 @@ public class FragmentChat extends BaseFragment
                 //        if (!isStopBot) popBackStackFragment();
             }
         }
-
-
     }
 
     /**
@@ -3534,17 +3532,17 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
                 if (url.toLowerCase().equals("igap://close")) {
                     if (webViewChatPage != null) {
                         closeWebViewForSpecialUrlChat(false);
                     }
                 }
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
             }
         });
 
