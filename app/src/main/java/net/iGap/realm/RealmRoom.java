@@ -1507,6 +1507,9 @@ public class RealmRoom extends RealmObject {
     }
 
     public long getLastScrollPositionMessageId() {
+        if (lastScrollPositionMessageId == 0 || !RealmRoomMessage.existMessage(lastScrollPositionMessageId))
+            return 0;
+
         return lastScrollPositionMessageId;
     }
 
