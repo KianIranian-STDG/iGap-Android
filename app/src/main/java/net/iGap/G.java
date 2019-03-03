@@ -474,7 +474,6 @@ public class G extends MultiDexApplication {
                     RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
                             .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
                             .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0).findAll();
-                    Log.d("bagi:Bug" , "realmRoomMessages:size:" + realmRoomMessages.size());
                     for (RealmRoomMessage var : realmRoomMessages)
                         var.removeFromRealm();
                 }
