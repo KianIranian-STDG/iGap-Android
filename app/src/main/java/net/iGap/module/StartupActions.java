@@ -107,6 +107,10 @@ public final class StartupActions {
                 for (RealmRoom room : realmRooms)
                 {
                     RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId());
+                    if (room.getLastMessage() != null) {
+                        roomMessages = roomMessages.notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getLastMessage().getMessageId());
+                    }
+
                     RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
                             .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
                             .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0).findAll();
