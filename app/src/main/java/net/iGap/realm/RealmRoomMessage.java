@@ -588,6 +588,66 @@ public class RealmRoomMessage extends RealmObject {
         return 0;
     }
 
+    public void removeFromRealm() {
+        Realm realm = Realm.getDefaultInstance();
+        if (realmAdditional != null) {
+            this.setRealmAdditional(null);
+            realmAdditional.deleteFromRealm();
+        }
+
+        if (attachment != null) {
+            long count = realm.where(RealmRoomMessage.class)
+                    .equalTo(RealmRoomMessageFields.ATTACHMENT.ID, attachment.getId())
+                    .count();
+
+            if (count == 1) { // 1 is for this message
+                this.setAttachment(null);
+                attachment.deleteFromRealm();
+            }
+        }
+
+        if (location != null) {
+            this.setLocation(null);
+            location.deleteFromRealm();
+        }
+
+        if (roomMessageContact != null) {
+            this.setRoomMessageContact(null);
+            roomMessageContact.deleteFromRealm();
+        }
+
+        if (roomMessageWallet != null) {
+            this.setRoomMessageWallet(null);
+            roomMessageWallet.deleteFromRealm();
+        }
+
+        if (forwardMessage != null) {
+            long count = realm.where(RealmRoomMessage.class)
+                    .equalTo(RealmRoomMessageFields.FORWARD_MESSAGE.MESSAGE_ID, forwardMessage.getMessageId())
+                    .or()
+                    .equalTo(RealmRoomMessageFields.REPLY_TO.MESSAGE_ID, forwardMessage.getMessageId())
+                    .count();
+            if (count == 1) { // 1 is for this message
+                this.setForwardMessage(null);
+                forwardMessage.deleteFromRealm();
+            }
+        }
+
+        if (replyTo != null) {
+            long count = realm.where(RealmRoomMessage.class)
+                    .equalTo(RealmRoomMessageFields.FORWARD_MESSAGE.MESSAGE_ID, replyTo.getMessageId())
+                    .or()
+                    .equalTo(RealmRoomMessageFields.REPLY_TO.MESSAGE_ID, replyTo.getMessageId())
+                    .count();
+            if (count == 1) { // 1 is for this message
+                this.setReplyTo(null);
+                replyTo.deleteFromRealm();
+            }
+        }
+
+        this.deleteFromRealm();
+    }
+
     /**
      * make messages failed
      */
@@ -1291,7 +1351,7 @@ public class RealmRoomMessage extends RealmObject {
         return roomMessageWallet;
     }
 
-    private void setRoomMessageWallet(RealmRoomMessageWallet roomMessageWallet) {
+    public void setRoomMessageWallet(RealmRoomMessageWallet roomMessageWallet) {
         this.roomMessageWallet = roomMessageWallet;
     }
 

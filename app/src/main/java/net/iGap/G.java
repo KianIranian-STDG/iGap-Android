@@ -465,12 +465,10 @@ public class G extends MultiDexApplication {
                 RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
                 for (RealmRoom room : realmRooms)
                 {
-
                     RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId());
 
                     if (roomMessages.count() < 1500)
                         continue;
-
 
                     long time = TimeUtils.currentLocalTime() - 14 * 24 * 60 * 60 * 1000;
                     RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
@@ -478,73 +476,7 @@ public class G extends MultiDexApplication {
                             .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0).findAll();
                     Log.d("bagi:Bug" , "realmRoomMessages:size:" + realmRoomMessages.size());
                     for (RealmRoomMessage var : realmRoomMessages)
-                    {
-                        RealmAdditional realmAdditional = var.getRealmAdditional();
-                        if (realmAdditional != null) {
-                            Log.d("bagi:Bug" , "realmAdditional delete:");
-                            var.setRealmAdditional(null);
-                            realmAdditional.deleteFromRealm();
-                        }
-                        RealmAttachment realmAttachment = var.getAttachment();
-                        if (realmAttachment != null) {
-                            long count = realm.where(RealmRoomMessage.class)
-                                    .equalTo(RealmRoomMessageFields.ATTACHMENT.ID, realmAttachment.getId())
-                                    .notEqualTo(RealmRoomMessageFields.MESSAGE_ID, var.getMessageId())
-                                    .count();
-
-                            if (count == 0) {
-                                Log.d("bagi:Bug" , "realmAttachment delete:");
-                                var.setAttachment(null);
-                                realmAttachment.deleteFromRealm();
-                            }
-                        }
-
-                        RealmRoomMessageLocation realmRoomMessageLocation = var.getLocation();
-                        if (realmRoomMessageLocation != null) {
-                            var.setLocation(null);
-                            realmRoomMessageLocation.deleteFromRealm();
-                        }
-
-                        RealmRoomMessageContact realmRoomMessageContact = var.getRoomMessageContact();
-                        if (realmRoomMessageContact != null) {
-                            var.setRoomMessageContact(null);
-                            realmRoomMessageContact.deleteFromRealm();
-                        }
-
-                        RealmRoomMessageWallet realmRoomMessageWallet = var.getRoomMessageWallet();
-                        if (realmRoomMessageWallet != null) {
-                            //var.setRoomMessageWallet(null);
-                            realmRoomMessageWallet.deleteFromRealm();
-                        }
-
-                        RealmRoomMessage realmRoomMessageFo = var.getForwardMessage();
-                        if (realmRoomMessageFo != null) {
-                            long count = realm.where(RealmRoomMessage.class)
-                                    .equalTo(RealmRoomMessageFields.FORWARD_MESSAGE.MESSAGE_ID, realmRoomMessageFo.getMessageId())
-                                    .notEqualTo(RealmRoomMessageFields.MESSAGE_ID, var.getMessageId())
-                                    .count();
-                            if (count == 0) {
-                                Log.d("bagi:Bug" , "realmRoomMessageFo delete:");
-                                var.setForwardMessage(null);
-                                realmRoomMessageFo.deleteFromRealm();
-                            }
-                        }
-
-                        RealmRoomMessage realmRoomMessageRe = var.getReplyTo();
-                        if (realmRoomMessageRe != null) {
-                            long count = realm.where(RealmRoomMessage.class)
-                                    .equalTo(RealmRoomMessageFields.REPLY_TO.MESSAGE_ID, realmRoomMessageRe.getMessageId())
-                                    .notEqualTo(RealmRoomMessageFields.MESSAGE_ID, var.getMessageId())
-                                    .count();
-                            if (count == 0) {
-                                Log.d("bagi:Bug" , "realmRoomMessageRe delete:");
-                                var.setReplyTo(null);
-                                realmRoomMessageRe.deleteFromRealm();
-                            }
-                        }
-
-                        var.deleteFromRealm();
-                    }
+                        var.removeFromRealm();
                 }
 
             }
