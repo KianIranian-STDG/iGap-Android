@@ -102,14 +102,11 @@ public final class StartupActions {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                long time = TimeUtils.currentLocalTime() - 14 * 24 * 60 * 60 * 1000;
+                long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000;
                 RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
                 for (RealmRoom room : realmRooms)
                 {
                     RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId());
-                    if (roomMessages.count() < 1000)
-                        continue;
-
                     RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
                             .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
                             .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0).findAll();
