@@ -33,6 +33,9 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.realm.RealmDataUsage;
 import net.iGap.realm.RealmMigration;
+import net.iGap.realm.RealmRoom;
+import net.iGap.realm.RealmRoomMessage;
+import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.webrtc.CallObserver;
 
@@ -49,6 +52,7 @@ import java.util.TimeZone;
 import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -94,6 +98,26 @@ public final class StartupActions {
         initializeGlobalVariables();
 
         realmConfiguration();
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                long time = TimeUtils.currentLocalTime() - 14 * 24 * 60 * 60 * 1000;
+                RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
+                for (RealmRoom room : realmRooms)
+                {
+                    RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId());
+                    if (roomMessages.count() < 1000)
+                        continue;
+
+                    RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
+                            .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
+                            .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0).findAll();
+                    for (RealmRoomMessage var : realmRoomMessages)
+                        var.removeFromRealm();
+                }
+            }
+        });
         mainUserInfo();
         connectToServer();
         manageSettingPreferences();
@@ -582,7 +606,7 @@ public final class StartupActions {
         configuredRealm.close();
         SharedPreferences sharedPreferences = G.context.getSharedPreferences("Counter", Context.MODE_PRIVATE);
         int index = sharedPreferences.getInt("C", 0);
-        if (index == 10) {
+        if (index == 15) {
             index = 1;
             try {
                 RealmConfiguration aa = configuredRealm.getConfiguration();

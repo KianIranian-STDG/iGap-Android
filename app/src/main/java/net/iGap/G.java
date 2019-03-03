@@ -458,28 +458,6 @@ public class G extends MultiDexApplication {
         } catch (Exception e) {
         }
         new StartupActions();
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
-                for (RealmRoom room : realmRooms)
-                {
-                    RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId());
-
-                    if (roomMessages.count() < 1000)
-                        continue;
-
-                    long time = TimeUtils.currentLocalTime() - 14 * 24 * 60 * 60 * 1000;
-                    RealmResults<RealmRoomMessage> realmRoomMessages = roomMessages
-                            .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
-                            .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0).findAll();
-                    for (RealmRoomMessage var : realmRoomMessages)
-                        var.removeFromRealm();
-                }
-
-            }
-        });
      /*   try {
             WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
             WebRtcAudioUtils.setWebRtcBasedNoiseSuppressor(true);
