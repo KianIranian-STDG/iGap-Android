@@ -590,36 +590,26 @@ public class RealmRoomMessage extends RealmObject {
 
     public void removeFromRealm() {
         Realm realm = Realm.getDefaultInstance();
-        if (realmAdditional != null) {
-            this.setRealmAdditional(null);
+        if (realmAdditional != null)
             realmAdditional.deleteFromRealm();
-        }
 
         if (attachment != null) {
             long count = realm.where(RealmRoomMessage.class)
                     .equalTo(RealmRoomMessageFields.ATTACHMENT.ID, attachment.getId())
                     .count();
 
-            if (count == 1) { // 1 is for this message
-                this.setAttachment(null);
+            if (count == 1) // 1 is for this message
                 attachment.deleteFromRealm();
-            }
         }
 
-        if (location != null) {
-            this.setLocation(null);
+        if (location != null)
             location.deleteFromRealm();
-        }
 
-        if (roomMessageContact != null) {
-            this.setRoomMessageContact(null);
+        if (roomMessageContact != null)
             roomMessageContact.deleteFromRealm();
-        }
 
-        if (roomMessageWallet != null) {
-            this.setRoomMessageWallet(null);
+        if (roomMessageWallet != null)
             roomMessageWallet.deleteFromRealm();
-        }
 
         if (forwardMessage != null) {
             long count = realm.where(RealmRoomMessage.class)
@@ -627,10 +617,8 @@ public class RealmRoomMessage extends RealmObject {
                     .or()
                     .equalTo(RealmRoomMessageFields.REPLY_TO.MESSAGE_ID, forwardMessage.getMessageId())
                     .count();
-            if (count == 1) { // 1 is for this message
-                this.setForwardMessage(null);
+            if (count == 1) // 1 is for this message
                 forwardMessage.deleteFromRealm();
-            }
         }
 
         if (replyTo != null) {
@@ -639,10 +627,8 @@ public class RealmRoomMessage extends RealmObject {
                     .or()
                     .equalTo(RealmRoomMessageFields.REPLY_TO.MESSAGE_ID, replyTo.getMessageId())
                     .count();
-            if (count == 1) { // 1 is for this message
-                this.setReplyTo(null);
+            if (count == 1) // 1 is for this message
                 replyTo.deleteFromRealm();
-            }
         }
 
         this.deleteFromRealm();

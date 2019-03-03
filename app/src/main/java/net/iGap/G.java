@@ -467,7 +467,7 @@ public class G extends MultiDexApplication {
                 {
                     RealmQuery<RealmRoomMessage> roomMessages = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId());
 
-                    if (roomMessages.count() < 1500)
+                    if (roomMessages.count() < 1000)
                         continue;
 
                     long time = TimeUtils.currentLocalTime() - 14 * 24 * 60 * 60 * 1000;
