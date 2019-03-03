@@ -2134,13 +2134,17 @@ public class FragmentChat extends BaseFragment
             if (webViewChatPage.canGoBack() && (!webViewChatPage.getUrl().trim().toLowerCase().equals(urlWebViewForSpecialUrlChat.trim().toLowerCase())) && !isStopBot) {
                 webViewChatPage.goBack();
             } else {
-                recyclerView.setVisibility(View.VISIBLE);
-                viewAttachFile.setVisibility(View.VISIBLE);
-                rootWebView.setVisibility(View.GONE);
-                webViewChatPage = null;
+                makeWebViewGone();
                 //        if (!isStopBot) popBackStackFragment();
             }
         }
+    }
+
+    private void makeWebViewGone() {
+        recyclerView.setVisibility(View.VISIBLE);
+        viewAttachFile.setVisibility(View.VISIBLE);
+        rootWebView.setVisibility(View.GONE);
+        webViewChatPage = null;
     }
 
     /**
@@ -3534,9 +3538,7 @@ public class FragmentChat extends BaseFragment
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 if (url.toLowerCase().equals("igap://close")) {
-                    if (webViewChatPage != null) {
-                        closeWebViewForSpecialUrlChat(false);
-                    }
+                    makeWebViewGone();
                 }
             }
 
