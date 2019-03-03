@@ -13,10 +13,14 @@ package net.iGap.realm;
 import net.iGap.module.AppUtils;
 import net.iGap.proto.ProtoGlobal;
 
+import org.parceler.Parcel;
+
 import io.realm.Realm;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.net_iGap_realm_RealmRoomMessageWalletRealmProxy;
 
+@Parcel(implementations = {net_iGap_realm_RealmRoomMessageWalletRealmProxy.class}, value = Parcel.Serialization.BEAN, analyze = {RealmRoomMessageWallet.class})
 public class RealmRoomMessageWallet extends RealmObject {
 
     @PrimaryKey
