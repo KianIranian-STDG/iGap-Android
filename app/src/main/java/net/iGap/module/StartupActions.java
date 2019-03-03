@@ -102,7 +102,7 @@ public final class StartupActions {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000;
+                long time = TimeUtils.currentLocalTime() - 30 * 24 * 60 * 60 * 1000L;
                 RealmResults<RealmRoom> realmRooms = realm.where(RealmRoom.class).findAll();
                 for (RealmRoom room : realmRooms)
                 {
