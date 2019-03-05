@@ -206,6 +206,7 @@ import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserUpdateStatus;
 import net.iGap.interfaces.OnVoiceRecord;
 import net.iGap.interfaces.OpenBottomSheetItem;
+import net.iGap.libs.Tuple;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -7330,18 +7331,18 @@ public class FragmentChat extends BaseFragment
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.forwardedFrom.getMessageType(), chatItem.forwardedFrom);
                 String _text = AppUtils.conversionMessageType(chatItem.forwardedFrom.getMessageType());
                 if (_text != null && _text.length() > 0) {
-                    replayTo.setText(_text);
+                    ReplySetText(replayTo, _text);
                 } else {
-                    replayTo.setText(chatItem.forwardedFrom.getMessage());
+                    ReplySetText(replayTo, chatItem.forwardedFrom.getMessage());
                 }
             } else {
                 RealmRoomMessage message = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(chatItem.messageID)).findFirst();
                 AppUtils.rightFileThumbnailIcon(thumbnail, chatItem.messageType, message);
                 String _text = AppUtils.conversionMessageType(chatItem.messageType);
                 if (_text != null && _text.length() > 0) {
-                    replayTo.setText(_text);
+                    ReplySetText(replayTo, _text);
                 } else {
-                    replayTo.setText(chatItem.messageText);
+                    ReplySetText(replayTo, chatItem.messageText);
                 }
             }
             if (chatType == CHANNEL) {
@@ -7360,6 +7361,12 @@ public class FragmentChat extends BaseFragment
             // I set tag to retrieve it later when sending message
             mReplayLayout.setTag(chatItem);
         }
+    }
+
+    private void ReplySetText(TextView replayTo, String text) {
+        ArrayList<Tuple<Integer, Integer>> a = AbstractMessage.getBoldPlaces(text);
+        text = AbstractMessage.removeBoldMark(text, a);
+        replayTo.setText(text);
     }
 
     private void initLayoutChannelFooter() {
