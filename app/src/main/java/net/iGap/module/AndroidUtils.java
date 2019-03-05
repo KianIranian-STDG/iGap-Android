@@ -372,6 +372,7 @@ public final class AndroidUtils {
                 return G.DIR_DOCUMENT;
             case IMAGE:
             case IMAGE_TEXT:
+            case STICKER:
             case GIF:
             case GIF_TEXT:
                 return G.DIR_IMAGES;
