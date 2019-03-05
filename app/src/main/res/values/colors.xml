@@ -145,10 +145,10 @@
   <color name="background_check_gps">#85565656</color>
 
   <color name="background_setting_dark">#2c363f</color>
-  <color name="background_setting_dark_2">#602c363f</color>
+  <color name="background_setting_dark_2">#2c363f</color>
 
   <color name="background_setting_light">#f4f0e8</color>
-  <color name="background_setting_light_2">#60f7f7f7</color>
+  <color name="background_setting_light_2">#f7f7f7</color>
 
 
   <color name="textColorCall">#f8f4df</color>
