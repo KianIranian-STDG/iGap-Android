@@ -778,7 +778,7 @@ public class HelperNotification {
                 if (roomMessage.hasForwardFrom()) {
                     rm = roomMessage.getForwardFrom();
                 } else if (roomMessage.hasReplyTo()) {
-                    rm = roomMessage.getReplyTo();
+                    rm = roomMessage;
                 }
 
                 text = rm.getMessage();
