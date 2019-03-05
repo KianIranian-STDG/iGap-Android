@@ -3083,17 +3083,11 @@ public class FragmentChat extends BaseFragment
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-//                int totalItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getItemCount();
-//                int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-
                 int visibleItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getChildCount();
+                int totalItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getItemCount();
+                int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
-                int totalItemCount = layoutManager.getItemCount();
-                int lastVisible = layoutManager.findLastVisibleItemPosition();
-
-                boolean endHasBeenReached = lastVisible + visibleItemCount >= totalItemCount;
-
-                if (endHasBeenReached  && !isAnimateStart) {
+                if (pastVisibleItems + visibleItemCount >= totalItemCount && !isAnimateStart) {
                     isScrollEnd = false;
                     isAnimateStart = true;
                     isAnimateStart = false;
