@@ -27,8 +27,10 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityPopUpNotification;
+import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.interfaces.OnActivityChatStart;
+import net.iGap.libs.Tuple;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.ChatSendMessageUtil;
@@ -782,6 +784,8 @@ public class HelperNotification {
                 }
 
                 text = rm.getMessage();
+                ArrayList<Tuple<Integer, Integer>> a = AbstractMessage.getBoldPlaces(text);
+                text = AbstractMessage.removeBoldMark(text, a);
 
                 if (rm.getMessageType() == ProtoGlobal.RoomMessageType.STICKER) {
                     text = G.context.getString(R.string.sticker_message) + " : " + text;
