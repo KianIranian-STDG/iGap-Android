@@ -67,7 +67,7 @@ public class HelperDownloadFile {
         }
     }
 
-    private static HelperDownloadFile helperDownloadFile;
+    private static final HelperDownloadFile helperDownloadFile = new HelperDownloadFile();
     public ArrayList<String> manuallyStoppedDownload = new ArrayList<>();
     private ConcurrentHashMap<String, StructDownLoad> list = new ConcurrentHashMap<>();
     private ArrayList<StructQueue> mQueue = new ArrayList<>();
@@ -77,9 +77,6 @@ public class HelperDownloadFile {
     //**********************************************************************************************
 
     public static HelperDownloadFile getInstance() {
-        if (helperDownloadFile == null) {
-            helperDownloadFile = new HelperDownloadFile();
-        }
         return helperDownloadFile;
     }
 
