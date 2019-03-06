@@ -311,7 +311,7 @@ public class ScannerFragment extends Fragment implements OnFragmentInteraction {
                                     Intent intent = new Intent(Intent.ACTION_VIEW);
                                     intent.setData(Uri.parse(content));
                                     startActivity(intent);
-                                }else {
+                                } else {
                                     Toast.makeText(getContext(), R.string.data_unknown, Toast.LENGTH_LONG).show();
                                 }
 

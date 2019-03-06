@@ -131,7 +131,6 @@ import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.libs.tabBar.NavigationTabStrip;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
