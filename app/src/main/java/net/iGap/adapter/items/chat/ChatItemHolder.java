@@ -139,6 +139,9 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         /////////////Vote////
         LinearLayout.LayoutParams layout_356 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         layout_356.bottomMargin = i_Dp(R.dimen.dp16);
+        layout_356.rightMargin = i_Dp(R.dimen.dp6);
+        layout_356.leftMargin = i_Dp(R.dimen.dp6);
+
         lyt_vote = new LinearLayout(context);
         lyt_vote.setId(R.id.lyt_vote);
         lyt_vote.setOrientation(HORIZONTAL);
@@ -211,6 +214,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         lyt_vote_down.addView(img_vote_down);
 
         lyt_vote.addView(lyt_vote_down);
+        lyt_vote.addView(getHorizontalSpace(i_Dp(R.dimen.dp4)));
         lyt_vote.addView(lyt_vote_up);
 
         //////////////end////
@@ -286,7 +290,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
 
         linearLayout_683.addView(csl_ll_time, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         csl_ll_time.addView(lyt_see, 0);
-        csl_ll_time.addView(lyt_vote, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        csl_ll_time.addView(lyt_vote);
 
         LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
