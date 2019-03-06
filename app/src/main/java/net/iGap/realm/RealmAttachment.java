@@ -27,6 +27,7 @@ import java.io.IOException;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmAttachmentRealmProxy;
 
@@ -42,6 +43,8 @@ public class RealmAttachment extends RealmObject {
     private int width;
     private int height;
     private double duration;
+
+    @Index
     private String cacheId;
     private RealmThumbnail largeThumbnail;
     private RealmThumbnail smallThumbnail;
