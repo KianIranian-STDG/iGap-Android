@@ -227,6 +227,14 @@ public class RequestQueue {
         }
     }
 
+    public static void removeRequestQueue(String identity) {
+        for (Map.Entry<String, RequestWrapper> entry : G.requestQueueMap.entrySet()) {
+            if (entry.getValue().identity != null && entry.getValue().identity.toString().contains(identity)) {
+                G.requestQueueMap.remove(entry.getKey());
+            }
+        }
+    }
+
     private static void requestQueueMapRemover(String key) {
 
         try {

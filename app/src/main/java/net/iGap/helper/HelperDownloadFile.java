@@ -189,7 +189,7 @@ public class HelperDownloadFile {
         String primaryKey = cacheId + ProtoFileDownload.FileDownload.Selector.FILE;
 
         if (list.size() > 0 && list.containsKey(primaryKey)) {
-            //removeRequestQueue(list.get(primaryKey).identity); // don't need remove this item, remove listener in enough for stop download
+            //RequestQueue.removeRequestQueue(list.get(primaryKey).identity); // don't need remove this item, remove listener in enough for stop download
 
             StructDownLoad item = list.get(primaryKey);
 
@@ -557,14 +557,6 @@ public class HelperDownloadFile {
             if (mItem.listener != null) {
                 String _path = item.moveToDirectoryPAth.length() > 0 ? item.moveToDirectoryPAth : item.path;
                 mItem.listener.OnProgress(_path, item.progress);
-            }
-        }
-    }
-
-    void removeRequestQueue(String identity) {
-        for (Map.Entry<String, RequestWrapper> entry : G.requestQueueMap.entrySet()) {
-            if (entry.getValue().identity != null && entry.getValue().identity.toString().contains(identity)) {
-                G.requestQueueMap.remove(entry.getKey());
             }
         }
     }

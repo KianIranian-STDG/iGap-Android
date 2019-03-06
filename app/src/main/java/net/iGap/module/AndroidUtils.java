@@ -492,16 +492,15 @@ public final class AndroidUtils {
         md.update(buffer);
         byte[] digest = md.digest();
 
-        String hexStr = "";
-        for (int i = 0; i < digest.length; i++) {
-            hexStr += Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1);
+        StringBuilder hexStr = new StringBuilder();
+        for (byte aDigest : digest) {
+            hexStr.append(Integer.toString((aDigest & 0xff) + 0x100, 16).substring(1));
         }
-        return hexStr;
+        return hexStr.toString();
     }
 
     public static String getFilePathWithCashId(String cashId, String name, ProtoGlobal.RoomMessageType messageType) {
 
-        String _Dir = suitableAppFilePath(messageType);
         String _hash = cashId;
         String _mimeType = "";
 
@@ -516,8 +515,6 @@ public final class AndroidUtils {
             }
         }
 
-        String _result = "";
-
         try {
             if (cashId != null && cashId.length() > 0) {
                 _hash = makeSHA1Hash(cashId);
@@ -526,9 +523,7 @@ public final class AndroidUtils {
 
         }
 
-        _result = _Dir + "/" + _hash + _mimeType;
-
-        return _result;
+        return suitableAppFilePath(messageType) + "/" + _hash + _mimeType;
     }
 
     public static String getFilePathWithCashId(String cashId, String name, String selectDir, boolean isThumbNail) {
