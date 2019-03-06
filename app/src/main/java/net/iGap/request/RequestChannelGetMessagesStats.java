@@ -13,10 +13,11 @@ package net.iGap.request;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class RequestChannelGetMessagesStats {
 
-    public void channelGetMessagesStats(long roomId, ArrayList<Long> messageIds) {
+    public void channelGetMessagesStats(long roomId, HashSet<Long> messageIds) {
 
         ProtoChannelGetMessagesStats.ChannelGetMessagesStats.Builder builder = ProtoChannelGetMessagesStats.ChannelGetMessagesStats.newBuilder();
         builder.setRoomId(roomId);

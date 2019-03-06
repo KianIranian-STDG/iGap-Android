@@ -15,6 +15,7 @@ import net.iGap.G;
 import net.iGap.request.RequestChannelGetMessagesStats;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,9 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class HelperGetMessageState {
 
-    private static ConcurrentHashMap<Long, Long> getViewsMessage = new ConcurrentHashMap<>();
-    private static ArrayList<Long> roomIds = new ArrayList<>();
-    private static ArrayList<Long> getViews = new ArrayList<>();
+    private static ConcurrentHashMap<Long, HashSet<Long>> getViewsMessage = new ConcurrentHashMap<>();
     private static long latestTime;
 
     /**
@@ -39,16 +38,17 @@ public class HelperGetMessageState {
 
     public static void getMessageState(long roomId, long messageId) {
 
-        if (!getViews.contains(messageId)) {
-            getViews.add(messageId);
+        if (!getViewsMessage.containsKey(roomId)) {
+            HashSet<Long> messageIdsForRoom = new HashSet<>();
+            getViewsMessage.put(roomId, messageIdsForRoom);
+        }
 
-            getViewsMessage.put(messageId, roomId);
-            if (!roomIds.contains(roomId)) {
-                roomIds.add(roomId);
-            }
+        HashSet<Long> messageIdsForRoom = getViewsMessage.get(roomId);
+        if (!messageIdsForRoom.contains(messageId)){
+            messageIdsForRoom.add(messageId);
             latestTime = System.currentTimeMillis();
 
-            if (getViewsMessage.size() > 50) {
+            if (messageIdsForRoom.size() > 50) {
                 sendMessageStateRequest();
             }
 
@@ -61,15 +61,9 @@ public class HelperGetMessageState {
      */
     private static void sendMessageStateRequest() {
 
-        for (long roomId : roomIds) {
-            ArrayList messageIds = new ArrayList();
-            for (Iterator<Map.Entry<Long, Long>> it = getViewsMessage.entrySet().iterator(); it.hasNext(); ) {
-                Map.Entry<Long, Long> entry = it.next();
-                if (roomId == entry.getValue()) {
-                    messageIds.add(entry.getKey());
-                    getViewsMessage.remove(entry.getKey());
-                }
-            }
+        for (long roomId : getViewsMessage.keySet()) {
+            HashSet<Long> messageIds = getViewsMessage.get(roomId);
+            getViewsMessage.remove(roomId);
             if (messageIds.size() > 0) {
                 new RequestChannelGetMessagesStats().channelGetMessagesStats(roomId, messageIds);
             }
@@ -82,13 +76,13 @@ public class HelperGetMessageState {
      * array in enter to chat for allow message to get new state
      */
     public static void clearMessageViews() {
-        getViews.clear();
+        getViewsMessage.clear();
     }
 
     /**
      * loop for check time out for sending request get message state
      */
-    private static void checkLoop() {
+    private static void checkLoop() { //this have very bad result in performance
         if (timeOut()) { // getViewsMessage.size() > 0 &&
             sendMessageStateRequest();
         } else {
