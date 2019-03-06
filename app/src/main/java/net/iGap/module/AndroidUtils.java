@@ -556,21 +556,12 @@ public final class AndroidUtils {
             e.printStackTrace();
         }
 
-        if (selectDir.equals(G.DIR_TEMP)) {
-
-            if (isThumbNail) {
-                _result = G.DIR_TEMP + "/" + "thumb_" + _hash + _mimeType;
-            } else {
-                _result = G.DIR_TEMP + "/" + _hash + _mimeType;
-            }
-        } else if (selectDir.equals(G.DIR_IMAGE_USER)) {
-
-            if (isThumbNail) {
-                _result = G.DIR_IMAGE_USER + "/" + "thumb_" + _hash + _mimeType;
-            } else {
-                _result = G.DIR_IMAGE_USER + "/" + _hash + _mimeType;
-            }
+        if (isThumbNail) {
+            _result = selectDir + "/" + "thumb_" + _hash + _mimeType;
+        } else {
+            _result = selectDir + "/" + _hash + _mimeType;
         }
+
         // AppUtils.suitableThumbFileName(name);
 
         return _result;

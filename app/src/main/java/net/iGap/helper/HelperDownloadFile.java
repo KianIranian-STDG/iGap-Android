@@ -132,22 +132,19 @@ public class HelperDownloadFile {
         }
 
         item.selector = selector;
-        String sel;
         switch (item.selector) {
             case FILE:
                 item.path = AndroidUtils.getFilePathWithCashId(item.cashId, item.name, G.DIR_TEMP, false);
                 break;
             case SMALL_THUMBNAIL:
                 if (item.url != null && !item.url.isEmpty()) {
-                    sel = "?selector=" + 1;
-                    item.url = item.url + sel;
+                    item.url = item.url + "?selector=" + 1;
                 }
                 item.path = AndroidUtils.getFilePathWithCashId(item.cashId, item.name, G.DIR_TEMP, true);
                 break;
             case LARGE_THUMBNAIL:
                 if (item.url != null && !item.url.isEmpty()) {
-                    sel = "?selector=" + 2;
-                    item.url = item.url + sel;
+                    item.url = item.url + "?selector=" + 2;
                 }
                 item.path = AndroidUtils.getFilePathWithCashId(item.cashId, item.name, G.DIR_TEMP, true);
                 break;
@@ -165,8 +162,8 @@ public class HelperDownloadFile {
         }
 
         if (moveToDirectoryPAth != null && moveToDirectoryPAth.length() > 0) {
-            File _lockalFile = new File(moveToDirectoryPAth);
-            if (_lockalFile.exists()) {
+            File _localFile = new File(moveToDirectoryPAth);
+            if (_localFile.exists()) {
                 item.progress = 100;
             }
         }
@@ -201,12 +198,10 @@ public class HelperDownloadFile {
 
             }
 
-            if (item.structListeners != null) {
-                for (StructListener mItem : item.structListeners) {
-                    if (mItem.listener != null) {
-                        item.isPause = true;
-                        mItem.listener.OnError(item.Token);
-                    }
+            for (StructListener mItem : item.structListeners) {
+                if (mItem.listener != null) {
+                    item.isPause = true;
+                    mItem.listener.OnError(item.Token);
                 }
             }
 
