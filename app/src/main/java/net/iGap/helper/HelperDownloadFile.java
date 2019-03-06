@@ -12,8 +12,6 @@ package net.iGap.helper;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.downloader.Error;
 import com.downloader.OnCancelListener;
@@ -26,27 +24,19 @@ import com.downloader.Progress;
 import com.downloader.utils.Utils;
 
 import net.iGap.G;
-import net.iGap.interfaces.OnDownload;
 import net.iGap.interfaces.OnFileDownloadResponse;
-import net.iGap.interfaces.OnFileDownloaded;
-import net.iGap.interfaces.OnStickerDownloaded;
 import net.iGap.module.AndroidUtils;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmAttachmentFields;
 import net.iGap.request.RequestFileDownload;
-import net.iGap.request.RequestWrapper;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class HelperDownloadFile {
 
@@ -510,46 +500,14 @@ public class HelperDownloadFile {
             }
             switch (item.selector) {
                 case FILE:
-                    setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
+                    RealmAttachment.setFilePAthToDataBaseAttachment(cashId, item.moveToDirectoryPAth);
                     break;
                 case SMALL_THUMBNAIL:
                 case LARGE_THUMBNAIL:
-                    setThumbnailPathDataBaseAttachment(cashId, item.path);
+                    RealmAttachment.setThumbnailPathDataBaseAttachment(cashId, item.path);
                     break;
             }
         }
-    }
-
-    private void setThumbnailPathDataBaseAttachment(final String cashID, final String path) {
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(@NonNull Realm realm) {
-                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
-                for (RealmAttachment attachment : attachments) {
-                    attachment.setLocalThumbnailPath(path);
-                }
-            }
-        });
-
-        realm.close();
-    }
-
-    private void setFilePAthToDataBaseAttachment(final String cashID, final String path) {
-
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
-
-                for (RealmAttachment attachment : attachments) {
-                    attachment.setLocalFilePath(path);
-                }
-            }
-        });
-        realm.close();
     }
 
     private void updateView(final StructDownLoad item) {

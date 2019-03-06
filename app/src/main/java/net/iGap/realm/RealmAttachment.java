@@ -10,6 +10,7 @@
 
 package net.iGap.realm;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import net.iGap.G;
@@ -27,6 +28,7 @@ import java.io.IOException;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import io.realm.net_iGap_realm_RealmAttachmentRealmProxy;
@@ -211,6 +213,38 @@ public class RealmAttachment extends RealmObject {
         realm.close();
 
         return realmAttachment;
+    }
+
+    public static void setThumbnailPathDataBaseAttachment(final String cashID, final String path) {
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(@NonNull Realm realm) {
+                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
+                for (RealmAttachment attachment : attachments) {
+                    attachment.setLocalThumbnailPath(path);
+                }
+            }
+        });
+
+        realm.close();
+    }
+
+    public static void setFilePAthToDataBaseAttachment(final String cashID, final String path) {
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<RealmAttachment> attachments = realm.where(RealmAttachment.class).equalTo(RealmAttachmentFields.CACHE_ID, cashID).findAll();
+
+                for (RealmAttachment attachment : attachments) {
+                    attachment.setLocalFilePath(path);
+                }
+            }
+        });
+        realm.close();
     }
 
     public RealmThumbnail getLargeThumbnail() {
