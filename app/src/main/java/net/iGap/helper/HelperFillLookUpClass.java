@@ -201,6 +201,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30616, "ProtoClientRoomReport.ClientRoomReportResponse");
         lookupMap.put(30617, "ProtoClientRegisterDevice.ClientRegisterDeviceResponse");
         lookupMap.put(30618, "ProtoClientGetPromote.ClientGetPromoteResponse");
+        lookupMap.put(30619, "ProtoClientGetFavoriteMenu.ClientGetFavoriteMenuResponse");
 
         // FileUpload,Download 7xx , 307xx
         lookupMap.put(30700, "ProtoFileUploadOption.FileUploadOptionResponse");
@@ -248,6 +249,7 @@ public class HelperFillLookUpClass {
         //Mpl 90xx
         lookupMap.put(39100, "ProtoMplGetBillToken.MplGetBillTokenResponse");
         lookupMap.put(39101, "ProtoMplGetTopupToken.MplGetTopupTokenResponse");
+        lookupMap.put(39102, "ProtoMplGetSalesToken.MplGetSalesTokenResponse");
         lookupMap.put(39200, "ProtoBillInquiryMci.BillInquiryMciResponse");
         lookupMap.put(39201, "ProtoBillInquiryTelecom.BillInquiryTelecomResponse");
 
