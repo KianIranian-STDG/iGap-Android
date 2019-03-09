@@ -144,6 +144,7 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyAppBarLayout;
 import net.iGap.module.MyPhonStateService;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.dashboard.DashboardModel;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -1641,7 +1642,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!G.isWalletRegister) {
+
+                Intent intent = new Intent(ActivityMain.this,ActivityDashboard.class);
+                startActivity(intent);
+
+  /*              if (!G.isWalletRegister) {
                     new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
                     lockNavigation();
                 } else {
@@ -1660,7 +1665,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
                     intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
                     startActivityForResult(intent, WALLET_REQUEST_CODE);
-                }
+                }*/
             }
         });
 

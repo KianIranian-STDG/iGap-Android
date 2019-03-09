@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="3">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardDashboard1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="@dimen/dp4"
+        android:layout_weight="2"
+        app:cardCornerRadius="@dimen/dp4">
+
+        <ImageView
+            android:id="@+id/imgDashboard"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:src="@color/A1" />
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardDashboard2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/dp4"
+        android:layout_weight="1"
+        app:cardCornerRadius="@dimen/dp4">
+
+        <ImageView
+            android:id="@+id/imgDashboard2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp48"
+            android:src="@color/A7"
+
+            />
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
