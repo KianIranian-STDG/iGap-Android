@@ -280,14 +280,7 @@ public class SearchFragment extends BaseFragment {
                         }
                         realm.close();
 
-                        String text = edtSearch.getText().toString();
-                        if (text.startsWith("@")) {
-                            fillListItemAtsign(text.substring(1));
-
-                        } else {
-                            fillListItemGlobal(text);
-
-                        }
+                        fillAfterResponse();
                     }
                 });
             }
@@ -298,11 +291,23 @@ public class SearchFragment extends BaseFragment {
                     @Override
                     public void run() {
                         loadingProgressBar.setVisibility(View.GONE);
+                        fillAfterResponse();
                     }
                 });
             }
         };
 
+    }
+
+    private void fillAfterResponse(){
+        String text = edtSearch.getText().toString();
+        if (text.startsWith("@")) {
+            fillListItemAtsign(text.substring(1));
+
+        } else {
+            fillListItemGlobal(text);
+
+        }
     }
 
     private void fillListItemHashtag(String text) {
@@ -568,7 +573,7 @@ public class SearchFragment extends BaseFragment {
             results = realm.where(RealmRegisteredInfo.class).contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).equalTo(RealmRegisteredInfoFields.IS_BOT, false).findAll();
 
         } else {
-            results = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.IS_BOT, false).beginGroup().contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRegisteredInfoFields.DISPLAY_NAME, text).endGroup().findAll();
+            results = realm.where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.IS_BOT, false).beginGroup().contains(RealmRegisteredInfoFields.USERNAME, text, Case.INSENSITIVE).or().contains(RealmRegisteredInfoFields.DISPLAY_NAME, text,Case.INSENSITIVE).endGroup().findAll();
         }
 
         if (results != null && results.size() > 0) {

@@ -101,7 +101,6 @@ import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.Config;
 import net.iGap.G;
-import net.iGap.libs.MyWebViewClient;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.activities.ActivityCall;
@@ -131,7 +130,11 @@ import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.databinding.PaymentDialogBinding;
 import net.iGap.eventbus.PaymentFragment;
+import net.iGap.fragments.emoji.DialogAddSticker;
+import net.iGap.fragments.emoji.FragmentAddStickers;
+import net.iGap.fragments.emoji.FragmentSettingStickers;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
+import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -150,10 +153,6 @@ import net.iGap.helper.HelperString;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.HelperUrl;
 import net.iGap.helper.ImageHelper;
-import net.iGap.fragments.emoji.DialogAddSticker;
-import net.iGap.fragments.emoji.FragmentAddStickers;
-import net.iGap.fragments.emoji.FragmentSettingStickers;
-import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.interfaces.FinishActivity;
 import net.iGap.interfaces.ICallFinish;
 import net.iGap.interfaces.IDispatchTochEvent;
@@ -189,6 +188,7 @@ import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnConnectionChangeStateChat;
 import net.iGap.interfaces.OnDeleteChatFinishActivity;
 import net.iGap.interfaces.OnForwardBottomSheet;
+import net.iGap.interfaces.OnGetFavoriteMenu;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
 import net.iGap.interfaces.OnHelperSetAction;
@@ -206,6 +206,7 @@ import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserUpdateStatus;
 import net.iGap.interfaces.OnVoiceRecord;
 import net.iGap.interfaces.OpenBottomSheetItem;
+import net.iGap.libs.MyWebViewClient;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
@@ -253,9 +254,6 @@ import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructSendSticker;
 import net.iGap.module.structs.StructUploadVideo;
 import net.iGap.module.structs.StructWebView;
-import net.iGap.module.webserviceDrBot.Favorite;
-import net.iGap.module.webserviceDrBot.StructBot;
-import net.iGap.module.webserviceDrBot.WebService;
 import net.iGap.proto.ProtoChannelGetMessagesStats;
 import net.iGap.proto.ProtoClientGetRoomHistory;
 import net.iGap.proto.ProtoClientRoomReport;
@@ -288,6 +286,7 @@ import net.iGap.request.RequestChatDelete;
 import net.iGap.request.RequestChatEditMessage;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestChatUpdateDraft;
+import net.iGap.request.RequestClientGetFavoriteMenu;
 import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestClientJoinByUsername;
 import net.iGap.request.RequestClientMuteRoom;
@@ -398,10 +397,7 @@ public class FragmentChat extends BaseFragment
     private static ArrayMap<String, Boolean> compressedPath = new ArrayMap<>(); // keep compressedPath and also keep video path that never be won't compressed
     private static ArrayList<StructUploadVideo> structUploadVideos = new ArrayList<>();
     private boolean isShareOk = true;
-    private boolean isDrBot = true;
-    public static OnHandleDrBot onHandleDrBot;
 
-    private Bitmap icon;
     private boolean isRepley = false;
     private boolean swipeBack = false;
     public static List<StructGroupSticker> data = new ArrayList<>();
@@ -574,7 +570,6 @@ public class FragmentChat extends BaseFragment
     private boolean isNewBottomSheet = true;
     PaymentDialogBinding paymentDialogBinding;
     PaymentFragment paymentDialog;
-    List<Favorite> items = new ArrayList<>();
     boolean isAnimateStart = false;
     boolean isScrollEnd = false;
     private ArrayList<StructGroupSticker> stickerArrayList = new ArrayList<>();
@@ -1566,74 +1561,51 @@ public class FragmentChat extends BaseFragment
 
         rcvDrBot = rootView.findViewById(R.id.rcvDrBot);
         rcvDrBot.setLayoutManager(new LinearLayoutManager(G.context, LinearLayoutManager.HORIZONTAL, false));
-        AdapterDrBot adapterDrBot = new AdapterDrBot(items);
-        rcvDrBot.setAdapter(adapterDrBot);
+        rcvDrBot.setItemViewCacheSize(200);
 
-        List nameValuePairs = new ArrayList(1);
-        WebService.AsyncCaller caller = new WebService.AsyncCaller(context, nameValuePairs, new WebService.AsyncTaskCompleteListener<String>() {
+        new RequestClientGetFavoriteMenu().clientGetFavoriteMenu(new OnGetFavoriteMenu() {
             @Override
-            public void onTaskComplete(String result) {
-                Gson gson = new Gson();
-                StructBot item = null;
-                try {
-                    item = gson.fromJson(result, StructBot.class);
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                } catch (JsonSyntaxException e1) {
-                    e1.printStackTrace();
-                }
-
-
-                if (item != null && item.getResult() == 1) {
-
-                    items = item.getFavorite();
-                    if (items.size() == 0) {
-                        return;
-                    }
-
-                    rcvDrBot.setVisibility(View.VISIBLE);
-                    adapterDrBot.update(items);
-
-                    onHandleDrBot = new OnHandleDrBot() {
-                        @Override
-                        public void goToRoomBot(Favorite item) {
-
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    HelperUrl.checkUsernameAndGoToRoom(item.getFavoriteValue().replace("@", ""), HelperUrl.ChatEntry.chat);
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void sendMessageBOt(Favorite item) {
-
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (!isChatReadOnly) {
-                                        if (item.getFavoriteValue().equals("$financial")) {
-                                            new HelperFragment(FragmentPayment.newInstance()).setReplace(false).load();
-                                            //lockNavigation();
-                                            return;
-                                        }
-                                        edtChat.setText(item.getFavoriteValue());
-                                        imvSendButton.performClick();
-                                        scrollToEnd();
+            public void onGetList(List<ProtoGlobal.Favorite> favoriteList) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        AdapterDrBot adapterDrBot = new AdapterDrBot(favoriteList, new AdapterDrBot.OnHandleDrBot() {
+                            @Override
+                            public void goToRoomBot(ProtoGlobal.Favorite favorite) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        HelperUrl.checkUsernameAndGoToRoom(favorite.getValue().replace("@", ""), HelperUrl.ChatEntry.chat);
                                     }
-                                }
-                            });
+                                });
+                            }
 
-
-                        }
-                    };
-
-                }
-
+                            @Override
+                            public void sendMessageBOt(ProtoGlobal.Favorite favorite) {
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!isChatReadOnly) {
+                                            if (favorite.getValue().equals("$financial")) {
+                                                new HelperFragment(FragmentPayment.newInstance()).setReplace(false).load();
+                                                //lockNavigation();
+                                                return;
+                                            }
+                                            edtChat.setText(favorite.getValue());
+                                            imvSendButton.performClick();
+                                            scrollToEnd();
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        rcvDrBot.setAdapter(adapterDrBot);
+                        rcvDrBot.setVisibility(View.VISIBLE);
+                    }
+                });
             }
-        }, true);
-        caller.execute("igap/getData");
+        });
+
 
 
     }
@@ -9714,24 +9686,5 @@ public class FragmentChat extends BaseFragment
     }
 
 
-    public interface OnHandleDrBot {
-
-        void goToRoomBot(Favorite favorite);
-
-        void sendMessageBOt(Favorite favorite);
-
-    }
-
-/*    private boolean isBot(long userId) {
-        Realm realm=Realm.getDefaultInstance();
-        RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
-        if (realmRegisteredInfo != null) {
-            if (realmRegisteredInfo.isBot()) {
-                return true;
-            } else
-                return false;
-        } else
-            return false;
-    }*/
 
 }

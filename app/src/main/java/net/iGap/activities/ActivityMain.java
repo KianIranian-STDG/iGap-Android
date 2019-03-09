@@ -250,6 +250,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private String phoneNumber;
     private TextView itemCash;
     private ViewGroup itemNavWallet;
+    private int currentFabIcon =0;
 
     public static void setWeight(View view, int value) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
@@ -1242,6 +1243,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void setFabIcon(int res) {
+
+        if(res ==currentFabIcon){
+            return;
+        }
+        currentFabIcon = res;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             arcMenu.fabMenu.setImageDrawable(getResources().getDrawable(res, context.getTheme()));
         } else {

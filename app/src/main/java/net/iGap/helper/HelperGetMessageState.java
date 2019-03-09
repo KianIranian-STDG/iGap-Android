@@ -10,13 +10,12 @@
 
 package net.iGap.helper;
 
+import android.os.Handler;
+
 import net.iGap.Config;
-import net.iGap.G;
 import net.iGap.request.RequestChannelGetMessagesStats;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -25,11 +24,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class HelperGetMessageState {
 
-    private static ConcurrentHashMap<Long, Long> getViewsMessage = new ConcurrentHashMap<>();
-    private static ArrayList<Long> roomIds = new ArrayList<>();
-    private static ArrayList<Long> getViews = new ArrayList<>();
-    private static long latestTime;
-
+    private static ConcurrentHashMap<Long, HashSet<Long>> getViewsMessage = new ConcurrentHashMap<>();
+    private static HashSet<Long> getViews = new HashSet<>();
+    private static Thread thread;
+    private static final Object mutex = new Object();
     /**
      * check limit and timeout for sending getMessageState
      *
@@ -39,20 +37,31 @@ public class HelperGetMessageState {
 
     public static void getMessageState(long roomId, long messageId) {
 
-        if (!getViews.contains(messageId)) {
-            getViews.add(messageId);
-
-            getViewsMessage.put(messageId, roomId);
-            if (!roomIds.contains(roomId)) {
-                roomIds.add(roomId);
+        synchronized (mutex) {
+            if (thread == null) {
+                thread = new Thread(new RepeatingThread());
+                thread.start();
             }
-            latestTime = System.currentTimeMillis();
+        }
 
-            if (getViewsMessage.size() > 50) {
-                sendMessageStateRequest();
-            }
+        if (getViews.contains(messageId)) {
+            return;
+        }
 
-            checkLoop();
+        getViews.add(messageId);
+
+        if (!getViewsMessage.containsKey(roomId)) {
+            HashSet<Long> messageIdsForRoom = new HashSet<>();
+            getViewsMessage.put(roomId, messageIdsForRoom);
+        }
+
+        HashSet<Long> messageIdsForRoom = getViewsMessage.get(roomId);
+        if (!messageIdsForRoom.contains(messageId)){
+            messageIdsForRoom.add(messageId);
+
+//            if (messageIdsForRoom.size() > 50) {
+//                sendMessageStateRequest();
+//            }
         }
     }
 
@@ -61,15 +70,9 @@ public class HelperGetMessageState {
      */
     private static void sendMessageStateRequest() {
 
-        for (long roomId : roomIds) {
-            ArrayList messageIds = new ArrayList();
-            for (Iterator<Map.Entry<Long, Long>> it = getViewsMessage.entrySet().iterator(); it.hasNext(); ) {
-                Map.Entry<Long, Long> entry = it.next();
-                if (roomId == entry.getValue()) {
-                    messageIds.add(entry.getKey());
-                    getViewsMessage.remove(entry.getKey());
-                }
-            }
+        for (long roomId : getViewsMessage.keySet()) {
+            HashSet<Long> messageIds = getViewsMessage.get(roomId);
+            getViewsMessage.remove(roomId);
             if (messageIds.size() > 0) {
                 new RequestChannelGetMessagesStats().channelGetMessagesStats(roomId, messageIds);
             }
@@ -85,33 +88,19 @@ public class HelperGetMessageState {
         getViews.clear();
     }
 
-    /**
-     * loop for check time out for sending request get message state
-     */
-    private static void checkLoop() {
-        if (timeOut()) { // getViewsMessage.size() > 0 &&
+    private static class RepeatingThread implements Runnable {
+
+        private final Handler mHandler = new Handler();
+
+        RepeatingThread() {
+
+        }
+
+        @Override
+        public void run() {
             sendMessageStateRequest();
-        } else {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    checkLoop();
-                }
-            }, Config.GET_MESSAGE_STATE_TIME_OUT_CHECKING);
+            mHandler.postDelayed(this, Config.GET_MESSAGE_STATE_TIME_OUT);
         }
     }
 
-    /**
-     * check time in each Config.GET_MESSAGE_STATE_TIME_OUT second
-     *
-     * @return true in timed out
-     */
-    private static boolean timeOut() {
-        long currentTime = System.currentTimeMillis();
-        long difference = (currentTime - latestTime);
-        if (difference >= Config.GET_MESSAGE_STATE_TIME_OUT) {
-            return true;
-        }
-        return false;
-    }
 }
