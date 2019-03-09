@@ -289,6 +289,13 @@ public class MessagesAdapter<Item extends AbstractMessage> extends FastItemAdapt
         }
         return null;
     }
+    public long getItemByPosition(int position){
+        try {
+            return getAdapterItem(position).mMessage.time;
+        }catch (Exception e){}
+        return 0;
+
+    }
 
     public void removeMessage(long messageId) {
 

@@ -46,6 +46,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -401,6 +402,8 @@ public class FragmentChat extends BaseFragment
     private boolean isRepley = false;
     private boolean swipeBack = false;
     public static List<StructGroupSticker> data = new ArrayList<>();
+    public Runnable countDownRunnable;
+    public Handler countDownHandler;
 
 
     /**
@@ -574,6 +577,8 @@ public class FragmentChat extends BaseFragment
     boolean isScrollEnd = false;
     private ArrayList<StructGroupSticker> stickerArrayList = new ArrayList<>();
     public static OnUpdateSticker onUpdateSticker;
+    public CardView cardFloatingTime;
+    public TextView txtFloatingTime;
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -650,8 +655,11 @@ public class FragmentChat extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
+
         G.locationListener = this;
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
+        cardFloatingTime = rootView.findViewById(R.id.cardFloatingTime);
+        txtFloatingTime = rootView.findViewById(R.id.txtFloatingTime);
 
         return attachToSwipeBack(rootView);
     }
@@ -733,6 +741,13 @@ public class FragmentChat extends BaseFragment
         super.onViewCreated(view, savedInstanceState);
 
         realmChat = Realm.getDefaultInstance();
+        countDownRunnable = new Runnable() {
+            @Override
+            public void run() {
+                cardFloatingTime.setVisibility(View.GONE);
+            }
+        };
+        countDownHandler = new Handler(Looper.getMainLooper());
 
         startPageFastInitialize();
         G.handler.postDelayed(new Runnable() {
@@ -1557,7 +1572,7 @@ public class FragmentChat extends BaseFragment
     private void initDrBot() {
         llScrollNavigate = (FrameLayout) rootView.findViewById(R.id.ac_ll_scrool_navigate);
         FrameLayout.LayoutParams param = (FrameLayout.LayoutParams) llScrollNavigate.getLayoutParams();
-        param.bottomMargin =  (int) getResources().getDimension(R.dimen.dp60);
+        param.bottomMargin = (int) getResources().getDimension(R.dimen.dp60);
 
         rcvDrBot = rootView.findViewById(R.id.rcvDrBot);
         rcvDrBot.setLayoutManager(new LinearLayoutManager(G.context, LinearLayoutManager.HORIZONTAL, false));
@@ -2063,7 +2078,7 @@ public class FragmentChat extends BaseFragment
                     if (G.locationListenerResponse != null)
                         G.locationListenerResponse.setLocationResponse(latitude, longitude);
                 } else*/
-                    sendPosition(latitude, longitude, imagePath);
+                sendPosition(latitude, longitude, imagePath);
             }
         };
     }
@@ -2881,7 +2896,8 @@ public class FragmentChat extends BaseFragment
                     try {
                         if (isRepley)
                             replay((mAdapter.getItem(viewHolder.getAdapterPosition())).mMessage);
-                    } catch (Exception ignored) { }
+                    } catch (Exception ignored) {
+                    }
                     isRepley = false;
                 }
 
@@ -2904,7 +2920,7 @@ public class FragmentChat extends BaseFragment
                         dX = 0;
 
                     if (dX < -ViewMaker.dpToPixel(150)) {
-                        dX =  -ViewMaker.dpToPixel(150);
+                        dX = -ViewMaker.dpToPixel(150);
                     }
 
                     super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -3060,6 +3076,18 @@ public class FragmentChat extends BaseFragment
                 int totalItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getItemCount();
                 int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
+                //InputMethodManager imm  = (InputMethodManager)getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+  //              if (!((InputMethodManager) G.currentActivity.getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE)).isAcceptingText()) {
+                    cardFloatingTime.setVisibility(View.VISIBLE);
+                    long item = mAdapter.getItemByPosition(((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition());
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(item);
+                    txtFloatingTime.setText(TimeUtils.getChatSettingsTimeAgo(G.fragmentActivity, calendar.getTime()));
+                    resetCountDownTimer();
+      //          }
+
+
                 if (pastVisibleItems + visibleItemCount >= totalItemCount && !isAnimateStart) {
                     isScrollEnd = false;
                     isAnimateStart = true;
@@ -3080,6 +3108,7 @@ public class FragmentChat extends BaseFragment
                     isAnimateStart = true;
                     setDownBtnVisible();
                     isAnimateStart = false;
+
 //                    llScrollNavigate.animate()
 //                            .alpha(1.0f)
 //                            .translationY(0)
@@ -3094,7 +3123,9 @@ public class FragmentChat extends BaseFragment
                     txtNewUnreadMessage.setText(countNewMessage + "");
                     if (countNewMessage == 0) {
                         txtNewUnreadMessage.setVisibility(View.GONE);
+
                     } else {
+
                         txtNewUnreadMessage.setVisibility(View.VISIBLE);
                     }
 
@@ -3419,6 +3450,12 @@ public class FragmentChat extends BaseFragment
         //realm.close();
     }
 
+    private void resetCountDownTimer() {
+
+        countDownHandler.removeCallbacks(countDownRunnable);
+        countDownHandler.postDelayed(countDownRunnable, 500);
+    }
+
     public static void fillStickerList() {
 
         data.clear();
@@ -3527,7 +3564,7 @@ public class FragmentChat extends BaseFragment
                                   int actionState, boolean isCurrentlyActive) {
 
 
-        if (dX <- ViewMaker.dpToPixel(140)) {
+        if (dX < -ViewMaker.dpToPixel(140)) {
             if (!isRepley) {
                 Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -4315,7 +4352,7 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onOpenClick(View view, StructMessageInfo message, int pos) {
 
-        if(message.messageType==ProtoGlobal.RoomMessageType.STICKER){
+        if (message.messageType == ProtoGlobal.RoomMessageType.STICKER) {
             checkSticker(message);
             return;
         }
@@ -5808,6 +5845,7 @@ public class FragmentChat extends BaseFragment
     private boolean isEnd() {
         if (addToView) {
             if (((recyclerView.getLayoutManager()) == null) || ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition() + END_CHAT_LIMIT > recyclerView.getAdapter().getItemCount()) {
+
                 return true;
             }
         }
@@ -6006,7 +6044,7 @@ public class FragmentChat extends BaseFragment
                                 rm[0].setShowMessage(true);
                                 rm[0].setCreateTime(TimeUtils.currentLocalTime());
 
-                                if(isReply()) {
+                                if (isReply()) {
                                     rm[0].setReplyTo(realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, parseLong(((StructMessageInfo) mReplayLayout.getTag()).messageID)).findFirst());
                                 }
                             }
@@ -6018,7 +6056,7 @@ public class FragmentChat extends BaseFragment
 
                         new ChatSendMessageUtil().build(chatType, mRoomId, rm[0]).sendMessage(identity + "");
 
-                        if(isReply()) {
+                        if (isReply()) {
                             mReplayLayout.setTag(null);
                             mReplayLayout.setVisibility(View.GONE);
                         }
@@ -6248,7 +6286,7 @@ public class FragmentChat extends BaseFragment
             String message = edtChat.getText().toString();
             if (!message.trim().isEmpty() || ((mReplayLayout != null && mReplayLayout.getVisibility() == View.VISIBLE))) {
                 hasDraft = true;
-                RealmRoom.setDraft(mRoomId, message, replyToMessageId ,chatType);
+                RealmRoom.setDraft(mRoomId, message, replyToMessageId, chatType);
             } else {
                 clearDraftRequest();
             }
@@ -8381,7 +8419,9 @@ public class FragmentChat extends BaseFragment
 
         RealmRoomMessage timeMessage = RealmRoomMessage.makeTimeMessage(time, timeString);
 
-        return StructMessageInfo.convert(getRealmChat(), timeMessage);
+        StructMessageInfo theTime = StructMessageInfo.convert(getRealmChat(), timeMessage);
+
+        return theTime;
     }
 
     private void switchAddItem(ArrayList<StructMessageInfo> messageInfos, boolean addTop) {
@@ -8415,6 +8455,7 @@ public class FragmentChat extends BaseFragment
                             }
                         }
                         mAdapter.add(0, new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+
                         index = 1;
                     }
                 } else {
@@ -8442,6 +8483,7 @@ public class FragmentChat extends BaseFragment
                         if (mAdapter.getItemCount() > 0) {
                             if (mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage != null && RealmRoomMessage.isTimeDayDifferent(messageInfo.time, mAdapter.getAdapterItem(mAdapter.getItemCount() - 1).mMessage.time)) {
                                 mAdapter.add(new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
+
                             }
                         } else {
                             mAdapter.add(new TimeItem(mAdapter, this).setMessage(makeLayoutTime(messageInfo.time)).withIdentifier(identifier++));
@@ -8489,19 +8531,19 @@ public class FragmentChat extends BaseFragment
                         break;
                     case FILE:
                     case FILE_TEXT:
-                            if (!addTop) {
-                                mAdapter.add(new FileItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            } else {
-                                mAdapter.add(index, new FileItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
-                            }
+                        if (!addTop) {
+                            mAdapter.add(new FileItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        } else {
+                            mAdapter.add(index, new FileItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
+                        }
                         break;
-                    case STICKER :
+                    case STICKER:
                         if (!addTop) {
                             mAdapter.add(new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         } else {
                             mAdapter.add(index, new StickerItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
                         }
-                    break ;
+                        break;
                     case VOICE:
                         if (!addTop) {
                             mAdapter.add(new VoiceItem(mAdapter, chatType, this).setMessage(messageInfo).withIdentifier(identifier));
@@ -8952,8 +8994,8 @@ public class FragmentChat extends BaseFragment
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (FragmentChat.isLoadingMoreMessage){
-                                if (!isWaitingForHistoryUp && !isWaitingForHistoryDown){
+                            if (FragmentChat.isLoadingMoreMessage) {
+                                if (!isWaitingForHistoryUp && !isWaitingForHistoryDown) {
 
                                     FragmentChat.isLoadingMoreMessage = false;
                                     hideProgress();
@@ -9066,9 +9108,9 @@ public class FragmentChat extends BaseFragment
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (FragmentChat.isLoadingMoreMessage){
+                            if (FragmentChat.isLoadingMoreMessage) {
                                 if (!isWaitingForHistoryUp &&
-                                        !isWaitingForHistoryDown){
+                                        !isWaitingForHistoryDown) {
                                     FragmentChat.isLoadingMoreMessage = false;
                                     hideProgress();
                                     llScrollNavigate.performClick();
