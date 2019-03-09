@@ -10,6 +10,7 @@ import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientGetRoomMessage;
 
 import java.util.Map;
@@ -24,9 +25,15 @@ public class NotificationService extends FirebaseMessagingService {
     private final static String MESSAGE_TYPE = "loc_key";
     private static boolean isFirstMessage = true;
 
+
+    @Override
+    public void onNewToken(String mToken) {
+        super.onNewToken(mToken);
+        RealmUserInfo.setPushNotification(mToken);
+    }
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
         if (isFirstMessage) {
             if (remoteMessage.getData().size() > 0) {
                 Map<String, String> date = remoteMessage.getData();
