@@ -10,6 +10,8 @@
 
 package net.iGap.helper;
 
+import android.os.Handler;
+
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.request.RequestChannelGetMessagesStats;
@@ -27,8 +29,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class HelperGetMessageState {
 
     private static ConcurrentHashMap<Long, HashSet<Long>> getViewsMessage = new ConcurrentHashMap<>();
-    private static long latestTime;
-
+    private static Thread thread;
+    private static final Object mutex = new Object();
     /**
      * check limit and timeout for sending getMessageState
      *
@@ -38,6 +40,13 @@ public class HelperGetMessageState {
 
     public static void getMessageState(long roomId, long messageId) {
 
+        synchronized (mutex) {
+            if (thread == null) {
+                thread = new Thread(new RepeatingThread());
+                thread.start();
+            }
+        }
+
         if (!getViewsMessage.containsKey(roomId)) {
             HashSet<Long> messageIdsForRoom = new HashSet<>();
             getViewsMessage.put(roomId, messageIdsForRoom);
@@ -46,13 +55,10 @@ public class HelperGetMessageState {
         HashSet<Long> messageIdsForRoom = getViewsMessage.get(roomId);
         if (!messageIdsForRoom.contains(messageId)){
             messageIdsForRoom.add(messageId);
-            latestTime = System.currentTimeMillis();
 
-            if (messageIdsForRoom.size() > 50) {
-                sendMessageStateRequest();
-            }
-
-            checkLoop();
+//            if (messageIdsForRoom.size() > 50) {
+//                sendMessageStateRequest();
+//            }
         }
     }
 
@@ -79,33 +85,18 @@ public class HelperGetMessageState {
         getViewsMessage.clear();
     }
 
-    /**
-     * loop for check time out for sending request get message state
-     */
-    private static void checkLoop() { //this have very bad result in performance
-        if (timeOut()) { // getViewsMessage.size() > 0 &&
-            sendMessageStateRequest();
-        } else {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    checkLoop();
-                }
-            }, Config.GET_MESSAGE_STATE_TIME_OUT_CHECKING);
-        }
-    }
+    private static class RepeatingThread implements Runnable {
 
-    /**
-     * check time in each Config.GET_MESSAGE_STATE_TIME_OUT second
-     *
-     * @return true in timed out
-     */
-    private static boolean timeOut() {
-        long currentTime = System.currentTimeMillis();
-        long difference = (currentTime - latestTime);
-        if (difference >= Config.GET_MESSAGE_STATE_TIME_OUT) {
-            return true;
+        private final Handler mHandler = new Handler();
+
+        RepeatingThread() {
+
         }
-        return false;
+
+        @Override
+        public void run() {
+            sendMessageStateRequest();
+            mHandler.postDelayed(this, Config.GET_MESSAGE_STATE_TIME_OUT);
+        }
     }
 }
