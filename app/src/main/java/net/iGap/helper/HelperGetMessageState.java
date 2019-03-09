@@ -13,13 +13,9 @@ package net.iGap.helper;
 import android.os.Handler;
 
 import net.iGap.Config;
-import net.iGap.G;
 import net.iGap.request.RequestChannelGetMessagesStats;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -29,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class HelperGetMessageState {
 
     private static ConcurrentHashMap<Long, HashSet<Long>> getViewsMessage = new ConcurrentHashMap<>();
+    private static HashSet<Long> getViews = new HashSet<>();
     private static Thread thread;
     private static final Object mutex = new Object();
     /**
@@ -46,6 +43,12 @@ public class HelperGetMessageState {
                 thread.start();
             }
         }
+
+        if (getViews.contains(messageId)) {
+            return;
+        }
+
+        getViews.add(messageId);
 
         if (!getViewsMessage.containsKey(roomId)) {
             HashSet<Long> messageIdsForRoom = new HashSet<>();
@@ -82,7 +85,7 @@ public class HelperGetMessageState {
      * array in enter to chat for allow message to get new state
      */
     public static void clearMessageViews() {
-        getViewsMessage.clear();
+        getViews.clear();
     }
 
     private static class RepeatingThread implements Runnable {
@@ -99,4 +102,5 @@ public class HelperGetMessageState {
             mHandler.postDelayed(this, Config.GET_MESSAGE_STATE_TIME_OUT);
         }
     }
+
 }
