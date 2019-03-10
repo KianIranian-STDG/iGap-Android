@@ -4053,7 +4053,7 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
+    public synchronized void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
 
         if (roomMessage.getMessageId() <= biggestMessageId) {
             return;
@@ -4131,6 +4131,7 @@ public class FragmentChat extends BaseFragment
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                getRealmChat().refresh();
                 //final Realm realm = Realm.getDefaultInstance();
                 final RealmRoomMessage realmRoomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
@@ -4253,7 +4254,7 @@ public class FragmentChat extends BaseFragment
 
                 //realm.close();
             }
-        }, 400);
+        }, 0);
     }
 
     private StructWebView getUrlWebView(String additionalData) {
