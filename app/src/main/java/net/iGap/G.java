@@ -321,7 +321,6 @@ public class G extends MultiDexApplication {
     public static OnChannelUpdateReactionStatus onChannelUpdateReactionStatus;
     public static OnChannelUpdateReactionStatus onChannelUpdateReactionStatusChat;
     public static OnClientCheckInviteLink onClientCheckInviteLink;
-    public static OnClientGetRoomMessage onClientGetRoomMessage;
     public static OnClientJoinByInviteLink onClientJoinByInviteLink;
     public static OnClientJoinByUsername onClientJoinByUsername;
     public static OnClientResolveUsername onClientResolveUsername;

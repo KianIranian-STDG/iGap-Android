@@ -1950,11 +1950,9 @@ public class FragmentChat extends BaseFragment
                                 firstVisiblePositionOffset = 0;
                                 getMessages();
                             } else {
-                                new RequestClientGetRoomMessage().clientGetRoomMessage(mRoomId, pinMessageId);
-                                G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
+                                new RequestClientGetRoomMessage().clientGetRoomMessage(mRoomId, pinMessageId, new OnClientGetRoomMessage() {
                                     @Override
                                     public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
-                                        G.onClientGetRoomMessage = null;
                                         G.handler.post(new Runnable() {
                                             @Override
                                             public void run() {
@@ -1964,9 +1962,8 @@ public class FragmentChat extends BaseFragment
                                                 setGapAndGetMessage(pinMessageId);
                                             }
                                         });
-
                                     }
-                                };
+                                });
                             }
                         }
                     }

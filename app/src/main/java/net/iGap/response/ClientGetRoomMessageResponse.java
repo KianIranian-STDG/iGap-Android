@@ -14,6 +14,7 @@ import net.iGap.G;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientGetRoomMessage;
 import net.iGap.realm.RealmRoomMessage;
+import net.iGap.request.RequestClientGetRoomMessage;
 
 import io.realm.Realm;
 
@@ -21,9 +22,9 @@ public class ClientGetRoomMessageResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public ClientGetRoomMessageResponse(int actionId, Object protoClass, String identity) {
+    public ClientGetRoomMessageResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -37,16 +38,18 @@ public class ClientGetRoomMessageResponse extends MessageHandler {
         final ProtoClientGetRoomMessage.ClientGetRoomMessageResponse.Builder builder = (ProtoClientGetRoomMessage.ClientGetRoomMessageResponse.Builder) message;
         final Realm realm = Realm.getDefaultInstance();
 
+        RequestClientGetRoomMessage.RequestClientGetRoomMessageExtra extra = (RequestClientGetRoomMessage.RequestClientGetRoomMessageExtra) identity;
+
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                RealmRoomMessage.putOrUpdate(realm, Long.parseLong(identity), builder.getMessage(), new StructMessageOption().setGap());
+                RealmRoomMessage.putOrUpdate(realm, extra.getRoomId(), builder.getMessage(), new StructMessageOption().setGap());
             }
         });
         realm.close();
 
-        if (G.onClientGetRoomMessage != null) {
-            G.onClientGetRoomMessage.onClientGetRoomMessageResponse(builder.getMessage());
+        if (extra.getOnClientGetRoomMessage() != null) {
+            extra.getOnClientGetRoomMessage().onClientGetRoomMessageResponse(builder.getMessage());
         }
     }
 

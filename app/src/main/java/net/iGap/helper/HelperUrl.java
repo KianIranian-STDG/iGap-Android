@@ -956,15 +956,13 @@ public class HelperUrl {
             if (realmRoom == null || realmRoom.isDeleted()) {
                 openChat(username, type, user, room, chatEntry, messageId);
             } else {
-                new RequestClientGetRoomMessage().clientGetRoomMessage(room.getId(), messageId);
-                G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
+                new RequestClientGetRoomMessage().clientGetRoomMessage(room.getId(), messageId, new OnClientGetRoomMessage() {
                     @Override
                     public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
                         RealmRoomMessage.setGap(message.getMessageId());
-                        G.onClientGetRoomMessage = null;
                         openChat(username, type, user, room, chatEntry, message.getMessageId());
                     }
-                };
+                });
             }
         }
         realm.close();

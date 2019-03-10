@@ -45,30 +45,28 @@ public class NotificationService extends FirebaseMessagingService {
                     G.handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, messageId);
+                            new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, messageId, new OnClientGetRoomMessage() {
+                                @Override
+                                public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
+                                    if (date.containsKey(MESSAGE_TYPE)) {
+                                        final Realm realm = Realm.getDefaultInstance();
+                                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                                        if (room != null) {
+                                            HelperNotification.getInstance().addMessage(roomId, message, room.getType(), room, realm);
+                                        }
+                                        realm.close();
+                                    }
+                                }
+                            });
                         }
                     }, 2000);
 
-                    G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
-                        @Override
-                        public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
-                            G.onClientGetRoomMessage = null;
-                            if (date.containsKey(MESSAGE_TYPE)) {
-                                final Realm realm = Realm.getDefaultInstance();
-                                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                                if (room != null) {
-                                    HelperNotification.getInstance().addMessage(roomId, message, room.getType(), room, realm);
-                                }
-                                realm.close();
-                            }
-                        }
-                    };
+
                 }
             }
 
             isFirstMessage = false;
         }
-
 
     }
 

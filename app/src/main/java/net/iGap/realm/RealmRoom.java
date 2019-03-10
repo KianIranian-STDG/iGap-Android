@@ -1447,10 +1447,9 @@ public class RealmRoom extends RealmObject {
                 RealmRoomMessage roomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                         equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).findFirst();
                 if (roomMessage == null) {
-                    G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
+                    new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, room.getPinMessageId(), new OnClientGetRoomMessage() {
                         @Override
                         public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
-                            G.onClientGetRoomMessage = null;
                             G.handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1460,9 +1459,7 @@ public class RealmRoom extends RealmObject {
                                 }
                             }, 200);
                         }
-                    };
-
-                    new RequestClientGetRoomMessage().clientGetRoomMessage(roomId, room.getPinMessageId());
+                    });
                 } else {
                     RealmRoomMessage roomMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).
                             equalTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageId()).notEqualTo(RealmRoomMessageFields.MESSAGE_ID, room.getPinMessageIdDeleted()).
