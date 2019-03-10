@@ -157,24 +157,12 @@ public class MakeButtons {
 
         // Set a background color for CardView
 
-        if (additionalType == AdditionalType.UNDER_KEYBOARD_BUTTON) {
+    /*    if (additionalType == AdditionalType.UNDER_KEYBOARD_BUTTON) {
             card.setCardBackgroundColor(Color.parseColor("#20000000"));
-        }
+        }*/
 
 
-        //    card.setForeground(getSelectedItemDrawable());
-        //  card.setBackgroundResource(getSelectedItemDrawable());
 
-    /*    int[] attrs = new int[]{R.attr.selectableItemBackground};
-        TypedArray typedArray = G.context.obtainStyledAttributes(attrs);
-        int backgroundResource = typedArray.getResourceId(0, 0);
-        card.setBackgroundResource(backgroundResource);
-        typedArray.recycle();*/
-        //      card.setForeground(getSelectedItemDrawable());
-
-        //  card.setFocusable(true);
-        //    card.setClickable(true);
-        // card.setCardElevation(3);
 
 
         LinearLayout linearLayout_529 = new LinearLayout(G.context);
@@ -203,7 +191,7 @@ public class MakeButtons {
             layout_738.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 
 
-            //  img1.setBackgroundColor(Color.parseColor("#000000"));
+
 
 
             img1.setLayoutParams(layout_738);
