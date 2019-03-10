@@ -5,6 +5,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import net.iGap.G;
+import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperNotification;
 import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.proto.ProtoGlobal;
@@ -34,7 +35,10 @@ public class NotificationService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        if (isFirstMessage) {
+
+        if(!G.userLogin){
+            WebSocketClient.reconnect(false);
+        }else if (isFirstMessage) {
             if (remoteMessage.getData().size() > 0) {
                 Map<String, String> date = remoteMessage.getData();
                 if (date.containsKey(ROOM_ID) && date.containsKey(MESSAGE_ID)) {
@@ -64,10 +68,8 @@ public class NotificationService extends FirebaseMessagingService {
 
                 }
             }
-
             isFirstMessage = false;
         }
-
     }
 
 
