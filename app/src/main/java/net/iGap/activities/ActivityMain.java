@@ -85,6 +85,7 @@ import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
+import net.iGap.fragments.dashboard.DashboardFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
@@ -251,7 +252,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private String phoneNumber;
     private TextView itemCash;
     private ViewGroup itemNavWallet;
-    private int currentFabIcon =0;
+    private int currentFabIcon = 0;
 
     public static void setWeight(View view, int value) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
@@ -441,7 +442,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        Log.d("bagi" ,"ActivityMain:onCreate:start");
+        Log.d("bagi", "ActivityMain:onCreate:start");
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.intent.action.PHONE_STATE");
         MyPhonStateService myPhonStateService = new MyPhonStateService();
@@ -825,7 +826,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
         new StickerFromServer().execute();
 
-        Log.d("bagi" ,"ActivityMain:onCreate:end");
+        Log.d("bagi", "ActivityMain:onCreate:end");
     }
 
     private class StickerFromServer extends AsyncTask<Void, Void, Void> {
@@ -842,6 +843,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
                     }
                 }
+
                 @Override
                 public void onFailure(Call<StructSticker> call, Throwable t) {
                 }
@@ -1207,6 +1209,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             case channel:
                                 btnCreateNewChannel.performClick();
                                 break;
+
                         }
                     } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
 
@@ -1226,14 +1229,19 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             findViewById(R.id.amr_btn_search).setVisibility(View.VISIBLE);
             findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
-            arcMenu.setVisibility(View.VISIBLE);
             setFabIcon(R.mipmap.plus);
+            arcMenu.fabMenu.hide();
+            arcMenu.setVisibility(View.VISIBLE);
+
         } else if (adapter.getItem(position) instanceof FragmentCall) {
 
             findViewById(R.id.amr_btn_search).setVisibility(View.GONE);
             findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
             setFabIcon(R.drawable.ic_call_black_24dp);
+            arcMenu.fabMenu.hide();
             arcMenu.setVisibility(View.VISIBLE);
+        } else if (adapter.getItem(position) instanceof DashboardFragment) {
+            arcMenu.setVisibility(View.GONE);
         }
 
         if (arcMenu.isMenuOpened()) {
@@ -1245,7 +1253,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void setFabIcon(int res) {
 
-        if(res ==currentFabIcon){
+        if (res == currentFabIcon) {
             return;
         }
         currentFabIcon = res;
@@ -1284,6 +1292,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             index = 2;
                         } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
                             index = 1;
+
                         } else {
                             index = 0;
                         }
@@ -1346,7 +1355,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (HelperCalander.isPersianUnicode) {
-            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
+            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_phone), getString(R.string.md_users_social_symbol));
         } else {
             navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
         }
@@ -1358,7 +1367,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (G.multiTab) {
             navigationTabStrip.setVisibility(View.VISIBLE);
-            mViewPager.setOffscreenPageLimit(5);
+            mViewPager.setOffscreenPageLimit(3);
         } else {
             navigationTabStrip.setVisibility(View.GONE);
             mViewPager.setOffscreenPageLimit(1);
@@ -1372,18 +1381,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 public void run() {
 
                     if (G.multiTab) {
+                        pages.add(DashboardFragment.newInstance(true));
+
                         fragmentCall = FragmentCall.newInstance(true);
                         pages.add(fragmentCall);
 
-                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
-                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
-                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
+                        /* pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));*/
+                        /*  pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));*/
+                        /*      pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));*/
+
+
                     }
 
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                     sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
-                    mViewPager.setCurrentItem(4);
+                    mViewPager.setCurrentItem(3);
                     setViewPagerSelectedItem();
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
                 }
@@ -1451,7 +1464,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d("bagi" ,"ActivityMain:onstart:start");
+        Log.d("bagi", "ActivityMain:onstart:start");
 
         if (!G.isFirstPassCode) {
             openActivityPassCode();
@@ -1465,7 +1478,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         //    }
         //});
 
-        Log.d("bagi" ,"ActivityMain:onstart:end");
+        Log.d("bagi", "ActivityMain:onstart:end");
     }
 
     @SuppressLint("MissingSuperCall")
@@ -1643,7 +1656,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(ActivityMain.this,ActivityDashboard.class);
+                Intent intent = new Intent(ActivityMain.this, ActivityDashboard.class);
                 startActivity(intent);
 
   /*              if (!G.isWalletRegister) {
@@ -2516,12 +2529,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("bagi" ,"ActivityMain:onResume:start");
+        Log.d("bagi", "ActivityMain:onResume:start");
 
         resume();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        Log.d("bagi" ,"ActivityMain:onResume:end");
+        Log.d("bagi", "ActivityMain:onResume:end");
     }
 
     public void resume() {

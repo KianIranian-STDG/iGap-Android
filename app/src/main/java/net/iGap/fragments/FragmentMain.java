@@ -141,7 +141,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         return fragment;
     }
 
-    @Override
+/*    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
@@ -153,11 +153,16 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                 channelSwitcher = 1;
                 initRecycleView();
                 initListener();
-            } else if (switcher.equals("2") && groupSwitcher == 0) {
+            }
+           else if (switcher.equals("2") && groupSwitcher == 0) {
                 groupSwitcher = 1;
-                initRecycleView();
-                initListener();
-            } else if (switcher.equals("3") && chatSwitcher == 0) {
+                if (mainType!=null){
+                    initRecycleView();
+                    initListener();
+                }
+
+            }
+            else if (switcher.equals("3") && chatSwitcher == 0) {
                 chatSwitcher = 1;
                 initRecycleView();
                 initListener();
@@ -173,7 +178,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
         }
 
-    }
+    }*/
 
     @Nullable
     @Override
@@ -192,7 +197,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("bagi" ,"FragmentMain:onViewCreated:start");
+        Log.d("bagi", "FragmentMain:onViewCreated:start");
 
         //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         this.mView = view;
@@ -208,7 +213,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         pbLoading = view.findViewById(R.id.pbLoading);
         // pbLoading.setVisibility(View.VISIBLE);
 
-        switcher = String.valueOf(this.toString().charAt(this.toString().lastIndexOf(":") + 1));
+    /*    switcher = String.valueOf(this.toString().charAt(this.toString().lastIndexOf(":") + 1));
         if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
             allSwitcher = 1;
             initRecycleView();
@@ -219,16 +224,18 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             initRecycleView();
             initListener();
             pbLoading.setVisibility(View.GONE);
-        }
-        Log.d("bagi" ,"FragmentMain:onViewCreated:end");
+        }*/
+        initRecycleView(view);
+        initListener();
+        Log.d("bagi", "FragmentMain:onViewCreated:end");
 
 
     }
 
-    private void initRecycleView() {
+    private void initRecycleView(View view) {
 
-        if (mView != null) {
-            mRecyclerView = (RecyclerView) mView.findViewById(R.id.cl_recycler_view_contact);
+        if (view != null) {
+            mRecyclerView = (RecyclerView) view.findViewById(R.id.cl_recycler_view_contact);
             // mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
             mRecyclerView.setItemAnimator(null);
             mRecyclerView.setItemViewCacheSize(1000);
@@ -239,48 +246,48 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
         Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
 
-        switch (mainType) {
-            case all:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
-                if (results.size() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    pbLoading.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                    //        pbLoading.setVisibility(View.VISIBLE);
-                }
-                break;
-            case chat:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
-                if (results.size() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    pbLoading.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                    //        pbLoading.setVisibility(View.VISIBLE);
-                }
-                break;
-            case group:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
-                if (results.size() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    pbLoading.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                    //       pbLoading.setVisibility(View.VISIBLE);
-                }
-                break;
-            case channel:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
-                if (results.size() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    pbLoading.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                    //              pbLoading.setVisibility(View.VISIBLE);
-                }
-                break;
-        }
+            switch (mainType) {
+                case all:
+                    results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
+                    if (results.size() > 0) {
+                        viewById.setVisibility(View.GONE);
+                        pbLoading.setVisibility(View.GONE);
+                    } else {
+                        viewById.setVisibility(View.VISIBLE);
+                        //        pbLoading.setVisibility(View.VISIBLE);
+                    }
+                    break;
+                case chat:
+                    results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
+                    if (results.size() > 0) {
+                        viewById.setVisibility(View.GONE);
+                        pbLoading.setVisibility(View.GONE);
+                    } else {
+                        viewById.setVisibility(View.VISIBLE);
+                        //        pbLoading.setVisibility(View.VISIBLE);
+                    }
+                    break;
+                case group:
+                    results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
+                    if (results.size() > 0) {
+                        viewById.setVisibility(View.GONE);
+                        pbLoading.setVisibility(View.GONE);
+                    } else {
+                        viewById.setVisibility(View.VISIBLE);
+                        //       pbLoading.setVisibility(View.VISIBLE);
+                    }
+                    break;
+                case channel:
+                    results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
+                    if (results.size() > 0) {
+                        viewById.setVisibility(View.GONE);
+                        pbLoading.setVisibility(View.GONE);
+                    } else {
+                        viewById.setVisibility(View.VISIBLE);
+                        //              pbLoading.setVisibility(View.VISIBLE);
+                    }
+                    break;
+            }
 
 
         final RoomAdapter roomsAdapter = new RoomAdapter(results, this);
@@ -358,7 +365,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             getChatsList();
         }
 
-        if (mView != null) {
+        if (view != null) {
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -1007,7 +1014,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     public void onResume() {
         super.onResume();
 
-        Log.d("bagi" ,"FragmentMain:onResume:start");
+        Log.d("bagi", "FragmentMain:onResume:start");
 
         G.onSetActionInRoom = this;
         G.onDateChanged = this;
@@ -1069,7 +1076,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         }
 //        BotInit.checkDrIgap();
 
-        Log.d("bagi" ,"FragmentMain:onResume:end");
+        Log.d("bagi", "FragmentMain:onResume:end");
     }
 
     @Override

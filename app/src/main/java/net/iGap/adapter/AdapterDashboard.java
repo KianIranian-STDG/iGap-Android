@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import net.iGap.R;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.module.dashboard.DashboardModel;
 
 import java.util.ArrayList;
@@ -32,15 +33,15 @@ public class AdapterDashboard extends RecyclerView.Adapter<RecyclerView.ViewHold
             case 1:
                 return new ViewType1(layoutInflater.inflate(R.layout.item_dashboard_1, viewGroup, false));
             case 2:
-                return new ViewType1(layoutInflater.inflate(R.layout.item_dashboard_2, viewGroup, false));
+                return new ViewType2(layoutInflater.inflate(R.layout.item_dashboard_2, viewGroup, false));
             case 3:
-                return new ViewType1(layoutInflater.inflate(R.layout.item_dashboard_3, viewGroup, false));
+                return new ViewType3(layoutInflater.inflate(R.layout.item_dashboard_3, viewGroup, false));
             case 4:
-                return new ViewType1(layoutInflater.inflate(R.layout.item_dashboard_4, viewGroup, false));
+                return new ViewType4(layoutInflater.inflate(R.layout.item_dashboard_4, viewGroup, false));
             case 5:
-                return new ViewType1(layoutInflater.inflate(R.layout.item_dashboard_5, viewGroup, false));
+                return new ViewType5(layoutInflater.inflate(R.layout.item_dashboard_5, viewGroup, false));
             case 6:
-                return new ViewType1(layoutInflater.inflate(R.layout.item_dashboard_6, viewGroup, false));
+                return new ViewType6(layoutInflater.inflate(R.layout.item_dashboard_6, viewGroup, false));
 
         }
 
@@ -52,7 +53,8 @@ public class AdapterDashboard extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
         if (viewHolder instanceof ViewType1) {
-    //        Glide.with(context).load(dashboardModels.get(i).getImageList().get(0)).into(((ViewType1) viewHolder).imgDashboard);
+            ((ViewType1) viewHolder).imgDashboard.getLayoutParams().height = ViewMaker.dpToPixel(140);
+            //        Glide.with(context).load(dashboardModels.get(i).getImageList().get(0)).into(((ViewType1) viewHolder).imgDashboard);
         } else if (viewHolder instanceof ViewType2) {
            /* Glide.with(context).load(dashboardModels.get(i).getImageList().get(0)).into(((ViewType2) viewHolder).imgDashboard);
             Glide.with(context).load(dashboardModels.get(i).getImageList().get(1)).into(((ViewType2) viewHolder).imgDashboard2);*/
@@ -68,7 +70,9 @@ public class AdapterDashboard extends RecyclerView.Adapter<RecyclerView.ViewHold
             Glide.with(context).load(dashboardModels.get(i).getImageList().get(2)).into(((ViewType4) viewHolder).imgDashboard3);*/
 
         } else if (viewHolder instanceof ViewType5) {
-
+            ((ViewType5) viewHolder).imgDashboard.getLayoutParams().height = ViewMaker.dpToPixel(60);
+            ((ViewType5) viewHolder).imgDashboard2.getLayoutParams().height = ViewMaker.dpToPixel(124);
+            ((ViewType5) viewHolder).imgDashboard3.getLayoutParams().height = ViewMaker.dpToPixel(60);
           /*  Glide.with(context).load(dashboardModels.get(i).getImageList().get(0)).into(((ViewType5) viewHolder).imgDashboard);
             Glide.with(context).load(dashboardModels.get(i).getImageList().get(1)).into(((ViewType5) viewHolder).imgDashboard2);
             Glide.with(context).load(dashboardModels.get(i).getImageList().get(2)).into(((ViewType5) viewHolder).imgDashboard3);*/

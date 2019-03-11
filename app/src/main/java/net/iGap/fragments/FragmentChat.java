@@ -404,6 +404,8 @@ public class FragmentChat extends BaseFragment
     public static List<StructGroupSticker> data = new ArrayList<>();
     public Runnable countDownRunnable;
     public Handler countDownHandler;
+    private Runnable scrollRunnable;
+    private Handler scrollHandler;
 
 
     /**
@@ -579,6 +581,8 @@ public class FragmentChat extends BaseFragment
     public static OnUpdateSticker onUpdateSticker;
     public CardView cardFloatingTime;
     public TextView txtFloatingTime;
+    public boolean rcTouchListener;
+
 
     public static Realm getRealmChat() {
         if (realmChat == null || realmChat.isClosed()) {
@@ -655,7 +659,6 @@ public class FragmentChat extends BaseFragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         isNeedResume = true;
-
         G.locationListener = this;
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
         cardFloatingTime = rootView.findViewById(R.id.cardFloatingTime);
@@ -748,6 +751,15 @@ public class FragmentChat extends BaseFragment
             }
         };
         countDownHandler = new Handler(Looper.getMainLooper());
+
+
+        scrollRunnable = new Runnable() {
+            @Override
+            public void run() {
+                rcTouchListener = false;
+            }
+        };
+        scrollHandler = new Handler();
 
         startPageFastInitialize();
         G.handler.postDelayed(new Runnable() {
@@ -1620,7 +1632,6 @@ public class FragmentChat extends BaseFragment
                 });
             }
         });
-
 
 
     }
@@ -3068,6 +3079,24 @@ public class FragmentChat extends BaseFragment
             }
         });
 
+
+        recyclerView.setOnFlingListener(new RecyclerView.OnFlingListener() {
+
+            @Override
+            public boolean onFling(int velocityX, int velocityY) {
+
+            /*    if (Math.abs(velocityY) > MAX_VELOCITY_Y) {
+                    velocityY = MAX_VELOCITY_Y * (int) Math.signum((double)velocityY);
+                    mRecyclerView.fling(velocityX, velocityY);
+                    return true;
+                }*/
+                rcTouchListener = true;
+                scrollHandler.removeCallbacks(scrollRunnable);
+                scrollHandler.postDelayed(scrollRunnable, 1000);
+
+                return false;
+            }
+        });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -3076,17 +3105,15 @@ public class FragmentChat extends BaseFragment
                 int totalItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getItemCount();
                 int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
-                //InputMethodManager imm  = (InputMethodManager)getActivity().getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-  //              if (!((InputMethodManager) G.currentActivity.getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE)).isAcceptingText()) {
+                if (rcTouchListener) {
                     cardFloatingTime.setVisibility(View.VISIBLE);
                     long item = mAdapter.getItemByPosition(((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition());
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTimeInMillis(item);
                     txtFloatingTime.setText(TimeUtils.getChatSettingsTimeAgo(G.fragmentActivity, calendar.getTime()));
                     resetCountDownTimer();
-      //          }
-
+                }
 
                 if (pastVisibleItems + visibleItemCount >= totalItemCount && !isAnimateStart) {
                     isScrollEnd = false;
@@ -3130,6 +3157,38 @@ public class FragmentChat extends BaseFragment
                     }
 
                 }
+            }
+        });
+
+ /*       if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+            card.setCardBackgroundColor(Color.parseColor("#ffffff"));
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            //    event.addBatch(0,0,0,0,0,0);
+            //            card.setCardBackgroundColor(Color.parseColor("#ffffff"));
+        } else if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+
+            card.setCardBackgroundColor(Color.parseColor("#20000000"));
+
+        } else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+            *//* Reset Color *//*
+            card.setCardBackgroundColor(Color.parseColor("#ffffff"));
+            //  card.setOnClickListener(clickListener);
+
+        }
+        return false;
+*/
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    rcTouchListener = true;
+                } else {
+                    rcTouchListener = false;
+                }
+
+
+                return false;
             }
         });
 
@@ -3453,7 +3512,7 @@ public class FragmentChat extends BaseFragment
     private void resetCountDownTimer() {
 
         countDownHandler.removeCallbacks(countDownRunnable);
-        countDownHandler.postDelayed(countDownRunnable, 500);
+        countDownHandler.postDelayed(countDownRunnable, 1000);
     }
 
     public static void fillStickerList() {
@@ -9726,7 +9785,6 @@ public class FragmentChat extends BaseFragment
         }
 
     }
-
 
 
 }
