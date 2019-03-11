@@ -119,6 +119,8 @@ public final class StartupActions {
                 }
             }
         });
+        realm.close();
+
         mainUserInfo();
         connectToServer();
         manageSettingPreferences();
