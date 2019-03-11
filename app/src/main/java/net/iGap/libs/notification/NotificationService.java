@@ -36,9 +36,8 @@ public class NotificationService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        if(!G.userLogin){
-            WebSocketClient.reconnect(false);
-        }else if (isFirstMessage) {
+        WebSocketClient.reconnect(false);
+        if (isFirstMessage) {
             if (remoteMessage.getData().size() > 0) {
                 Map<String, String> date = remoteMessage.getData();
                 if (date.containsKey(ROOM_ID) && date.containsKey(MESSAGE_ID)) {

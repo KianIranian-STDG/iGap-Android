@@ -213,7 +213,7 @@ public class WebSocketClient {
      *              detected this actions(android 7.*).
      */
 
-    public static void reconnect(boolean force) {
+    public static synchronized void reconnect(boolean force) {
 
         if ((force || (webSocketClient == null || !webSocketClient.isOpen()))) {
             G.handler.postDelayed(new Runnable() {
