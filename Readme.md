@@ -30,7 +30,7 @@ Using the iGap infrastructure and utilizing it in personal and/or organizational
     Issues: https://github.com/KianIranian-STDG/iGap-Android/issues
 
 ## Partner
-**[KianIranian-STDG](https://kianiranian.com)** was founded in 2015 aiming to create communicative and informative platforms supported by Internet and network on the basis of modern technology. We focus on the fields of designing, programming, supporting communicative and media software on mobile phones and tablets.
+**[Kian Iranian](https://kianiranian.com)** was founded in 2015 aiming to create communicative and informative platforms supported by Internet and network on the basis of modern technology. We focus on the fields of designing, programming, supporting communicative and media software on mobile phones and tablets.
 
 ## IRAN Sans-serif fonts
 IRAN Sans-serif fonts are considered a proprietary software.To gain information about the laws regarding the use of these fonts, please visit www.fontiran.com
