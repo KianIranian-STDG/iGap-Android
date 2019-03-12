@@ -251,6 +251,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private TextView itemCash;
     private ViewGroup itemNavWallet;
     private int currentFabIcon =0;
+    private RealmUserInfo userInfo;
 
     public static void setWeight(View view, int value) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
@@ -535,7 +536,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
 
-        RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
+        userInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
         if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
             isNeedToRegister = true;
@@ -2372,10 +2373,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
      * @param updateFromServer if is set true send request to sever for get own info
      */
     private void setDrawerInfo(boolean updateFromServer) {
-        RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
-        if (realmUserInfo != null) {
-            String username = realmUserInfo.getUserInfo().getDisplayName();
-            phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
+        if (userInfo != null) {
+            String username = userInfo.getUserInfo().getDisplayName();
+            phoneNumber = userInfo.getUserInfo().getPhoneNumber();
             imgNavImage = (ImageView) findViewById(R.id.lm_imv_user_picture);
             EmojiTextViewE txtNavName = (EmojiTextViewE) findViewById(R.id.lm_txt_user_name);
             TextView txtNavPhone = (TextView) findViewById(R.id.lm_txt_phone_number);
@@ -2787,8 +2787,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     public void run() {
                         if (imagePath == null || !new File(imagePath).exists()) {
                             //Realm realm1 = Realm.getDefaultInstance();
-                            RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
-                            imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
+                            imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
                             //realm1.close();
                         } else {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgNavImage);
