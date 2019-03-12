@@ -823,31 +823,23 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (backGroundPath.isEmpty()) {
             getWallpaperAsDefault();
         }
-        new StickerFromServer().execute();
 
-        Log.d("bagi" ,"ActivityMain:onCreate:end");
-    }
+        ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
+            @Override
+            public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
 
-    private class StickerFromServer extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            ApiEmojiUtils.getAPIService().getFavoritSticker().enqueue(new Callback<StructSticker>() {
-                @Override
-                public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
-
-                    if (response.body() != null) {
-                        if (response.body().getOk() && response.body().getData().size() > 0) {
-                            setStickerToRealm(response.body().getData(), true);// add favorit sticker to db
-                        }
+                if (response.body() != null) {
+                    if (response.body().getOk() && response.body().getData().size() > 0) {
+                        setStickerToRealm(response.body().getData(), true);// add favorit sticker to db
                     }
                 }
-                @Override
-                public void onFailure(Call<StructSticker> call, Throwable t) {
-                }
-            });
-            return null;
-        }
+            }
+            @Override
+            public void onFailure(Call<StructSticker> call, Throwable t) {
+            }
+        });
+
+        Log.d("bagi" ,"ActivityMain:onCreate:end");
     }
 
     public static void setStickerToRealm(List<StructGroupSticker> mData, boolean isFavorite) {
