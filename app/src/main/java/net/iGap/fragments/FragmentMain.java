@@ -15,7 +15,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -55,10 +54,10 @@ import net.iGap.interfaces.OnDateChanged;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
 import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
-import net.iGap.interfaces.OnSelectMenu;
 import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnVersionCallBack;
 import net.iGap.libs.Tuple;
+import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
@@ -109,11 +108,10 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static boolean isMenuButtonAddShown = false;
-    public static HashMap<MainType, RoomAdapter> adapterHashMap = new HashMap<>();
     public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
     public MainType mainType;
     boolean isSendRequestForLoading = false;
@@ -365,19 +363,20 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                     super.onScrolled(recyclerView, dx, dy);
 
                     try {
-                        if (((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
-                            ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
+                        ArcMenu arcMenu = ((ActivityMain) G.fragmentActivity).arcMenu;
+                        if (arcMenu.isMenuOpened()) {
+                            arcMenu.toggleMenu();
                         }
 
                         if (dy > 0) {
                             // Scroll Down
-                            if (((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
-                                ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.hide();
+                            if (arcMenu.fabMenu.isShown()) {
+                                arcMenu.fabMenu.hide();
                             }
                         } else if (dy < 0) {
                             // Scroll Up
-                            if (!((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
-                                ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.show();
+                            if (!arcMenu.fabMenu.isShown()) {
+                                arcMenu.fabMenu.show();
                             }
                         }
                     } catch (ClassCastException e) {
@@ -861,11 +860,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     @Override
     public void onRemoveFragment(Fragment fragment) {
         removeFromBaseFragment(fragment);
-    }
-
-    @Override
-    public void onSelectMenu(String message, RealmRoom realmRoom) {
-        onSelectRoomMenu(message, realmRoom);
     }
 
     @Override
