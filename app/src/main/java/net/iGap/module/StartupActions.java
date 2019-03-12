@@ -591,22 +591,10 @@ public final class StartupActions {
 
         Realm configuredRealm = getInstance();
 
-        DynamicRealm dynamicRealm = DynamicRealm.getInstance(configuredRealm.getConfiguration());
-
         /*if (configuration!=null)
             Realm.deleteRealm(configuration);*/
 
-        /**
-         * Returns version of Realm file on disk
-         */
-        if (dynamicRealm.getVersion() == -1) {
-            Realm.setDefaultConfiguration(new RealmConfiguration.Builder().name("iGapLocalDatabaseEncrypted.realm").schemaVersion(REALM_SCHEMA_VERSION).deleteRealmIfMigrationNeeded().build());
-            //   Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
-        } else {
-            Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
-        }
-
-        dynamicRealm.close();
+        Realm.setDefaultConfiguration(configuredRealm.getConfiguration());
         configuredRealm.close();
     }
 
@@ -639,6 +627,12 @@ public final class StartupActions {
         }
 
         byte[] mKey = Base64.decode(sharedPreferences.getString("myByteArray", null), Base64.DEFAULT);
+
+        RealmConfiguration oldConfig = new RealmConfiguration.Builder().name(context.getResources().getString(R.string.planDB))
+                .schemaVersion(REALM_SCHEMA_VERSION)
+                .compactOnLaunch()
+                .migration(new RealmMigration()).build();
+
         RealmConfiguration newConfig = new RealmConfiguration.Builder()
                 .name(context.getResources().getString(R.string.encriptedDB))
                 .encryptionKey(mKey)
@@ -653,26 +647,17 @@ public final class StartupActions {
                 .migration(new RealmMigration())
                 .build();
 
+        File oldRealmFile = new File(oldConfig.getPath());
         File newRealmFile = new File(newConfig.getPath());
-        if (newRealmFile.exists()) {
+        if (!oldRealmFile.exists()) {
             return Realm.getInstance(newConfig);// ohhhhh
         } else {
             Realm realm = null;
             try {
-                RealmConfiguration configuration = new RealmConfiguration.Builder().name(context.getResources().getString(R.string.planDB))
-                        .schemaVersion(REALM_SCHEMA_VERSION)
-                        .compactOnLaunch(new CompactOnLaunchCallback() {
-                            @Override
-                            public boolean shouldCompact(long totalBytes, long usedBytes) {
-                                final long thresholdSize = 50 * 1024 * 1024;
-                                return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.5);
-                            }
-                        })
-                        .migration(new RealmMigration()).build();
-                realm = Realm.getInstance(configuration);
+                realm = Realm.getInstance(oldConfig);
                 realm.writeEncryptedCopyTo(newRealmFile, mKey);
                 realm.close();
-                Realm.deleteRealm(configuration);
+                Realm.deleteRealm(oldConfig);
                 return Realm.getInstance(newConfig);
             } catch (OutOfMemoryError oom) {
                 realm.close();
@@ -680,9 +665,7 @@ public final class StartupActions {
             } catch (Exception e) {
                 realm.close();
                 return getPlainInstance();
-
             }
         }
-
     }
 }
