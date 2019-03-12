@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import io.realm.CompactOnLaunchCallback;
 import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -607,29 +608,21 @@ public final class StartupActions {
 
         dynamicRealm.close();
         configuredRealm.close();
-        SharedPreferences sharedPreferences = G.context.getSharedPreferences("Counter", Context.MODE_PRIVATE);
-        int index = sharedPreferences.getInt("C", 0);
-        if (index == 15) {
-            index = 1;
-            try {
-                RealmConfiguration aa = configuredRealm.getConfiguration();
-                Realm.compactRealm(aa);// ohhhh
-
-            } catch (UnsupportedOperationException e) {
-                e.printStackTrace();
-            }
-
-        } else {
-            index = index +1;
-        }
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("C", index);
-        editor.apply();
     }
 
     public Realm getPlainInstance() {
-        RealmConfiguration configuration = new RealmConfiguration.Builder().name(context.getResources().getString(R.string.planDB)).schemaVersion(REALM_SCHEMA_VERSION).migration(new RealmMigration()).build();
+        RealmConfiguration configuration = new RealmConfiguration.Builder()
+                .name(context.getResources().getString(R.string.planDB))
+                .schemaVersion(REALM_SCHEMA_VERSION)
+                .compactOnLaunch(new CompactOnLaunchCallback() {
+                    @Override
+                    public boolean shouldCompact(long totalBytes, long usedBytes) {
+                        final long thresholdSize = 50 * 1024 * 1024;
+                        return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.5);
+                    }
+                })
+                .migration(new RealmMigration())
+                .build();
         return Realm.getInstance(configuration);
     }
 
@@ -649,6 +642,13 @@ public final class StartupActions {
         RealmConfiguration newConfig = new RealmConfiguration.Builder()
                 .name(context.getResources().getString(R.string.encriptedDB))
                 .encryptionKey(mKey)
+                .compactOnLaunch(new CompactOnLaunchCallback() {
+                    @Override
+                    public boolean shouldCompact(long totalBytes, long usedBytes) {
+                        final long thresholdSize = 50 * 1024 * 1024;
+                        return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.5);
+                    }
+                })
                 .schemaVersion(REALM_SCHEMA_VERSION)
                 .migration(new RealmMigration())
                 .build();
@@ -661,7 +661,13 @@ public final class StartupActions {
             try {
                 RealmConfiguration configuration = new RealmConfiguration.Builder().name(context.getResources().getString(R.string.planDB))
                         .schemaVersion(REALM_SCHEMA_VERSION)
-                        .compactOnLaunch()
+                        .compactOnLaunch(new CompactOnLaunchCallback() {
+                            @Override
+                            public boolean shouldCompact(long totalBytes, long usedBytes) {
+                                final long thresholdSize = 50 * 1024 * 1024;
+                                return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.5);
+                            }
+                        })
                         .migration(new RealmMigration()).build();
                 realm = Realm.getInstance(configuration);
                 realm.writeEncryptedCopyTo(newRealmFile, mKey);
