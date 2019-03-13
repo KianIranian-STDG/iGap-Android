@@ -5214,7 +5214,8 @@ public class FragmentChat extends BaseFragment
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-
+                        if (roomId != ownerId)
+                            return;
                         if (!isCloudRoom) {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
                         }
@@ -5223,10 +5224,12 @@ public class FragmentChat extends BaseFragment
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (roomId != ownerId)
+                            return;
                         if (!isCloudRoom && imvUserPicture != null) {
                             imvUserPicture.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color));
                         }
@@ -5440,17 +5443,20 @@ public class FragmentChat extends BaseFragment
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-
+                        if (idForGetAvatar != ownerId)
+                            return;
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
                     }
                 });
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (idForGetAvatar != ownerId)
+                            return;
                         if (imvUserPicture != null) {
                             imvUserPicture.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color));
                         }

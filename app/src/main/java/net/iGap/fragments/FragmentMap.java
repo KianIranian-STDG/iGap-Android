@@ -372,7 +372,8 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-
+                        if (id != ownerId)
+                            return;
                         //   if (!isCloudRoom) {
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgProfile);
                         //     }
@@ -381,10 +382,12 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (id != ownerId)
+                            return;
                         //   if (!isCloudRoom && imvUserPicture != null) {
                         imgProfile.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color));
                         //    }

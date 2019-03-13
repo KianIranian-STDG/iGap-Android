@@ -1150,7 +1150,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
         public OnComplete mComplete;
         public String action;
-        private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
         public RoomAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, OnComplete complete) {
             super(data, true);
@@ -1222,7 +1221,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                         holder.image.setVisibility(View.VISIBLE);
                     }
 
-                    setAvatar(mInfo, holder.image);
+                    setAvatar(mInfo, holder);
                 }
 
                 setChatIcon(mInfo, holder.txtChatIcon);
@@ -1497,7 +1496,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             }
         }
 
-        private void setAvatar(final RealmRoom mInfo, CircleImageView imageView) {
+        private void setAvatar(final RealmRoom mInfo, ViewHolder holder) {
             long idForGetAvatar;
             HelperAvatar.AvatarType avatarType;
             if (mInfo.getType() == CHAT) {
@@ -1508,7 +1507,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                 avatarType = HelperAvatar.AvatarType.ROOM;
             }
 
-            hashMapAvatar.put(idForGetAvatar, imageView);
+            final long idForGetAvatarOriginal = idForGetAvatar;
 
             HelperAvatar.getAvatar(idForGetAvatar, avatarType, false, new OnAvatarGet() {
                 @Override
@@ -1516,26 +1515,20 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (hashMapAvatar.get(idForGetAvatar) != null && avatarPath != null) {
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(idForGetAvatar));
+                            if (idForGetAvatar == idForGetAvatarOriginal) {
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                             }
                         }
                     });
                 }
 
                 @Override
-                public void onShowInitials(String initials, String color) {
+                public void onShowInitials(String initials, String color, long idForGetAvatar) {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            long idForGetAvatar;
-                            if (mInfo.getType() == CHAT) {
-                                idForGetAvatar = mInfo.getChatRoom().getPeerId();
-                            } else {
-                                idForGetAvatar = mInfo.getId();
-                            }
-                            if (hashMapAvatar.get(idForGetAvatar) != null) {
-                                hashMapAvatar.get(idForGetAvatar).setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), initials, color));
+                            if (idForGetAvatar == idForGetAvatarOriginal) {
+                                holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), initials, color));
                             }
                         }
                     });

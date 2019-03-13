@@ -940,7 +940,6 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
         public String mainRole;
         public ProtoGlobal.Room.Type roomType;
         public long userId;
-        private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
         public MemberAdapter(RealmResults<RealmMember> realmResults, ProtoGlobal.Room.Type roomType, String mainRole, long userId) {
             super(realmResults, true);
@@ -1068,23 +1067,27 @@ public class FragmentShowMember extends BaseFragment implements OnGroupAddAdmin,
 
             setRoleStarColor(holder.roleStar, mContact);
 
-            hashMapAvatar.put(mContact.peerId, holder.image);
-
             HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(String avatarPath, long userId) {
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(userId));
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mContact.peerId == userId)
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                        }
+                    });
                 }
 
                 @Override
-                public void onShowInitials(String initials, String color) {
-                    //CircleImageView imageView;
-                    //if (hashMapAvatar.get(userId) != null) {
-                    //    imageView = hashMapAvatar.get(userId);
-                    //} else {
-                    //    imageView = holder.image;
-                    //}
-                    holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                public void onShowInitials(final String initials, final String color, final long userId) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mContact.peerId == userId)
+                                holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        }
+                    });
                 }
             });
 

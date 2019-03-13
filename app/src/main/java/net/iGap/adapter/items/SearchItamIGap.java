@@ -65,22 +65,22 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
             HelperAvatar.getAvatar(item.getUser().getId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath, long roomId) {
-
-                    G.currentActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
+                            if (item.getUser().getId() == roomId)
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
                         }
                     });
                 }
 
                 @Override
-                public void onShowInitials(final String initials, final String color) {
-
-                    G.currentActivity.runOnUiThread(new Runnable() {
+                public void onShowInitials(final String initials, final String color, final long roomId) {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            if (item.getUser().getId() == roomId)
+                                holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                         }
                     });
                 }
@@ -93,20 +93,22 @@ public class SearchItamIGap extends AbstractItem<SearchItamIGap, SearchItamIGap.
             HelperAvatar.getAvatar(item.getRoom().getId(), HelperAvatar.AvatarType.ROOM, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath, long roomId) {
-                    G.currentActivity.runOnUiThread(new Runnable() {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
+                            if (item.getRoom().getId() == roomId)
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
                         }
                     });
                 }
 
                 @Override
-                public void onShowInitials(final String initials, final String color) {
-                    G.currentActivity.runOnUiThread(new Runnable() {
+                public void onShowInitials(final String initials, final String color, final long roomId) {
+                    G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            if (item.getRoom().getId() == roomId)
+                                holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                         }
                     });
                 }

@@ -38,7 +38,6 @@ import java.util.List;
 public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItemGroup.ViewHolder> {
     public static OnClickAdapter OnClickAdapter;
     public StructContactInfo mContact;
-    private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
     public ContactItemGroup setContact(StructContactInfo contact) {
         this.mContact = contact;
@@ -89,25 +88,25 @@ public class ContactItemGroup extends AbstractItem<ContactItemGroup, ContactItem
             }
         }
 
-        hashMapAvatar.put(mContact.peerId, holder.image);
-
         HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, final long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(ownerId));
+                        if (mContact.peerId == ownerId)
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                     }
                 });
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        holder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        if (mContact.peerId == ownerId)
+                            holder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
             }

@@ -2754,6 +2754,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            if (G.userId != ownerId)
+                                return;
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgNavImage);
                         }
                     });
@@ -2761,10 +2763,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (G.userId != ownerId)
+                            return;
                         imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
                     }
                 });

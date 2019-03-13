@@ -440,6 +440,8 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (fragmentSettingViewModel.userId != ownerId)
+                            return;
 
                         if (avatarPath != null) {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), fragmentSettingBinding.stImgCircleImage);
@@ -452,10 +454,13 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (fragmentSettingViewModel.userId != ownerId)
+                            return;
+
                         fragmentSettingBinding.stImgCircleImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) fragmentSettingBinding.stImgCircleImage.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
                     }
                 });

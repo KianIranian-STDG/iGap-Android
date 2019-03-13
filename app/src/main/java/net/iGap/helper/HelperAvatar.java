@@ -113,7 +113,7 @@ public class HelperAvatar {
                                 }
 
                                 @Override
-                                public void onShowInitials(String initials, String color) {
+                                public void onShowInitials(String initials, String color, long ownerId) {
                                     onAvatarDelete.showInitials(initials, color);
                                 }
                             });
@@ -152,7 +152,7 @@ public class HelperAvatar {
          */
         String[] initialsStart = showInitials(ownerId, avatarType);
         if (initialsStart != null) {
-            onAvatarGet.onShowInitials(initialsStart[0], initialsStart[1]);
+            onAvatarGet.onShowInitials(initialsStart[0], initialsStart[1], ownerId);
         }
         getAvatarImage(registeredUser, ownerId, avatarType, showMain, _realm, onAvatarGet);
     }
@@ -250,13 +250,13 @@ public class HelperAvatar {
 
                 String[] initials = showInitials(ownerId, avatarType);
                 if (initials != null) {
-                    onAvatarGet.onShowInitials(initials[0], initials[1]);
+                    onAvatarGet.onShowInitials(initials[0], initials[1], ownerId);
                 }
             }
         } else {
             String[] initials = showInitials(ownerId, avatarType);
             if (initials != null) {
-                onAvatarGet.onShowInitials(initials[0], initials[1]);
+                onAvatarGet.onShowInitials(initials[0], initials[1], ownerId);
             } else {
                 getAvatarAfterTime(ownerId, avatarType, onAvatarGet);
             }
@@ -292,8 +292,8 @@ public class HelperAvatar {
                         }
 
                         @Override
-                        public void onShowInitials(final String initials, final String color) {
-                            onAvatarGet.onShowInitials(initials, color);
+                        public void onShowInitials(final String initials, final String color, final long ownerId) {
+                            onAvatarGet.onShowInitials(initials, color, ownerId);
                         }
                     });
                 }

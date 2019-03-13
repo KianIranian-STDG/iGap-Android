@@ -85,7 +85,6 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
     private TextView empty_call;
     private int attampOnError = 0;
     private RecyclerView mRecyclerView;
-    private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
     //private CallAdapterA mAdapter;
 
     public static FragmentCall newInstance(boolean openInFragmentMain) {
@@ -750,17 +749,27 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
 
             viewHolder.name.setText(item.getPeer().getDisplayName());
 
-            hashMapAvatar.put(item.getId(), viewHolder.image);
-
             HelperAvatar.getAvatarCall(item.getPeer(), item.getPeer().getId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath, long ownerId) {
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(item.getId()));
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (item.getPeer().getId() == ownerId)
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), viewHolder.image);
+                        }
+                    });
                 }
 
                 @Override
-                public void onShowInitials(final String initials, final String color) {
-                    hashMapAvatar.get(item.getId()).setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) viewHolder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                public void onShowInitials(final String initials, final String color, final long ownerId) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (item.getPeer().getId() == ownerId)
+                                viewHolder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) viewHolder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        }
+                    });
                 }
             });
         }

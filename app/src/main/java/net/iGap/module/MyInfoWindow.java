@@ -209,16 +209,20 @@ public class MyInfoWindow extends InfoWindow {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (userId != roomId)
+                            return;
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), avatar);
                     }
                 });
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long roomId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (userId != roomId)
+                            return;
                         avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });

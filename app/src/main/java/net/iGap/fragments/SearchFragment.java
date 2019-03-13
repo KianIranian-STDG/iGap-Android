@@ -72,7 +72,6 @@ import static net.iGap.fragments.FragmentChat.messageId;
 
 public class SearchFragment extends BaseFragment {
 
-    public static HashMap<Long, CircleImageView> hashMapAvatarSearchFragment = new HashMap<>();
     MaterialDesignTextView btnClose;
     RippleView rippleDown;
     private FastAdapter fastAdapter;

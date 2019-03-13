@@ -49,7 +49,6 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
     private RecyclerView mRecyclerView;
     //private MapUserAdapterA mAdapter;
     private MapUserAdapter mAdapter;
-    private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
     private ImageView imvNothingFound;
     private TextView txtEmptyListComment;
     private RippleView rippleBack;
@@ -401,24 +400,25 @@ public class FragmentMapUsers extends BaseFragment implements ActivityMain.OnBac
                 holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
             }
 
-            hashMapAvatar.put(item.getUserId(), holder.avatar);
             HelperAvatar.getAvatar(item.getUserId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath, final long ownerId) {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(ownerId));
+                            if (item.getUserId() == ownerId)
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
                         }
                     });
                 }
 
                 @Override
-                public void onShowInitials(final String initials, final String color) {
+                public void onShowInitials(final String initials, final String color, final long ownerId) {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            if (item.getUserId() == ownerId)
+                                holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                         }
                     });
                 }
