@@ -1400,12 +1400,15 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                             if (mInfo.getLastMessage().isAuthorMe()) {
                                 lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                             } else {
-                                RealmRegisteredInfo realmRegisteredInfo = getRealmFragmentMain().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirstAsync();
+                                RealmRegisteredInfo realmRegisteredInfo = getRealmFragmentMain().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirstAsync();
                                 realmRegisteredInfo.addChangeListener(new RealmObjectChangeListener<RealmModel>() {
                                     @Override
                                     public void onChange(RealmModel realmModel, @javax.annotation.Nullable ObjectChangeSet changeSet) {
                                         if (changeSet == null) {
                                             Log.d("bagi" , "HOI");
+                                            if (!((RealmRegisteredInfo) realmModel).isValid() || ((RealmRegisteredInfo) realmModel).getId() !=  mInfo.getLastMessage().getUserId())
+                                                return;
+
                                             holder.realmRegisteredInfo = (RealmRegisteredInfo) realmModel;
                                             if (holder.realmRegisteredInfo.getDisplayName() != null) {
 
