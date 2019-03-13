@@ -110,6 +110,7 @@ import io.realm.Realm;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
@@ -217,8 +218,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         if (mMessage.forwardedFrom != null) {
             myText = new SpannableString(mMessage.forwardedFrom.getMessage());
-        } else {
+        } else if (mMessage.messageText != null) {
             myText = new SpannableString(mMessage.messageText);
+        } else {
+            myText = new SpannableString("");
         }
 
         updateMessageText();
@@ -1898,8 +1901,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            if (G.locationListener != null)
-                              G.locationListener.requestLocation();
+                            if (G.locationListener != null){
+                                isLocationFromBot=true;
+                                G.locationListener.requestLocation();
+                            }
+
 
 
                    /*         G.locationListenerResponse = new LocationListenerResponse() {

@@ -153,7 +153,7 @@ public class G extends MultiDexApplication {
     public static String SeenTickColor;
     public static String attachmentColor;
     public static String roomMessageTypeColor;
-//    public static String iconColorBottomSheet;
+    //    public static String iconColorBottomSheet;
     public static String progressColor;
     public static String headerTextColor;
     public static String backgroundTheme;
@@ -164,12 +164,12 @@ public class G extends MultiDexApplication {
     public static String textBubble;
     public static String linkColor;
     public static String txtIconCheck;
-//    public static String textBubbleSend;
+    //    public static String textBubbleSend;
     public static String textSubTheme;
     public static String tintImage;
     public static String lineBorder;
     public static Ipromote ipromote;
-//    public static String menuBackgroundColor;
+    //    public static String menuBackgroundColor;
     public static String authorHash;
     public static String displayName;
     public static boolean isAppInFg = false;
@@ -250,13 +250,13 @@ public class G extends MultiDexApplication {
     public static OnChatDeleteMessageResponse onChatDeleteMessageResponse;
     public static OnChatDelete onChatDelete;
     public static OnChatSendMessage onChatSendMessage;
-//    public static OnUserUsernameToId onUserUsernameToId;
+    //    public static OnUserUsernameToId onUserUsernameToId;
     public static OnUserProfileGetNickname onUserProfileGetNickname;
     public static OnGroupCreate onGroupCreate;
     public static OnGroupAddMember onGroupAddMember;
     public static OnGroupAddAdmin onGroupAddAdmin;
     public static OnGroupAddModerator onGroupAddModerator;
-//    public static OnGroupClearMessage onGroupClearMessage;
+    //    public static OnGroupClearMessage onGroupClearMessage;
     public static OnGroupEdit onGroupEdit;
     public static OnGroupKickAdmin onGroupKickAdmin;
     public static OnGroupKickMember onGroupKickMember;
@@ -288,7 +288,7 @@ public class G extends MultiDexApplication {
     public static OnUserSessionGetActiveList onUserSessionGetActiveList;
     public static OnUserSessionTerminate onUserSessionTerminate;
     public static OnUserSessionLogout onUserSessionLogout;
-//    public static UpdateListAfterKick updateListAfterKick;
+    //    public static UpdateListAfterKick updateListAfterKick;
     public static OnHelperSetAction onHelperSetAction;
     public static OnChannelCreate onChannelCreate;
     public static OnChannelDelete onChannelDelete;
@@ -309,7 +309,7 @@ public class G extends MultiDexApplication {
     public static OnChannelUpdateUsername onChannelUpdateUsername;
     public static OnGroupAvatarDelete onGroupAvatarDelete;
     public static OnRefreshActivity onRefreshActivity;
-//    public static OnGetUserInfo onGetUserInfo;
+    //    public static OnGetUserInfo onGetUserInfo;
     public static OnFileDownloaded onFileDownloaded;
     public static OnStickerDownloaded onStickerDownloaded;
     public static OnUserInfoMyClient onUserInfoMyClient;
@@ -347,14 +347,14 @@ public class G extends MultiDexApplication {
     public static OnVideoCallFrame onVideoCallFrame;
     public static ICallFinish iCallFinishChat;
     public static ICallFinish iCallFinishMain;
-//    public static IMainFinish iMainFinish;
+    //    public static IMainFinish iMainFinish;
 //    public static IActivityFinish iActivityFinish;
     public static OnBlockStateChanged onBlockStateChanged;
     public static OnContactsGetList onContactsGetList;
     public static OnCallLogClear onCallLogClear;
     public static OnMapUsersGet onMapUsersGet;
     public static OnPinedMessage onPinedMessage;
-//    public static OnSelectMenu onSelectMenu;
+    //    public static OnSelectMenu onSelectMenu;
 //    public static OnRemoveFragment onRemoveFragment;
     public static OnChatDeleteInRoomList onChatDeleteInRoomList;
     public static OnGroupDeleteInRoomList onGroupDeleteInRoomList;
@@ -427,6 +427,7 @@ public class G extends MultiDexApplication {
     public static boolean appChangeRinggerMode = false;
 
     public static LocationListener locationListener;
+    public static boolean isLocationFromBot = false;
     //public static LocationListenerResponse locationListenerResponse;
 
     @Override

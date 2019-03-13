@@ -50,6 +50,7 @@ import java.util.HashMap;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 public class BotInit implements View.OnClickListener {
@@ -414,7 +415,7 @@ public class BotInit implements View.OnClickListener {
                                 @Override
                                 public void execute(Realm realm) {
                                     RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
-                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(),null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
                                     G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
                                     if (G.onBotClick != null) {
                                         G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
@@ -434,8 +435,10 @@ public class BotInit implements View.OnClickListener {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Boolean response = false;
-                            if (G.locationListener != null)
-                                response = G.locationListener.requestLocation();
+                            if (G.locationListener != null) {
+                                isLocationFromBot = true;
+                                G.locationListener.requestLocation();
+                            }
 
               /*              G.locationListenerResponse = new LocationListenerResponse() {
                                 @Override

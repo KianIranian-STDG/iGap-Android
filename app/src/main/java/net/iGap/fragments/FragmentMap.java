@@ -82,6 +82,7 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 
+import static net.iGap.G.isLocationFromBot;
 import static net.iGap.R.id.mf_fragment_map_view;
 
 public class FragmentMap extends BaseFragment implements OnMapReadyCallback, View.OnClickListener, LocationListener {
@@ -276,7 +277,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     @Override
     public void onDetach() {
         super.onDetach();
-
+        isLocationFromBot = false;
         HelperSetAction.sendCancel(FragmentChat.messageId);
     }
 
@@ -419,12 +420,11 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
             return;
         }
-        if (mode == Mode.seePosition) {
+        if (mode == Mode.seePosition || isLocationFromBot) {
             mMap.setMyLocationEnabled(true);
 
             mMap.getUiSettings().setZoomGesturesEnabled(true);
         } else {
-
             mMap.getUiSettings().setZoomGesturesEnabled(false);
             mMap.setMyLocationEnabled(false);
         }
