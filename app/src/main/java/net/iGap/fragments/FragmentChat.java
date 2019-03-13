@@ -404,6 +404,8 @@ public class FragmentChat extends BaseFragment
     public static List<StructGroupSticker> data = new ArrayList<>();
     public Runnable countDownRunnable;
     public Handler countDownHandler;
+    private Runnable scrollRunnable;
+    private Handler scrollHandler;
 
 
     /**
@@ -749,6 +751,15 @@ public class FragmentChat extends BaseFragment
             }
         };
         countDownHandler = new Handler(Looper.getMainLooper());
+
+
+        scrollRunnable = new Runnable() {
+            @Override
+            public void run() {
+                rcTouchListener = false;
+            }
+        };
+        scrollHandler = new Handler();
 
         startPageFastInitialize();
         G.handler.postDelayed(new Runnable() {
@@ -3066,6 +3077,23 @@ public class FragmentChat extends BaseFragment
         });
 
 
+        recyclerView.setOnFlingListener(new RecyclerView.OnFlingListener() {
+
+            @Override
+            public boolean onFling(int velocityX, int velocityY) {
+
+            /*    if (Math.abs(velocityY) > MAX_VELOCITY_Y) {
+                    velocityY = MAX_VELOCITY_Y * (int) Math.signum((double)velocityY);
+                    mRecyclerView.fling(velocityX, velocityY);
+                    return true;
+                }*/
+                rcTouchListener = true;
+                scrollHandler.removeCallbacks(scrollRunnable);
+                scrollHandler.postDelayed(scrollRunnable, 1000);
+
+                return false;
+            }
+        });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -3481,7 +3509,7 @@ public class FragmentChat extends BaseFragment
     private void resetCountDownTimer() {
 
         countDownHandler.removeCallbacks(countDownRunnable);
-        countDownHandler.postDelayed(countDownRunnable, 500);
+        countDownHandler.postDelayed(countDownRunnable, 1000);
     }
 
     public static void fillStickerList() {
