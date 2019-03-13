@@ -1249,7 +1249,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
                     //if (mInfo.getChatRoom() != null && RealmRoom.isBot(mInfo.getChatRoom().getPeerId())) {
 
-                    if (mInfo != null && RealmRoom.isPromote(mInfo.getId())) {
+                    if (mInfo.isFromPromote()) {
                         //              holder.rootChat.setBackgroundColor(G.context.getResources().getColor(R.color.green_20));
                         holder.txtPinIcon.setVisibility(View.GONE);
                     } else {
