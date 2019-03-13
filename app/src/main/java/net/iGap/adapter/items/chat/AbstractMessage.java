@@ -512,7 +512,7 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 //  String[] initialize =
                 final ImageView copyMessageSenderAvatar = (ImageView) messageSenderAvatar;
-                HelperAvatar.getAvatar(null, Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, getRealmChat(), new OnAvatarGet() {
+                HelperAvatar.getAvatar(Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                     @Override
                     public void onAvatarGet(final String avatarPath, long ownerId) {
                         G.handler.post(new Runnable() {

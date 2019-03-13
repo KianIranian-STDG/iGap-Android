@@ -118,7 +118,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     boolean isThereAnyMoreItemToLoad = true;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private OnComplete mComplete;
     private int mOffset = 0;
     private View viewById;
     private RecyclerView mRecyclerView;
@@ -194,7 +193,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
         //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         this.mView = view;
-        mComplete = this;
         tagId = System.currentTimeMillis();
 
         mainType = (MainType) getArguments().getSerializable(STR_MAIN_TYPE);
@@ -1515,22 +1513,32 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             HelperAvatar.getAvatar(idForGetAvatar, avatarType, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(String avatarPath, long idForGetAvatar) {
-                    if (hashMapAvatar.get(idForGetAvatar) != null && avatarPath != null) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(idForGetAvatar));
-                    }
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (hashMapAvatar.get(idForGetAvatar) != null && avatarPath != null) {
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(idForGetAvatar));
+                            }
+                        }
+                    });
                 }
 
                 @Override
                 public void onShowInitials(String initials, String color) {
-                    long idForGetAvatar;
-                    if (mInfo.getType() == CHAT) {
-                        idForGetAvatar = mInfo.getChatRoom().getPeerId();
-                    } else {
-                        idForGetAvatar = mInfo.getId();
-                    }
-                    if (hashMapAvatar.get(idForGetAvatar) != null) {
-                        hashMapAvatar.get(idForGetAvatar).setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), initials, color));
-                    }
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            long idForGetAvatar;
+                            if (mInfo.getType() == CHAT) {
+                                idForGetAvatar = mInfo.getChatRoom().getPeerId();
+                            } else {
+                                idForGetAvatar = mInfo.getId();
+                            }
+                            if (hashMapAvatar.get(idForGetAvatar) != null) {
+                                hashMapAvatar.get(idForGetAvatar).setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), initials, color));
+                            }
+                        }
+                    });
                 }
             });
         }

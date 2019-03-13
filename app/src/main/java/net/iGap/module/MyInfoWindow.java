@@ -203,7 +203,7 @@ public class MyInfoWindow extends InfoWindow {
             }
         });
 
-        HelperAvatar.getAvatar(null, userId, HelperAvatar.AvatarType.USER, true, realm, new OnAvatarGet() {
+        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long roomId) {
                 G.handler.post(new Runnable() {

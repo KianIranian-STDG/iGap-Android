@@ -56,26 +56,31 @@ public class HelperAvatar {
      * @param ownerId user id for users and roomId for rooms
      */
     public static void avatarAdd(final long ownerId, final String src, final ProtoGlobal.Avatar avatar, final OnAvatarAdd onAvatarAdd) {
-        Realm realm = Realm.getDefaultInstance();
-
-        realm.executeTransaction(new Realm.Transaction() {
+        LooperThreadHelper.getInstance().getHandler().post(new Runnable() {
             @Override
-            public void execute(Realm realm) {
-                if (src == null) {
-                    return;
-                }
+            public void run() {
+                Realm realm = Realm.getDefaultInstance();
 
-                String avatarPath = copyAvatar(src, avatar);
-                RealmAvatar.putOrUpdate(realm, ownerId, avatar).getFile().setLocalFilePath(avatarPath);
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        if (src == null) {
+                            return;
+                        }
 
-                if (onAvatarAdd != null && avatarPath != null) {
-                    onAvatarAdd.onAvatarAdd(avatarPath);
-                }
+                        String avatarPath = copyAvatar(src, avatar);
+                        RealmAvatar.putOrUpdate(realm, ownerId, avatar).getFile().setLocalFilePath(avatarPath);
 
-                syncAvatarAdd(ownerId, avatarPath);
+                        if (onAvatarAdd != null && avatarPath != null) {
+                            onAvatarAdd.onAvatarAdd(avatarPath);
+                        }
+
+                        syncAvatarAdd(ownerId, avatarPath);
+                    }
+                });
+                realm.close();
             }
         });
-        realm.close();
     }
 
     /**
@@ -87,7 +92,6 @@ public class HelperAvatar {
      * @param avatarId   id avatar for delete from RealmAvatar
      */
     public static void avatarDelete(final long ownerId, final long avatarId, final AvatarType avatarType, @Nullable final OnAvatarDelete onAvatarDelete) {
-
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
@@ -142,7 +146,7 @@ public class HelperAvatar {
      * @param showMain       true for set main avatar and false for show thumbnail
      * @param onAvatarGet    callback for return info
      */
-    public static void getAvatar(@Nullable ProtoGlobal.RegisteredUser registeredUser, final long ownerId, AvatarType avatarType, boolean showMain, Realm _realm, final OnAvatarGet onAvatarGet) {
+    private static void getAvatar(@Nullable ProtoGlobal.RegisteredUser registeredUser, final long ownerId, AvatarType avatarType, boolean showMain, Realm _realm, final OnAvatarGet onAvatarGet) {
         /**
          * first show user initials and after that show avatar if exist
          */
@@ -163,9 +167,14 @@ public class HelperAvatar {
      * @param onAvatarGet callback for return info
      */
     public static void getAvatar(final long ownerId, AvatarType avatarType, boolean showMain, final OnAvatarGet onAvatarGet) {
-        Realm realm = Realm.getDefaultInstance();
-        getAvatar(null, ownerId, avatarType, showMain, realm, onAvatarGet);
-        realm.close();
+        LooperThreadHelper.getInstance().getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                Realm realm = Realm.getDefaultInstance();
+                getAvatar(null, ownerId, avatarType, showMain, realm, onAvatarGet);
+                realm.close();
+            }
+        });
     }
 
     /**
@@ -216,28 +225,21 @@ public class HelperAvatar {
                         });
 
                         realm.close();
-
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                for (long ownerId : ownerIdList) {
-                                    ArrayList<OnAvatarGet> listeners = (onAvatarGetHashMap.get(ownerId));
-                                    if (listeners != null) {
-                                        for (OnAvatarGet listener : listeners) {
-                                            if (listener != null) {
-                                                listener.onAvatarGet(filepath, ownerId);
-                                            } else {
-                                                onAvatarGet.onAvatarGet(filepath, ownerId);
-                                            }
-                                        }
-                                        onAvatarGetHashMap.remove(ownerId);
+                        for (long ownerId : ownerIdList) {
+                            ArrayList<OnAvatarGet> listeners = (onAvatarGetHashMap.get(ownerId));
+                            if (listeners != null) {
+                                for (OnAvatarGet listener : listeners) {
+                                    if (listener != null) {
+                                        listener.onAvatarGet(filepath, ownerId);
+                                    } else {
+                                        onAvatarGet.onAvatarGet(filepath, ownerId);
                                     }
                                 }
-
-                                ownerIdList.clear();
+                                onAvatarGetHashMap.remove(ownerId);
                             }
-                        });
+                        }
+
+                        ownerIdList.clear();
                     }
 
                     @Override
@@ -262,8 +264,7 @@ public class HelperAvatar {
     }
 
     public static void getAvatarCall(final ProtoGlobal.RegisteredUser registeredUser, final long ownerId, final AvatarType avatarType, final boolean showMain, final OnAvatarGet onAvatarGet) {
-
-        G.handler.post(new Runnable() {
+        LooperThreadHelper.getInstance().getHandler().post(new Runnable() {
             @Override
             public void run() {
                 Realm realm = Realm.getDefaultInstance();
@@ -279,7 +280,7 @@ public class HelperAvatar {
             if (mRepeatList.containsKey(ownerId)) {
                 return;
             }
-            G.handler.postDelayed(new Runnable() {
+            LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     mRepeatList.put(ownerId, true);
@@ -287,22 +288,12 @@ public class HelperAvatar {
                     HelperAvatar.getAvatar(ownerId, avatarType, false, new OnAvatarGet() {
                         @Override
                         public void onAvatarGet(final String avatarPath, final long ownerId) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    onAvatarGet.onAvatarGet(avatarPath, ownerId);
-                                }
-                            });
+                            onAvatarGet.onAvatarGet(avatarPath, ownerId);
                         }
 
                         @Override
                         public void onShowInitials(final String initials, final String color) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    onAvatarGet.onShowInitials(initials, color);
-                                }
-                            });
+                            onAvatarGet.onShowInitials(initials, color);
                         }
                     });
                 }
@@ -352,7 +343,7 @@ public class HelperAvatar {
      * @param ownerId if is user set userId and if is room set roomId
      * @return initials[0] , color[1]
      */
-    public static String[] showInitials(long ownerId, AvatarType avatarType) {
+    private static String[] showInitials(long ownerId, AvatarType avatarType) {
         Realm realm = Realm.getDefaultInstance();
         String initials = null;
         String color = null;
@@ -363,11 +354,10 @@ public class HelperAvatar {
                 initials = realmRegisteredInfo.getInitials();
                 color = realmRegisteredInfo.getColor();
             } else {
-                for (RealmRoom realmRoom : realm.where(RealmRoom.class).findAll()) {
-                    if (realmRoom.getChatRoom() != null && realmRoom.getChatRoom().getPeerId() == ownerId) {
-                        initials = realmRoom.getInitials();
-                        color = realmRoom.getColor();
-                    }
+                RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.CHAT_ROOM.PEER_ID, ownerId).findFirst();
+                if (realmRoom != null) {
+                    initials = realmRoom.getInitials();
+                    color = realmRoom.getColor();
                 }
             }
         } else if (avatarType == AvatarType.ROOM) {

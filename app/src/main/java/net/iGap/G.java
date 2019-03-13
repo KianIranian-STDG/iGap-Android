@@ -39,6 +39,7 @@ import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperDownloadFile;
+import net.iGap.helper.LooperThreadHelper;
 import net.iGap.interfaces.*;
 import net.iGap.module.ChatSendMessageUtil;
 import net.iGap.module.ChatUpdateStatusUtil;
@@ -432,6 +433,7 @@ public class G extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        LooperThreadHelper.getInstance();
 
         G.firstTimeEnterToApp = true;
 
