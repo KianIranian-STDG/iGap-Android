@@ -1336,6 +1336,14 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             }
         }
 
+        @Override
+        public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+            super.onViewDetachedFromWindow(holder);
+            if (holder.realmRegisteredInfo == null || !holder.realmRegisteredInfo.isValid())
+                return;
+            holder.realmRegisteredInfo.removeAllChangeListeners();
+        }
+
         //*******************************************************************************************
         private void setLastMessage(RealmRoom mInfo, ViewHolder holder, boolean isMyCloud) {
 
@@ -1400,66 +1408,20 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                             if (mInfo.getLastMessage().isAuthorMe()) {
                                 lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                             } else {
-                                RealmRegisteredInfo realmRegisteredInfo = getRealmFragmentMain().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirstAsync();
-                                realmRegisteredInfo.addChangeListener(new RealmObjectChangeListener<RealmModel>() {
+                                holder.realmRegisteredInfo = getRealmFragmentMain().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirstAsync();
+                                holder.realmRegisteredInfo.addChangeListener(new RealmObjectChangeListener<RealmModel>() {
                                     @Override
                                     public void onChange(RealmModel realmModel, @javax.annotation.Nullable ObjectChangeSet changeSet) {
-                                        if (changeSet == null) {
-                                            Log.d("bagi" , "HOI");
+                                        if (changeSet == null || !changeSet.isDeleted()) {
                                             if (!((RealmRegisteredInfo) realmModel).isValid() || ((RealmRegisteredInfo) realmModel).getId() !=  mInfo.getLastMessage().getUserId())
                                                 return;
-
-                                            holder.realmRegisteredInfo = (RealmRegisteredInfo) realmModel;
-                                            if (holder.realmRegisteredInfo.getDisplayName() != null) {
-
-                                                String _name = holder.realmRegisteredInfo.getDisplayName();
-                                                if (_name.length() > 0) {
-                                                    String lastMessageSenderAsync;
-
-                                                    if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-                                                        if (HelperCalander.isPersianUnicode) {
-                                                            lastMessageSenderAsync = _name + ": ";
-                                                        } else {
-                                                            lastMessageSenderAsync = " :" + _name;
-                                                        }
-                                                    } else {
-                                                        if (HelperCalander.isPersianUnicode) {
-                                                            lastMessageSenderAsync = " :" + _name;
-                                                        } else {
-                                                            lastMessageSenderAsync = _name + ": ";
-                                                        }
-                                                    }
-
-                                                    Log.d("bagi" , lastMessageSenderAsync);
-                                                    holder.lastMessageSender.setText(lastMessageSenderAsync);
-                                                }
-                                            }
+                                            setSenderName(holder);
                                         }
-
-
-                                        Log.d("bagi" , "JJJJJJ");
                                     }
                                 });
 
-                                if (holder.realmRegisteredInfo != null && holder.realmRegisteredInfo.getDisplayName() != null) {
-
-                                    String _name = holder.realmRegisteredInfo.getDisplayName();
-                                    if (_name.length() > 0) {
-
-                                        if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-                                            if (HelperCalander.isPersianUnicode) {
-                                                lastMessageSender = _name + ": ";
-                                            } else {
-                                                lastMessageSender = " :" + _name;
-                                            }
-                                        } else {
-                                            if (HelperCalander.isPersianUnicode) {
-                                                lastMessageSender = " :" + _name;
-                                            } else {
-                                                lastMessageSender = _name + ": ";
-                                            }
-                                        }
-                                    }
+                                if (holder.realmRegisteredInfo.isLoaded() && holder.realmRegisteredInfo != null) {
+                                    setSenderName(holder);
                                 }
                             }
 
@@ -1535,6 +1497,31 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
                     holder.lastMessageSender.setVisibility(View.GONE);
                     holder.txtTime.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        private void setSenderName(ViewHolder holder) {
+            if (holder.realmRegisteredInfo.getDisplayName() != null) {
+
+                String _name = holder.realmRegisteredInfo.getDisplayName();
+                if (_name.length() > 0) {
+                    String lastMessageSenderAsync;
+
+                    if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+                        if (HelperCalander.isPersianUnicode) {
+                            lastMessageSenderAsync = _name + ": ";
+                        } else {
+                            lastMessageSenderAsync = " :" + _name;
+                        }
+                    } else {
+                        if (HelperCalander.isPersianUnicode) {
+                            lastMessageSenderAsync = " :" + _name;
+                        } else {
+                            lastMessageSenderAsync = _name + ": ";
+                        }
+                    }
+                    holder.lastMessageSender.setText(lastMessageSenderAsync);
                 }
             }
         }
