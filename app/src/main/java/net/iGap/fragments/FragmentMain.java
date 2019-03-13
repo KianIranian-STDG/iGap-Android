@@ -73,6 +73,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -91,8 +92,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.realm.ObjectChangeSet;
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
+import io.realm.RealmModel;
+import io.realm.RealmObjectChangeListener;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -1396,11 +1400,47 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                             if (mInfo.getLastMessage().isAuthorMe()) {
                                 lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                             } else {
+                                RealmRegisteredInfo realmRegisteredInfo = getRealmFragmentMain().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, userId).findFirstAsync();
+                                realmRegisteredInfo.addChangeListener(new RealmObjectChangeListener<RealmModel>() {
+                                    @Override
+                                    public void onChange(RealmModel realmModel, @javax.annotation.Nullable ObjectChangeSet changeSet) {
+                                        if (changeSet == null) {
+                                            Log.d("bagi" , "HOI");
+                                            holder.realmRegisteredInfo = (RealmRegisteredInfo) realmModel;
+                                            if (holder.realmRegisteredInfo.getDisplayName() != null) {
 
-                                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmFragmentMain(), mInfo.getLastMessage().getUserId());
-                                if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
+                                                String _name = holder.realmRegisteredInfo.getDisplayName();
+                                                if (_name.length() > 0) {
+                                                    String lastMessageSenderAsync;
 
-                                    String _name = realmRegisteredInfo.getDisplayName();
+                                                    if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+                                                        if (HelperCalander.isPersianUnicode) {
+                                                            lastMessageSenderAsync = _name + ": ";
+                                                        } else {
+                                                            lastMessageSenderAsync = " :" + _name;
+                                                        }
+                                                    } else {
+                                                        if (HelperCalander.isPersianUnicode) {
+                                                            lastMessageSenderAsync = " :" + _name;
+                                                        } else {
+                                                            lastMessageSenderAsync = _name + ": ";
+                                                        }
+                                                    }
+
+                                                    Log.d("bagi" , lastMessageSenderAsync);
+                                                    holder.lastMessageSender.setText(lastMessageSenderAsync);
+                                                }
+                                            }
+                                        }
+
+
+                                        Log.d("bagi" , "JJJJJJ");
+                                    }
+                                });
+
+                                if (holder.realmRegisteredInfo != null && holder.realmRegisteredInfo.getDisplayName() != null) {
+
+                                    String _name = holder.realmRegisteredInfo.getDisplayName();
                                     if (_name.length() > 0) {
 
                                         if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
@@ -1578,7 +1618,8 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             protected CircleImageView image;
             protected EmojiTextViewE name;
             protected MaterialDesignTextView mute;
-            RealmRoom mInfo;
+            protected RealmRoom mInfo;
+            protected RealmRegisteredInfo realmRegisteredInfo;
             private ViewGroup rootChat;
             private EmojiTextViewE txtLastMessage;
             private EmojiTextViewE txtLastMessageFileText;
