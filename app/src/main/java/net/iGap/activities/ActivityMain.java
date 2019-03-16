@@ -551,7 +551,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
 
-        if (G.firstTimeEnterToApp) {
+        if (!G.userLogin) {
             /**
              * set true mFirstRun for get room history after logout and login again
              */

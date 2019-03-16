@@ -14,7 +14,16 @@ import net.iGap.proto.ProtoClientGetRoomList;
 
 public class RequestClientGetRoomList {
 
-    public void clientGetRoomList(int offset, int limit, String identity) {
+    public static boolean isLoadingRoomListOffsetZero = false;
+
+    public synchronized void clientGetRoomList(int offset, int limit, String identity) {
+        if (offset == 0) {
+            if (isLoadingRoomListOffsetZero) {
+                return;
+            } else {
+                isLoadingRoomListOffsetZero = true;
+            }
+        }
         ProtoClientGetRoomList.ClientGetRoomList.Builder clientGetRoomList = ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
         clientGetRoomList.setPagination(new RequestPagination().pagination(offset, limit));
 

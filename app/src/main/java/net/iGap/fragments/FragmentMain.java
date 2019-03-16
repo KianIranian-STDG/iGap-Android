@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -102,13 +101,11 @@ import io.realm.Realm;
 import io.realm.RealmModel;
 import io.realm.RealmObjectChangeListener;
 import io.realm.RealmQuery;
-import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
-import static net.iGap.G.firstTimeEnterToApp;
 import static net.iGap.G.userId;
 import static net.iGap.fragments.FragmentMain.MainType.all;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
@@ -301,7 +298,7 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
         //mRecyclerView.setAdapter(roomsAdapter);
 
         if (mainType == all) {
-            getChatsList();
+            getChatLists();
         }
 
         if (mView != null) {
@@ -447,7 +444,7 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
         }
     }
 
-    private void testIsSecure() {
+    private void getChatLists() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -458,16 +455,10 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
                     isSendRequestForLoading = true;
                     progressBar.setVisibility(View.VISIBLE);
                 } else {
-                    testIsSecure();
+                    getChatLists();
                 }
             }
         }, 1000);
-    }
-
-    private void getChatsList() {
-        if (firstTimeEnterToApp) {
-            testIsSecure();
-        }
     }
 
     private void onSelectRoomMenu(String message, RealmRoom item) {
@@ -820,8 +811,8 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
          * getRoomList and finally send condition that before get clientCondition;
          * in else changeState compute new client condition with latest messaging changeState
          */
-        if (firstTimeEnterToApp) {
-            firstTimeEnterToApp = false;
+        if (!G.userLogin) {
+            G.userLogin = true;
             sendClientCondition();
         } else if (fromLogin || mOffset == 0) {
 
@@ -872,11 +863,6 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
     @Override
     public void onClientGetRoomListError(int majorCode, int minorCode) {
         isSendRequestForLoading = false;
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-            }
-        });
 
         if (majorCode == 9) {
             if (G.currentActivity != null) {
@@ -897,8 +883,7 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
             @Override
             public void run() {
                 progressBar.setVisibility(View.GONE);
-                firstTimeEnterToApp = false;
-                getChatsList();
+                getChatLists();
                 isSendRequestForLoading = false;
             }
         });
@@ -1556,7 +1541,7 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
             /**
              * ********************* chat icon *********************
              */
-            if (mInfo.getType() == CHAT || mainType != MainType.all) {
+            if (mInfo.getType() == CHAT || mainType != all) {
                 textView.setVisibility(View.GONE);
             } else {
 

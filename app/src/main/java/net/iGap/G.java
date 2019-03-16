@@ -435,8 +435,6 @@ public class G extends MultiDexApplication {
         super.onCreate();
         LooperThreadHelper.getInstance();
 
-        G.firstTimeEnterToApp = true;
-
         new Thread(new Runnable() {
             @Override
             public void run() {
