@@ -56,6 +56,7 @@ import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
 import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnVersionCallBack;
+import net.iGap.libs.MyRealmRecyclerViewAdapter;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.module.AndroidUtils;
@@ -93,7 +94,9 @@ import java.util.List;
 import java.util.Map;
 
 import io.realm.ObjectChangeSet;
+import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollection;
+import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmModel;
 import io.realm.RealmObjectChangeListener;
@@ -115,23 +118,20 @@ import static net.iGap.realm.RealmRoom.putChatToDatabase;
 public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
-    public static boolean isMenuButtonAddShown = false;
     public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
     public MainType mainType;
     boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = true;
     private ProgressBar progressBar;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private int mOffset = 0;
     private View viewById;
     private RecyclerView mRecyclerView;
     private long tagId;
     private Realm realmFragmentMain;
     private RecyclerView.OnScrollListener onScrollListener;
-    private String tabId;
     private View mView = null;
     private String switcher;
-    private int channelSwitcher, allSwitcher, groupSwitcher, chatSwitcher, callSwitcher = 0;
+    private int channelSwitcher, allSwitcher, groupSwitcher, chatSwitcher = 0;
     private ProgressBar pbLoading;
 
     public static FragmentMain newInstance(MainType mainType) {
@@ -200,25 +200,20 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         tagId = System.currentTimeMillis();
 
         mainType = (MainType) getArguments().getSerializable(STR_MAIN_TYPE);
-        progressBar = (ProgressBar) view.findViewById(R.id.ac_progress_bar_waiting);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_main_swipe_refresh_layout);
-        swipeRefreshLayout.setRefreshing(false);
-        swipeRefreshLayout.setEnabled(false);
+        progressBar = view.findViewById(R.id.ac_progress_bar_waiting);
         viewById = view.findViewById(R.id.empty_icon);
         pbLoading = view.findViewById(R.id.pbLoading);
-        // pbLoading.setVisibility(View.VISIBLE);
-
+        pbLoading.setVisibility(View.VISIBLE);
+        viewById.setVisibility(View.GONE);
         switcher = String.valueOf(this.toString().charAt(this.toString().lastIndexOf(":") + 1));
         if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
             allSwitcher = 1;
             initRecycleView();
             initListener();
-            pbLoading.setVisibility(View.GONE);
         } else if (switcher.equals("0") && allSwitcher == 0 && mView != null) {
             allSwitcher = 1;
             initRecycleView();
             initListener();
-            pbLoading.setVisibility(View.GONE);
         }
         Log.d("bagi" ,"FragmentMain:onViewCreated:end");
 
@@ -241,49 +236,21 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
         switch (mainType) {
             case all:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
-                if (results.size() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    pbLoading.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                    //        pbLoading.setVisibility(View.VISIBLE);
-                }
+                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).sort(fieldNames, sort).findAllAsync();
                 break;
             case chat:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
-                if (results.size() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    pbLoading.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                    //        pbLoading.setVisibility(View.VISIBLE);
-                }
+                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).sort(fieldNames, sort).findAllAsync();
                 break;
             case group:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
-                if (results.size() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    pbLoading.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                    //       pbLoading.setVisibility(View.VISIBLE);
-                }
+                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).sort(fieldNames, sort).findAllAsync();
                 break;
             case channel:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
-                if (results.size() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    pbLoading.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                    //              pbLoading.setVisibility(View.VISIBLE);
-                }
+                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).sort(fieldNames, sort).findAllAsync();
                 break;
         }
 
 
-        final RoomAdapter roomsAdapter = new RoomAdapter(results, this);
+        final RoomAdapter roomsAdapter = new RoomAdapter(results, this, viewById, pbLoading);
 
         if (!G.multiTab) {
             onScrollListener = new RecyclerView.OnScrollListener() {
@@ -329,30 +296,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         //adapterHashMap.put(mainType, roomsAdapter);
         //
         //mRecyclerView.setAdapter(roomsAdapter);
-
-        roomsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                if (roomsAdapter.getItemCount() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    goToTop();
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onItemRangeRemoved(int positionStart, int itemCount) {
-                super.onItemRangeRemoved(positionStart, itemCount);
-                if (roomsAdapter.getItemCount() > 0) {
-                    viewById.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                }
-            }
-        });
 
         if (mainType == all) {
             getChatsList();
@@ -429,7 +372,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                             }
                         });
 
@@ -454,7 +396,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                                 firstTimeEnterToApp = false;
                                 getChatsList();
                                 isSendRequestForLoading = false;
-                                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
                             }
                         });
                     }
@@ -509,7 +450,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
                     }
                 });
 
@@ -583,7 +523,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             @Override
             public void run() {
                 progressBar.setVisibility(View.GONE);
-                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
             }
         });
 
@@ -656,7 +595,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     private void getChatsList() {
         if (firstTimeEnterToApp) {
             testIsSecure();
-            swipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -1150,20 +1088,64 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
      * **********************************************************************************
      */
 
-    public class RoomAdapter extends RealmRecyclerViewAdapter<RealmRoom, RoomAdapter.ViewHolder> {
+    public class RoomAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomAdapter.ViewHolder> {
 
         public OnComplete mComplete;
         public String action;
+        private View emptyView;
+        private View loadingView;
 
-        public RoomAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, OnComplete complete) {
+        public RoomAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, OnComplete complete, View emptyView, View loadingView) {
             super(data, true);
             this.mComplete = complete;
+            this.emptyView = emptyView;
+            this.loadingView = loadingView;
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             // View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
             return new ViewHolder(ViewMaker.getViewItemRoom());
+        }
+
+        @Override
+        protected OrderedRealmCollectionChangeListener createListener() {
+            return new OrderedRealmCollectionChangeListener() {
+                @Override
+                public void onChange(Object collection, OrderedCollectionChangeSet changeSet) {
+                    if (getData() != null && getData().size() > 0) {
+                        emptyView.setVisibility(View.GONE);
+                    } else {
+                        emptyView.setVisibility(View.VISIBLE);
+                    }
+                    if (changeSet.getState() == OrderedCollectionChangeSet.State.INITIAL) {
+                        loadingView.setVisibility(View.GONE);
+                        notifyDataSetChanged();
+                        return;
+                    }
+                    // For deletions, the adapter has to be notified in reverse order.
+                    OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
+                    for (int i = deletions.length - 1; i >= 0; i--) {
+                        OrderedCollectionChangeSet.Range range = deletions[i];
+                        notifyItemRangeRemoved(range.startIndex, range.length);
+                    }
+
+                    OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
+                    for (OrderedCollectionChangeSet.Range range : insertions) {
+                        notifyItemRangeInserted(range.startIndex, range.length);
+                        goToTop();
+                    }
+
+                    if (!updateOnModification) {
+                        return;
+                    }
+
+                    OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
+                    for (OrderedCollectionChangeSet.Range range : modifications) {
+                        notifyItemRangeChanged(range.startIndex, range.length);
+                    }
+                }
+            };
         }
 
         @Override
