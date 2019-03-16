@@ -864,7 +864,7 @@ public class RealmRoom extends RealmObject {
 
     public static void setAction(final long roomId, final long userId, final String action) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -875,6 +875,8 @@ public class RealmRoom extends RealmObject {
         });
         realm.close();
     }
+
+
 
     public static void setLastScrollPosition(final long roomId, final long messageId, final int offset) {
         Realm realm = Realm.getDefaultInstance();

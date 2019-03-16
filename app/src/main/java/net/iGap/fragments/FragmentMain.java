@@ -652,12 +652,7 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
 
     @Override
     public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                RealmRoom.setAction(roomId, userId, HelperGetAction.getAction(roomId, RealmRoom.detectType(roomId), clientAction));
-            }
-        });
+        RealmRoom.setAction(roomId, userId, HelperGetAction.getAction(roomId, RealmRoom.detectType(roomId), clientAction));
     }
 
     @Override

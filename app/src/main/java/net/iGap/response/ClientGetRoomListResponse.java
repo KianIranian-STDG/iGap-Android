@@ -61,8 +61,8 @@ public class ClientGetRoomListResponse extends MessageHandler {
         if (isLoadingRoomListOffsetZero) {
             isLoadingRoomListOffsetZero = false;
         }
-
-        G.onClientGetRoomListResponse.onClientGetRoomListTimeout();
+        if (G.onClientGetRoomListResponse != null)
+            G.onClientGetRoomListResponse.onClientGetRoomListTimeout();
     }
 
     @Override
@@ -75,7 +75,8 @@ public class ClientGetRoomListResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        G.onClientGetRoomListResponse.onClientGetRoomListError(majorCode, minorCode);
+        if (G.onClientGetRoomListResponse != null)
+            G.onClientGetRoomListResponse.onClientGetRoomListError(majorCode, minorCode);
     }
 }
 
