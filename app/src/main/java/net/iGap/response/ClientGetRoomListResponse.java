@@ -54,7 +54,7 @@ public class ClientGetRoomListResponse extends MessageHandler {
     public void timeOut() {
         super.timeOut();
 
-        G.onClientGetRoomListResponse.onTimeout();
+        G.onClientGetRoomListResponse.onClientGetRoomListTimeout();
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ClientGetRoomListResponse extends MessageHandler {
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();
         int minorCode = errorResponse.getMinorCode();
-        G.onClientGetRoomListResponse.onError(majorCode, minorCode);
+        G.onClientGetRoomListResponse.onClientGetRoomListError(majorCode, minorCode);
     }
 }
 

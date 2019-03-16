@@ -48,6 +48,7 @@ import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnChatUpdateStatusResponse;
+import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDateChanged;
@@ -100,6 +101,7 @@ import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmModel;
 import io.realm.RealmObjectChangeListener;
+import io.realm.RealmQuery;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -115,7 +117,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseFragment implements OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
@@ -233,19 +235,20 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         RealmResults<RealmRoom> results = null;
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
         Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
+        RealmQuery<RealmRoom> temp = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false);
 
         switch (mainType) {
             case all:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).sort(fieldNames, sort).findAllAsync();
+                results = temp.sort(fieldNames, sort).findAllAsync();
                 break;
             case chat:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).sort(fieldNames, sort).findAllAsync();
+                results = temp.equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).sort(fieldNames, sort).findAllAsync();
                 break;
             case group:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).sort(fieldNames, sort).findAllAsync();
+                results = temp.equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).sort(fieldNames, sort).findAllAsync();
                 break;
             case channel:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).sort(fieldNames, sort).findAllAsync();
+                results = temp.equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).sort(fieldNames, sort).findAllAsync();
                 break;
         }
 
@@ -358,49 +361,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                     }
                 };
 
-                ((ActivityMain) G.fragmentActivity).mainInterfaceGetRoomList = new ActivityMain.MainInterfaceGetRoomList() {
-                    @Override
-                    public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
-
-                        FragmentMain.this.onClientGetRoomList(roomList, response, identity);
-                    }
-
-                    @Override
-                    public void onError(int majorCode, int minorCode) {
-
-                        isSendRequestForLoading = false;
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                            }
-                        });
-
-                        if (majorCode == 9) {
-                            if (G.currentActivity != null) {
-                                G.currentActivity.finish();
-                            }
-                            Intent intent = new Intent(context, ActivityRegisteration.class);
-                            intent.putExtra(ActivityRegisteration.showProfile, true);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(intent);
-                        }
-                    }
-
-                    @Override
-                    public void onTimeout() {
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                progressBar.setVisibility(View.GONE);
-                                firstTimeEnterToApp = false;
-                                getChatsList();
-                                isSendRequestForLoading = false;
-                            }
-                        });
-                    }
-                };
-
                 break;
             case chat:
                 ((ActivityMain) G.fragmentActivity).mainActionChat = new ActivityMain.MainInterface() {
@@ -457,94 +417,6 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         }
     }
 
-    private void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
-
-        boolean fromLogin = false;
-        // requst from login
-        if (identity.equals("0")) {
-            mOffset = 0;
-            fromLogin = true;
-        } else if (Long.parseLong(identity) < tagId) {
-            return;
-        }
-
-        boolean deleteBefore = false;
-        if (mOffset == 0) {
-            deleteBefore = true;
-        }
-
-        boolean cleanAfter = false;
-
-        if (roomList.size() == 0) {
-            isThereAnyMoreItemToLoad = false;
-            cleanAfter = true;
-        } else {
-            isThereAnyMoreItemToLoad = true;
-        }
-
-        putChatToDatabase(roomList, deleteBefore, cleanAfter);
-
-        //fastAdapter
-        //G.handler.postDelayed(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        initRecycleView(null);
-        //    }
-        //}, 200);
-
-        /**
-         * to first enter to app , client first compute clientCondition then
-         * getRoomList and finally send condition that before get clientCondition;
-         * in else changeState compute new client condition with latest messaging changeState
-         */
-        if (firstTimeEnterToApp) {
-            firstTimeEnterToApp = false;
-            sendClientCondition();
-        } else if (fromLogin || mOffset == 0) {
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                    if (G.clientConditionGlobal != null) {
-                        new RequestClientCondition().clientCondition(G.clientConditionGlobal);
-                    } else {
-                        new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
-                    }
-
-
-                }
-            }).start();
-        }
-
-        mOffset += roomList.size();
-
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.GONE);
-            }
-        });
-
-        isSendRequestForLoading = false;
-
-        if (isThereAnyMoreItemToLoad && G.multiTab) {
-            isSendRequestForLoading = true;
-            new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-        //else {
-        //    mOffset = 0;
-        //}
-
-
-    }
 
     private boolean heartBeatTimeOut() {
 
@@ -829,10 +701,30 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     }
 
     @Override
+    public void onGroupDeleteError(int majorCode, int minorCode) {
+
+    }
+
+    @Override
+    public void onGroupDeleteTimeOut() {
+
+    }
+
+    @Override
     public void onChannelDelete(long roomId) {
         //fastAdapter
         //adapterHashMap.get(all).removeChat(roomId);
         //adapterHashMap.get(channel).removeChat(roomId);
+    }
+
+    @Override
+    public void onChannelDeleteError(int majorCode, int minorCode) {
+
+    }
+
+    @Override
+    public void onChannelDeleteTimeOut() {
+
     }
 
     @Override
@@ -888,22 +780,133 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     }
 
     @Override
-    public void Error(int majorCode, int minorCode) {
+    public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
+
+        boolean fromLogin = false;
+        // requst from login
+        if (identity.equals("0")) {
+            mOffset = 0;
+            fromLogin = true;
+        } else if (Long.parseLong(identity) < tagId) {
+            return;
+        }
+
+        boolean deleteBefore = false;
+        if (mOffset == 0) {
+            deleteBefore = true;
+        }
+
+        boolean cleanAfter = false;
+
+        if (roomList.size() == 0) {
+            isThereAnyMoreItemToLoad = false;
+            cleanAfter = true;
+        } else {
+            isThereAnyMoreItemToLoad = true;
+        }
+
+        putChatToDatabase(roomList, deleteBefore, cleanAfter);
+
+        //fastAdapter
+        //G.handler.postDelayed(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        initRecycleView(null);
+        //    }
+        //}, 200);
+
+        /**
+         * to first enter to app , client first compute clientCondition then
+         * getRoomList and finally send condition that before get clientCondition;
+         * in else changeState compute new client condition with latest messaging changeState
+         */
+        if (firstTimeEnterToApp) {
+            firstTimeEnterToApp = false;
+            sendClientCondition();
+        } else if (fromLogin || mOffset == 0) {
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (G.clientConditionGlobal != null) {
+                        new RequestClientCondition().clientCondition(G.clientConditionGlobal);
+                    } else {
+                        new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
+                    }
+
+
+                }
+            }).start();
+        }
+
+        mOffset += roomList.size();
+
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        isSendRequestForLoading = false;
+
+        if (isThereAnyMoreItemToLoad && G.multiTab) {
+            isSendRequestForLoading = true;
+            new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+
+            G.handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+        //else {
+        //    mOffset = 0;
+        //}
+
 
     }
 
     @Override
-    public void onTimeOut() {
+    public void onClientGetRoomListError(int majorCode, int minorCode) {
+        isSendRequestForLoading = false;
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+            }
+        });
+
+        if (majorCode == 9) {
+            if (G.currentActivity != null) {
+                G.currentActivity.finish();
+            }
+            Intent intent = new Intent(context, ActivityRegisteration.class);
+            intent.putExtra(ActivityRegisteration.showProfile, true);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
 
     }
+
+    @Override
+    public void onClientGetRoomListTimeout() {
+
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+                firstTimeEnterToApp = false;
+                getChatsList();
+                isSendRequestForLoading = false;
+            }
+        });
+    }
+
 
     @Override
     public void onChatDeleteError(int majorCode, int minorCode) {
-
-    }
-
-    @Override
-    public void onError(int majorCode, int minorCode) {
 
     }
 
@@ -953,6 +956,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         //G.onChatDeleteInRoomList = this;
         //G.onGroupDeleteInRoomList = this;
         //G.onChannelDeleteInRoomList = this;
+        G.onClientGetRoomListResponse = this;
         //onClientGetRoomResponseRoomList = this;
         //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponseFragmentMain(this);
         //G.chatSendMessageUtil.setOnChatSendMessageResponseFragmentMainRoomList(this);

@@ -197,7 +197,7 @@ import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -222,7 +222,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public MainInterface mainActionChat;
     public MainInterface mainActionGroup;
     public MainInterface mainActionChannel;
-    public MainInterfaceGetRoomList mainInterfaceGetRoomList;
     public ArcMenu arcMenu;
     FragmentCall fragmentCall;
     FloatingActionButton btnStartNewChat;
@@ -2579,7 +2578,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponseRoomList(this);
         G.onClientCondition = this;
-        G.onClientGetRoomListResponse = this;
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
         G.onUnreadChange = this;
@@ -2950,32 +2948,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
     }
 
-    @Override
-    public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
-
-        if (mainInterfaceGetRoomList != null) {
-            mainInterfaceGetRoomList.onClientGetRoomList(roomList, response, identity);
-        }
-    }
-
-    @Override
-    public void onError(int majorCode, int minorCode) {
-
-        if (mainInterfaceGetRoomList != null) {
-            mainInterfaceGetRoomList.onError(majorCode, minorCode);
-        }
-    }
-
-    //************************
-
-    @Override
-    public void onTimeout() {
-
-        if (mainInterfaceGetRoomList != null) {
-            mainInterfaceGetRoomList.onTimeout();
-        }
-    }
-
     public void lockNavigation() {
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
@@ -3135,15 +3107,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public interface MainInterface {
         void onAction(MainAction action);
-    }
-
-    public interface MainInterfaceGetRoomList {
-
-        void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity);
-
-        void onError(int majorCode, int minorCode);
-
-        void onTimeout();
     }
 
     public interface OnBackPressedListener {

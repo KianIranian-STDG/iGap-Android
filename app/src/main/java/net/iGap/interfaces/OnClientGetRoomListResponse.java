@@ -18,7 +18,7 @@ import java.util.List;
 public interface OnClientGetRoomListResponse {
     void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity);
 
-    void onError(int majorCode, int minorCode);
+    void onClientGetRoomListError(int majorCode, int minorCode);
 
-    void onTimeout();
+    void onClientGetRoomListTimeout();
 }
