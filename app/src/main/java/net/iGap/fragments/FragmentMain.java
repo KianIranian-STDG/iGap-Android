@@ -404,11 +404,6 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
 
                 break;
             case clinetCondition:
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                    }
-                });
 
                 break;
         }
