@@ -218,10 +218,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private static long currentTime;
     public TextView iconLock;
     public static boolean isUseCamera = false;
-    public MainInterface mainActionApp;
-    public MainInterface mainActionChat;
-    public MainInterface mainActionGroup;
-    public MainInterface mainActionChannel;
     public ArcMenu arcMenu;
     FragmentCall fragmentCall;
     FloatingActionButton btnStartNewChat;
@@ -2856,30 +2852,31 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     }
                 });
                 //realm.close();
-
-                switch (roomType) {
-
-                    case CHAT:
-                        if (mainActionChat != null) {
-                            mainActionChat.onAction(MainAction.downScrool);
+                for (Fragment f: pages) {
+                    if (f instanceof FragmentMain) {
+                        FragmentMain mainFragment = (FragmentMain) f;
+                        switch (mainFragment.mainType) {
+                            case all:
+                                mainFragment.onAction(MainAction.downScrool);
+                                break;
+                            case chat:
+                                if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                                    mainFragment.onAction(MainAction.downScrool);
+                                }
+                                break;
+                            case group:
+                                if (roomType == ProtoGlobal.Room.Type.GROUP) {
+                                    mainFragment.onAction(MainAction.downScrool);
+                                }
+                                break;
+                            case channel:
+                                if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+                                    mainFragment.onAction(MainAction.downScrool);
+                                }
+                                break;
                         }
-                        break;
-                    case GROUP:
-                        if (mainActionGroup != null) {
-                            mainActionGroup.onAction(MainAction.downScrool);
-                        }
-                        break;
-                    case CHANNEL:
-                        if (mainActionChannel != null) {
-                            mainActionChannel.onAction(MainAction.downScrool);
-                        }
-                        break;
+                    }
                 }
-
-                if (mainActionApp != null) {
-                    mainActionApp.onAction(MainAction.downScrool);
-                }
-
                 /**
                  * don't send update status for own message
                  */
@@ -2915,21 +2912,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void notifySubFragmentForCondition() {
-
-        if (mainActionApp != null) {
-            mainActionApp.onAction(MainAction.clinetCondition);
-        }
-
-        if (mainActionChat != null) {
-            mainActionChat.onAction(MainAction.clinetCondition);
-        }
-
-        if (mainActionGroup != null) {
-            mainActionGroup.onAction(MainAction.clinetCondition);
-        }
-
-        if (mainActionChannel != null) {
-            mainActionChannel.onAction(MainAction.clinetCondition);
+        for (Fragment f: pages) {
+            if (f instanceof FragmentMain) {
+                ((FragmentMain)f).onAction(MainAction.clinetCondition);
+            }
         }
     }
 

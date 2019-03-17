@@ -114,7 +114,7 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseFragment implements ActivityMain.MainInterface, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
@@ -152,23 +152,18 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
             if (switcher.equals("1") && channelSwitcher == 0) {
                 channelSwitcher = 1;
                 initRecycleView();
-                initListener();
             } else if (switcher.equals("2") && groupSwitcher == 0) {
                 groupSwitcher = 1;
                 initRecycleView();
-                initListener();
             } else if (switcher.equals("3") && chatSwitcher == 0) {
                 chatSwitcher = 1;
                 initRecycleView();
-                initListener();
             } else if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
                 allSwitcher = 1;
                 initRecycleView();
-                initListener();
             } else if (switcher.equals("0") && allSwitcher == 0 && mView != null) {
                 allSwitcher = 1;
                 initRecycleView();
-                initListener();
             }
 
         }
@@ -208,11 +203,9 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
         if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
             allSwitcher = 1;
             initRecycleView();
-            initListener();
         } else if (switcher.equals("0") && allSwitcher == 0 && mView != null) {
             allSwitcher = 1;
             initRecycleView();
-            initListener();
         }
         Log.d("bagi" ,"FragmentMain:onViewCreated:end");
 
@@ -346,48 +339,8 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
 
     //***************************************************************************************************************************
 
-    private void initListener() {
-        switch (mainType) {
-
-            case all:
-
-                ((ActivityMain) G.fragmentActivity).mainActionApp = new ActivityMain.MainInterface() {
-                    @Override
-                    public void onAction(ActivityMain.MainAction action) {
-                        doAction(action);
-                    }
-                };
-
-                break;
-            case chat:
-                ((ActivityMain) G.fragmentActivity).mainActionChat = new ActivityMain.MainInterface() {
-                    @Override
-                    public void onAction(ActivityMain.MainAction action) {
-                        doAction(action);
-                    }
-                };
-                break;
-            case group:
-                ((ActivityMain) G.fragmentActivity).mainActionGroup = new ActivityMain.MainInterface() {
-                    @Override
-                    public void onAction(ActivityMain.MainAction action) {
-                        doAction(action);
-                    }
-                };
-                break;
-            case channel:
-                ((ActivityMain) G.fragmentActivity).mainActionChannel = new ActivityMain.MainInterface() {
-                    @Override
-                    public void onAction(ActivityMain.MainAction action) {
-                        doAction(action);
-                    }
-                };
-                break;
-        }
-    }
-
-    private void doAction(ActivityMain.MainAction action) {
-
+    @Override
+    public void onAction(ActivityMain.MainAction action) {
         switch (action) {
 
             case downScrool:

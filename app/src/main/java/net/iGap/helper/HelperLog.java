@@ -21,10 +21,11 @@ public class HelperLog {
     }
 
     public static void setErrorLog(Exception e) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        String sStackTrace = sw.toString();
-        setErrorLog(sStackTrace);
+
+        Crashlytics.logException(e);
+
+        if (BuildConfig.DEBUG) {
+            e.printStackTrace();
+        }
     }
 }
