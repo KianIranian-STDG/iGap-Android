@@ -265,93 +265,74 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public static void setMediaLayout() {
+        try {
+            if (MusicPlayer.mp != null) {
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
+                if (MusicPlayer.shearedMediaLayout != null) {
+                    MusicPlayer.initLayoutTripMusic(MusicPlayer.shearedMediaLayout);
 
-                try {
-
-                    if (MusicPlayer.mp != null) {
-
-                        if (MusicPlayer.shearedMediaLayout != null) {
-                            MusicPlayer.initLayoutTripMusic(MusicPlayer.shearedMediaLayout);
-
-                            if (MusicPlayer.chatLayout != null) {
-                                MusicPlayer.chatLayout.setVisibility(View.GONE);
-                            }
-
-                            if (MusicPlayer.mainLayout != null) {
-                                MusicPlayer.mainLayout.setVisibility(View.GONE);
-                            }
-                        } else if (MusicPlayer.chatLayout != null) {
-                            MusicPlayer.initLayoutTripMusic(MusicPlayer.chatLayout);
-
-                            if (MusicPlayer.mainLayout != null) {
-                                MusicPlayer.mainLayout.setVisibility(View.GONE);
-                            }
-                        } else if (MusicPlayer.mainLayout != null) {
-                            MusicPlayer.initLayoutTripMusic(MusicPlayer.mainLayout);
-                        }
-                    } else {
-
-                        if (MusicPlayer.mainLayout != null) {
-                            MusicPlayer.mainLayout.setVisibility(View.GONE);
-                        }
-
-                        if (MusicPlayer.chatLayout != null) {
-                            MusicPlayer.chatLayout.setVisibility(View.GONE);
-                        }
-
-                        if (MusicPlayer.shearedMediaLayout != null) {
-                            MusicPlayer.shearedMediaLayout.setVisibility(View.GONE);
-                        }
-
-
+                    if (MusicPlayer.chatLayout != null) {
+                        MusicPlayer.chatLayout.setVisibility(View.GONE);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+
+                    if (MusicPlayer.mainLayout != null) {
+                        MusicPlayer.mainLayout.setVisibility(View.GONE);
+                    }
+                } else if (MusicPlayer.chatLayout != null) {
+                    MusicPlayer.initLayoutTripMusic(MusicPlayer.chatLayout);
+
+                    if (MusicPlayer.mainLayout != null) {
+                        MusicPlayer.mainLayout.setVisibility(View.GONE);
+                    }
+                } else if (MusicPlayer.mainLayout != null) {
+                    MusicPlayer.initLayoutTripMusic(MusicPlayer.mainLayout);
+                }
+            } else {
+
+                if (MusicPlayer.mainLayout != null) {
+                    MusicPlayer.mainLayout.setVisibility(View.GONE);
+                }
+
+                if (MusicPlayer.chatLayout != null) {
+                    MusicPlayer.chatLayout.setVisibility(View.GONE);
+                }
+
+                if (MusicPlayer.shearedMediaLayout != null) {
+                    MusicPlayer.shearedMediaLayout.setVisibility(View.GONE);
                 }
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+            HelperLog.setErrorLog(e);
+        }
     }
 
     public static void setStripLayoutCall() {
+        if (G.isInCall) {
+            if (ActivityCall.stripLayoutChat != null) {
+                ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-
-                if (G.isInCall) {
-
-                    if (ActivityCall.stripLayoutChat != null) {
-                        ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
-
-                        if (ActivityCall.stripLayoutMain != null) {
-                            ActivityCall.stripLayoutMain.setVisibility(View.GONE);
-                        }
-                    } else {
-                        if (ActivityCall.stripLayoutMain != null) {
-                            ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
-                        }
-                    }
-                } else {
-
-                    if (ActivityCall.stripLayoutMain != null) {
-                        ActivityCall.stripLayoutMain.setVisibility(View.GONE);
-                    }
-
-                    if (ActivityCall.stripLayoutChat != null) {
-                        ActivityCall.stripLayoutChat.setVisibility(View.GONE);
-                    }
+                if (ActivityCall.stripLayoutMain != null) {
+                    ActivityCall.stripLayoutMain.setVisibility(View.GONE);
+                }
+            } else {
+                if (ActivityCall.stripLayoutMain != null) {
+                    ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
                 }
             }
-        });
+        } else {
 
+            if (ActivityCall.stripLayoutMain != null) {
+                ActivityCall.stripLayoutMain.setVisibility(View.GONE);
+            }
 
+            if (ActivityCall.stripLayoutChat != null) {
+                ActivityCall.stripLayoutChat.setVisibility(View.GONE);
+            }
+        }
     }
 
-    public Realm getRealm() {
+    private Realm getRealm() {
         if (mRealm == null || mRealm.isClosed()) {
 
             mRealm = Realm.getDefaultInstance();
@@ -360,12 +341,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         return mRealm;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    private void closeRealm() {
         if (mRealm != null && !mRealm.isClosed()) {
             mRealm.close();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        closeRealm();
         if (G.imageLoader != null) {
             G.imageLoader.clearMemoryCache();
         }
