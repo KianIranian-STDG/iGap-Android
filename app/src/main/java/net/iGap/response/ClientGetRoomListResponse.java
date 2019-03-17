@@ -15,6 +15,7 @@ import net.iGap.proto.ProtoClientGetRoomList;
 import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.request.RequestClientCondition;
+import net.iGap.request.RequestClientGetRoomList;
 
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 import static net.iGap.request.RequestClientGetRoomList.isLoadingRoomListOffsetZero;
@@ -23,22 +24,19 @@ public class ClientGetRoomListResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public RequestClientGetRoomList.IdentityGetRoomList identity;
 
-    public ClientGetRoomListResponse(int actionId, Object protoClass, String identity) {
+    public ClientGetRoomListResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
         this.actionId = actionId;
-        this.identity = identity;
+        this.identity = (RequestClientGetRoomList.IdentityGetRoomList) identity;
     }
 
     @Override
     public void handler() {
         super.handler();
-        if (isLoadingRoomListOffsetZero) {
-            isLoadingRoomListOffsetZero = false;
-        }
 
         final ProtoClientGetRoomList.ClientGetRoomListResponse.Builder clientGetRoomListResponse = (ProtoClientGetRoomList.ClientGetRoomListResponse.Builder) message;
         if (G.onClientGetRoomListResponse != null) {
@@ -58,9 +56,10 @@ public class ClientGetRoomListResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
-        if (isLoadingRoomListOffsetZero) {
-            isLoadingRoomListOffsetZero = false;
+        if (identity.isOffsetZero) {
+            RequestClientGetRoomList.isLoadingRoomListOffsetZero = false;
         }
+
         if (G.onClientGetRoomListResponse != null)
             G.onClientGetRoomListResponse.onClientGetRoomListTimeout();
     }
@@ -68,8 +67,8 @@ public class ClientGetRoomListResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        if (isLoadingRoomListOffsetZero) {
-            isLoadingRoomListOffsetZero = false;
+        if (identity.isOffsetZero) {
+            RequestClientGetRoomList.isLoadingRoomListOffsetZero = false;
         }
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;

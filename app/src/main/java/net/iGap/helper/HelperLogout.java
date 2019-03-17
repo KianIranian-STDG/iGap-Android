@@ -21,6 +21,7 @@ import net.iGap.activities.ActivityRegisteration;
 import net.iGap.module.AppUtils;
 import net.iGap.module.LoginActions;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.request.RequestClientGetRoomList;
 
 import ir.radsense.raadcore.model.Auth;
 
@@ -65,6 +66,7 @@ public final class HelperLogout {
     private static void resetStaticField() {
         Theme.setThemeColor();
         G.userLogin = false;
+        RequestClientGetRoomList.isLoadingRoomListOffsetZero = false;
         G.multiTab = false;
         G.isTimeWhole = false;
         G.isFirstPassCode = false;

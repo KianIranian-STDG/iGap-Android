@@ -15,19 +15,35 @@ import net.iGap.proto.ProtoClientGetRoomList;
 public class RequestClientGetRoomList {
 
     public static boolean isLoadingRoomListOffsetZero = false;
+    private static final Integer mutex = 1;
 
-    public synchronized void clientGetRoomList(int offset, int limit, String identity) {
+    public static class IdentityGetRoomList {
+        public boolean isFromLogin;
+        public boolean isOffsetZero;
+        public String content;
+
+        IdentityGetRoomList(boolean isFromLogin, boolean isOffsetZero, String content) {
+            this.isFromLogin = isFromLogin;
+            this.isOffsetZero = isOffsetZero;
+            this.content = content;
+        }
+    }
+
+    public void clientGetRoomList(int offset, int limit, String identity) {
         if (offset == 0) {
-            if (isLoadingRoomListOffsetZero) {
-                return;
-            } else {
-                isLoadingRoomListOffsetZero = true;
+            synchronized(mutex) {
+                if (isLoadingRoomListOffsetZero) {
+                    return;
+                } else {
+                    isLoadingRoomListOffsetZero = true;
+                }
             }
         }
         ProtoClientGetRoomList.ClientGetRoomList.Builder clientGetRoomList = ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
         clientGetRoomList.setPagination(new RequestPagination().pagination(offset, limit));
 
-        RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList, identity);
+        IdentityGetRoomList identityGetRoomList = new IdentityGetRoomList(identity.equals("0"), offset == 0, identity);
+        RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList, identityGetRoomList);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

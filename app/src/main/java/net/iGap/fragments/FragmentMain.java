@@ -453,7 +453,7 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
                     getChatLists();
                 }
             }
-        }, 1000);
+        }, 10);
     }
 
     private void onSelectRoomMenu(String message, RealmRoom item) {
@@ -761,14 +761,12 @@ public class FragmentMain extends BaseFragment implements OnClientGetRoomListRes
     }
 
     @Override
-    public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
-
+    public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
         boolean fromLogin = false;
-        // requst from login
-        if (identity.equals("0")) {
+        if (identity.isFromLogin) {
             mOffset = 0;
             fromLogin = true;
-        } else if (Long.parseLong(identity) < tagId) {
+        } else if (Long.parseLong(identity.content) < tagId) {
             return;
         }
 
