@@ -241,7 +241,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private Realm mRealm;
     private boolean isNeedToRegister = false;
     private ViewPager mViewPager;
-    private ArrayList<Fragment> pages = new ArrayList<Fragment>();
+    private ArrayList<Fragment> pages = new ArrayList<>();
     private String phoneNumber;
     private TextView itemCash;
     private ViewGroup itemNavWallet;
@@ -2831,65 +2831,61 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
 
-        //Realm realm = Realm.getDefaultInstance();
-        runOnUiThread(new Runnable() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void run() {
-                getRealm().executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                        final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
-                        if (room != null && realmRoomMessage != null) {
-                            /**
-                             * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
-                             */
-                            if (room.getUnreadCount() <= 1) {
-                                realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
-                                room.setFirstUnreadMessage(realmRoomMessage);
-                            }
-                        }
-                    }
-                });
-                //realm.close();
-                for (Fragment f: pages) {
-                    if (f instanceof FragmentMain) {
-                        FragmentMain mainFragment = (FragmentMain) f;
-                        switch (mainFragment.mainType) {
-                            case all:
-                                mainFragment.onAction(MainAction.downScrool);
-                                break;
-                            case chat:
-                                if (roomType == ProtoGlobal.Room.Type.CHAT) {
-                                    mainFragment.onAction(MainAction.downScrool);
-                                }
-                                break;
-                            case group:
-                                if (roomType == ProtoGlobal.Room.Type.GROUP) {
-                                    mainFragment.onAction(MainAction.downScrool);
-                                }
-                                break;
-                            case channel:
-                                if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
-                                    mainFragment.onAction(MainAction.downScrool);
-                                }
-                                break;
-                        }
-                    }
-                }
-                /**
-                 * don't send update status for own message
-                 */
-                if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
-                    // user has received the message, so I make a new delivered update status request
-                    if (roomType == ProtoGlobal.Room.Type.CHAT) {
-                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-                    } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            public void execute(Realm realm) {
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                if (room != null && realmRoomMessage != null) {
+                    /**
+                     * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+                     */
+                    if (room.getUnreadCount() <= 1) {
+                        realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
+                        room.setFirstUnreadMessage(realmRoomMessage);
                     }
                 }
             }
         });
+        realm.close();
+        for (Fragment f: pages) {
+            if (f instanceof FragmentMain) {
+                FragmentMain mainFragment = (FragmentMain) f;
+                switch (mainFragment.mainType) {
+                    case all:
+                        mainFragment.onAction(MainAction.downScrool);
+                        break;
+                    case chat:
+                        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                            mainFragment.onAction(MainAction.downScrool);
+                        }
+                        break;
+                    case group:
+                        if (roomType == ProtoGlobal.Room.Type.GROUP) {
+                            mainFragment.onAction(MainAction.downScrool);
+                        }
+                        break;
+                    case channel:
+                        if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+                            mainFragment.onAction(MainAction.downScrool);
+                        }
+                        break;
+                }
+            }
+        }
+
+        /**
+         * don't send update status for own message
+         */
+        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
+            // user has received the message, so I make a new delivered update status request
+            if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            }
+        }
     }
 
     //*****************************************************************************************************************************
