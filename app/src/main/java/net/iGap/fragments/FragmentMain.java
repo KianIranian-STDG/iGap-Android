@@ -338,6 +338,9 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
     @Override
     public void onAction(ActivityMain.MainAction action) {
+
+        if (mRecyclerView == null) {return;}
+
         switch (action) {
 
             case downScrool:
