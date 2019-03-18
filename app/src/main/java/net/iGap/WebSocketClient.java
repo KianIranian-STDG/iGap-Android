@@ -164,7 +164,7 @@ public class WebSocketClient {
      * @return webSocketConnection
      */
 
-    public static WebSocket getInstance() {
+    public  synchronized static WebSocket getInstance() {
         if (!waitingForReconnecting && (webSocketClient == null || !webSocketClient.isOpen())) {
             waitingForReconnecting = true;
             HelperConnectionState.connectionState(ConnectionState.CONNECTING);
