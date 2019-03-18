@@ -255,8 +255,9 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                         if (mOffset > 0) {
                             int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                             if (lastVisiblePosition + 10 >= mOffset) {
-                                new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-                                progressBar.setVisibility(View.VISIBLE);
+                                boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+                                if (send)
+                                    progressBar.setVisibility(View.VISIBLE);
                             }
                         }
                     } else {
@@ -288,6 +289,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         if (mainType == all) {
             getChatLists();
         }
+        Log.d("bagi" , "" + mOffset);
 
         if (mView != null) {
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -392,8 +394,9 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             @Override
             public void run() {
                 if (G.isSecure && G.userLogin) {
-                    new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-                    progressBar.setVisibility(View.VISIBLE);
+                    boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+                    if (send)
+                        progressBar.setVisibility(View.VISIBLE);
                 } else {
                     getChatLists();
                 }
@@ -707,6 +710,8 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
     @Override
     public synchronized void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
+
+        Log.d("bagi" , "onClientGetRoomList" + roomList.size() + "" + identity.offset);
         boolean fromLogin = false;
         if (identity.isFromLogin) {
             mOffset = 0;
@@ -766,14 +771,16 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         });
 
         if (isThereAnyMoreItemToLoad && G.multiTab) {
-            new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
 
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-            });
+            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+            if (send) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
         }
         //else {
         //    mOffset = 0;

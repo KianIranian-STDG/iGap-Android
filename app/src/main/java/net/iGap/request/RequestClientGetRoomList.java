@@ -10,6 +10,8 @@
 
 package net.iGap.request;
 
+import android.util.Log;
+
 import net.iGap.proto.ProtoClientGetRoomList;
 
 import java.util.HashSet;
@@ -32,11 +34,12 @@ public class RequestClientGetRoomList {
         }
     }
 
-    public void clientGetRoomList(int offset, int limit, String identity) {
+    public boolean clientGetRoomList(int offset, int limit, String identity) {
+        Log.d("bagi" , "clientGetRoomList" + offset + "" + limit + identity);
         if (offset == 0) {
             synchronized(mutex) {
                 if (isLoadingRoomListOffsetZero) {
-                    return;
+                    return false;
                 } else {
                     isLoadingRoomListOffsetZero = true;
                 }
@@ -45,7 +48,7 @@ public class RequestClientGetRoomList {
 
         synchronized(mutex) {
             if (pendingRequest.contains(offset)) {
-                return;
+                return false;
             } else {
                 pendingRequest.add(offset);
             }
@@ -61,5 +64,6 @@ public class RequestClientGetRoomList {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        return true;
     }
 }
