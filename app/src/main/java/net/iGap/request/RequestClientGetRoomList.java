@@ -12,6 +12,7 @@ package net.iGap.request;
 
 import android.util.Log;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoClientGetRoomList;
 
 import java.util.HashSet;
@@ -50,7 +51,8 @@ public class RequestClientGetRoomList {
             if (pendingRequest.contains(offset)) {
                 return false;
             } else {
-                pendingRequest.add(offset);
+                if (G.userLogin)
+                    pendingRequest.add(offset);
             }
         }
 
