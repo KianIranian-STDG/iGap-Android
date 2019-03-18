@@ -164,7 +164,7 @@ public class WebSocketClient {
      * @return webSocketConnection
      */
 
-    public static WebSocket getInstance() {
+    public synchronized static WebSocket getInstance() {
         if (!waitingForReconnecting && (webSocketClient == null || !webSocketClient.isOpen())) {
             waitingForReconnecting = true;
             HelperConnectionState.connectionState(ConnectionState.CONNECTING);
@@ -341,17 +341,12 @@ public class WebSocketClient {
                             e.printStackTrace();
                         }
 
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (G.symmetricKey == null && G.socketConnection) {
-                                    WebSocket webSocket = WebSocketClient.getInstance();
-                                    if (webSocket != null) {
-                                        webSocket.sendText("i need 30001");
-                                    }
-                                }
+                        if (G.symmetricKey == null && G.socketConnection) {
+                            WebSocket webSocket = WebSocketClient.getInstance();
+                            if (webSocket != null) {
+                                webSocket.sendText("i need 30001");
                             }
-                        });
+                        }
                     } else {
                         G.allowForConnect = false;
                         WebSocket webSocket = WebSocketClient.getInstance();
