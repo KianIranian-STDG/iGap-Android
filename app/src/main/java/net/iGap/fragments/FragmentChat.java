@@ -2284,23 +2284,31 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = new IUpdateLogItem() {
             @Override
             public void onUpdate(byte[] log, long messageId) {
-                if (mAdapter == null) {
+                if (getActivity() == null && getActivity().isFinishing())
                     return;
-                }
-                for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-
-                    try {
-                        AbstractMessage item = mAdapter.getAdapterItem(i);
-
-                        if (item.mMessage != null && item.mMessage.messageID.equals(messageId + "")) {
-                            item.mMessage.logs = log;
-                            mAdapter.notifyAdapterItemChanged(i);
-                            break;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mAdapter == null) {
+                            return;
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+
+                            try {
+                                AbstractMessage item = mAdapter.getAdapterItem(i);
+
+                                if (item.mMessage != null && item.mMessage.messageID.equals(messageId + "")) {
+                                    item.mMessage.logs = log;
+                                    mAdapter.notifyAdapterItemChanged(i);
+                                    break;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                HelperLog.setErrorLog(e);
+                            }
+                        }
                     }
-                }
+                });
             }
         };
 

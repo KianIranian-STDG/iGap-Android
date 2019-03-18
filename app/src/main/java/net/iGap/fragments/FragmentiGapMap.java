@@ -1585,7 +1585,12 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         RealmRegisteredInfo.getRegistrationInfo(result.getUserId(), new OnInfo() {
                             @Override
                             public void onInfo(Long registeredId) {
-                                drawMark(result.getLat(), result.getLon(), result.getHasComment(), result.getUserId());
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        drawMark(result.getLat(), result.getLon(), result.getHasComment(), result.getUserId());
+                                    }
+                                });
                             }
                         });
                     }

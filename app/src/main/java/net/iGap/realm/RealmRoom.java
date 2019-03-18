@@ -707,7 +707,7 @@ public class RealmRoom extends RealmObject {
 
     public static void updatePin(final long roomId, final boolean pin, final long pinId) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);

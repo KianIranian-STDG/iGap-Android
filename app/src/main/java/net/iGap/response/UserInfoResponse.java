@@ -10,8 +10,6 @@
 
 package net.iGap.response;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import net.iGap.G;
@@ -19,6 +17,7 @@ import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentShowMember;
 import net.iGap.helper.HelperLogMessage;
+import net.iGap.helper.LooperThreadHelper;
 import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserInfo;
 import net.iGap.realm.RealmAvatar;
@@ -48,84 +47,75 @@ public class UserInfoResponse extends MessageHandler {
         super.handler();
         final ProtoUserInfo.UserInfoResponse.Builder builder = (ProtoUserInfo.UserInfoResponse.Builder) message;
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(@NonNull Realm realm) {
+                RealmRegisteredInfo.putOrUpdate(realm, builder.getUser());
+                RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
+            }
+        });
+
+        realm.close();
+
+        LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(@NonNull Realm realm) {
-                        RealmRegisteredInfo.putOrUpdate(realm, builder.getUser());
-                        RealmAvatar.putOrUpdateAndManageDelete(realm, builder.getUser().getId(), builder.getUser().getAvatar());
-                    }
-                });
+                RequestUserInfo.userIdArrayList.remove(String.valueOf(builder.getUser().getId()));
+            }
+        }, RequestUserInfo.CLEAR_ARRAY_TIME);
 
-                realm.close();
+        if (identity != null && identity.equals(RequestUserInfo.InfoType.UPDATE_ROOM.toString())) {
+            RealmRoom.updateChatRoom(builder.getUser().getId());
+        }
 
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        RequestUserInfo.userIdArrayList.remove(String.valueOf(builder.getUser().getId()));
-                    }
-                }, RequestUserInfo.CLEAR_ARRAY_TIME);
+        if (identity != null && identity.equals(RequestUserInfo.InfoType.JUST_INFO.toString())) {
+            G.onRegistrationInfo.onInfo(builder.getUser());
+            return;
+        }
+        if ((builder.getUser().getId() == userId)) {
+            if (G.onUserInfoMyClient != null) {
+                G.onUserInfoMyClient.onUserInfoMyClient();
+            }
+        }
 
-                if (identity != null && identity.equals(RequestUserInfo.InfoType.UPDATE_ROOM.toString())) {
-                    RealmRoom.updateChatRoom(builder.getUser().getId());
+        if (G.onUserUpdateStatus != null) {
+            G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), builder.getUser().getLastSeen(), builder.getUser().getStatus().toString());
+        }
+
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                if (G.onUserInfoResponse != null) {
+                    G.onUserInfoResponse.onUserInfo(builder.getUser(), identity);
                 }
 
-                if (identity != null && identity.equals(RequestUserInfo.InfoType.JUST_INFO.toString())) {
-                    G.onRegistrationInfo.onInfo(builder.getUser());
-                    return;
+                if (FragmentShowMember.infoUpdateListenerCount != null) {
+                    FragmentShowMember.infoUpdateListenerCount.complete(true, "" + builder.getUser().getId(), "OK");
                 }
 
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if ((builder.getUser().getId() == userId)) {
-                            if (G.onUserInfoMyClient != null) {
-                                G.onUserInfoMyClient.onUserInfoMyClient();
-                            }
-                        }
-
-                        if (G.onUserUpdateStatus != null) {
-                            G.onUserUpdateStatus.onUserUpdateStatus(builder.getUser().getId(), builder.getUser().getLastSeen(), builder.getUser().getStatus().toString());
-                        }
-
-                        if (G.onUserInfoResponse != null) {
-                            G.onUserInfoResponse.onUserInfo(builder.getUser(), identity);
-                        }
-
-                        if (FragmentShowMember.infoUpdateListenerCount != null) {
-                            FragmentShowMember.infoUpdateListenerCount.complete(true, "" + builder.getUser().getId(), "OK");
-                        }
-
-                        // update chat message header forward after get user or room info
-                        if (AbstractMessage.updateForwardInfo != null) {
-                            long _id = builder.getUser().getId();
-                            if (AbstractMessage.updateForwardInfo.containsKey(_id)) {
-                                String messageId = AbstractMessage.updateForwardInfo.get(_id);
-                                AbstractMessage.updateForwardInfo.remove(_id);
-                                if (FragmentChat.onUpdateUserOrRoomInfo != null) {
-                                    FragmentChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageId);
-                                }
-                            }
+                // update chat message header forward after get user or room info
+                if (AbstractMessage.updateForwardInfo != null) {
+                    long _id = builder.getUser().getId();
+                    if (AbstractMessage.updateForwardInfo.containsKey(_id)) {
+                        String messageId = AbstractMessage.updateForwardInfo.get(_id);
+                        AbstractMessage.updateForwardInfo.remove(_id);
+                        if (FragmentChat.onUpdateUserOrRoomInfo != null) {
+                            FragmentChat.onUpdateUserOrRoomInfo.onUpdateUserOrRoomInfo(messageId);
                         }
                     }
-                });
-
-                // update log message in realm room message after get user info
-                if (HelperLogMessage.logMessageUpdateList.containsKey(builder.getUser().getId())) {
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            HelperLogMessage.updateLogMessageAfterGetUserInfo(builder.getUser().getId());
-                        }
-                    }, 500);
                 }
             }
         });
+
+        // update log message in realm room message after get user info
+        LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                HelperLogMessage.updateLogMessageAfterGetUserInfo(builder.getUser().getId());
+            }
+        }, 500);
     }
 
     @Override

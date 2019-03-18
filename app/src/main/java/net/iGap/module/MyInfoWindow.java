@@ -83,7 +83,12 @@ public class MyInfoWindow extends InfoWindow {
             RealmRegisteredInfo.getRegistrationInfo(userId, new OnInfo() {
                 @Override
                 public void onInfo(Long registeredId) {
-                    onOpen(arg);
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            onOpen(arg);
+                        }
+                    });
                 }
             });
             return;

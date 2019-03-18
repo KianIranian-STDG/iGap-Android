@@ -42,6 +42,7 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
+import net.iGap.helper.HelperLog;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
@@ -106,6 +107,7 @@ import io.realm.Sort;
 
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
+import static net.iGap.G.fragmentActivity;
 import static net.iGap.G.userId;
 import static net.iGap.fragments.FragmentMain.MainType.all;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
@@ -939,32 +941,35 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     @Override
     public void isDeprecated() {
         try {
-            if (G.fragmentActivity.hasWindowFocus()) {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
+            if (getActivity() != null && !getActivity().isFinishing()) {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new MaterialDialog.Builder(getActivity())
-                                .cancelable(false)
-                                .title(R.string.new_version_alert).titleGravity(GravityEnum.CENTER)
-                                .titleColor(Color.parseColor("#f44336"))
-                                .content(R.string.deprecated)
-                                .contentGravity(GravityEnum.CENTER)
-                                .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (getActivity().hasWindowFocus()) {
+                            new MaterialDialog.Builder(getActivity())
+                                    .cancelable(false)
+                                    .title(R.string.new_version_alert).titleGravity(GravityEnum.CENTER)
+                                    .titleColor(Color.parseColor("#f44336"))
+                                    .content(R.string.deprecated)
+                                    .contentGravity(GravityEnum.CENTER)
+                                    .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                // HelperUrl.openBrowser("http://d.igap.net/update");
-                                String url = "http://d.igap.net/update";
-                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                i.setData(Uri.parse(url));
-                                startActivity(i);
-                            }
-                        })
-                                .show();
+                                    // HelperUrl.openBrowser("http://d.igap.net/update");
+                                    String url = "http://d.igap.net/update";
+                                    Intent i = new Intent(Intent.ACTION_VIEW);
+                                    i.setData(Uri.parse(url));
+                                    startActivity(i);
+                                }
+                            })
+                                    .show();
+                        }
                     }
                 });
             }
         } catch (Exception e) {
+            HelperLog.setErrorLog(e);
         }
 
     }
@@ -972,39 +977,41 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     @Override
     public void isUpdateAvailable() {
         try {
-            if (G.fragmentActivity.hasWindowFocus()) {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
+            if (getActivity() != null && !getActivity().isFinishing()) {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new MaterialDialog.Builder(G.fragmentActivity)
-                                .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
-                                .titleGravity(GravityEnum.CENTER)
-                                .buttonsGravity(GravityEnum.CENTER)
-                                .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
-                                .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (getActivity().hasWindowFocus()) {
+                            new MaterialDialog.Builder(getActivity())
+                                    .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
+                                    .titleGravity(GravityEnum.CENTER)
+                                    .buttonsGravity(GravityEnum.CENTER)
+                                    .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
+                                    .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                dialog.dismiss();
-                            }
-                        }).positiveText(R.string.startUpdate).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    dialog.dismiss();
+                                }
+                            }).positiveText(R.string.startUpdate).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                // HelperUrl.openBrowser("http://d.igap.net/update");
-                                String url = "http://d.igap.net/update";
-                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                i.setData(Uri.parse(url));
-                                startActivity(i);
-                                dialog.dismiss();
-                            }
-                        })
-                                .show();
+                                    // HelperUrl.openBrowser("http://d.igap.net/update");
+                                    String url = "http://d.igap.net/update";
+                                    Intent i = new Intent(Intent.ACTION_VIEW);
+                                    i.setData(Uri.parse(url));
+                                    startActivity(i);
+                                    dialog.dismiss();
+                                }
+                            })
+                                    .show();
+                        }
                     }
                 });
-
             }
         } catch (Exception e) {
+            HelperLog.setErrorLog(e);
         }
     }
 
