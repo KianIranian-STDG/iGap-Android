@@ -632,6 +632,7 @@ public class RealmRoomMessage extends RealmObject {
         }
 
         this.deleteFromRealm();
+        realm.close();
     }
 
     /**
