@@ -12,19 +12,22 @@ package net.iGap.request;
 
 import net.iGap.proto.ProtoClientGetRoomList;
 
+import java.util.HashSet;
+
 public class RequestClientGetRoomList {
 
+    public static HashSet<Integer> pendingRequest = new HashSet<>();
     public static boolean isLoadingRoomListOffsetZero = false;
     private static final Integer mutex = 1;
 
     public static class IdentityGetRoomList {
         public boolean isFromLogin;
-        public boolean isOffsetZero;
         public String content;
+        public int offset;
 
-        IdentityGetRoomList(boolean isFromLogin, boolean isOffsetZero, String content) {
+        IdentityGetRoomList(boolean isFromLogin, int offset, String content) {
             this.isFromLogin = isFromLogin;
-            this.isOffsetZero = isOffsetZero;
+            this.offset = offset;
             this.content = content;
         }
     }
@@ -39,10 +42,19 @@ public class RequestClientGetRoomList {
                 }
             }
         }
+
+        synchronized(mutex) {
+            if (pendingRequest.contains(offset)) {
+                return;
+            } else {
+                pendingRequest.add(offset);
+            }
+        }
+
         ProtoClientGetRoomList.ClientGetRoomList.Builder clientGetRoomList = ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
         clientGetRoomList.setPagination(new RequestPagination().pagination(offset, limit));
 
-        IdentityGetRoomList identityGetRoomList = new IdentityGetRoomList(identity.equals("0"), offset == 0, identity);
+        IdentityGetRoomList identityGetRoomList = new IdentityGetRoomList(identity.equals("0"), offset, identity);
         RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList, identityGetRoomList);
         try {
             RequestQueue.sendRequest(requestWrapper);

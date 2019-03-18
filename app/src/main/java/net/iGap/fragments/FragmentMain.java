@@ -121,7 +121,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
     public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
     public MainType mainType;
-    boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = true;
     private ProgressBar progressBar;
     private int mOffset = 0;
@@ -253,17 +252,11 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
                     if (isThereAnyMoreItemToLoad) {
-                        if (!isSendRequestForLoading && mOffset > 0) {
+                        if (mOffset > 0) {
                             int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                             if (lastVisiblePosition + 10 >= mOffset) {
-                                isSendRequestForLoading = true;
                                 new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        progressBar.setVisibility(View.VISIBLE);
-                                    }
-                                });
+                                progressBar.setVisibility(View.VISIBLE);
                             }
                         }
                     } else {
@@ -399,10 +392,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             @Override
             public void run() {
                 if (G.isSecure && G.userLogin) {
-
-                    mOffset = 0;
                     new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-                    isSendRequestForLoading = true;
                     progressBar.setVisibility(View.VISIBLE);
                 } else {
                     getChatLists();
@@ -716,7 +706,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     }
 
     @Override
-    public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
+    public synchronized void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
         boolean fromLogin = false;
         if (identity.isFromLogin) {
             mOffset = 0;
@@ -758,20 +748,12 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             G.userLogin = true;
             sendClientCondition();
         } else if (fromLogin || mOffset == 0) {
+            if (G.clientConditionGlobal != null) {
+                new RequestClientCondition().clientCondition(G.clientConditionGlobal);
+            } else {
+                new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
+            }
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                    if (G.clientConditionGlobal != null) {
-                        new RequestClientCondition().clientCondition(G.clientConditionGlobal);
-                    } else {
-                        new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
-                    }
-
-
-                }
-            }).start();
         }
 
         mOffset += roomList.size();
@@ -783,10 +765,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             }
         });
 
-        isSendRequestForLoading = false;
-
         if (isThereAnyMoreItemToLoad && G.multiTab) {
-            isSendRequestForLoading = true;
             new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
 
             G.handler.post(new Runnable() {
@@ -805,8 +784,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
     @Override
     public void onClientGetRoomListError(int majorCode, int minorCode) {
-        isSendRequestForLoading = false;
-
         if (majorCode == 9) {
             if (G.currentActivity != null) {
                 G.currentActivity.finish();
@@ -827,7 +804,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             public void run() {
                 progressBar.setVisibility(View.GONE);
                 getChatLists();
-                isSendRequestForLoading = false;
             }
         });
     }

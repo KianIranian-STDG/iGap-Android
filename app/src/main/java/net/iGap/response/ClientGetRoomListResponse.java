@@ -18,7 +18,7 @@ import net.iGap.request.RequestClientCondition;
 import net.iGap.request.RequestClientGetRoomList;
 
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
-import static net.iGap.request.RequestClientGetRoomList.isLoadingRoomListOffsetZero;
+import static net.iGap.request.RequestClientGetRoomList.pendingRequest;
 
 public class ClientGetRoomListResponse extends MessageHandler {
 
@@ -42,21 +42,19 @@ public class ClientGetRoomListResponse extends MessageHandler {
         if (G.onClientGetRoomListResponse != null) {
             G.onClientGetRoomListResponse.onClientGetRoomList(clientGetRoomListResponse.getRoomsList(), clientGetRoomListResponse.getResponse(), identity);
         } else {
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
-                    putChatToDatabase(clientGetRoomListResponse.getRoomsList(), false, false);
-                }
-            }).start();
+            new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
+            putChatToDatabase(clientGetRoomListResponse.getRoomsList(), false, false);
         }
+
+        pendingRequest.remove(identity.offset);
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        if (identity.isOffsetZero) {
+        pendingRequest.remove(identity.offset);
+
+        if (identity.offset == 0) {
             RequestClientGetRoomList.isLoadingRoomListOffsetZero = false;
         }
 
@@ -67,7 +65,9 @@ public class ClientGetRoomListResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        if (identity.isOffsetZero) {
+        pendingRequest.remove(identity.offset);
+
+        if (identity.offset == 0) {
             RequestClientGetRoomList.isLoadingRoomListOffsetZero = false;
         }
 
