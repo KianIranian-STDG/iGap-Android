@@ -43,7 +43,7 @@ public class ClientGetRoomListResponse extends MessageHandler {
             G.onClientGetRoomListResponse.onClientGetRoomList(clientGetRoomListResponse.getRoomsList(), clientGetRoomListResponse.getResponse(), identity);
         } else {
             new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
-            putChatToDatabase(clientGetRoomListResponse.getRoomsList(), false, false);
+            putChatToDatabase(clientGetRoomListResponse.getRoomsList());
         }
 
         pendingRequest.remove(identity.offset);
