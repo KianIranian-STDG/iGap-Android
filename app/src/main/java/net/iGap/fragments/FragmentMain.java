@@ -11,11 +11,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -44,21 +42,24 @@ import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
+import net.iGap.helper.HelperLog;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChannelDeleteInRoomList;
 import net.iGap.interfaces.OnChatDeleteInRoomList;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnChatUpdateStatusResponse;
+import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnClientGetRoomResponseRoomList;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnDateChanged;
 import net.iGap.interfaces.OnGroupDeleteInRoomList;
 import net.iGap.interfaces.OnNotifyTime;
 import net.iGap.interfaces.OnRemoveFragment;
-import net.iGap.interfaces.OnSelectMenu;
 import net.iGap.interfaces.OnSetActionInRoom;
 import net.iGap.interfaces.OnVersionCallBack;
+import net.iGap.libs.MyRealmRecyclerViewAdapter;
 import net.iGap.libs.Tuple;
+import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
@@ -74,6 +75,7 @@ import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
 import net.iGap.realm.RealmClientCondition;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.realm.RealmRegisteredInfoFields;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmRoomFields;
 import net.iGap.realm.RealmRoomMessage;
@@ -92,15 +94,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.realm.ObjectChangeSet;
+import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollection;
+import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
-import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmModel;
+import io.realm.RealmObjectChangeListener;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
-import static net.iGap.G.firstTimeEnterToApp;
+import static net.iGap.G.fragmentActivity;
 import static net.iGap.G.userId;
 import static net.iGap.fragments.FragmentMain.MainType.all;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
@@ -109,28 +116,22 @@ import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 import static net.iGap.realm.RealmRoom.putChatToDatabase;
 
 
-public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnComplete, OnSetActionInRoom, OnSelectMenu, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
+public class FragmentMain extends BaseFragment implements ActivityMain.MainInterface, OnClientGetRoomListResponse, OnVersionCallBack, OnComplete, OnSetActionInRoom, OnRemoveFragment, OnChatUpdateStatusResponse, OnChatDeleteInRoomList, OnGroupDeleteInRoomList, OnChannelDeleteInRoomList, OnChatSendMessageResponse, OnClientGetRoomResponseRoomList, OnDateChanged {
 
     public static final String STR_MAIN_TYPE = "STR_MAIN_TYPE";
-    public static boolean isMenuButtonAddShown = false;
-    public static HashMap<MainType, RoomAdapter> adapterHashMap = new HashMap<>();
     public static HashMap<MainType, RoomAdapter> roomAdapterHashMap = new HashMap<>();
     public MainType mainType;
-    boolean isSendRequestForLoading = false;
     boolean isThereAnyMoreItemToLoad = true;
     private ProgressBar progressBar;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private OnComplete mComplete;
     private int mOffset = 0;
     private View viewById;
     private RecyclerView mRecyclerView;
     private long tagId;
     private Realm realmFragmentMain;
     private RecyclerView.OnScrollListener onScrollListener;
-    private String tabId;
     private View mView = null;
     private String switcher;
-    private int channelSwitcher, allSwitcher, groupSwitcher, chatSwitcher, callSwitcher = 0;
+    private int channelSwitcher, allSwitcher, groupSwitcher, chatSwitcher = 0;
     private ProgressBar pbLoading;
 
     public static FragmentMain newInstance(MainType mainType) {
@@ -152,23 +153,18 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             if (switcher.equals("1") && channelSwitcher == 0) {
                 channelSwitcher = 1;
                 initRecycleView();
-                initListener();
             } else if (switcher.equals("2") && groupSwitcher == 0) {
                 groupSwitcher = 1;
                 initRecycleView();
-                initListener();
             } else if (switcher.equals("3") && chatSwitcher == 0) {
                 chatSwitcher = 1;
                 initRecycleView();
-                initListener();
             } else if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
                 allSwitcher = 1;
                 initRecycleView();
-                initListener();
             } else if (switcher.equals("0") && allSwitcher == 0 && mView != null) {
                 allSwitcher = 1;
                 initRecycleView();
-                initListener();
             }
 
         }
@@ -196,29 +192,21 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
         //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         this.mView = view;
-        mComplete = this;
         tagId = System.currentTimeMillis();
 
         mainType = (MainType) getArguments().getSerializable(STR_MAIN_TYPE);
-        progressBar = (ProgressBar) view.findViewById(R.id.ac_progress_bar_waiting);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.activity_main_swipe_refresh_layout);
-        swipeRefreshLayout.setRefreshing(false);
-        swipeRefreshLayout.setEnabled(false);
+        progressBar = view.findViewById(R.id.ac_progress_bar_waiting);
         viewById = view.findViewById(R.id.empty_icon);
         pbLoading = view.findViewById(R.id.pbLoading);
-        // pbLoading.setVisibility(View.VISIBLE);
-
+        pbLoading.setVisibility(View.VISIBLE);
+        viewById.setVisibility(View.GONE);
         switcher = String.valueOf(this.toString().charAt(this.toString().lastIndexOf(":") + 1));
         if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
             allSwitcher = 1;
             initRecycleView();
-            initListener();
-            pbLoading.setVisibility(View.GONE);
         } else if (switcher.equals("0") && allSwitcher == 0 && mView != null) {
             allSwitcher = 1;
             initRecycleView();
-            initListener();
-            pbLoading.setVisibility(View.GONE);
         }
         Log.d("bagi" ,"FragmentMain:onViewCreated:end");
 
@@ -238,52 +226,25 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         RealmResults<RealmRoom> results = null;
         String[] fieldNames = {RealmRoomFields.IS_PINNED, RealmRoomFields.PIN_ID, RealmRoomFields.UPDATED_TIME};
         Sort[] sort = {Sort.DESCENDING, Sort.DESCENDING, Sort.DESCENDING};
+        RealmQuery<RealmRoom> temp = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false);
 
         switch (mainType) {
             case all:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).findAll().sort(fieldNames, sort);
-                if (results.size() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    pbLoading.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                    //        pbLoading.setVisibility(View.VISIBLE);
-                }
+                results = temp.sort(fieldNames, sort).findAllAsync();
                 break;
             case chat:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).findAll().sort(fieldNames, sort);
-                if (results.size() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    pbLoading.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                    //        pbLoading.setVisibility(View.VISIBLE);
-                }
+                results = temp.equalTo(RealmRoomFields.TYPE, RoomType.CHAT.toString()).sort(fieldNames, sort).findAllAsync();
                 break;
             case group:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).findAll().sort(fieldNames, sort);
-                if (results.size() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    pbLoading.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                    //       pbLoading.setVisibility(View.VISIBLE);
-                }
+                results = temp.equalTo(RealmRoomFields.TYPE, RoomType.GROUP.toString()).sort(fieldNames, sort).findAllAsync();
                 break;
             case channel:
-                results = getRealmFragmentMain().where(RealmRoom.class).equalTo(RealmRoomFields.KEEP_ROOM, false).equalTo(RealmRoomFields.IS_DELETED, false).equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).findAll().sort(fieldNames, sort);
-                if (results.size() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    pbLoading.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                    //              pbLoading.setVisibility(View.VISIBLE);
-                }
+                results = temp.equalTo(RealmRoomFields.TYPE, RoomType.CHANNEL.toString()).sort(fieldNames, sort).findAllAsync();
                 break;
         }
 
 
-        final RoomAdapter roomsAdapter = new RoomAdapter(results, this);
+        final RoomAdapter roomsAdapter = new RoomAdapter(results, this, viewById, pbLoading);
 
         if (!G.multiTab) {
             onScrollListener = new RecyclerView.OnScrollListener() {
@@ -291,17 +252,12 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
                     if (isThereAnyMoreItemToLoad) {
-                        if (!isSendRequestForLoading && mOffset > 0) {
+                        if (mOffset > 0) {
                             int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                             if (lastVisiblePosition + 10 >= mOffset) {
-                                isSendRequestForLoading = true;
-                                new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-                                G.handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        progressBar.setVisibility(View.VISIBLE);
-                                    }
-                                });
+                                boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+                                if (send)
+                                    progressBar.setVisibility(View.VISIBLE);
                             }
                         }
                     } else {
@@ -330,33 +286,10 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         //
         //mRecyclerView.setAdapter(roomsAdapter);
 
-        roomsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                super.onItemRangeInserted(positionStart, itemCount);
-                if (roomsAdapter.getItemCount() > 0) {
-                    viewById.setVisibility(View.GONE);
-                    goToTop();
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onItemRangeRemoved(int positionStart, int itemCount) {
-                super.onItemRangeRemoved(positionStart, itemCount);
-                if (roomsAdapter.getItemCount() > 0) {
-                    viewById.setVisibility(View.GONE);
-                } else {
-                    viewById.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
         if (mainType == all) {
-            getChatsList();
+            getChatLists();
         }
+        Log.d("bagi" , "" + mOffset);
 
         if (mView != null) {
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -365,19 +298,20 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                     super.onScrolled(recyclerView, dx, dy);
 
                     try {
-                        if (((ActivityMain) G.fragmentActivity).arcMenu.isMenuOpened()) {
-                            ((ActivityMain) G.fragmentActivity).arcMenu.toggleMenu();
+                        ArcMenu arcMenu = ((ActivityMain) G.fragmentActivity).arcMenu;
+                        if (arcMenu.isMenuOpened()) {
+                            arcMenu.toggleMenu();
                         }
 
                         if (dy > 0) {
                             // Scroll Down
-                            if (((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
-                                ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.hide();
+                            if (arcMenu.fabMenu.isShown()) {
+                                arcMenu.fabMenu.hide();
                             }
                         } else if (dy < 0) {
                             // Scroll Up
-                            if (!((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.isShown()) {
-                                ((ActivityMain) G.fragmentActivity).arcMenu.fabMenu.show();
+                            if (!arcMenu.fabMenu.isShown()) {
+                                arcMenu.fabMenu.show();
                             }
                         }
                     } catch (ClassCastException e) {
@@ -402,93 +336,8 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
     //***************************************************************************************************************************
 
-    private void initListener() {
-        switch (mainType) {
-
-            case all:
-
-                ((ActivityMain) G.fragmentActivity).mainActionApp = new ActivityMain.MainInterface() {
-                    @Override
-                    public void onAction(ActivityMain.MainAction action) {
-                        doAction(action);
-                    }
-                };
-
-                ((ActivityMain) G.fragmentActivity).mainInterfaceGetRoomList = new ActivityMain.MainInterfaceGetRoomList() {
-                    @Override
-                    public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
-
-                        FragmentMain.this.onClientGetRoomList(roomList, response, identity);
-                    }
-
-                    @Override
-                    public void onError(int majorCode, int minorCode) {
-
-                        isSendRequestForLoading = false;
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
-                            }
-                        });
-
-                        if (majorCode == 9) {
-                            if (G.currentActivity != null) {
-                                G.currentActivity.finish();
-                            }
-                            Intent intent = new Intent(context, ActivityRegisteration.class);
-                            intent.putExtra(ActivityRegisteration.showProfile, true);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            context.startActivity(intent);
-                        }
-                    }
-
-                    @Override
-                    public void onTimeout() {
-
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                progressBar.setVisibility(View.GONE);
-                                firstTimeEnterToApp = false;
-                                getChatsList();
-                                isSendRequestForLoading = false;
-                                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
-                            }
-                        });
-                    }
-                };
-
-                break;
-            case chat:
-                ((ActivityMain) G.fragmentActivity).mainActionChat = new ActivityMain.MainInterface() {
-                    @Override
-                    public void onAction(ActivityMain.MainAction action) {
-                        doAction(action);
-                    }
-                };
-                break;
-            case group:
-                ((ActivityMain) G.fragmentActivity).mainActionGroup = new ActivityMain.MainInterface() {
-                    @Override
-                    public void onAction(ActivityMain.MainAction action) {
-                        doAction(action);
-                    }
-                };
-                break;
-            case channel:
-                ((ActivityMain) G.fragmentActivity).mainActionChannel = new ActivityMain.MainInterface() {
-                    @Override
-                    public void onAction(ActivityMain.MainAction action) {
-                        doAction(action);
-                    }
-                };
-                break;
-        }
-    }
-
-    private void doAction(ActivityMain.MainAction action) {
-
+    @Override
+    public void onAction(ActivityMain.MainAction action) {
         switch (action) {
 
             case downScrool:
@@ -505,106 +354,11 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
                 break;
             case clinetCondition:
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
 
                 break;
         }
     }
 
-    private void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
-
-        boolean fromLogin = false;
-        // requst from login
-        if (identity.equals("0")) {
-            mOffset = 0;
-            fromLogin = true;
-        } else if (Long.parseLong(identity) < tagId) {
-            return;
-        }
-
-        boolean deleteBefore = false;
-        if (mOffset == 0) {
-            deleteBefore = true;
-        }
-
-        boolean cleanAfter = false;
-
-        if (roomList.size() == 0) {
-            isThereAnyMoreItemToLoad = false;
-            cleanAfter = true;
-        } else {
-            isThereAnyMoreItemToLoad = true;
-        }
-
-        putChatToDatabase(roomList, deleteBefore, cleanAfter);
-
-        //fastAdapter
-        //G.handler.postDelayed(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        initRecycleView(null);
-        //    }
-        //}, 200);
-
-        /**
-         * to first enter to app , client first compute clientCondition then
-         * getRoomList and finally send condition that before get clientCondition;
-         * in else changeState compute new client condition with latest messaging changeState
-         */
-        if (firstTimeEnterToApp) {
-            firstTimeEnterToApp = false;
-            sendClientCondition();
-        } else if (fromLogin || mOffset == 0) {
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-                    if (G.clientConditionGlobal != null) {
-                        new RequestClientCondition().clientCondition(G.clientConditionGlobal);
-                    } else {
-                        new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
-                    }
-
-
-                }
-            }).start();
-        }
-
-        mOffset += roomList.size();
-
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.GONE);
-                swipeRefreshLayout.setRefreshing(false);// swipe refresh is complete and gone
-            }
-        });
-
-        isSendRequestForLoading = false;
-
-        if (isThereAnyMoreItemToLoad && G.multiTab) {
-            isSendRequestForLoading = true;
-            new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    progressBar.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-        //else {
-        //    mOffset = 0;
-        //}
-
-
-    }
 
     private boolean heartBeatTimeOut() {
 
@@ -635,28 +389,19 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         }
     }
 
-    private void testIsSecure() {
+    private void getChatLists() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (G.isSecure && G.userLogin) {
-
-                    mOffset = 0;
-                    new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-                    isSendRequestForLoading = true;
-                    progressBar.setVisibility(View.VISIBLE);
+                    boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+                    if (send)
+                        progressBar.setVisibility(View.VISIBLE);
                 } else {
-                    testIsSecure();
+                    getChatLists();
                 }
             }
-        }, 1000);
-    }
-
-    private void getChatsList() {
-        if (firstTimeEnterToApp) {
-            testIsSecure();
-            swipeRefreshLayout.setRefreshing(false);
-        }
+        }, 10);
     }
 
     private void onSelectRoomMenu(String message, RealmRoom item) {
@@ -850,22 +595,12 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
     @Override
     public void onSetAction(final long roomId, final long userId, final ProtoGlobal.ClientAction clientAction) {
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-                RealmRoom.setAction(roomId, userId, HelperGetAction.getAction(roomId, RealmRoom.detectType(roomId), clientAction));
-            }
-        });
+        RealmRoom.setAction(roomId, userId, HelperGetAction.getAction(roomId, RealmRoom.detectType(roomId), clientAction));
     }
 
     @Override
     public void onRemoveFragment(Fragment fragment) {
         removeFromBaseFragment(fragment);
-    }
-
-    @Override
-    public void onSelectMenu(String message, RealmRoom realmRoom) {
-        onSelectRoomMenu(message, realmRoom);
     }
 
     @Override
@@ -895,10 +630,30 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     }
 
     @Override
+    public void onGroupDeleteError(int majorCode, int minorCode) {
+
+    }
+
+    @Override
+    public void onGroupDeleteTimeOut() {
+
+    }
+
+    @Override
     public void onChannelDelete(long roomId) {
         //fastAdapter
         //adapterHashMap.get(all).removeChat(roomId);
         //adapterHashMap.get(channel).removeChat(roomId);
+    }
+
+    @Override
+    public void onChannelDeleteError(int majorCode, int minorCode) {
+
+    }
+
+    @Override
+    public void onChannelDeleteTimeOut() {
+
     }
 
     @Override
@@ -954,22 +709,115 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     }
 
     @Override
-    public void Error(int majorCode, int minorCode) {
+    public synchronized void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
+
+        Log.d("bagi" , "onClientGetRoomList" + roomList.size() + "" + identity.offset);
+        boolean fromLogin = false;
+        if (identity.isFromLogin) {
+            mOffset = 0;
+            fromLogin = true;
+        } else if (Long.parseLong(identity.content) < tagId) {
+            return;
+        }
+
+        boolean deleteBefore = false;
+        if (mOffset == 0) {
+            deleteBefore = true;
+        }
+
+        boolean cleanAfter = false;
+
+        if (roomList.size() == 0) {
+            isThereAnyMoreItemToLoad = false;
+            cleanAfter = true;
+        } else {
+            isThereAnyMoreItemToLoad = true;
+        }
+
+        putChatToDatabase(roomList, deleteBefore, cleanAfter);
+
+        //fastAdapter
+        //G.handler.postDelayed(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        initRecycleView(null);
+        //    }
+        //}, 200);
+
+        /**
+         * to first enter to app , client first compute clientCondition then
+         * getRoomList and finally send condition that before get clientCondition;
+         * in else changeState compute new client condition with latest messaging changeState
+         */
+        if (!G.userLogin) {
+            G.userLogin = true;
+            sendClientCondition();
+        } else if (fromLogin || mOffset == 0) {
+            if (G.clientConditionGlobal != null) {
+                new RequestClientCondition().clientCondition(G.clientConditionGlobal);
+            } else {
+                new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
+            }
+
+        }
+
+        mOffset += roomList.size();
+
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
+        if (isThereAnyMoreItemToLoad && G.multiTab) {
+
+            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+            if (send) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        }
+        //else {
+        //    mOffset = 0;
+        //}
+
 
     }
 
     @Override
-    public void onTimeOut() {
+    public void onClientGetRoomListError(int majorCode, int minorCode) {
+        if (majorCode == 9) {
+            if (G.currentActivity != null) {
+                G.currentActivity.finish();
+            }
+            Intent intent = new Intent(context, ActivityRegisteration.class);
+            intent.putExtra(ActivityRegisteration.showProfile, true);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
 
     }
+
+    @Override
+    public void onClientGetRoomListTimeout() {
+
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+                getChatLists();
+            }
+        });
+    }
+
 
     @Override
     public void onChatDeleteError(int majorCode, int minorCode) {
-
-    }
-
-    @Override
-    public void onError(int majorCode, int minorCode) {
 
     }
 
@@ -1019,6 +867,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
         //G.onChatDeleteInRoomList = this;
         //G.onGroupDeleteInRoomList = this;
         //G.onChannelDeleteInRoomList = this;
+        G.onClientGetRoomListResponse = this;
         //onClientGetRoomResponseRoomList = this;
         //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponseFragmentMain(this);
         //G.chatSendMessageUtil.setOnChatSendMessageResponseFragmentMainRoomList(this);
@@ -1075,32 +924,35 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     @Override
     public void isDeprecated() {
         try {
-            if (G.fragmentActivity.hasWindowFocus()) {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
+            if (getActivity() != null && !getActivity().isFinishing()) {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new MaterialDialog.Builder(getActivity())
-                                .cancelable(false)
-                                .title(R.string.new_version_alert).titleGravity(GravityEnum.CENTER)
-                                .titleColor(Color.parseColor("#f44336"))
-                                .content(R.string.deprecated)
-                                .contentGravity(GravityEnum.CENTER)
-                                .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (getActivity().hasWindowFocus()) {
+                            new MaterialDialog.Builder(getActivity())
+                                    .cancelable(false)
+                                    .title(R.string.new_version_alert).titleGravity(GravityEnum.CENTER)
+                                    .titleColor(Color.parseColor("#f44336"))
+                                    .content(R.string.deprecated)
+                                    .contentGravity(GravityEnum.CENTER)
+                                    .positiveText(R.string.startUpdate).itemsGravity(GravityEnum.START).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                // HelperUrl.openBrowser("http://d.igap.net/update");
-                                String url = "http://d.igap.net/update";
-                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                i.setData(Uri.parse(url));
-                                startActivity(i);
-                            }
-                        })
-                                .show();
+                                    // HelperUrl.openBrowser("http://d.igap.net/update");
+                                    String url = "http://d.igap.net/update";
+                                    Intent i = new Intent(Intent.ACTION_VIEW);
+                                    i.setData(Uri.parse(url));
+                                    startActivity(i);
+                                }
+                            })
+                                    .show();
+                        }
                     }
                 });
             }
         } catch (Exception e) {
+            HelperLog.setErrorLog(e);
         }
 
     }
@@ -1108,39 +960,41 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
     @Override
     public void isUpdateAvailable() {
         try {
-            if (G.fragmentActivity.hasWindowFocus()) {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
+            if (getActivity() != null && !getActivity().isFinishing()) {
+                getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        new MaterialDialog.Builder(G.fragmentActivity)
-                                .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
-                                .titleGravity(GravityEnum.CENTER)
-                                .buttonsGravity(GravityEnum.CENTER)
-                                .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
-                                .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        if (getActivity().hasWindowFocus()) {
+                            new MaterialDialog.Builder(getActivity())
+                                    .title(R.string.igap_update).titleColor(Color.parseColor("#1DE9B6"))
+                                    .titleGravity(GravityEnum.CENTER)
+                                    .buttonsGravity(GravityEnum.CENTER)
+                                    .content(R.string.new_version_avilable).contentGravity(GravityEnum.CENTER)
+                                    .negativeText(R.string.ignore).negativeColor(Color.parseColor("#798e89")).onNegative(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                dialog.dismiss();
-                            }
-                        }).positiveText(R.string.startUpdate).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    dialog.dismiss();
+                                }
+                            }).positiveText(R.string.startUpdate).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                                // HelperUrl.openBrowser("http://d.igap.net/update");
-                                String url = "http://d.igap.net/update";
-                                Intent i = new Intent(Intent.ACTION_VIEW);
-                                i.setData(Uri.parse(url));
-                                startActivity(i);
-                                dialog.dismiss();
-                            }
-                        })
-                                .show();
+                                    // HelperUrl.openBrowser("http://d.igap.net/update");
+                                    String url = "http://d.igap.net/update";
+                                    Intent i = new Intent(Intent.ACTION_VIEW);
+                                    i.setData(Uri.parse(url));
+                                    startActivity(i);
+                                    dialog.dismiss();
+                                }
+                            })
+                                    .show();
+                        }
                     }
                 });
-
             }
         } catch (Exception e) {
+            HelperLog.setErrorLog(e);
         }
     }
 
@@ -1154,21 +1008,64 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
      * **********************************************************************************
      */
 
-    public class RoomAdapter extends RealmRecyclerViewAdapter<RealmRoom, RoomAdapter.ViewHolder> {
+    public class RoomAdapter extends MyRealmRecyclerViewAdapter<RealmRoom, RoomAdapter.ViewHolder> {
 
         public OnComplete mComplete;
         public String action;
-        private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
+        private View emptyView;
+        private View loadingView;
 
-        public RoomAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, OnComplete complete) {
+        public RoomAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, OnComplete complete, View emptyView, View loadingView) {
             super(data, true);
             this.mComplete = complete;
+            this.emptyView = emptyView;
+            this.loadingView = loadingView;
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             // View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
             return new ViewHolder(ViewMaker.getViewItemRoom());
+        }
+
+        @Override
+        protected OrderedRealmCollectionChangeListener createListener() {
+            return new OrderedRealmCollectionChangeListener() {
+                @Override
+                public void onChange(Object collection, OrderedCollectionChangeSet changeSet) {
+                    if (getData() != null && getData().size() > 0) {
+                        emptyView.setVisibility(View.GONE);
+                    } else {
+                        emptyView.setVisibility(View.VISIBLE);
+                    }
+                    if (changeSet.getState() == OrderedCollectionChangeSet.State.INITIAL) {
+                        loadingView.setVisibility(View.GONE);
+                        notifyDataSetChanged();
+                        return;
+                    }
+                    // For deletions, the adapter has to be notified in reverse order.
+                    OrderedCollectionChangeSet.Range[] deletions = changeSet.getDeletionRanges();
+                    for (int i = deletions.length - 1; i >= 0; i--) {
+                        OrderedCollectionChangeSet.Range range = deletions[i];
+                        notifyItemRangeRemoved(range.startIndex, range.length);
+                    }
+
+                    OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
+                    for (OrderedCollectionChangeSet.Range range : insertions) {
+                        notifyItemRangeInserted(range.startIndex, range.length);
+                        goToTop();
+                    }
+
+                    if (!updateOnModification) {
+                        return;
+                    }
+
+                    OrderedCollectionChangeSet.Range[] modifications = changeSet.getChangeRanges();
+                    for (OrderedCollectionChangeSet.Range range : modifications) {
+                        notifyItemRangeChanged(range.startIndex, range.length);
+                    }
+                }
+            };
         }
 
         @Override
@@ -1230,7 +1127,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                         holder.image.setVisibility(View.VISIBLE);
                     }
 
-                    setAvatar(mInfo, holder.image);
+                    setAvatar(mInfo, holder);
                 }
 
                 setChatIcon(mInfo, holder.txtChatIcon);
@@ -1258,7 +1155,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
 
                     //if (mInfo.getChatRoom() != null && RealmRoom.isBot(mInfo.getChatRoom().getPeerId())) {
 
-                    if (mInfo != null && RealmRoom.isPromote(mInfo.getId())) {
+                    if (mInfo.isFromPromote()) {
                         //              holder.rootChat.setBackgroundColor(G.context.getResources().getColor(R.color.green_20));
                         holder.txtPinIcon.setVisibility(View.GONE);
                     } else {
@@ -1341,6 +1238,14 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             }
         }
 
+        @Override
+        public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+            super.onViewDetachedFromWindow(holder);
+            if (holder.realmRegisteredInfo == null || !holder.realmRegisteredInfo.isValid())
+                return;
+            holder.realmRegisteredInfo.removeAllChangeListeners();
+        }
+
         //*******************************************************************************************
         private void setLastMessage(RealmRoom mInfo, ViewHolder holder, boolean isMyCloud) {
 
@@ -1405,27 +1310,20 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                             if (mInfo.getLastMessage().isAuthorMe()) {
                                 lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                             } else {
-
-                                RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmFragmentMain(), mInfo.getLastMessage().getUserId());
-                                if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
-
-                                    String _name = realmRegisteredInfo.getDisplayName();
-                                    if (_name.length() > 0) {
-
-                                        if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-                                            if (HelperCalander.isPersianUnicode) {
-                                                lastMessageSender = _name + ": ";
-                                            } else {
-                                                lastMessageSender = " :" + _name;
-                                            }
-                                        } else {
-                                            if (HelperCalander.isPersianUnicode) {
-                                                lastMessageSender = " :" + _name;
-                                            } else {
-                                                lastMessageSender = _name + ": ";
-                                            }
+                                holder.realmRegisteredInfo = getRealmFragmentMain().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirstAsync();
+                                holder.realmRegisteredInfo.addChangeListener(new RealmObjectChangeListener<RealmModel>() {
+                                    @Override
+                                    public void onChange(RealmModel realmModel, @javax.annotation.Nullable ObjectChangeSet changeSet) {
+                                        if (changeSet == null || !changeSet.isDeleted()) {
+                                            if (!((RealmRegisteredInfo) realmModel).isValid() || ((RealmRegisteredInfo) realmModel).getId() !=  mInfo.getLastMessage().getUserId())
+                                                return;
+                                            setSenderName(holder);
                                         }
                                     }
+                                });
+
+                                if (holder.realmRegisteredInfo.isLoaded() && holder.realmRegisteredInfo != null) {
+                                    setSenderName(holder);
                                 }
                             }
 
@@ -1505,7 +1403,32 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             }
         }
 
-        private void setAvatar(final RealmRoom mInfo, CircleImageView imageView) {
+        private void setSenderName(ViewHolder holder) {
+            if (holder.realmRegisteredInfo.getDisplayName() != null) {
+
+                String _name = holder.realmRegisteredInfo.getDisplayName();
+                if (_name.length() > 0) {
+                    String lastMessageSenderAsync;
+
+                    if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+                        if (HelperCalander.isPersianUnicode) {
+                            lastMessageSenderAsync = _name + ": ";
+                        } else {
+                            lastMessageSenderAsync = " :" + _name;
+                        }
+                    } else {
+                        if (HelperCalander.isPersianUnicode) {
+                            lastMessageSenderAsync = " :" + _name;
+                        } else {
+                            lastMessageSenderAsync = _name + ": ";
+                        }
+                    }
+                    holder.lastMessageSender.setText(lastMessageSenderAsync);
+                }
+            }
+        }
+
+        private void setAvatar(final RealmRoom mInfo, ViewHolder holder) {
             long idForGetAvatar;
             HelperAvatar.AvatarType avatarType;
             if (mInfo.getType() == CHAT) {
@@ -1516,27 +1439,31 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
                 avatarType = HelperAvatar.AvatarType.ROOM;
             }
 
-            hashMapAvatar.put(idForGetAvatar, imageView);
+            final long idForGetAvatarOriginal = idForGetAvatar;
 
             HelperAvatar.getAvatar(idForGetAvatar, avatarType, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(String avatarPath, long idForGetAvatar) {
-                    if (hashMapAvatar.get(idForGetAvatar) != null && avatarPath != null) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(idForGetAvatar));
-                    }
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (idForGetAvatar == idForGetAvatarOriginal) {
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                            }
+                        }
+                    });
                 }
 
                 @Override
-                public void onShowInitials(String initials, String color) {
-                    long idForGetAvatar;
-                    if (mInfo.getType() == CHAT) {
-                        idForGetAvatar = mInfo.getChatRoom().getPeerId();
-                    } else {
-                        idForGetAvatar = mInfo.getId();
-                    }
-                    if (hashMapAvatar.get(idForGetAvatar) != null) {
-                        hashMapAvatar.get(idForGetAvatar).setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), initials, color));
-                    }
+                public void onShowInitials(String initials, String color, long idForGetAvatar) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (idForGetAvatar == idForGetAvatarOriginal) {
+                                holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), initials, color));
+                            }
+                        }
+                    });
                 }
             });
         }
@@ -1545,7 +1472,7 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             /**
              * ********************* chat icon *********************
              */
-            if (mInfo.getType() == CHAT || mainType != MainType.all) {
+            if (mInfo.getType() == CHAT || mainType != all) {
                 textView.setVisibility(View.GONE);
             } else {
 
@@ -1583,7 +1510,8 @@ public class FragmentMain extends BaseFragment implements OnVersionCallBack, OnC
             protected CircleImageView image;
             protected EmojiTextViewE name;
             protected MaterialDesignTextView mute;
-            RealmRoom mInfo;
+            protected RealmRoom mInfo;
+            protected RealmRegisteredInfo realmRegisteredInfo;
             private ViewGroup rootChat;
             private EmojiTextViewE txtLastMessage;
             private EmojiTextViewE txtLastMessageFileText;

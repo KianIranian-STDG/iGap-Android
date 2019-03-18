@@ -261,16 +261,22 @@ public class FragmentChannelProfile extends BaseFragment implements OnChannelAva
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (fragmentChannelProfileViewModel.roomId != ownerId)
+                            return;
+
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgCircleImageView);
                     }
                 });
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (fragmentChannelProfileViewModel.roomId != ownerId)
+                            return;
+
                         imgCircleImageView.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) imgCircleImageView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });

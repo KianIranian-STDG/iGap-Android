@@ -204,7 +204,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     private Realm realmMapUsers;
     private RecyclerView mRecyclerView;
     private MapUserAdapter mAdapter;
-    private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private View vgSlideUp;
     private TextView iconSlide;
@@ -1558,7 +1557,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                             }
 
                             @Override
-                            public void onShowInitials(String initials, String color) {
+                            public void onShowInitials(String initials, String color, long ownerId) {
                             }
                         });
                     }
@@ -1586,7 +1585,12 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                         RealmRegisteredInfo.getRegistrationInfo(result.getUserId(), new OnInfo() {
                             @Override
                             public void onInfo(Long registeredId) {
-                                drawMark(result.getLat(), result.getLon(), result.getHasComment(), result.getUserId());
+                                G.handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        drawMark(result.getLat(), result.getLon(), result.getHasComment(), result.getUserId());
+                                    }
+                                });
                             }
                         });
                     }
@@ -1950,24 +1954,25 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 holder.distance.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.distance.getText().toString()));
             }
 
-            hashMapAvatar.put(item.getUserId(), holder.avatar);
             HelperAvatar.getAvatar(item.getUserId(), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath, final long ownerId) {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(ownerId));
+                            if (item.getUserId() == ownerId)
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
                         }
                     });
                 }
 
                 @Override
-                public void onShowInitials(final String initials, final String color) {
+                public void onShowInitials(final String initials, final String color, final long ownerId) {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            if (item.getUserId() == ownerId)
+                                holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                         }
                     });
                 }

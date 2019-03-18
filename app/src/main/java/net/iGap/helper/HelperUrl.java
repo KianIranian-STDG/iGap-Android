@@ -814,12 +814,26 @@ public class HelperUrl {
                 HelperAvatar.getAvatar(room.getId(), HelperAvatar.AvatarType.ROOM, false, new OnAvatarGet() {
                     @Override
                     public void onAvatarGet(final String avatarPath, long roomId) {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (room.getId() != roomId)
+                                    return;
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imageView[0]);
+                            }
+                        });
                     }
 
                     @Override
-                    public void onShowInitials(String initials, String color) {
-                        imageView[0].setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imageView[0].getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    public void onShowInitials(String initials, String color, long roomId) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (room.getId() != roomId)
+                                    return;
+                                imageView[0].setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imageView[0].getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            }
+                        });
                     }
                 });
                 if (G.fragmentActivity != null && !G.fragmentActivity.isFinishing() && !G.currentActivity.isFinishing()) {

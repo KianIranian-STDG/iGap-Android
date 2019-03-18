@@ -318,17 +318,19 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), viewHolder.image);
+                            if (registeredInfo.getId() == ownerId)
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), viewHolder.image);
                         }
                     });
                 }
 
                 @Override
-                public void onShowInitials(final String initials, final String color) {
+                public void onShowInitials(final String initials, final String color, final long ownerId) {
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            viewHolder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) viewHolder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                            if (registeredInfo.getId() == ownerId)
+                                viewHolder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) viewHolder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                         }
                     });
                 }

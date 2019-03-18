@@ -532,14 +532,13 @@ public class BotInit implements View.OnClickListener {
         G.ipromote = new Ipromote() {
             @Override
             public void onGetPromoteResponse(ProtoClientGetPromote.ClientGetPromoteResponse.Builder builder) {
-                final Realm realm = Realm.getDefaultInstance();
                 ArrayList<Long> promoteIds = new ArrayList<>();
 
                 for (int i = 0; i < builder.getPromoteList().size(); i++)
                     promoteIds.add(builder.getPromoteList().get(i).getId());
 
-
-                realm.executeTransactionAsync(new Realm.Transaction() {
+                final Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         RealmResults<RealmRoom> roomList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findAll();
@@ -549,10 +548,10 @@ public class BotInit implements View.OnClickListener {
                                 room.setFromPromote(false);
                                 new RequestClientPinRoom().pinRoom(room.getId(), false);
                             }
-
                         }
                     }
                 });
+                realm.close();
 
                 for (int i = builder.getPromoteList().size() - 1; i >= 0; i--) {
 

@@ -14,7 +14,7 @@ public interface OnChannelDeleteInRoomList {
 
     void onChannelDelete(long roomId);
 
-    void onError(int majorCode, int minorCode);
+    void onChannelDeleteError(int majorCode, int minorCode);
 
-    void onTimeOut();
+    void onChannelDeleteTimeOut();
 }

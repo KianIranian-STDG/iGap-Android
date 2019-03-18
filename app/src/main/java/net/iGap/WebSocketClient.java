@@ -23,6 +23,7 @@ import net.iGap.helper.HelperConnectionState;
 import net.iGap.helper.HelperTimeOut;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.realm.RealmRoom;
+import net.iGap.request.RequestClientGetRoomList;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestWrapper;
 import net.iGap.response.HandleResponse;
@@ -297,6 +298,7 @@ public class WebSocketClient {
      * role back main data for preparation reconnecting to socket
      */
     private static void resetWebsocketInfo() {
+        RequestClientGetRoomList.isLoadingRoomListOffsetZero = false;
         count = 0;
         G.canRunReceiver = true;
         G.symmetricKey = null;
@@ -314,7 +316,7 @@ public class WebSocketClient {
     }
 
     /**
-     * reset some info after connection is lost
+     * reset some info just for 'RealmRoom' after connection is lost
      */
     private static void resetMainInfo() {
         RealmRoom.clearAllActions();

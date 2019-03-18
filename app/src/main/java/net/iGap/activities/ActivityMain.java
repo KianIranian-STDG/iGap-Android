@@ -197,7 +197,7 @@ import static net.iGap.G.userId;
 import static net.iGap.R.string.updating;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 
-public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnClientGetRoomListResponse, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance {
+public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient, OnPayment, OnUnreadChange, OnChatClearMessageResponse, OnChatSendMessageResponse, OnClientCondition, OnGroupAvatarResponse, DrawerLayout.DrawerListener, OnMapRegisterStateMain, EventListener, RefreshWalletBalance {
 
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
@@ -218,11 +218,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private static long currentTime;
     public TextView iconLock;
     public static boolean isUseCamera = false;
-    public MainInterface mainActionApp;
-    public MainInterface mainActionChat;
-    public MainInterface mainActionGroup;
-    public MainInterface mainActionChannel;
-    public MainInterfaceGetRoomList mainInterfaceGetRoomList;
     public ArcMenu arcMenu;
     FragmentCall fragmentCall;
     FloatingActionButton btnStartNewChat;
@@ -246,11 +241,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private Realm mRealm;
     private boolean isNeedToRegister = false;
     private ViewPager mViewPager;
-    private ArrayList<Fragment> pages = new ArrayList<Fragment>();
+    private ArrayList<Fragment> pages = new ArrayList<>();
     private String phoneNumber;
     private TextView itemCash;
     private ViewGroup itemNavWallet;
     private int currentFabIcon =0;
+    private RealmUserInfo userInfo;
 
     public static void setWeight(View view, int value) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
@@ -265,93 +261,74 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public static void setMediaLayout() {
+        try {
+            if (MusicPlayer.mp != null) {
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
+                if (MusicPlayer.shearedMediaLayout != null) {
+                    MusicPlayer.initLayoutTripMusic(MusicPlayer.shearedMediaLayout);
 
-                try {
-
-                    if (MusicPlayer.mp != null) {
-
-                        if (MusicPlayer.shearedMediaLayout != null) {
-                            MusicPlayer.initLayoutTripMusic(MusicPlayer.shearedMediaLayout);
-
-                            if (MusicPlayer.chatLayout != null) {
-                                MusicPlayer.chatLayout.setVisibility(View.GONE);
-                            }
-
-                            if (MusicPlayer.mainLayout != null) {
-                                MusicPlayer.mainLayout.setVisibility(View.GONE);
-                            }
-                        } else if (MusicPlayer.chatLayout != null) {
-                            MusicPlayer.initLayoutTripMusic(MusicPlayer.chatLayout);
-
-                            if (MusicPlayer.mainLayout != null) {
-                                MusicPlayer.mainLayout.setVisibility(View.GONE);
-                            }
-                        } else if (MusicPlayer.mainLayout != null) {
-                            MusicPlayer.initLayoutTripMusic(MusicPlayer.mainLayout);
-                        }
-                    } else {
-
-                        if (MusicPlayer.mainLayout != null) {
-                            MusicPlayer.mainLayout.setVisibility(View.GONE);
-                        }
-
-                        if (MusicPlayer.chatLayout != null) {
-                            MusicPlayer.chatLayout.setVisibility(View.GONE);
-                        }
-
-                        if (MusicPlayer.shearedMediaLayout != null) {
-                            MusicPlayer.shearedMediaLayout.setVisibility(View.GONE);
-                        }
-
-
+                    if (MusicPlayer.chatLayout != null) {
+                        MusicPlayer.chatLayout.setVisibility(View.GONE);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+
+                    if (MusicPlayer.mainLayout != null) {
+                        MusicPlayer.mainLayout.setVisibility(View.GONE);
+                    }
+                } else if (MusicPlayer.chatLayout != null) {
+                    MusicPlayer.initLayoutTripMusic(MusicPlayer.chatLayout);
+
+                    if (MusicPlayer.mainLayout != null) {
+                        MusicPlayer.mainLayout.setVisibility(View.GONE);
+                    }
+                } else if (MusicPlayer.mainLayout != null) {
+                    MusicPlayer.initLayoutTripMusic(MusicPlayer.mainLayout);
+                }
+            } else {
+
+                if (MusicPlayer.mainLayout != null) {
+                    MusicPlayer.mainLayout.setVisibility(View.GONE);
+                }
+
+                if (MusicPlayer.chatLayout != null) {
+                    MusicPlayer.chatLayout.setVisibility(View.GONE);
+                }
+
+                if (MusicPlayer.shearedMediaLayout != null) {
+                    MusicPlayer.shearedMediaLayout.setVisibility(View.GONE);
                 }
             }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+            HelperLog.setErrorLog(e);
+        }
     }
 
     public static void setStripLayoutCall() {
+        if (G.isInCall) {
+            if (ActivityCall.stripLayoutChat != null) {
+                ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
 
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-
-                if (G.isInCall) {
-
-                    if (ActivityCall.stripLayoutChat != null) {
-                        ActivityCall.stripLayoutChat.setVisibility(View.VISIBLE);
-
-                        if (ActivityCall.stripLayoutMain != null) {
-                            ActivityCall.stripLayoutMain.setVisibility(View.GONE);
-                        }
-                    } else {
-                        if (ActivityCall.stripLayoutMain != null) {
-                            ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
-                        }
-                    }
-                } else {
-
-                    if (ActivityCall.stripLayoutMain != null) {
-                        ActivityCall.stripLayoutMain.setVisibility(View.GONE);
-                    }
-
-                    if (ActivityCall.stripLayoutChat != null) {
-                        ActivityCall.stripLayoutChat.setVisibility(View.GONE);
-                    }
+                if (ActivityCall.stripLayoutMain != null) {
+                    ActivityCall.stripLayoutMain.setVisibility(View.GONE);
+                }
+            } else {
+                if (ActivityCall.stripLayoutMain != null) {
+                    ActivityCall.stripLayoutMain.setVisibility(View.VISIBLE);
                 }
             }
-        });
+        } else {
 
+            if (ActivityCall.stripLayoutMain != null) {
+                ActivityCall.stripLayoutMain.setVisibility(View.GONE);
+            }
 
+            if (ActivityCall.stripLayoutChat != null) {
+                ActivityCall.stripLayoutChat.setVisibility(View.GONE);
+            }
+        }
     }
 
-    public Realm getRealm() {
+    private Realm getRealm() {
         if (mRealm == null || mRealm.isClosed()) {
 
             mRealm = Realm.getDefaultInstance();
@@ -360,12 +337,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         return mRealm;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    private void closeRealm() {
         if (mRealm != null && !mRealm.isClosed()) {
             mRealm.close();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        closeRealm();
         if (G.imageLoader != null) {
             G.imageLoader.clearMemoryCache();
         }
@@ -535,7 +516,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
 
-        RealmUserInfo userInfo = getRealm().where(RealmUserInfo.class).findFirst();
+        userInfo = getRealm().where(RealmUserInfo.class).findFirst();
 
         if (userInfo == null || !userInfo.getUserRegistrationState()) { // user registered before
             isNeedToRegister = true;
@@ -551,7 +532,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
 
-        if (G.firstTimeEnterToApp) {
+        if (!G.userLogin) {
             /**
              * set true mFirstRun for get room history after logout and login again
              */
@@ -2364,10 +2345,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
      * @param updateFromServer if is set true send request to sever for get own info
      */
     private void setDrawerInfo(boolean updateFromServer) {
-        RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
-        if (realmUserInfo != null) {
-            String username = realmUserInfo.getUserInfo().getDisplayName();
-            phoneNumber = realmUserInfo.getUserInfo().getPhoneNumber();
+        if (userInfo != null) {
+            String username = userInfo.getUserInfo().getDisplayName();
+            phoneNumber = userInfo.getUserInfo().getPhoneNumber();
             imgNavImage = (ImageView) findViewById(R.id.lm_imv_user_picture);
             EmojiTextViewE txtNavName = (EmojiTextViewE) findViewById(R.id.lm_txt_user_name);
             TextView txtNavPhone = (TextView) findViewById(R.id.lm_txt_phone_number);
@@ -2579,7 +2559,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         G.clearMessagesUtil.setOnChatClearMessageResponse(this);
         G.chatSendMessageUtil.setOnChatSendMessageResponseRoomList(this);
         G.onClientCondition = this;
-        G.onClientGetRoomListResponse = this;
         G.onUserInfoMyClient = this;
         G.onMapRegisterStateMain = this;
         G.onUnreadChange = this;
@@ -2754,6 +2733,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            if (G.userId != ownerId)
+                                return;
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgNavImage);
                         }
                     });
@@ -2761,10 +2742,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (G.userId != ownerId)
+                            return;
                         imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
                     }
                 });
@@ -2779,8 +2762,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     public void run() {
                         if (imagePath == null || !new File(imagePath).exists()) {
                             //Realm realm1 = Realm.getDefaultInstance();
-                            RealmUserInfo realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
-                            imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), realmUserInfo.getUserInfo().getInitials(), realmUserInfo.getUserInfo().getColor()));
+                            imgNavImage.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) imgNavImage.getContext().getResources().getDimension(R.dimen.dp100), userInfo.getUserInfo().getInitials(), userInfo.getUserInfo().getColor()));
                             //realm1.close();
                         } else {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(imagePath), imgNavImage);
@@ -2849,64 +2831,61 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     public void onMessageReceive(final long roomId, final String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
 
-        //Realm realm = Realm.getDefaultInstance();
-        runOnUiThread(new Runnable() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void run() {
-                getRealm().executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
-                        final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
-                        if (room != null && realmRoomMessage != null) {
-                            /**
-                             * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
-                             */
-                            if (room.getUnreadCount() <= 1) {
-                                realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
-                                room.setFirstUnreadMessage(realmRoomMessage);
-                            }
-                        }
-                    }
-                });
-                //realm.close();
-
-                switch (roomType) {
-
-                    case CHAT:
-                        if (mainActionChat != null) {
-                            mainActionChat.onAction(MainAction.downScrool);
-                        }
-                        break;
-                    case GROUP:
-                        if (mainActionGroup != null) {
-                            mainActionGroup.onAction(MainAction.downScrool);
-                        }
-                        break;
-                    case CHANNEL:
-                        if (mainActionChannel != null) {
-                            mainActionChannel.onAction(MainAction.downScrool);
-                        }
-                        break;
-                }
-
-                if (mainActionApp != null) {
-                    mainActionApp.onAction(MainAction.downScrool);
-                }
-
-                /**
-                 * don't send update status for own message
-                 */
-                if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
-                    // user has received the message, so I make a new delivered update status request
-                    if (roomType == ProtoGlobal.Room.Type.CHAT) {
-                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
-                    } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
-                        G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            public void execute(Realm realm) {
+                RealmRoom room = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
+                final RealmRoomMessage realmRoomMessage = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
+                if (room != null && realmRoomMessage != null) {
+                    /**
+                     * client checked  (room.getUnreadCount() <= 1)  because in HelperMessageResponse unreadCount++
+                     */
+                    if (room.getUnreadCount() <= 1) {
+                        realmRoomMessage.setFutureMessageId(realmRoomMessage.getMessageId());
+                        room.setFirstUnreadMessage(realmRoomMessage);
                     }
                 }
             }
         });
+        realm.close();
+        for (Fragment f: pages) {
+            if (f instanceof FragmentMain) {
+                FragmentMain mainFragment = (FragmentMain) f;
+                switch (mainFragment.mainType) {
+                    case all:
+                        mainFragment.onAction(MainAction.downScrool);
+                        break;
+                    case chat:
+                        if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                            mainFragment.onAction(MainAction.downScrool);
+                        }
+                        break;
+                    case group:
+                        if (roomType == ProtoGlobal.Room.Type.GROUP) {
+                            mainFragment.onAction(MainAction.downScrool);
+                        }
+                        break;
+                    case channel:
+                        if (roomType == ProtoGlobal.Room.Type.CHANNEL) {
+                            mainFragment.onAction(MainAction.downScrool);
+                        }
+                        break;
+                }
+            }
+        }
+
+        /**
+         * don't send update status for own message
+         */
+        if (roomMessage.getAuthor().getUser() != null && roomMessage.getAuthor().getUser().getUserId() != userId) {
+            // user has received the message, so I make a new delivered update status request
+            if (roomType == ProtoGlobal.Room.Type.CHAT) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            } else if (roomType == ProtoGlobal.Room.Type.GROUP && roomMessage.getStatus() == ProtoGlobal.RoomMessageStatus.SENT) {
+                G.chatUpdateStatusUtil.sendUpdateStatus(roomType, roomId, roomMessage.getMessageId(), ProtoGlobal.RoomMessageStatus.DELIVERED);
+            }
+        }
     }
 
     //*****************************************************************************************************************************
@@ -2929,47 +2908,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void notifySubFragmentForCondition() {
-
-        if (mainActionApp != null) {
-            mainActionApp.onAction(MainAction.clinetCondition);
-        }
-
-        if (mainActionChat != null) {
-            mainActionChat.onAction(MainAction.clinetCondition);
-        }
-
-        if (mainActionGroup != null) {
-            mainActionGroup.onAction(MainAction.clinetCondition);
-        }
-
-        if (mainActionChannel != null) {
-            mainActionChannel.onAction(MainAction.clinetCondition);
-        }
-    }
-
-    @Override
-    public void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity) {
-
-        if (mainInterfaceGetRoomList != null) {
-            mainInterfaceGetRoomList.onClientGetRoomList(roomList, response, identity);
-        }
-    }
-
-    @Override
-    public void onError(int majorCode, int minorCode) {
-
-        if (mainInterfaceGetRoomList != null) {
-            mainInterfaceGetRoomList.onError(majorCode, minorCode);
-        }
-    }
-
-    //************************
-
-    @Override
-    public void onTimeout() {
-
-        if (mainInterfaceGetRoomList != null) {
-            mainInterfaceGetRoomList.onTimeout();
+        for (Fragment f: pages) {
+            if (f instanceof FragmentMain) {
+                ((FragmentMain)f).onAction(MainAction.clinetCondition);
+            }
         }
     }
 
@@ -3132,15 +3074,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     public interface MainInterface {
         void onAction(MainAction action);
-    }
-
-    public interface MainInterfaceGetRoomList {
-
-        void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity);
-
-        void onError(int majorCode, int minorCode);
-
-        void onTimeout();
     }
 
     public interface OnBackPressedListener {

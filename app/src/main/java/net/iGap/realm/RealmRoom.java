@@ -10,8 +10,6 @@
 
 package net.iGap.realm;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -21,7 +19,6 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperString;
 import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.module.BotInit;
-import net.iGap.module.TimeUtils;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
@@ -259,59 +256,44 @@ public class RealmRoom extends RealmObject {
          * that realm is closed, and for avoid from that error i used from
          * new instance for this action ))
          */
+        final Realm realm = Realm.getDefaultInstance();
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
-            public void run() {
-                final Realm realm = Realm.getDefaultInstance();
+            public void execute(Realm realm) {
 
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-
-                        if (deleteBefore) {
-                            RealmResults<RealmRoom> list = realm.where(RealmRoom.class).findAll();
-                            for (int i = 0; i < list.size(); i++) {
-                                list.get(i).setDeleted(true);
-                            }
-
-                            BotInit.checkDrIgap();
-                        }
-
-                        for (ProtoGlobal.Room room : rooms) {
-                            RealmRoom.putOrUpdate(room, realm);
-                        }
-
-                        if (cleanDeletedRoomMessage) {
-                            // delete messages and rooms that was deleted
-                            RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
-                            for (RealmRoom item : deletedRoomsList) {
-                                /**
-                                 * delete all message in deleted room
-                                 *
-                                 * hint: {@link RealmRoom#deleteRoom(long)} also do following actions but it is in
-                                 * transaction and client can't use a transaction inside another
-                                 */
-                                RealmRoomMessage.deleteAllMessage(realm, item.getId());
-                                RealmClientCondition.deleteCondition(realm, item.getId());
-                                item.deleteFromRealm();
-                            }
-                        }
+                if (deleteBefore) {
+                    RealmResults<RealmRoom> list = realm.where(RealmRoom.class).findAll();
+                    for (RealmRoom room : list) {
+                        room.setDeleted(true);
                     }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
 
-                        realm.close();
+                    BotInit.checkDrIgap();
+                }
+
+                for (ProtoGlobal.Room room : rooms) {
+                    RealmRoom.putOrUpdate(room, realm);
+                }
+
+                if (cleanDeletedRoomMessage) {
+                    // delete messages and rooms that was deleted
+                    RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
+                    for (RealmRoom item : deletedRoomsList) {
+                        /**
+                         * delete all message in deleted room
+                         *
+                         * hint: {@link RealmRoom#deleteRoom(long)} also do following actions but it is in
+                         * transaction and client can't use a transaction inside another
+                         */
+                        RealmRoomMessage.deleteAllMessage(realm, item.getId());
+                        RealmClientCondition.deleteCondition(realm, item.getId());
+                        item.deleteFromRealm();
                     }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        realm.close();
-                    }
-                });
+                }
             }
         });
+
+        realm.close();
     }
 
     public static void convertAndSetDraft(final long roomId, final String message, final long replyToMessageId, int draftTime) {
@@ -725,7 +707,7 @@ public class RealmRoom extends RealmObject {
 
     public static void updatePin(final long roomId, final boolean pin, final long pinId) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom room = RealmRoom.getRealmRoom(realm, roomId);
@@ -864,7 +846,7 @@ public class RealmRoom extends RealmObject {
 
     public static void setAction(final long roomId, final long userId, final String action) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
+        realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, roomId).findFirst();
@@ -875,6 +857,8 @@ public class RealmRoom extends RealmObject {
         });
         realm.close();
     }
+
+
 
     public static void setLastScrollPosition(final long roomId, final long messageId, final int offset) {
         Realm realm = Realm.getDefaultInstance();

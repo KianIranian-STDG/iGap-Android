@@ -255,19 +255,19 @@ public class HelperUnpackMessage {
             Method method3 = object3.getClass().getMethod("build");
             method3.invoke(object3);
         } catch (InstantiationException e) {
-            sendLog(e);
+            HelperLog.setErrorLog(e);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            sendLog(e);
+            HelperLog.setErrorLog(e);
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            sendLog(e);
+            HelperLog.setErrorLog(e);
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
-            sendLog(e);
+            HelperLog.setErrorLog(e);
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            sendLog(e);
+            HelperLog.setErrorLog(e);
             e.printStackTrace();
         }
 
@@ -292,29 +292,22 @@ public class HelperUnpackMessage {
                 responseClass.getMethod(optionalMethod).invoke(object);
             }
         } catch (InstantiationException e) {
-            sendLog(e);
+            HelperLog.setErrorLog(e);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            sendLog(e);
+            HelperLog.setErrorLog(e);
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            sendLog(e);
+            HelperLog.setErrorLog(e);
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
-            sendLog(e);
+            HelperLog.setErrorLog(e);
             e.printStackTrace();
         } catch (InvocationTargetException e) {
-            sendLog(e);
+            HelperLog.setErrorLog(e);
             e.printStackTrace();
         }
         return object;
     }
 
-    private static void sendLog(Exception e) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        e.printStackTrace(pw);
-        String sStackTrace = sw.toString();
-        HelperLog.setErrorLog(sStackTrace);
-    }
 }
