@@ -1198,13 +1198,15 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
             findViewById(R.id.amr_btn_search).setVisibility(View.VISIBLE);
             findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
-            arcMenu.setVisibility(View.VISIBLE);
             setFabIcon(R.mipmap.plus);
+            arcMenu.fabMenu.hide();
+            arcMenu.setVisibility(View.VISIBLE);
         } else if (adapter.getItem(position) instanceof FragmentCall) {
 
             findViewById(R.id.amr_btn_search).setVisibility(View.GONE);
             findViewById(R.id.am_btn_menu).setVisibility(View.VISIBLE);
             setFabIcon(R.drawable.ic_call_black_24dp);
+            arcMenu.fabMenu.hide();
             arcMenu.setVisibility(View.VISIBLE);
         }
 
