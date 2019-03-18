@@ -402,10 +402,8 @@ public class FragmentChat extends BaseFragment
     private boolean isRepley = false;
     private boolean swipeBack = false;
     public static List<StructGroupSticker> data = new ArrayList<>();
-    public Runnable countDownRunnable;
-    public Handler countDownHandler;
-    private Runnable scrollRunnable;
-    private Handler scrollHandler;
+    public Runnable gongingRunnable;
+    public Handler gongingHandler;
 
 
     /**
@@ -581,7 +579,6 @@ public class FragmentChat extends BaseFragment
     public static OnUpdateSticker onUpdateSticker;
     public CardView cardFloatingTime;
     public TextView txtFloatingTime;
-    public boolean rcTouchListener;
 
 
     public static Realm getRealmChat() {
@@ -744,22 +741,15 @@ public class FragmentChat extends BaseFragment
         super.onViewCreated(view, savedInstanceState);
 
         realmChat = Realm.getDefaultInstance();
-        countDownRunnable = new Runnable() {
+        gongingRunnable = new Runnable() {
             @Override
             public void run() {
                 cardFloatingTime.setVisibility(View.GONE);
             }
         };
-        countDownHandler = new Handler(Looper.getMainLooper());
+        gongingHandler = new Handler(Looper.getMainLooper());
 
 
-        scrollRunnable = new Runnable() {
-            @Override
-            public void run() {
-                rcTouchListener = false;
-            }
-        };
-        scrollHandler = new Handler();
 
         startPageFastInitialize();
         G.handler.postDelayed(new Runnable() {
@@ -3095,9 +3085,6 @@ public class FragmentChat extends BaseFragment
                     mRecyclerView.fling(velocityX, velocityY);
                     return true;
                 }*/
-                rcTouchListener = true;
-                scrollHandler.removeCallbacks(scrollRunnable);
-                scrollHandler.postDelayed(scrollRunnable, 1000);
 
                 return false;
             }
@@ -3110,15 +3097,15 @@ public class FragmentChat extends BaseFragment
                 int totalItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getItemCount();
                 int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
-
-                if (rcTouchListener) {
-                    cardFloatingTime.setVisibility(View.VISIBLE);
-                    long item = mAdapter.getItemByPosition(((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition());
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTimeInMillis(item);
+                cardFloatingTime.setVisibility(View.VISIBLE);
+                long item = mAdapter.getItemByPosition(((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition());
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(item);
+                if (item != 0L) {
                     txtFloatingTime.setText(TimeUtils.getChatSettingsTimeAgo(G.fragmentActivity, calendar.getTime()));
-                    resetCountDownTimer();
                 }
+                gongingHandler.removeCallbacks(gongingRunnable);
+                gongingHandler.postDelayed(gongingRunnable, 1000);
 
                 if (pastVisibleItems + visibleItemCount >= totalItemCount && !isAnimateStart) {
                     isScrollEnd = false;
@@ -3185,12 +3172,6 @@ public class FragmentChat extends BaseFragment
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-                if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    rcTouchListener = true;
-                } else {
-                    rcTouchListener = false;
-                }
 
 
                 return false;
@@ -3512,12 +3493,6 @@ public class FragmentChat extends BaseFragment
         });
 
         //realm.close();
-    }
-
-    private void resetCountDownTimer() {
-
-        countDownHandler.removeCallbacks(countDownRunnable);
-        countDownHandler.postDelayed(countDownRunnable, 1000);
     }
 
     public static void fillStickerList() {
