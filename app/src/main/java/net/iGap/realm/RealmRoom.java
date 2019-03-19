@@ -32,6 +32,7 @@ import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import io.realm.Realm;
@@ -264,12 +265,12 @@ public class RealmRoom extends RealmObject {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Long[] array2 = new Long[rooms.size()];
+                HashSet<Long> all = new HashSet<>();
                 long time = Long.MAX_VALUE;
 
                 for (int i = 0; i < rooms.size(); i++) {
                     RealmRoom.putOrUpdate(rooms.get(i), realm);
-                    array2[i] = rooms.get(i).getId();
+                    all.add(rooms.get(i).getId());
 
                     Log.d("bagi", "create" + rooms.get(i).getLastMessage().getCreateTime());
                     Log.d("bagi", "update" + rooms.get(i).getLastMessage().getUpdateTime());
@@ -287,9 +288,11 @@ public class RealmRoom extends RealmObject {
 
 
                 RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class)
-                        .greaterThan(RealmRoomFields.LAST_MESSAGE.UPDATE_TIME, time).equalTo(RealmRoomFields.KEEP_ROOM, false).not()
-                        .in(RealmRoomFields.ID, array2).findAll();
+                        .greaterThan(RealmRoomFields.LAST_MESSAGE.UPDATE_TIME, time).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
                 for (RealmRoom item : deletedRoomsList) {
+                    if (all.contains(item.getId())) {
+                        continue;
+                    }
                     /**
                      * delete all message in deleted room
                      *
