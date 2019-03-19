@@ -265,26 +265,30 @@ public class RealmRoom extends RealmObject {
             @Override
             public void execute(Realm realm) {
                 Long[] array2 = new Long[rooms.size()];
-                long time = 0L;
+                long time = Long.MAX_VALUE;
 
                 for (int i = 0; i < rooms.size(); i++) {
                     RealmRoom.putOrUpdate(rooms.get(i), realm);
                     array2[i] = rooms.get(i).getId();
 
-                    if (time < rooms.get(i).getLastMessage().getCreateTime() * 1000L) {
+                    Log.d("bagi", "create" + rooms.get(i).getLastMessage().getCreateTime());
+                    Log.d("bagi", "update" + rooms.get(i).getLastMessage().getUpdateTime());
+                    if (rooms.get(i).getLastMessage().getCreateTime() != 0 && time > rooms.get(i).getLastMessage().getCreateTime() * 1000L) {
                         time = rooms.get(i).getLastMessage().getCreateTime() * 1000L;
                     }
 
-                    if (time < rooms.get(i).getLastMessage().getUpdateTime() * 1000L) {
+                    if (rooms.get(i).getLastMessage().getUpdateTime() != 0 && time > rooms.get(i).getLastMessage().getUpdateTime() * 1000L) {
                         time = rooms.get(i).getLastMessage().getUpdateTime() * 1000L;
                     }
                 }
 
+                Log.d("bagi" , "LastTime" + time);
+
+
+
                 RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class)
-                        .greaterThan(RealmRoomFields.UPDATED_TIME, time).equalTo(RealmRoomFields.KEEP_ROOM, false).not()
-                        .beginGroup()
-                        .in(RealmRoomFields.ID, array2)
-                        .endGroup().findAll();
+                        .greaterThan(RealmRoomFields.LAST_MESSAGE.UPDATE_TIME, time).equalTo(RealmRoomFields.KEEP_ROOM, false).not()
+                        .in(RealmRoomFields.ID, array2).findAll();
                 for (RealmRoom item : deletedRoomsList) {
                     /**
                      * delete all message in deleted room
