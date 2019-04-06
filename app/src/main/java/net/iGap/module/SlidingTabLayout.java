@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -117,7 +118,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
     protected TextView createDefaultTabView(Context context, int i) {
 
-        TextView textView = new TextView(context);
+        TextView textView = new AppCompatTextView(context);
         textView.setGravity(Gravity.CENTER);
 
         if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {

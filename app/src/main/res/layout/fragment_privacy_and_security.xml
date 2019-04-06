@@ -218,7 +218,7 @@
           style="?backgroundColorSettingTheme"
           android:orientation="vertical">
 
-          <net.iGap.module.HeaderTextview
+          <net.iGap.module.HeaderTextView
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -500,7 +500,7 @@
             android:textStyle="normal"
             android:visibility="gone" />
 
-          <net.iGap.module.HeaderTextview
+          <net.iGap.module.HeaderTextView
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -603,7 +603,7 @@
           style="?backgroundColorSettingTheme"
           android:orientation="vertical">
 
-          <net.iGap.module.HeaderTextview
+          <net.iGap.module.HeaderTextView
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

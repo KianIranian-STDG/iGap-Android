@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.http.SslError;
 import android.os.Build;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -173,7 +175,7 @@ public class MakeButtons {
         linearLayout_529.setLayoutParams(layout_941);
         linearLayout_529.setWeightSum(weightSum);
 
-        ImageView img1 = new ImageView(G.context);
+        AppCompatImageView img1 = new AppCompatImageView(G.context);
 
         /*img1.setId(1);
         img1.setTag("abc");*/
@@ -199,7 +201,7 @@ public class MakeButtons {
         }
 
         if (entity.getLable().trim() != null) {
-            TextView btn1 = new TextView(G.context);
+            TextView btn1 = new AppCompatTextView(G.context);
 
             // btn1.setId(R.id.btn1);
             btn1.setEllipsize(TextUtils.TruncateAt.END);

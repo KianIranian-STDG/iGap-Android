@@ -11,6 +11,7 @@
 package net.iGap.adapter.items.chat;
 
 import android.graphics.Color;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -80,7 +81,7 @@ public class TimeItem extends AbstractMessage<TimeItem, TimeItem.ViewHolder> {
             view_12.setLayoutParams(layout_522);
             linearLayout_33.addView(view_12);
 
-            text = new TextView(G.context);
+            text = new AppCompatTextView(G.context);
             text.setId(R.id.cslt_txt_time_date);
             text.setSingleLine(true);
             text.setPadding(ViewMaker.i_Dp(R.dimen.dp16), ViewMaker.i_Dp(R.dimen.dp4), ViewMaker.i_Dp(R.dimen.dp16), ViewMaker.i_Dp(R.dimen.dp4));

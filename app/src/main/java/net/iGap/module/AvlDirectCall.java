@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -145,7 +146,7 @@ public class AvlDirectCall extends LinearLayout {
 
     private View makeHeaderTextView(Context context) {
 
-        TextView textView = new TextView(context);
+        TextView textView = new AppCompatTextView(context);
         textView.setTextColor(Color.parseColor("#ffffff"));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.dp16));
         LinearLayoutCompat.LayoutParams lp = new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);

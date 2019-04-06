@@ -15,6 +15,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.InputType;
@@ -178,8 +179,8 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutDialog.setOrientation(LinearLayout.VERTICAL);
         layoutDialog.setBackgroundColor(G.context.getResources().getColor(android.R.color.white));
-        TextView text2 = new TextView(G.context);
-        TextView text3 = new TextView(G.context);
+        TextView text2 = new AppCompatTextView(G.context);
+        TextView text3 = new AppCompatTextView(G.context);
 
         text2.setTextColor(G.context.getResources().getColor(android.R.color.black));
         text3.setTextColor(G.context.getResources().getColor(android.R.color.black));
@@ -942,7 +943,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         inputGroupLink.addView(edtLink);
         inputGroupLink.addView(viewRevoke, viewParams);
 
-        TextView txtLink = new TextView(G.fragmentActivity);
+        TextView txtLink = new AppCompatTextView(G.fragmentActivity);
         txtLink.setText(Config.IGAP_LINK_PREFIX);
         txtLink.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
 

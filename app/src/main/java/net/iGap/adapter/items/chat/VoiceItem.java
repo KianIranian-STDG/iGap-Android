@@ -13,6 +13,8 @@ package net.iGap.adapter.items.chat;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -288,13 +290,13 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
     protected static class ViewHolder extends ChatItemHolder implements IThumbNailItem, IProgress {
 
         protected MessageProgress progress;
-        protected ImageView thumbnail;
+        protected AppCompatImageView thumbnail;
         //protected ImageView tic;
-        protected TextView btnPlayMusic;
+        protected AppCompatTextView btnPlayMusic;
         protected SeekBar musicSeekbar;
         protected OnComplete complete;
-        protected TextView txt_Timer;
-        protected TextView author;
+        protected AppCompatTextView txt_Timer;
+        protected AppCompatTextView author;
         protected String mFilePath = "";
         protected String mMessageID = "";
         protected String mTimeMusic = "";
@@ -332,7 +334,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             layout_1488.gravity = Gravity.CENTER;
             frameLayout_161.setLayoutParams(layout_1488);
 
-            thumbnail = new ImageView(G.context);
+            thumbnail = new AppCompatImageView(G.context);
             thumbnail.setId(R.id.thumbnail);
             FrameLayout.LayoutParams layout_152 = new FrameLayout.LayoutParams(i_Dp(R.dimen.dp20), i_Dp(R.dimen.dp20));
             layout_152.gravity = Gravity.CENTER;
@@ -343,7 +345,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             frameLayout_161.addView(progress);
             linearLayout_153.addView(frameLayout_161);
 
-            author = new TextView(G.context);
+            author = new AppCompatTextView(G.context);
             author.setId(R.id.cslv_txt_author);
             author.setText("recorded voice");
             author.setTextColor(Color.parseColor(G.textBubble));
@@ -364,7 +366,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             LinearLayout.LayoutParams layout_669 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
             linearLayout_503.setLayoutParams(layout_669);
 
-            btnPlayMusic = new TextView(G.context);
+            btnPlayMusic = new AppCompatTextView(G.context);
             btnPlayMusic.setId(R.id.csla_btn_play_music);
             btnPlayMusic.setBackgroundResource(0);
             btnPlayMusic.setGravity(Gravity.CENTER);
@@ -384,7 +386,7 @@ public class VoiceItem extends AbstractMessage<VoiceItem, VoiceItem.ViewHolder> 
             linearLayout_503.addView(musicSeekbar);
             audioPlayerViewContainer.addView(linearLayout_503);
 
-            txt_Timer = new TextView(G.context);
+            txt_Timer = new AppCompatTextView(G.context);
             txt_Timer.setId(R.id.csla_txt_timer);
             txt_Timer.setPadding(0, 0, i_Dp(R.dimen.dp8), 0);
             txt_Timer.setText("00:00");

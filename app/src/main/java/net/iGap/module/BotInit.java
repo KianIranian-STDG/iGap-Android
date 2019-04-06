@@ -6,6 +6,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -354,7 +356,7 @@ public class BotInit implements View.OnClickListener {
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
         param.setMargins(2, 2, 2, 2);
 
-        Button btn = new Button(G.context);
+        AppCompatButton btn = new AppCompatButton(G.context);
         btn.setLayoutParams(param);
         btn.setTextColor(Color.WHITE);
         btn.setBackgroundColor(ContextCompat.getColor(G.context, R.color.zxing_viewfinder_laser));
@@ -501,7 +503,7 @@ public class BotInit implements View.OnClickListener {
 
         ViewGroup.LayoutParams param = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
 
-        TextView txt = new TextView(G.context);
+        TextView txt = new AppCompatTextView(G.context);
         txt.setLayoutParams(param);
         txt.setPadding(15, 6, 15, 6);
         txt.setText(action);
