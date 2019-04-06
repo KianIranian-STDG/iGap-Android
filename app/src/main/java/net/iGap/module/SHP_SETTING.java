@@ -71,6 +71,9 @@ public class SHP_SETTING {
 
     // ========================================================================================== notification and sound
 
+
+    public static final String KEY_NOTIF_KEYS = "NOTIF_KEYS";
+
     public static final String KEY_STNS_ALERT_MESSAGE = "STNS_ALERT_MESSAGE";
     public static final String KEY_STNS_MESSAGE_PREVIEW_MESSAGE = "STNS_MESSAGE_PREVIEW_MESSAGE";
     public static final String KEY_STNS_ALERT_GROUP = "STNS_ALERT_GROUP";
