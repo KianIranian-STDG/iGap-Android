@@ -272,6 +272,16 @@ public class RealmRoom extends RealmObject {
                     RealmRoom.putOrUpdate(rooms.get(i), realm);
                     all.add(rooms.get(i).getId());
 
+                    int aaa = 1550582142;
+                    if (rooms.get(i).getLastMessage().getCreateTime() != 0 && rooms.get(i).getLastMessage().getCreateTime()< aaa){
+                        Log.d("bagi" , " Bug in " + rooms.get(i).getTitle());
+                    }
+
+                    if (rooms.get(i).getLastMessage().getUpdateTime() != 0 && rooms.get(i).getLastMessage().getUpdateTime()< aaa){
+                        Log.d("bagi" , " Bug in " + rooms.get(i).getTitle());
+
+                    }
+
                     Log.d("bagi", "create" + rooms.get(i).getLastMessage().getCreateTime());
                     Log.d("bagi", "update" + rooms.get(i).getLastMessage().getUpdateTime());
                     if (rooms.get(i).getLastMessage().getCreateTime() != 0 && time > rooms.get(i).getLastMessage().getCreateTime() * 1000L) {
