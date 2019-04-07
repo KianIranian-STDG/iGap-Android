@@ -31,6 +31,8 @@ import net.iGap.request.RequestClientGetRoom;
 import net.iGap.request.RequestClientGetRoomMessage;
 import net.iGap.request.RequestGroupUpdateDraft;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import io.realm.Realm;
@@ -70,6 +72,7 @@ public class RealmRoom extends RealmObject {
     private long actionStateUserId;
     private String actionState;
     private boolean isDeleted = false;
+    private boolean isMarkedAsDeleted = false;
     private boolean isPinned;
     private long pinId;
     private long pinMessageId;
@@ -144,6 +147,7 @@ public class RealmRoom extends RealmObject {
 
 
         realmRoom.isDeleted = false;
+        realmRoom.isMarkedAsDeleted = false;
         realmRoom.keepRoom = false;
 
         realmRoom.setColor(room.getColor());
@@ -249,7 +253,7 @@ public class RealmRoom extends RealmObject {
      *
      * @param rooms ProtoGlobal.Room
      */
-    public static void putChatToDatabase(final List<ProtoGlobal.Room> rooms, final boolean deleteBefore, final boolean cleanDeletedRoomMessage) {
+    public static void putChatToDatabase(final List<ProtoGlobal.Room> rooms) {
 
         /**
          * (( hint : i don't used from mRealm instance ,because i have an error
@@ -261,34 +265,48 @@ public class RealmRoom extends RealmObject {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                HashSet<Long> all = new HashSet<>();
+                long timeMin = Long.MAX_VALUE;
+                long timeMax = Long.MIN_VALUE;
 
-                if (deleteBefore) {
-                    RealmResults<RealmRoom> list = realm.where(RealmRoom.class).findAll();
-                    for (RealmRoom room : list) {
-                        room.setDeleted(true);
+                for (int i = 0; i < rooms.size(); i++) {
+                    RealmRoom.putOrUpdate(rooms.get(i), realm);
+                    all.add(rooms.get(i).getId());
+
+                    if (rooms.get(i).getLastMessage().getCreateTime() != 0 && timeMin > rooms.get(i).getLastMessage().getCreateTime() * 1000L) {
+                        timeMin = rooms.get(i).getLastMessage().getCreateTime() * 1000L;
                     }
 
-                    BotInit.checkDrIgap();
-                }
-
-                for (ProtoGlobal.Room room : rooms) {
-                    RealmRoom.putOrUpdate(room, realm);
-                }
-
-                if (cleanDeletedRoomMessage) {
-                    // delete messages and rooms that was deleted
-                    RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_DELETED, true).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
-                    for (RealmRoom item : deletedRoomsList) {
-                        /**
-                         * delete all message in deleted room
-                         *
-                         * hint: {@link RealmRoom#deleteRoom(long)} also do following actions but it is in
-                         * transaction and client can't use a transaction inside another
-                         */
-                        RealmRoomMessage.deleteAllMessage(realm, item.getId());
-                        RealmClientCondition.deleteCondition(realm, item.getId());
-                        item.deleteFromRealm();
+                    if (rooms.get(i).getLastMessage().getUpdateTime() != 0 && timeMin > rooms.get(i).getLastMessage().getUpdateTime() * 1000L) {
+                        timeMin = rooms.get(i).getLastMessage().getUpdateTime() * 1000L;
                     }
+
+                    if (rooms.get(i).getLastMessage().getCreateTime() != 0 && timeMax < rooms.get(i).getLastMessage().getCreateTime() * 1000L) {
+                        timeMax = rooms.get(i).getLastMessage().getCreateTime() * 1000L;
+                    }
+
+                    if (rooms.get(i).getLastMessage().getUpdateTime() != 0 && timeMax < rooms.get(i).getLastMessage().getUpdateTime() * 1000L) {
+                        timeMax = rooms.get(i).getLastMessage().getUpdateTime() * 1000L;
+                    }
+                }
+
+                RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class)
+                        .greaterThanOrEqualTo(RealmRoomFields.LAST_MESSAGE.UPDATE_TIME, timeMin)
+                        .lessThanOrEqualTo(RealmRoomFields.LAST_MESSAGE.UPDATE_TIME, timeMax)
+                        .equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
+                for (RealmRoom item : deletedRoomsList) {
+                    if (all.contains(item.getId())) {
+                        continue;
+                    }
+                    /**
+                     * delete all message in deleted room
+                     *
+                     * hint: {@link RealmRoom#deleteRoom(long)} also do following actions but it is in
+                     * transaction and client can't use a transaction inside another
+                     */
+                    RealmRoomMessage.deleteAllMessage(realm, item.getId());
+                    RealmClientCondition.deleteCondition(realm, item.getId());
+                    item.deleteFromRealm();
                 }
             }
         });

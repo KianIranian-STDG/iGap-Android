@@ -62,6 +62,7 @@ import net.iGap.libs.Tuple;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
+import net.iGap.module.BotInit;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
@@ -404,7 +405,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                     getChatLists();
                 }
             }
-        }, 10);
+        }, 1000);
     }
 
     private void onSelectRoomMenu(String message, RealmRoom item) {
@@ -723,21 +724,18 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             return;
         }
 
-        boolean deleteBefore = false;
         if (mOffset == 0) {
-            deleteBefore = true;
+            BotInit.checkDrIgap();
         }
 
-        boolean cleanAfter = false;
 
         if (roomList.size() == 0) {
             isThereAnyMoreItemToLoad = false;
-            cleanAfter = true;
         } else {
             isThereAnyMoreItemToLoad = true;
         }
 
-        putChatToDatabase(roomList, deleteBefore, cleanAfter);
+        putChatToDatabase(roomList);
 
         //fastAdapter
         //G.handler.postDelayed(new Runnable() {

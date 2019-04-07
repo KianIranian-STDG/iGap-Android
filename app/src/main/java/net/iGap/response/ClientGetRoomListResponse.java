@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import android.util.Log;
+
 import net.iGap.G;
 import net.iGap.proto.ProtoClientGetRoomList;
 import net.iGap.proto.ProtoError;
@@ -42,8 +44,9 @@ public class ClientGetRoomListResponse extends MessageHandler {
         if (G.onClientGetRoomListResponse != null) {
             G.onClientGetRoomListResponse.onClientGetRoomList(clientGetRoomListResponse.getRoomsList(), clientGetRoomListResponse.getResponse(), identity);
         } else {
+            Log.d("bagi" ,"What th hel");
             new RequestClientCondition().clientCondition(RealmClientCondition.computeClientCondition(null));
-            putChatToDatabase(clientGetRoomListResponse.getRoomsList(), false, false);
+            putChatToDatabase(clientGetRoomListResponse.getRoomsList());
         }
 
         pendingRequest.remove(identity.offset);
