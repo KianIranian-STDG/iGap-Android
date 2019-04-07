@@ -266,39 +266,34 @@ public class RealmRoom extends RealmObject {
             @Override
             public void execute(Realm realm) {
                 HashSet<Long> all = new HashSet<>();
-                long time = Long.MAX_VALUE;
+                long timeMin = Long.MAX_VALUE;
+                long timeMax = Long.MIN_VALUE;
 
                 for (int i = 0; i < rooms.size(); i++) {
                     RealmRoom.putOrUpdate(rooms.get(i), realm);
                     all.add(rooms.get(i).getId());
 
-                    int aaa = 1550582142;
-                    if (rooms.get(i).getLastMessage().getCreateTime() != 0 && rooms.get(i).getLastMessage().getCreateTime()< aaa){
-                        Log.d("bagi" , " Bug in " + rooms.get(i).getTitle());
+                    if (rooms.get(i).getLastMessage().getCreateTime() != 0 && timeMin > rooms.get(i).getLastMessage().getCreateTime() * 1000L) {
+                        timeMin = rooms.get(i).getLastMessage().getCreateTime() * 1000L;
                     }
 
-                    if (rooms.get(i).getLastMessage().getUpdateTime() != 0 && rooms.get(i).getLastMessage().getUpdateTime()< aaa){
-                        Log.d("bagi" , " Bug in " + rooms.get(i).getTitle());
-
+                    if (rooms.get(i).getLastMessage().getUpdateTime() != 0 && timeMin > rooms.get(i).getLastMessage().getUpdateTime() * 1000L) {
+                        timeMin = rooms.get(i).getLastMessage().getUpdateTime() * 1000L;
                     }
 
-                    Log.d("bagi", "create" + rooms.get(i).getLastMessage().getCreateTime());
-                    Log.d("bagi", "update" + rooms.get(i).getLastMessage().getUpdateTime());
-                    if (rooms.get(i).getLastMessage().getCreateTime() != 0 && time > rooms.get(i).getLastMessage().getCreateTime() * 1000L) {
-                        time = rooms.get(i).getLastMessage().getCreateTime() * 1000L;
+                    if (rooms.get(i).getLastMessage().getCreateTime() != 0 && timeMax < rooms.get(i).getLastMessage().getCreateTime() * 1000L) {
+                        timeMax = rooms.get(i).getLastMessage().getCreateTime() * 1000L;
                     }
 
-                    if (rooms.get(i).getLastMessage().getUpdateTime() != 0 && time > rooms.get(i).getLastMessage().getUpdateTime() * 1000L) {
-                        time = rooms.get(i).getLastMessage().getUpdateTime() * 1000L;
+                    if (rooms.get(i).getLastMessage().getUpdateTime() != 0 && timeMax < rooms.get(i).getLastMessage().getUpdateTime() * 1000L) {
+                        timeMax = rooms.get(i).getLastMessage().getUpdateTime() * 1000L;
                     }
                 }
 
-                Log.d("bagi" , "LastTime" + time);
-
-
-
                 RealmResults<RealmRoom> deletedRoomsList = realm.where(RealmRoom.class)
-                        .greaterThan(RealmRoomFields.LAST_MESSAGE.UPDATE_TIME, time).equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
+                        .greaterThanOrEqualTo(RealmRoomFields.LAST_MESSAGE.UPDATE_TIME, timeMin)
+                        .lessThanOrEqualTo(RealmRoomFields.LAST_MESSAGE.UPDATE_TIME, timeMax)
+                        .equalTo(RealmRoomFields.KEEP_ROOM, false).findAll();
                 for (RealmRoom item : deletedRoomsList) {
                     if (all.contains(item.getId())) {
                         continue;
