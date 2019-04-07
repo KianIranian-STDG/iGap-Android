@@ -72,7 +72,6 @@ public class RealmRoom extends RealmObject {
     private long actionStateUserId;
     private String actionState;
     private boolean isDeleted = false;
-    private boolean isMarkedAsDeleted = false;
     private boolean isPinned;
     private long pinId;
     private long pinMessageId;
@@ -147,7 +146,6 @@ public class RealmRoom extends RealmObject {
 
 
         realmRoom.isDeleted = false;
-        realmRoom.isMarkedAsDeleted = false;
         realmRoom.keepRoom = false;
 
         realmRoom.setColor(room.getColor());
