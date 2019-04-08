@@ -1311,6 +1311,9 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                             if (mInfo.getLastMessage().isAuthorMe()) {
                                 lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
                             } else {
+                                if (holder.realmRegisteredInfo != null && holder.realmRegisteredInfo.isValid()){
+                                    holder.realmRegisteredInfo.removeAllChangeListeners();
+                                }
                                 holder.realmRegisteredInfo = getRealmFragmentMain().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirstAsync();
                                 holder.realmRegisteredInfo.addChangeListener(new RealmObjectChangeListener<RealmModel>() {
                                     @Override
