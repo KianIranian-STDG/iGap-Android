@@ -308,7 +308,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         //  rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (mode == Mode.sendPosition) {
-            fabOpenMap.setVisibility(View.GONE);
+            fabOpenMap.hide();
             rvSendPosition.setVisibility(View.VISIBLE);
             rvSeePosition.setVisibility(View.GONE);
             rvSendPosition.setOnClickListener(this);
@@ -316,7 +316,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
         } else if (mode == Mode.seePosition) {
             rvSeePosition.setVisibility(View.VISIBLE);
-            fabOpenMap.setVisibility(View.VISIBLE);
+            fabOpenMap.show();
             rvSendPosition.setVisibility(View.GONE);
             fabOpenMap.setOnClickListener(this);
 
