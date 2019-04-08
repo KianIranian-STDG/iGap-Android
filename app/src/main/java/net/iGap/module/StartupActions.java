@@ -606,7 +606,7 @@ public final class StartupActions {
                     @Override
                     public boolean shouldCompact(long totalBytes, long usedBytes) {
                         final long thresholdSize = 50 * 1024 * 1024;
-                        return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.5);
+                        return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.8);
                     }
                 })
                 .migration(new RealmMigration())
@@ -640,7 +640,7 @@ public final class StartupActions {
                     @Override
                     public boolean shouldCompact(long totalBytes, long usedBytes) {
                         final long thresholdSize = 50 * 1024 * 1024;
-                        return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.5);
+                        return (totalBytes > thresholdSize) && (((double) usedBytes / (double) totalBytes) < 0.8);
                     }
                 })
                 .schemaVersion(REALM_SCHEMA_VERSION)
