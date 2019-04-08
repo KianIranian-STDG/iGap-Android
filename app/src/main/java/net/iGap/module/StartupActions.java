@@ -116,7 +116,7 @@ public final class StartupActions {
                             .lessThan(RealmRoomMessageFields.CREATE_TIME, time)
                             .greaterThan(RealmRoomMessageFields.MESSAGE_ID, 0).findAll();
                     for (RealmRoomMessage var : realmRoomMessages)
-                        var.removeFromRealm();
+                        var.removeFromRealm(realm);
                 }
             }
         });
