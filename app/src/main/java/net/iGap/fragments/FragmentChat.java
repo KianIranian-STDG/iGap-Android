@@ -5859,12 +5859,14 @@ public class FragmentChat extends BaseFragment
     }
 
     private void setDownBtnVisible() {
-        llScrollNavigate.setVisibility(View.VISIBLE);
+        if (llScrollNavigate != null)
+            llScrollNavigate.setVisibility(View.VISIBLE);
         isScrollEnd = true;
     }
 
     private void setDownBtnGone() {
-        llScrollNavigate.setVisibility(View.GONE);
+        if (llScrollNavigate != null)
+            llScrollNavigate.setVisibility(View.GONE);
         isScrollEnd = false;
     }
 
