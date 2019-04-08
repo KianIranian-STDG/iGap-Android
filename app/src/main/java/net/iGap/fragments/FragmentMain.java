@@ -1314,20 +1314,22 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                                 if (holder.realmRegisteredInfo != null && holder.realmRegisteredInfo.isValid()){
                                     holder.realmRegisteredInfo.removeAllChangeListeners();
                                 }
-                                holder.realmRegisteredInfo = getRealmFragmentMain().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirstAsync();
-                                holder.realmRegisteredInfo.addChangeListener(new RealmObjectChangeListener<RealmModel>() {
-                                    @Override
-                                    public void onChange(RealmModel realmModel, @javax.annotation.Nullable ObjectChangeSet changeSet) {
-                                        if (changeSet == null || !changeSet.isDeleted()) {
-                                            if (!((RealmRegisteredInfo) realmModel).isValid() || ((RealmRegisteredInfo) realmModel).getId() !=  mInfo.getLastMessage().getUserId())
-                                                return;
-                                            setSenderName(holder);
+                                if (mInfo.getLastMessage() != null) {
+                                    holder.realmRegisteredInfo = getRealmFragmentMain().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirstAsync();
+                                    holder.realmRegisteredInfo.addChangeListener(new RealmObjectChangeListener<RealmModel>() {
+                                        @Override
+                                        public void onChange(RealmModel realmModel, @javax.annotation.Nullable ObjectChangeSet changeSet) {
+                                            if (changeSet == null || !changeSet.isDeleted()) {
+                                                if (!((RealmRegisteredInfo) realmModel).isValid() || ((RealmRegisteredInfo) realmModel).getId() !=  mInfo.getLastMessage().getUserId())
+                                                    return;
+                                                setSenderName(holder);
+                                            }
                                         }
-                                    }
-                                });
+                                    });
 
-                                if (holder.realmRegisteredInfo.isLoaded() && holder.realmRegisteredInfo != null) {
-                                    setSenderName(holder);
+                                    if (holder.realmRegisteredInfo.isLoaded() && holder.realmRegisteredInfo != null) {
+                                        setSenderName(holder);
+                                    }
                                 }
                             }
 
