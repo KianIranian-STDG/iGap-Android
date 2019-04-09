@@ -107,7 +107,7 @@ import net.iGap.Theme;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
-import net.iGap.adapter.AdapterBottomSheet;
+import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.AdapterDrBot;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.adapter.items.AdapterBottomSheetForward;
@@ -402,10 +402,8 @@ public class FragmentChat extends BaseFragment
     private boolean isRepley = false;
     private boolean swipeBack = false;
     public static List<StructGroupSticker> data = new ArrayList<>();
-    public Runnable countDownRunnable;
-    public Handler countDownHandler;
-    private Runnable scrollRunnable;
-    private Handler scrollHandler;
+    public Runnable gongingRunnable;
+    public Handler gongingHandler;
 
 
     /**
@@ -622,10 +620,12 @@ public class FragmentChat extends BaseFragment
         uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         String[] projection = {
-                MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME
+                MediaStore.MediaColumns.DATA,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.ImageColumns.DATE_TAKEN
         };
 
-        cursor = activity.getContentResolver().query(uri, projection, null, null, null);
+        cursor = activity.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_TAKEN);
 
         if (cursor != null) {
             column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
@@ -744,22 +744,15 @@ public class FragmentChat extends BaseFragment
         super.onViewCreated(view, savedInstanceState);
 
         realmChat = Realm.getDefaultInstance();
-        countDownRunnable = new Runnable() {
+        gongingRunnable = new Runnable() {
             @Override
             public void run() {
                 cardFloatingTime.setVisibility(View.GONE);
             }
         };
-        countDownHandler = new Handler(Looper.getMainLooper());
+        gongingHandler = new Handler(Looper.getMainLooper());
 
 
-        scrollRunnable = new Runnable() {
-            @Override
-            public void run() {
-                rcTouchListener = false;
-            }
-        };
-        scrollHandler = new Handler();
 
         startPageFastInitialize();
         G.handler.postDelayed(new Runnable() {
@@ -1961,11 +1954,9 @@ public class FragmentChat extends BaseFragment
                                 firstVisiblePositionOffset = 0;
                                 getMessages();
                             } else {
-                                new RequestClientGetRoomMessage().clientGetRoomMessage(mRoomId, pinMessageId);
-                                G.onClientGetRoomMessage = new OnClientGetRoomMessage() {
+                                new RequestClientGetRoomMessage().clientGetRoomMessage(mRoomId, pinMessageId, new OnClientGetRoomMessage() {
                                     @Override
                                     public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
-                                        G.onClientGetRoomMessage = null;
                                         G.handler.post(new Runnable() {
                                             @Override
                                             public void run() {
@@ -1975,9 +1966,8 @@ public class FragmentChat extends BaseFragment
                                                 setGapAndGetMessage(pinMessageId);
                                             }
                                         });
-
                                     }
-                                };
+                                });
                             }
                         }
                     }
@@ -2298,23 +2288,31 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = new IUpdateLogItem() {
             @Override
             public void onUpdate(byte[] log, long messageId) {
-                if (mAdapter == null) {
+                if (getActivity() == null && getActivity().isFinishing())
                     return;
-                }
-                for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
-
-                    try {
-                        AbstractMessage item = mAdapter.getAdapterItem(i);
-
-                        if (item.mMessage != null && item.mMessage.messageID.equals(messageId + "")) {
-                            item.mMessage.logs = log;
-                            mAdapter.notifyAdapterItemChanged(i);
-                            break;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mAdapter == null) {
+                            return;
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        for (int i = mAdapter.getAdapterItemCount() - 1; i >= 0; i--) {
+
+                            try {
+                                AbstractMessage item = mAdapter.getAdapterItem(i);
+
+                                if (item.mMessage != null && item.mMessage.messageID.equals(messageId + "")) {
+                                    item.mMessage.logs = log;
+                                    mAdapter.notifyAdapterItemChanged(i);
+                                    break;
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                HelperLog.setErrorLog(e);
+                            }
+                        }
                     }
-                }
+                });
             }
         };
 
@@ -3090,9 +3088,6 @@ public class FragmentChat extends BaseFragment
                     mRecyclerView.fling(velocityX, velocityY);
                     return true;
                 }*/
-                rcTouchListener = true;
-                scrollHandler.removeCallbacks(scrollRunnable);
-                scrollHandler.postDelayed(scrollRunnable, 1000);
 
                 return false;
             }
@@ -3105,15 +3100,15 @@ public class FragmentChat extends BaseFragment
                 int totalItemCount = ((LinearLayoutManager) recyclerView.getLayoutManager()).getItemCount();
                 int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
-
-                if (rcTouchListener) {
-                    cardFloatingTime.setVisibility(View.VISIBLE);
-                    long item = mAdapter.getItemByPosition(((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition());
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTimeInMillis(item);
+                cardFloatingTime.setVisibility(View.VISIBLE);
+                long item = mAdapter.getItemByPosition(((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition());
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(item);
+                if (item != 0L) {
                     txtFloatingTime.setText(TimeUtils.getChatSettingsTimeAgo(G.fragmentActivity, calendar.getTime()));
-                    resetCountDownTimer();
                 }
+                gongingHandler.removeCallbacks(gongingRunnable);
+                gongingHandler.postDelayed(gongingRunnable, 1000);
 
                 if (pastVisibleItems + visibleItemCount >= totalItemCount && !isAnimateStart) {
                     isScrollEnd = false;
@@ -3180,12 +3175,6 @@ public class FragmentChat extends BaseFragment
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-                if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    rcTouchListener = true;
-                } else {
-                    rcTouchListener = false;
-                }
 
 
                 return false;
@@ -3507,12 +3496,6 @@ public class FragmentChat extends BaseFragment
         });
 
         //realm.close();
-    }
-
-    private void resetCountDownTimer() {
-
-        countDownHandler.removeCallbacks(countDownRunnable);
-        countDownHandler.postDelayed(countDownRunnable, 1000);
     }
 
     public static void fillStickerList() {
@@ -4084,7 +4067,7 @@ public class FragmentChat extends BaseFragment
     }
 
     @Override
-    public void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
+    public synchronized void onMessageReceive(final long roomId, String message, ProtoGlobal.RoomMessageType messageType, final ProtoGlobal.RoomMessage roomMessage, final ProtoGlobal.Room.Type roomType) {
 
         if (roomMessage.getMessageId() <= biggestMessageId) {
             return;
@@ -4162,6 +4145,7 @@ public class FragmentChat extends BaseFragment
         G.handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                getRealmChat().refresh();
                 //final Realm realm = Realm.getDefaultInstance();
                 final RealmRoomMessage realmRoomMessage = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.MESSAGE_ID, roomMessage.getMessageId()).findFirst();
 
@@ -4284,7 +4268,7 @@ public class FragmentChat extends BaseFragment
 
                 //realm.close();
             }
-        }, 400);
+        }, 0);
     }
 
     private StructWebView getUrlWebView(String additionalData) {
@@ -5244,7 +5228,8 @@ public class FragmentChat extends BaseFragment
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-
+                        if (roomId != ownerId)
+                            return;
                         if (!isCloudRoom) {
                             G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
                         }
@@ -5253,10 +5238,12 @@ public class FragmentChat extends BaseFragment
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (roomId != ownerId)
+                            return;
                         if (!isCloudRoom && imvUserPicture != null) {
                             imvUserPicture.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color));
                         }
@@ -5470,17 +5457,20 @@ public class FragmentChat extends BaseFragment
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-
+                        if (idForGetAvatar != ownerId)
+                            return;
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
                     }
                 });
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (idForGetAvatar != ownerId)
+                            return;
                         if (imvUserPicture != null) {
                             imvUserPicture.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color));
                         }
@@ -5872,12 +5862,14 @@ public class FragmentChat extends BaseFragment
     }
 
     private void setDownBtnVisible() {
-        llScrollNavigate.setVisibility(View.VISIBLE);
+        if (llScrollNavigate != null)
+            llScrollNavigate.setVisibility(View.VISIBLE);
         isScrollEnd = true;
     }
 
     private void setDownBtnGone() {
-        llScrollNavigate.setVisibility(View.GONE);
+        if (llScrollNavigate != null)
+            llScrollNavigate.setVisibility(View.GONE);
         isScrollEnd = false;
     }
 
@@ -7847,7 +7839,7 @@ public class FragmentChat extends BaseFragment
                             public void run() {
                                 fastItemAdapter.add(new AdapterCamera("").withIdentifier(99));
                                 for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                                    fastItemAdapter.add(new AdapterBottomSheet(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
+                                    fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
                                 }
                                 isPermissionCamera = true;
                             }
@@ -7900,7 +7892,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void run() {
                 for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                    fastItemAdapter.add(new AdapterBottomSheet(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
+                    fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
                 }
             }
         });
@@ -9050,20 +9042,20 @@ public class FragmentChat extends BaseFragment
                         sort = Sort.ASCENDING;
                         isWaitingForHistoryDown = false;
                     }
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (FragmentChat.isLoadingMoreMessage) {
-                                if (!isWaitingForHistoryUp && !isWaitingForHistoryDown) {
+                    if (FragmentChat.isLoadingMoreMessage) {
+                        if (!isWaitingForHistoryUp && !isWaitingForHistoryDown) {
 
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
                                     FragmentChat.isLoadingMoreMessage = false;
                                     hideProgress();
                                     llScrollNavigate.performClick();
                                 }
-                                return;
-                            }
+                            });
                         }
-                    });
+                        return;
+                    }
 
                     realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, sort);
                     MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN, getRealmChat());

@@ -13,7 +13,7 @@ package net.iGap.interfaces;
 public interface OnGroupDeleteInRoomList {
     void onGroupDelete(long roomId);
 
-    void Error(int majorCode, int minorCode);
+    void onGroupDeleteError(int majorCode, int minorCode);
 
-    void onTimeOut();
+    void onGroupDeleteTimeOut();
 }

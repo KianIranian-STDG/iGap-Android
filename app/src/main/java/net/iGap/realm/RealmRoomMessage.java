@@ -588,8 +588,7 @@ public class RealmRoomMessage extends RealmObject {
         return 0;
     }
 
-    public void removeFromRealm() {
-        Realm realm = Realm.getDefaultInstance();
+    public void removeFromRealm(Realm realm) {
         if (realmAdditional != null)
             realmAdditional.deleteFromRealm();
 

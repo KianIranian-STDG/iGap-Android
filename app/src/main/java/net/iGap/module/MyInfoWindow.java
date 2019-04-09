@@ -83,7 +83,12 @@ public class MyInfoWindow extends InfoWindow {
             RealmRegisteredInfo.getRegistrationInfo(userId, new OnInfo() {
                 @Override
                 public void onInfo(Long registeredId) {
-                    onOpen(arg);
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            onOpen(arg);
+                        }
+                    });
                 }
             });
             return;
@@ -203,22 +208,26 @@ public class MyInfoWindow extends InfoWindow {
             }
         });
 
-        HelperAvatar.getAvatar(null, userId, HelperAvatar.AvatarType.USER, true, realm, new OnAvatarGet() {
+        HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, true, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long roomId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (userId != roomId)
+                            return;
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), avatar);
                     }
                 });
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long roomId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (userId != roomId)
+                            return;
                         avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });

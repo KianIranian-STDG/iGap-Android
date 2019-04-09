@@ -11,6 +11,8 @@
 package net.iGap.adapter.items.chat;
 
 import android.graphics.Color;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,9 +90,9 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
 
     protected static class ViewHolder extends ChatItemHolder {
 
-        protected TextView name;
-        protected TextView number;
-        protected ImageView image;
+        protected AppCompatTextView name;
+        protected AppCompatTextView number;
+        protected AppCompatImageView image;
 
         public ViewHolder(View view) {
             super(view);
@@ -100,7 +102,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             container2.setPadding((int) G.context.getResources().getDimension(messageContainerPadding), 0, 5, 2);
             container2.setLayoutParams(layoutParamsContainer2);
 
-            image = new ImageView(G.context);
+            image = new AppCompatImageView(G.context);
             LinearLayout.LayoutParams layoutParamsImage = new LinearLayout.LayoutParams(ViewMaker.i_Dp(R.dimen.dp48), ViewMaker.i_Dp(R.dimen.dp48));
             layoutParamsImage.rightMargin = 14;
             image.setId(R.id.image);
@@ -113,7 +115,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             container3.setOrientation(VERTICAL);
             container3.setLayoutParams(layoutParamsContainer3);
 
-            name = new TextView(G.context);
+            name = new AppCompatTextView(G.context);
             LinearLayout.LayoutParams layoutParamsName = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             name.setId(R.id.name);
             name.setTextAppearance(context, android.R.style.TextAppearance_Medium);
@@ -124,7 +126,7 @@ public class ContactItem extends AbstractMessage<ContactItem, ContactItem.ViewHo
             name.setLayoutParams(layoutParamsName);
             container3.addView(name);
 
-            number = new TextView(G.context);
+            number = new AppCompatTextView(G.context);
             LinearLayout.LayoutParams layoutParamsNumber = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             number.setId(R.id.number);
             number.setTextAppearance(context, android.R.style.TextAppearance_Small);

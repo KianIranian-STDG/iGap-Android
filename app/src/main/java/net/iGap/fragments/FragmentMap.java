@@ -82,6 +82,7 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 
+import static net.iGap.G.isLocationFromBot;
 import static net.iGap.R.id.mf_fragment_map_view;
 
 public class FragmentMap extends BaseFragment implements OnMapReadyCallback, View.OnClickListener, LocationListener {
@@ -276,7 +277,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
     @Override
     public void onDetach() {
         super.onDetach();
-
+        isLocationFromBot = false;
         HelperSetAction.sendCancel(FragmentChat.messageId);
     }
 
@@ -307,7 +308,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
         //  rvSendPosition.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (mode == Mode.sendPosition) {
-            fabOpenMap.setVisibility(View.GONE);
+            fabOpenMap.hide();
             rvSendPosition.setVisibility(View.VISIBLE);
             rvSeePosition.setVisibility(View.GONE);
             rvSendPosition.setOnClickListener(this);
@@ -315,7 +316,7 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
         } else if (mode == Mode.seePosition) {
             rvSeePosition.setVisibility(View.VISIBLE);
-            fabOpenMap.setVisibility(View.VISIBLE);
+            fabOpenMap.show();
             rvSendPosition.setVisibility(View.GONE);
             fabOpenMap.setOnClickListener(this);
 
@@ -372,7 +373,8 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-
+                        if (id != ownerId)
+                            return;
                         //   if (!isCloudRoom) {
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imgProfile);
                         //     }
@@ -381,10 +383,12 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (id != ownerId)
+                            return;
                         //   if (!isCloudRoom && imvUserPicture != null) {
                         imgProfile.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color));
                         //    }
@@ -419,12 +423,11 @@ public class FragmentMap extends BaseFragment implements OnMapReadyCallback, Vie
 
             return;
         }
-        if (mode == Mode.seePosition) {
+        if (mode == Mode.seePosition || isLocationFromBot) {
             mMap.setMyLocationEnabled(true);
 
             mMap.getUiSettings().setZoomGesturesEnabled(true);
         } else {
-
             mMap.getUiSettings().setZoomGesturesEnabled(false);
             mMap.setMyLocationEnabled(false);
         }

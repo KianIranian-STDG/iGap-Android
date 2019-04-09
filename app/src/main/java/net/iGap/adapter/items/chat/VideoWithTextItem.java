@@ -12,6 +12,7 @@ package net.iGap.adapter.items.chat;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -135,7 +136,7 @@ public class VideoWithTextItem extends AbstractMessage<VideoWithTextItem, VideoW
             image.setCornerRadius(HelperRadius.computeRadius());
             frameLayout_642.addView(image);
 
-            duration = new TextView(G.context);
+            duration = new AppCompatTextView(G.context);
             duration.setId(R.id.duration);
             duration.setBackgroundResource(R.drawable.bg_message_image_time);
             duration.setGravity(Gravity.CENTER_VERTICAL);

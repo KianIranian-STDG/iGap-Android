@@ -38,7 +38,6 @@ public class AdapterBottomSheetForward extends AbstractItem<AdapterBottomSheetFo
 
     public StructBottomSheetForward mList;
     public boolean isChecked = false;
-    private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
 
     public AdapterBottomSheetForward(StructBottomSheetForward mList) {
         this.mList = mList;
@@ -58,7 +57,6 @@ public class AdapterBottomSheetForward extends AbstractItem<AdapterBottomSheetFo
         super.bindView(viewHolder, payloads);
 
         if (mList.isContactList()) {
-            hashMapAvatar.put(mList.getId(), viewHolder.imgSrc);
             setAvatarContact(viewHolder, mList.getId());
         } else {
             setAvatar(mList, viewHolder.imgSrc);
@@ -139,27 +137,31 @@ public class AdapterBottomSheetForward extends AbstractItem<AdapterBottomSheetFo
             avatarType = HelperAvatar.AvatarType.ROOM;
         }
 
-        hashMapAvatar.put(idForGetAvatar, imageView);
+        final long idForGetAvatarOriginal = idForGetAvatar;
 
         HelperAvatar.getAvatar(idForGetAvatar, avatarType, false, new OnAvatarGet() {
             @Override
             public void onAvatarGet(String avatarPath, long idForGetAvatar) {
-                if (hashMapAvatar.get(idForGetAvatar) != null) {
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(idForGetAvatar));
-                }
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (idForGetAvatar == idForGetAvatarOriginal ) {
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imageView);
+                        }
+                    }
+                });
             }
 
             @Override
-            public void onShowInitials(String initials, String color) {
-                long idForGetAvatar;
-                if (mInfo.getType() == ProtoGlobal.Room.Type.CHAT) {
-                    idForGetAvatar = mInfo.getPeer_id();
-                } else {
-                    idForGetAvatar = mInfo.getId();
-                }
-                if (hashMapAvatar.get(idForGetAvatar) != null) {
-                    hashMapAvatar.get(idForGetAvatar).setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), initials, color));
-                }
+            public void onShowInitials(String initials, String color, long idForGetAvatar) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (idForGetAvatar == idForGetAvatarOriginal ) {
+                            imageView.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), initials, color));
+                        }
+                    }
+                });
             }
         });
     }
@@ -169,12 +171,25 @@ public class AdapterBottomSheetForward extends AbstractItem<AdapterBottomSheetFo
         HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(ownerId));
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (userId == ownerId) {
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.imgSrc);
+                        }
+                    }
+                });
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
-                hashMapAvatar.get(userId).setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.imgSrc.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (userId == ownerId)
+                            holder.imgSrc.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.imgSrc.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    }
+                });
             }
         });
     }

@@ -35,7 +35,6 @@ import java.util.List;
 import io.realm.Realm;
 
 import static net.iGap.G.firstEnter;
-import static net.iGap.G.firstTimeEnterToApp;
 import static net.iGap.G.isAppInFg;
 
 /**
@@ -59,10 +58,7 @@ public class LoginActions {
                     @Override
                     protected Void doInBackground(Void... voids) {
                         G.clientConditionGlobal = RealmClientCondition.computeClientCondition(null);
-
-                        if (!firstTimeEnterToApp || !isAppInFg) {
-                            new RequestClientGetRoomList().clientGetRoomList(0, Config.LIMIT_LOAD_ROOM, "0");
-                        }
+                        new RequestClientGetRoomList().clientGetRoomList(0, Config.LIMIT_LOAD_ROOM, "0");
                         return null;
                     }
 

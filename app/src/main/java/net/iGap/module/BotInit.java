@@ -6,6 +6,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +52,7 @@ import java.util.HashMap;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 public class BotInit implements View.OnClickListener {
@@ -353,7 +356,7 @@ public class BotInit implements View.OnClickListener {
         LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
         param.setMargins(2, 2, 2, 2);
 
-        Button btn = new Button(G.context);
+        AppCompatButton btn = new AppCompatButton(G.context);
         btn.setLayoutParams(param);
         btn.setTextColor(Color.WHITE);
         btn.setBackgroundColor(ContextCompat.getColor(G.context, R.color.zxing_viewfinder_laser));
@@ -414,7 +417,7 @@ public class BotInit implements View.OnClickListener {
                                 @Override
                                 public void execute(Realm realm) {
                                     RealmUserInfo realmUserInfo = RealmUserInfo.getRealmUserInfo(realm);
-                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(),null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
+                                    RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, realmUserInfo.getUserInfo().getPhoneNumber(), null, 0, realm, ProtoGlobal.RoomMessageType.TEXT);
                                     G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
                                     if (G.onBotClick != null) {
                                         G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
@@ -434,8 +437,10 @@ public class BotInit implements View.OnClickListener {
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                             Boolean response = false;
-                            if (G.locationListener != null)
-                                response = G.locationListener.requestLocation();
+                            if (G.locationListener != null) {
+                                isLocationFromBot = true;
+                                G.locationListener.requestLocation();
+                            }
 
               /*              G.locationListenerResponse = new LocationListenerResponse() {
                                 @Override
@@ -498,7 +503,7 @@ public class BotInit implements View.OnClickListener {
 
         ViewGroup.LayoutParams param = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
 
-        TextView txt = new TextView(G.context);
+        TextView txt = new AppCompatTextView(G.context);
         txt.setLayoutParams(param);
         txt.setPadding(15, 6, 15, 6);
         txt.setText(action);
@@ -529,14 +534,13 @@ public class BotInit implements View.OnClickListener {
         G.ipromote = new Ipromote() {
             @Override
             public void onGetPromoteResponse(ProtoClientGetPromote.ClientGetPromoteResponse.Builder builder) {
-                final Realm realm = Realm.getDefaultInstance();
                 ArrayList<Long> promoteIds = new ArrayList<>();
 
                 for (int i = 0; i < builder.getPromoteList().size(); i++)
                     promoteIds.add(builder.getPromoteList().get(i).getId());
 
-
-                realm.executeTransactionAsync(new Realm.Transaction() {
+                final Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
                         RealmResults<RealmRoom> roomList = realm.where(RealmRoom.class).equalTo(RealmRoomFields.IS_FROM_PROMOTE, true).findAll();
@@ -546,10 +550,10 @@ public class BotInit implements View.OnClickListener {
                                 room.setFromPromote(false);
                                 new RequestClientPinRoom().pinRoom(room.getId(), false);
                             }
-
                         }
                     }
                 });
+                realm.close();
 
                 for (int i = builder.getPromoteList().size() - 1; i >= 0; i--) {
 

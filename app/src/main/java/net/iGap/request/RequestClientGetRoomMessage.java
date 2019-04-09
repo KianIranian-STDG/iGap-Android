@@ -10,20 +10,40 @@
 
 package net.iGap.request;
 
+import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.proto.ProtoClientGetRoomMessage;
 
 public class RequestClientGetRoomMessage {
 
-    public void clientGetRoomMessage(long roomId, long messageId) {
+    public void clientGetRoomMessage(long roomId, long messageId, OnClientGetRoomMessage onClientGetRoomMessage) {
         ProtoClientGetRoomMessage.ClientGetRoomMessage.Builder builder = ProtoClientGetRoomMessage.ClientGetRoomMessage.newBuilder();
         builder.setRoomId(roomId);
         builder.setMessageId(messageId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(604, builder, roomId + "");
+        RequestWrapper requestWrapper = new RequestWrapper(604, builder, new RequestClientGetRoomMessageExtra(roomId, onClientGetRoomMessage));
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
     }
+
+    public class RequestClientGetRoomMessageExtra {
+        private long roomId;
+        private OnClientGetRoomMessage onClientGetRoomMessage;
+
+        RequestClientGetRoomMessageExtra(long roomId, OnClientGetRoomMessage onClientGetRoomMessage) {
+            this.roomId = roomId;
+            this.onClientGetRoomMessage = onClientGetRoomMessage;
+        }
+
+        public long getRoomId() {
+            return roomId;
+        }
+
+        public OnClientGetRoomMessage getOnClientGetRoomMessage() {
+            return onClientGetRoomMessage;
+        }
+    }
+
 }

@@ -2,6 +2,8 @@ package net.iGap.adapter.items.chat;
 
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,13 +39,13 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
     LinearLayout lyt_vote_up;
     LinearLayout lyt_vote_down;
     LinearLayout lyt_signature;
-    TextView txt_vote_down;
-    TextView txt_vote_up;
-    TextView txt_signature;
-    TextView txt_views_label;
-    TextView txtEditedIndicator;
-    TextView cslr_txt_time;
-    ImageView cslr_txt_tic;
+    AppCompatTextView txt_vote_down;
+    AppCompatTextView txt_vote_up;
+    AppCompatTextView txt_signature;
+    AppCompatTextView txt_views_label;
+    AppCompatTextView txtEditedIndicator;
+    AppCompatTextView cslr_txt_time;
+    AppCompatImageView cslr_txt_tic;
     View cslm_view_left_dis;
 
 
@@ -85,7 +87,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         csl_ll_time.setPadding(dpToPixel(5), 0, dpToPixel(5), 0);
         csl_ll_time.setLayoutParams(layout_189);
 
-        txtEditedIndicator = new TextView(context);
+        txtEditedIndicator = new MaterialDesignTextView(context);
         txtEditedIndicator.setId(R.id.txtEditedIndicator);
         txtEditedIndicator.setPadding(i_Dp(dp4), 0, 0, 0);
         txtEditedIndicator.setGravity(CENTER);
@@ -105,7 +107,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         layout_927.topMargin = dpToPixel(4);
         txtEditedIndicator.setLayoutParams(layout_927);
 
-        cslr_txt_time = new TextView(context);
+        cslr_txt_time = new AppCompatTextView(context);
         cslr_txt_time.setId(R.id.cslr_txt_time);
         cslr_txt_time.setGravity(CENTER);
         cslr_txt_time.setPadding(dpToPixel(2), 0, dpToPixel(2), 0);
@@ -119,7 +121,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         cslr_txt_time.setLayoutParams(layout_638);
 
         // ContextThemeWrapper newContext = new ContextThemeWrapper(G.context, R.style.ChatMessages_MaterialDesignTextView_Tick);
-        cslr_txt_tic = new ImageView(context);
+        cslr_txt_tic = new AppCompatImageView(context);
         cslr_txt_tic.setId(R.id.cslr_txt_tic);
 
 //        cslr_txt_tic.setColorFilter(context.getResources().getColor(R.color.colorOldBlack));
@@ -156,7 +158,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         lyt_vote_up.setLayoutParams(layout_799);
 
         LinearLayout.LayoutParams layout_713 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        txt_vote_up = new TextView(context);
+        txt_vote_up = new AppCompatTextView(context);
         txt_vote_up.setId(R.id.txt_vote_up);
         txt_vote_up.setText("0");
         txt_vote_up.setGravity(BOTTOM);
@@ -195,7 +197,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
 
         LinearLayout.LayoutParams layout_856 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        txt_vote_down = new TextView(context);
+        txt_vote_down = new AppCompatTextView(context);
         txt_vote_down.setId(R.id.txt_vote_down);
         txt_vote_down.setText("0");
         txt_vote_down.setGravity(BOTTOM);
@@ -245,7 +247,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         LinearLayout.LayoutParams layout_483 = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
         lyt_signature.setLayoutParams(layout_483);
 
-        txt_signature = new TextView(context);
+        txt_signature = new AppCompatTextView(context);
         txt_signature.setId(R.id.txt_signature);
         txt_signature.setGravity(CENTER);
         txt_signature.setText("");
@@ -259,7 +261,7 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
         lyt_signature.addView(txt_signature);
         lyt_see.addView(lyt_signature);
 
-        txt_views_label = new TextView(context);
+        txt_views_label = new AppCompatTextView(context);
         txt_views_label.setId(R.id.txt_views_label);
         txt_views_label.setGravity(CENTER);
         txt_views_label.setText("0");
@@ -290,7 +292,8 @@ public class ChatItemHolder extends RecyclerView.ViewHolder {
 
         linearLayout_683.addView(csl_ll_time, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         csl_ll_time.addView(lyt_see, 0);
-        csl_ll_time.addView(lyt_vote);
+        csl_ll_time.addView(lyt_vote, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
 
         LinearLayout.LayoutParams layout_842 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 

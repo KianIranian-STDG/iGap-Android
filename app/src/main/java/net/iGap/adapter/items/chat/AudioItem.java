@@ -14,6 +14,8 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
 import static android.support.design.R.id.center;
 import android.view.Gravity;
@@ -348,10 +350,10 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
 
     protected static class ViewHolder extends ChatItemWithTextHolder implements IThumbNailItem, IProgress {
         protected MessageProgress progress;
-        protected ImageView thumbnail;
-        protected TextView fileSize;
-        protected TextView fileName;
-        protected TextView songArtist;
+        protected AppCompatImageView thumbnail;
+        protected AppCompatTextView fileSize;
+        protected AppCompatTextView fileName;
+        protected AppCompatTextView songArtist;
         protected String mFilePath = "";
         protected String mMessageID = "";
         protected String mTimeMusic = "";
@@ -359,7 +361,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
         protected MaterialDesignTextView btnPlayMusic;
         protected SeekBar musicSeekbar;
         protected OnComplete complete;
-        protected TextView txt_Timer;
+        protected AppCompatTextView txt_Timer;
         protected LinearLayout audioBox;
 
         public ViewHolder(final View view) {
@@ -393,7 +395,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             FrameLayout frameLayout = new FrameLayout(G.context);
             frameLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
-            thumbnail = new ImageView(G.context);
+            thumbnail = new AppCompatImageView(G.context);
             thumbnail.setId(R.id.thumbnail);
             LinearLayout.LayoutParams thumbnailParams = new LinearLayout.LayoutParams((int) G.context.getResources().getDimension(R.dimen.dp48), (int) G.context.getResources().getDimension(R.dimen.dp48));
             thumbnail.setAdjustViewBounds(true);
@@ -401,7 +403,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             AppUtils.setImageDrawable(thumbnail, R.drawable.green_music_note);
             thumbnail.setLayoutParams(thumbnailParams);
 
-            fileSize = new TextView(G.context);
+            fileSize = new AppCompatTextView(G.context);
             fileSize.setId(R.id.fileSize);
             fileSize.setTextAppearance(context, android.R.style.TextAppearance_Small);
             fileSize.setGravity(BOTTOM | CENTER_HORIZONTAL);
@@ -421,7 +423,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             LinearLayout.LayoutParams layout_114 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             linearLayout_222.setLayoutParams(layout_114);
 
-            fileName = new TextView(G.context);
+            fileName = new AppCompatTextView(G.context);
             fileName.setId(R.id.fileName);
             fileName.setEllipsize(TextUtils.TruncateAt.MIDDLE);
             fileName.setGravity(LEFT);
@@ -436,7 +438,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             fileName.setLayoutParams(layout_298);
             linearLayout_222.addView(fileName);
 
-            songArtist = new TextView(G.context);
+            songArtist = new AppCompatTextView(G.context);
             songArtist.setId(R.id.songArtist);
             songArtist.setTextAppearance(context, android.R.style.TextAppearance_Small);
             songArtist.setSingleLine(true);
@@ -483,7 +485,7 @@ public class AudioItem extends AbstractMessage<AudioItem, AudioItem.ViewHolder> 
             linearLayout_511.addView(musicSeekbar);
             audioPlayerViewContainer.addView(linearLayout_511);
 
-            txt_Timer = new TextView(G.context);
+            txt_Timer = new AppCompatTextView(G.context);
             txt_Timer.setId(R.id.csla_txt_timer);
             txt_Timer.setPadding(0, 0, (int) G.context.getResources().getDimension(R.dimen.dp8), 0);
             txt_Timer.setText("00:00");

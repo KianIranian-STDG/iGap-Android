@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp60"
                 android:layout_marginLeft="@dimen/dp24"
@@ -83,7 +83,7 @@
                         android:visibility="visible" />
                 </LinearLayout>
 
-                <net.iGap.module.HeaderTextview
+                <net.iGap.module.HeaderTextView
                     android:id="@+id/remindTime"
                     android:layout_width="0dp"
                     android:layout_weight=".2"
@@ -103,7 +103,7 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/dp8">
 
-                <net.iGap.module.HeaderTextview
+                <net.iGap.module.HeaderTextView
                     android:id="@+id/rg_btn_dialog_okVerifyCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
                     android:textSize="@dimen/dp14"
                     android:textStyle="bold" />
 
-                <net.iGap.module.HeaderTextview
+                <net.iGap.module.HeaderTextView
                     android:id="@+id/rg_btn_cancelVerifyCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

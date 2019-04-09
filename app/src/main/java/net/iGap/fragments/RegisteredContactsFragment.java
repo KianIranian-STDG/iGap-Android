@@ -128,7 +128,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     private ProgressBar prgWaitingLoadContact;
     private EditText edtSearch;
     private boolean isCallAction = false;
-    private HashMap<Long, CircleImageView> hashMapAvatar = new HashMap<>();
     private FastItemAdapter fastItemAdapter;
     private ProgressBar prgWaitingLiadList;
     //private ContactListAdapterA mAdapter;
@@ -927,7 +926,6 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 //                viewHolder.root.setBackgroundColor(ContextCompat.getColor(G.context, R.color.white));
             }
 
-            hashMapAvatar.put(contact.getId(), viewHolder.image);
             setAvatar(viewHolder, contact.getId());
         }
 
@@ -936,12 +934,24 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
             HelperAvatar.getAvatar(userId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(final String avatarPath, long ownerId) {
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatar.get(ownerId));
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (userId == ownerId)
+                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                        }
+                    });
                 }
 
                 @Override
-                public void onShowInitials(final String initials, final String color) {
-                    hashMapAvatar.get(userId).setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                public void onShowInitials(final String initials, final String color, final long ownerId) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (userId == ownerId)
+                                holder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        }
+                    });
                 }
             });
         }

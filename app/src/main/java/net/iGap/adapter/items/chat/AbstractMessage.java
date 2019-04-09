@@ -110,6 +110,7 @@ import io.realm.Realm;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 import static android.content.Context.MODE_PRIVATE;
+import static net.iGap.G.isLocationFromBot;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentChat.getRealmChat;
 import static net.iGap.helper.HelperCalander.convertToUnicodeFarsiNumber;
@@ -217,8 +218,10 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         }
         if (mMessage.forwardedFrom != null) {
             myText = new SpannableString(mMessage.forwardedFrom.getMessage());
-        } else {
+        } else if (mMessage.messageText != null) {
             myText = new SpannableString(mMessage.messageText);
+        } else {
+            myText = new SpannableString("");
         }
 
         updateMessageText();
@@ -512,24 +515,28 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
 
                 //  String[] initialize =
                 final ImageView copyMessageSenderAvatar = (ImageView) messageSenderAvatar;
-                HelperAvatar.getAvatar(null, Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, getRealmChat(), new OnAvatarGet() {
+                HelperAvatar.getAvatar(Long.parseLong(mMessage.senderID), HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
                     @Override
                     public void onAvatarGet(final String avatarPath, long ownerId) {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), copyMessageSenderAvatar);
+                                if (ownerId == Long.parseLong(mMessage.senderID)) {
+                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), copyMessageSenderAvatar);
+                                }
                             }
                         });
                     }
 
                     @Override
-                    public void onShowInitials(final String initials, final String color) {
+                    public void onShowInitials(final String initials, final String color, final long ownerId) {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                copyMessageSenderAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
-                            }
+                                if (ownerId == Long.parseLong(mMessage.senderID)) {
+                                    copyMessageSenderAvatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.itemView.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                                }
+                             }
                         });
                     }
                 });
@@ -1898,8 +1905,11 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
                         @Override
                         public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                            if (G.locationListener != null)
-                              G.locationListener.requestLocation();
+                            if (G.locationListener != null){
+                                isLocationFromBot=true;
+                                G.locationListener.requestLocation();
+                            }
+
 
 
                    /*         G.locationListenerResponse = new LocationListenerResponse() {

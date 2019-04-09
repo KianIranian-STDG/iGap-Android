@@ -21,9 +21,7 @@ public class RequestChannelGetMessagesStats {
 
         ProtoChannelGetMessagesStats.ChannelGetMessagesStats.Builder builder = ProtoChannelGetMessagesStats.ChannelGetMessagesStats.newBuilder();
         builder.setRoomId(roomId);
-        for (long messageId : messageIds) {
-            builder.addMessageId(messageId);
-        }
+        builder.addAllMessageId(messageIds);
 
         RequestWrapper requestWrapper = new RequestWrapper(423, builder);
         try {

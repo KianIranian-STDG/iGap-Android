@@ -174,17 +174,19 @@ public class SetCardPinFragment extends Fragment {
             }
         });
 
-        currentPassTitle.setVisibility((mCard == null ? RaadApp.paygearCard.isProtected : mCard.isProtected) ? View.VISIBLE : View.GONE);
-        currentPass.setVisibility((mCard == null ? RaadApp.paygearCard.isProtected : mCard.isProtected) ? View.VISIBLE : View.GONE);
+        try {
+            currentPassTitle.setVisibility((mCard == null ? RaadApp.paygearCard.isProtected : mCard.isProtected) ? View.VISIBLE : View.GONE);
+            currentPass.setVisibility((mCard == null ? RaadApp.paygearCard.isProtected : mCard.isProtected) ? View.VISIBLE : View.GONE);
 
+            if (isRecovery) {
+                currentPassTitle.setText(R.string.four_digit_code);
+                currentPass.setHint(R.string.enter_four_digit_code);
+            } else {
+                currentPassTitle.setText(R.string.current_pass);
+                currentPass.setHint(R.string.current_pass);
 
-        if (isRecovery) {
-            currentPassTitle.setText(R.string.four_digit_code);
-            currentPass.setHint(R.string.enter_four_digit_code);
-        } else {
-            currentPassTitle.setText(R.string.current_pass);
-            currentPass.setHint(R.string.current_pass);
-
+            }
+        } catch (Exception e) {
         }
         if (isRecovery) {
             getOTP();

@@ -383,7 +383,7 @@ public class RealmMigration implements io.realm.RealmMigration {
             oldVersion++;
         }
 
-        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 27
+        if (oldVersion == 27) {
 
             RealmObjectSchema realmStickerDetails = schema.create(RealmStickersDetails.class.getSimpleName())
                     .addField("id", long.class, FieldAttribute.REQUIRED)
@@ -415,6 +415,19 @@ public class RealmMigration implements io.realm.RealmMigration {
                     .addField("sort", int.class, FieldAttribute.REQUIRED)
                     .addRealmListField("realmStickersDetails",realmStickerDetails);
 
+            oldVersion++;
+        }
+
+        if (oldVersion == REALM_LATEST_MIGRATION_VERSION) { // REALM_LATEST_MIGRATION_VERSION = 28
+            RealmObjectSchema realmRoomDraft = schema.get(RealmRoomDraft.class.getSimpleName());
+            if (realmRoomDraft != null) {
+                realmRoomDraft.addField("draftTime", long.class, FieldAttribute.REQUIRED);
+            }
+
+            RealmObjectSchema realmAttachment = schema.get(RealmAttachment.class.getSimpleName());
+            if (realmAttachment != null) {
+                realmAttachment.addIndex(RealmAttachmentFields.CACHE_ID);
+            }
             oldVersion++;
         }
     }

@@ -20,7 +20,7 @@ public interface OnAvatarGet {
      *
      * @param avatarPath path for show image from that
      */
-    void onAvatarGet(String avatarPath, long roomId);
+    void onAvatarGet(String avatarPath, long avatarId);
 
     /**
      * call this method if avatarPath not exist
@@ -28,5 +28,5 @@ public interface OnAvatarGet {
      * @param initials letters for show in imageView
      * @param color    color imageView background
      */
-    void onShowInitials(String initials, String color);
+    void onShowInitials(String initials, String color, long avatarId);
 }

@@ -24,7 +24,7 @@
       style="?textSubColorSettingTheme"
       app:submitBackground="@color/red" />
 
-    <net.iGap.module.HeaderTextview
+    <net.iGap.module.HeaderTextView
       android:id="@+id/rg_txt_titleToolbar"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -77,7 +77,7 @@
     android:padding="@dimen/dp8">
 
 
-    <net.iGap.module.HeaderTextview
+    <net.iGap.module.HeaderTextView
       android:id="@+id/rg_txt_okDialog"
       android:layout_width="@dimen/dp60"
       android:layout_height="@dimen/dp36"

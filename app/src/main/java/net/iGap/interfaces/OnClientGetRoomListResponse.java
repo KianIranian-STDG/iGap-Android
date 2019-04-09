@@ -12,13 +12,14 @@ package net.iGap.interfaces;
 
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoResponse;
+import net.iGap.request.RequestClientGetRoomList;
 
 import java.util.List;
 
 public interface OnClientGetRoomListResponse {
-    void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, String identity);
+    void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity);
 
-    void onError(int majorCode, int minorCode);
+    void onClientGetRoomListError(int majorCode, int minorCode);
 
-    void onTimeout();
+    void onClientGetRoomListTimeout();
 }

@@ -222,7 +222,7 @@
             android:visibility="visible">
 
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -441,7 +441,7 @@
 
             >
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
               android:id="@+id/headerTextview"
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="match_parent"
@@ -548,7 +548,7 @@
             style="?backgroundColorSettingTheme"
             android:visibility="@{safeUnbox(fragmentGroupProfileViewModel.settingVisibility)}">
 
-            <net.iGap.module.HeaderTextview
+            <net.iGap.module.HeaderTextView
               fontPath="fonts/IRANSansMobile_Bold.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"

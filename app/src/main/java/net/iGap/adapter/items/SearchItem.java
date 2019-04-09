@@ -32,7 +32,6 @@ import net.iGap.proto.ProtoGlobal;
 import java.util.List;
 
 import static net.iGap.fragments.SearchFragment.SearchType.contact;
-import static net.iGap.fragments.SearchFragment.hashMapAvatarSearchFragment;
 
 public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> {
     public SearchFragment.StructSearch item;
@@ -105,26 +104,25 @@ public class SearchItem extends AbstractItem<SearchItem, SearchItem.ViewHolder> 
             }
         }
 
-        hashMapAvatarSearchFragment.put(this.getIdentifier(), holder.avatar);
-
         HelperAvatar.getAvatar(item.idDetectAvatar, avatarType, false, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long roomId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), hashMapAvatarSearchFragment.get(SearchItem.this.getIdentifier()));
+                        if (item.idDetectAvatar == roomId)
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.avatar);
                     }
                 });
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long roomId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        hashMapAvatarSearchFragment.get(SearchItem.this.getIdentifier())
-                                .setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                        if (item.idDetectAvatar == roomId)
+                            holder.avatar.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.avatar.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
                     }
                 });
             }

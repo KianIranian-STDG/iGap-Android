@@ -89,12 +89,24 @@ public class ContactItem extends AbstractItem<ContactItem, ContactItem.ViewHolde
         HelperAvatar.getAvatar(mContact.peerId, HelperAvatar.AvatarType.USER, false, new OnAvatarGet() {
             @Override
             public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mContact.peerId == ownerId)
+                            G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                    }
+                });
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
-                holder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mContact.peerId == ownerId)
+                            holder.image.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) holder.image.getContext().getResources().getDimension(R.dimen.dp60), initials, color));
+                    }
+                });
             }
         });
     }

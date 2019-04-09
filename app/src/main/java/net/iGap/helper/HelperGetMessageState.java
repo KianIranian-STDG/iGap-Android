@@ -50,18 +50,20 @@ public class HelperGetMessageState {
 
         getViews.add(messageId);
 
-        if (!getViewsMessage.containsKey(roomId)) {
-            HashSet<Long> messageIdsForRoom = new HashSet<>();
-            getViewsMessage.put(roomId, messageIdsForRoom);
-        }
+        synchronized (mutex) {
+            if (!getViewsMessage.containsKey(roomId)) {
+                HashSet<Long> messageIdsForRoom = new HashSet<>();
+                getViewsMessage.put(roomId, messageIdsForRoom);
+            }
 
-        HashSet<Long> messageIdsForRoom = getViewsMessage.get(roomId);
-        if (!messageIdsForRoom.contains(messageId)){
-            messageIdsForRoom.add(messageId);
+            HashSet<Long> messageIdsForRoom = getViewsMessage.get(roomId);
+            if (!messageIdsForRoom.contains(messageId)) {
+                messageIdsForRoom.add(messageId);
 
 //            if (messageIdsForRoom.size() > 50) {
 //                sendMessageStateRequest();
 //            }
+            }
         }
     }
 
@@ -69,12 +71,13 @@ public class HelperGetMessageState {
      * send request for get message state for each room
      */
     private static void sendMessageStateRequest() {
-
-        for (long roomId : getViewsMessage.keySet()) {
-            HashSet<Long> messageIds = getViewsMessage.get(roomId);
-            getViewsMessage.remove(roomId);
-            if (messageIds.size() > 0) {
-                new RequestChannelGetMessagesStats().channelGetMessagesStats(roomId, messageIds);
+        synchronized (mutex) {
+            for (long roomId : getViewsMessage.keySet()) {
+                HashSet<Long> messageIds = getViewsMessage.get(roomId);
+                getViewsMessage.remove(roomId);
+                if (messageIds.size() > 0) {
+                    new RequestChannelGetMessagesStats().channelGetMessagesStats(roomId, messageIds);
+                }
             }
         }
     }

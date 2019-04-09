@@ -22,6 +22,7 @@ import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.InputType;
@@ -577,7 +578,7 @@ public class FragmentChannelProfileViewModel
         inputChannelLink.addView(edtLink);
         inputChannelLink.addView(viewRevoke, viewParams);
 
-        TextView txtLink = new TextView(G.fragmentActivity);
+        TextView txtLink = new AppCompatTextView(G.fragmentActivity);
         txtLink.setText(Config.IGAP_LINK_PREFIX + link);
         txtLink.setTextColor(G.context.getResources().getColor(R.color.gray_6c));
 

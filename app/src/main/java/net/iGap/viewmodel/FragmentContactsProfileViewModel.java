@@ -349,16 +349,20 @@ public class FragmentContactsProfileViewModel implements OnUserContactEdit, OnUs
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (userId != ownerId)
+                            return;
                         G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), fragmentContactsProfileBinding.chiImgCircleImage);
                     }
                 });
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color) {
+            public void onShowInitials(final String initials, final String color, final long ownerId) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (userId != ownerId)
+                            return;
                         fragmentContactsProfileBinding.chiImgCircleImage.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) fragmentContactsProfileBinding.chiImgCircleImage.getContext().getResources().getDimension(R.dimen.dp100), initials, color));
                     }
                 });

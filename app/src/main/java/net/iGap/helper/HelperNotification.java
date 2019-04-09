@@ -149,7 +149,6 @@ public class HelperNotification {
 
         private NotificationManager notificationManager;
         private Notification notification;
-        private int defaultNotificationId = 20;
         private String mHeader = "";
         private String mContent = "";
         private Bitmap mBitmapIcon = null;
@@ -158,13 +157,6 @@ public class HelperNotification {
         private int delayAlarm = 5000;
         private long currentAlarm;
         private int notificationIconSrc;
-
-        class StructNotificationMap {
-            int notificationId;
-            Notification notification;
-        }
-
-        private HashMap<Long, StructNotificationMap> notificationMap = new HashMap<>();
 
         int vibrator;
         int sound;
@@ -196,16 +188,16 @@ public class HelperNotification {
         }
 
         private void setNotification() {
-            StructNotificationMap np = null;
-            int notificationId = defaultNotificationId;
+            int notificationId = 21;
             if (settingValue.separateNotification) {
-                if (notificationMap.containsKey(messageList.get(0).roomId)) {
-                    notificationId = notificationMap.get(messageList.get(0).roomId).notificationId;
+                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.KEY_NOTIF_KEYS, Context.MODE_PRIVATE);
+                notificationId = sharedPreferences.getInt("NotifNextId", 22);
+                int roomNotifId = sharedPreferences.getInt(String.valueOf(messageList.get(0).roomId), -1);
+                if (roomNotifId == -1) {
+                    sharedPreferences.edit().putInt(String.valueOf(messageList.get(0).roomId), notificationId).apply();
+                    sharedPreferences.edit().putInt("NotifNextId", notificationId + 1).apply();
                 } else {
-                    np = new StructNotificationMap();
-                    np.notificationId = ++defaultNotificationId;
-                    notificationMap.put(messageList.get(0).roomId, np);
-                    notificationId = defaultNotificationId;
+                    notificationId = roomNotifId;
                 }
             }
 
@@ -246,10 +238,6 @@ public class HelperNotification {
 
             if (currentAlarm + delayAlarm < System.currentTimeMillis()) {
                 alarmNotification(messageToShow);
-            }
-
-            if (np != null) {
-                np.notification = notification;
             }
 
             notificationManager.notify(notificationId, notification);
@@ -516,16 +504,6 @@ public class HelperNotification {
             }
             return intVibrator;
         }
-
-        public void updateNotification(long roomId) {
-            if (notificationManager != null) {
-                StructNotificationMap sp = notificationMap.get(roomId);
-                if (sp != null && sp.notification != null) {
-                    notificationManager.notify(sp.notificationId, sp.notification);
-                }
-            }
-        }
-
     }
 
     private class ShowPopUp {
@@ -835,7 +813,7 @@ public class HelperNotification {
                     }
 
                     if (notificationId > 0) {
-                        HelperNotification.getInstance().showNotification.updateNotification(roomId);
+                        HelperNotification.getInstance().showNotification.notificationManager.cancel(notificationId);
                     }
 
                     if (message != null && message.length() > 0 && roomId > 0) {

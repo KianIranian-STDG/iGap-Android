@@ -24,17 +24,16 @@ import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnRotateImage;
-import net.iGap.module.AttachFile;
 import net.iGap.module.structs.StructBottomSheet;
 
 import java.util.List;
 
-public class AdapterBottomSheet extends AbstractItem<AdapterBottomSheet, AdapterBottomSheet.ViewHolder> {
+public class BottomSheetItem extends AbstractItem<BottomSheetItem, BottomSheetItem.ViewHolder> {
 
     public StructBottomSheet mList;
     public boolean isChecked = false;
 
-    public AdapterBottomSheet(StructBottomSheet item) {
+    public BottomSheetItem(StructBottomSheet item) {
         this.mList = item;
     }
 
