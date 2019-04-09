@@ -56,7 +56,7 @@ public class Config {
     public static final int LAST_SEEN_TIME_OUT = (int) (60 * DateUtils.MINUTE_IN_MILLIS); // after this time show exactly time instead of minutes
     public static final int DEFAULT_BOTH_CHAT_DELETE_TIME = (int) (2 * DateUtils.HOUR_IN_MILLIS);
     public static final String iGapAccount = "iGap";
-    public static final String URL_WEBSOCKET = "wss://secure.igap.net/hybrid/";
+    public static final String URL_WEBSOCKET = "ws://192.168.10.254:8739/";
     //  public static final String URL_WEBSOCKET = "ws://192.168.10.254:8739/";
     public static final String URL_MAP = "https://c.tile.openstreetmap.org/";
     public static final String IGAP_LINK_PREFIX = "https://iGap.net/";
