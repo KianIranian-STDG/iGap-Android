@@ -217,7 +217,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         }*/
 
         initRecycleView();
-        initListener();
         Log.d("bagi" ,"FragmentMain:onViewCreated:end");
 
 

@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-
 import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.module.dashboard.DashboardModel;
@@ -126,10 +124,10 @@ public class AdapterDashboard extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public class ViewType4 extends RecyclerView.ViewHolder {
+    public class ViewType6 extends RecyclerView.ViewHolder {
         ImageView imgDashboard, imgDashboard2, imgDashboard3;
 
-        public ViewType4(@NonNull View itemView) {
+        public ViewType6(@NonNull View itemView) {
             super(itemView);
             imgDashboard = itemView.findViewById(R.id.imgDashboard);
             imgDashboard2 = itemView.findViewById(R.id.imgDashboard2);
@@ -149,10 +147,10 @@ public class AdapterDashboard extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    public class ViewType6 extends RecyclerView.ViewHolder {
+    public class ViewType4 extends RecyclerView.ViewHolder {
         ImageView imgDashboard, imgDashboard2;
 
-        public ViewType6(@NonNull View itemView) {
+        public ViewType4(@NonNull View itemView) {
             super(itemView);
             imgDashboard = itemView.findViewById(R.id.imgDashboard);
             imgDashboard2 = itemView.findViewById(R.id.imgDashboard2);
