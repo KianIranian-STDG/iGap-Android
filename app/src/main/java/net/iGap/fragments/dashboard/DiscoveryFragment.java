@@ -3,8 +3,10 @@ package net.iGap.fragments.dashboard;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +33,8 @@ public class DiscoveryFragment extends BaseFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d("bagi" , "DiscoveryFragmentononCreateView");
         return inflater.inflate(R.layout.fragment_discovery, container, false);
     }
 
@@ -39,6 +42,7 @@ public class DiscoveryFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rcDiscovery = view.findViewById(R.id.rcDiscovery);
+        Log.d("bagi" , "DiscoveryFragmentonViewCreated");
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
         rcDiscovery.setLayoutManager(layoutManager);
         int page = getArguments().getInt("page");
@@ -46,6 +50,9 @@ public class DiscoveryFragment extends BaseFragment {
         new RequestClientGetDiscovery().getDiscovery(page, new OnDiscoveryList() {
             @Override
             public void onDiscoveryListReady(ArrayList<ProtoGlobal.Discovery> discoveryArrayList, String title) {
+
+                Log.d("bagi" , discoveryArrayList.size() + "size");
+                Log.d("bagi" , title + "size");
                 DiscoveryAdapter adapterDiscovery = new DiscoveryAdapter(getActivity(), discoveryArrayList);
                 rcDiscovery.setAdapter(adapterDiscovery);
             }
