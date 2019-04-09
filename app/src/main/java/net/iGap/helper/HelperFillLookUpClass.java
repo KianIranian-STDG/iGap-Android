@@ -12,6 +12,7 @@ package net.iGap.helper;
 
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
+import net.iGap.proto.ProtoClientGetDiscovery;
 
 import static net.iGap.G.forcePriorityActionId;
 import static net.iGap.G.generalImmovableClasses;
@@ -202,6 +203,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30617, "ProtoClientRegisterDevice.ClientRegisterDeviceResponse");
         lookupMap.put(30618, "ProtoClientGetPromote.ClientGetPromoteResponse");
         lookupMap.put(30619, "ProtoClientGetFavoriteMenu.ClientGetFavoriteMenuResponse");
+        lookupMap.put(30620, "ProtoClientGetDiscovery.ClientGetDiscoveryResponse");
 
         // FileUpload,Download 7xx , 307xx
         lookupMap.put(30700, "ProtoFileUploadOption.FileUploadOptionResponse");

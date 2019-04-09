@@ -139,7 +139,7 @@ dependencies {
     }
     implementation 'com.github.KianIranian-STDG:Websocket:1.0.1'
     implementation 'com.github.KianIranian-STDG:MessageProgress:1.0.1'
-    implementation 'com.github.KianIranian-STDG:Proto:Build101'
+    implementation 'com.github.KianIranian-STDG:Proto:Build102'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
