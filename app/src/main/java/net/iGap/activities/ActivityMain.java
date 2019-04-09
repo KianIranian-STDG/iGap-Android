@@ -24,7 +24,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -85,7 +84,7 @@ import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
-import net.iGap.fragments.dashboard.DashboardFragment;
+import net.iGap.fragments.dashboard.DiscoveryFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
@@ -112,7 +111,6 @@ import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnClientCondition;
-import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnConnectionChangeState;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
@@ -145,11 +143,9 @@ import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyAppBarLayout;
 import net.iGap.module.MyPhonStateService;
 import net.iGap.module.SHP_SETTING;
-import net.iGap.module.dashboard.DashboardModel;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoResponse;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmCallConfig;
@@ -1210,7 +1206,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             setFabIcon(R.drawable.ic_call_black_24dp);
             arcMenu.fabMenu.hide();
             arcMenu.setVisibility(View.VISIBLE);
-        } else if (adapter.getItem(position) instanceof DashboardFragment) {
+        } else if (adapter.getItem(position) instanceof DiscoveryFragment) {
             arcMenu.setVisibility(View.GONE);
         }
 
@@ -1350,7 +1346,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 public void run() {
 
                     if (G.multiTab) {
-                        pages.add(DashboardFragment.newInstance(true));
+                        pages.add(DiscoveryFragment.newInstance(0));
 
                         fragmentCall = FragmentCall.newInstance(true);
                         pages.add(fragmentCall);
@@ -1624,11 +1620,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         itemNavWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(ActivityMain.this, ActivityDashboard.class);
-                startActivity(intent);
-
-  /*              if (!G.isWalletRegister) {
+                if (!G.isWalletRegister) {
                     new HelperFragment(FragmentWalletAgrement.newInstance(phoneNumber.substring(2))).load();
                     lockNavigation();
                 } else {
@@ -1647,7 +1639,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     intent.putExtra(WalletActivity.TEXT_TITLE, G.textTitleTheme);
                     intent.putExtra(WalletActivity.TEXT_SUB_TITLE, G.textSubTheme);
                     startActivityForResult(intent, WALLET_REQUEST_CODE);
-                }*/
+                }
             }
         });
 

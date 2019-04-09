@@ -10,16 +10,17 @@
 
 package net.iGap.request;
 
+import net.iGap.fragments.dashboard.OnDiscoveryList;
 import net.iGap.proto.ProtoClientGetDiscovery;
 
 public class RequestClientGetDiscovery {
 
-    public void getDiscovery(int pageId) {
+    public void getDiscovery(int pageId, OnDiscoveryList discoveryListener) {
 
         ProtoClientGetDiscovery.ClientGetDiscovery.Builder builder = ProtoClientGetDiscovery.ClientGetDiscovery.newBuilder();
         builder.setPageId(pageId);
 
-        RequestWrapper requestWrapper = new RequestWrapper(620, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(620, builder, discoveryListener);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {
