@@ -9041,20 +9041,20 @@ public class FragmentChat extends BaseFragment
                         sort = Sort.ASCENDING;
                         isWaitingForHistoryDown = false;
                     }
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (FragmentChat.isLoadingMoreMessage) {
-                                if (!isWaitingForHistoryUp && !isWaitingForHistoryDown) {
+                    if (FragmentChat.isLoadingMoreMessage) {
+                        if (!isWaitingForHistoryUp && !isWaitingForHistoryDown) {
 
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
                                     FragmentChat.isLoadingMoreMessage = false;
                                     hideProgress();
                                     llScrollNavigate.performClick();
                                 }
-                                return;
-                            }
+                            });
                         }
-                    });
+                        return;
+                    }
 
                     realmRoomMessages = getRealmChat().where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).notEqualTo(RealmRoomMessageFields.DELETED, true).between(RealmRoomMessageFields.MESSAGE_ID, startMessageId, endMessageId).findAll().sort(RealmRoomMessageFields.MESSAGE_ID, sort);
                     MessageLoader.sendMessageStatus(roomId, realmRoomMessages, chatType, ProtoGlobal.RoomMessageStatus.SEEN, getRealmChat());
