@@ -107,7 +107,7 @@ import net.iGap.Theme;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityTrimVideo;
-import net.iGap.adapter.AdapterBottomSheet;
+import net.iGap.adapter.BottomSheetItem;
 import net.iGap.adapter.AdapterDrBot;
 import net.iGap.adapter.MessagesAdapter;
 import net.iGap.adapter.items.AdapterBottomSheetForward;
@@ -7836,7 +7836,7 @@ public class FragmentChat extends BaseFragment
                             public void run() {
                                 fastItemAdapter.add(new AdapterCamera("").withIdentifier(99));
                                 for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                                    fastItemAdapter.add(new AdapterBottomSheet(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
+                                    fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
                                 }
                                 isPermissionCamera = true;
                             }
@@ -7889,7 +7889,7 @@ public class FragmentChat extends BaseFragment
             @Override
             public void run() {
                 for (int i = 0; i < FragmentEditImage.itemGalleryList.size(); i++) {
-                    fastItemAdapter.add(new AdapterBottomSheet(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
+                    fastItemAdapter.add(new BottomSheetItem(FragmentEditImage.itemGalleryList.get(i)).withIdentifier(100 + i));
                 }
             }
         });
