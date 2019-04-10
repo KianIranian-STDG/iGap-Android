@@ -1,6 +1,7 @@
 package net.iGap.adapter.items.discovery;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +15,7 @@ import net.iGap.adapter.items.discovery.holder.Type3ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type4ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type5ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type6ViewHolder;
-import net.iGap.module.AndroidUtils;
+import net.iGap.adapter.items.discovery.holder.Type7ViewHolder;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.ArrayList;
@@ -45,13 +46,17 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 return new Type5ViewHolder(layoutInflater.inflate(R.layout.item_dashboard_5, viewGroup, false));
             case 6:
                 return new Type6ViewHolder(layoutInflater.inflate(R.layout.item_dashboard_6, viewGroup, false));
+            case 7:
+                return new Type7ViewHolder(layoutInflater.inflate(R.layout.item_dashboard_7, viewGroup, false));
         }
         return new Type1ViewHolder(layoutInflater.inflate(R.layout.item_dashboard_1, viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder viewHolder, int i) {
-        viewHolder.itemView.getLayoutParams().height = Math.round(AndroidUtils.dpToPx(context, discoveryList.get(i).getHeight()));
+        String[] scales = discoveryList.get(i).getScale().split(":");
+        float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
+        viewHolder.itemView.getLayoutParams().height = Math.round(height);
         viewHolder.bindView(discoveryList.get(i));
     }
 

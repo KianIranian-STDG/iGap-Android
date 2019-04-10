@@ -5,8 +5,11 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.proto.ProtoGlobal;
+
+import java.util.List;
 
 public class Type5ViewHolder extends BaseViewHolder {
     private ImageView img0, img1, img2;
@@ -24,6 +27,10 @@ public class Type5ViewHolder extends BaseViewHolder {
 
     @Override
     public void bindView(ProtoGlobal.Discovery item) {
+        List<ProtoGlobal.DiscoveryField> discoveryFields = item.getDiscoveryfieldsList();
+        G.imageLoader.displayImage(discoveryFields.get(0).getImageurl(), img0);
+        G.imageLoader.displayImage(discoveryFields.get(1).getImageurl(), img1);
+        G.imageLoader.displayImage(discoveryFields.get(2).getImageurl(), img2);
 
     }
 }

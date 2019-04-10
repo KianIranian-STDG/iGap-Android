@@ -5,8 +5,11 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.proto.ProtoGlobal;
+
+import java.util.List;
 
 public class Type1ViewHolder extends BaseViewHolder {
     private ImageView img0;
@@ -20,7 +23,7 @@ public class Type1ViewHolder extends BaseViewHolder {
 
     @Override
     public void bindView(ProtoGlobal.Discovery item) {
-
-//            Glide.with(context).load(dashboardModels.get(i).getImageList().get(1)).into(((ViewType2) viewHolder).imgDashboard2);*/
+        List<ProtoGlobal.DiscoveryField> discoveryFields = item.getDiscoveryfieldsList();
+        G.imageLoader.displayImage(discoveryFields.get(0).getImageurl(), img0);
     }
 }

@@ -10,6 +10,8 @@
 
 package net.iGap.response;
 
+import android.util.Log;
+
 import net.iGap.fragments.dashboard.OnDiscoveryList;
 import net.iGap.proto.ProtoClientGetDiscovery;
 import net.iGap.proto.ProtoGlobal;
@@ -20,9 +22,9 @@ public class ClientGetDiscoveryResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public OnDiscoveryList identity;
+    public Object identity;
 
-    public ClientGetDiscoveryResponse(int actionId, Object protoClass, OnDiscoveryList identity) {
+    public ClientGetDiscoveryResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
         this.message = protoClass;
         this.actionId = actionId;
@@ -33,19 +35,19 @@ public class ClientGetDiscoveryResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoClientGetDiscovery.ClientGetDiscoveryResponse.Builder builder = (ProtoClientGetDiscovery.ClientGetDiscoveryResponse.Builder) message;
-        identity.onDiscoveryListReady((ArrayList<ProtoGlobal.Discovery>) builder.getDiscoveriesList(), builder.getTitle());
+        ((OnDiscoveryList) identity).onDiscoveryListReady(new ArrayList<ProtoGlobal.Discovery>(builder.getDiscoveriesList()), builder.getTitle());
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        identity.onDiscoveryListReady(new ArrayList<>(), "");
+        ((OnDiscoveryList) identity).onDiscoveryListReady(new ArrayList<>(), "");
     }
 
     @Override
     public void error() {
         super.error();
-        identity.onDiscoveryListReady(new ArrayList<>(), "");
+        ((OnDiscoveryList) identity).onDiscoveryListReady(new ArrayList<>(), "");
     }
 }
 

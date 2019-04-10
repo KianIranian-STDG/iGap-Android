@@ -11,16 +11,18 @@ import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
 
-public class Type4ViewHolder extends BaseViewHolder {
-    private ImageView img0, img1;
-    private CardView card0, card1;
+public class Type7ViewHolder extends BaseViewHolder {
+    private ImageView img0, img1, img2;
+    private CardView card0, card1, card2;
 
-    public Type4ViewHolder(@NonNull View itemView) {
+    public Type7ViewHolder(@NonNull View itemView) {
         super(itemView);
-        img0 = itemView.findViewById(R.id.type4_img0);
-        img1 = itemView.findViewById(R.id.type4_img1);
-        card0 = itemView.findViewById(R.id.type4_card0);
-        card1 = itemView.findViewById(R.id.type4_card1);
+        img0 = itemView.findViewById(R.id.type7_img0);
+        img1 = itemView.findViewById(R.id.type7_img1);
+        img2 = itemView.findViewById(R.id.type7_img2);
+        card0 = itemView.findViewById(R.id.type7_card0);
+        card1 = itemView.findViewById(R.id.type7_card1);
+        card2 = itemView.findViewById(R.id.type7_card2);
     }
 
     @Override
@@ -28,6 +30,6 @@ public class Type4ViewHolder extends BaseViewHolder {
         List<ProtoGlobal.DiscoveryField> discoveryFields = item.getDiscoveryfieldsList();
         G.imageLoader.displayImage(discoveryFields.get(0).getImageurl(), img0);
         G.imageLoader.displayImage(discoveryFields.get(1).getImageurl(), img1);
-
+        G.imageLoader.displayImage(discoveryFields.get(2).getImageurl(), img2);
     }
 }
