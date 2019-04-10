@@ -381,14 +381,4 @@ public class FragmentAddContact extends BaseFragment {
         }
     }
 
-    private void closeKeyboard(View v) {
-        if (isAdded()) {
-            try {
-                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            } catch (IllegalStateException e) {
-                e.getStackTrace();
-            }
-        }
-    }
 }

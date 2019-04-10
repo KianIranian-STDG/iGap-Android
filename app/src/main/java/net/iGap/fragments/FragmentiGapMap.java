@@ -1715,17 +1715,6 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
         }, 1000);
     }
 
-    private void closeKeyboard(View v) {
-        if (isAdded()) {
-            try {
-                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            } catch (IllegalStateException e) {
-                e.getStackTrace();
-            }
-        }
-    }
-
     @Override
     public void onState(final boolean state) {
         G.handler.post(new Runnable() {

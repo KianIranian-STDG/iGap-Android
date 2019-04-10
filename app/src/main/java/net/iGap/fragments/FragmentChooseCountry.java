@@ -173,17 +173,6 @@ public class FragmentChooseCountry extends BaseFragment {
         return structCountryArrayList;
     }
 
-    private void closeKeyboard(View v) {
-        if (isAdded()) {
-            try {
-                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            } catch (IllegalStateException e) {
-                e.getStackTrace();
-            }
-        }
-    }
-
     private class StickyHeader implements StickyRecyclerHeadersAdapter {
 
         private ArrayList<StructCountry> item;
