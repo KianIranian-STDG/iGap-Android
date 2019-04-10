@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryAdapter;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.proto.ProtoGlobal;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 
 public class DiscoveryFragment extends BaseFragment {
     private RecyclerView rcDiscovery;
+    private int page;
 
     public static DiscoveryFragment newInstance(int page) {
         DiscoveryFragment discoveryFragment = new DiscoveryFragment();
@@ -41,16 +43,25 @@ public class DiscoveryFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_discovery, container, false);
+        page = getArguments().getInt("page");
+        View view = inflater.inflate(R.layout.fragment_discovery, container, false);
+        if (page == 0) {
+            return view;
+        } else {
+            return attachToSwipeBack(view);
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (G.fragmentActivity != null && page != 0) {
+            ((ActivityMain) G.fragmentActivity).lockNavigation();
+        }
+
         rcDiscovery = view.findViewById(R.id.rcDiscovery);
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
         rcDiscovery.setLayoutManager(layoutManager);
-        int page = getArguments().getInt("page");
 
         new RequestClientGetDiscovery().getDiscovery(page, new OnDiscoveryList() {
             @Override

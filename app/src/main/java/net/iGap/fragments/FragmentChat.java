@@ -661,8 +661,6 @@ public class FragmentChat extends BaseFragment
         isNeedResume = true;
         G.locationListener = this;
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
-        cardFloatingTime = rootView.findViewById(R.id.cardFloatingTime);
-        txtFloatingTime = rootView.findViewById(R.id.txtFloatingTime);
 
         return attachToSwipeBack(rootView);
     }
@@ -742,6 +740,9 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        cardFloatingTime = rootView.findViewById(R.id.cardFloatingTime);
+        txtFloatingTime = rootView.findViewById(R.id.txtFloatingTime);
 
         realmChat = Realm.getDefaultInstance();
         gongingRunnable = new Runnable() {
