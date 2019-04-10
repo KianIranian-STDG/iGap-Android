@@ -73,6 +73,7 @@ import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
 import net.iGap.fragments.FragmentCall;
+import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentMediaPlayer;
@@ -1241,21 +1242,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     return;
                 }
 
-                int index;
+                int index = 0;
 
                 if (G.selectedTabInMainActivity.length() > 0) {
 
                     if (HelperCalander.isPersianUnicode) {
 
                         if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
-                            index = 4;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
-                            index = 3;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
                             index = 2;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
+                        } else if (G.selectedTabInMainActivity.equals(FragmentCall.class.toString())) {
                             index = 1;
-                        } else {
+                        } else if (G.selectedTabInMainActivity.equals(DiscoveryFragment.class.toString())) {
                             index = 0;
                         }
 
@@ -1263,14 +1260,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
                             index = 0;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
+                        } else if (G.selectedTabInMainActivity.equals(FragmentCall.class.toString())) {
                             index = 1;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
+                        } else if (G.selectedTabInMainActivity.equals(DiscoveryFragment.class.toString())) {
                             index = 2;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
-                            index = 3;
-                        } else {
-                            index = 4;
                         }
                     }
 
@@ -1280,7 +1273,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } else {
 
                     if (HelperCalander.isPersianUnicode) {
-                        index = 4;
+                        index = 2;
                     } else {
                         index = 0;
                     }
@@ -1319,7 +1312,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (HelperCalander.isPersianUnicode) {
             navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_phone), getString(R.string.md_users_social_symbol));
         } else {
-            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
+            navigationTabStrip.setTitles(getString(R.string.md_users_social_symbol), getString(R.string.md_phone), getString(R.string.md_apps));
         }
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
@@ -2639,6 +2632,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
                     G.selectedTabInMainActivity = fm.mainType.toString();
                 } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
+
+                    G.selectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
+                } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof DiscoveryFragment) {
 
                     G.selectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
                 }
