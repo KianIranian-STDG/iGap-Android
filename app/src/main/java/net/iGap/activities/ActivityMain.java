@@ -1232,9 +1232,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void setViewPagerSelectedItem() {
-        if (!G.multiTab) {
-            return;
-        }
 
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -1330,13 +1327,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         mViewPager = findViewById(R.id.viewpager);
 
-        if (G.multiTab) {
-            navigationTabStrip.setVisibility(View.VISIBLE);
-            mViewPager.setOffscreenPageLimit(3);
-        } else {
-            navigationTabStrip.setVisibility(View.GONE);
-            mViewPager.setOffscreenPageLimit(1);
-        }
+        navigationTabStrip.setVisibility(View.VISIBLE);
+        mViewPager.setOffscreenPageLimit(3);
 
         findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
 
@@ -1345,18 +1337,14 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 @Override
                 public void run() {
 
-                    if (G.multiTab) {
-                        pages.add(DiscoveryFragment.newInstance(0));
+                    pages.add(DiscoveryFragment.newInstance(0));
 
-                        fragmentCall = FragmentCall.newInstance(true);
-                        pages.add(fragmentCall);
+                    fragmentCall = FragmentCall.newInstance(true);
+                    pages.add(fragmentCall);
 
-                        /* pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));*/
-                        /*  pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));*/
-                        /*      pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));*/
-
-
-                    }
+                    /* pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));*/
+                    /*  pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));*/
+                    /*      pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));*/
 
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                     sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
@@ -1381,25 +1369,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }, 400);
 
-            if (G.multiTab) {
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
 
-                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
-                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
-                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
+                    fragmentCall = FragmentCall.newInstance(true);
+                    pages.add(fragmentCall);
+                    pages.add(DiscoveryFragment.newInstance(0));
 
-                        fragmentCall = FragmentCall.newInstance(true);
-                        pages.add(fragmentCall);
+                    mViewPager.getAdapter().notifyDataSetChanged();
 
-                        mViewPager.getAdapter().notifyDataSetChanged();
+                    setViewPagerSelectedItem();
 
-                        setViewPagerSelectedItem();
-
-                    }
-                }, 800);
-            }
+                }
+            }, 800);
         }
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);

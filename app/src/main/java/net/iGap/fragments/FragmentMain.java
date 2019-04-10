@@ -255,27 +255,25 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
         final RoomAdapter roomsAdapter = new RoomAdapter(results, this, viewById, pbLoading);
 
-        if (!G.multiTab) {
-            onScrollListener = new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    if (isThereAnyMoreItemToLoad) {
-                        if (mOffset > 0) {
-                            int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                            if (lastVisiblePosition + 10 >= mOffset) {
-                                boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-                                if (send)
-                                    progressBar.setVisibility(View.VISIBLE);
-                            }
+        onScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (isThereAnyMoreItemToLoad) {
+                    if (mOffset > 0) {
+                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                        if (lastVisiblePosition + 10 >= mOffset) {
+                            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+                            if (send)
+                                progressBar.setVisibility(View.VISIBLE);
                         }
-                    } else {
-                        mRecyclerView.removeOnScrollListener(onScrollListener);
                     }
+                } else {
+                    mRecyclerView.removeOnScrollListener(onScrollListener);
                 }
-            };
-            mRecyclerView.addOnScrollListener(onScrollListener);
-        }
+            }
+        };
+        mRecyclerView.addOnScrollListener(onScrollListener);
 
         mRecyclerView.setAdapter(roomsAdapter);
 
@@ -779,18 +777,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             }
         });
 
-        if (isThereAnyMoreItemToLoad && G.multiTab) {
-
-            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-            if (send) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-        }
         //else {
         //    mOffset = 0;
         //}

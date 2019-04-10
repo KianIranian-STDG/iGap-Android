@@ -1023,26 +1023,26 @@ public class FragmentSettingViewModel {
 
     public void onClickMultiTab(View view) {
 
-        isMultiTab.set(!isMultiTab.get());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        if (isMultiTab.get()) {
-            G.multiTab = true;
-            editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, true);
-            editor.apply();
-        } else {
-            G.multiTab = false;
-            editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
-            editor.apply();
-        }
-        FragmentMain.roomAdapterHashMap = null;
-
-        if (onRefreshActivity != null) {
-            G.isRestartActivity = true;
-            onRefreshActivity.refresh("ar");
-        }
-        if (FragmentSetting.onRemoveFragmentSetting != null)
-            FragmentSetting.onRemoveFragmentSetting.removeFragment();
+//        isMultiTab.set(!isMultiTab.get());
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//        if (isMultiTab.get()) {
+//            G.multiTab = true;
+//            editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, true);
+//            editor.apply();
+//        } else {
+//            G.multiTab = false;
+//            editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
+//            editor.apply();
+//        }
+//        FragmentMain.roomAdapterHashMap = null;
+//
+//        if (onRefreshActivity != null) {
+//            G.isRestartActivity = true;
+//            onRefreshActivity.refresh("ar");
+//        }
+//        if (FragmentSetting.onRemoveFragmentSetting != null)
+//            FragmentSetting.onRemoveFragmentSetting.removeFragment();
 
     }
 

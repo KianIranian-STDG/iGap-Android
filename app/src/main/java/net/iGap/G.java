@@ -406,7 +406,6 @@ public class G extends MultiDexApplication {
     public static boolean isFragmentMapActive = false; // for check network
     public static boolean isRestartActivity = false; // for check passCode
     public static boolean isFirstPassCode = true; // for check passCode
-    public static boolean multiTab = false;
     public static boolean isTimeWhole = false;
     public static FragmentManager fragmentManager;
     private Tracker mTracker;
