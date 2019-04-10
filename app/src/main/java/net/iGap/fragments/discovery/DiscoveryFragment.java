@@ -55,11 +55,15 @@ public class DiscoveryFragment extends BaseFragment {
         new RequestClientGetDiscovery().getDiscovery(page, new OnDiscoveryList() {
             @Override
             public void onDiscoveryListReady(ArrayList<ProtoGlobal.Discovery> discoveryArrayList, String title) {
-
-                Log.d("bagi" , discoveryArrayList.size() + "size");
-                Log.d("bagi" , title + "size");
-                DiscoveryAdapter adapterDiscovery = new DiscoveryAdapter(getActivity(), discoveryArrayList);
-                rcDiscovery.setAdapter(adapterDiscovery);
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("bagi" , discoveryArrayList.size() + "size");
+                        Log.d("bagi" , title + "size");
+                        DiscoveryAdapter adapterDiscovery = new DiscoveryAdapter(getActivity(), discoveryArrayList);
+                        rcDiscovery.setAdapter(adapterDiscovery);
+                    }
+                });
             }
         });
     }

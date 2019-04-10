@@ -1207,6 +1207,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             arcMenu.fabMenu.hide();
             arcMenu.setVisibility(View.VISIBLE);
         } else if (adapter.getItem(position) instanceof DiscoveryFragment) {
+            findViewById(R.id.amr_btn_search).setVisibility(View.GONE);
+            findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
             arcMenu.setVisibility(View.GONE);
         }
 
@@ -1309,9 +1311,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (HelperCalander.isPersianUnicode) {
-            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_phone), getString(R.string.md_users_social_symbol));
+            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_apps), getString(R.string.md_users_social_symbol));
         } else {
-            navigationTabStrip.setTitles(getString(R.string.md_users_social_symbol), getString(R.string.md_phone), getString(R.string.md_apps));
+            navigationTabStrip.setTitles(getString(R.string.md_users_social_symbol), getString(R.string.md_apps), getString(R.string.md_phone));
         }
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
@@ -1329,10 +1331,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 @Override
                 public void run() {
 
-                    pages.add(DiscoveryFragment.newInstance(0));
 
                     fragmentCall = FragmentCall.newInstance(true);
                     pages.add(fragmentCall);
+
+                    pages.add(DiscoveryFragment.newInstance(0));
 
                     /* pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));*/
                     /*  pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));*/
@@ -1366,8 +1369,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 public void run() {
 
                     fragmentCall = FragmentCall.newInstance(true);
-                    pages.add(fragmentCall);
                     pages.add(DiscoveryFragment.newInstance(0));
+                    pages.add(fragmentCall);
 
                     mViewPager.getAdapter().notifyDataSetChanged();
 
