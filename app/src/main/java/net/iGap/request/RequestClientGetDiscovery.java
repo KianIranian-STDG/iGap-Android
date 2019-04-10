@@ -10,7 +10,7 @@
 
 package net.iGap.request;
 
-import net.iGap.fragments.dashboard.OnDiscoveryList;
+import net.iGap.fragments.discovery.OnDiscoveryList;
 import net.iGap.proto.ProtoClientGetDiscovery;
 
 public class RequestClientGetDiscovery {

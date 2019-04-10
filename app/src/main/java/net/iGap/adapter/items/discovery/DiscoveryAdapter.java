@@ -35,21 +35,21 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         LayoutInflater layoutInflater = LayoutInflater.from(context.getApplicationContext());
         switch (i) {
             case 1:
-                return new Type1ViewHolder(layoutInflater.inflate(R.layout.item_dashboard_1, viewGroup, false));
+                return new Type1ViewHolder(layoutInflater.inflate(R.layout.item_discovery_1, viewGroup, false));
             case 2:
-                return new Type2ViewHolder(layoutInflater.inflate(R.layout.item_dashboard_2, viewGroup, false));
+                return new Type2ViewHolder(layoutInflater.inflate(R.layout.item_discovery_2, viewGroup, false));
             case 3:
-                return new Type3ViewHolder(layoutInflater.inflate(R.layout.item_dashboard_3, viewGroup, false));
+                return new Type3ViewHolder(layoutInflater.inflate(R.layout.item_discovery_3, viewGroup, false));
             case 4:
-                return new Type4ViewHolder(layoutInflater.inflate(R.layout.item_dashboard_4, viewGroup, false));
+                return new Type4ViewHolder(layoutInflater.inflate(R.layout.item_discovery_4, viewGroup, false));
             case 5:
-                return new Type5ViewHolder(layoutInflater.inflate(R.layout.item_dashboard_5, viewGroup, false));
+                return new Type5ViewHolder(layoutInflater.inflate(R.layout.item_discovery_5, viewGroup, false));
             case 6:
-                return new Type6ViewHolder(layoutInflater.inflate(R.layout.item_dashboard_6, viewGroup, false));
+                return new Type6ViewHolder(layoutInflater.inflate(R.layout.item_discovery_6, viewGroup, false));
             case 7:
-                return new Type7ViewHolder(layoutInflater.inflate(R.layout.item_dashboard_7, viewGroup, false));
+                return new Type7ViewHolder(layoutInflater.inflate(R.layout.item_discovery_7, viewGroup, false));
         }
-        return new Type1ViewHolder(layoutInflater.inflate(R.layout.item_dashboard_1, viewGroup, false));
+        return new Type1ViewHolder(layoutInflater.inflate(R.layout.item_discovery_1, viewGroup, false));
     }
 
     @Override

@@ -1,4 +1,4 @@
-package net.iGap.fragments.dashboard;
+package net.iGap.fragments.discovery;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,11 +23,11 @@ public class DiscoveryFragment extends BaseFragment {
     private RecyclerView rcDiscovery;
 
     public static DiscoveryFragment newInstance(int page) {
-        DiscoveryFragment dashboardFragment = new DiscoveryFragment();
+        DiscoveryFragment discoveryFragment = new DiscoveryFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("page" , page);
-        dashboardFragment.setArguments(bundle);
-        return dashboardFragment;
+        discoveryFragment.setArguments(bundle);
+        return discoveryFragment;
     }
 
     public DiscoveryFragment() {
@@ -41,7 +41,6 @@ public class DiscoveryFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("bagi" , "DiscoveryFragmentononCreateView");
         return inflater.inflate(R.layout.fragment_discovery, container, false);
     }
 
@@ -49,7 +48,6 @@ public class DiscoveryFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rcDiscovery = view.findViewById(R.id.rcDiscovery);
-        Log.d("bagi" , "DiscoveryFragmentonViewCreated");
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
         rcDiscovery.setLayoutManager(layoutManager);
         int page = getArguments().getInt("page");

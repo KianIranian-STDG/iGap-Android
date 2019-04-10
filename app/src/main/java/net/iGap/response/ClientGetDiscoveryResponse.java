@@ -10,9 +10,7 @@
 
 package net.iGap.response;
 
-import android.util.Log;
-
-import net.iGap.fragments.dashboard.OnDiscoveryList;
+import net.iGap.fragments.discovery.OnDiscoveryList;
 import net.iGap.proto.ProtoClientGetDiscovery;
 import net.iGap.proto.ProtoGlobal;
 

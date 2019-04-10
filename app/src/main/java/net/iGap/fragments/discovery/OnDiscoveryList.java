@@ -1,4 +1,4 @@
-package net.iGap.fragments.dashboard;
+package net.iGap.fragments.discovery;
 
 import net.iGap.proto.ProtoGlobal;
 

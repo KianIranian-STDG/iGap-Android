@@ -28,6 +28,10 @@ public class Type2ViewHolder extends BaseViewHolder {
         List<ProtoGlobal.DiscoveryField> discoveryFields = item.getDiscoveryfieldsList();
         G.imageLoader.displayImage(discoveryFields.get(0).getImageurl(), img0);
         G.imageLoader.displayImage(discoveryFields.get(1).getImageurl(), img1);
+//        discoveryFields.get(1).getValue()
+//        discoveryFields.get(1).getActiontype()
+//        discoveryFields.get(1).getActiontypeValue()
+//        discoveryFields.get(1).getOrderid()
 
     }
 }
