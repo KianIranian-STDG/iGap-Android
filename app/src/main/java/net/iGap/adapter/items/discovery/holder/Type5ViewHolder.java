@@ -32,5 +32,25 @@ public class Type5ViewHolder extends BaseViewHolder {
         G.imageLoader.displayImage(discoveryFields.get(1).getImageurl(), img1);
         G.imageLoader.displayImage(discoveryFields.get(2).getImageurl(), img2);
 
+        card0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleDiscoveryFieldsClick(discoveryFields.get(0));
+            }
+        });
+
+        card1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleDiscoveryFieldsClick(discoveryFields.get(1));
+            }
+        });
+
+        card2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleDiscoveryFieldsClick(discoveryFields.get(2));
+            }
+        });
     }
 }

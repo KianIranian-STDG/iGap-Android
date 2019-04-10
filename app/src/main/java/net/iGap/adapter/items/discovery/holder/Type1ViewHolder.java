@@ -1,6 +1,5 @@
 package net.iGap.adapter.items.discovery.holder;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -8,9 +7,6 @@ import android.widget.ImageView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentChat;
-import net.iGap.fragments.discovery.DiscoveryFragment;
-import net.iGap.helper.HelperFragment;
 import net.iGap.proto.ProtoGlobal;
 
 import java.util.List;
@@ -29,10 +25,11 @@ public class Type1ViewHolder extends BaseViewHolder {
     public void bindView(ProtoGlobal.Discovery item) {
         List<ProtoGlobal.DiscoveryField> discoveryFields = item.getDiscoveryfieldsList();
         G.imageLoader.displayImage(discoveryFields.get(0).getImageurl(), img0);
+
         card0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HelperFragment(DiscoveryFragment.newInstance(0)).setReplace(false).load(false);
+                handleDiscoveryFieldsClick(discoveryFields.get(0));
             }
         });
     }
