@@ -771,6 +771,8 @@
             android:layout_height="1dp"
             android:visibility="visible" />
 
+          <!-- multi tab must be deleted -->
+
           <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp48"
@@ -780,7 +782,7 @@
             android:paddingLeft="@dimen/dp16"
             android:paddingRight="@dimen/dp16"
             android:paddingStart="@dimen/dp16"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
               android:id="@+id/st_txt_st_toggle_multi_tab"

@@ -238,7 +238,7 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private static boolean isNeedOpenWithoutBrowser(String url) {
+    public static boolean isNeedOpenWithoutBrowser(String url) {
         ArrayList<String> listApps = new ArrayList<>();
         listApps.add("facebook.com");
         listApps.add("twitter.com");

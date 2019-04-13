@@ -204,7 +204,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static final int requestCodePaymentBill = 199;
     public static final int requestCodeQrCode = 200;
     public static final int requestCodeBarcode = 201;
-    private static final int WALLET_REQUEST_CODE = 1024;
+    public static final int WALLET_REQUEST_CODE = 1024;
 
     public static boolean isMenuButtonAddShown = false;
     public static boolean isOpenChatBeforeSheare = false;
@@ -223,7 +223,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     FloatingActionButton btnCreateNewGroup;
     FloatingActionButton btnCreateNewChannel;
     SampleFragmentPagerAdapter sampleFragmentPagerAdapter;
-    boolean waitingForConfiguration = false;
+    public static boolean waitingForConfiguration = false;
     private LinearLayout mediaLayout;
     private FrameLayout frameChatContainer;
     private FrameLayout frameMainContainer;
