@@ -2981,9 +2981,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (navigationTabStrip != null && navigationTabStrip.getVisibility() == View.VISIBLE) {
-                    navigationTabStrip.setTitleBadge(RealmRoom.getUnreadCountPages());
-                }
+//                if (navigationTabStrip != null && navigationTabStrip.getVisibility() == View.VISIBLE) {
+//                    navigationTabStrip.setTitleBadge(RealmRoom.getUnreadCountPages());
+//                }
             }
         });
     }
