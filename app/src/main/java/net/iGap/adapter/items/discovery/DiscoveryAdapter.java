@@ -16,15 +16,14 @@ import net.iGap.adapter.items.discovery.holder.Type4ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type5ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type6ViewHolder;
 import net.iGap.adapter.items.discovery.holder.Type7ViewHolder;
-import net.iGap.proto.ProtoGlobal;
 
 import java.util.ArrayList;
 
 public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private Context context;
-    private ArrayList<ProtoGlobal.Discovery> discoveryList;
+    private ArrayList<DiscoveryItem> discoveryList;
 
-    public DiscoveryAdapter(Context context, ArrayList<ProtoGlobal.Discovery> discoveryList) {
+    public DiscoveryAdapter(Context context, ArrayList<DiscoveryItem> discoveryList) {
         this.context = context;
         this.discoveryList = discoveryList;
     }
@@ -54,7 +53,7 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder viewHolder, int i) {
-        String[] scales = discoveryList.get(i).getScale().split(":");
+        String[] scales = discoveryList.get(i).scale.split(":");
         float height = Resources.getSystem().getDisplayMetrics().widthPixels * 1.0f * Integer.parseInt(scales[1]) / Integer.parseInt(scales[0]);
         viewHolder.itemView.getLayoutParams().height = Math.round(height);
         viewHolder.bindView(discoveryList.get(i));
@@ -67,7 +66,7 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        return discoveryList.get(position).getModelValue() + 1;
+        return discoveryList.get(position).model.getNumber() + 1;
     }
 
 }

@@ -10,6 +10,7 @@
 
 package net.iGap.response;
 
+import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.fragments.discovery.OnDiscoveryList;
 import net.iGap.proto.ProtoClientGetDiscovery;
 import net.iGap.proto.ProtoGlobal;
@@ -33,19 +34,24 @@ public class ClientGetDiscoveryResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoClientGetDiscovery.ClientGetDiscoveryResponse.Builder builder = (ProtoClientGetDiscovery.ClientGetDiscoveryResponse.Builder) message;
-        ((OnDiscoveryList) identity).onDiscoveryListReady(new ArrayList<ProtoGlobal.Discovery>(builder.getDiscoveriesList()), builder.getTitle());
+        ArrayList<DiscoveryItem> res = new ArrayList<>();
+        for (ProtoGlobal.Discovery discovery: builder.getDiscoveriesList()) {
+            res.add(new DiscoveryItem(discovery));
+        }
+
+        ((OnDiscoveryList) identity).onDiscoveryListReady(res, builder.getTitle());
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        ((OnDiscoveryList) identity).onDiscoveryListReady(new ArrayList<>(), "");
+        ((OnDiscoveryList) identity).onError();
     }
 
     @Override
     public void error() {
         super.error();
-        ((OnDiscoveryList) identity).onDiscoveryListReady(new ArrayList<>(), "");
+        ((OnDiscoveryList) identity).onError();
     }
 }
 

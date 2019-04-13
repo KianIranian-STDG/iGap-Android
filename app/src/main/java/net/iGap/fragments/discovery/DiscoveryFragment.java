@@ -1,34 +1,36 @@
 package net.iGap.fragments.discovery;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.discovery.DiscoveryAdapter;
-import net.iGap.fragments.BaseFragment;
+import net.iGap.adapter.items.discovery.DiscoveryItem;
+import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.MyAppBarLayout;
-import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
 
-public class DiscoveryFragment extends BaseFragment {
+public class DiscoveryFragment extends FragmentToolBarBack {
     private RecyclerView rcDiscovery;
-    private TextView titleTextView;
-    private MyAppBarLayout appBarLayout;
+    private TextView emptyRecycle;
+    private SwipeRefreshLayout pullToRefresh;
     private int page;
 
     public static DiscoveryFragment newInstance(int page) {
@@ -50,6 +52,7 @@ public class DiscoveryFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         page = getArguments().getInt("page");
         View view = inflater.inflate(R.layout.fragment_discovery, container, false);
         if (page == 0) {
@@ -60,33 +63,28 @@ public class DiscoveryFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (G.fragmentActivity != null && page != 0) {
-            ((ActivityMain) G.fragmentActivity).lockNavigation();
-        }
-    }
-
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        appBarLayout = view.findViewById(R.id.ac_appBarLayout);
-        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
+        emptyRecycle = view.findViewById(R.id.emptyRecycle);
+
         if (page == 0) {
             appBarLayout.setVisibility(View.GONE);
         }
 
-        titleTextView = view.findViewById(R.id.title);
-        titleTextView.setTypeface(G.typeface_IRANSansMobile);
-
-        SwipeRefreshLayout pullToRefresh = view.findViewById(R.id.pullToRefresh);
+        pullToRefresh = view.findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 updateOrFetchRecycleViewData();
-                pullToRefresh.setRefreshing(false);
+            }
+        });
+
+        emptyRecycle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                new HelperFragment(FragmentWebView.newInstance("https://google.com")).setReplace(false).load(false);
+                updateOrFetchRecycleViewData();
             }
         });
 
@@ -107,19 +105,66 @@ public class DiscoveryFragment extends BaseFragment {
     }
 
     private void updateOrFetchRecycleViewData() {
+        pullToRefresh.setRefreshing(true);
         new RequestClientGetDiscovery().getDiscovery(page, new OnDiscoveryList() {
             @Override
-            public void onDiscoveryListReady(ArrayList<ProtoGlobal.Discovery> discoveryArrayList, String title) {
+            public void onDiscoveryListReady(ArrayList<DiscoveryItem> discoveryArrayList, String title) {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        DiscoveryAdapter adapterDiscovery = new DiscoveryAdapter(getActivity(), discoveryArrayList);
-                        rcDiscovery.setAdapter(adapterDiscovery);
-                        titleTextView.setText(title);
+                        pullToRefresh.setRefreshing(false);
+                        if (page == 0) {
+                            GsonBuilder builder = new GsonBuilder();
+                            Gson gson = builder.create();
+                            SharedPreferences pref = G.context.getSharedPreferences("DiscoveryPages", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor edit = pref.edit();
+                            String cache = gson.toJson(discoveryArrayList);
+                            edit.putString("page0", cache).apply();
+                            edit.putString("title", title).apply();
+                        }
+                        setAdapterData(discoveryArrayList, title);
+                    }
+                });
+            }
+
+            @Override
+            public void onError() {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        pullToRefresh.setRefreshing(false);
+                        if (page == 0) {
+                            GsonBuilder builder = new GsonBuilder();
+                            Gson gson = builder.create();
+                            SharedPreferences pref = G.context.getSharedPreferences("DiscoveryPages", Context.MODE_PRIVATE);
+                            String json = pref.getString("page0" , "");
+                            String title = pref.getString("title" , "");
+                            if (json != null && !json.equals("")) {
+                                ArrayList<DiscoveryItem> discoveryArrayList = gson.fromJson(json, new TypeToken<ArrayList<DiscoveryItem>>(){}.getType());
+                                setAdapterData(discoveryArrayList, title);
+                            } else {
+                                setAdapterData(new ArrayList<>(), "");
+                            }
+
+                        } else {
+                            setAdapterData(new ArrayList<>(), "");
+                        }
                     }
                 });
             }
         });
     }
 
+    private void setAdapterData(ArrayList<DiscoveryItem> discoveryArrayList, String title) {
+        DiscoveryAdapter adapterDiscovery = new DiscoveryAdapter(getActivity(), discoveryArrayList);
+        if (discoveryArrayList.size() == 0) {
+            rcDiscovery.setVisibility(View.GONE);
+            emptyRecycle.setVisibility(View.VISIBLE);
+        } else {
+            rcDiscovery.setVisibility(View.VISIBLE);
+            emptyRecycle.setVisibility(View.GONE);
+        }
+        rcDiscovery.setAdapter(adapterDiscovery);
+        titleTextView.setText(title);
+    }
 }

@@ -7,9 +7,7 @@ import android.widget.ImageView;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.proto.ProtoGlobal;
-
-import java.util.List;
+import net.iGap.adapter.items.discovery.DiscoveryItem;
 
 public class Type6ViewHolder extends BaseViewHolder {
     private ImageView img0, img1, img2;
@@ -26,30 +24,29 @@ public class Type6ViewHolder extends BaseViewHolder {
     }
 
     @Override
-    public void bindView(ProtoGlobal.Discovery item) {
-        List<ProtoGlobal.DiscoveryField> discoveryFields = item.getDiscoveryfieldsList();
-        G.imageLoader.displayImage(discoveryFields.get(0).getImageurl(), img0);
-        G.imageLoader.displayImage(discoveryFields.get(1).getImageurl(), img1);
-        G.imageLoader.displayImage(discoveryFields.get(2).getImageurl(), img2);
+    public void bindView(DiscoveryItem item) {
+        G.imageLoader.displayImage(item.discoveryFields.get(0).imageUrl, img0, option);
+        G.imageLoader.displayImage(item.discoveryFields.get(1).imageUrl, img1, option);
+        G.imageLoader.displayImage(item.discoveryFields.get(2).imageUrl, img2, option);
 
         card0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleDiscoveryFieldsClick(discoveryFields.get(0));
+                handleDiscoveryFieldsClick(item.discoveryFields.get(0));
             }
         });
 
         card1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleDiscoveryFieldsClick(discoveryFields.get(1));
+                handleDiscoveryFieldsClick(item.discoveryFields.get(1));
             }
         });
 
         card2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleDiscoveryFieldsClick(discoveryFields.get(2));
+                handleDiscoveryFieldsClick(item.discoveryFields.get(2));
             }
         });
     }

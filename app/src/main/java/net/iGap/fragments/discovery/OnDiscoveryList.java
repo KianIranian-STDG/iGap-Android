@@ -1,10 +1,12 @@
 package net.iGap.fragments.discovery;
 
-import net.iGap.proto.ProtoGlobal;
+
+import net.iGap.adapter.items.discovery.DiscoveryItem;
 
 import java.util.ArrayList;
 
 public interface OnDiscoveryList {
 
-    void onDiscoveryListReady(ArrayList<ProtoGlobal.Discovery> discoveryArrayList, String title);
+    void onDiscoveryListReady(ArrayList<DiscoveryItem> discoveryArrayList, String title);
+    void onError();
 }

@@ -2,51 +2,50 @@ package net.iGap.adapter.items.discovery.holder;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentWebView;
 import net.iGap.fragments.discovery.DiscoveryFragment;
+import net.iGap.adapter.items.discovery.DiscoveryItem;
+import net.iGap.adapter.items.discovery.DiscoveryItemField;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperUrl;
-import net.iGap.proto.ProtoGlobal;
-import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 
-import java.util.ArrayList;
-
-import io.realm.Realm;
-
-import static net.iGap.G.isLocationFromBot;
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder{
+    public static DisplayImageOptions option = new DisplayImageOptions.Builder().cacheOnDisk(true).build();
+
 
     BaseViewHolder(@NonNull View itemView) {
         super(itemView);
     }
 
-    public abstract void bindView(ProtoGlobal.Discovery item);
+    public abstract void bindView(DiscoveryItem item);
 
-    void handleDiscoveryFieldsClick(ProtoGlobal.DiscoveryField discoveryField) {
-        new RequestClientSetDiscoveryItemClick().setDiscoveryClicked(discoveryField.getId());
-        switch (discoveryField.getActiontype()) {
+    void handleDiscoveryFieldsClick(DiscoveryItemField discoveryField) {
+        new RequestClientSetDiscoveryItemClick().setDiscoveryClicked(discoveryField.id);
+        switch (discoveryField.actionType) {
             case PAGE:
-                actionPage(discoveryField.getValue());
+                actionPage(discoveryField.value);
                 break;
             case JOIN_LINK:
-                HelperUrl.checkAndJoinToRoom(discoveryField.getValue());
+                HelperUrl.checkAndJoinToRoom(discoveryField.value);
                 break;
             case WEB_LINK:
-                HelperUrl.openBrowser(discoveryField.getValue());
+                HelperUrl.openBrowser(discoveryField.value);
                 break;
             case WEB_VIEW_LINK:
-                //we must move webview from chat to main or create new one
-                //openWebViewForSpecialUrlChat(discoveryField.getValue());
+                new HelperFragment(FragmentWebView.newInstance(discoveryField.value)).setReplace(false).load(false);
+                break;
+            case USERNAME_LINK:
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(discoveryField.value.replace("@", ""), HelperUrl.ChatEntry.chat, 0);
                 break;
             case REQUEST_PHONE:
 //                new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_number).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -66,9 +65,6 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder{
 //                        });
 //                    }
 //                }).show();
-                break;
-            case USERNAME_LINK:
-                HelperUrl.checkUsernameAndGoToRoomWithMessageId(discoveryField.getValue().replace("@", ""), HelperUrl.ChatEntry.chat, 0);
                 break;
             case REQUEST_LOCATION:
                 new MaterialDialog.Builder(G.currentActivity).title(R.string.access_location).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
