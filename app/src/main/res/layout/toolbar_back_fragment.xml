@@ -49,7 +49,7 @@
             android:singleLine="true"
             android:text=""
             android:textAppearance="@style/TextIconAppearance_toolbar"
-            android:textColor="#CCFFFFFF"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/dp20" />
 
 

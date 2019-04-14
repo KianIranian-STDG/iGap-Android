@@ -21,6 +21,9 @@ public class Type7ViewHolder extends BaseViewHolder {
         card0 = itemView.findViewById(R.id.type7_card0);
         card1 = itemView.findViewById(R.id.type7_card1);
         card2 = itemView.findViewById(R.id.type7_card2);
+        card0.setCardBackgroundColor(G.getThemeBackgroundColor());
+        card1.setCardBackgroundColor(G.getThemeBackgroundColor());
+        card2.setCardBackgroundColor(G.getThemeBackgroundColor());
     }
 
     @Override

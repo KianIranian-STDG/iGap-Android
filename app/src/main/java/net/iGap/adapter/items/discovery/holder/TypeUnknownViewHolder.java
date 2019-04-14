@@ -5,6 +5,7 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 
@@ -16,6 +17,7 @@ public class TypeUnknownViewHolder extends BaseViewHolder {
         super(itemView);
         txt0 = itemView.findViewById(R.id.unknown_text);
         card0 = itemView.findViewById(R.id.unknown_card);
+        card0.setCardBackgroundColor(G.getThemeBackgroundColor());
     }
 
     @Override
