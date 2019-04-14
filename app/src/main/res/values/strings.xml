@@ -61,6 +61,13 @@
     <string name="phone_number">Phone Number</string>
     <string name="Re_Phone_Verification">Verifying the entered phone number</string>
 
+    <!--Reagent-->
+    <string name="ra_title">"test string"</string>
+    <string name="ra_enter_reagent_code">"enter reagent code"</string>
+    <string name="ra_confirm">"Confirm"</string>
+    <string name="ra_skip">"Skip"</string>
+
+
     <!-- Toast -->
     <string name="Toast_waiting_fot_get_info">Connecting and getting Info...</string>
     <string name="Toast_Location_Not_Found">Location not found.</string>

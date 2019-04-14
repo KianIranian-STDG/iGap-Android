@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.graphics.Color" />
+
+        <import type="net.iGap.G" />
+
+        <variable
+            name="fragmentRegisterViewModel"
+            type="net.iGap.viewmodel.FragmentRegisterViewModel" />
+    </data>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@{Color.parseColor(G.backgroundTheme),default=@color/toolbar_background}"
+        android:clickable="true"
+        tools:ignore="MissingPrefix">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@{Color.parseColor(G.backgroundTheme),default=@color/toolbar_background}"
+            android:orientation="vertical"
+            tools:ignore="MissingPrefix">
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/tb_Reagent_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp60"
+                    android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
+                    android:layoutDirection="ltr"
+                    app:contentInsetLeft="0dp"
+                    app:contentInsetStart="0dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            fontPath="fonts/IRANSansMobile_Bold.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:text="@string/igap"
+                            android:textColor="@color/rg_whit_background"
+                            android:textSize="@dimen/dp20"
+                            android:visibility="visible" />
+
+                        <net.iGap.libs.rippleeffect.RippleView
+                            android:id="@+id/setPassword_rippleOk"
+                            rv_centered="true"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:rv_alpha="200"
+                            app:rv_centered="true"
+                            app:rv_rippleDuration="0"
+                            app:rv_ripplePadding="5dp">
+
+                            <net.iGap.module.MaterialDesignTextView
+                                android:id="@+id/rg_txtOk"
+                                android:layout_width="@dimen/dp52"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:gravity="center"
+                                android:onClick="@{fragmentRegisterViewModel::onClickTxtOk}"
+                                android:text="@string/md_check_symbol"
+                                android:textAppearance="@style/TextIconAppearance_toolbar"
+                                android:textColor="@color/whit_background"
+                                android:visibility="@{fragmentRegisterViewModel.txtOkVisibility}"
+
+                                />
+                        </net.iGap.libs.rippleeffect.RippleView>
+
+
+                        <net.iGap.module.MaterialDesignTextView
+                            android:id="@+id/rg_qrCode"
+                            android:layout_width="@dimen/dp52"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:gravity="center"
+                            android:onClick="@{fragmentRegisterViewModel::onClickQrCode}"
+                            android:text="@string/md_qrCode"
+                            android:textAppearance="@style/TextIconAppearance_toolbar"
+                            android:textColor="@color/whit_background"
+                            android:visibility="@{fragmentRegisterViewModel.qrCodeVisibility ,default =visible}" />
+                    </RelativeLayout>
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.AppBarLayout>
+
+
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/dp32"
+                android:paddingRight="@dimen/dp32">
+
+                <LinearLayout
+                    android:id="@+id/headerLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/rg_rootMainLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:visibility="@{fragmentRegisterViewModel.rootMainLayoutVisibility}">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingBottom="@dimen/dp16"
+                            android:textColor="@color/toolbar_title_register">
+
+                            <TextView
+                                fontPath="fonts/IRANSansMobile.ttf"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/dp16"
+                                android:background="@android:color/transparent"
+                                android:gravity="center"
+                                android:text="@string/rg_title_register"
+                                android:textColor="@{Color.parseColor(G.textTitleTheme),default=@color/toolbar_background}"
+                                android:textSize="@dimen/dp18" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginLeft="@dimen/dp32"
+                                android:layout_marginTop="@dimen/dp8"
+                                android:layout_marginRight="@dimen/dp32"
+                                android:background="@{Color.parseColor(G.lineBorder),default=@color/toolbar_background}" />
+
+                            <TextView
+                                fontPath="fonts/IRANSansMobile.ttf"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/rg_txt_title_register"
+                                android:layout_centerVertical="true"
+                                android:layout_marginTop="@dimen/dp12"
+                                android:gravity="center"
+                                android:text="@string/rg_confirm_text_register"
+                                android:textColor="@{Color.parseColor(G.textTitleTheme),default=@color/toolbar_background}"
+                                android:textSize="@dimen/dp14"
+
+                                />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:textColor="@color/toolbar_title_register">
+
+                            <Button
+                                android:id="@+id/btn_reagent_country"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/dp40"
+                                android:layout_above="@+id/rg_layout_center"
+                                android:layout_marginBottom="@dimen/dp12"
+                                android:background="@drawable/rg_background_agreement"
+                                android:drawableLeft="@mipmap/flesh"
+                                android:paddingLeft="@dimen/dp12"
+                                android:paddingTop="@dimen/dp4"
+                                android:paddingRight="@dimen/dp28"
+                                android:paddingBottom="@dimen/dp4"
+                                android:text="@string/iran"
+                                android:textColor="@{fragmentRegisterViewModel.btnChoseCountryColor , default = @color/rg_black_register}"
+                                android:textSize="@dimen/dp14"
+
+
+                                />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layoutDirection="ltr"
+                                android:orientation="horizontal">
+
+                                <net.iGap.module.MEditText
+                                    android:id="@+id/et_reagent_countryCode"
+                                    android:layout_width="0dp"
+                                    android:layout_height="@dimen/dp40"
+                                    android:layout_marginRight="@dimen/dp8"
+                                    android:layout_weight=".3"
+                                    android:background="@drawable/rg_background_agreement"
+                                    android:enabled="@{fragmentRegisterViewModel.edtCodeNumberEnable , default = false}"
+                                    android:gravity="center"
+                                    android:inputType="phone"
+                                    android:maxLength="5"
+                                    android:singleLine="true"
+                                    android:text="@{fragmentRegisterViewModel.callbackEdtCodeNumber , default=98}"
+                                    android:textColor="@{fragmentRegisterViewModel.edtCodeNumberColor , default = @color/rg_black_register}"
+                                    android:textIsSelectable="false"
+                                    android:textSize="@dimen/dp14" />
+
+                                <com.vicmikhailau.maskededittext.MaskedEditText
+                                    android:id="@+id/et_reagent_phoneNumber"
+                                    android:layout_width="0dp"
+                                    android:layout_height="@dimen/dp40"
+                                    android:layout_weight=".7"
+                                    android:background="@drawable/rg_background_agreement"
+                                    android:gravity="left|center_vertical"
+                                    android:imeOptions="flagNoExtractUi"
+                                    android:inputType="phone"
+                                    android:maxLength="18"
+                                    android:onTextChanged="@{fragmentRegisterViewModel::onTextChanged}"
+                                    android:padding="@dimen/dp4"
+                                    android:text="@={fragmentRegisterViewModel.callBackEdtPhoneNumber}"
+                                    android:textAlignment="gravity"
+                                    android:textColor="@{fragmentRegisterViewModel.edtPhoneNumberColor , default = @color/rg_black_register}"
+                                    android:textSize="@dimen/dp14"
+                                    app:mask="@{fragmentRegisterViewModel.edtPhoneNumberMask}" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:padding="@dimen/dp16">
+
+                                <Button
+                                    android:id="@+id/btn_reagent_start"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/shape_background_button"
+                                    android:gravity="center"
+                                    android:text="@string/rg_Start"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/dp14" />
+
+                                <Button
+                                    android:id="@+id/btn_reagent_skip"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="@dimen/dp8"
+                                    android:background="@color/transparent"
+                                    android:text="@string/ra_skip"
+                                    android:textColor="@color/gray10"
+
+                                    />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+            </ScrollView>
+
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_reagent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="invisible" />
+    </FrameLayout>
+</layout>
