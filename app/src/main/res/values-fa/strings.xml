@@ -1420,4 +1420,6 @@
     <string name="add_sticker_text">آیا مطمئن هستید که میخواهید این استیکرها را نصب کنید؟</string>
     <string name="Add">اضافه</string>
     <string name="Remove">حذف</string>
+
+    <string name="unknown_type">این نوع کارت پشتیبانی نمی شود.</string>
 </resources>

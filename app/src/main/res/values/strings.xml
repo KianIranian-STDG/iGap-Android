@@ -1417,4 +1417,6 @@
     <string name="Favorite">Favorite</string>
     <string name="Please_select_an_option">Please select an option</string>
 
+    <string name="unknown_type">not supported card</string>
+
 </resources>
