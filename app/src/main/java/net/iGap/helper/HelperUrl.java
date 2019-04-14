@@ -200,22 +200,10 @@ public class HelperUrl {
                         mUrl = "http://" + mUrl;
                     }
 
-                    URL url = null;
-                    try {
-                        url = new URL(mUrl);
-                        URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
-                        url = new URL(uri.toASCIIString());
-                        mUrl = url.toString();
-                        mUrl = mUrl.replaceAll("[^\\x00-\\x7F]", "");
-                        if (checkedInappBrowser == 1 && !isNeedOpenWithoutBrowser(mUrl)) {
-                            openBrowser(mUrl);
-                        } else {
-                            openWithoutBrowser(mUrl);
-                        }
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
+                    if (checkedInappBrowser == 1 && !isNeedOpenWithoutBrowser(mUrl)) {
+                        openBrowser(mUrl); //internal chrome
+                    } else {
+                        openWithoutBrowser(mUrl);//external intent
                     }
 
                 }
