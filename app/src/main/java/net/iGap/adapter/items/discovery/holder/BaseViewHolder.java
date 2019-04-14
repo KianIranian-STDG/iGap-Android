@@ -65,13 +65,14 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 HelperUrl.checkAndJoinToRoom(discoveryField.value);
                 break;
             case WEB_LINK:/** tested **/
-                HelperUrl.openBrowser(discoveryField.value);
+                openLinkIntent(discoveryField.value);
                 break;
             case WEB_VIEW_LINK:/** tested title needed**/
                 if (HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
                     openLinkIntent(discoveryField.value);
                 } else {
                     new HelperFragment(FragmentWebView.newInstance(discoveryField.value)).setReplace(false).load();
+                    // or HelperUrl.openBrowser(discoveryField.value);
                 }
                 break;
             case USERNAME_LINK:/** tested **/

@@ -32,7 +32,7 @@ public class FragmentToolBarBack extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         numberOfVisible--;
-        if (G.fragmentActivity != null) {
+        if (G.fragmentActivity instanceof ActivityMain) {
             ((ActivityMain) G.fragmentActivity).openNavigation();
         }
     }
@@ -40,7 +40,7 @@ public class FragmentToolBarBack extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (G.fragmentActivity != null) {
+        if (G.fragmentActivity instanceof ActivityMain) {
             ((ActivityMain) G.fragmentActivity).lockNavigation();
         }
     }

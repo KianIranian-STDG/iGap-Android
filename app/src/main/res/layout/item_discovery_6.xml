@@ -10,7 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/dp4"
-        android:layout_weight="2"
+        android:layout_weight="6"
         app:cardCornerRadius="@dimen/dp4">
 
         <ImageView
@@ -26,7 +26,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="4"
         android:layout_margin="@dimen/dp4"
         android:orientation="vertical">
 

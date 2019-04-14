@@ -1316,9 +1316,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (HelperCalander.isPersianUnicode) {
-            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_apps), getString(R.string.md_users_social_symbol));
+            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_apps), getString(R.string.md_chat_tab));
         } else {
-            navigationTabStrip.setTitles(getString(R.string.md_users_social_symbol), getString(R.string.md_apps), getString(R.string.md_phone));
+            navigationTabStrip.setTitles(getString(R.string.md_chat_tab), getString(R.string.md_apps), getString(R.string.md_phone));
         }
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
