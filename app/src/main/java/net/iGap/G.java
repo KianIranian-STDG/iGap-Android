@@ -368,6 +368,7 @@ public class G extends MultiDexApplication {
     public static OnAudioFocusChangeListener onAudioFocusChangeListener;
     public static IDispatchTochEvent dispatchTochEventChat;
     public static IOnBackPressed onBackPressedChat;
+    public static IOnBackPressed onBackPressedWebView;
     public static ISendPosition iSendPositionChat;
     public static ITowPanModDesinLayout iTowPanModDesinLayout;
     public static OnDateChanged onDateChanged;

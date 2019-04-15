@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,7 @@ import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
+import net.iGap.module.SHP_SETTING;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestClientSetDiscoveryItemClick;
 import net.iGap.request.RequestGeoGetConfiguration;
@@ -65,14 +67,19 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 HelperUrl.checkAndJoinToRoom(discoveryField.value);
                 break;
             case WEB_LINK:/** tested **/
-                openLinkIntent(discoveryField.value);
+                SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, G.context.MODE_PRIVATE);
+                int checkedInAppBrowser = sharedPreferences.getInt(SHP_SETTING.KEY_IN_APP_BROWSER, 1);
+                if (checkedInAppBrowser == 1 && !HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
+                    HelperUrl.openBrowser(discoveryField.value);
+                }else {
+                    HelperUrl.openWithoutBrowser(discoveryField.value);
+                }
                 break;
             case WEB_VIEW_LINK:/** tested title needed**/
                 if (HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {
-                    openLinkIntent(discoveryField.value);
+                    HelperUrl.openWithoutBrowser(discoveryField.value);
                 } else {
                     new HelperFragment(FragmentWebView.newInstance(discoveryField.value)).setReplace(false).load();
-                    // or HelperUrl.openBrowser(discoveryField.value);
                 }
                 break;
             case USERNAME_LINK:/** tested **/
@@ -142,7 +149,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                                                         waitingForConfiguration = false;
                                                     }
                                                 }, 2000);
-                                                new HelperFragment(FragmentiGapMap.getInstance()).load();
+                                                new HelperFragment(FragmentiGapMap.getInstance()).setReplace(false).load();
 
                                             }
 
@@ -164,7 +171,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                                                 waitingForConfiguration = false;
                                             }
                                         }, 2000);
-                                        new HelperFragment(FragmentiGapMap.getInstance()).load();
+                                        new HelperFragment(FragmentiGapMap.getInstance()).setReplace(false).load();
                                     }
                                 }
 
@@ -221,24 +228,12 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private void openLinkIntent(String value) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(value));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (intent.resolveActivity(G.fragmentActivity.getPackageManager()) != null) {
-            G.fragmentActivity.startActivity(intent);
-        } else {
-            // error
-        }
-    }
-
     private void actionPage(String value) {
         new HelperFragment(DiscoveryFragment.newInstance(Integer.valueOf(value))).setReplace(false).load(false);
     }
 
     public void dialPhoneNumber(Context context, String phoneNumber) {
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:" + phoneNumber));
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null));
         if (intent.resolveActivity(G.context.getPackageManager()) != null) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);

@@ -247,7 +247,7 @@ public class HelperUrl {
         return false;
     }
 
-    private static void openWithoutBrowser(String url) {
+    public static void openWithoutBrowser(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -2431,7 +2431,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
-
+        if (G.onBackPressedWebView != null) {
+            if (G.onBackPressedWebView.onBack()) {
+                return;
+            }
+        }
 
         if (G.onBackPressedExplorer != null) {
             if (G.onBackPressedExplorer.onBack()) {

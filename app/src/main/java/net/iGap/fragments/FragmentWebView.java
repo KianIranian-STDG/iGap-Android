@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +14,13 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
+import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.discovery.DiscoveryFragment;
+import net.iGap.interfaces.IOnBackPressed;
 import net.iGap.libs.MyWebViewClient;
 
-public class FragmentWebView extends FragmentToolBarBack {
+public class FragmentWebView extends FragmentToolBarBack implements IOnBackPressed {
 
     private String url;
     private WebView webView;
@@ -46,10 +50,9 @@ public class FragmentWebView extends FragmentToolBarBack {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        titleTextView.setText(DiscoveryFragment.lastDiscoveryTitle);
         webView = view.findViewById(R.id.webView);
         progressWebView = view.findViewById(R.id.progressWebView);
-        webView.loadUrl("");
         webView.getSettings().setLoadsImagesAutomatically(true);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.clearCache(true);
@@ -102,10 +105,44 @@ public class FragmentWebView extends FragmentToolBarBack {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                titleTextView.setText(view.getTitle());
 
             }
         });
 
         webView.loadUrl(url);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        G.onBackPressedWebView = this;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        G.onBackPressedWebView = null;
+    }
+
+    @Override
+    public boolean onBack() {
+        webView.stopLoading();
+        if (webView.canGoBack()) {
+            webView.goBack();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void onBackButtonClicked(View view) {
+        webView.stopLoading();
+        if (webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            super.onBackButtonClicked(view);
+        }
     }
 }

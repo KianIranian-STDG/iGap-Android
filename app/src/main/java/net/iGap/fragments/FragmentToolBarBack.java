@@ -57,9 +57,13 @@ public class FragmentToolBarBack extends BaseFragment {
         rippleBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                closeKeyboard(view);
-                popBackStackFragment();
+                onBackButtonClicked(view);
             }
         });
+    }
+
+    protected void onBackButtonClicked(View view) {
+        closeKeyboard(view);
+        popBackStackFragment();
     }
 }

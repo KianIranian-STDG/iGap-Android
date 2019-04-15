@@ -32,6 +32,7 @@ public class DiscoveryFragment extends FragmentToolBarBack {
     private TextView emptyRecycle;
     private SwipeRefreshLayout pullToRefresh;
     private int page;
+    public static String lastDiscoveryTitle;
 
     public static DiscoveryFragment newInstance(int page) {
         DiscoveryFragment discoveryFragment = new DiscoveryFragment();
@@ -109,6 +110,7 @@ public class DiscoveryFragment extends FragmentToolBarBack {
         new RequestClientGetDiscovery().getDiscovery(page, new OnDiscoveryList() {
             @Override
             public void onDiscoveryListReady(ArrayList<DiscoveryItem> discoveryArrayList, String title) {
+                lastDiscoveryTitle = title;
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
