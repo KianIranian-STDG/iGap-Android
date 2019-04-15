@@ -9,6 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
+import android.content.Intent;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.os.Build;
@@ -21,11 +22,13 @@ import android.view.WindowManager;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentRegistrationNicknameBinding;
 import net.iGap.fragments.ReagentFragment;
 import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
+import net.iGap.module.transition.fragment.FragmentTransition;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmUserInfo;
@@ -33,6 +36,8 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserProfileSetNickname;
 
 import io.realm.Realm;
+
+import static net.iGap.G.context;
 
 public class FragmentRegistrationNicknameViewModel {
 
@@ -160,17 +165,16 @@ public class FragmentRegistrationNicknameViewModel {
                                 G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        G.onUserInfoResponse = null;
-                                        hideProgressBar();
+//                                        G.onUserInfoResponse = null;
+//                                        hideProgressBar();
 //                                        Intent intent = new Intent(context, ActivityMain.class);
 //                                        intent.putExtra(ARG_USER_ID, user.getId());
 //                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                        G.context.startActivity(intent)
-                                        ReagentFragment reagentFragment = new ReagentFragment();
-                                        new HelperFragment(reagentFragment)
-                                                .load();
+//                                        G.context.startActivity(intent);
+//                                        G.fragmentActivity.finish();
 
-                                        //G.fragmentActivity.finish();
+                                        ReagentFragment reagentFragment = new ReagentFragment();
+//                                        FragmentTransition transition = SupportFra
                                     }
                                 });
                             }
