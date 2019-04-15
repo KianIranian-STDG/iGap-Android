@@ -183,6 +183,7 @@
     <string name="st_nickname">"نام"</string>
     <string name="st_contactName">"نام مخاطب"</string>
     <string name="st_phoneNumber">"شماره تلفن"</string>
+    <string name="st_represent">معرف</string>
     <string name="st_title_info">"اطلاعات"</string>
     <string name="st_title_notification_sounds">"اعلانات و صداها"</string>
     <string name="st_title_Clear_Cache">"پاک کردن حافظهٔ نهان"</string>
@@ -1428,4 +1429,6 @@
     <string name="add_sticker_text">آیا مطمئن هستید که میخواهید این استیکرها را نصب کنید؟</string>
     <string name="Add">اضافه</string>
     <string name="Remove">حذف</string>
+
+    <string name="try_later">چند ثانیه بعد امتحان کنید</string>
 </resources>

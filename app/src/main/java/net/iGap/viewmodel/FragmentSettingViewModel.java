@@ -84,6 +84,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserProfileCheckUsername;
+import net.iGap.request.RequestUserProfileGetRepresentative;
 import net.iGap.request.RequestUserProfileSetEmail;
 import net.iGap.request.RequestUserProfileSetGender;
 import net.iGap.request.RequestUserProfileSetNickname;
@@ -136,6 +137,7 @@ public class FragmentSettingViewModel {
     public ObservableField<String> callbackSetUserName = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_username));
     public ObservableField<String> callbackSetEmail = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.set_email));
     public ObservableField<String> callbackSetPhoneNumber = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_phoneNumber));
+    public ObservableField<String> callbackSetRepresent = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_represent));
     public ObservableField<String> callbackSetBio = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_bio));
     public ObservableField<String> callbackLanguage = new ObservableField<>("English");
     public ObservableField<String> callbackDataShams = new ObservableField<>("Miladi");
@@ -909,6 +911,16 @@ public class FragmentSettingViewModel {
 
     }
 
+    public void onClickRepresent(View view) {
+        if (RequestUserProfileGetRepresentative.numberOfPendingRequest == 0) {
+            if (callbackSetRepresent.get().equals("")) {
+                Toast.makeText(G.context, "ClickWork", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            HelperError.showSnackMessage(G.context.getString(R.string.try_later), false);
+        }
+    }
+
     public void onClickBio(View view) {
 
         FragmentBio fragmentBio = new FragmentBio();
@@ -1573,6 +1585,11 @@ public class FragmentSettingViewModel {
             ProtoGlobal.Gender userGender = userInfo.getGender();
             userEmail = userInfo.getEmail();
             bio = userInfo.getUserInfo().getBio();
+            if (userInfo.getRepresentPhoneNumber() == null || userInfo.getRepresentPhoneNumber().length() < 1) {
+                callbackSetRepresent.set("");
+            } else {
+                callbackSetRepresent.set(userInfo.getRepresentPhoneNumber());
+            }
 
             if (nickName != null) {
                 callbackSetName.set(nickName);

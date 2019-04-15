@@ -396,42 +396,97 @@
           </LinearLayout>
 
           <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{fragmentSettingViewModel::onClickPhoneNumber}"
-            android:orientation="vertical">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginTop="@dimen/dp12"
-              android:paddingEnd="@dimen/dp4"
-              android:paddingStart="@dimen/dp4"
-              android:text="@string/st_phoneNumber"
-              android:textSize="@dimen/dp15"
-              android:textStyle="normal" />
+              android:orientation="horizontal">
 
-            <RelativeLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="start">
+              <LinearLayout
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight=".48"
+                  android:onClick="@{fragmentSettingViewModel::onClickPhoneNumber}"
+                  android:orientation="vertical">
+
+                  <TextView
+                      style="?textTitleColorSettingTheme"
+                      fontPath="fonts/IRANSansMobile.ttf"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="@dimen/dp12"
+                      android:paddingEnd="@dimen/dp4"
+                      android:paddingStart="@dimen/dp4"
+                      android:text="@string/st_phoneNumber"
+                      android:textSize="@dimen/dp15"
+                      android:textStyle="normal" />
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:gravity="start">
 
 
-              <TextView
-                android:id="@+id/st_txt_phoneNumber"
-                style="?textSubColorSettingTheme"
-                fontPath="fonts/IRANSansMobile.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingEnd="@dimen/dp4"
-                android:paddingStart="@dimen/dp4"
-                android:text="@{fragmentSettingViewModel.callbackSetPhoneNumber , default =@string/st_phoneNumber }"
-                android:textSize="@dimen/dp14"
-                android:textStyle="normal" />
-            </RelativeLayout>
+                      <TextView
+                          android:id="@+id/st_txt_phoneNumber"
+                          style="?textSubColorSettingTheme"
+                          fontPath="fonts/IRANSansMobile.ttf"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:gravity="center_vertical"
+                          android:paddingEnd="@dimen/dp4"
+                          android:paddingStart="@dimen/dp4"
+                          android:text="@{fragmentSettingViewModel.callbackSetPhoneNumber , default =@string/st_phoneNumber }"
+                          android:textSize="@dimen/dp14"
+                          android:textStyle="normal" />
+                  </RelativeLayout>
+
+              </LinearLayout>
+
+              <LinearLayout
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight=".04"
+                  android:orientation="vertical" />
+
+              <LinearLayout
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:layout_weight=".48"
+                  android:onClick="@{fragmentSettingViewModel::onClickRepresent}"
+                  android:orientation="vertical">
+
+                  <TextView
+                      style="?textTitleColorSettingTheme"
+                      fontPath="fonts/IRANSansMobile.ttf"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="@dimen/dp12"
+                      android:paddingEnd="@dimen/dp4"
+                      android:paddingStart="@dimen/dp4"
+                      android:text="@string/st_represent"
+                      android:textSize="@dimen/dp15"
+                      android:textStyle="normal" />
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:gravity="start">
+
+
+                      <TextView
+                          android:id="@+id/st_txt_represent"
+                          style="?textSubColorSettingTheme"
+                          fontPath="fonts/IRANSansMobile.ttf"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:gravity="center_vertical"
+                          android:paddingEnd="@dimen/dp4"
+                          android:paddingStart="@dimen/dp4"
+                          android:text="@{fragmentSettingViewModel.callbackSetRepresent , default =@string/st_represent }"
+                          android:textSize="@dimen/dp14"
+                          android:textStyle="normal" />
+                  </RelativeLayout>
+
+              </LinearLayout>
 
           </LinearLayout>
 
