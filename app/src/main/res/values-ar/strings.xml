@@ -318,6 +318,8 @@
 
     <string name="st_phoneNumber">"رقم الهاتف "</string>
 
+    <string name="st_represent">الكاشف</string>
+
     <string name="st_title_info">"المعلومات"</string>
 
     <string name="st_title_notification_sounds">"الإشعارات و الأصوات"</string>

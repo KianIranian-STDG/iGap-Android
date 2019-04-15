@@ -175,6 +175,7 @@
     <string name="st_nickname">First Name</string>
     <string name="st_contactName">Contact Name</string>
     <string name="st_phoneNumber">Phone Number</string>
+    <string name="st_represent">Represent</string>
     <string name="st_title_info">Information</string>
     <string name="st_title_notification_sounds">Notifications and Sounds</string>
     <string name="st_title_Clear_Cache">Clear Cache</string>

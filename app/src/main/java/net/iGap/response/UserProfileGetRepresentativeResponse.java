@@ -10,17 +10,16 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
-import net.iGap.proto.ProtoUserProfileGetNickname;
 import net.iGap.proto.ProtoUserProfileGetRepresentative;
+import net.iGap.request.RequestUserProfileGetRepresentative;
 
 public class UserProfileGetRepresentativeResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public UserProfileGetRepresentativeResponse(int actionId, Object protoClass, String identity) {
+    public UserProfileGetRepresentativeResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
 
         this.message = protoClass;
@@ -33,16 +32,18 @@ public class UserProfileGetRepresentativeResponse extends MessageHandler {
         super.handler();
 
         ProtoUserProfileGetRepresentative.UserProfileGetRepresentativeResponse.Builder builder = (ProtoUserProfileGetRepresentative.UserProfileGetRepresentativeResponse.Builder) message;
-        builder.getPhoneNumber();
+        ((RequestUserProfileGetRepresentative.OnRepresentReady) this.identity).onRepresent(builder.getPhoneNumber());
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+        ((RequestUserProfileGetRepresentative.OnRepresentReady) this.identity).onFailed();
     }
 
     @Override
     public void error() {
         super.error();
+        ((RequestUserProfileGetRepresentative.OnRepresentReady) this.identity).onFailed();
     }
 }
