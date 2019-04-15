@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the RooyeKhat Media Company - www.RooyeKhat.co
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
@@ -51,6 +51,7 @@ import net.iGap.viewmodel.FragmentRegisterViewModel;
 
 public class FragmentRegister extends BaseFragment {
 
+    public static final String TAG = FragmentRegister.class.getSimpleName();
     private static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
     private static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
     private static final String KEY_SAVE_PHONENUMBER_NUMBER = "SAVE_PHONENUMBER_NUMBER";
@@ -62,19 +63,16 @@ public class FragmentRegister extends BaseFragment {
     public static MaskedEditText edtPhoneNumber;
     public static TextView btnOk;
     public static int positionRadioButton = -1;
-
     public static OnStartAnimationRegister onStartAnimationRegister;
     private TextView txtAgreement_register;
-    private ViewGroup layout_verify;
     //Array List for Store List of StructCountry Object
-
+    private ViewGroup layout_verify;
     private FragmentActivity mActivity;
     private ScrollView scrollView;
     private int headerLayoutHeight;
     private LinearLayout headerLayout;
     private FragmentRegisterViewModel fragmentRegisterViewModel;
     private ActivityRegisterBinding fragmentRegisterBinding;
-    public static final String TAG = FragmentRegister.class.getSimpleName();
     private SMSReceiver smsReceiver;
 
     @Nullable
@@ -187,7 +185,7 @@ public class FragmentRegister extends BaseFragment {
                 public void onOTPReceived(String message) {
 
                     try {
-                        if (message != null && message.length()>0) {
+                        if (message != null && message.length() > 0) {
                             fragmentRegisterViewModel.receiveVerifySms(message);
                         }
                     } catch (Exception e1) {
@@ -199,12 +197,12 @@ public class FragmentRegister extends BaseFragment {
 
                 @Override
                 public void onOTPTimeOut() {
-                    Log.e(TAG,"OTP Time out");
+                    Log.e(TAG, "OTP Time out");
                 }
 
                 @Override
                 public void onOTPReceivedError(String error) {
-                    Log.e(TAG,error);
+                    Log.e(TAG, error);
                 }
             });
 
@@ -218,14 +216,14 @@ public class FragmentRegister extends BaseFragment {
             task.addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    Log.e(TAG,"sms API successfully started   ");
+                    Log.e(TAG, "sms API successfully started   ");
                 }
             });
 
             task.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.e(TAG,"sms Fail to start API   ");
+                    Log.e(TAG, "sms Fail to start API   ");
                 }
             });
         } catch (Exception e) {
@@ -234,13 +232,13 @@ public class FragmentRegister extends BaseFragment {
     }
 
 
-    private void unregisterReceiver(){
+    private void unregisterReceiver() {
         try {
-            if(smsReceiver !=null){
+            if (smsReceiver != null) {
                 G.fragmentActivity.unregisterReceiver(smsReceiver);
-                smsReceiver=null;
+                smsReceiver = null;
             }
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
     }
@@ -281,7 +279,6 @@ public class FragmentRegister extends BaseFragment {
 
                 @Override
                 public void onGlobalLayout() {
-                    // TODO Auto-generated method stub
                     headerLayoutHeight = headerLayout.getHeight();
                     scrollView.scrollTo(0, headerLayoutHeight);
                     headerLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);

@@ -26,7 +26,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -57,6 +56,7 @@ import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperLogout;
 import net.iGap.helper.HelperSaveFile;
 import net.iGap.helper.HelperString;
+import net.iGap.interfaces.OnCountryCode;
 import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnPushLoginToken;
 import net.iGap.interfaces.OnPushTwoStepVerification;
@@ -98,7 +98,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static net.iGap.G.context;
 import static net.iGap.R.color.black_register;
 
-public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRecoverySecurityPassword {
+public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRecoverySecurityPassword, OnCountryCode {
 
     private static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
     private static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
@@ -113,8 +113,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     //Array List for Store List of StructCountry Object
     public String regex;
     public boolean isVerify = false;
-    private boolean isCallMethodSupported;
-    ProtoUserRegister.UserRegisterResponse.Method methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
     public ObservableField<String> callbackTxtAgreement = new ObservableField<>(G.context.getResources().getString(R.string.rg_agreement_text_register));
     public ObservableField<String> callbackBtnChoseCountry = new ObservableField<>("Iran");
     public ObservableField<String> callbackEdtCodeNumber = new ObservableField<>("+98");
@@ -159,6 +157,8 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     public ObservableBoolean btnChoseCountryEnable = new ObservableBoolean(true);
     public ObservableBoolean edtPhoneNumberEnable = new ObservableBoolean(true);
     public ObservableBoolean btnStartEnable = new ObservableBoolean(true);
+    ProtoUserRegister.UserRegisterResponse.Method methodForReceiveCode = ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SMS;
+    private boolean isCallMethodSupported;
     private MaterialDialog dialogRegistration;
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList();
     private Uri image_uriQrCode;
@@ -196,11 +196,12 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     private TextView txtTimer;
     private TextView btnResondCode = null;
     private TextView txtShowReason;
+
     public FragmentRegisterViewModel(FragmentRegister fragmentRegister, View root, FragmentActivity mActivity) {
         this.fragmentRegister = fragmentRegister;
         view = root;
         this.mActivity = mActivity;
-
+        G.onCountryCode = this;
         getInfo();
     }
 
@@ -748,7 +749,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         callBackTxtVerifySms.set(G.context.getResources().getString(R.string.errore_verification_sms));
         txtVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_error_red));
 
-        if (dialog ==null){
+        if (dialog == null) {
             dialog = new Dialog(G.fragmentActivity);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.rg_dialog_verify_code);
@@ -757,7 +758,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             edtEnterCodeVerify = (EditText) dialog.findViewById(R.id.rg_edt_dialog_verifyCode); //EditText For Enter sms cod
             txtShowReason = (TextView) dialog.findViewById(R.id.txt_show_reason);
             btnEnterManuallyCode = (TextView) dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
-            txtTimer      = (TextView) dialog.findViewById(R.id.remindTime);
+            txtTimer = (TextView) dialog.findViewById(R.id.remindTime);
             btnResondCode = (TextView) dialog.findViewById(R.id.rg_btn_dialog_okVerifyCode);// resend code
         }
 
@@ -1075,12 +1076,12 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             prgVerifyKeyVisibility.set(View.VISIBLE);
 
             try {
-            userVerifyResponse(verificationCode);
-            ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
-            userVerify.setCode(Integer.parseInt(verificationCode));
-            userVerify.setUsername(userName);
+                userVerifyResponse(verificationCode);
+                ProtoUserVerify.UserVerify.Builder userVerify = ProtoUserVerify.UserVerify.newBuilder();
+                userVerify.setCode(Integer.parseInt(verificationCode));
+                userVerify.setUsername(userName);
 
-            RequestWrapper requestWrapper = new RequestWrapper(101, userVerify);
+                RequestWrapper requestWrapper = new RequestWrapper(101, userVerify);
 
                 RequestQueue.sendRequest(requestWrapper);
             } catch (IllegalAccessException e) {
@@ -1270,6 +1271,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
                         txtVerifyServerColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
 
+                        //newUser
                         if (true) {
                             G.handler.post(new Runnable() {
                                 @Override
@@ -1647,6 +1649,16 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
         CountDownTimerQrCode.start();
 
+    }
+
+    @Override
+    public void countryInfo(String countryName, String code, boolean performClick) {
+        isoCode = code;
+
+        if (performClick) {
+            btnOk.performClick();
+            dialogChooseCountry.dismiss();
+        }
     }
 
     public enum Reason {

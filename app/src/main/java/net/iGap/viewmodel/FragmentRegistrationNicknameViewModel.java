@@ -167,14 +167,14 @@ public class FragmentRegistrationNicknameViewModel {
 //                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                                        G.context.startActivity(intent);
 //                                        G.fragmentActivity.finish();
-// TODO: 4/15/19 cut this code
+
                                         ReagentFragment reagentFragment = new ReagentFragment();
                                         FragmentManager fragmentManager = G.fragmentActivity.getSupportFragmentManager();
+                                        reagentFragment.userId = user.getId();
                                         FragmentTransaction transaction = fragmentManager.beginTransaction();
                                         transaction.replace(R.id.ar_layout_root, reagentFragment);
                                         transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
                                         transaction.commitAllowingStateLoss();
-                                        transaction.addToBackStack(null);
                                     }
                                 });
                             }

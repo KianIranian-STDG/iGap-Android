@@ -9,6 +9,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/tb_Reagent_toolbar"
         android:layout_width="match_parent"
+        android:background="@color/green"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
@@ -112,7 +113,7 @@
                 android:textColor="@color/toolbar_title_register">
 
                 <Button
-                    android:id="@+id/btn_reagent_country"
+                    android:id="@+id/btn_reagent_selectCountry"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp40"
                     android:layout_marginBottom="@dimen/dp12"
@@ -183,6 +184,7 @@
                         android:gravity="center"
                         android:text="@string/rg_Start"
                         android:textAllCaps="false"
+                        android:layout_marginRight="@dimen/dp8"
                         android:textColor="@color/white"
                         android:textSize="@dimen/dp14" />
 

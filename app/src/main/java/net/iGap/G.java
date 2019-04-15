@@ -25,20 +25,17 @@ import android.os.SystemClock;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import net.iGap.activities.ActivityCustomError;
 import net.iGap.activities.ActivityMain;
 import net.iGap.helper.HelperCheckInternetConnection;
-import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.LooperThreadHelper;
 import net.iGap.interfaces.*;
 import net.iGap.module.ChatSendMessageUtil;
@@ -46,23 +43,12 @@ import net.iGap.module.ChatUpdateStatusUtil;
 import net.iGap.module.ClearMessagesUtil;
 import net.iGap.module.MultiDexUtils;
 import net.iGap.module.StartupActions;
-import net.iGap.module.TimeUtils;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoClientCondition;
-import net.iGap.realm.RealmAdditional;
-import net.iGap.realm.RealmAttachment;
-import net.iGap.realm.RealmAttachmentFields;
-import net.iGap.realm.RealmRoom;
-import net.iGap.realm.RealmRoomMessage;
-import net.iGap.realm.RealmRoomMessageContact;
-import net.iGap.realm.RealmRoomMessageFields;
-import net.iGap.realm.RealmRoomMessageLocation;
-import net.iGap.realm.RealmRoomMessageWallet;
 import net.iGap.request.RequestWrapper;
 
 import org.paygear.wallet.model.Card;
 import org.paygear.wallet.utils.Utils;
-import org.webrtc.voiceengine.WebRtcAudioUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -76,9 +62,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.fabric.sdk.android.Fabric;
-import io.realm.Realm;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
 import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.web.WebBase;
 
@@ -409,7 +392,6 @@ public class G extends MultiDexApplication {
     public static boolean multiTab = false;
     public static boolean isTimeWhole = false;
     public static FragmentManager fragmentManager;
-    private Tracker mTracker;
     public static Account iGapAccount;
     public static Card selectedCard = null;
     public static long cardamount;
@@ -422,56 +404,15 @@ public class G extends MultiDexApplication {
     public static OnHoldBackgroundChanegeListener onHoldBackgroundChanegeListener;
     public static boolean isWebRtcConnected = false;
     public static boolean isDepricatedApp = false;
-
     public static int rotationState;
     public static int mainRingerMode = 0;
     public static boolean appChangeRinggerMode = false;
-
     public static LocationListener locationListener;
     public static boolean isLocationFromBot = false;
+
+    public static OnCountryCode onCountryCode;
     //public static LocationListenerResponse locationListenerResponse;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        LooperThreadHelper.getInstance();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
-                CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
-            }
-        }).start();
-
-        context = getApplicationContext();
-        handler = new Handler();
-        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        Raad.init(getApplicationContext());
-        Utils.setInstart(context, "fa");
-        WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
-
-        try {
-            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
-            mainRingerMode = am.getRingerMode();
-        } catch (Exception e) {
-        }
-        new StartupActions();
-     /*   try {
-            WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
-            WebRtcAudioUtils.setWebRtcBasedNoiseSuppressor(true);
-            WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);
-        } catch (Exception e) {
-        }*/
-
-    }
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(updateResources(base));
-        new MultiDexUtils().getLoadedExternalDexClasses(this);
-    }
+    private Tracker mTracker;
 
     private static int makeColorTransparent100(String color) {
         if (color.length() == 9) {
@@ -514,6 +455,48 @@ public class G extends MultiDexApplication {
         G.context = baseContext;
 
         return baseContext;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        LooperThreadHelper.getInstance();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Fabric.with(getApplicationContext(), new Crashlytics.Builder().core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()).build());
+                CaocConfig.Builder.create().backgroundMode(CaocConfig.BACKGROUND_MODE_SILENT).showErrorDetails(false).showRestartButton(true).trackActivities(true).restartActivity(ActivityMain.class).errorActivity(ActivityCustomError.class).apply();
+            }
+        }).start();
+
+        context = getApplicationContext();
+        handler = new Handler();
+        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        Raad.init(getApplicationContext());
+        Utils.setInstart(context, "fa");
+        WebBase.apiKey = "5aa7e856ae7fbc00016ac5a01c65909797d94a16a279f46a4abb5faa";
+
+        try {
+            AudioManager am = (AudioManager) G.context.getSystemService(Context.AUDIO_SERVICE);
+            mainRingerMode = am.getRingerMode();
+        } catch (Exception e) {
+        }
+        new StartupActions();
+     /*   try {
+            WebRtcAudioUtils.setWebRtcBasedAcousticEchoCanceler(true);
+            WebRtcAudioUtils.setWebRtcBasedNoiseSuppressor(true);
+            WebRtcAudioUtils.setWebRtcBasedAutomaticGainControl(true);
+        } catch (Exception e) {
+        }*/
+
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(updateResources(base));
+        new MultiDexUtils().getLoadedExternalDexClasses(this);
     }
 
     @Override
