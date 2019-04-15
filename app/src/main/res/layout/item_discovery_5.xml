@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            app:cardPreventCornerOverlap="false"
             app:cardCornerRadius="@dimen/dp4">
 
             <ImageView
@@ -36,6 +37,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_marginTop="@dimen/dp8"
+            app:cardPreventCornerOverlap="false"
             app:cardCornerRadius="@dimen/dp4">
 
             <ImageView
@@ -56,6 +58,7 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/dp4"
         android:layout_weight="6"
+        app:cardPreventCornerOverlap="false"
         app:cardCornerRadius="@dimen/dp4">
 
         <ImageView
