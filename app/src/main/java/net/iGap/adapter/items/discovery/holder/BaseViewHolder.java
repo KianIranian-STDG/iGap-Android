@@ -64,7 +64,15 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 actionPage(discoveryField.value);
                 break;
             case JOIN_LINK:
-                HelperUrl.checkAndJoinToRoom(discoveryField.value);
+                int index = discoveryField.value.lastIndexOf("/");
+                if (index >= 0 && index < discoveryField.value.length() - 1) {
+                    String token = discoveryField.value.substring(index + 1);
+                    if (discoveryField.value.toLowerCase().contains("join")) {
+                        HelperUrl.checkAndJoinToRoom(token);
+                    } else {
+                        HelperUrl.checkUsernameAndGoToRoom(token, HelperUrl.ChatEntry.profile);
+                    }
+                }
                 break;
             case WEB_LINK:/** tested **/
                 SharedPreferences sharedPreferences = G.context.getSharedPreferences(SHP_SETTING.FILE_NAME, G.context.MODE_PRIVATE);
