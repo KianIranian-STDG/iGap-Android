@@ -10,11 +10,13 @@
 
 package net.iGap.request;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoUserProfileGetRepresentative;
 
 
 public class RequestUserProfileGetRepresentative {
 
+    public static int numberOfPendingRequest = 0;
     public interface OnRepresentReady {
         void onRepresent(String phoneNumber);
         void onFailed();
@@ -25,6 +27,9 @@ public class RequestUserProfileGetRepresentative {
         ProtoUserProfileGetRepresentative.UserProfileGetRepresentative.Builder builder = ProtoUserProfileGetRepresentative.UserProfileGetRepresentative.newBuilder();
 
         RequestWrapper requestWrapper = new RequestWrapper(151, builder, onRepresentReady);
+        if (G.userLogin) {
+            numberOfPendingRequest ++;
+        }
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

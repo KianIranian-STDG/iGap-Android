@@ -13,6 +13,8 @@ package net.iGap.response;
 import net.iGap.proto.ProtoUserProfileGetRepresentative;
 import net.iGap.request.RequestUserProfileGetRepresentative;
 
+import static net.iGap.request.RequestUserProfileGetRepresentative.numberOfPendingRequest;
+
 public class UserProfileGetRepresentativeResponse extends MessageHandler {
 
     public int actionId;
@@ -30,6 +32,7 @@ public class UserProfileGetRepresentativeResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
+        numberOfPendingRequest --;
 
         ProtoUserProfileGetRepresentative.UserProfileGetRepresentativeResponse.Builder builder = (ProtoUserProfileGetRepresentative.UserProfileGetRepresentativeResponse.Builder) message;
         ((RequestUserProfileGetRepresentative.OnRepresentReady) this.identity).onRepresent(builder.getPhoneNumber());
@@ -43,6 +46,7 @@ public class UserProfileGetRepresentativeResponse extends MessageHandler {
 
     @Override
     public void error() {
+        numberOfPendingRequest --;
         super.error();
         ((RequestUserProfileGetRepresentative.OnRepresentReady) this.identity).onFailed();
     }

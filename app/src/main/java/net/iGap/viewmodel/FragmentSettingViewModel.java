@@ -912,9 +912,12 @@ public class FragmentSettingViewModel {
     }
 
     public void onClickRepresent(View view) {
-        if (callbackSetRepresent.get().equals("")) {
-            Toast.makeText(G.context, "ClickWork", Toast.LENGTH_LONG).show();
-            // open fragement
+        if (RequestUserProfileGetRepresentative.numberOfPendingRequest == 0) {
+            if (callbackSetRepresent.get().equals("")) {
+                Toast.makeText(G.context, "ClickWork", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            HelperError.showSnackMessage(G.context.getString(R.string.try_later), false);
         }
     }
 
@@ -1584,19 +1587,6 @@ public class FragmentSettingViewModel {
             bio = userInfo.getUserInfo().getBio();
             if (userInfo.getRepresentPhoneNumber() == null || userInfo.getRepresentPhoneNumber().length() < 1) {
                 callbackSetRepresent.set("");
-                new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
-                    @Override
-                    public void onRepresent(String phoneNumber) {
-                        try (Realm realm = Realm.getDefaultInstance()) {
-                            RealmUserInfo.setRepresentPhoneNumber(realm, phoneNumber);
-                        } catch (Exception e) {
-                        }
-                    }
-
-                    @Override
-                    public void onFailed() {
-                    }
-                });
             } else {
                 callbackSetRepresent.set(userInfo.getRepresentPhoneNumber());
             }

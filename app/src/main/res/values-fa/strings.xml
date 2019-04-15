@@ -1429,4 +1429,6 @@
     <string name="add_sticker_text">آیا مطمئن هستید که میخواهید این استیکرها را نصب کنید؟</string>
     <string name="Add">اضافه</string>
     <string name="Remove">حذف</string>
+
+    <string name="try_later">چند ثانیه بعد امتحان کنید</string>
 </resources>

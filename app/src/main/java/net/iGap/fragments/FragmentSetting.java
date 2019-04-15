@@ -51,10 +51,12 @@ import net.iGap.module.FileUploadStructure;
 import net.iGap.module.SUID;
 import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserAvatarAdd;
 import net.iGap.request.RequestUserProfileGetBio;
 import net.iGap.request.RequestUserProfileGetEmail;
 import net.iGap.request.RequestUserProfileGetGender;
+import net.iGap.request.RequestUserProfileGetRepresentative;
 import net.iGap.viewmodel.FragmentSettingViewModel;
 
 import java.io.File;
@@ -100,7 +102,26 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        boolean isIntroduce = realmUserInfo != null && (realmUserInfo.getRepresentPhoneNumber() == null || realmUserInfo.getRepresentPhoneNumber().length() < 1);
+        realm.close();
 
+        if (isIntroduce) {
+            new RequestUserProfileGetRepresentative().userProfileGetRepresentative(new RequestUserProfileGetRepresentative.OnRepresentReady() {
+                @Override
+                public void onRepresent(String phoneNumber) {
+                    try (Realm realm = Realm.getDefaultInstance()) {
+                        RealmUserInfo.setRepresentPhoneNumber(realm, phoneNumber);
+                    } catch (Exception e) {
+                    }
+                }
+
+                @Override
+                public void onFailed() {
+                }
+            });
+        }
 
         initDataBinding();
 
