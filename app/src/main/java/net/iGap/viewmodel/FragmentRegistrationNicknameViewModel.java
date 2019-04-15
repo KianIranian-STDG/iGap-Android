@@ -9,26 +9,23 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
-import android.content.Intent;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputLayout;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.WindowManager;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentRegistrationNicknameBinding;
 import net.iGap.fragments.ReagentFragment;
-import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
-import net.iGap.module.transition.fragment.FragmentTransition;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmAvatar;
 import net.iGap.realm.RealmUserInfo;
@@ -36,8 +33,6 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserProfileSetNickname;
 
 import io.realm.Realm;
-
-import static net.iGap.G.context;
 
 public class FragmentRegistrationNicknameViewModel {
 
@@ -166,15 +161,20 @@ public class FragmentRegistrationNicknameViewModel {
                                     @Override
                                     public void run() {
 //                                        G.onUserInfoResponse = null;
-//                                        hideProgressBar();
+                                        hideProgressBar();
 //                                        Intent intent = new Intent(context, ActivityMain.class);
 //                                        intent.putExtra(ARG_USER_ID, user.getId());
 //                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                                        G.context.startActivity(intent);
 //                                        G.fragmentActivity.finish();
-
+// TODO: 4/15/19 cut this code
                                         ReagentFragment reagentFragment = new ReagentFragment();
-//                                        FragmentTransition transition = SupportFra
+                                        FragmentManager fragmentManager = G.fragmentActivity.getSupportFragmentManager();
+                                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                        transaction.replace(R.id.ar_layout_root, reagentFragment);
+                                        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
+                                        transaction.commitAllowingStateLoss();
+                                        transaction.addToBackStack(null);
                                     }
                                 });
                             }
