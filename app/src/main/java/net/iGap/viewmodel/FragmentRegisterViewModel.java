@@ -1651,13 +1651,28 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     }
 
     @Override
-    public void countryInfo(String countryName, String code, boolean performClick,String pattern) {
-        isoCode = code;
+    public void countryInfo(StructCountry structCountry) {
+        isoCode = structCountry.getCountryCode();
 
-        if (performClick) {
+        if (structCountry.getName() != null) {
             btnOk.performClick();
             dialogChooseCountry.dismiss();
         }
+
+        FragmentRegister.positionRadioButton = structCountry.getId();
+
+        FragmentRegister.edtCodeNumber.setText(("+ " + structCountry.getCountryCode()));
+
+        if (structCountry.getPhonePattern() != null || structCountry.getPhonePattern().equals(" ")) {
+            FragmentRegister.edtPhoneNumber.setMask((structCountry.getPhonePattern().replace("X", "#").replace(" ", "-")));
+        } else {
+            FragmentRegister.edtPhoneNumber.setMaxLines(18);
+            FragmentRegister.edtPhoneNumber.setMask("##################");
+        }
+
+        FragmentRegister.btnChoseCountry.setText(structCountry.getName());
+
+
     }
 
     public enum Reason {

@@ -1,5 +1,7 @@
 package net.iGap.interfaces;
 
+import net.iGap.module.structs.StructCountry;
+
 public interface OnCountryCode {
-    void countryInfo(String countryName, String code,boolean performClick,String pattern);
+    void countryInfo(StructCountry structCountry);
 }

@@ -127,10 +127,9 @@ public class FragmentSettingViewModel {
     public static int KEY_AD_ROAMING_MUSIC = -1;
     public static int KEY_AD_ROAMINGN_GIF = -1;
     static boolean isActiveRun = false;
+    private static SharedPreferences sharedPreferences;
+    private static FragmentSettingBinding fragmentSettingBinding;
     public long userId;
-
-    boolean isCheckedThemeDark;
-
     public ObservableField<String> callbackSetName = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.first_name));
     public ObservableField<String> callbackTextSize = new ObservableField<>("16");
     public ObservableField<String> callbackSetTitleName = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.first_name));
@@ -160,9 +159,7 @@ public class FragmentSettingViewModel {
     public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
     public ObservableField<Integer> isAutoThemeDark = new ObservableField<>(View.GONE);
     public ObservableField<Integer> isGoneLayoutColor = new ObservableField<>(View.VISIBLE);
-
-
-    private static SharedPreferences sharedPreferences;
+    boolean isCheckedThemeDark;
     private int poRbDialogTextSize = -1;
     private Uri uriIntent;
     private long idAvatar;
@@ -175,7 +172,6 @@ public class FragmentSettingViewModel {
     private RealmPrivacy realmPrivacy;
     private RealmRegisteredInfo mRealmRegisteredInfo;
     private FragmentSetting fragmentSetting;
-    private static FragmentSettingBinding fragmentSettingBinding;
     private int[] fontSizeArray = {11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
 
 
@@ -1110,7 +1106,6 @@ public class FragmentSettingViewModel {
 
         isSendEnter.set(!isSendEnter.get());
     }
-
 
 
     public void onCheckedChangedSendEnter(boolean isChecked) {

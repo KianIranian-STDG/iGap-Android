@@ -6,13 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/pb_reagent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_centerInParent="true" />
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/tb_Reagent_appBar"
         android:layout_width="match_parent"
@@ -191,6 +184,13 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/pb_reagent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 </RelativeLayout>
 
 

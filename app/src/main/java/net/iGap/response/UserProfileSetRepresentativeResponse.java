@@ -10,8 +10,13 @@
 
 package net.iGap.response;
 
+import android.util.Log;
+
 import net.iGap.G;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserProfileRepresentative;
+
+import static com.nostra13.universalimageloader.core.ImageLoader.TAG;
 
 public class UserProfileSetRepresentativeResponse extends MessageHandler {
 
@@ -44,6 +49,11 @@ public class UserProfileSetRepresentativeResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        if (G.onUserProfileSetRepresentative != null) {
+            G.onUserProfileSetRepresentative.onErrorSetRepresentative(majorCode, minorCode);
+        }
     }
 }

@@ -2,10 +2,12 @@ package net.iGap.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,7 +31,6 @@ import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.interfaces.OnCountryCode;
-import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
@@ -52,6 +53,7 @@ import static net.iGap.viewmodel.FragmentRegisterViewModel.isoCode;
 public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUserProfileSetRepresentative {
 
     private static final String ARG_USER_ID = "arg_user_id";
+    private static final String TAG = ReagentFragment.class.getName();
     public static MaskedEditText phoneNumberEt;
     public String regex;
     public long userId;
@@ -67,16 +69,16 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUs
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList();
     private ProgressBar progressBar;
     private boolean isNeedCloseActivity;
+    private String countryPattern = "###-###-####";
 
 
     public static ReagentFragment newInstance(boolean isNeedCloseActivity) {
         ReagentFragment reagentFragment = new ReagentFragment();
         Bundle bundle = new Bundle();
-        bundle.putBoolean("isNeedCloseActivity" , isNeedCloseActivity);
+        bundle.putBoolean("isNeedCloseActivity", isNeedCloseActivity);
         reagentFragment.setArguments(bundle);
         return reagentFragment;
     }
-
 
 
     @Nullable
@@ -90,12 +92,12 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUs
         super.onViewCreated(view, savedInstanceState);
 
         isNeedCloseActivity = getArguments().getBoolean("isNeedCloseActivity", true);
-        setUoViews(view);
+        setupViews(view);
         G.onCountryCode = this;
         G.onUserProfileSetRepresentative = this;
     }
 
-    private void setUoViews(View view) {
+    private void setupViews(View view) {
         detailTv = view.findViewById(R.id.tv_reagent_detail);
         phoneNumberEt = view.findViewById(R.id.et_reagent_phoneNumber);
         letsGoBtn = view.findViewById(R.id.btn_reagent_start);
@@ -123,26 +125,46 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUs
                     phoneNumberEt.setText("");
                     Toast.makeText(G.fragmentActivity, G.fragmentActivity.getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT).show();
                 }
+
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s.length() == countryPattern.length()) {
+                    letsGoBtn.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_background_button));
+                    letsGoBtn.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                    letsGoBtn.setEnabled(true);
+                } else {
+                    letsGoBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
+                    letsGoBtn.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                    letsGoBtn.setEnabled(false);
+                }
             }
         });
 
-        if (phoneNumberEt.getText().toString().isEmpty()) {
-            letsGoBtn.setEnabled(true);
-            letsGoBtn.setOnClickListener(v -> {
-                new RequestUserProfileSetRepresentative().userProfileSetRepresentative(countryCode + phoneNumberEt.getText().toString().replace("-", ""));
-                progressBar.setVisibility(View.VISIBLE);
-            });
+        if (!isNeedCloseActivity)
+            skipBtn.setText(G.fragmentActivity.getResources().getString(R.string.cancel));
 
-            skipBtn.setOnClickListener(v -> finalAction());
+        letsGoBtn.setOnClickListener(v -> {
+            new RequestUserProfileSetRepresentative().userProfileSetRepresentative(countryCode + phoneNumberEt.getText().toString().replace("-", ""));
+            progressBar.setVisibility(View.VISIBLE);
+            closeKeyboard(v);
+        });
+
+        skipBtn.setOnClickListener(v -> finalAction());
+        setMask(countryPattern);
+    }
+
+    private void closeKeyboard(View v) {
+        if (isAdded()) {
+            try {
+                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            } catch (IllegalStateException e) {
+                e.getStackTrace();
+            }
         }
-
-        String pattern = "###-###-####";
-        setMask(pattern);
     }
 
     private void selectCountry() {
@@ -318,17 +340,17 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUs
 
 
     @Override
-    public void countryInfo(String countryName, String code, boolean performClick, String pattern) {
-        selectCountryBtn.setText(countryName);
-        countryCodeEt.setText("+ " + String.valueOf(code));
-        countryCode = code;
+    public void countryInfo(StructCountry structCountry) {
+        selectCountryBtn.setText(structCountry.getName());
+        countryCodeEt.setText("+ " + String.valueOf(structCountry.getCountryCode()));
+        countryCode = structCountry.getCountryCode();
+        countryPattern = structCountry.getPhonePattern();
 
-        if (performClick) {
+        if (structCountry.getName() != null) {
             dialogChooseCountry.dismiss();
             btnOk.performClick();
         }
-
-        setMask(pattern);
+        setMask(structCountry.getPhonePattern());
     }
 
     private void setMask(String pattern) {
@@ -342,11 +364,31 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUs
 
     @Override
     public void onSetRepresentative(String phone) {
-        finalAction();
-        progressBar.setVisibility(View.GONE);
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+                finalAction();
+
+            }
+        });
+
         Realm realm = Realm.getDefaultInstance();
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
         RealmUserInfo.setRepresentPhoneNumber(realm, realmUserInfo, phone);
         realm.close();
     }
+
+    @Override
+    public void onErrorSetRepresentative(int majorCode, int minorCode) {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+                finalAction();
+
+            }
+        });
+    }
+
 }
