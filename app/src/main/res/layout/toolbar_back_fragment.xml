@@ -5,7 +5,8 @@
     android:id="@+id/ac_appBarLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/iGapColor">
+    android:background="@color/iGapColor"
+    android:layoutDirection="ltr">
 
     <LinearLayout
         android:id="@+id/toolbar"
