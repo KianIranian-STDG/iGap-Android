@@ -1431,4 +1431,7 @@
     <string name="Remove">حذف</string>
 
     <string name="try_later">چند ثانیه بعد امتحان کنید</string>
+    <string name="representer">معرف</string>
+    <string name="representer_code">شماره تلفن همراه معرف خود را  وارد کنید
+</string>
 </resources>

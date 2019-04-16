@@ -6,15 +6,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <ProgressBar
+        android:id="@+id/pb_reagent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerInParent="true" />
+
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/tb_Reagent_toolbar"
+        android:id="@+id/tb_Reagent_appBar"
         android:layout_width="match_parent"
-        android:background="@color/green"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/green">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/tb_Reagent_toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp60"
+            android:background="#9dc756"
             android:layoutDirection="ltr"
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp">
@@ -28,7 +37,7 @@
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:gravity="center"
-                    android:text="@string/igap"
+                    android:text="@string/representer"
                     android:textColor="@color/rg_whit_background"
                     android:textSize="@dimen/dp20"
                     android:visibility="visible" />
@@ -55,7 +64,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tb_Reagent_toolbar"
+        android:layout_below="@id/tb_Reagent_appBar"
         android:paddingLeft="@dimen/dp32"
         android:paddingRight="@dimen/dp32">
 
@@ -69,37 +78,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:paddingTop="@dimen/dp16"
                 android:paddingBottom="@dimen/dp16"
                 android:textColor="@color/toolbar_title_register">
-
-                <TextView
-                    android:id="@+id/tv_reagent_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp16"
-                    android:background="@android:color/transparent"
-                    android:gravity="center"
-                    android:text="@string/ra_title"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/dp18" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/dp32"
-                    android:layout_marginTop="@dimen/dp8"
-                    android:layout_marginRight="@dimen/dp32"
-                    android:background="@color/gray_9d" />
 
                 <TextView
                     android:id="@+id/tv_reagent_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/rg_txt_title_register"
-                    android:layout_centerVertical="true"
                     android:layout_marginTop="@dimen/dp12"
                     android:gravity="center"
-                    android:text="@string/rg_confirm_text_register"
+                    android:text="@string/representer_code"
                     android:textColor="@color/black"
                     android:textSize="@dimen/dp14"
 
@@ -133,6 +122,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp16"
                     android:layoutDirection="ltr"
                     android:orientation="horizontal">
 
@@ -172,7 +162,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
                     android:layout_marginTop="@dimen/dp16"
                     android:gravity="center_vertical">
 
@@ -180,11 +170,11 @@
                         android:id="@+id/btn_reagent_start"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp8"
                         android:background="@drawable/shape_background_button"
                         android:gravity="center"
                         android:text="@string/rg_Start"
                         android:textAllCaps="false"
-                        android:layout_marginRight="@dimen/dp8"
                         android:textColor="@color/white"
                         android:textSize="@dimen/dp14" />
 
@@ -193,10 +183,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/dp8"
-                        android:background="@color/transparent"
+                        android:background="@drawable/shape_background_button_gray"
                         android:text="@string/ra_skip"
                         android:textAllCaps="false"
-                        android:textColor="@color/gray_5c" />
+                        android:textColor="@color/black" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

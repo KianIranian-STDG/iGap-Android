@@ -93,6 +93,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
                     FragmentRegister.edtPhoneNumber.setMaxLines(18);
                     FragmentRegister.edtPhoneNumber.setMask("##################");
                 }
+
                 FragmentRegister.btnChoseCountry.setText((countrylist.get(position).getName()));
 //
 //                FragmentRegisterViewModel.isoCode = countrylist.get(position).getAbbreviation();
@@ -101,7 +102,8 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
 
 
                 G.onCountryCode.countryInfo(countrylist.get(position).getName(),
-                        countrylist.get(position).getCountryCode(), true);
+                        countrylist.get(position).getCountryCode(),
+                        true,countrylist.get(position).getPhonePattern());
 
             }
         });

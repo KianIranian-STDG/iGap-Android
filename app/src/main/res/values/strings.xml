@@ -1426,4 +1426,7 @@
     <string name="Please_select_an_option">Please select an option</string>
 
     <string name="try_later">try some second later</string>
+    <string name="representer">Set Representer</string>
+    <string name="representer_code">Please set your represetative phone number here</string>
+
 </resources>

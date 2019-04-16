@@ -3,7 +3,6 @@ package net.iGap.fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
-import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +18,7 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,11 +30,13 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterDialog;
 import net.iGap.interfaces.OnCountryCode;
 import net.iGap.interfaces.OnInfoCountryResponse;
+import net.iGap.interfaces.OnUserProfileSetRepresentative;
 import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SoftKeyboard;
 import net.iGap.module.structs.StructCountry;
 import net.iGap.request.RequestInfoCountry;
+import net.iGap.request.RequestUserProfileSetRepresentative;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,16 +46,16 @@ import static net.iGap.fragments.FragmentRegister.positionRadioButton;
 import static net.iGap.viewmodel.FragmentRegisterViewModel.dialogChooseCountry;
 import static net.iGap.viewmodel.FragmentRegisterViewModel.isoCode;
 
-public class ReagentFragment extends BaseFragment implements OnCountryCode {
+public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUserProfileSetRepresentative {
 
     private static final String ARG_USER_ID = "arg_user_id";
+    public static MaskedEditText phoneNumberEt;
     public String regex;
     public long userId;
     private EditText countryCodeEt;
     private View view;
-    private TextView titleTv;
     private TextView detailTv;
-    private MaskedEditText phoneNumberEt;
+    private String countryCode = "98";
     private Button letsGoBtn;
     private Button skipBtn;
     private Button selectCountryBtn;
@@ -61,6 +63,7 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode {
     private AdapterDialog adapterDialog;
     private ArrayList<StructCountry> items = new ArrayList<>();
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList();
+    private ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -69,17 +72,18 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode {
             view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_reagent, container, false);
         setUoViews();
         G.onCountryCode = this;
+        G.onUserProfileSetRepresentative = this;
         return view;
     }
 
     private void setUoViews() {
-        titleTv = view.findViewById(R.id.tv_reagent_title);
         detailTv = view.findViewById(R.id.tv_reagent_detail);
         phoneNumberEt = view.findViewById(R.id.et_reagent_phoneNumber);
         letsGoBtn = view.findViewById(R.id.btn_reagent_start);
         skipBtn = view.findViewById(R.id.btn_reagent_skip);
         countryCodeEt = view.findViewById(R.id.et_reagent_countryCode);
         selectCountryBtn = view.findViewById(R.id.btn_reagent_selectCountry);
+        progressBar = view.findViewById(R.id.pb_reagent);
     }
 
     @Override
@@ -99,7 +103,6 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode {
                 if (s.toString().startsWith("0")) {
                     phoneNumberEt.setText("");
                     Toast.makeText(G.fragmentActivity, G.fragmentActivity.getResources().getString(R.string.Toast_First_0), Toast.LENGTH_SHORT).show();
-
                 }
             }
 
@@ -112,14 +115,15 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode {
         if (phoneNumberEt.getText().toString().isEmpty()) {
             letsGoBtn.setEnabled(true);
             letsGoBtn.setOnClickListener(v -> {
-                finalAction();
+                new RequestUserProfileSetRepresentative().userProfileSetRepresentative(countryCode + phoneNumberEt.getText().toString().replace("-", ""));
+                progressBar.setVisibility(View.VISIBLE);
             });
 
             skipBtn.setOnClickListener(v -> finalAction());
         }
 
-
-
+        String pattern = "###-###-####";
+        setMask(pattern);
     }
 
     private void selectCountry() {
@@ -228,31 +232,7 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                G.onInfoCountryResponse = new OnInfoCountryResponse() {
-                    @Override
-                    public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (pattern.equals("")) {
-                                    phoneNumberEt.setMask("##################");
-                                } else {
-                                    phoneNumberEt.setMask(pattern.replace("X", "#").replace(" ", "-"));
-
-                                }                            }
-                        });
-                    }
-
-                    @Override
-                    public void onError(int majorCode, int minorCode) {
-                        //empty
-                    }
-                };
-
                 new RequestInfoCountry().infoCountry(isoCode);
-
-//                callBackEdtPhoneNumber.set("");
                 dialogChooseCountry.dismiss();
             }
         });
@@ -315,15 +295,31 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode {
 
 
     @Override
-    public void countryInfo(String countryName, String code, boolean performClick) {
+    public void countryInfo(String countryName, String code, boolean performClick, String pattern) {
         selectCountryBtn.setText(countryName);
         countryCodeEt.setText("+ " + String.valueOf(code));
+        countryCode = code;
 
         if (performClick) {
             dialogChooseCountry.dismiss();
             btnOk.performClick();
         }
 
+        setMask(pattern);
     }
 
+    private void setMask(String pattern) {
+        if (pattern.equals("")) {
+            phoneNumberEt.setMask("##################");
+        } else {
+            phoneNumberEt.setText("");
+            phoneNumberEt.setMask(pattern.replace("X", "#").replace(" ", "-"));
+        }
+    }
+
+    @Override
+    public void onSetRepresentative() {
+        finalAction();
+        progressBar.setVisibility(View.GONE);
+    }
 }

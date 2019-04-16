@@ -1271,8 +1271,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
                         txtVerifyServerColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
 
-                        //newUser
-                        if (true) {
+                        if (newUser) {
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1652,7 +1651,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     }
 
     @Override
-    public void countryInfo(String countryName, String code, boolean performClick) {
+    public void countryInfo(String countryName, String code, boolean performClick,String pattern) {
         isoCode = code;
 
         if (performClick) {

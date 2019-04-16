@@ -370,6 +370,7 @@ public class G extends MultiDexApplication {
     public static OnPayment onPayment;
     public static OnMplResult onMplResult;
     public static OnVersionCallBack onVersionCallBack;
+    public static OnUserProfileSetRepresentative onUserProfileSetRepresentative;
     public static ISignalingOffer iSignalingOffer;
     public static ISignalingRinging iSignalingRinging;
     public static ISignalingAccept iSignalingAccept;
