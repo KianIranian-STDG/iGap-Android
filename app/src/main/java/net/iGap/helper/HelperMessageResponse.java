@@ -89,16 +89,13 @@ public class HelperMessageResponse {
                      * update unread count if new messageId that received is bigger than latest messageId that exist
                      */
 
-                    Log.d("bagiNotif", "root" + roomMessage.getMessage());
                     if (!roomMessage.getAuthor().getHash().equals(authorHash) && (room.getLastMessage() == null || (room.getLastMessage() != null && room.getLastMessage().getMessageId() < roomMessage.getMessageId()))) {
                         room.setUnreadCount(room.getUnreadCount() + 1);
-                        Log.d("bagiNotif", "unread++");
                     }
 
                     if (!roomMessage.getAuthor().getHash().equals(authorHash)) {
                         if (roomMessage.getStatus() != ProtoGlobal.RoomMessageStatus.SEEN) {
                             HelperNotification.getInstance().addMessage(roomId, roomMessage, roomType, room, realm);
-                            Log.d("bagiNotif", "addMessage" + roomMessage.getStatus().toString());
                         }
                     }
 
