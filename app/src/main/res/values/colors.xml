@@ -160,4 +160,6 @@
   <color name="color_powered_by">#84ffffff</color>
 
   <color name="color_default_discovery_cards">#84ffffff</color>
+
+  <color name="start_color">#706e6a</color>
 </resources>
