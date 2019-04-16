@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -133,12 +134,12 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() == countryPattern.length()) {
-                    letsGoBtn.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_background_button));
+                    letsGoBtn.setBackgroundColor(Color.parseColor(G.appBarColor));
                     letsGoBtn.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                     letsGoBtn.setEnabled(true);
                 } else {
                     letsGoBtn.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
-                    letsGoBtn.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+                    letsGoBtn.setTextColor(Color.parseColor(G.textSubTheme));
                     letsGoBtn.setEnabled(false);
                 }
             }

@@ -41,8 +41,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp12"
                     android:gravity="center"
+                    style="?textSubColorSettingTheme"
                     android:text="@string/representer_code"
-                    android:textColor="@color/black"
                     android:textSize="@dimen/dp14"
 
                     />
@@ -124,7 +124,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/dp8"
-                        android:background="@drawable/shape_background_button"
+                        android:background="#9dc756"
                         android:gravity="center"
                         android:text="@string/rg_Start"
                         android:textAllCaps="false"
@@ -136,7 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/dp8"
-                        android:background="@drawable/shape_background_button_gray"
+                        android:background="@color/emoji_gray20"
                         android:text="@string/ra_skip"
                         android:textAllCaps="false"
                         android:textColor="@color/black" />

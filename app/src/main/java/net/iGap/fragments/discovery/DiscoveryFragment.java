@@ -2,6 +2,7 @@ package net.iGap.fragments.discovery;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -47,6 +48,15 @@ public class DiscoveryFragment extends FragmentToolBarBack {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        RecyclerView.Adapter adapter = rcDiscovery.getAdapter();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Nullable
