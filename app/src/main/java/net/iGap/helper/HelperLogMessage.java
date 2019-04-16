@@ -161,7 +161,7 @@ public class HelperLogMessage {
         return " " + result + " ";
     }
 
-    private static String getLogTypeString(ProtoGlobal.RoomMessageLog.Type type, ProtoGlobal.RoomMessage.Author author) {
+    public static String getLogTypeString(ProtoGlobal.RoomMessageLog.Type type, ProtoGlobal.RoomMessage.Author author) {
         int messageID = 0;
 
         switch (type) {

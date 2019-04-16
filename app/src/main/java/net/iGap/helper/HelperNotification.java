@@ -751,13 +751,19 @@ public class HelperNotification {
                 if (roomMessage.getLog().getType() == PINNED_MESSAGE) {
                     text = roomMessage.getReplyTo().getMessage();
                 } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MEMBER_JOINED_BY_INVITE_LINK) {
-                    text = G.context.getString(R.string.MEMBER_JOINED_BY_INVITE_LINK);
+                    text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
                     // after showing notification we must update it after getting user name by bellow line
                     //roomMessage.getLog().getTargetUser().getId()
-                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VOICE_CALL) {
-                    text = G.context.getString(R.string.MISSED_VOICE_CALL);
+                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MEMBER_ADDED) {
+                    text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
+                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MEMBER_KICKED) {
+                    text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
+                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MEMBER_LEFT) {
+                    text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
+                }  else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VOICE_CALL) {
+                    text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
                 } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VIDEO_CALL) {
-                    text = G.context.getString(R.string.MISSED_VIDEO_CALL);
+                    text = HelperLogMessage.getLogTypeString(roomMessage.getLog().getType(), roomMessage.getAuthor());
                 } else if (roomMessage.getReplyTo() != null) {
                     text = AppUtils.conversionMessageType(roomMessage.getReplyTo().getMessageType());
                 }
