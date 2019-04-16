@@ -750,6 +750,10 @@ public class HelperNotification {
             if (roomMessage.hasLog()) {
                 if (roomMessage.getLog().getType() == PINNED_MESSAGE) {
                     text = roomMessage.getReplyTo().getMessage();
+                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MEMBER_JOINED_BY_INVITE_LINK) {
+                    text = G.context.getString(R.string.MEMBER_JOINED_BY_INVITE_LINK);
+                    // after showing notification we must update it after getting user name by bellow line
+                    //roomMessage.getLog().getTargetUser().getId()
                 } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VOICE_CALL) {
                     text = G.context.getString(R.string.MISSED_VOICE_CALL);
                 } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VIDEO_CALL) {
