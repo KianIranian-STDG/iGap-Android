@@ -31,7 +31,8 @@ public class UserProfileSetRepresentativeResponse extends MessageHandler {
         super.handler();
 
         ProtoUserProfileRepresentative.UserProfileSetRepresentativeResponse.Builder builder = (ProtoUserProfileRepresentative.UserProfileSetRepresentativeResponse.Builder) message;
-        G.onUserProfileSetRepresentative.onSetRepresentative();
+        if (G.onUserProfileSetRepresentative != null)
+            G.onUserProfileSetRepresentative.onSetRepresentative(builder.getPhoneNumber());
 
     }
 

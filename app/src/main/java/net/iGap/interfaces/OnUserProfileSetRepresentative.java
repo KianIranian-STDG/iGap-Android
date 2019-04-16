@@ -11,5 +11,5 @@
 package net.iGap.interfaces;
 
 public interface OnUserProfileSetRepresentative {
-    void onSetRepresentative();
+    void onSetRepresentative(String phone);
 }

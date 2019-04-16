@@ -35,11 +35,14 @@ import net.iGap.module.CountryListComparator;
 import net.iGap.module.CountryReader;
 import net.iGap.module.SoftKeyboard;
 import net.iGap.module.structs.StructCountry;
+import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestInfoCountry;
 import net.iGap.request.RequestUserProfileSetRepresentative;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import io.realm.Realm;
 
 import static net.iGap.fragments.FragmentRegister.btnOk;
 import static net.iGap.fragments.FragmentRegister.positionRadioButton;
@@ -53,7 +56,6 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUs
     public String regex;
     public long userId;
     private EditText countryCodeEt;
-    private View view;
     private TextView detailTv;
     private String countryCode = "98";
     private Button letsGoBtn;
@@ -64,19 +66,36 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUs
     private ArrayList<StructCountry> items = new ArrayList<>();
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList();
     private ProgressBar progressBar;
+    private boolean isNeedCloseActivity;
+
+
+    public static ReagentFragment newInstance(boolean isNeedCloseActivity) {
+        ReagentFragment reagentFragment = new ReagentFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isNeedCloseActivity" , isNeedCloseActivity);
+        reagentFragment.setArguments(bundle);
+        return reagentFragment;
+    }
+
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (view == null)
-            view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_reagent, container, false);
-        setUoViews();
-        G.onCountryCode = this;
-        G.onUserProfileSetRepresentative = this;
-        return view;
+        return LayoutInflater.from(getContext()).inflate(R.layout.fragment_reagent, container, false);
     }
 
-    private void setUoViews() {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        isNeedCloseActivity = getArguments().getBoolean("isNeedCloseActivity", true);
+        setUoViews(view);
+        G.onCountryCode = this;
+        G.onUserProfileSetRepresentative = this;
+    }
+
+    private void setUoViews(View view) {
         detailTv = view.findViewById(R.id.tv_reagent_detail);
         phoneNumberEt = view.findViewById(R.id.et_reagent_phoneNumber);
         letsGoBtn = view.findViewById(R.id.btn_reagent_start);
@@ -286,11 +305,15 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUs
 
     private void finalAction() {
         G.onUserInfoResponse = null;
-        Intent intent = new Intent(getContext(), ActivityMain.class);
-        intent.putExtra(ARG_USER_ID, userId);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        G.context.startActivity(intent);
-        G.fragmentActivity.finish();
+        if (isNeedCloseActivity) {
+            Intent intent = new Intent(getContext(), ActivityMain.class);
+            intent.putExtra(ARG_USER_ID, userId);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            G.context.startActivity(intent);
+            G.fragmentActivity.finish();
+        } else {
+            G.currentActivity.onBackPressed();
+        }
     }
 
 
@@ -318,8 +341,12 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUs
     }
 
     @Override
-    public void onSetRepresentative() {
+    public void onSetRepresentative(String phone) {
         finalAction();
         progressBar.setVisibility(View.GONE);
+        Realm realm = Realm.getDefaultInstance();
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        RealmUserInfo.setRepresentPhoneNumber(realm, realmUserInfo, phone);
+        realm.close();
     }
 }

@@ -168,7 +168,7 @@ public class FragmentRegistrationNicknameViewModel {
 //                                        G.context.startActivity(intent);
 //                                        G.fragmentActivity.finish();
 
-                                        ReagentFragment reagentFragment = new ReagentFragment();
+                                        ReagentFragment reagentFragment = ReagentFragment.newInstance(true);
                                         FragmentManager fragmentManager = G.fragmentActivity.getSupportFragmentManager();
                                         reagentFragment.userId = user.getId();
                                         FragmentTransaction transaction = fragmentManager.beginTransaction();

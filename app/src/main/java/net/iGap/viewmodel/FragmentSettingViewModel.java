@@ -56,6 +56,7 @@ import net.iGap.fragments.FragmentPrivacyAndSecurity;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentThemColor;
+import net.iGap.fragments.ReagentFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -914,7 +915,7 @@ public class FragmentSettingViewModel {
     public void onClickRepresent(View view) {
         if (RequestUserProfileGetRepresentative.numberOfPendingRequest == 0) {
             if (callbackSetRepresent.get().equals("")) {
-                Toast.makeText(G.context, "ClickWork", Toast.LENGTH_LONG).show();
+                new HelperFragment(ReagentFragment.newInstance(false)).setReplace(false).load();
             }
         } else {
             HelperError.showSnackMessage(G.context.getString(R.string.try_later), false);

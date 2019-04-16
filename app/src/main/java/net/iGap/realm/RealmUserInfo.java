@@ -342,6 +342,10 @@ public class RealmUserInfo extends RealmObject {
 
     public static void setRepresentPhoneNumber(Realm realm, String representPhoneNumber) {
         RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        setRepresentPhoneNumber(realm, realmUserInfo, representPhoneNumber);
+    }
+
+    public static void setRepresentPhoneNumber(Realm realm, RealmUserInfo realmUserInfo , String representPhoneNumber) {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
