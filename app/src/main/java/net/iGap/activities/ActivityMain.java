@@ -236,7 +236,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private ImageView imgNavImage;
     private DrawerLayout drawer;
     private ProgressBar contentLoading;
-    private TextView iconLocation;
     private Realm mRealm;
     private boolean isNeedToRegister = false;
     private ViewPager mViewPager;
@@ -2147,7 +2146,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
 
         contentLoading = (ProgressBar) findViewById(R.id.loadingContent);
-        iconLocation = (TextView) findViewById(R.id.am_btn_location);
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -2159,12 +2157,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             stopAnimationLocation();
         }
 
-        iconLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openMapFragment();
-            }
-        });
         G.onMapRegisterState = new OnMapRegisterState() {
             @Override
             public void onState(final boolean state) {
@@ -2211,15 +2203,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void stopAnimationLocation() {
-        if (iconLocation != null) {
-            iconLocation.setVisibility(View.GONE);
-        }
+        //
     }
 
     public void startAnimationLocation() {
-        if (iconLocation != null) {
-            iconLocation.setVisibility(View.VISIBLE);
-        }
+        //
     }
 
     private void connectionState() {

@@ -19,7 +19,7 @@
             android:id="@+id/type4_img0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:src="@color/color_default_discovery_cards" />
 
     </android.support.v7.widget.CardView>
@@ -39,7 +39,7 @@
             android:id="@+id/type4_img1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
             android:src="@color/color_default_discovery_cards"
 
             />

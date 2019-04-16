@@ -318,7 +318,7 @@
 
     <string name="st_phoneNumber">"رقم الهاتف "</string>
 
-    <string name="st_represent">الكاشف</string>
+    <string name="st_represent">الكاشف:</string>
 
     <string name="st_title_info">"المعلومات"</string>
 
@@ -2374,6 +2374,6 @@
     <string name="try_later">حاول بعض الثانية في وقت لاحق</string>
 
     <string name="unknown_type">هذا النوع من البطاقات غير مدعوم.</string>
-    <string name="representer">تعيين ريسبنتر</string>
+    <string name="representer">ريسبنتر</string>
     <string name="representer_code">يرجى ضبط رقم هاتفك التمثيلي هنا</string>
 </resources>

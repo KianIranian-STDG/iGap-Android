@@ -50,7 +50,7 @@ import static net.iGap.fragments.FragmentRegister.positionRadioButton;
 import static net.iGap.viewmodel.FragmentRegisterViewModel.dialogChooseCountry;
 import static net.iGap.viewmodel.FragmentRegisterViewModel.isoCode;
 
-public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUserProfileSetRepresentative {
+public class ReagentFragment extends FragmentToolBarBack implements OnCountryCode, OnUserProfileSetRepresentative {
 
     private static final String ARG_USER_ID = "arg_user_id";
     private static final String TAG = ReagentFragment.class.getName();
@@ -84,7 +84,7 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUs
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return LayoutInflater.from(getContext()).inflate(R.layout.fragment_reagent, container, false);
+        return attachToSwipeBack(LayoutInflater.from(getContext()).inflate(R.layout.fragment_reagent, container, false));
     }
 
     @Override
@@ -105,6 +105,7 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUs
         countryCodeEt = view.findViewById(R.id.et_reagent_countryCode);
         selectCountryBtn = view.findViewById(R.id.btn_reagent_selectCountry);
         progressBar = view.findViewById(R.id.pb_reagent);
+        titleTextView.setText(R.string.representer);
     }
 
     @Override
@@ -154,17 +155,6 @@ public class ReagentFragment extends BaseFragment implements OnCountryCode, OnUs
 
         skipBtn.setOnClickListener(v -> finalAction());
         setMask(countryPattern);
-    }
-
-    private void closeKeyboard(View v) {
-        if (isAdded()) {
-            try {
-                InputMethodManager imm = (InputMethodManager) G.fragmentActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            } catch (IllegalStateException e) {
-                e.getStackTrace();
-            }
-        }
     }
 
     private void selectCountry() {

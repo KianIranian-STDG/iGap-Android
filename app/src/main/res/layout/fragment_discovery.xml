@@ -8,6 +8,7 @@
 
     <include
         layout="@layout/toolbar_back_fragment"
+        android:id="@+id/ac_appBarLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,6 +26,8 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rcDiscovery"
+            android:padding="@dimen/dp4"
+            android:clipToPadding="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

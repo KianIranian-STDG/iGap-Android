@@ -31,7 +31,7 @@
 
   <string name="md_try_agin">\uf450</string>  <!--igap_satellite-variant-->
   <string name="md_users_social_symbol">\uf00e</string>  <!-- igap_account-multiple  -->
-  <string name="md_chat_tab">\uf181</string>  <!-- igap_account-multiple  -->
+  <string name="md_chat_tab">\uf17a</string>  <!-- igap_account-multiple  -->
   <string name="md_settings_cogwheel_button">\uf493</string>  <!-- igap_settings  -->
   <string name="md_help_round_button">\uf2d7</string>  <!-- igap_help-circle  -->
   <string name="md_menu_button">\uf35c</string>  <!-- igap_menu  -->

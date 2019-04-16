@@ -50,7 +50,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        titleTextView.setText(DiscoveryFragment.lastDiscoveryTitle);
+        titleTextView.setText(G.context.getString(R.string.igap));
         webView = view.findViewById(R.id.webView);
         progressWebView = view.findViewById(R.id.progressWebView);
         webView.getSettings().setLoadsImagesAutomatically(true);
