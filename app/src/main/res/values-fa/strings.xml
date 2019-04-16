@@ -45,7 +45,7 @@
     <!-- Register Page -->
     <string name="rg_title_register">"ثبت نام"</string>
     <string name="rg_confirm_text_register">"لطفاً نام و کد کشور خود را تأیید کرده سپس شماره تلفن همراه خود را بدون صفر ابتدای آن وارد نمایید."</string>
-    <string name="rg_Start">"بزن بریم"</string>
+    <string name="rg_Start">"بزن بریم..."</string>
     <string name="rg_Select_Country">"کشور خود را انتخاب کنید"</string>
     <string name="rg_agreement_text_register">"تأیید نهایی شماره تلفن شما، ما قصد داریم کد فعال سازی را برای این شماره ارسال کنیم."</string>
     <string name="rg_verify_register1">"در حال اتصال"</string>
@@ -64,6 +64,14 @@
     <string name="resend_message">"ارسال مجدد کد فعال سازی"</string>
     <string name="phone_number">"شماره تلفن"</string>
     <string name="Re_Phone_Verification">"تأیید شماره تلفن"</string>
+
+
+    <!--Reagent-->
+    <string name="ra_title">"کد معرف"</string>
+    <string name="ra_enter_reagent_code">"لطفا شماره ی معرف خود را وارد کنید"</string>
+    <string name="ra_confirm">"تایید"</string>
+    <string name="ra_skip">"فعلا بیخیال!"</string>
+
 
     <!-- Toast -->
     <string name="Toast_waiting_fot_get_info">"در انتظار اتصال و موقعیت یابی"</string>
@@ -175,6 +183,7 @@
     <string name="st_nickname">"نام"</string>
     <string name="st_contactName">"نام مخاطب"</string>
     <string name="st_phoneNumber">"شماره تلفن"</string>
+    <string name="st_represent">معرف</string>
     <string name="st_title_info">"اطلاعات"</string>
     <string name="st_title_notification_sounds">"اعلانات و صداها"</string>
     <string name="st_title_Clear_Cache">"پاک کردن حافظهٔ نهان"</string>
@@ -1420,6 +1429,11 @@
     <string name="add_sticker_text">آیا مطمئن هستید که میخواهید این استیکرها را نصب کنید؟</string>
     <string name="Add">اضافه</string>
     <string name="Remove">حذف</string>
+
+    <string name="try_later">چند ثانیه بعد امتحان کنید</string>
+    <string name="representer">معرف</string>
+    <string name="representer_code">شماره تلفن همراه معرف خود را  وارد کنید
+</string>
 
     <string name="unknown_type">این نوع کارت پشتیبانی نمی شود.</string>
 </resources>

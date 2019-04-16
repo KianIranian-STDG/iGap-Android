@@ -7,22 +7,23 @@ package net.iGap.viewmodel;
  * iGap Messenger | Free, Fast and Secure instant messaging application
  * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
-*/
+ */
 
-import android.content.Intent;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.WindowManager;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.activities.ActivityMain;
 import net.iGap.databinding.FragmentRegistrationNicknameBinding;
+import net.iGap.fragments.ReagentFragment;
 import net.iGap.interfaces.OnUserInfoResponse;
 import net.iGap.interfaces.OnUserProfileSetNickNameResponse;
 import net.iGap.proto.ProtoGlobal;
@@ -32,8 +33,6 @@ import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserProfileSetNickname;
 
 import io.realm.Realm;
-
-import static net.iGap.G.context;
 
 public class FragmentRegistrationNicknameViewModel {
 
@@ -71,7 +70,7 @@ public class FragmentRegistrationNicknameViewModel {
         Realm realm = Realm.getDefaultInstance();
         final String nickName = callBackEdtNikeName.get();
         if (!nickName.equals("")) {
-            //showProgressBar();
+//            //showProgressBar();
             G.fragmentActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -79,12 +78,15 @@ public class FragmentRegistrationNicknameViewModel {
                     setNickName();
                 }
             });
+
+            // TODO: 4/14/19 add Representer fragment
+
+
         } else {
             G.handler.post(new Runnable() {
                 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
                 @Override
                 public void run() {
-
                     txtInputNickName.setErrorEnabled(true);
                     txtInputNickName.setError(G.fragmentActivity.getResources().getString(R.string.Toast_Write_NickName));
                     txtInputNickName.setHintTextAppearance(R.style.error_appearance);
@@ -158,13 +160,21 @@ public class FragmentRegistrationNicknameViewModel {
                                 G.handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        G.onUserInfoResponse = null;
+//                                        G.onUserInfoResponse = null;
                                         hideProgressBar();
-                                        Intent intent = new Intent(context, ActivityMain.class);
-                                        intent.putExtra(ARG_USER_ID, user.getId());
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        G.context.startActivity(intent);
-                                        G.fragmentActivity.finish();
+//                                        Intent intent = new Intent(context, ActivityMain.class);
+//                                        intent.putExtra(ARG_USER_ID, user.getId());
+//                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                        G.context.startActivity(intent);
+//                                        G.fragmentActivity.finish();
+
+                                        ReagentFragment reagentFragment = ReagentFragment.newInstance(true);
+                                        FragmentManager fragmentManager = G.fragmentActivity.getSupportFragmentManager();
+                                        reagentFragment.userId = user.getId();
+                                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                        transaction.replace(R.id.ar_layout_root, reagentFragment);
+                                        transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left);
+                                        transaction.commitAllowingStateLoss();
                                     }
                                 });
                             }

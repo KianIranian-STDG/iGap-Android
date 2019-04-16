@@ -33,6 +33,7 @@ public class RealmUserInfo extends RealmObject {
     private String authorHash;
     private boolean importContactLimit;
     private String pushNotificationToken;
+    private String representPhoneNumber;
 
     public static RealmUserInfo getRealmUserInfo(Realm realm) {
         return realm.where(RealmUserInfo.class).findFirst();
@@ -329,6 +330,30 @@ public class RealmUserInfo extends RealmObject {
 
     public void setPushNotificationToken(String pushNotificationToken) {
         this.pushNotificationToken = pushNotificationToken;
+    }
+
+    public String getRepresentPhoneNumber() {
+        return representPhoneNumber;
+    }
+
+    public void setRepresentPhoneNumber(String representPhoneNumber) {
+        this.representPhoneNumber = representPhoneNumber;
+    }
+
+    public static void setRepresentPhoneNumber(Realm realm, String representPhoneNumber) {
+        RealmUserInfo realmUserInfo = realm.where(RealmUserInfo.class).findFirst();
+        setRepresentPhoneNumber(realm, realmUserInfo, representPhoneNumber);
+    }
+
+    public static void setRepresentPhoneNumber(Realm realm, RealmUserInfo realmUserInfo , String representPhoneNumber) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if (realmUserInfo != null) {
+                    realmUserInfo.setRepresentPhoneNumber(representPhoneNumber);
+                }
+            }
+        });
     }
 
 }

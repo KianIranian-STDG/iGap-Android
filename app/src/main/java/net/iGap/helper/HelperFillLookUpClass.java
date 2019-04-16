@@ -12,6 +12,8 @@ package net.iGap.helper;
 
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
+import net.iGap.proto.ProtoUserProfileGetRepresentative;
+import net.iGap.proto.ProtoUserProfileRepresentative;
 import net.iGap.proto.ProtoClientGetDiscovery;
 import net.iGap.proto.ProtoClientSetDiscoveryItemClick;
 
@@ -103,6 +105,8 @@ public class HelperFillLookUpClass {
         lookupMap.put(30148, "ProtoUserProfileGetBio.UserProfileGetBioResponse");
         lookupMap.put(30149, "ProtoUserReport.UserReportResponse");
         lookupMap.put(30150, "ProtoUserSetBot.UserSetBotResponse");
+        lookupMap.put(30151, "ProtoUserProfileGetRepresentative.UserProfileGetRepresentativeResponse");
+        lookupMap.put(30152, "ProtoUserProfileRepresentative.UserProfileSetRepresentativeResponse");
 
         // Chat 2xx , 302xx
         lookupMap.put(30200, "ProtoChatGetRoom.ChatGetRoomResponse");

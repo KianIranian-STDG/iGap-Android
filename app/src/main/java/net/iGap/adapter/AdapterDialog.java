@@ -20,10 +20,9 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.RadioButton;
 
+import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentRegister;
 import net.iGap.module.structs.StructCountry;
-import net.iGap.viewmodel.FragmentRegisterViewModel;
 
 import java.util.ArrayList;
 
@@ -36,6 +35,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
     ArrayList<StructCountry> mStringFilterList;
     ValueFilter valueFilter;
     private RadioButton name_tv;
+
 
     public AdapterDialog(Context context, ArrayList<StructCountry> countrylist) {
         this.context = context;
@@ -66,7 +66,7 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
         convertView = null;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.rg_adapter_dialog, null);
-            name_tv = (RadioButton) convertView.findViewById(R.id.rg_radioButton);
+            name_tv = convertView.findViewById(R.id.rg_radioButton);
             StructCountry structCountry = countrylist.get(position);
             name_tv.setText(structCountry.getName());
         }
@@ -76,24 +76,12 @@ public class AdapterDialog extends BaseAdapter implements Filterable {
         name_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mSelectedVariation = (Integer) v.getTag();
-
-                FragmentRegister.positionRadioButton = countrylist.get(position).getId();
                 mSelectedVariation = countrylist.get(position).getId();
                 notifyDataSetChanged();
 
-                FragmentRegister.edtCodeNumber.setText(("+ " + countrylist.get(position).getCountryCode()));
-                if (countrylist.get(position).getPhonePattern() != null || countrylist.get(position).getPhonePattern().equals(" ")) {
-                    FragmentRegister.edtPhoneNumber.setMask((countrylist.get(position).getPhonePattern().replace("X", "#").replace(" ", "-")));
-                } else {
-                    FragmentRegister.edtPhoneNumber.setMaxLines(18);
-                    FragmentRegister.edtPhoneNumber.setMask("##################");
-                }
-                FragmentRegister.btnChoseCountry.setText((countrylist.get(position).getName()));
-                FragmentRegisterViewModel.isoCode = countrylist.get(position).getAbbreviation();
-                FragmentRegisterViewModel.btnOk.performClick();
-                FragmentRegisterViewModel.dialogChooseCountry.dismiss();
+                G.onCountryCode.countryInfo(countrylist.get(position));
+
             }
         });
 

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="?backgroundColorSettingTheme"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/tb_Reagent_appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/green">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tb_Reagent_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp60"
+            android:background="#9dc756"
+            android:layoutDirection="ltr"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="@string/representer"
+                    android:textColor="@color/rg_whit_background"
+                    android:textSize="@dimen/dp20"
+                    android:visibility="visible" />
+
+                <net.iGap.libs.rippleeffect.RippleView
+                    android:id="@+id/setPassword_rippleOk"
+                    rv_centered="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:rv_alpha="200"
+                    app:rv_centered="true"
+                    app:rv_rippleDuration="0"
+                    app:rv_ripplePadding="5dp">
+
+
+                </net.iGap.libs.rippleeffect.RippleView>
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tb_Reagent_appBar"
+        android:paddingLeft="@dimen/dp32"
+        android:paddingRight="@dimen/dp32">
+
+        <LinearLayout
+            android:id="@+id/headerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/dp16"
+                android:paddingBottom="@dimen/dp16"
+                android:textColor="@color/toolbar_title_register">
+
+                <TextView
+                    android:id="@+id/tv_reagent_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp12"
+                    android:gravity="center"
+                    android:text="@string/representer_code"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/dp14"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:textColor="@color/toolbar_title_register">
+
+                <Button
+                    android:id="@+id/btn_reagent_selectCountry"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp40"
+                    android:layout_marginBottom="@dimen/dp12"
+                    android:background="@drawable/rg_background_agreement"
+                    android:drawableLeft="@mipmap/flesh"
+                    android:paddingLeft="@dimen/dp12"
+                    android:paddingTop="@dimen/dp4"
+                    android:paddingRight="@dimen/dp28"
+                    android:paddingBottom="@dimen/dp4"
+                    android:text="@string/iran"
+                    android:textColor="@color/rg_black_register"
+                    android:textSize="@dimen/dp14"
+
+
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp16"
+                    android:layoutDirection="ltr"
+                    android:orientation="horizontal">
+
+                    <net.iGap.module.MEditText
+                        android:id="@+id/et_reagent_countryCode"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp40"
+                        android:layout_marginRight="@dimen/dp8"
+                        android:layout_weight=".3"
+                        android:background="@drawable/rg_background_agreement"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:inputType="phone"
+                        android:maxLength="5"
+                        android:singleLine="true"
+                        android:text="+98"
+                        android:textColor="@color/rg_black_register"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/dp14" />
+
+                    <com.vicmikhailau.maskededittext.MaskedEditText
+                        android:id="@+id/et_reagent_phoneNumber"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp40"
+                        android:layout_weight=".7"
+                        android:background="@drawable/rg_background_agreement"
+                        android:gravity="left|center_vertical"
+                        android:imeOptions="flagNoExtractUi"
+                        android:inputType="phone"
+                        android:maxLength="18"
+                        android:padding="@dimen/dp4"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/rg_black_register"
+                        android:textSize="@dimen/dp14" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:gravity="center_vertical">
+
+                    <Button
+                        android:id="@+id/btn_reagent_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp8"
+                        android:background="@drawable/shape_background_button"
+                        android:gravity="center"
+                        android:text="@string/rg_Start"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/dp14" />
+
+                    <Button
+                        android:id="@+id/btn_reagent_skip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/dp8"
+                        android:background="@drawable/shape_background_button_gray"
+                        android:text="@string/ra_skip"
+                        android:textAllCaps="false"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/pb_reagent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+</RelativeLayout>
+
+

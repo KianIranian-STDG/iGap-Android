@@ -61,6 +61,13 @@
     <string name="phone_number">Phone Number</string>
     <string name="Re_Phone_Verification">Verifying the entered phone number</string>
 
+    <!--Reagent-->
+    <string name="ra_title">"test string"</string>
+    <string name="ra_enter_reagent_code">"enter reagent code"</string>
+    <string name="ra_confirm">"Confirm"</string>
+    <string name="ra_skip">"Skip"</string>
+
+
     <!-- Toast -->
     <string name="Toast_waiting_fot_get_info">Connecting and getting Info...</string>
     <string name="Toast_Location_Not_Found">Location not found.</string>
@@ -168,6 +175,7 @@
     <string name="st_nickname">First Name</string>
     <string name="st_contactName">Contact Name</string>
     <string name="st_phoneNumber">Phone Number</string>
+    <string name="st_represent">Represent</string>
     <string name="st_title_info">Information</string>
     <string name="st_title_notification_sounds">Notifications and Sounds</string>
     <string name="st_title_Clear_Cache">Clear Cache</string>
@@ -1416,6 +1424,10 @@
     <string name="Recently">Recently</string>
     <string name="Favorite">Favorite</string>
     <string name="Please_select_an_option">Please select an option</string>
+
+    <string name="try_later">try some second later</string>
+    <string name="representer">Set Representer</string>
+    <string name="representer_code">Please set your represetative phone number here</string>
 
     <string name="unknown_type">not supported card</string>
 

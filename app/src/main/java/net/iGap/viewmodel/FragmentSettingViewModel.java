@@ -56,6 +56,7 @@ import net.iGap.fragments.FragmentPrivacyAndSecurity;
 import net.iGap.fragments.FragmentSetting;
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentThemColor;
+import net.iGap.fragments.ReagentFragment;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
 import net.iGap.helper.HelperFragment;
@@ -84,6 +85,7 @@ import net.iGap.realm.RealmRegisteredInfo;
 import net.iGap.realm.RealmRoom;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserProfileCheckUsername;
+import net.iGap.request.RequestUserProfileGetRepresentative;
 import net.iGap.request.RequestUserProfileSetEmail;
 import net.iGap.request.RequestUserProfileSetGender;
 import net.iGap.request.RequestUserProfileSetNickname;
@@ -125,10 +127,9 @@ public class FragmentSettingViewModel {
     public static int KEY_AD_ROAMING_MUSIC = -1;
     public static int KEY_AD_ROAMINGN_GIF = -1;
     static boolean isActiveRun = false;
+    private static SharedPreferences sharedPreferences;
+    private static FragmentSettingBinding fragmentSettingBinding;
     public long userId;
-
-    boolean isCheckedThemeDark;
-
     public ObservableField<String> callbackSetName = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.first_name));
     public ObservableField<String> callbackTextSize = new ObservableField<>("16");
     public ObservableField<String> callbackSetTitleName = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.first_name));
@@ -136,6 +137,7 @@ public class FragmentSettingViewModel {
     public ObservableField<String> callbackSetUserName = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_username));
     public ObservableField<String> callbackSetEmail = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.set_email));
     public ObservableField<String> callbackSetPhoneNumber = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_phoneNumber));
+    public ObservableField<String> callbackSetRepresent = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_represent));
     public ObservableField<String> callbackSetBio = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_bio));
     public ObservableField<String> callbackLanguage = new ObservableField<>("English");
     public ObservableField<String> callbackDataShams = new ObservableField<>("Miladi");
@@ -157,9 +159,7 @@ public class FragmentSettingViewModel {
     public ObservableField<Boolean> isCameraButtonSheet = new ObservableField<>(true);
     public ObservableField<Integer> isAutoThemeDark = new ObservableField<>(View.GONE);
     public ObservableField<Integer> isGoneLayoutColor = new ObservableField<>(View.VISIBLE);
-
-
-    private static SharedPreferences sharedPreferences;
+    boolean isCheckedThemeDark;
     private int poRbDialogTextSize = -1;
     private Uri uriIntent;
     private long idAvatar;
@@ -172,7 +172,6 @@ public class FragmentSettingViewModel {
     private RealmPrivacy realmPrivacy;
     private RealmRegisteredInfo mRealmRegisteredInfo;
     private FragmentSetting fragmentSetting;
-    private static FragmentSettingBinding fragmentSettingBinding;
     private int[] fontSizeArray = {11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30};
 
 
@@ -909,6 +908,16 @@ public class FragmentSettingViewModel {
 
     }
 
+    public void onClickRepresent(View view) {
+        if (RequestUserProfileGetRepresentative.numberOfPendingRequest == 0) {
+            if (callbackSetRepresent.get().equals("")) {
+                new HelperFragment(ReagentFragment.newInstance(false)).setReplace(false).load();
+            }
+        } else {
+            HelperError.showSnackMessage(G.context.getString(R.string.try_later), false);
+        }
+    }
+
     public void onClickBio(View view) {
 
         FragmentBio fragmentBio = new FragmentBio();
@@ -1097,7 +1106,6 @@ public class FragmentSettingViewModel {
 
         isSendEnter.set(!isSendEnter.get());
     }
-
 
 
     public void onCheckedChangedSendEnter(boolean isChecked) {
@@ -1573,6 +1581,11 @@ public class FragmentSettingViewModel {
             ProtoGlobal.Gender userGender = userInfo.getGender();
             userEmail = userInfo.getEmail();
             bio = userInfo.getUserInfo().getBio();
+            if (userInfo.getRepresentPhoneNumber() == null || userInfo.getRepresentPhoneNumber().length() < 1) {
+                callbackSetRepresent.set("");
+            } else {
+                callbackSetRepresent.set(userInfo.getRepresentPhoneNumber());
+            }
 
             if (nickName != null) {
                 callbackSetName.set(nickName);
