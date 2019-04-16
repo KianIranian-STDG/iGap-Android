@@ -24,7 +24,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -81,10 +80,12 @@ import net.iGap.fragments.FragmentNewGroup;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentInquiry;
 import net.iGap.fragments.FragmentSetting;
+import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.fragments.FragmentWalletAgrement;
 import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.RegisteredContactsFragment;
 import net.iGap.fragments.SearchFragment;
+import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
@@ -111,7 +112,6 @@ import net.iGap.interfaces.OnChatClearMessageResponse;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnChatSendMessageResponse;
 import net.iGap.interfaces.OnClientCondition;
-import net.iGap.interfaces.OnClientGetRoomListResponse;
 import net.iGap.interfaces.OnConnectionChangeState;
 import net.iGap.interfaces.OnGeoGetConfiguration;
 import net.iGap.interfaces.OnGetPermission;
@@ -147,7 +147,6 @@ import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.ConnectionState;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
-import net.iGap.proto.ProtoResponse;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmAttachment;
 import net.iGap.realm.RealmCallConfig;
@@ -205,7 +204,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static final int requestCodePaymentBill = 199;
     public static final int requestCodeQrCode = 200;
     public static final int requestCodeBarcode = 201;
-    private static final int WALLET_REQUEST_CODE = 1024;
+    public static final int WALLET_REQUEST_CODE = 1024;
 
     public static boolean isMenuButtonAddShown = false;
     public static boolean isOpenChatBeforeSheare = false;
@@ -224,7 +223,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     FloatingActionButton btnCreateNewGroup;
     FloatingActionButton btnCreateNewChannel;
     SampleFragmentPagerAdapter sampleFragmentPagerAdapter;
-    boolean waitingForConfiguration = false;
+    public static boolean waitingForConfiguration = false;
     private LinearLayout mediaLayout;
     private FrameLayout frameChatContainer;
     private FrameLayout frameMainContainer;
@@ -677,6 +676,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
             @Override
             public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {
+                int marginTop = Math.round(AndroidUtils.dpToPx(ActivityMain.this, 12f) * 1.0f * Math.abs(verticalOffset) / appBarLayout.getTotalScrollRange());
+                LinearLayout.LayoutParams param = ((LinearLayout.LayoutParams) navigationTabStrip.getLayoutParams());
+                param.setMargins(0, marginTop, 0, 0);
+                navigationTabStrip.setLayoutParams(param);
                 toolbar.clearAnimation();
                 if (moveUp) {
                     if (toolbar.getAlpha() != 0F) {
@@ -1208,6 +1211,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             setFabIcon(R.drawable.ic_call_black_24dp);
             arcMenu.fabMenu.hide();
             arcMenu.setVisibility(View.VISIBLE);
+        } else if (adapter.getItem(position) instanceof DiscoveryFragment) {
+            findViewById(R.id.amr_btn_search).setVisibility(View.GONE);
+            findViewById(R.id.am_btn_menu).setVisibility(View.GONE);
+            arcMenu.setVisibility(View.GONE);
         }
 
         if (arcMenu.isMenuOpened()) {
@@ -1219,7 +1226,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void setFabIcon(int res) {
 
-        if(res ==currentFabIcon){
+        if (res == currentFabIcon) {
             return;
         }
         currentFabIcon = res;
@@ -1232,9 +1239,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void setViewPagerSelectedItem() {
-        if (!G.multiTab) {
-            return;
-        }
 
         G.handler.postDelayed(new Runnable() {
             @Override
@@ -1244,21 +1248,17 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     return;
                 }
 
-                int index;
+                int index = 0;
 
                 if (G.selectedTabInMainActivity.length() > 0) {
 
                     if (HelperCalander.isPersianUnicode) {
 
                         if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
-                            index = 4;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
-                            index = 3;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
                             index = 2;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
+                        } else if (G.selectedTabInMainActivity.equals(FragmentCall.class.toString())) {
                             index = 1;
-                        } else {
+                        } else if (G.selectedTabInMainActivity.equals(DiscoveryFragment.class.toString())) {
                             index = 0;
                         }
 
@@ -1266,14 +1266,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
                             index = 0;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.chat.toString())) {
+                        } else if (G.selectedTabInMainActivity.equals(FragmentCall.class.toString())) {
                             index = 1;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.group.toString())) {
+                        } else if (G.selectedTabInMainActivity.equals(DiscoveryFragment.class.toString())) {
                             index = 2;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.channel.toString())) {
-                            index = 3;
-                        } else {
-                            index = 4;
                         }
                     }
 
@@ -1283,7 +1279,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 } else {
 
                     if (HelperCalander.isPersianUnicode) {
-                        index = 4;
+                        index = 2;
                     } else {
                         index = 0;
                     }
@@ -1320,9 +1316,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
 
         if (HelperCalander.isPersianUnicode) {
-            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_channel_icon), getString(R.string.md_users_social_symbol), getString(R.string.md_user_account_box), getString(R.string.md_apps));
+            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_apps), getString(R.string.md_chat_tab));
         } else {
-            navigationTabStrip.setTitles(getString(R.string.md_apps), getString(R.string.md_user_account_box), getString(R.string.md_users_social_symbol), getString(R.string.md_channel_icon), getString(R.string.md_phone));
+            navigationTabStrip.setTitles(getString(R.string.md_chat_tab), getString(R.string.md_apps), getString(R.string.md_phone));
         }
 
         navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
@@ -1330,13 +1326,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         mViewPager = findViewById(R.id.viewpager);
 
-        if (G.multiTab) {
-            navigationTabStrip.setVisibility(View.VISIBLE);
-            mViewPager.setOffscreenPageLimit(5);
-        } else {
-            navigationTabStrip.setVisibility(View.GONE);
-            mViewPager.setOffscreenPageLimit(1);
-        }
+        navigationTabStrip.setVisibility(View.VISIBLE);
+        mViewPager.setOffscreenPageLimit(3);
 
         findViewById(R.id.loadingContent).setVisibility(View.VISIBLE);
 
@@ -1345,19 +1336,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 @Override
                 public void run() {
 
-                    if (G.multiTab) {
-                        fragmentCall = FragmentCall.newInstance(true);
-                        pages.add(fragmentCall);
 
-                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
-                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
-                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
-                    }
+                    fragmentCall = FragmentCall.newInstance(true);
+                    pages.add(fragmentCall);
+
+                    pages.add(DiscoveryFragment.newInstance(0));
+
+                    /* pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));*/
+                    /*  pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));*/
+                    /*      pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));*/
 
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                     sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
-                    mViewPager.setCurrentItem(4);
+                    mViewPager.setCurrentItem(3);
                     setViewPagerSelectedItem();
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
                 }
@@ -1377,25 +1369,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
             }, 400);
 
-            if (G.multiTab) {
-                G.handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
 
-                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.chat));
-                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.group));
-                        pages.add(FragmentMain.newInstance(FragmentMain.MainType.channel));
+                    fragmentCall = FragmentCall.newInstance(true);
+                    pages.add(DiscoveryFragment.newInstance(0));
+                    pages.add(fragmentCall);
 
-                        fragmentCall = FragmentCall.newInstance(true);
-                        pages.add(fragmentCall);
+                    mViewPager.getAdapter().notifyDataSetChanged();
 
-                        mViewPager.getAdapter().notifyDataSetChanged();
+                    setViewPagerSelectedItem();
 
-                        setViewPagerSelectedItem();
-
-                    }
-                }, 800);
-            }
+                }
+            }, 800);
         }
 
         MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);
@@ -2444,7 +2431,11 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     @Override
     public void onBackPressed() {
-
+        if (G.onBackPressedWebView != null) {
+            if (G.onBackPressedWebView.onBack()) {
+                return;
+            }
+        }
 
         if (G.onBackPressedExplorer != null) {
             if (G.onBackPressedExplorer.onBack()) {
@@ -2485,12 +2476,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("bagi" ,"ActivityMain:onResume:start");
+        Log.d("bagi", "ActivityMain:onResume:start");
 
         resume();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        Log.d("bagi" ,"ActivityMain:onResume:end");
+        Log.d("bagi", "ActivityMain:onResume:end");
     }
 
     public void resume() {
@@ -2551,7 +2542,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
         if (drawer != null) {
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            openNavigation();
             drawer.closeDrawer(GravityCompat.START);
         }
 
@@ -2652,6 +2643,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
                     G.selectedTabInMainActivity = fm.mainType.toString();
                 } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
+
+                    G.selectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
+                } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof DiscoveryFragment) {
 
                     G.selectedTabInMainActivity = adapter.getItem(mViewPager.getCurrentItem()).getClass().getName();
                 }
@@ -2922,7 +2916,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     public void openNavigation() {
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        if (FragmentToolBarBack.numberOfVisible <= 1)
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     //*************************************************************
@@ -2992,9 +2987,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (navigationTabStrip != null && navigationTabStrip.getVisibility() == View.VISIBLE) {
-                    navigationTabStrip.setTitleBadge(RealmRoom.getUnreadCountPages());
-                }
+//                if (navigationTabStrip != null && navigationTabStrip.getVisibility() == View.VISIBLE) {
+//                    navigationTabStrip.setTitleBadge(RealmRoom.getUnreadCountPages());
+//                }
             }
         });
     }

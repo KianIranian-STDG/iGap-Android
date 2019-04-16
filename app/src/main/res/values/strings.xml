@@ -1290,8 +1290,8 @@
     <string name="amount_2">amount :</string>
     <string name="payment_canceled">payment is canceled</string>
     <string name="PayGear_unavailable">PayGear is unavailable</string>
-    <string name="bills_inquiry_mci">MCI subscribers bill enquiry </string>
-    <string name="bills_inquiry_telecom">Home phones bill enquiry</string>
+    <string name="bills_inquiry_mci">MCI subscribers bill inquiry </string>
+    <string name="bills_inquiry_telecom">Home phones bill inquiry</string>
     <string name="bills_inquiry">Bills inquiry mci and telecom</string>
     <string name="bills_inquiry_title">Bills inquiry</string>
     <string name="bill_type">Bill Type</string>
@@ -1416,5 +1416,7 @@
     <string name="Recently">Recently</string>
     <string name="Favorite">Favorite</string>
     <string name="Please_select_an_option">Please select an option</string>
+
+    <string name="unknown_type">not supported card</string>
 
 </resources>

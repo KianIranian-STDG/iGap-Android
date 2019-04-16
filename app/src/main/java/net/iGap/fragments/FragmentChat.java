@@ -579,6 +579,7 @@ public class FragmentChat extends BaseFragment
     public static OnUpdateSticker onUpdateSticker;
     public CardView cardFloatingTime;
     public TextView txtFloatingTime;
+    public boolean rcTouchListener;
 
 
     public static Realm getRealmChat() {
@@ -660,8 +661,6 @@ public class FragmentChat extends BaseFragment
         isNeedResume = true;
         G.locationListener = this;
         rootView = inflater.inflate(R.layout.activity_chat, container, false);
-        cardFloatingTime = rootView.findViewById(R.id.cardFloatingTime);
-        txtFloatingTime = rootView.findViewById(R.id.txtFloatingTime);
 
         return attachToSwipeBack(rootView);
     }
@@ -741,6 +740,9 @@ public class FragmentChat extends BaseFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        cardFloatingTime = rootView.findViewById(R.id.cardFloatingTime);
+        txtFloatingTime = rootView.findViewById(R.id.txtFloatingTime);
 
         realmChat = Realm.getDefaultInstance();
         gongingRunnable = new Runnable() {
@@ -9397,17 +9399,6 @@ public class FragmentChat extends BaseFragment
                 }
             }
         });
-    }
-
-    private void closeKeyboard(View v) {
-        if (isAdded()) {
-            try {
-                InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            } catch (IllegalStateException e) {
-                e.getStackTrace();
-            }
-        }
     }
 
     private void error(String error) {

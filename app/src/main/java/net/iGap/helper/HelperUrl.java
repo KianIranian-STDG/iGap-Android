@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -226,7 +226,7 @@ public class HelperUrl {
         strBuilder.setSpan(clickable, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private static boolean isNeedOpenWithoutBrowser(String url) {
+    public static boolean isNeedOpenWithoutBrowser(String url) {
         ArrayList<String> listApps = new ArrayList<>();
         listApps.add("facebook.com");
         listApps.add("twitter.com");
@@ -247,7 +247,7 @@ public class HelperUrl {
         return false;
     }
 
-    private static void openWithoutBrowser(String url) {
+    public static void openWithoutBrowser(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -60,7 +60,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="allowBackup,supportsRtl">
-        <activity android:name=".activities.ActivityDashboard"></activity>
 
         <receiver
             android:name=".module.CustomButtonListener"

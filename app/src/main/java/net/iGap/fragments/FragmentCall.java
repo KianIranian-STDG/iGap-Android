@@ -1,5 +1,6 @@
 package net.iGap.fragments;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -156,6 +157,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
         return attachToSwipeBack(inflater.inflate(R.layout.fragment_call, container, false));
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

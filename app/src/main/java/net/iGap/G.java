@@ -4,7 +4,7 @@
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the kianiranian  Company - http://www.kianiranian.com/
  * All rights reserved.
  */
 
@@ -368,6 +368,7 @@ public class G extends MultiDexApplication {
     public static OnAudioFocusChangeListener onAudioFocusChangeListener;
     public static IDispatchTochEvent dispatchTochEventChat;
     public static IOnBackPressed onBackPressedChat;
+    public static IOnBackPressed onBackPressedWebView;
     public static ISendPosition iSendPositionChat;
     public static ITowPanModDesinLayout iTowPanModDesinLayout;
     public static OnDateChanged onDateChanged;
@@ -406,7 +407,6 @@ public class G extends MultiDexApplication {
     public static boolean isFragmentMapActive = false; // for check network
     public static boolean isRestartActivity = false; // for check passCode
     public static boolean isFirstPassCode = true; // for check passCode
-    public static boolean multiTab = false;
     public static boolean isTimeWhole = false;
     public static FragmentManager fragmentManager;
     private Tracker mTracker;

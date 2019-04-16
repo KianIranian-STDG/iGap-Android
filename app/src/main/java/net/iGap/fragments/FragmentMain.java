@@ -143,7 +143,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         return fragment;
     }
 
-    @Override
+/*    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
 
@@ -158,6 +158,12 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 groupSwitcher = 1;
                 initRecycleView();
             } else if (switcher.equals("3") && chatSwitcher == 0) {
+                if (mainType!=null){
+                    initRecycleView();
+                }
+
+            }
+            else if (switcher.equals("3") && chatSwitcher == 0) {
                 chatSwitcher = 1;
                 initRecycleView();
             } else if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
@@ -170,7 +176,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
         }
 
-    }
+    }*/
 
     @Nullable
     @Override
@@ -189,7 +195,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("bagi" ,"FragmentMain:onViewCreated:start");
+        Log.d("bagi", "FragmentMain:onViewCreated:start");
 
         //G.chatUpdateStatusUtil.setOnChatUpdateStatusResponse(this);
         this.mView = view;
@@ -201,14 +207,16 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         pbLoading = view.findViewById(R.id.pbLoading);
         pbLoading.setVisibility(View.VISIBLE);
         viewById.setVisibility(View.GONE);
-        switcher = String.valueOf(this.toString().charAt(this.toString().lastIndexOf(":") + 1));
+        /*switcher = String.valueOf(this.toString().charAt(this.toString().lastIndexOf(":") + 1));
         if (switcher.equals("4") && allSwitcher == 0 && mView != null) {
             allSwitcher = 1;
             initRecycleView();
         } else if (switcher.equals("0") && allSwitcher == 0 && mView != null) {
             allSwitcher = 1;
             initRecycleView();
-        }
+        }*/
+
+        initRecycleView();
         Log.d("bagi" ,"FragmentMain:onViewCreated:end");
 
 
@@ -247,27 +255,25 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
         final RoomAdapter roomsAdapter = new RoomAdapter(results, this, viewById, pbLoading);
 
-        if (!G.multiTab) {
-            onScrollListener = new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    if (isThereAnyMoreItemToLoad) {
-                        if (mOffset > 0) {
-                            int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                            if (lastVisiblePosition + 10 >= mOffset) {
-                                boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-                                if (send)
-                                    progressBar.setVisibility(View.VISIBLE);
-                            }
+        onScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (isThereAnyMoreItemToLoad) {
+                    if (mOffset > 0) {
+                        int lastVisiblePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                        if (lastVisiblePosition + 10 >= mOffset) {
+                            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
+                            if (send)
+                                progressBar.setVisibility(View.VISIBLE);
                         }
-                    } else {
-                        mRecyclerView.removeOnScrollListener(onScrollListener);
                     }
+                } else {
+                    mRecyclerView.removeOnScrollListener(onScrollListener);
                 }
-            };
-            mRecyclerView.addOnScrollListener(onScrollListener);
-        }
+            }
+        };
+        mRecyclerView.addOnScrollListener(onScrollListener);
 
         mRecyclerView.setAdapter(roomsAdapter);
 
@@ -771,18 +777,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             }
         });
 
-        if (isThereAnyMoreItemToLoad && G.multiTab) {
-
-            boolean send = new RequestClientGetRoomList().clientGetRoomList(mOffset, Config.LIMIT_LOAD_ROOM, tagId + "");
-            if (send) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-        }
         //else {
         //    mOffset = 0;
         //}
@@ -856,7 +850,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     public void onResume() {
         super.onResume();
 
-        Log.d("bagi" ,"FragmentMain:onResume:start");
+        Log.d("bagi", "FragmentMain:onResume:start");
 
         G.onSetActionInRoom = this;
         G.onDateChanged = this;
@@ -919,7 +913,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         }
 //        BotInit.checkDrIgap();
 
-        Log.d("bagi" ,"FragmentMain:onResume:end");
+        Log.d("bagi", "FragmentMain:onResume:end");
     }
 
     @Override

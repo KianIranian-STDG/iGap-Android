@@ -158,4 +158,6 @@
   <color name="background_payment">#b7000000</color>
   <color name="launch_app_color">#f4f0e8 </color>
   <color name="color_powered_by">#84ffffff</color>
+
+  <color name="color_default_discovery_cards">#84ffffff</color>
 </resources>

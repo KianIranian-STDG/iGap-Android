@@ -113,24 +113,24 @@ public class HelperFragment {
         return this;
     }
 
-    public void load() {
-
+    public void load(boolean checkStack) {
         if (fragment == null) {
             return;
         }
 
         try {
+            if (checkStack) {
+                if (fragment.getClass().getName().equalsIgnoreCase(FragmentChat.class.getName())) {
+                    if (SystemClock.elapsedRealtime() - G.mLastClickTime > 1000) {
+                        G.mLastClickTime = SystemClock.elapsedRealtime();
+                    } else {
+                        return;
+                    }
+                }
 
-            if (fragment.getClass().getName().equalsIgnoreCase(FragmentChat.class.getName())) {
-                if (SystemClock.elapsedRealtime() - G.mLastClickTime > 1000) {
-                    G.mLastClickTime = SystemClock.elapsedRealtime();
-                } else {
+                else if ((G.fragmentActivity.getSupportFragmentManager().getBackStackEntryAt(G.fragmentActivity.getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equalsIgnoreCase(fragment.getClass().getName()))){
                     return;
                 }
-            }
-
-           else if ((G.fragmentActivity.getSupportFragmentManager().getBackStackEntryAt(G.fragmentActivity.getSupportFragmentManager().getBackStackEntryCount() - 1).getName().equalsIgnoreCase(fragment.getClass().getName()))){
-                return;
             }
 
         } catch (Exception e) {
@@ -183,6 +183,10 @@ public class HelperFragment {
         } catch (IllegalStateException e) {
             e.printStackTrace();
         }
+    }
+
+    public void load() {
+        load(true);
     }
 
     public void remove() {

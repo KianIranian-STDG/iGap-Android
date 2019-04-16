@@ -22,14 +22,16 @@
   <string name="md_add_user_button">\uf014</string>  <!-- igap_account-plus  -->
   <string name="md_add_plus_button">\uf415</string>  <!-- igap_plus  -->
   <string name="md_user_account_box">\uf004</string>  <!-- igap_account  -->
-  <string name="md_apps">\uf03b</string>  <!-- igap_apps  -->
+  <string name="md_apps">\uf640</string>  <!-- igap_apps  -->
   <string name="md_igap_contacts">\uf6ca</string>  <!-- igap_apps  -->
   <string name="md_nearby">\uf352</string>  <!-- igap_map-marker-radius -->
   <string name="md_chat_box">\uf366</string>  <!-- igap_message-processing -->
   <string name="md_satellite_variant">\uf471</string>  <!--igap_satellite-variant-->
 
 
+  <string name="md_try_agin">\uf450</string>  <!--igap_satellite-variant-->
   <string name="md_users_social_symbol">\uf00e</string>  <!-- igap_account-multiple  -->
+  <string name="md_chat_tab">\uf181</string>  <!-- igap_account-multiple  -->
   <string name="md_settings_cogwheel_button">\uf493</string>  <!-- igap_settings  -->
   <string name="md_help_round_button">\uf2d7</string>  <!-- igap_help-circle  -->
   <string name="md_menu_button">\uf35c</string>  <!-- igap_menu  -->

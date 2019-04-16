@@ -5,7 +5,7 @@ package net.iGap.viewmodel;
  * You should have received a copy of the license in this archive (see LICENSE).
  * Copyright © 2017 , iGap - www.iGap.net
  * iGap Messenger | Free, Fast and Secure instant messaging application
- * The idea of the RooyeKhat Media Company - www.RooyeKhat.co
+ * The idea of the Kianiranian Company - www.kianiranian.com
  * All rights reserved.
  */
 
@@ -1023,26 +1023,26 @@ public class FragmentSettingViewModel {
 
     public void onClickMultiTab(View view) {
 
-        isMultiTab.set(!isMultiTab.get());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        if (isMultiTab.get()) {
-            G.multiTab = true;
-            editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, true);
-            editor.apply();
-        } else {
-            G.multiTab = false;
-            editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
-            editor.apply();
-        }
-        FragmentMain.roomAdapterHashMap = null;
-
-        if (onRefreshActivity != null) {
-            G.isRestartActivity = true;
-            onRefreshActivity.refresh("ar");
-        }
-        if (FragmentSetting.onRemoveFragmentSetting != null)
-            FragmentSetting.onRemoveFragmentSetting.removeFragment();
+//        isMultiTab.set(!isMultiTab.get());
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//        if (isMultiTab.get()) {
+//            G.multiTab = true;
+//            editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, true);
+//            editor.apply();
+//        } else {
+//            G.multiTab = false;
+//            editor.putBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
+//            editor.apply();
+//        }
+//        FragmentMain.roomAdapterHashMap = null;
+//
+//        if (onRefreshActivity != null) {
+//            G.isRestartActivity = true;
+//            onRefreshActivity.refresh("ar");
+//        }
+//        if (FragmentSetting.onRemoveFragmentSetting != null)
+//            FragmentSetting.onRemoveFragmentSetting.removeFragment();
 
     }
 

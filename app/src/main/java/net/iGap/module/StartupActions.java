@@ -421,8 +421,6 @@ public final class StartupActions {
 
         Theme.setThemeColor();
 
-        G.multiTab = preferences.getBoolean(SHP_SETTING.KEY_MULTI_TAB, false);
-
         // setting for show layout vote in channel
         G.showVoteChannelLayout = preferences.getInt(SHP_SETTING.KEY_VOTE, 1) == 1;
 
