@@ -750,6 +750,10 @@ public class HelperNotification {
             if (roomMessage.hasLog()) {
                 if (roomMessage.getLog().getType() == PINNED_MESSAGE) {
                     text = roomMessage.getReplyTo().getMessage();
+                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VOICE_CALL) {
+                    text = G.context.getString(R.string.MISSED_VOICE_CALL);
+                } else if (roomMessage.getLog().getType() == ProtoGlobal.RoomMessageLog.Type.MISSED_VIDEO_CALL) {
+                    text = G.context.getString(R.string.MISSED_VIDEO_CALL);
                 } else if (roomMessage.getReplyTo() != null) {
                     text = AppUtils.conversionMessageType(roomMessage.getReplyTo().getMessageType());
                 }
