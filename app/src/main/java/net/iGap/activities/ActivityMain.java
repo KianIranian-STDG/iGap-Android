@@ -1255,9 +1255,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
                             index = 2;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentCall.class.toString())) {
+                        } else if (DiscoveryFragment.class.toString().contains(G.selectedTabInMainActivity)) {
                             index = 1;
-                        } else if (G.selectedTabInMainActivity.equals(DiscoveryFragment.class.toString())) {
+                        } else if (FragmentCall.class.toString().contains(G.selectedTabInMainActivity)) {
                             index = 0;
                         }
 
@@ -1265,9 +1265,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
                         if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
                             index = 0;
-                        } else if (G.selectedTabInMainActivity.equals(FragmentCall.class.toString())) {
+                        } else if (DiscoveryFragment.class.toString().contains(G.selectedTabInMainActivity)) {
                             index = 1;
-                        } else if (G.selectedTabInMainActivity.equals(DiscoveryFragment.class.toString())) {
+                        } else if (FragmentCall.class.toString().contains(G.selectedTabInMainActivity)) {
                             index = 2;
                         }
                     }
@@ -1348,7 +1348,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                     pages.add(FragmentMain.newInstance(FragmentMain.MainType.all));
                     sampleFragmentPagerAdapter = new SampleFragmentPagerAdapter(getSupportFragmentManager());
                     mViewPager.setAdapter(sampleFragmentPagerAdapter);
-                    mViewPager.setCurrentItem(3);
+                    mViewPager.setCurrentItem(2);
                     setViewPagerSelectedItem();
                     findViewById(R.id.loadingContent).setVisibility(View.GONE);
                 }
