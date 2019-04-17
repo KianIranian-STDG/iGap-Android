@@ -23,6 +23,7 @@ import net.iGap.R;
 import net.iGap.adapter.items.discovery.DiscoveryAdapter;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.fragments.FragmentToolBarBack;
+import net.iGap.helper.HelperError;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.request.RequestClientGetDiscovery;
 
@@ -33,11 +34,12 @@ public class DiscoveryFragment extends FragmentToolBarBack {
     private TextView emptyRecycle;
     private SwipeRefreshLayout pullToRefresh;
     private int page;
+    DiscoveryAdapter adapterDiscovery;
 
     public static DiscoveryFragment newInstance(int page) {
         DiscoveryFragment discoveryFragment = new DiscoveryFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("page" , page);
+        bundle.putInt("page", page);
         discoveryFragment.setArguments(bundle);
         return discoveryFragment;
     }
@@ -75,7 +77,7 @@ public class DiscoveryFragment extends FragmentToolBarBack {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        adapterDiscovery = new DiscoveryAdapter(getActivity(), new ArrayList<>());
         emptyRecycle = view.findViewById(R.id.emptyRecycle);
 
         if (page == 0) {
@@ -86,15 +88,21 @@ public class DiscoveryFragment extends FragmentToolBarBack {
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                updateOrFetchRecycleViewData();
+                boolean isSend = updateOrFetchRecycleViewData();
+                if (!isSend) {
+                    pullToRefresh.setRefreshing(false);
+                    HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
+                }
             }
         });
 
         emptyRecycle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                new HelperFragment(FragmentWebView.newInstance("https://google.com")).setReplace(false).load(false);
-                updateOrFetchRecycleViewData();
+                boolean isSend = updateOrFetchRecycleViewData();
+                if (!isSend) {
+                    HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
+                }
             }
         });
 
@@ -111,12 +119,40 @@ public class DiscoveryFragment extends FragmentToolBarBack {
         rcDiscovery = view.findViewById(R.id.rcDiscovery);
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
         rcDiscovery.setLayoutManager(layoutManager);
-        updateOrFetchRecycleViewData();
+        rcDiscovery.setAdapter(adapterDiscovery);
+        rcDiscovery.setVisibility(View.GONE);
+        emptyRecycle.setVisibility(View.VISIBLE);
+
+        adapterDiscovery.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                if (adapterDiscovery.getItemCount() == 0) {
+                    rcDiscovery.setVisibility(View.GONE);
+                    emptyRecycle.setVisibility(View.VISIBLE);
+                } else {
+                    rcDiscovery.setVisibility(View.VISIBLE);
+                    emptyRecycle.setVisibility(View.GONE);
+                }
+            }
+        });
+        tryToUpdateOrFetchRecycleViewData(0);
     }
 
-    private void updateOrFetchRecycleViewData() {
-        pullToRefresh.setRefreshing(true);
-        new RequestClientGetDiscovery().getDiscovery(page, new OnDiscoveryList() {
+    private void tryToUpdateOrFetchRecycleViewData(int count) {
+        boolean isSend = updateOrFetchRecycleViewData();
+        if (!isSend && page == 0 && count < 3) {
+            G.handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tryToUpdateOrFetchRecycleViewData(count + 1);
+                }
+            }, 1000);
+        }
+    }
+
+    private boolean updateOrFetchRecycleViewData() {
+        boolean isSend = new RequestClientGetDiscovery().getDiscovery(page, new OnDiscoveryList() {
             @Override
             public void onDiscoveryListReady(ArrayList<DiscoveryItem> discoveryArrayList, String title) {
                 G.handler.post(new Runnable() {
@@ -144,37 +180,40 @@ public class DiscoveryFragment extends FragmentToolBarBack {
                     public void run() {
                         pullToRefresh.setRefreshing(false);
                         if (page == 0) {
-                            GsonBuilder builder = new GsonBuilder();
-                            Gson gson = builder.create();
-                            SharedPreferences pref = G.context.getSharedPreferences("DiscoveryPages", Context.MODE_PRIVATE);
-                            String json = pref.getString("page0" , "");
-                            String title = pref.getString("title" , "");
-                            if (json != null && !json.equals("")) {
-                                ArrayList<DiscoveryItem> discoveryArrayList = gson.fromJson(json, new TypeToken<ArrayList<DiscoveryItem>>(){}.getType());
-                                setAdapterData(discoveryArrayList, title);
-                            } else {
-                                setAdapterData(new ArrayList<>(), "");
-                            }
-
-                        } else {
-                            setAdapterData(new ArrayList<>(), "");
+                            loadOfflinePageZero();
                         }
                     }
                 });
             }
         });
+
+        if (isSend) {
+            pullToRefresh.setRefreshing(true);
+        } else {
+            if (page == 0) {
+                loadOfflinePageZero();
+            }
+        }
+
+        return isSend;
     }
 
     private void setAdapterData(ArrayList<DiscoveryItem> discoveryArrayList, String title) {
-        DiscoveryAdapter adapterDiscovery = new DiscoveryAdapter(getActivity(), discoveryArrayList);
-        if (discoveryArrayList.size() == 0) {
-            rcDiscovery.setVisibility(View.GONE);
-            emptyRecycle.setVisibility(View.VISIBLE);
-        } else {
-            rcDiscovery.setVisibility(View.VISIBLE);
-            emptyRecycle.setVisibility(View.GONE);
-        }
-        rcDiscovery.setAdapter(adapterDiscovery);
+        adapterDiscovery.setDiscoveryList(discoveryArrayList);
         titleTextView.setText(title);
+        adapterDiscovery.notifyDataSetChanged();
+    }
+
+    private void loadOfflinePageZero() {
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        SharedPreferences pref = G.context.getSharedPreferences("DiscoveryPages", Context.MODE_PRIVATE);
+        String json = pref.getString("page0", "");
+        String title = pref.getString("title", "");
+        if (json != null && !json.equals("")) {
+            ArrayList<DiscoveryItem> discoveryArrayList = gson.fromJson(json, new TypeToken<ArrayList<DiscoveryItem>>() {
+            }.getType());
+            setAdapterData(discoveryArrayList, title);
+        }
     }
 }

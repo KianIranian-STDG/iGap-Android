@@ -29,6 +29,10 @@ public class DiscoveryAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.discoveryList = discoveryList;
     }
 
+    public void setDiscoveryList(ArrayList<DiscoveryItem> discoveryList) {
+        this.discoveryList = discoveryList;
+    }
+
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
