@@ -88,9 +88,10 @@ public class DiscoveryFragment extends FragmentToolBarBack {
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                setRefreshing(true);
                 boolean isSend = updateOrFetchRecycleViewData();
                 if (!isSend) {
-                    pullToRefresh.setRefreshing(false);
+                    setRefreshing(false);
                     HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
                 }
             }
@@ -139,6 +140,19 @@ public class DiscoveryFragment extends FragmentToolBarBack {
         tryToUpdateOrFetchRecycleViewData(0);
     }
 
+    private void setRefreshing(boolean value) {
+        pullToRefresh.setRefreshing(value);
+        if (value) {
+            if (adapterDiscovery.getItemCount() == 0) {
+                 emptyRecycle.setVisibility(View.GONE);
+            }
+        } else {
+            if (adapterDiscovery.getItemCount() == 0) {
+                emptyRecycle.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
     private void tryToUpdateOrFetchRecycleViewData(int count) {
         boolean isSend = updateOrFetchRecycleViewData();
         if (!isSend && page == 0 && count < 3) {
@@ -158,7 +172,7 @@ public class DiscoveryFragment extends FragmentToolBarBack {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        pullToRefresh.setRefreshing(false);
+                        setRefreshing(false);
                         if (page == 0) {
                             GsonBuilder builder = new GsonBuilder();
                             Gson gson = builder.create();
@@ -178,7 +192,7 @@ public class DiscoveryFragment extends FragmentToolBarBack {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        pullToRefresh.setRefreshing(false);
+                        setRefreshing(false);
                         if (page == 0) {
                             loadOfflinePageZero();
                         }
@@ -188,7 +202,7 @@ public class DiscoveryFragment extends FragmentToolBarBack {
         });
 
         if (isSend) {
-            pullToRefresh.setRefreshing(true);
+            setRefreshing(true);
         } else {
             if (page == 0) {
                 loadOfflinePageZero();
