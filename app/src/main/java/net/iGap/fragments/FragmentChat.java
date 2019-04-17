@@ -1506,9 +1506,7 @@ public class FragmentChat extends BaseFragment
                                 layoutMute = rootView.findViewById(R.id.chl_ll_channel_footer);
                                 layoutMute.setVisibility(View.VISIBLE);
                                 ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setText(R.string.start);
-                                ((TextView) rootView.findViewById(R.id.chl_txt_mute_channel)).setOnClickListener(v -> {
-                                    Toast.makeText(musicPlayer, "ggggg", Toast.LENGTH_SHORT).show();
-                                });
+
                                 LinearLayout layoutAttach = rootView.findViewById(R.id.layout_attach_file);
                                 layoutAttach.setVisibility(View.GONE);
 
