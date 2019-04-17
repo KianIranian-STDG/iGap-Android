@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp8"
                 android:textColor="@color/black"
-                tools:text="@{viewModel.profileName}" />
+                tools:text="@{viewModel.profileNameTv}" />
 
             <TextView
                 android:id="@+id/tv_customerClub_referral"
@@ -47,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp8"
                 android:textColor="@color/gray_9d"
+                android:text="@{viewModel.referralTv}"
                 tools:text="کد معرف : 0912042503" />
         </LinearLayout>
 
@@ -72,6 +73,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="50dp"
+                android:text="@{viewModel.pointsTv}"
                 tools:text="300" />
 
         </LinearLayout>
@@ -83,11 +85,12 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp8"
+            android:onClick="@{(v) -> viewModel.onOrderHistoryClick()}"
             android:layout_marginBottom="@dimen/dp32"
             android:background="@drawable/shape_background_customer_club_order_history"
             android:paddingStart="@dimen/dp32"
             android:paddingEnd="@dimen/dp32"
-            android:text="مشاهده سوابق"
+            android:text="@string/order_history"
             android:textColor="@color/white"
 
             />
