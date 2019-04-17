@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import net.iGap.G;
@@ -25,8 +25,8 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
 
     private String url;
     private WebView webView;
-    private ProgressBar progressWebView;
     private TextView webViewError;
+    private SwipeRefreshLayout pullToRefresh;
     Handler delayHandler = new Handler();
     Runnable taskMakeVisibleWebViewWithDelay;
     CustomWebViewClient customWebViewClient;
@@ -56,13 +56,22 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         webView = view.findViewById(R.id.webView);
-        progressWebView = view.findViewById(R.id.progressWebView);
         webViewError = view.findViewById(R.id.webViewError);
+
+        pullToRefresh = view.findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                customWebViewClient.isWebViewVisible = true;
+                webView.clearView();
+                webView.reload();
+                setWebViewVisibleWithDelay();
+            }
+        });
 
         webViewError.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressWebView.setVisibility(View.VISIBLE);
                 customWebViewClient.isWebViewVisible = true;
                 webView.clearView();
                 webView.reload();
@@ -84,9 +93,9 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
             @Override
             public void onProgressChanged(WebView view, int progress) {
                 if (progress == 100) {
-                    progressWebView.setVisibility(View.GONE);
+                    pullToRefresh.setRefreshing(false);
                 } else {
-                    progressWebView.setVisibility(View.VISIBLE);
+                    pullToRefresh.setRefreshing(true);
                 }
             }
         });
