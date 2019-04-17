@@ -10,21 +10,28 @@
 
 package net.iGap.request;
 
+import net.iGap.G;
 import net.iGap.fragments.discovery.OnDiscoveryList;
 import net.iGap.proto.ProtoClientGetDiscovery;
 
 public class RequestClientGetDiscovery {
 
-    public void getDiscovery(int pageId, OnDiscoveryList discoveryListener) {
+    public boolean getDiscovery(int pageId, OnDiscoveryList discoveryListener) {
 
         ProtoClientGetDiscovery.ClientGetDiscovery.Builder builder = ProtoClientGetDiscovery.ClientGetDiscovery.newBuilder();
         builder.setPageId(pageId);
 
         RequestWrapper requestWrapper = new RequestWrapper(620, builder, discoveryListener);
         try {
-            RequestQueue.sendRequest(requestWrapper);
+            if (G.userLogin) {
+                RequestQueue.sendRequest(requestWrapper);
+                return true;
+            } else {
+                return false;
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+            return false;
         }
     }
 }
