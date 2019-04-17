@@ -290,7 +290,7 @@ public class BotInit implements View.OnClickListener {
 
     private void init(View rootView) {
 
-        btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
+        btnShowBot = rootView.findViewById(R.id.chl_btn_show_bot_action);
         btnShowBot.setVisibility(View.INVISIBLE);
 
         layoutBot = rootView.findViewById(R.id.layout_bot);
@@ -310,7 +310,7 @@ public class BotInit implements View.OnClickListener {
             return;
         }*/
 
-        btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
+        btnShowBot = rootView.findViewById(R.id.chl_btn_show_bot_action);
 
         if (gone) {
             layoutBot.setVisibility(View.GONE);
@@ -380,7 +380,7 @@ public class BotInit implements View.OnClickListener {
                 InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(rootView.findViewById(R.id.chl_edt_chat).getWindowToken(), 0);
 
-                MaterialDesignTextView btnShowBot = (MaterialDesignTextView) rootView.findViewById(R.id.chl_btn_show_bot_action);
+                MaterialDesignTextView btnShowBot = rootView.findViewById(R.id.chl_btn_show_bot_action);
 
             } catch (IllegalStateException e) {
                 e.getStackTrace();
@@ -482,7 +482,7 @@ public class BotInit implements View.OnClickListener {
     public void onClick(View v) {
         try {
             if (v.getId() == ButtonActionType.USERNAME_LINK) {
-                HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).toString().substring(1), HelperUrl.ChatEntry.chat, 0);
+                HelperUrl.checkUsernameAndGoToRoomWithMessageId(((ArrayList<String>) v.getTag()).get(0).substring(1), HelperUrl.ChatEntry.chat, 0);
             } else if (v.getId() == ButtonActionType.BOT_ACTION) {
                 try {
                     Long identity = System.currentTimeMillis();
@@ -490,7 +490,7 @@ public class BotInit implements View.OnClickListener {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1).toString(), ((ArrayList<String>) v.getTag()).get(2).toString(), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
+                            RealmRoomMessage realmRoomMessage = RealmRoomMessage.makeAdditionalData(roomId, identity, ((ArrayList<String>) v.getTag()).get(1), ((ArrayList<String>) v.getTag()).get(2), 3, realm, ProtoGlobal.RoomMessageType.TEXT);
                             G.chatSendMessageUtil.build(ProtoGlobal.Room.Type.CHAT, roomId, realmRoomMessage).sendMessage(identity + "");
                             if (G.onBotClick != null) {
                                 G.onBotClick.onBotCommandText(realmRoomMessage, ButtonActionType.BOT_ACTION);
@@ -500,11 +500,11 @@ public class BotInit implements View.OnClickListener {
                 } catch (Exception e) {
                 }
             } else if (v.getId() == ButtonActionType.JOIN_LINK) {
-                HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).toString().substring(14));
+                HelperUrl.checkAndJoinToRoom(((ArrayList<String>) v.getTag()).get(0).substring(14));
             } else if (v.getId() == ButtonActionType.WEB_LINK) {
-                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0).toString());
+                HelperUrl.openBrowser(((ArrayList<String>) v.getTag()).get(0));
             } else if (v.getId() == ButtonActionType.WEBVIEW_LINK) {
-                G.onBotClick.onBotCommandText(((ArrayList<String>) v.getTag()).get(0).toString(), ButtonActionType.WEBVIEW_LINK);
+                G.onBotClick.onBotCommandText(((ArrayList<String>) v.getTag()).get(0), ButtonActionType.WEBVIEW_LINK);
             } else if (v.getId() == ButtonActionType.REQUEST_PHONE) {
                 try {
                     new MaterialDialog.Builder(G.currentActivity).title(R.string.access_phone_number).positiveText(R.string.ok).negativeText(R.string.cancel).onPositive(new MaterialDialog.SingleButtonCallback() {
