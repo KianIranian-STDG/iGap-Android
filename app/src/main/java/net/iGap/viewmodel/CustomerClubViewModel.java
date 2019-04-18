@@ -7,11 +7,13 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentCustomerClubProfile;
+import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.realm.RealmUserInfo;
+import net.iGap.request.RequestUserIVandGetScore;
 
 import io.realm.Realm;
 
-public class CustomerClubViewModel {
+public class CustomerClubViewModel implements OnUserIVandGetScore {
     public static final int REQUEST_CODE_QR_CODE = 200;
     public ObservableField<String> profileNameTv = new ObservableField<>("");
     public ObservableField<String> referralTv = new ObservableField<>("0");
@@ -23,6 +25,7 @@ public class CustomerClubViewModel {
 
     public CustomerClubViewModel(FragmentCustomerClubProfile fragmentCustomerClubProfile) {
         this.fragmentCustomerClubProfile = fragmentCustomerClubProfile;
+        G.onUserIVandGetScore = this;
         initData();
     }
 
@@ -52,5 +55,14 @@ public class CustomerClubViewModel {
 
     public void onDestroy() {
         mRealm.close();
+    }
+
+    @Override
+    public void getScore(int score) {
+        pointsTv.set(String.valueOf(score));
+    }
+
+    public void onStart() {
+        new RequestUserIVandGetScore().userIVandGetScore();
     }
 }

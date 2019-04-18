@@ -12,10 +12,6 @@ package net.iGap.helper;
 
 import net.iGap.fragments.FragmentShowAvatars;
 import net.iGap.fragments.FragmentShowImage;
-import net.iGap.proto.ProtoUserProfileGetRepresentative;
-import net.iGap.proto.ProtoUserProfileRepresentative;
-import net.iGap.proto.ProtoClientGetDiscovery;
-import net.iGap.proto.ProtoClientSetDiscoveryItemClick;
 
 import static net.iGap.G.forcePriorityActionId;
 import static net.iGap.G.generalImmovableClasses;
@@ -107,6 +103,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30150, "ProtoUserSetBot.UserSetBotResponse");
         lookupMap.put(30151, "ProtoUserProfileGetRepresentative.UserProfileGetRepresentativeResponse");
         lookupMap.put(30152, "ProtoUserProfileRepresentative.UserProfileSetRepresentativeResponse");
+        lookupMap.put(30154, "ProtoUserIVandGetScore.UserIVandGetScoreResponse");
 
         // Chat 2xx , 302xx
         lookupMap.put(30200, "ProtoChatGetRoom.ChatGetRoomResponse");
@@ -267,6 +264,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(60002, "ProtoPushUserInfoExpired.PushUserInfoExpiredResponse");
         lookupMap.put(60003, "ProtoPushRateSignaling.PushRateSignalingResponse");
         lookupMap.put(60004, "ProtoPushWalletPaymentVerified.PushWalletPaymentVerifiedResponse");
+
 
     }
 

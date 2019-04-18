@@ -49,6 +49,7 @@ public class FragmentCustomerClubProfile extends BaseFragment {
     public void onStart() {
         super.onStart();
         setImage();
+        viewModel.onStart();
 
     }
 
