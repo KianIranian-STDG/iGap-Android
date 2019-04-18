@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout >
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
-            type="net.iGap.viewmodel.CustomerClubViewModel"/>
+            type="net.iGap.viewmodel.CustomerClubViewModel" />
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:paddingBottom="@dimen/dp32"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingTop="56dp">
 
 
         <LinearLayout
@@ -21,73 +22,105 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
-            android:layout_marginTop="@dimen/dp32"
             android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/dp32">
+            android:orientation="vertical">
 
-
-            <net.iGap.module.CircleImageView
-                android:id="@+id/iv_customerClub_profile"
-                android:layout_width="@dimen/dp120"
-                android:layout_height="@dimen/dp120"
-                android:layout_marginBottom="@dimen/dp16" />
-
-            <TextView
-                android:id="@+id/tv_customerClub_name"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp8"
-                android:textColor="@color/black"
-                tools:text="@{viewModel.profileNameTv}" />
+                android:layout_margin="@dimen/dp16"
+                app:cardCornerRadius="8dp">
 
-            <TextView
-                android:id="@+id/tv_customerClub_referral"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp8"
-                android:textColor="@color/gray_9d"
-                android:text="@{viewModel.referralTv}"
-                tools:text="کد معرف : 0912042503" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <net.iGap.module.CircleImageView
+                        android:id="@+id/iv_customerClub_profile"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_marginBottom="@dimen/dp16"
+                        app:civ_border_color="@color/emoji_gray20"
+                        app:civ_border_width="1dp" />
+
+                    <TextView
+                        android:id="@+id/tv_customerClub_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp8"
+                        android:textColor="@color/black"
+                        tools:text="@{viewModel.profileNameTv}" />
+
+                    <TextView
+                        android:id="@+id/tv_customerClub_referral"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp8"
+                        android:text="@{viewModel.referralTv}"
+                        android:textColor="@color/gray_9d"
+                        tools:text="کد معرف : 0912042503" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/btn_customerClub_orderHistory"
             android:layout_below="@+id/ll_customerClub_profile"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_customerClub_points"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                tools:text="امتیاز شما:" />
+                android:layout_marginLeft="@dimen/dp16"
+                android:layout_marginRight="@dimen/dp16"
+                app:cardCornerRadius="8dp">
 
-            <TextView
-                android:id="@+id/tv_customerClub_pointNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="50dp"
-                android:text="@{viewModel.pointsTv}"
-                tools:text="300" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp16"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_customerClub_points"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp8"
+                        android:text="@string/your_point"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_customerClub_pointNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.pointsTv}"
+                        android:textColor="@color/black"
+                        android:textSize="50dp"
+                        tools:text="300" />
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
 
         <Button
             android:id="@+id/btn_customerClub_orderHistory"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginLeft="@dimen/dp16"
             android:layout_marginTop="@dimen/dp8"
-            android:onClick="@{(v) -> viewModel.onOrderHistoryClick()}"
+            android:layout_marginRight="@dimen/dp16"
             android:layout_marginBottom="@dimen/dp32"
             android:background="@drawable/shape_background_customer_club_order_history"
+            android:onClick="@{(v) -> viewModel.onOrderHistoryClick()}"
             android:paddingStart="@dimen/dp32"
             android:paddingEnd="@dimen/dp32"
             android:text="@string/order_history"

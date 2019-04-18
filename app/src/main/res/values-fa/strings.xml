@@ -1437,4 +1437,5 @@
 
     <string name="unknown_type">این نوع کارت پشتیبانی نمی شود.</string>
     <string name="order_history">مشاهده سوابق</string>
+    <string name="your_point">امتیاز شما:</string>
 </resources>

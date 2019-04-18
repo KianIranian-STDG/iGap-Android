@@ -1431,5 +1431,6 @@
 
     <string name="unknown_type">not supported card</string>
     <string name="order_history">مشاهده سوابق</string>
+    <string name="your_point">امتیاز شما:</string>
 
 </resources>

@@ -1,6 +1,5 @@
 package net.iGap.fragments;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -49,7 +48,6 @@ public class FragmentCustomerClubProfile extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-
         setImage();
 
     }
@@ -81,15 +79,9 @@ public class FragmentCustomerClubProfile extends BaseFragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroy() {
+        super.onDestroy();
+
         viewModel.onDestroy();
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        viewModel.onResult(requestCode, resultCode, data);
     }
 }
