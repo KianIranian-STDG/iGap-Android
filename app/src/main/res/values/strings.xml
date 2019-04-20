@@ -175,7 +175,7 @@
     <string name="st_nickname">First Name</string>
     <string name="st_contactName">Contact Name</string>
     <string name="st_phoneNumber">Phone Number</string>
-    <string name="st_represent">Representer:</string>
+    <string name="st_represent">Referral:</string>
     <string name="st_title_info">Information</string>
     <string name="st_title_notification_sounds">Notifications and Sounds</string>
     <string name="st_title_Clear_Cache">Clear Cache</string>
@@ -1426,7 +1426,7 @@
     <string name="Please_select_an_option">Please select an option</string>
 
     <string name="try_later">Try some second later</string>
-    <string name="representer">Representer</string>
+    <string name="representer">Set Referral</string>
     <string name="representer_code">Please set your represetative phone number here</string>
 
     <string name="unknown_type">not supported card</string>
@@ -1437,6 +1437,6 @@
     <string name="error_submit_qr_code">There is an error with the request!</string>
     <string name="not_exist_activities">There are no scoring history.</string>
     <string name="ivand_profile_title">My score</string>
-    <string name="ivand_activities_title">My scoring records</string>
+    <string name="ivand_activities_title">Score History</string>
 
 </resources>
