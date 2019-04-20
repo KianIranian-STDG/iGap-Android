@@ -11,14 +11,17 @@
 package net.iGap.response;
 
 import net.iGap.proto.ProtoUserIVandGetActivities;
+import net.iGap.request.RequestUserIVandGetActivities;
+
+import java.util.ArrayList;
 
 public class UserIVandGetActivitiesResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public UserIVandGetActivitiesResponse(int actionId, Object protoClass, String identity) {
+    public UserIVandGetActivitiesResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
         this.message = protoClass;
         this.actionId = actionId;
@@ -28,8 +31,11 @@ public class UserIVandGetActivitiesResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoUserIVandGetActivities.UserIVandGetActivities.Builder builder = (ProtoUserIVandGetActivities.UserIVandGetActivities.Builder) message;
-
+        ProtoUserIVandGetActivities.UserIVandGetActivitiesResponse.Builder builder = (ProtoUserIVandGetActivities.UserIVandGetActivitiesResponse.Builder) message;
+        ((RequestUserIVandGetActivities.GetActivityStruct) identity).onGetActivities.onGetActivitiesReady(
+                ((RequestUserIVandGetActivities.GetActivityStruct) identity).pagination,
+                new ArrayList<>(builder.getAcitivitiesList())
+        );
     }
 
     @Override
@@ -41,6 +47,9 @@ public class UserIVandGetActivitiesResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        ((RequestUserIVandGetActivities.GetActivityStruct) identity).onGetActivities.onError(
+                ((RequestUserIVandGetActivities.GetActivityStruct) identity).pagination
+        );
 
     }
 }

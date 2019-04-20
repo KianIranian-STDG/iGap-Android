@@ -10,12 +10,30 @@
 
 package net.iGap.request;
 
+import net.iGap.G;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoUserIVandGetActivities;
 
+import java.util.ArrayList;
+
 public class RequestUserIVandGetActivities {
 
-    public void getActivities(int offset, int limit) {
+    public interface OnGetActivities {
+        void onGetActivitiesReady(ProtoGlobal.Pagination pagination, ArrayList<ProtoGlobal.IVandActivity> discoveryArrayList);
+        void onError(ProtoGlobal.Pagination pagination);
+    }
+
+    public class GetActivityStruct {
+        public OnGetActivities onGetActivities;
+        public ProtoGlobal.Pagination pagination;
+
+        public GetActivityStruct(OnGetActivities onGetActivities, ProtoGlobal.Pagination pagination) {
+            this.onGetActivities = onGetActivities;
+            this.pagination = pagination;
+        }
+    }
+
+    public boolean getActivities(int offset, int limit, OnGetActivities onGetActivities) {
 
         ProtoGlobal.Pagination.Builder pagination = ProtoGlobal.Pagination.newBuilder();
         pagination.setLimit(limit)
@@ -23,12 +41,17 @@ public class RequestUserIVandGetActivities {
 
         ProtoUserIVandGetActivities.UserIVandGetActivities.Builder builder = ProtoUserIVandGetActivities.UserIVandGetActivities.newBuilder();
         builder.setPagination(pagination);
-
-        RequestWrapper requestWrapper = new RequestWrapper(153, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(153, builder, new GetActivityStruct(onGetActivities, pagination.build()));
         try {
-            RequestQueue.sendRequest(requestWrapper);
+            if (G.userLogin) {
+                RequestQueue.sendRequest(requestWrapper);
+                return true;
+            } else {
+                return false;
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+            return false;
         }
     }
 }

@@ -158,4 +158,10 @@
   <string name="md_swich_video">\uf569</string>
   <string name="md_igap_bluetooth">\uf0af</string>
   <string name="md_igap_stop">\uf4db</string>
+
+  <string name="md_igap_arrow_up_thick">\uf05e</string>
+  <string name="md_igap_arrow_down_thick">\uf046</string>
+  <string name="md_igap_minus">\uf374</string>
+
+
 </resources>
