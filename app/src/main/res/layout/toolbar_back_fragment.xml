@@ -37,7 +37,7 @@
 
         </net.iGap.libs.rippleeffect.RippleView>
 
-        <net.iGap.module.MaterialDesignTextView
+        <net.iGap.module.CustomTextViewMedium
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="match_parent"

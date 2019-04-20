@@ -1435,7 +1435,8 @@
 
     <string name="dialog_ok">Ok</string>
     <string name="error_submit_qr_code">There is an error with the request!</string>
-
-
+    <string name="not_exist_activities">There are no scoring history.</string>
+    <string name="ivand_profile_title">My score</string>
+    <string name="ivand_activities_title">My scoring records</string>
 
 </resources>

@@ -17,7 +17,7 @@ import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.viewmodel.FragmentIVandProfileViewModel;
 
-public class FragmentIVandProfile extends BaseFragment {
+public class FragmentIVandProfile extends FragmentToolBarBack {
     private FragmentIvandProfileBinding binding;
     private FragmentIVandProfileViewModel viewModel;
     private CircleImageView profileImage;
@@ -27,7 +27,7 @@ public class FragmentIVandProfile extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ivand_profile, container, false);
-        return binding.getRoot();
+        return attachToSwipeBack(binding.getRoot());
     }
 
     @Override
@@ -40,6 +40,7 @@ public class FragmentIVandProfile extends BaseFragment {
         viewModel = new FragmentIVandProfileViewModel(this);
         binding.setViewModel(viewModel);
         profileImage = binding.ivIvandProfile;
+        titleTextView.setText(getString(R.string.ivand_profile_title));
 
     }
 

@@ -2381,4 +2381,10 @@
 
     <string name="dialog_ok">"حسناً"</string>
     <string name="error_submit_qr_code">لقد حدث خط مع طلبك</string>
+
+    <string name="not_exist_activities">لا يوجد سجل التهديف.</string>
+
+    <string name="ivand_profile_title">تقييمي</string>
+
+    <string name="ivand_activities_title">سجلات التصنيف الخاصة بي</string>
 </resources>

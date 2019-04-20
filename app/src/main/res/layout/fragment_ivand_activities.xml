@@ -34,7 +34,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <net.iGap.module.MaterialDesignTextView
-        android:id="@+id/emptyRecycle"
+        android:id="@+id/retry"
         android:layout_width="@dimen/dp52"
         android:layout_height="@dimen/dp52"
         android:layout_gravity="center"
@@ -44,6 +44,25 @@
         android:visibility="gone"
         android:textAppearance="@style/TextIconAppearance_toolbar"
         android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <net.iGap.module.CustomTextViewMedium
+        android:id="@+id/emptyActivitiesText"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:gravity="center"
+        android:text="@string/not_exist_activities"
+        android:textSize="@dimen/dp14"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

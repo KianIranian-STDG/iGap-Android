@@ -24,7 +24,8 @@ import java.util.ArrayList;
 
 public class FragmentIVandActivities extends FragmentToolBarBack {
     private RecyclerView recyclerView;
-    private TextView emptyRecycle;
+    private TextView retry;
+    private TextView emptyActivitiesText;
     private SwipeRefreshLayout pullToRefresh;
     private IVandActivityAdapter iVandActivityAdapter;
     private boolean isLoading;
@@ -56,7 +57,9 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         iVandActivityAdapter = new IVandActivityAdapter(new ArrayList<>());
-        emptyRecycle = view.findViewById(R.id.emptyRecycle);
+        titleTextView.setText(getString(R.string.ivand_activities_title));
+        retry = view.findViewById(R.id.retry);
+        emptyActivitiesText = view.findViewById(R.id.emptyActivitiesText);
         isLoading = false;
         existMoreItem = true;
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
@@ -71,7 +74,7 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
             }
         });
 
-        emptyRecycle.setOnClickListener(new View.OnClickListener() {
+        retry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean isSend = updateOrFetchRecycleViewData(0);
@@ -113,8 +116,10 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
                 }
             }
         });
+
         recyclerView.setVisibility(View.GONE);
-        emptyRecycle.setVisibility(View.VISIBLE);
+        retry.setVisibility(View.GONE);
+        emptyActivitiesText.setVisibility(View.GONE);
 
         iVandActivityAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -122,10 +127,10 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
                 super.onChanged();
                 if (iVandActivityAdapter.getItemCount() == 0) {
                     recyclerView.setVisibility(View.GONE);
-                    emptyRecycle.setVisibility(View.VISIBLE);
+                    retry.setVisibility(View.VISIBLE);
                 } else {
                     recyclerView.setVisibility(View.VISIBLE);
-                    emptyRecycle.setVisibility(View.GONE);
+                    retry.setVisibility(View.GONE);
                 }
             }
         });
