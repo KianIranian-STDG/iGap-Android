@@ -1436,4 +1436,9 @@
 </string>
 
     <string name="unknown_type">این نوع کارت پشتیبانی نمی شود.</string>
+    <string name="order_history">مشاهده سوابق</string>
+    <string name="your_point">امتیاز شما:</string>
+
+    <string name="dialog_ok">باشه</string>
+    <string name="error_submit_qr_code">خطایی با درخواست شما رخ داده است!</string>
 </resources>

@@ -2376,4 +2376,9 @@
     <string name="unknown_type">هذا النوع من البطاقات غير مدعوم.</string>
     <string name="representer">ريسبنتر</string>
     <string name="representer_code">يرجى ضبط رقم هاتفك التمثيلي هنا</string>
+    <string name="order_history">مشاهده سوابق</string>
+    <string name="your_point">امتیاز شما:</string>
+
+    <string name="dialog_ok">"حسناً"</string>
+    <string name="error_submit_qr_code">لقد حدث خط مع طلبك</string>
 </resources>

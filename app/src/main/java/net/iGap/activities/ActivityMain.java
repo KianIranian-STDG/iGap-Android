@@ -69,6 +69,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.Theme;
 import net.iGap.adapter.items.chat.ViewMaker;
+import net.iGap.dialog.SubmitScoreDialog;
 import net.iGap.eventbus.EventListener;
 import net.iGap.eventbus.EventManager;
 import net.iGap.eventbus.socketMessages;
@@ -161,12 +162,14 @@ import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestGeoGetConfiguration;
 import net.iGap.request.RequestInfoWallpaper;
 import net.iGap.request.RequestSignalingGetConfiguration;
+import net.iGap.request.RequestUserIVandSetActivity;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.request.RequestUserSessionLogout;
 import net.iGap.request.RequestUserVerifyNewDevice;
 import net.iGap.request.RequestWalletGetAccessToken;
 import net.iGap.request.RequestWalletIdMapping;
 import net.iGap.viewmodel.ActivityCallViewModel;
+import net.iGap.viewmodel.FragmentIVandProfileViewModel;
 import net.iGap.viewmodel.FragmentPaymentInquiryViewModel;
 import net.iGap.viewmodel.FragmentThemColorViewModel;
 
@@ -930,6 +933,39 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 }
 
                 break;
+            case FragmentIVandProfileViewModel.REQUEST_CODE_QR_IVAND_CODE:
+                IntentResult result2 = IntentIntegrator.parseActivityResult(resultCode, data);
+                if (result2.getContents() != null) {
+                    boolean isSend = new RequestUserIVandSetActivity().setActivity(result2.getContents(), new RequestUserIVandSetActivity.OnSetActivities() {
+                        @Override
+                        public void onSetActivitiesReady(String message, boolean isOk) {
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SubmitScoreDialog dialog = new SubmitScoreDialog(ActivityMain.this, message, isOk);
+                                    dialog.show();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError() {
+                            G.handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SubmitScoreDialog dialog = new SubmitScoreDialog(ActivityMain.this, getString(R.string.error_submit_qr_code), false);
+                                    dialog.show();
+                                }
+                            });
+                        }
+                    });
+
+                    if (!isSend) {
+                        HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
+                    }
+                }
+                break;
+
         }
     }
 

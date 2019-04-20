@@ -10,20 +10,18 @@
 
 package net.iGap.response;
 
-import net.iGap.adapter.items.discovery.DiscoveryItem;
-import net.iGap.fragments.discovery.OnDiscoveryList;
-import net.iGap.proto.ProtoClientGetDiscovery;
-import net.iGap.proto.ProtoGlobal;
+import android.util.Log;
 
-import java.util.ArrayList;
+import net.iGap.proto.ProtoUserIVandSetActivity;
+import net.iGap.request.RequestUserIVandSetActivity;
 
-public class ClientGetDiscoveryResponse extends MessageHandler {
+public class UserIVandSetActivityResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
     public Object identity;
 
-    public ClientGetDiscoveryResponse(int actionId, Object protoClass, Object identity) {
+    public UserIVandSetActivityResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
         this.message = protoClass;
         this.actionId = actionId;
@@ -33,24 +31,22 @@ public class ClientGetDiscoveryResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoClientGetDiscovery.ClientGetDiscoveryResponse.Builder builder = (ProtoClientGetDiscovery.ClientGetDiscoveryResponse.Builder) message;
-        ArrayList<DiscoveryItem> res = new ArrayList<>();
-        for (ProtoGlobal.Discovery discovery: builder.getDiscoveriesList()) {
-            res.add(new DiscoveryItem(discovery));
-        }
-
-        ((OnDiscoveryList) identity).onDiscoveryListReady(res, builder.getTitle());
+        ProtoUserIVandSetActivity.UserIVandSetActivityResponse.Builder builder = (ProtoUserIVandSetActivity.UserIVandSetActivityResponse.Builder) message;
+        Log.d("bagi", "handler");
+        ((RequestUserIVandSetActivity.OnSetActivities) identity).onSetActivitiesReady(builder.getMessage(), builder.getState());
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
+
     }
 
     @Override
     public void error() {
         super.error();
-        ((OnDiscoveryList) identity).onError();
+        ((RequestUserIVandSetActivity.OnSetActivities) identity).onError();
+
     }
 }
 

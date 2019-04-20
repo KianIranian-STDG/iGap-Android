@@ -107,16 +107,6 @@ public class DiscoveryFragment extends FragmentToolBarBack {
             }
         });
 
-        RippleView rippleBackButton = (RippleView) view.findViewById(R.id.chl_ripple_back_Button);
-        rippleBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                closeKeyboard(view);
-                popBackStackFragment();
-            }
-        });
-
-
         rcDiscovery = view.findViewById(R.id.rcDiscovery);
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
         rcDiscovery.setLayoutManager(layoutManager);
