@@ -6,25 +6,25 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentCustomerClubProfile;
+import net.iGap.fragments.FragmentIVandProfile;
 import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserIVandGetScore;
 
 import io.realm.Realm;
 
-public class CustomerClubViewModel implements OnUserIVandGetScore {
+public class FragmentIVandProfileViewModel implements OnUserIVandGetScore {
     public static final int REQUEST_CODE_QR_CODE = 200;
     public ObservableField<String> profileNameTv = new ObservableField<>("");
     public ObservableField<String> referralTv = new ObservableField<>("0");
     public ObservableField<String> pointsTv = new ObservableField<>("300");
     private RealmUserInfo realmUserInfo;
     private Realm mRealm;
-    private FragmentCustomerClubProfile fragmentCustomerClubProfile;
+    private FragmentIVandProfile fragmentIVandProfile;
 
 
-    public CustomerClubViewModel(FragmentCustomerClubProfile fragmentCustomerClubProfile) {
-        this.fragmentCustomerClubProfile = fragmentCustomerClubProfile;
+    public FragmentIVandProfileViewModel(FragmentIVandProfile fragmentIVandProfile) {
+        this.fragmentIVandProfile = fragmentIVandProfile;
         G.onUserIVandGetScore = this;
         initData();
     }
@@ -45,7 +45,7 @@ public class CustomerClubViewModel implements OnUserIVandGetScore {
     }
 
     public void onOrderHistoryClick() {
-        IntentIntegrator integrator = new IntentIntegrator(fragmentCustomerClubProfile.getActivity());
+        IntentIntegrator integrator = new IntentIntegrator(fragmentIVandProfile.getActivity());
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
         integrator.setRequestCode(REQUEST_CODE_QR_CODE);
         integrator.setBeepEnabled(false);

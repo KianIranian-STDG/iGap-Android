@@ -7,28 +7,26 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import net.iGap.databinding.FragmentIvandProfileBinding;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.databinding.FragmentCustomrtclubProfileBinding;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
-import net.iGap.viewmodel.CustomerClubViewModel;
+import net.iGap.viewmodel.FragmentIVandProfileViewModel;
 
-public class FragmentCustomerClubProfile extends BaseFragment {
-
-    private FragmentCustomrtclubProfileBinding binding;
-    private CustomerClubViewModel viewModel;
+public class FragmentIVandProfile extends BaseFragment {
+    private FragmentIvandProfileBinding binding;
+    private FragmentIVandProfileViewModel viewModel;
     private CircleImageView profileImage;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_customrtclub_profile, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ivand_profile, container, false);
         return binding.getRoot();
     }
 
@@ -39,9 +37,9 @@ public class FragmentCustomerClubProfile extends BaseFragment {
     }
 
     private void setUpViews() {
-        viewModel = new CustomerClubViewModel(this);
+        viewModel = new FragmentIVandProfileViewModel(this);
         binding.setViewModel(viewModel);
-        profileImage = binding.ivCustomerClubProfile;
+        profileImage = binding.ivIvandProfile;
 
     }
 
