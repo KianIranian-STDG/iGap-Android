@@ -3,7 +3,9 @@ package net.iGap.fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -83,6 +85,12 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(iVandActivityAdapter);
+
+        DividerItemDecoration itemDecorator = new DividerItemDecoration(requireContext(),
+                layoutManager.getOrientation());
+        itemDecorator.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider_rv));
+
+        recyclerView.addItemDecoration(itemDecorator);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

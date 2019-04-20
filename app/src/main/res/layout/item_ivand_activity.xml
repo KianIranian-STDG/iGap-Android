@@ -1,81 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/dp4"
-    android:paddingBottom="@dimen/dp4">
+    android:paddingTop="@dimen/dp8"
+    android:paddingBottom="@dimen/dp8">
+
+    <net.iGap.module.MaterialDesignTextView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        android:text="@string/md_show_more_button"
+        android:textAppearance="@style/TextIconAppearance.all"
+        android:textColor="@color/border_editText"
+        android:textSize="@dimen/dp18"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.33" />
+
+    <net.iGap.module.CustomTextViewMedium
+        android:id="@+id/txt_score"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:gravity="end|center_vertical"
+        android:text="TextView"
+        android:textColor="@color/black90"
+        android:textSize="@dimen/dp14"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/image"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.66" />
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/txt_subject"
-        android:layout_width="wrap_content"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp16"
-        android:layout_marginLeft="@dimen/dp16"
-        android:gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="start|center_vertical"
+        android:text="TextView"
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"
-        android:text="TextView"
-        style="?textTitleColorSettingTheme"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/txt_date"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <net.iGap.module.CustomTextViewMedium
         android:id="@+id/txt_date"
-        android:layout_width="wrap_content"
+        style="?textTitleColorSettingTheme"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:gravity="center"
+        android:text="TextView"
         android:textColor="@color/black90"
         android:textSize="@dimen/dp14"
-        android:text="TextView"
-        style="?textTitleColorSettingTheme"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/txt_subject"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/txt_date"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <net.iGap.module.CustomTextViewMedium
-            android:id="@+id/txt_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:text="TextView"
-            style="?textTitleColorSettingTheme"
-            android:textColor="@color/black90"
-            android:textSize="@dimen/dp14" />
-
-        <View
-            android:layout_width="@dimen/dp2"
-            android:layout_height="match_parent" />
-
-        <net.iGap.module.MaterialDesignTextView
-            android:id="@+id/image"
-            android:layout_width="@dimen/dp48"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/md_show_more_button"
-            android:textAppearance="@style/TextIconAppearance.all"
-            android:textColor="@color/border_editText"
-            android:textSize="@dimen/dp18" />
-    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

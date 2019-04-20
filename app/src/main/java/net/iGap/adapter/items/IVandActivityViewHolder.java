@@ -1,5 +1,6 @@
 package net.iGap.adapter.items;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -26,15 +27,18 @@ public class IVandActivityViewHolder extends RecyclerView.ViewHolder {
 
     public void bindView(ProtoGlobal.IVandActivity item) {
         txt_subject.setText(item.getTitle());
-        txt_score.setText(Math.abs(item.getScore()));
-        txt_date.setText(item.getTime() * 1000);
+        txt_score.setText(String.valueOf(Math.abs(item.getScore())));
+        txt_date.setText(String.valueOf(item.getTime() * 1000));
 
         if (item.getScore() > 0) {
             image.setText(G.context.getString(R.string.md_igap_arrow_up_thick));
+            image.setTextColor(Color.parseColor(G.appBarColor));
         } else if (item.getScore() < 0) {
             image.setText(G.context.getString(R.string.md_igap_arrow_down_thick));
+            image.setTextColor(Color.parseColor(G.notificationColor));
         } else {
             image.setText(G.context.getString(R.string.md_igap_minus));
+            image.setTextColor(Color.parseColor(G.textTitleTheme));
         }
     }
 }

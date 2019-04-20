@@ -1433,4 +1433,9 @@
     <string name="order_history">مشاهده سوابق</string>
     <string name="your_point">امتیاز شما:</string>
 
+    <string name="dialog_ok">Ok</string>
+    <string name="error_submit_qr_code">There is an error with the request!</string>
+
+
+
 </resources>
