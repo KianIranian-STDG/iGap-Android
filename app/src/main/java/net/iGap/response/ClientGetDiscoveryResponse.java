@@ -45,7 +45,6 @@ public class ClientGetDiscoveryResponse extends MessageHandler {
     @Override
     public void timeOut() {
         super.timeOut();
-        ((OnDiscoveryList) identity).onError();
     }
 
     @Override
