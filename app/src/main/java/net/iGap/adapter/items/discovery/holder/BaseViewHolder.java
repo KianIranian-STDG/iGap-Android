@@ -14,6 +14,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentIVandActivities;
+import net.iGap.fragments.FragmentIVandProfile;
 import net.iGap.fragments.FragmentPayment;
 import net.iGap.fragments.FragmentPaymentBill;
 import net.iGap.fragments.FragmentPaymentCharge;
@@ -45,6 +47,7 @@ import io.realm.Realm;
 import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
+import static net.iGap.viewmodel.FragmentIVandProfileViewModel.scanBarCode;
 
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
@@ -82,6 +85,15 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 }else {
                     HelperUrl.openWithoutBrowser(discoveryField.value);
                 }
+                break;
+            case IVAND:
+                new HelperFragment(new FragmentIVandProfile()).setReplace(false).load();
+                break;
+            case IVANDQR:
+                scanBarCode(G.currentActivity);
+                break;
+            case IVANDLIST:
+                new HelperFragment(FragmentIVandActivities.newInstance()).setReplace(false).load();
                 break;
             case WEB_VIEW_LINK:/** tested title needed**/
                 if (HelperUrl.isNeedOpenWithoutBrowser(discoveryField.value)) {

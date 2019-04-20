@@ -1,12 +1,15 @@
 package net.iGap.viewmodel;
 
+import android.app.Activity;
 import android.databinding.ObservableField;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentIVandProfile;
+import net.iGap.helper.HelperFragment;
 import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserIVandGetScore;
@@ -14,7 +17,7 @@ import net.iGap.request.RequestUserIVandGetScore;
 import io.realm.Realm;
 
 public class FragmentIVandProfileViewModel implements OnUserIVandGetScore {
-    public static final int REQUEST_CODE_QR_CODE = 200;
+    public static final int REQUEST_CODE_QR_IVAND_CODE = 543;
     public ObservableField<String> profileNameTv = new ObservableField<>("");
     public ObservableField<String> referralTv = new ObservableField<>("0");
     public ObservableField<String> pointsTv = new ObservableField<>("300");
@@ -45,9 +48,13 @@ public class FragmentIVandProfileViewModel implements OnUserIVandGetScore {
     }
 
     public void onOrderHistoryClick() {
-        IntentIntegrator integrator = new IntentIntegrator(fragmentIVandProfile.getActivity());
+        new HelperFragment(FragmentIVandActivities.newInstance()).setReplace(false).load();
+    }
+
+    public static void scanBarCode(Activity activity) {
+        IntentIntegrator integrator = new IntentIntegrator(activity);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-        integrator.setRequestCode(REQUEST_CODE_QR_CODE);
+        integrator.setRequestCode(REQUEST_CODE_QR_IVAND_CODE);
         integrator.setBeepEnabled(false);
         integrator.setPrompt("");
         integrator.initiateScan();
