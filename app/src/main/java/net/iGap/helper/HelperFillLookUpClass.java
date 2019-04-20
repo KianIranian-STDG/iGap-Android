@@ -105,6 +105,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(30152, "ProtoUserProfileRepresentative.UserProfileSetRepresentativeResponse");
         lookupMap.put(30153, "ProtoUserIVandGetActivities.UserIVandGetActivitiesResponse");
         lookupMap.put(30154, "ProtoUserIVandGetScore.UserIVandGetScoreResponse");
+        lookupMap.put(30155, "ProtoUserIVandSetActivity.UserIVandSetActivityResponse");
 
         // Chat 2xx , 302xx
         lookupMap.put(30200, "ProtoChatGetRoom.ChatGetRoomResponse");
