@@ -2,6 +2,7 @@ package net.iGap.viewmodel;
 
 import android.app.Activity;
 import android.databinding.ObservableField;
+import android.view.View;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
@@ -47,6 +48,14 @@ public class FragmentIVandProfileViewModel implements OnUserIVandGetScore {
         return mRealm;
     }
 
+    public int saleVisibility() {
+        realmUserInfo = getRealm().where(RealmUserInfo.class).findFirst();
+        if (realmUserInfo.getRepresentPhoneNumber() == null || realmUserInfo.getRepresentPhoneNumber().equals("")) {
+            return View.GONE;
+        }
+        return View.VISIBLE;
+    }
+
     public void onOrderHistoryClick() {
         new HelperFragment(FragmentIVandActivities.newInstance()).setReplace(false).load();
     }
@@ -69,7 +78,8 @@ public class FragmentIVandProfileViewModel implements OnUserIVandGetScore {
         pointsTv.set(String.valueOf(score));
     }
 
-    public void onStart() {
+    public void onResume() {
+        initData();
         new RequestUserIVandGetScore().userIVandGetScore();
     }
 }

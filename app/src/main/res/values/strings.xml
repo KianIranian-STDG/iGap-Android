@@ -1430,13 +1430,14 @@
     <string name="representer_code">Please set your represetative phone number here</string>
 
     <string name="unknown_type">not supported card</string>
-    <string name="order_history">مشاهده سوابق</string>
-    <string name="your_point">امتیاز شما:</string>
+    <string name="order_history">Score History</string>
+    <string name="your_point">Your Score:</string>
 
     <string name="dialog_ok">Ok</string>
     <string name="error_submit_qr_code">There is an error with the request!</string>
-    <string name="not_exist_activities">There are no scoring history.</string>
-    <string name="ivand_profile_title">My score</string>
+    <string name="not_exist_activities">Your history is empty.</string>
+    <string name="ivand_profile_title">My Score</string>
     <string name="ivand_activities_title">Score History</string>
+    <string name="scan_barcode">Scan Barcode</string>
 
 </resources>

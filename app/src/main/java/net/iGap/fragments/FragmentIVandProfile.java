@@ -48,8 +48,12 @@ public class FragmentIVandProfile extends FragmentToolBarBack {
     public void onStart() {
         super.onStart();
         setImage();
-        viewModel.onStart();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.onResume();
     }
 
     private void setImage() {

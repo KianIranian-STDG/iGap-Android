@@ -1442,9 +1442,10 @@
     <string name="dialog_ok">باشه</string>
     <string name="error_submit_qr_code">خطایی با درخواست شما رخ داده است!</string>
 
-    <string name="not_exist_activities">هیچ سابقه امتیازگیری وجود ندارد.</string>
+    <string name="not_exist_activities">لیست سوابق شما خالی است.</string>
 
     <string name="ivand_profile_title">امتیاز من</string>
 
     <string name="ivand_activities_title">سوابق امتیاز</string>
+    <string name="scan_barcode">اسکن بارکد</string>
 </resources>
