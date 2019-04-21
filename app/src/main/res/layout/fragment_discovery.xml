@@ -35,6 +35,7 @@
 
     <net.iGap.module.MaterialDesignTextView
         android:id="@+id/emptyRecycle"
+        style="?textTitleColorSettingTheme"
         android:layout_width="@dimen/dp52"
         android:layout_height="@dimen/dp52"
         android:layout_gravity="center"
@@ -43,7 +44,6 @@
         android:text="@string/md_try_agin"
         android:visibility="gone"
         android:textAppearance="@style/TextIconAppearance_toolbar"
-        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

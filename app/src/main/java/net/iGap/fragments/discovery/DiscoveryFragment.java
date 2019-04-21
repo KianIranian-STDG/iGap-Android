@@ -111,34 +111,21 @@ public class DiscoveryFragment extends FragmentToolBarBack {
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
         rcDiscovery.setLayoutManager(layoutManager);
         rcDiscovery.setAdapter(adapterDiscovery);
-        rcDiscovery.setVisibility(View.GONE);
-        emptyRecycle.setVisibility(View.VISIBLE);
 
-        adapterDiscovery.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                if (adapterDiscovery.getItemCount() == 0) {
-                    rcDiscovery.setVisibility(View.GONE);
-                    emptyRecycle.setVisibility(View.VISIBLE);
-                } else {
-                    rcDiscovery.setVisibility(View.VISIBLE);
-                    emptyRecycle.setVisibility(View.GONE);
-                }
-            }
-        });
+        setRefreshing(true);
+
         tryToUpdateOrFetchRecycleViewData(0);
     }
 
     private void setRefreshing(boolean value) {
         pullToRefresh.setRefreshing(value);
         if (value) {
-            if (adapterDiscovery.getItemCount() == 0) {
-                 emptyRecycle.setVisibility(View.GONE);
-            }
+            emptyRecycle.setVisibility(View.GONE);
         } else {
             if (adapterDiscovery.getItemCount() == 0) {
                 emptyRecycle.setVisibility(View.VISIBLE);
+            } else {
+                emptyRecycle.setVisibility(View.GONE);
             }
         }
     }
@@ -152,6 +139,8 @@ public class DiscoveryFragment extends FragmentToolBarBack {
                     tryToUpdateOrFetchRecycleViewData(count + 1);
                 }
             }, 1000);
+        } else {
+            setRefreshing(false);
         }
     }
 
@@ -162,7 +151,6 @@ public class DiscoveryFragment extends FragmentToolBarBack {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        setRefreshing(false);
                         if (page == 0) {
                             GsonBuilder builder = new GsonBuilder();
                             Gson gson = builder.create();
@@ -173,6 +161,8 @@ public class DiscoveryFragment extends FragmentToolBarBack {
                             edit.putString("title", title).apply();
                         }
                         setAdapterData(discoveryArrayList, title);
+
+                        setRefreshing(false);
                     }
                 });
             }
@@ -182,10 +172,11 @@ public class DiscoveryFragment extends FragmentToolBarBack {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        setRefreshing(false);
                         if (page == 0) {
                             loadOfflinePageZero();
                         }
+
+                        setRefreshing(false);
                     }
                 });
             }
