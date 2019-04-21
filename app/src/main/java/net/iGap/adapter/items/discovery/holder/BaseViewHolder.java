@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 import net.iGap.G;
@@ -227,10 +229,11 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 dialPhoneNumber(G.context, discoveryField.value);
                 break;
             case SHOW_ALERT:/** tested **/
-                new AlertDialog.Builder(G.currentActivity)
-                        .setMessage(discoveryField.value)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
+                new MaterialDialog.Builder(G.currentActivity).content(discoveryField.value).positiveText(R.string.dialog_ok)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
                             }
                         })
                         .show();
