@@ -4,9 +4,14 @@
 
     <data>
 
+        <import type="android.graphics.Color" />
+
+        <import type="net.iGap.G" />
+
         <variable
             name="viewModel"
             type="net.iGap.viewmodel.FragmentIVandProfileViewModel" />
+
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -38,6 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp16"
+                    app:cardBackgroundColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                     app:cardCornerRadius="8dp">
 
                     <LinearLayout
@@ -81,6 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp16"
                     android:layout_marginRight="@dimen/dp16"
+                    app:cardBackgroundColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
                     app:cardCornerRadius="8dp">
 
                     <LinearLayout
