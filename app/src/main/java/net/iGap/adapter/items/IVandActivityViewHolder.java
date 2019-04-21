@@ -31,9 +31,9 @@ public class IVandActivityViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindView(ProtoGlobal.IVandActivity item) {
-        txt_subject.setTextColor(Color.parseColor(G.textBubble));
-        txt_score.setTextColor(Color.parseColor(G.textBubble));
-        txt_date.setTextColor(Color.parseColor(G.textBubble));
+        txt_subject.setTextColor(Color.parseColor(G.textTitleTheme));
+        txt_score.setTextColor(Color.parseColor(G.textTitleTheme));
+        txt_date.setTextColor(Color.parseColor(G.textTitleTheme));
 
         txt_subject.setText(item.getTitle());
         txt_score.setText(String.valueOf(Math.abs(item.getScore())));

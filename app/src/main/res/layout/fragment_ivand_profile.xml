@@ -66,7 +66,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/dp8"
-                            android:textColor="@color/black"
+                            android:textColor="@{Color.parseColor(G.textTitleTheme),default=@color/black}"
                             tools:text="@{viewModel.profileNameTv}" />
 
                         <net.iGap.module.CustomTextViewMedium
@@ -76,7 +76,7 @@
                             android:layout_marginBottom="@dimen/dp8"
                             android:text="@{viewModel.referralTv}"
                             android:visibility="@{viewModel.saleVisibility, default=visible}"
-                            android:textColor="@color/gray_9d"
+                            android:textColor="@{Color.parseColor(G.textSubTheme),default=@color/black}"
                             tools:text="" />
 
                     </LinearLayout>
@@ -103,14 +103,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/dp8"
                             android:text="@string/your_point"
-                            android:textColor="@color/black" />
+                            android:textColor="@{Color.parseColor(G.textTitleTheme),default=@color/black}" />
 
                         <net.iGap.module.CustomTextViewMedium
                             android:id="@+id/tv_ivand_pointNumber"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{viewModel.pointsTv}"
-                            android:textColor="@color/black"
+                            android:textColor="@{Color.parseColor(G.textTitleTheme),default=@color/black}"
                             android:textSize="50dp"
                             tools:text="-" />
 
