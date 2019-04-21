@@ -8,19 +8,24 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.IVandActivityAdapter;
 import net.iGap.helper.HelperError;
+import net.iGap.helper.HelperFragment;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.request.RequestUserIVandGetActivities;
 
 import java.util.ArrayList;
+
+import static net.iGap.viewmodel.FragmentIVandProfileViewModel.scanBarCode;
 
 public class FragmentIVandActivities extends FragmentToolBarBack {
     private RecyclerView recyclerView;
@@ -30,6 +35,7 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
     private IVandActivityAdapter iVandActivityAdapter;
     private boolean isLoading;
     private boolean existMoreItem;
+    private Button btnScanBarCode;
 
     public static FragmentIVandActivities newInstance() {
         FragmentIVandActivities fragmentIVandActivities = new FragmentIVandActivities();
@@ -58,17 +64,17 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
         super.onViewCreated(view, savedInstanceState);
         iVandActivityAdapter = new IVandActivityAdapter(new ArrayList<>());
         titleTextView.setText(getString(R.string.ivand_activities_title));
+        btnScanBarCode =view.findViewById(R.id.btnScanBarCode);
         retry = view.findViewById(R.id.retry);
         emptyActivitiesText = view.findViewById(R.id.emptyActivitiesText);
         isLoading = false;
-        existMoreItem = true;
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 boolean isSend = updateOrFetchRecycleViewData(0);
                 if (!isSend) {
-                    pullToRefresh.setRefreshing(false);
+                    turnOffRefresh(false);
                     HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
                 }
             }
@@ -81,6 +87,13 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
                 if (!isSend) {
                     HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
                 }
+            }
+        });
+
+        btnScanBarCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scanBarCode(G.currentActivity);
             }
         });
 
@@ -117,24 +130,37 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
             }
         });
 
-        recyclerView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        turnOnRefresh();
+
+        tryToUpdateOrFetchRecycleViewData(0);
+    }
+
+    private void turnOnRefresh() {
         retry.setVisibility(View.GONE);
         emptyActivitiesText.setVisibility(View.GONE);
+        pullToRefresh.setRefreshing(true);
+    }
 
-        iVandActivityAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                if (iVandActivityAdapter.getItemCount() == 0) {
-                    recyclerView.setVisibility(View.GONE);
-                    retry.setVisibility(View.VISIBLE);
-                } else {
-                    recyclerView.setVisibility(View.VISIBLE);
-                    retry.setVisibility(View.GONE);
-                }
+    private void turnOffRefresh(boolean isShowingEmptyList) {
+        if (iVandActivityAdapter.getItemCount() == 0) {
+            if (isShowingEmptyList) {
+                emptyActivitiesText.setVisibility(View.VISIBLE);
+                retry.setVisibility(View.GONE);
+            } else {
+                emptyActivitiesText.setVisibility(View.GONE);
+                retry.setVisibility(View.VISIBLE);
             }
-        });
-        tryToUpdateOrFetchRecycleViewData(0);
+        } else {
+            retry.setVisibility(View.GONE);
+            emptyActivitiesText.setVisibility(View.GONE);
+        }
+
+        pullToRefresh.setRefreshing(false);
     }
 
     private void tryToUpdateOrFetchRecycleViewData(int count) {
@@ -146,6 +172,8 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
                     tryToUpdateOrFetchRecycleViewData(count + 1);
                 }
             }, 1000);
+        } else {
+            turnOffRefresh(false);
         }
     }
 
@@ -158,13 +186,18 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
                     @Override
                     public void run() {
                         if (offset == 0) {
-                            pullToRefresh.setRefreshing(false);
                             setAdapterData(discoveryArrayList);
+                            turnOffRefresh(true);
+                            existMoreItem = true;
                         } else {
                             iVandActivityAdapter.removeLoadingItem();
                             isLoading = false;
                             iVandActivityAdapter.addMoreItemList(discoveryArrayList);
                             iVandActivityAdapter.notifyDataSetChanged();
+                        }
+
+                        if (discoveryArrayList.size() == 0) {
+                            existMoreItem = false;
                         }
                     }
                 });
@@ -176,7 +209,7 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
                     @Override
                     public void run() {
                         if (offset == 0) {
-                            pullToRefresh.setRefreshing(false);
+                            turnOffRefresh(false);
                         } else {
                             iVandActivityAdapter.removeLoadingItem();
                             isLoading = false;
@@ -188,7 +221,7 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
         });
 
         if (isSend && offset == 0) {
-            pullToRefresh.setRefreshing(true);
+            turnOnRefresh();
         }
 
         return isSend;
