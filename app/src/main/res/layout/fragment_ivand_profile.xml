@@ -23,100 +23,95 @@
             android:layout_height="wrap_content"
             android:layoutDirection="ltr" />
 
-        <LinearLayout
-            android:id="@+id/ll_ivand_profile"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ac_appBarLayout"
-            android:layout_centerInParent="true"
-            android:gravity="center_horizontal"
-            android:paddingTop="8dp"
-            android:orientation="vertical">
+            android:layout_below="@+id/ac_appBarLayout"
+            android:layout_above="@+id/btn_ivand_orderHistory"
+            android:layout_height="match_parent">
 
-            <android.support.v7.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp16"
-                app:cardCornerRadius="8dp">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp16"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    app:cardCornerRadius="8dp">
 
-                    <net.iGap.module.CircleImageView
-                        android:id="@+id/iv_ivand_profile"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:layout_marginBottom="@dimen/dp16"
-                        app:civ_border_color="@color/emoji_gray20"
-                        app:civ_border_width="1dp" />
-
-                    <net.iGap.module.CustomTextViewMedium
-                        android:id="@+id/tv_ivand_name"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dp8"
-                        android:textColor="@color/black"
-                        tools:text="@{viewModel.profileNameTv}" />
+                        android:layout_margin="@dimen/dp16"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
 
-                    <net.iGap.module.CustomTextViewMedium
-                        android:id="@+id/tv_ivand_referral"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dp8"
-                        android:text="@{viewModel.referralTv}"
-                        android:visibility="@{viewModel.saleVisibility, default=visible}"/>
-                        android:textColor="@color/gray_9d"
-                        tools:text="کد معرف : 0912042503" />
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
+                        <net.iGap.module.CircleImageView
+                            android:id="@+id/iv_ivand_profile"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:layout_marginBottom="@dimen/dp16"
+                            app:civ_border_color="@color/emoji_gray20"
+                            app:civ_border_width="1dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ll_ivand_profile"
-            android:gravity="center"
-            android:orientation="vertical">
+                        <net.iGap.module.CustomTextViewMedium
+                            android:id="@+id/tv_ivand_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/dp8"
+                            android:textColor="@color/black"
+                            tools:text="@{viewModel.profileNameTv}" />
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp16"
-                android:layout_marginRight="@dimen/dp16"
-                app:cardCornerRadius="8dp">
+                        <net.iGap.module.CustomTextViewMedium
+                            android:id="@+id/tv_ivand_referral"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/dp8"
+                            android:text="@{viewModel.referralTv}"
+                            android:visibility="@{viewModel.saleVisibility, default=visible}"
+                            android:textColor="@color/gray_9d"
+                            tools:text="" />
 
-                <LinearLayout
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dp16"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="@dimen/dp16"
+                    android:layout_marginRight="@dimen/dp16"
+                    app:cardCornerRadius="8dp">
 
-                    <net.iGap.module.CustomTextViewMedium
-                        android:id="@+id/tv_ivand_points"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dp8"
-                        android:text="@string/your_point"
-                        android:textColor="@color/black" />
+                        android:layout_margin="@dimen/dp16"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                    <net.iGap.module.CustomTextViewMedium
-                        android:id="@+id/tv_ivand_pointNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{viewModel.pointsTv}"
-                        android:textColor="@color/black"
-                        android:textSize="50dp"
-                        tools:text="-" />
+                        <net.iGap.module.CustomTextViewMedium
+                            android:id="@+id/tv_ivand_points"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/dp8"
+                            android:text="@string/your_point"
+                            android:textColor="@color/black" />
 
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
+                        <net.iGap.module.CustomTextViewMedium
+                            android:id="@+id/tv_ivand_pointNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{viewModel.pointsTv}"
+                            android:textColor="@color/black"
+                            android:textSize="50dp"
+                            tools:text="-" />
 
-        </LinearLayout>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+        </ScrollView>
 
         <Button
             android:id="@+id/btn_ivand_orderHistory"
