@@ -26,6 +26,7 @@ public class FragmentIVandProfile extends FragmentToolBarBack {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ivand_profile, container, false);
         return attachToSwipeBack(binding.getRoot());
     }
