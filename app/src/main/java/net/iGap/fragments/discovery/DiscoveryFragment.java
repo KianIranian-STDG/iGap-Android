@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,6 @@ import net.iGap.adapter.items.discovery.DiscoveryAdapter;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.helper.HelperError;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.request.RequestClientGetDiscovery;
 
 import java.util.ArrayList;
@@ -111,9 +111,6 @@ public class DiscoveryFragment extends FragmentToolBarBack {
         LinearLayoutManager layoutManager = new LinearLayoutManager(G.currentActivity);
         rcDiscovery.setLayoutManager(layoutManager);
         rcDiscovery.setAdapter(adapterDiscovery);
-
-        setRefreshing(true);
-
         tryToUpdateOrFetchRecycleViewData(0);
     }
 
@@ -131,15 +128,24 @@ public class DiscoveryFragment extends FragmentToolBarBack {
     }
 
     private void tryToUpdateOrFetchRecycleViewData(int count) {
+        setRefreshing(true);
         boolean isSend = updateOrFetchRecycleViewData();
-        if (!isSend && page == 0 && count < 3) {
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    tryToUpdateOrFetchRecycleViewData(count + 1);
-                }
-            }, 1000);
-        } else {
+
+        if (!isSend && page == 0) {
+
+            loadOfflinePageZero();
+
+            if (count < 3) {
+                G.handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        tryToUpdateOrFetchRecycleViewData(count + 1);
+                    }
+                }, 1000);
+            } else {
+                setRefreshing(false);
+            }
+        } else if (!isSend) {
             setRefreshing(false);
         }
     }
@@ -181,14 +187,6 @@ public class DiscoveryFragment extends FragmentToolBarBack {
                 });
             }
         });
-
-        if (isSend) {
-            setRefreshing(true);
-        } else {
-            if (page == 0) {
-                loadOfflinePageZero();
-            }
-        }
 
         return isSend;
     }
