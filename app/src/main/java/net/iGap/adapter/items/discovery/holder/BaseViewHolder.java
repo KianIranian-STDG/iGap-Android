@@ -1,8 +1,6 @@
 package net.iGap.adapter.items.discovery.holder;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
