@@ -143,7 +143,12 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
         super.onResume();
         turnOnRefresh();
 
-        tryToUpdateOrFetchRecycleViewData(0);
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tryToUpdateOrFetchRecycleViewData(0);
+            }
+        }, 100);
     }
 
     private void turnOnRefresh() {
@@ -178,7 +183,7 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
                     tryToUpdateOrFetchRecycleViewData(count + 1);
                 }
             }, 1000);
-        } else {
+        } else if (!isSend){
             turnOffRefresh(false);
         }
     }
