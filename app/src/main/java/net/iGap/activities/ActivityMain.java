@@ -949,11 +949,16 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         }
 
                         @Override
-                        public void onError() {
+                        public void onError(int majorCode, int minorCode) {
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    SubmitScoreDialog dialog = new SubmitScoreDialog(ActivityMain.this, getString(R.string.error_submit_qr_code), false);
+                                    String message = getString(R.string.error_submit_qr_code);
+                                    if (majorCode == 10183 && minorCode == 2) {
+                                        message = getString(R.string.E_10183);
+                                    }
+
+                                    SubmitScoreDialog dialog = new SubmitScoreDialog(ActivityMain.this, message, false);
                                     dialog.show();
                                 }
                             });

@@ -10,8 +10,7 @@
 
 package net.iGap.response;
 
-import android.util.Log;
-
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserIVandSetActivity;
 import net.iGap.request.RequestUserIVandSetActivity;
 
@@ -44,7 +43,12 @@ public class UserIVandSetActivityResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
-        ((RequestUserIVandSetActivity.OnSetActivities) identity).onError();
+
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+
+        ((RequestUserIVandSetActivity.OnSetActivities) identity).onError(majorCode, minorCode);
 
     }
 }
