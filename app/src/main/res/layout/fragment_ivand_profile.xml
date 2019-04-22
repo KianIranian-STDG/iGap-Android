@@ -76,7 +76,7 @@
                             android:layout_marginBottom="@dimen/dp8"
                             android:text="@{viewModel.referralTv}"
                             android:visibility="@{viewModel.saleVisibility, default=visible}"
-                            android:textColor="#C4C4C4"
+                            android:textColor="#B3FFFFFF"
                             tools:text="" />
 
                     </LinearLayout>
