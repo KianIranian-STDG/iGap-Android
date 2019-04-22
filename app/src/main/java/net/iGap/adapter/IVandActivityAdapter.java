@@ -34,10 +34,7 @@ public class IVandActivityAdapter extends RecyclerView.Adapter<RecyclerView.View
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater layoutInflater = LayoutInflater.from(G.context);
         if (i == TYPE_LOADING_MORE_ITEM) {
-            ProgressBar progressBar = new ProgressBar(viewGroup.getContext());
-            progressBar.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            progressBar.setIndeterminate(true);
-            return new ProgressBarViewHolder(progressBar);
+            return new ProgressBarViewHolder(layoutInflater.inflate(R.layout.item_ivand_activity_loading, viewGroup, false));
         } else {
             return new IVandActivityViewHolder(layoutInflater.inflate(R.layout.item_ivand_activity, viewGroup, false));
         }

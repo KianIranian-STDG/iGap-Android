@@ -128,6 +128,7 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
                     if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == iVandActivityAdapter.getItemCount() - 1) {
                         boolean isSend = updateOrFetchRecycleViewData(iVandActivityAdapter.getItemCountWithoutLoadingItem());
                         iVandActivityAdapter.addLoadingItem();
+                        iVandActivityAdapter.notifyItemInserted(iVandActivityAdapter.getItemCount() - 1);
                         if (isSend) {
                             isLoading = true;
                         }
@@ -223,6 +224,7 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
                             turnOffRefresh(false);
                         } else {
                             iVandActivityAdapter.removeLoadingItem();
+                            iVandActivityAdapter.notifyItemRemoved(iVandActivityAdapter.getItemCount());
                             isLoading = false;
                         }
                     }
