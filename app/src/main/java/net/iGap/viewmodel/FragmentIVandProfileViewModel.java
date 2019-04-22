@@ -17,7 +17,7 @@ import net.iGap.request.RequestUserIVandGetScore;
 
 import io.realm.Realm;
 
-public class FragmentIVandProfileViewModel implements OnUserIVandGetScore {
+public class FragmentIVandProfileViewModel {
     public static final int REQUEST_CODE_QR_IVAND_CODE = 543;
     public ObservableField<String> profileNameTv = new ObservableField<>("");
     public ObservableField<String> referralTv = new ObservableField<>("0");
@@ -27,8 +27,6 @@ public class FragmentIVandProfileViewModel implements OnUserIVandGetScore {
 
 
     public FragmentIVandProfileViewModel() {
-        G.onUserIVandGetScore = this;
-        initData();
     }
 
     private void initData() {
@@ -71,13 +69,23 @@ public class FragmentIVandProfileViewModel implements OnUserIVandGetScore {
         mRealm.close();
     }
 
-    @Override
-    public void getScore(int score) {
-        pointsTv.set(String.valueOf(score));
-    }
-
     public void onResume() {
         initData();
-        new RequestUserIVandGetScore().userIVandGetScore();
+        new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
+            @Override
+            public void getScore(int score) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        pointsTv.set(String.valueOf(score));
+                    }
+                });
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 }

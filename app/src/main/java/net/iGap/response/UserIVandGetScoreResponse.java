@@ -10,16 +10,16 @@
 
 package net.iGap.response;
 
-import net.iGap.G;
+import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.proto.ProtoUserIVandGetScore;
 
 public class UserIVandGetScoreResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public UserIVandGetScoreResponse(int actionId, Object protoClass, String identity) {
+    public UserIVandGetScoreResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
         this.message = protoClass;
         this.actionId = actionId;
@@ -30,7 +30,7 @@ public class UserIVandGetScoreResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder builder = (ProtoUserIVandGetScore.UserIVandGetScoreResponse.Builder) message;
-        G.onUserIVandGetScore.getScore(builder.getScore());
+        ((OnUserIVandGetScore) identity).getScore(builder.getScore());
     }
 
     @Override
@@ -42,6 +42,7 @@ public class UserIVandGetScoreResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        ((OnUserIVandGetScore) identity).onError();
 
     }
 }

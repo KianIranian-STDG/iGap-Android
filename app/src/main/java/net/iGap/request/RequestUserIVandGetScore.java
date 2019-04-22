@@ -10,15 +10,16 @@
 
 package net.iGap.request;
 
+import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.proto.ProtoUserIVandGetScore;
 
 public class RequestUserIVandGetScore {
 
-    public void userIVandGetScore() {
+    public void userIVandGetScore(OnUserIVandGetScore onUserIVandGetScore) {
 
         ProtoUserIVandGetScore.UserIVandGetScore.Builder builder = ProtoUserIVandGetScore.UserIVandGetScore.newBuilder();
 
-        RequestWrapper requestWrapper = new RequestWrapper(154, builder);
+        RequestWrapper requestWrapper = new RequestWrapper(154, builder, onUserIVandGetScore);
         try {
             RequestQueue.sendRequest(requestWrapper);
         } catch (IllegalAccessException e) {

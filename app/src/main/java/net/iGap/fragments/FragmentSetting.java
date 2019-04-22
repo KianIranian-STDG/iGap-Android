@@ -293,7 +293,14 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     @Override
     public void onStart() {
         super.onStart();
-        G.onUserIVandGetScore = new OnUserIVandGetScore() {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fragmentSettingViewModel.onResume();
+        new RequestUserIVandGetScore().userIVandGetScore(new OnUserIVandGetScore() {
             @Override
             public void getScore(int score) {
                 G.handler.post(new Runnable() {
@@ -303,14 +310,12 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
                     }
                 });
             }
-        };
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        fragmentSettingViewModel.onResume();
-        new RequestUserIVandGetScore().userIVandGetScore();
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 
     @Override
@@ -366,7 +371,6 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     public void onStop() {
         super.onStop();
         fragmentSettingViewModel.onStop();
-        G.onUserIVandGetScore = null;
     }
 
     @Override

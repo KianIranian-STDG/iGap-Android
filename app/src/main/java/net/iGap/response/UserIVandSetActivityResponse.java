@@ -32,7 +32,6 @@ public class UserIVandSetActivityResponse extends MessageHandler {
     public void handler() {
         super.handler();
         ProtoUserIVandSetActivity.UserIVandSetActivityResponse.Builder builder = (ProtoUserIVandSetActivity.UserIVandSetActivityResponse.Builder) message;
-        Log.d("bagi", "handler");
         ((RequestUserIVandSetActivity.OnSetActivities) identity).onSetActivitiesReady(builder.getMessage(), builder.getState());
     }
 

@@ -411,9 +411,6 @@ public class G extends MultiDexApplication {
     public static LocationListener locationListener;
     public static boolean isLocationFromBot = false;
 
-    //get score
-    public static OnUserIVandGetScore onUserIVandGetScore;
-
     public static OnCountryCode onCountryCode;
     //public static LocationListenerResponse locationListenerResponse;
     private Tracker mTracker;
