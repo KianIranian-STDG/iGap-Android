@@ -1441,5 +1441,6 @@
     <string name="scan_barcode">Scan Barcode</string>
     <string name="st_ivand">iGap Club</string>
     <string name="st_ivand_text_setting">Your Score:</string>
+    <string name="E_10183">The entered Code is invalid</string>
 
 </resources>
