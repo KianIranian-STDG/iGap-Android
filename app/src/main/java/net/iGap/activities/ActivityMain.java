@@ -678,10 +678,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
             @Override
             public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {
-                int marginTop = Math.round(AndroidUtils.dpToPx(ActivityMain.this, 12f) * 1.0f * Math.abs(verticalOffset) / appBarLayout.getTotalScrollRange());
-                LinearLayout.LayoutParams param = ((LinearLayout.LayoutParams) navigationTabStrip.getLayoutParams());
-                param.setMargins(0, marginTop, 0, 0);
-                navigationTabStrip.setLayoutParams(param);
+//                int marginTop = Math.round(AndroidUtils.dpToPx(ActivityMain.this, 12f) * 1.0f * Math.abs(verticalOffset) / appBarLayout.getTotalScrollRange());
+//                LinearLayout.LayoutParams param = ((LinearLayout.LayoutParams) navigationTabStrip.getLayoutParams());
+//                param.setMargins(0, marginTop, 0, 0);
+//                navigationTabStrip.setLayoutParams(param);
                 toolbar.clearAnimation();
                 if (moveUp) {
                     if (toolbar.getAlpha() != 0F) {
