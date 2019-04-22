@@ -38,7 +38,7 @@ public class FragmentIVandProfile extends FragmentToolBarBack {
     }
 
     private void setUpViews() {
-        viewModel = new FragmentIVandProfileViewModel(this);
+        viewModel = new FragmentIVandProfileViewModel();
         binding.setViewModel(viewModel);
         profileImage = binding.ivIvandProfile;
         titleTextView.setText(getString(R.string.ivand_profile_title));

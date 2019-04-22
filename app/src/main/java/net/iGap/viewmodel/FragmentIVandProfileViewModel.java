@@ -21,14 +21,12 @@ public class FragmentIVandProfileViewModel implements OnUserIVandGetScore {
     public static final int REQUEST_CODE_QR_IVAND_CODE = 543;
     public ObservableField<String> profileNameTv = new ObservableField<>("");
     public ObservableField<String> referralTv = new ObservableField<>("0");
-    public ObservableField<String> pointsTv = new ObservableField<>("300");
+    public ObservableField<String> pointsTv = new ObservableField<>("-");
     private RealmUserInfo realmUserInfo;
     private Realm mRealm;
-    private FragmentIVandProfile fragmentIVandProfile;
 
 
-    public FragmentIVandProfileViewModel(FragmentIVandProfile fragmentIVandProfile) {
-        this.fragmentIVandProfile = fragmentIVandProfile;
+    public FragmentIVandProfileViewModel() {
         G.onUserIVandGetScore = this;
         initData();
     }
