@@ -49,6 +49,7 @@ import net.iGap.fragments.FragmentCall;
 import net.iGap.fragments.FragmentChatBackground;
 import net.iGap.fragments.FragmentData;
 import net.iGap.fragments.FragmentDeleteAccount;
+import net.iGap.fragments.FragmentIVandProfile;
 import net.iGap.fragments.FragmentLanguage;
 import net.iGap.fragments.FragmentMain;
 import net.iGap.fragments.FragmentNotificationAndSound;
@@ -139,6 +140,7 @@ public class FragmentSettingViewModel {
     public ObservableField<String> callbackSetPhoneNumber = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_phoneNumber));
     public ObservableField<String> callbackSetRepresent = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_represent));
     public ObservableField<String> callbackSetBio = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_bio));
+    public ObservableField<String> callbackSetIVand = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.st_ivand_text_setting) + " -");
     public ObservableField<String> callbackLanguage = new ObservableField<>("English");
     public ObservableField<String> callbackDataShams = new ObservableField<>("Miladi");
     public ObservableField<String> callbackVersionApp = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.iGap_version));
@@ -928,6 +930,9 @@ public class FragmentSettingViewModel {
 
     }
 
+    public void onClickIVand(View view) {
+        new HelperFragment(new FragmentIVandProfile()).setReplace(false).load();
+    }
 
     public void onClickNotifyAndSound(View view) {
 
@@ -1570,6 +1575,10 @@ public class FragmentSettingViewModel {
         callbackVersionApp.set(G.fragmentActivity.getResources().getString(R.string.iGap_version) + " " + getAppVersion());
 
 
+    }
+
+    public void updateIvandScore(int score) {
+        callbackSetIVand.set(G.currentActivity.getString(R.string.st_ivand_text_setting) + " " + score);
     }
 
     private void updateUserInfoUI(RealmUserInfo userInfo) {

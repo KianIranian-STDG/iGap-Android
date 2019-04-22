@@ -1439,5 +1439,7 @@
     <string name="ivand_profile_title">My Score</string>
     <string name="ivand_activities_title">Score History</string>
     <string name="scan_barcode">Scan Barcode</string>
+    <string name="st_ivand">iGap Club</string>
+    <string name="st_ivand_text_setting">Your Score:</string>
 
 </resources>

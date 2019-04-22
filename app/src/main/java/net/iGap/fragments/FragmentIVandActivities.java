@@ -1,5 +1,8 @@
 package net.iGap.fragments;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -62,6 +65,9 @@ public class FragmentIVandActivities extends FragmentToolBarBack {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        view.findViewById(R.id.btnScanBarCode).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
+
         iVandActivityAdapter = new IVandActivityAdapter(new ArrayList<>());
         titleTextView.setText(getString(R.string.ivand_activities_title));
         btnScanBarCode =view.findViewById(R.id.btnScanBarCode);

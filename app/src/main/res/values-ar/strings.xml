@@ -2318,6 +2318,7 @@
     <string name="solid_colors">ألوان الخلفیه</string>
     <string name="wallpapers">خلفيات</string>
 
+    <string name="ra_title">"الكاشف"</string>
     <string name="verify_register_sms">SMS</string>
     <string name="verify_register_call">Call</string>
     <string name="way_receive_register_code">Way to receive code: </string>
@@ -2388,4 +2389,7 @@
 
     <string name="ivand_activities_title">يسجل السجلات</string>
     <string name="scan_barcode">مسح الرمز الشريطى</string>
+
+    <string name="st_ivand">النادي آیکپ</string>
+    <string name="st_ivand_text_setting">درجاتك:</string>
 </resources>

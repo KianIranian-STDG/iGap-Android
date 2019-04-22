@@ -491,38 +491,72 @@
           </LinearLayout>
 
           <LinearLayout
-            android:id="@+id/st_layout_bio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="@{fragmentSettingViewModel::onClickBio}"
-            android:orientation="vertical">
-
-            <TextView
-              style="?textTitleColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
+              android:id="@+id/st_layout_bio"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_marginTop="@dimen/dp12"
-              android:paddingEnd="@dimen/dp4"
-              android:paddingStart="@dimen/dp4"
-              android:text="@string/st_bio"
-              android:textSize="@dimen/dp15"
-              android:textStyle="normal" />
+              android:onClick="@{fragmentSettingViewModel::onClickBio}"
+              android:orientation="vertical">
 
             <TextView
-              android:id="@+id/st_txt_bio"
-              style="?textSubColorSettingTheme"
-              fontPath="fonts/IRANSansMobile.ttf"
+                style="?textTitleColorSettingTheme"
+                fontPath="fonts/IRANSansMobile.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp12"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="@string/st_bio"
+                android:textSize="@dimen/dp15"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/st_txt_bio"
+                style="?textSubColorSettingTheme"
+                fontPath="fonts/IRANSansMobile.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="@{fragmentSettingViewModel.callbackSetBio , default = @string/st_bio }"
+                android:textSize="@dimen/dp14"
+                android:theme="@style/Setting_editText"
+
+                />
+          </LinearLayout>
+
+          <LinearLayout
+              android:id="@+id/st_layout_ivand"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:gravity="center_vertical"
-              android:paddingEnd="@dimen/dp4"
-              android:paddingStart="@dimen/dp4"
-              android:text="@{fragmentSettingViewModel.callbackSetBio , default = @string/st_bio }"
-              android:textSize="@dimen/dp14"
-              android:theme="@style/Setting_editText"
+              android:onClick="@{fragmentSettingViewModel::onClickIVand}"
+              android:orientation="vertical">
 
-              />
+            <TextView
+                style="?textTitleColorSettingTheme"
+                fontPath="fonts/IRANSansMobile.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp12"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="@string/st_ivand"
+                android:textSize="@dimen/dp15"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/st_txt_ivand"
+                style="?textSubColorSettingTheme"
+                fontPath="fonts/IRANSansMobile.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingEnd="@dimen/dp4"
+                android:paddingStart="@dimen/dp4"
+                android:text="@{fragmentSettingViewModel.callbackSetIVand}"
+                android:textSize="@dimen/dp14"
+                android:theme="@style/Setting_editText" />
+
           </LinearLayout>
 
         </LinearLayout>

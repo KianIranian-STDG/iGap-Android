@@ -1,6 +1,9 @@
 package net.iGap.fragments;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +19,8 @@ import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.viewmodel.FragmentIVandProfileViewModel;
+
+import org.paygear.wallet.WalletActivity;
 
 public class FragmentIVandProfile extends FragmentToolBarBack {
     private FragmentIvandProfileBinding binding;
@@ -35,6 +40,8 @@ public class FragmentIVandProfile extends FragmentToolBarBack {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setUpViews();
+        view.findViewById(R.id.btn_ivand_orderHistory).getBackground().setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
+
     }
 
     private void setUpViews() {

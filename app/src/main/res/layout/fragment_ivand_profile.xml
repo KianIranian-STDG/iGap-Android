@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp16"
                     app:cardBackgroundColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                    app:cardCornerRadius="8dp">
+                    app:cardCornerRadius="@dimen/dp8">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/dp8"
-                            android:textColor="@{Color.parseColor(G.textTitleTheme),default=@color/black}"
+                            android:textColor="@android:color/white"
                             tools:text="@{viewModel.profileNameTv}" />
 
                         <net.iGap.module.CustomTextViewMedium
@@ -76,7 +76,7 @@
                             android:layout_marginBottom="@dimen/dp8"
                             android:text="@{viewModel.referralTv}"
                             android:visibility="@{viewModel.saleVisibility, default=visible}"
-                            android:textColor="@{Color.parseColor(G.textSubTheme),default=@color/black}"
+                            android:textColor="#C4C4C4"
                             tools:text="" />
 
                     </LinearLayout>
@@ -88,7 +88,7 @@
                     android:layout_marginLeft="@dimen/dp16"
                     android:layout_marginRight="@dimen/dp16"
                     app:cardBackgroundColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-                    app:cardCornerRadius="8dp">
+                    app:cardCornerRadius="@dimen/dp8">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -103,14 +103,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/dp8"
                             android:text="@string/your_point"
-                            android:textColor="@{Color.parseColor(G.textTitleTheme),default=@color/black}" />
+                            android:textColor="@android:color/white"/>
 
                         <net.iGap.module.CustomTextViewMedium
                             android:id="@+id/tv_ivand_pointNumber"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@{viewModel.pointsTv}"
-                            android:textColor="@{Color.parseColor(G.textTitleTheme),default=@color/black}"
+                            android:textColor="@android:color/white"
                             android:textSize="50dp"
                             tools:text="-" />
 

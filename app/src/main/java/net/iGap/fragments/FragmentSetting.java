@@ -43,6 +43,7 @@ import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnComplete;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnUserAvatarResponse;
+import net.iGap.interfaces.OnUserIVandGetScore;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.AttachFile;
@@ -53,6 +54,7 @@ import net.iGap.module.structs.StructBottomSheet;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestUserAvatarAdd;
+import net.iGap.request.RequestUserIVandGetScore;
 import net.iGap.request.RequestUserProfileGetBio;
 import net.iGap.request.RequestUserProfileGetEmail;
 import net.iGap.request.RequestUserProfileGetGender;
@@ -288,11 +290,27 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
         hideProgressBar();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        G.onUserIVandGetScore = new OnUserIVandGetScore() {
+            @Override
+            public void getScore(int score) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragmentSettingViewModel.updateIvandScore(score);
+                    }
+                });
+            }
+        };
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         fragmentSettingViewModel.onResume();
+        new RequestUserIVandGetScore().userIVandGetScore();
     }
 
     @Override
@@ -348,6 +366,7 @@ public class FragmentSetting extends BaseFragment implements OnUserAvatarRespons
     public void onStop() {
         super.onStop();
         fragmentSettingViewModel.onStop();
+        G.onUserIVandGetScore = null;
     }
 
     @Override

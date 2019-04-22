@@ -67,7 +67,7 @@
 
 
     <!--Reagent-->
-    <string name="ra_title">"کد معرف"</string>
+    <string name="ra_title">"معرف"</string>
     <string name="ra_enter_reagent_code">"لطفا شماره ی معرف خود را وارد کنید"</string>
     <string name="ra_confirm">"تایید"</string>
     <string name="ra_skip">"فعلا بیخیال!"</string>
@@ -1448,4 +1448,7 @@
 
     <string name="ivand_activities_title">سوابق امتیاز</string>
     <string name="scan_barcode">اسکن بارکد</string>
+
+    <string name="st_ivand">باشگاه آیگپ</string>
+    <string name="st_ivand_text_setting">امتیاز شما:</string>
 </resources>
