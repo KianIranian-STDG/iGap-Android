@@ -109,11 +109,12 @@ public class RequestQueue {
             return;
         }
 
-        ArrayList<RequestWrapper[]> arrayWrapper = priorityRequestWrapper.get(requestPriorityQueue.poll());
+        Integer p = requestPriorityQueue.poll();
+        ArrayList<RequestWrapper[]> arrayWrapper = priorityRequestWrapper.get(p);
         if (arrayWrapper != null && arrayWrapper.size() > 0) {
             RequestWrapper[] requestWrappers = arrayWrapper.get(0);
             arrayWrapper.remove(0);
-            priorityRequestWrapper.put(requestWrappers[0].getActionId(), arrayWrapper);
+            priorityRequestWrapper.put(p, arrayWrapper);
 
             sendRequest(requestWrappers);
         }
