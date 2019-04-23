@@ -31,7 +31,6 @@ import java.lang.reflect.Method;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,7 +44,10 @@ public class RequestQueue {
     private static final int QUEUE_LIMIT = 50;
     private static final int DEFAULT_PRIORITY = 100;
     public static CopyOnWriteArrayList<RequestWrapper> RUNNING_REQUEST_WRAPPERS = new CopyOnWriteArrayList<>(); // when logged-in and WAITING_REQUEST_WRAPPERS is full
-    public static PriorityQueue<Integer> actionIdPriority = new PriorityQueue<>(1000, new Comparator<Integer>() {
+
+
+    private static ConcurrentHashMap<Integer, ArrayList<RequestWrapper[]>> priorityRequestWrapper = new ConcurrentHashMap<>();
+    private static PriorityQueue<Integer> requestPriorityQueue = new PriorityQueue<>(1000, new Comparator<Integer>() {
         @Override
         public int compare(Integer a, Integer b) {
             if (a < b) {
@@ -57,33 +59,36 @@ public class RequestQueue {
             return 0;
         }
     });
-    private static ConcurrentHashMap<Integer, ArrayList<RequestWrapper[]>> priorityRequestWrapper = new ConcurrentHashMap<>();
+
+    // ***************************** Sending Request Methods ***************************************
 
     public static synchronized void sendRequest(RequestWrapper... requestWrappers) throws IllegalAccessException {
         int length = requestWrappers.length;
         String randomId = HelperString.generateKey();
 
         if (G.requestQueueMap.size() > QUEUE_LIMIT && !forcePriorityActionId.contains(requestWrappers[0].actionId)) {
-            Object priority = G.priorityActionId.get(requestWrappers[0].actionId);
+            Integer priority = G.priorityActionId.get(requestWrappers[0].actionId);
             if (priority == null) {
-                priority = (int) DEFAULT_PRIORITY;
+                priority = DEFAULT_PRIORITY;
             }
-            ArrayList<RequestWrapper[]> arrayWrapper = new ArrayList<>();
-            if (actionIdPriority.contains((int) priority)) {
-                arrayWrapper = priorityRequestWrapper.get((int) priority);
-                arrayWrapper.add(requestWrappers);
-                priorityRequestWrapper.put((int) priority, arrayWrapper);
+            ArrayList<RequestWrapper[]> arrayWrapper;
+            if (requestPriorityQueue.contains(priority)) {
+                arrayWrapper = priorityRequestWrapper.get(priority);
             } else {
-                arrayWrapper.add(requestWrappers);
-                priorityRequestWrapper.put((int) priority, arrayWrapper);
+                arrayWrapper = new ArrayList<>();
             }
-            actionIdPriority.offer((int) priority);
+            arrayWrapper.add(requestWrappers);
+            priorityRequestWrapper.put(priority, arrayWrapper);
+            requestPriorityQueue.offer(priority);
             return;
         }
 
         if (length == 1) {
             prepareRequest(randomId, requestWrappers[0]);
         } else if (length > 1) {
+            /**
+             * never be called until now
+             */
             ArrayList<Object> relationValue = new ArrayList<>();
             for (int i = 0; i < length; i++) {
                 relationValue.add(null);
@@ -100,11 +105,11 @@ public class RequestQueue {
     }
 
     public static synchronized void sendRequest() throws IllegalAccessException {
-        if (actionIdPriority.size() <= 0) {
+        if (requestPriorityQueue.size() <= 0) {
             return;
         }
 
-        ArrayList<RequestWrapper[]> arrayWrapper = priorityRequestWrapper.get(actionIdPriority.poll());
+        ArrayList<RequestWrapper[]> arrayWrapper = priorityRequestWrapper.get(requestPriorityQueue.poll());
         if (arrayWrapper != null && arrayWrapper.size() > 0) {
             RequestWrapper[] requestWrappers = arrayWrapper.get(0);
             arrayWrapper.remove(0);
@@ -189,29 +194,28 @@ public class RequestQueue {
         }
     }
 
-    private static synchronized void requestQueuePullFunction() {
+    // ********************************** Helper Methods *******************************************
 
-        for (Iterator<Map.Entry<String, RequestWrapper>> it = G.requestQueueMap.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry<String, RequestWrapper> entry = it.next();
+    public static void clearPriorityQueue() {
+        if (requestPriorityQueue != null) {
+            requestPriorityQueue.clear();
+        }
+    }
+
+    // ************************ Timeout and Remove Request Methods *********************************
+
+    /******
+     * This function runs for detecting timeout requests.
+     * when request exist it calls itself and
+     * else it set boolean value for next request to call this function.
+     *****/
+    private static synchronized void requestQueuePullFunction() {
+        for (Map.Entry<String, RequestWrapper> entry : G.requestQueueMap.entrySet()) {
             String key = entry.getKey();
             RequestWrapper requestWrapper = entry.getValue();
             boolean delete = timeDifference(requestWrapper.getTime());
             if (delete) {
-                if (key.contains(".")) {
-                    String randomId = key.split("\\.")[0];
-
-                    if (!G.requestQueueRelationMap.containsKey(randomId)) continue;
-
-                    ArrayList<Object> array = G.requestQueueRelationMap.get(randomId);
-
-                    G.requestQueueRelationMap.remove(randomId);
-
-                    for (int i = 0; i < array.size(); i++) {
-                        requestQueueMapRemover(randomId + "." + i);
-                    }
-                } else {
-                    requestQueueMapRemover(key);
-                }
+                deleteRequest(key);
             }
         }
 
@@ -225,8 +229,12 @@ public class RequestQueue {
         } else {
             G.pullRequestQueueRunned.getAndSet(false);
         }
+
     }
 
+    /******
+     * Remove a request from Queue whit identity
+     *****/
     public static void removeRequestQueue(String identity) {
         for (Map.Entry<String, RequestWrapper> entry : G.requestQueueMap.entrySet()) {
             if (entry.getValue().identity != null && entry.getValue().identity.toString().contains(identity)) {
@@ -235,10 +243,38 @@ public class RequestQueue {
         }
     }
 
+    /******
+     * Remove a request from Queue whit key and calling timeout and additional check
+     * some requests are grouped together and when one of them get timeout we should call timeout
+     * for all of request for this group
+     * note: group of request never used in iGap until now
+     *****/
+    private synchronized static void deleteRequest(String key) {
+        if (key.contains(".")) {
+            /**
+             * never be called until now
+             */
+            String randomId = key.split("\\.")[0];
+
+            if (!G.requestQueueRelationMap.containsKey(randomId)) return;
+
+            ArrayList<Object> array = G.requestQueueRelationMap.get(randomId);
+
+            G.requestQueueRelationMap.remove(randomId);
+
+            for (int i = 0; i < array.size(); i++) {
+                requestQueueMapRemover(randomId + "." + i);
+            }
+        } else {
+            requestQueueMapRemover(key);
+        }
+    }
+
+    /******
+     * Remove a request from Queue whit key and calling timeout
+     *****/
     private static void requestQueueMapRemover(String key) {
-
         try {
-
             RequestWrapper requestWrapper = G.requestQueueMap.get(key);
             G.requestQueueMap.remove(key);
 
@@ -278,40 +314,18 @@ public class RequestQueue {
      * @param allRequest  timeOut all requests
      */
     public static void timeOutImmediately(@Nullable String keyRandomId, boolean allRequest) {
-        for (Iterator<Map.Entry<String, RequestWrapper>> it = G.requestQueueMap.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry<String, RequestWrapper> entry = it.next();
+        for (Map.Entry<String, RequestWrapper> entry : G.requestQueueMap.entrySet()) {
             String key = entry.getKey();
-            if (allRequest || (keyRandomId != null && key.equals(keyRandomId))) {
-                if (key.contains(".")) {
-                    String randomId = key.split("\\.")[0];
-
-                    if (!G.requestQueueRelationMap.containsKey(randomId)) continue;
-
-                    ArrayList<Object> array = G.requestQueueRelationMap.get(randomId);
-
-                    G.requestQueueRelationMap.remove(randomId);
-
-                    for (int i = 0; i < array.size(); i++) {
-                        requestQueueMapRemover(randomId + "." + i);
-                    }
-                } else {
-                    requestQueueMapRemover(key);
-                }
+            if (allRequest || key.equals(keyRandomId)) {
+                deleteRequest(key);
             }
         }
     }
 
-    public static void clearPriorityQueue() {
-        if (actionIdPriority != null) {
-            actionIdPriority.clear();
-        }
-    }
-
+    /**
+     * if time not set yet don't set timeout
+     */
     private static boolean timeDifference(long beforeTime) {
-
-        /**
-         * if time not set yet don't set timeout
-         */
         if (beforeTime == 0) {
             return false;
         }
@@ -327,4 +341,7 @@ public class RequestQueue {
 
         return false;
     }
+
+
+    // **************************************** End ************************************************
 }
