@@ -167,7 +167,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
                 webViewError.setVisibility(View.VISIBLE);
                 webView.setVisibility(View.GONE);
                 titleTextView.setText(G.context.getString(R.string.igap));
-                HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
+                HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
             }
         }
 
