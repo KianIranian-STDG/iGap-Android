@@ -5903,8 +5903,10 @@ public class FragmentChat extends BaseFragment
             }
             countNewMessage++;
             setDownBtnVisible();
-            txtNewUnreadMessage.setText(countNewMessage + "");
-            txtNewUnreadMessage.setVisibility(View.VISIBLE);
+            if (txtNewUnreadMessage != null) {
+                txtNewUnreadMessage.setText(countNewMessage + "");
+                txtNewUnreadMessage.setVisibility(View.VISIBLE);
+            }
         }
     }
 
