@@ -2318,8 +2318,9 @@ public class FragmentChat extends BaseFragment
         iUpdateLogItem = new IUpdateLogItem() {
             @Override
             public void onUpdate(byte[] log, long messageId) {
-                if (getActivity() == null && getActivity().isFinishing())
+                if (getActivity() == null || getActivity().isFinishing())
                     return;
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
