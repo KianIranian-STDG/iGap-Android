@@ -14,4 +14,5 @@ import net.iGap.proto.ProtoGlobal;
 
 public interface OnClientGetRoomMessage {
     void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message);
+    void onError(int majorCode, int minorCode);
 }

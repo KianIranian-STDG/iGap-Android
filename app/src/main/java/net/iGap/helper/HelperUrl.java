@@ -964,6 +964,23 @@ public class HelperUrl {
                         RealmRoomMessage.setGap(message.getMessageId());
                         openChat(username, type, user, room, chatEntry, message.getMessageId());
                     }
+
+                    @Override
+                    public void onError(int majorCode, int minorCode) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                closeDialogWaiting();
+                                if (majorCode == 626) {
+                                    HelperError.showSnackMessage(G.context.getString(R.string.not_found_message), false);
+                                } else if (majorCode == 624 ){
+                                    HelperError.showSnackMessage(G.context.getString(R.string.ivnalid_data_provided), false);
+                                } else {
+                                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                                }
+                            }
+                        });
+                    }
                 });
             }
         }

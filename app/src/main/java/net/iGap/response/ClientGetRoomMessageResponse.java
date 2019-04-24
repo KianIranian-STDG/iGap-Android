@@ -13,6 +13,7 @@ package net.iGap.response;
 import net.iGap.G;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientGetRoomMessage;
+import net.iGap.proto.ProtoError;
 import net.iGap.realm.RealmRoomMessage;
 import net.iGap.request.RequestClientGetRoomMessage;
 
@@ -61,7 +62,14 @@ public class ClientGetRoomMessageResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
 
+        RequestClientGetRoomMessage.RequestClientGetRoomMessageExtra extra = (RequestClientGetRoomMessage.RequestClientGetRoomMessageExtra) identity;
+        if (extra.getOnClientGetRoomMessage() != null) {
+            extra.getOnClientGetRoomMessage().onError(majorCode, minorCode);
+        }
     }
 }
 

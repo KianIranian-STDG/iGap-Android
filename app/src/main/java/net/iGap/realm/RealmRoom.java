@@ -1459,6 +1459,11 @@ public class RealmRoom extends RealmObject {
                                 }
                             }, 200);
                         }
+
+                        @Override
+                        public void onError(int majorCode, int minorCode) {
+
+                        }
                     });
                 } else {
                     RealmRoomMessage roomMessage1 = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, roomId).

@@ -1997,6 +1997,11 @@ public class FragmentChat extends BaseFragment
                                             }
                                         });
                                     }
+
+                                    @Override
+                                    public void onError(int majorCode, int minorCode) {
+
+                                    }
                                 });
                             }
                         }
