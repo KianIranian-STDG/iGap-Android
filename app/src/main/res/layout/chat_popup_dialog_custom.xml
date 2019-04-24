@@ -102,6 +102,37 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/dialog_root_item33_notification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/dialog_icon_item33_notification"
+            style="?textSubColorSettingTheme"
+            android:layout_width="@dimen/dp26"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/md_muted"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textSize="@dimen/dp18" />
+
+        <TextView
+            android:id="@+id/dialog_text_item33_notification"
+            style="?textTitleColorSettingTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dp8"
+            android:paddingLeft="@dimen/dp8"
+            android:paddingRight="@dimen/dp8"
+            android:paddingTop="@dimen/dp8"
+            android:text="@string/mute_notification"
+            android:textSize="@dimen/dp14" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/dialog_root_item4_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

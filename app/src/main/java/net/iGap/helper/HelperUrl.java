@@ -1194,7 +1194,7 @@ public class HelperUrl {
 
         String action = intent.getAction();
 
-        if (action == null) return;
+        if (action == null || intent.getData() == null) return;
 
         if (action.equals(Intent.ACTION_VIEW)) {
             G.currentActivity = activity;
@@ -1204,11 +1204,20 @@ public class HelperUrl {
     }
 
     private static void checkConnection(final Uri path, int countTime) {
-
         countTime++;
 
         if (G.userLogin) {
-            getToRoom(path);
+            Pattern pattern = Pattern.compile("(https?:(//|\\\\\\\\))?(www\\.)?(igap\\.net(/|\\\\))(.*)(/|\\\\)([0-9]+)(\\\\|/)?");
+            Matcher matcher = pattern.matcher(path.toString());
+            if (matcher.find()) {
+                String username = matcher.group(6);
+                long messageId = Long.parseLong(matcher.group(8));
+                checkUsernameAndGoToRoomWithMessageId(username, ChatEntry.profile, messageId);
+            } else {
+                getToRoom(path);
+            }
+
+
         } else {
             if (countTime < 15) {
                 final int finalCountTime = countTime;

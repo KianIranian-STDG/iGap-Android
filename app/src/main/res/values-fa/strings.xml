@@ -1452,4 +1452,7 @@
     <string name="st_ivand">باشگاه آیگپ</string>
     <string name="st_ivand_text_setting">امتیاز شما:</string>
     <string name="E_10183">کد وارد شده نا معتبر می باشد</string>
+
+
+    <string name="share_link_item_dialog">اشتراک لینک</string>
 </resources>

@@ -4606,6 +4606,7 @@ public class FragmentChat extends BaseFragment
         ViewGroup rootReplay = v.findViewById(R.id.dialog_root_item1_notification);
         ViewGroup rootCopy = v.findViewById(R.id.dialog_root_item2_notification);
         ViewGroup rootShare = v.findViewById(R.id.dialog_root_item3_notification);
+        ViewGroup rootShareLink = v.findViewById(R.id.dialog_root_item33_notification);
         ViewGroup rootForward = v.findViewById(R.id.dialog_root_item4_notification);
         ViewGroup rootDelete = v.findViewById(R.id.dialog_root_item5_notification);
         ViewGroup rootEdit = v.findViewById(R.id.dialog_root_item6_notification);
@@ -4615,6 +4616,7 @@ public class FragmentChat extends BaseFragment
         TextView txtItemReplay = v.findViewById(R.id.dialog_text_item1_notification);
         TextView txtItemCopy = v.findViewById(R.id.dialog_text_item2_notification);
         TextView txtItemShare = v.findViewById(R.id.dialog_text_item3_notification);
+        TextView txtItemShareLink = v.findViewById(R.id.dialog_text_item33_notification);
         TextView txtItemForward = v.findViewById(R.id.dialog_text_item4_notification);
         TextView txtItemDelete = v.findViewById(R.id.dialog_text_item5_notification);
         TextView txtItemEdit = v.findViewById(R.id.dialog_text_item6_notification);
@@ -4629,6 +4631,9 @@ public class FragmentChat extends BaseFragment
 
         TextView iconShare = v.findViewById(R.id.dialog_icon_item3_notification);
         iconShare.setText(G.fragmentActivity.getResources().getString(R.string.md_share_button));
+
+        TextView iconShareLink = v.findViewById(R.id.dialog_icon_item33_notification);
+        iconShareLink.setText(G.fragmentActivity.getResources().getString(R.string.md_share_button));
 
         TextView iconForward = v.findViewById(R.id.dialog_icon_item4_notification);
         iconForward.setText(G.fragmentActivity.getResources().getString(R.string.md_forward));
@@ -4650,6 +4655,11 @@ public class FragmentChat extends BaseFragment
         } else {
             rootReport.setVisibility(View.GONE);
         }
+        boolean shareLinkIsOn = false;
+        RealmRoom room = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, message.roomId).findFirst();
+        if (room.getChannelRoom() != null && !room.getChannelRoom().isPrivate()) {
+             shareLinkIsOn = true;
+        }
 
 
         @ArrayRes int itemsRes = 0;
@@ -4660,6 +4670,7 @@ public class FragmentChat extends BaseFragment
                 txtItemReplay.setText(R.string.replay_item_dialog);
                 txtItemCopy.setText(R.string.copy_item_dialog);
                 txtItemShare.setText(R.string.share_item_dialog);
+                txtItemShareLink.setText(R.string.share_link_item_dialog);
                 txtItemForward.setText(R.string.forward_item_dialog);
                 txtItemDelete.setText(R.string.delete_item_dialog);
                 txtItemEdit.setText(R.string.edit_item_dialog);
@@ -4668,6 +4679,8 @@ public class FragmentChat extends BaseFragment
                 rootReplay.setVisibility(View.VISIBLE);
                 rootCopy.setVisibility(View.VISIBLE);
                 rootShare.setVisibility(View.VISIBLE);
+                if (shareLinkIsOn)
+                    rootShareLink.setVisibility(View.VISIBLE);
                 rootForward.setVisibility(View.VISIBLE);
                 rootDelete.setVisibility(View.VISIBLE);
                 rootEdit.setVisibility(View.VISIBLE);
@@ -4683,6 +4696,7 @@ public class FragmentChat extends BaseFragment
                 txtItemReplay.setText(R.string.replay_item_dialog);
                 txtItemCopy.setText(R.string.copy_item_dialog);
                 txtItemShare.setText(R.string.share_item_dialog);
+                txtItemShareLink.setText(R.string.share_link_item_dialog);
                 txtItemForward.setText(R.string.forward_item_dialog);
                 txtItemDelete.setText(R.string.delete_item_dialog);
                 txtItemEdit.setText(R.string.edit_item_dialog);
@@ -4690,6 +4704,8 @@ public class FragmentChat extends BaseFragment
                 rootReplay.setVisibility(View.VISIBLE);
                 rootCopy.setVisibility(View.VISIBLE);
                 rootShare.setVisibility(View.VISIBLE);
+                if (shareLinkIsOn)
+                    rootShareLink.setVisibility(View.VISIBLE);
                 rootForward.setVisibility(View.VISIBLE);
                 rootDelete.setVisibility(View.VISIBLE);
                 rootEdit.setVisibility(View.VISIBLE);
@@ -4704,12 +4720,15 @@ public class FragmentChat extends BaseFragment
 
                 txtItemReplay.setText(R.string.replay_item_dialog);
                 txtItemShare.setText(R.string.share_item_dialog);
+                txtItemShareLink.setText(R.string.share_link_item_dialog);
                 txtItemForward.setText(R.string.forward_item_dialog);
                 txtItemDelete.setText(R.string.delete_item_dialog);
                 txtItemEdit.setText(R.string.edit_item_dialog);
 
                 rootReplay.setVisibility(View.VISIBLE);
                 rootShare.setVisibility(View.VISIBLE);
+                if (shareLinkIsOn)
+                    rootShareLink.setVisibility(View.VISIBLE);
                 rootForward.setVisibility(View.VISIBLE);
                 rootDelete.setVisibility(View.VISIBLE);
                 rootSaveToDownload.setVisibility(View.VISIBLE);
@@ -4724,12 +4743,15 @@ public class FragmentChat extends BaseFragment
 
                 txtItemReplay.setText(R.string.replay_item_dialog);
                 txtItemShare.setText(R.string.share_item_dialog);
+                txtItemShareLink.setText(R.string.share_link_item_dialog);
                 txtItemForward.setText(R.string.forward_item_dialog);
                 txtItemDelete.setText(R.string.delete_item_dialog);
                 //itemsRes = R.array.otherMessageDialogItems;
 
                 rootReplay.setVisibility(View.VISIBLE);
                 rootShare.setVisibility(View.VISIBLE);
+                if (shareLinkIsOn)
+                    rootShareLink.setVisibility(View.VISIBLE);
                 rootForward.setVisibility(View.VISIBLE);
                 rootDelete.setVisibility(View.VISIBLE);
 
@@ -4881,6 +4903,15 @@ public class FragmentChat extends BaseFragment
                 shearedDataToOtherProgram(message);
             }
         });
+
+        rootShareLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                shearedLinkDataToOtherProgram(message);
+            }
+        });
+
         rootForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -6460,6 +6491,17 @@ public class FragmentChat extends BaseFragment
                 }
             }
         }, 300);
+    }
+
+    private void shearedLinkDataToOtherProgram(StructMessageInfo messageInfo) {
+        // when chat is channel this method will be called
+
+        if (messageInfo == null) return;
+        RealmRoom room = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, messageInfo.roomId).findFirst();
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, "https://igap.net/" + room.getChannelRoom().getUsername() + "/" + messageInfo.messageID);
+        startActivity(Intent.createChooser(intent, G.context.getString(R.string.share_link_item_dialog)));
     }
 
     private void shearedDataToOtherProgram(StructMessageInfo messageInfo) {

@@ -1442,5 +1442,6 @@
     <string name="st_ivand">iGap Club</string>
     <string name="st_ivand_text_setting">Your Score:</string>
     <string name="E_10183">The entered code is invalid</string>
+    <string name="share_link_item_dialog">Share Link</string>
 
 </resources>
