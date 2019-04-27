@@ -28,7 +28,7 @@ public class ClientSetDiscoveryItemClickResponse extends MessageHandler {
     @Override
     public void handler() {
         super.handler();
-        ProtoClientSetDiscoveryItemClick.ClientSetDiscoveryItemClick.Builder builder = (ProtoClientSetDiscoveryItemClick.ClientSetDiscoveryItemClick.Builder) message;
+        ProtoClientSetDiscoveryItemClick.ClientSetDiscoveryItemClickResponse.Builder builder = (ProtoClientSetDiscoveryItemClick.ClientSetDiscoveryItemClickResponse.Builder) message;
     }
 
     @Override
