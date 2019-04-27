@@ -91,6 +91,7 @@ public class HelperUrl {
     public static int LinkColorDark = Color.CYAN;
     public static MaterialDialog dialogWaiting;
     public static String igapResolve = "igap://resolve?";
+    private static Pattern patternMessageLink = Pattern.compile("(https?:(//|\\\\\\\\))?(www\\.)?(igap\\.net(/|\\\\))(.*)(/|\\\\)([0-9]+)(\\\\|/)?");
 
     private static boolean isIgapLink(String text) {
         return text.matches("(https?\\:\\/\\/)?igap.net/(.*)");
@@ -305,7 +306,14 @@ public class HelperUrl {
                     if (url.toLowerCase().contains("join")) {
                         checkAndJoinToRoom(token);
                     } else {
-                        checkUsernameAndGoToRoom(token, ChatEntry.profile);
+                        Matcher matcher = patternMessageLink.matcher(url);
+                        if (matcher.find()) {
+                            String username = matcher.group(6);
+                            long messageId = Long.parseLong(matcher.group(8));
+                            checkUsernameAndGoToRoomWithMessageId(username, ChatEntry.profile, messageId);
+                        } else {
+                            checkUsernameAndGoToRoom(token, ChatEntry.profile);
+                        }
                     }
                 }
             }
@@ -1224,8 +1232,7 @@ public class HelperUrl {
         countTime++;
 
         if (G.userLogin) {
-            Pattern pattern = Pattern.compile("(https?:(//|\\\\\\\\))?(www\\.)?(igap\\.net(/|\\\\))(.*)(/|\\\\)([0-9]+)(\\\\|/)?");
-            Matcher matcher = pattern.matcher(path.toString());
+            Matcher matcher = patternMessageLink.matcher(path.toString());
             if (matcher.find()) {
                 String username = matcher.group(6);
                 long messageId = Long.parseLong(matcher.group(8));
