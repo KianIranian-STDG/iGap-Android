@@ -215,8 +215,12 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             allSwitcher = 1;
             initRecycleView();
         }*/
-
-        initRecycleView();
+        G.handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initRecycleView();
+            }
+        }, 10);
         Log.d("bagi" ,"FragmentMain:onViewCreated:end");
 
 
@@ -228,8 +232,11 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             mRecyclerView = (RecyclerView) mView.findViewById(R.id.cl_recycler_view_contact);
             // mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
             mRecyclerView.setItemAnimator(null);
-            mRecyclerView.setItemViewCacheSize(1000);
-            mRecyclerView.setLayoutManager(new PreCachingLayoutManager(G.fragmentActivity, 3000));
+            mRecyclerView.setItemViewCacheSize(0);
+            final LinearLayoutManager layoutManager = new  LinearLayoutManager(getActivity());
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            mRecyclerView.setLayoutManager(layoutManager);
+//            mRecyclerView.setLayoutManager(new PreCachingLayoutManager(G.fragmentActivity, 3000));
         }
 
         RealmResults<RealmRoom> results = null;
@@ -1009,12 +1016,14 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         public String action;
         private View emptyView;
         private View loadingView;
+        private HashMap<Long, ArrayList<String>> avatarCache;
 
         public RoomAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, OnComplete complete, View emptyView, View loadingView) {
             super(data, true);
             this.mComplete = complete;
             this.emptyView = emptyView;
             this.loadingView = loadingView;
+            this.avatarCache = new HashMap<>();
         }
 
         @Override
@@ -1440,33 +1449,50 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 avatarType = HelperAvatar.AvatarType.ROOM;
             }
 
-            final long idForGetAvatarOriginal = idForGetAvatar;
-
-            HelperAvatar.getAvatar(idForGetAvatar, avatarType, false, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(String avatarPath, long idForGetAvatar) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (idForGetAvatar == idForGetAvatarOriginal) {
-                                G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
-                            }
-                        }
-                    });
+            if (avatarCache.containsKey(idForGetAvatar)) {
+                ArrayList<String> cacheAvatar = avatarCache.get(idForGetAvatar);
+                if (cacheAvatar.size() == 1) {
+                    G.imageLoader.displayImage(AndroidUtils.suitablePath(cacheAvatar.get(0)), holder.image);
+                } else {
+                    holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), cacheAvatar.get(0), cacheAvatar.get(1)));
                 }
+            } else {
+                final long idForGetAvatarOriginal = idForGetAvatar;
 
-                @Override
-                public void onShowInitials(String initials, String color, long idForGetAvatar) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (idForGetAvatar == idForGetAvatarOriginal) {
-                                holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), initials, color));
+                HelperAvatar.getAvatar(idForGetAvatar, avatarType, false, new OnAvatarGet() {
+                    @Override
+                    public void onAvatarGet(String avatarPath, long idForGetAvatar) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ArrayList<String> val = new ArrayList<>();
+                                val.add(avatarPath);
+                                avatarCache.put(idForGetAvatar, val);
+
+                                if (idForGetAvatar == idForGetAvatarOriginal) {
+                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
+                                }
                             }
-                        }
-                    });
-                }
-            });
+                        });
+                    }
+
+                    @Override
+                    public void onShowInitials(String initials, String color, long idForGetAvatar) {
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ArrayList<String> val = new ArrayList<>();
+                                val.add(initials);
+                                val.add(color);
+                                avatarCache.put(idForGetAvatar, val);
+                                if (idForGetAvatar == idForGetAvatarOriginal) {
+                                    holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), initials, color));
+                                }
+                            }
+                        });
+                    }
+                });
+            }
         }
 
         private void setChatIcon(RealmRoom mInfo, MaterialDesignTextView textView) {
