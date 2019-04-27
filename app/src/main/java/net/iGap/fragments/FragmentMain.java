@@ -1404,7 +1404,8 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         }
 
         private void setSenderName(ViewHolder holder) {
-            if (holder.realmRegisteredInfo.getDisplayName() != null) {
+            if (holder.realmRegisteredInfo.isLoaded() && holder.realmRegisteredInfo.isValid()
+                    && holder.realmRegisteredInfo.getDisplayName() != null) {
 
                 String _name = holder.realmRegisteredInfo.getDisplayName();
                 if (_name.length() > 0) {
