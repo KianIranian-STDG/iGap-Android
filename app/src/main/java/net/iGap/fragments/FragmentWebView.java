@@ -193,7 +193,7 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            if (isWebViewVisible && !view.getTitle().contains("صفحه وب در دسترس")) {
+            if (isWebViewVisible && view != null && view.getTitle() != null && !view.getTitle().contains("صفحه وب در دسترس")) {
                 titleTextView.setText(view.getTitle());
             }
 
