@@ -318,6 +318,11 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
 
     private void finalAction() {
         G.onUserInfoResponse = null;
+
+        if (getActivity() == null || getActivity().isFinishing()) {
+            return;
+        }
+
         if (isNeedCloseActivity) {
             Intent intent = new Intent(getContext(), ActivityMain.class);
             intent.putExtra(ARG_USER_ID, userId);
