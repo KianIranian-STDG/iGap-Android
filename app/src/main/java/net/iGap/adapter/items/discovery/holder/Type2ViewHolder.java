@@ -27,23 +27,8 @@ public class Type2ViewHolder extends BaseViewHolder {
 
     @Override
     public void bindView(DiscoveryItem item) {
-        if (item.discoveryFields.get(0).imageUrl.endsWith(".gif")) {
-            Glide.with(G.context)
-                    .asGif()
-                    .load(item.discoveryFields.get(0).imageUrl)
-                    .into(img0);
-        } else {
-            G.imageLoader.displayImage(item.discoveryFields.get(0).imageUrl, img0, option);
-        }
-
-        if (item.discoveryFields.get(1).imageUrl.endsWith(".gif")) {
-            Glide.with(G.context)
-                    .asGif()
-                    .load(item.discoveryFields.get(1).imageUrl)
-                    .into(img1);
-        } else {
-            G.imageLoader.displayImage(item.discoveryFields.get(1).imageUrl, img1, option);
-        }
+        loadImage(img0, item.discoveryFields.get(0).imageUrl);
+        loadImage(img1, item.discoveryFields.get(1).imageUrl);
 
         card0.setOnClickListener(new View.OnClickListener() {
             @Override

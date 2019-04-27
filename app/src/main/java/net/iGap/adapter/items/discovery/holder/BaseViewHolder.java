@@ -7,10 +7,11 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.bumptech.glide.Glide;
 
 import net.iGap.G;
 import net.iGap.R;
@@ -51,14 +52,23 @@ import static net.iGap.viewmodel.FragmentIVandProfileViewModel.scanBarCode;
 
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
-    public static DisplayImageOptions option = new DisplayImageOptions.Builder().cacheOnDisk(true).build();
-
 
     BaseViewHolder(@NonNull View itemView) {
         super(itemView);
     }
 
     public abstract void bindView(DiscoveryItem item);
+
+    void loadImage(ImageView imageView, String url) {
+        if (url.endsWith(".gif")) {
+            Glide.with(G.context)
+                    .asGif()
+                    .load(url)
+                    .into(imageView);
+        } else {
+            Glide.with(G.context).load(url).into(imageView);
+        }
+    }
 
     void handleDiscoveryFieldsClick(DiscoveryItemField discoveryField) {
         new RequestClientSetDiscoveryItemClick().setDiscoveryClicked(discoveryField.id);
