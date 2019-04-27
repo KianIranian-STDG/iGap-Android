@@ -65,7 +65,7 @@ public class RequestQrCodeNewDevice {
         }
 
         if (pInfo != null) {
-            AppVersion = pInfo.versionName;
+            AppVersion = pInfo.versionName.replace(".beta", "").replace("beta", "");
             AppBuildVersion = pInfo.versionCode;
         }
         Device = Build.BRAND;
