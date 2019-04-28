@@ -38,6 +38,8 @@ public class RealmAttachment extends RealmObject {
     // should be message id for message attachment and user id for avatar
     @PrimaryKey
     private long id;
+
+    @Index
     private String token;
     private String url;
     private String name;
