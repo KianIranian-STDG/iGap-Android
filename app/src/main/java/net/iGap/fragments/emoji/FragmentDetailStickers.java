@@ -20,10 +20,7 @@ import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.emoji.api.APIEmojiService;
-import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AndroidUtils;
+import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.request.RequestFileDownload;
 
@@ -34,14 +31,10 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentDetailStickers extends BaseFragment {
+public class FragmentDetailStickers extends FragmentToolBarBack {
 
-    private APIEmojiService mAPIService;
-
-    private String groupId = "";
     List<StructItemSticker> stickerList;
     private AdapterSettingPage adapterSettingPage;
-    private LinearLayout fcLayoutTitle;
 
     public FragmentDetailStickers() {
         // Required empty public constructor
@@ -57,20 +50,15 @@ public class FragmentDetailStickers extends BaseFragment {
         return fragmentDetailStickers;
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail_stickers, container, false);
+    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
+        inflater.inflate(R.layout.fragment_detail_stickers, root, true);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        fcLayoutTitle = view.findViewById(R.id.fc_layot_title);
-        fcLayoutTitle.setBackgroundColor(Color.parseColor(G.appBarColor));
+        titleTextView.setText(R.string.sticker);
         if (getArguments() != null) {
             stickerList = (List<StructItemSticker>) getArguments().getSerializable("GROUP_ID");
         }
@@ -78,15 +66,6 @@ public class FragmentDetailStickers extends BaseFragment {
 //        if (!groupId.isEmpty()) {
 //            getDataStickers();
 //        }
-
-
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_sticker_ripple_txtBack);
-        rippleBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popBackStackFragment();
-            }
-        });
 
 
         RecyclerView rcvSettingPage = view.findViewById(R.id.rcvSettingPage);
