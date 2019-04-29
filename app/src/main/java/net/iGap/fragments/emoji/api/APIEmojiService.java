@@ -6,6 +6,7 @@ import net.iGap.fragments.emoji.struct.StructEachSticker;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -25,7 +26,7 @@ public interface APIEmojiService {
     @POST("/stickers/{id}/favorite")
     Call<StructStickerResult> addSticker(@Path("id") String groupId);
 
-    @POST("/stickers/{id}/favorite")
+    @DELETE("/stickers/{id}/favorite")
     Call<StructStickerResult> removeSticker(@Path("id") String groupId);
 
     @GET("/stickers/favorite")
