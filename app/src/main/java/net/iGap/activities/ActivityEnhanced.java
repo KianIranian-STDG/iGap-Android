@@ -47,7 +47,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import io.github.inflationx.viewpump.ViewPumpContextWrapper;
+
 
 public class ActivityEnhanced extends AppCompatActivity {
 
@@ -76,7 +77,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(G.updateResources(newBase)));
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(G.updateResources(newBase)));
     }
 
     @Override

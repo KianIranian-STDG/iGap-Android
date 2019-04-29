@@ -27,7 +27,8 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import io.github.inflationx.viewpump.ViewPumpContextWrapper;
+
 
 public class BaseFragment extends SwipeBackFragment {
 
@@ -38,7 +39,7 @@ public class BaseFragment extends SwipeBackFragment {
     @Override
     public void onAttach(Context context) {
         //super.onAttach(context);
-        super.onAttach(CalligraphyContextWrapper.wrap(context));
+        super.onAttach(ViewPumpContextWrapper.wrap(context));
         G.fragmentActivity = (FragmentActivity) context;
         currentFragment = this;
         hideKeyboard();
