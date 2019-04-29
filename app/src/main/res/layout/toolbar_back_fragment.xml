@@ -59,6 +59,21 @@
                 android:textSize="@dimen/dp20" />
 
 
+            <net.iGap.module.MaterialDesignTextView
+                android:id="@+id/menu_item1"
+                fontPath="fonts/IRANSansMobile_Bold.ttf"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/md_rubbish_delete_file"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/dp18"
+                android:visibility="gone" />
+
+
         </LinearLayout>
 
     </net.iGap.module.MyAppBarLayout>

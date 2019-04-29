@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -25,8 +26,8 @@ import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.helper.HelperFragment;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
@@ -53,7 +54,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentAddStickers extends BaseFragment {
+public class FragmentAddStickers extends FragmentToolBarBack {
 
     private APIEmojiService mAPIService;
     private AdapterSettingPage adapterSettingPage;
@@ -75,29 +76,19 @@ public class FragmentAddStickers extends BaseFragment {
         return fragmentAddStickers;
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_stickers, container, false);
+    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
+        inflater.inflate(R.layout.fragment_add_stickers, root, true);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.findViewById(R.id.fc_layot_title).setBackgroundColor(Color.parseColor(G.appBarColor));
+        titleTextView.setText(R.string.add_sticker);
 
         getDataStickers();
         progressBar = view.findViewById(R.id.progress_stricker);
         progressBar.setVisibility(View.VISIBLE);
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_sticker_ripple_txtBack);
-        rippleBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popBackStackFragment();
-            }
-        });
 
         RecyclerView rcvSettingPage = view.findViewById(R.id.rcvSettingPage);
         adapterSettingPage = new AdapterSettingPage(getActivity(), new ArrayList<>());

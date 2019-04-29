@@ -21,6 +21,7 @@ public abstract class FragmentToolBarBack extends BaseFragment {
     public static int numberOfVisible = 0;
     protected MyAppBarLayout appBarLayout;
     protected TextView titleTextView;
+    protected TextView menu_item1;
 
     @Nullable
     @Override
@@ -58,6 +59,8 @@ public abstract class FragmentToolBarBack extends BaseFragment {
         titleTextView.setTypeface(G.typeface_IRANSansMobile);
         appBarLayout = view.findViewById(R.id.ac_appBarLayout);
         appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
+        menu_item1 = view.findViewById(R.id.menu_item1);
+        menu_item1.setVisibility(View.GONE);
 
         RippleView rippleBackButton = (RippleView) view.findViewById(R.id.chl_ripple_back_Button);
         rippleBackButton.setOnClickListener(new View.OnClickListener() {

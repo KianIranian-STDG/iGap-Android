@@ -1,69 +1,39 @@
 package net.iGap.fragments.emoji;
 
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.Glide;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
-import net.iGap.G;
 import net.iGap.R;
-import net.iGap.eventbus.ErrorHandler;
-import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.FragmentToolBarBack;
 import net.iGap.helper.HelperError;
-import net.iGap.helper.HelperFragment;
-import net.iGap.fragments.emoji.api.APIEmojiService;
-import net.iGap.fragments.emoji.api.ApiEmojiUtils;
-import net.iGap.fragments.emoji.struct.StructStickerResult;
-import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AndroidUtils;
-import net.iGap.proto.ProtoFileDownload;
-import net.iGap.realm.RealmStickers;
-import net.iGap.request.RequestFileDownload;
-import net.iGap.response.MessageHandler;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSettingStickers extends BaseFragment {
+public class FragmentSettingStickers extends FragmentToolBarBack {
 
     private List<StructGroupSticker> stickerList = new ArrayList<>();
     private ArrayList<StructItemSticker> recentStickerList;
-    private TextView txtDelete;
 
     public FragmentSettingStickers() {
         // Required empty public constructor
@@ -79,27 +49,21 @@ public class FragmentSettingStickers extends BaseFragment {
         return fragmentDetailStickers;
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_remove_stickers, container, false);
+    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
+        inflater.inflate(R.layout.fragment_remove_stickers, root, true);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        titleTextView.setText(R.string.remove_sticker);
 
         stickerList = (List<StructGroupSticker>) getArguments().getSerializable("GROUP_ID");
         recentStickerList = (ArrayList<StructItemSticker>) getArguments().getSerializable("RECENT");
 
-        AppBarLayout appBarLayout = view.findViewById(R.id.appBarLayout);
-        appBarLayout.setBackgroundColor(Color.parseColor(G.appBarColor));
-
-        txtDelete = view.findViewById(R.id.txtDelete);
-        txtDelete.setVisibility(View.GONE);
-        txtDelete.setOnClickListener(new View.OnClickListener() {
+        menu_item1.setText(R.string.md_rubbish_delete_file);
+        menu_item1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -124,16 +88,8 @@ public class FragmentSettingStickers extends BaseFragment {
             }
         });
 
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.fc_sticker_ripple_txtBack);
-        rippleBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popBackStackFragment();
-            }
-        });
-
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.pager);
+        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
+        ViewPager viewPager = view.findViewById(R.id.pager);
 
         viewPager.setAdapter(new SectionPagerAdapter(getActivity().getSupportFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);
@@ -148,9 +104,9 @@ public class FragmentSettingStickers extends BaseFragment {
             public void onPageSelected(int i) {
 
                 if (i == 1) {
-                    txtDelete.setVisibility(View.VISIBLE);
+                    menu_item1.setVisibility(View.VISIBLE);
                 } else {
-                    txtDelete.setVisibility(View.GONE);
+                    menu_item1.setVisibility(View.GONE);
                 }
 
             }
