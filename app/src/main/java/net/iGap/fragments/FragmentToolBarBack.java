@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.iGap.G;
@@ -15,7 +16,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.MyAppBarLayout;
 
-public class FragmentToolBarBack extends BaseFragment {
+public abstract class FragmentToolBarBack extends BaseFragment {
 
     public static int numberOfVisible = 0;
     protected MyAppBarLayout appBarLayout;
@@ -25,8 +26,13 @@ public class FragmentToolBarBack extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         numberOfVisible++;
-        return super.onCreateView(inflater, container, savedInstanceState);
+
+        LinearLayout view = (LinearLayout) inflater.inflate(R.layout.toolbar_back_fragment, container, false);
+        onCreateViewBody(inflater, view, savedInstanceState);
+        return attachToSwipeBack(view);
     }
+
+    public abstract void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState);
 
     @Override
     public void onDestroyView() {

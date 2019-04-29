@@ -6,15 +6,6 @@
     style="?backgroundColorSettingTheme"
     android:layoutDirection="ltr">
 
-    <include
-        layout="@layout/toolbar_back_fragment"
-        android:id="@+id/ac_appBarLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/pullToRefresh"
         android:layout_width="0dp"
@@ -22,7 +13,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ac_appBarLayout" >
+        app:layout_constraintTop_toTopOf="parent" >
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rcDiscovery"

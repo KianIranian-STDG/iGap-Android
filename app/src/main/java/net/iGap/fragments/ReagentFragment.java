@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -82,10 +83,9 @@ public class ReagentFragment extends FragmentToolBarBack implements OnCountryCod
     }
 
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return attachToSwipeBack(LayoutInflater.from(getContext()).inflate(R.layout.fragment_reagent, container, false));
+    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
+        inflater.inflate(R.layout.fragment_reagent, root, true);
     }
 
     @Override

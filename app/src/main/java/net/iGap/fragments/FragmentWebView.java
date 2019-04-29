@@ -9,10 +9,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.iGap.G;
@@ -39,22 +39,19 @@ public class FragmentWebView extends FragmentToolBarBack implements IOnBackPress
         return discoveryFragment;
     }
 
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        url = getArguments().getString("url");
-        if (!url.startsWith("https://") && !url.startsWith("http://")) {
-            url = "http://" + url;
-        }
-
-        return attachToSwipeBack(inflater.inflate(R.layout.fragment_my_web_view, container, false));
+    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
+        inflater.inflate(R.layout.fragment_my_web_view, root, true);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        url = getArguments().getString("url");
+        if (!url.startsWith("https://") && !url.startsWith("http://")) {
+            url = "http://" + url;
+        }
+
         webView = view.findViewById(R.id.webView);
         webViewError = view.findViewById(R.id.webViewError);
 

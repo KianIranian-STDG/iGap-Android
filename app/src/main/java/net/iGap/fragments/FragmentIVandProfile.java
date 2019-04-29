@@ -9,7 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
 import net.iGap.databinding.FragmentIvandProfileBinding;
 import net.iGap.G;
 import net.iGap.R;
@@ -27,13 +28,9 @@ public class FragmentIVandProfile extends FragmentToolBarBack {
     private FragmentIVandProfileViewModel viewModel;
     private CircleImageView profileImage;
 
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ivand_profile, container, false);
-        return attachToSwipeBack(binding.getRoot());
+    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_ivand_profile, root, true);
     }
 
     @Override

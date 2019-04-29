@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -21,6 +22,7 @@ import com.google.gson.reflect.TypeToken;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.discovery.DiscoveryAdapter;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.fragments.FragmentToolBarBack;
@@ -48,11 +50,6 @@ public class DiscoveryFragment extends FragmentToolBarBack {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         RecyclerView.Adapter adapter = rcDiscovery.getAdapter();
@@ -61,22 +58,18 @@ public class DiscoveryFragment extends FragmentToolBarBack {
         }
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        page = getArguments().getInt("page");
-        View view = inflater.inflate(R.layout.fragment_discovery, container, false);
-        if (page == 0) {
-            return view;
-        } else {
-            return attachToSwipeBack(view);
-        }
+    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
+        inflater.inflate(R.layout.fragment_discovery, root, true);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        page = getArguments().getInt("page");
+        if (page == 0){
+            setSwipeBackEnable(false);
+        }
         adapterDiscovery = new DiscoveryAdapter(getActivity(), new ArrayList<>());
         emptyRecycle = view.findViewById(R.id.emptyRecycle);
 

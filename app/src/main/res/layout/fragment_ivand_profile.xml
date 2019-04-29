@@ -20,17 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            layout="@layout/toolbar_back_fragment"
-            android:id="@+id/ac_appBarLayout"
-            android:layout_width="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_height="wrap_content"
-            android:layoutDirection="ltr" />
-
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_below="@+id/ac_appBarLayout"
             android:layout_above="@+id/btn_ivand_orderHistory"
             android:layout_height="match_parent">
 
