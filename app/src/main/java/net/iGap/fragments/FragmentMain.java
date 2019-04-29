@@ -37,6 +37,7 @@ import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
 import net.iGap.adapter.items.chat.ViewMaker;
+import net.iGap.helper.AvatarHandler;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
@@ -1016,14 +1017,12 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         public String action;
         private View emptyView;
         private View loadingView;
-        private HashMap<Long, ArrayList<String>> avatarCache;
 
         public RoomAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, OnComplete complete, View emptyView, View loadingView) {
             super(data, true);
             this.mComplete = complete;
             this.emptyView = emptyView;
             this.loadingView = loadingView;
-            this.avatarCache = new HashMap<>();
         }
 
         @Override
@@ -1440,59 +1439,27 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
         private void setAvatar(final RealmRoom mInfo, ViewHolder holder) {
             long idForGetAvatar;
-            HelperAvatar.AvatarType avatarType;
+            AvatarHandler.AvatarType avatarType;
             if (mInfo.getType() == CHAT) {
                 idForGetAvatar = mInfo.getChatRoom().getPeerId();
-                avatarType = HelperAvatar.AvatarType.USER;
+                avatarType = AvatarHandler.AvatarType.USER;
             } else {
                 idForGetAvatar = mInfo.getId();
-                avatarType = HelperAvatar.AvatarType.ROOM;
+                avatarType = AvatarHandler.AvatarType.ROOM;
             }
 
-            if (avatarCache.containsKey(idForGetAvatar)) {
-                ArrayList<String> cacheAvatar = avatarCache.get(idForGetAvatar);
-                if (cacheAvatar.size() == 1) {
-                    G.imageLoader.displayImage(AndroidUtils.suitablePath(cacheAvatar.get(0)), holder.image);
-                } else {
-                    holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), cacheAvatar.get(0), cacheAvatar.get(1)));
+            holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), mInfo.getInitials(), mInfo.getColor()));
+            avatarHandler.getAvatar(holder.image, null, idForGetAvatar, avatarType, false, false, true, new OnAvatarGet() {
+                @Override
+                public void onAvatarGet(String avatarPath, long idForGetAvatar) {
+                   G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                 }
-            } else {
-                final long idForGetAvatarOriginal = idForGetAvatar;
 
-                HelperAvatar.getAvatar(idForGetAvatar, avatarType, false, new OnAvatarGet() {
-                    @Override
-                    public void onAvatarGet(String avatarPath, long idForGetAvatar) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                ArrayList<String> val = new ArrayList<>();
-                                val.add(avatarPath);
-                                avatarCache.put(idForGetAvatar, val);
+                @Override
+                public void onShowInitials(String initials, String color, long idForGetAvatar) {
 
-                                if (idForGetAvatar == idForGetAvatarOriginal) {
-                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onShowInitials(String initials, String color, long idForGetAvatar) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                ArrayList<String> val = new ArrayList<>();
-                                val.add(initials);
-                                val.add(color);
-                                avatarCache.put(idForGetAvatar, val);
-                                if (idForGetAvatar == idForGetAvatarOriginal) {
-                                    holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), initials, color));
-                                }
-                            }
-                        });
-                    }
-                });
-            }
+                }
+            });
         }
 
         private void setChatIcon(RealmRoom mInfo, MaterialDesignTextView textView) {

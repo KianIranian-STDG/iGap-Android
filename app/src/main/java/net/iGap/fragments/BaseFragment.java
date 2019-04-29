@@ -22,6 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import net.iGap.G;
 import net.iGap.activities.ActivityMain;
+import net.iGap.helper.AvatarHandler;
 import net.iGap.helper.HelperFragment;
 import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
@@ -32,6 +33,7 @@ public class BaseFragment extends SwipeBackFragment {
 
     public boolean isNeedResume = false;
     protected Fragment currentFragment;
+    public AvatarHandler avatarHandler;
 
     @Override
     public void onAttach(Context context) {
@@ -44,7 +46,7 @@ public class BaseFragment extends SwipeBackFragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-
+        avatarHandler = new AvatarHandler(getFragmentManager());
         checkFont();
         super.onCreate(savedInstanceState);
 
