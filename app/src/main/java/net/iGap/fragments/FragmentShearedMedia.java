@@ -34,6 +34,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,9 @@ import net.iGap.module.DialogAnimation;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.PreCachingLayoutManager;
+import net.iGap.module.RadiusImageView;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.TimeUtils;
 import net.iGap.module.structs.StructMessageInfo;
 import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientCountRoomHistory;
@@ -92,6 +95,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.realm.Realm;
@@ -138,7 +142,7 @@ public class FragmentShearedMedia extends BaseFragment {
     private int numberOfSelected = 0;
     private int listCount = 0;
     private int changeSize = 0;
-    private int spanItemCount = 3;
+    private int spanItemCount = 4;
     private int offset;
     private boolean isChangeSelectType = false;
     private boolean canUpdateAfterDownload = false;
@@ -150,6 +154,7 @@ public class FragmentShearedMedia extends BaseFragment {
     private MaterialDesignTextView btnGoToPage;
     public static GoToPositionFromShardMedia goToPositionFromShardMedia;
     public static boolean goToPosition = false;
+    private int mCurrentSharedMediaType = 1 ; // 1 = image / 2 = video / 3 = audio / 4 = voice / 5 = gif / 6 = file / 7 = link
 
     public static FragmentShearedMedia newInstance(long roomId) {
         Bundle args = new Bundle();
@@ -635,6 +640,12 @@ public class FragmentShearedMedia extends BaseFragment {
             }
         });
 
+
+/*
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.dp10);
+        recyclerView.addItemDecoration(new GridViewItemDecorView(spacingInPixels));
+*/
+
         recyclerView.setLayoutManager(gLayoutManager);
         recyclerView.setAdapter(adapter);
 
@@ -643,21 +654,23 @@ public class FragmentShearedMedia extends BaseFragment {
             public void onGlobalLayout() {
                 recyclerView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 int viewWidth = recyclerView.getMeasuredWidth();
-                float cardViewWidth = G.context.getResources().getDimension(R.dimen.dp120);
+                float cardViewWidth = G.context.getResources().getDimension(R.dimen.dp100);
                 int newSpanCount = (int) Math.floor(viewWidth / cardViewWidth);
 
-                if (newSpanCount < 3) {
-                    newSpanCount = 3;
+                if (newSpanCount < 4) {
+                    newSpanCount = 4;
                 }
 
-                spanItemCount = newSpanCount;
-                gLayoutManager.setSpanCount(newSpanCount);
+                //spanItemCount = newSpanCount;
+                gLayoutManager.setSpanCount(spanItemCount);
                 gLayoutManager.requestLayout();
             }
         });
     }
 
     private void fillListImage() {
+
+        mCurrentSharedMediaType = 1 ;
 
         isChangeSelectType = true;
 
@@ -672,6 +685,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
     private void fillListVideo() {
 
+        mCurrentSharedMediaType = 2 ;
         isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_video);
@@ -686,6 +700,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
     private void fillListAudio() {
 
+        mCurrentSharedMediaType = 3 ;
         isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_audio);
@@ -702,6 +717,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
     private void fillListVoice() {
 
+        mCurrentSharedMediaType = 4 ;
         isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_voice);
@@ -718,6 +734,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
     private void fillListGif() {
 
+        mCurrentSharedMediaType = 5 ;
         isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_gif);
@@ -733,6 +750,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
     private void fillListFile() {
 
+        mCurrentSharedMediaType = 6 ;
         isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_file);
@@ -749,6 +767,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
     private void fillListLink() {
 
+        mCurrentSharedMediaType = 7 ;
         isChangeSelectType = true;
 
         txtSharedMedia.setText(R.string.shared_links);
@@ -814,6 +833,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
             Long time = list.get(i).getUpdateTime();
             secondItemTime = month_date.format(time);
+
             if (secondItemTime.compareTo(firstItemTime) > 0 || secondItemTime.compareTo(firstItemTime) < 0) {
 
                 StructShearedMedia timeItem = new StructShearedMedia();
@@ -827,6 +847,12 @@ public class FragmentShearedMedia extends BaseFragment {
                 }
 
                 timeItem.isItemTime = true;
+
+                //check time is today for set string instead of number date
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(time);
+                if (TimeUtils.getCheckDateIsToday(calendar.getTime()))
+                    timeItem.isToday = true;
 
                 result.add(timeItem);
 
@@ -1070,6 +1096,7 @@ public class FragmentShearedMedia extends BaseFragment {
         boolean isItemTime = false;
         String messageTime;
         long messageId;
+        boolean isToday = false ;
     }
 
     private class PreCashGridLayout extends GridLayoutManager {
@@ -1135,7 +1162,26 @@ public class FragmentShearedMedia extends BaseFragment {
             } else {
                 mAdapter.ViewHolderTime holder1 = (mAdapter.ViewHolderTime) holder;
 
-                holder1.txtTime.setText(mList.get(position).messageTime);
+                //check and show just first block with header
+                if (position == 0 && mCurrentSharedMediaType == 1 ) {
+                    holder1.txtHeader.setText(context.getString(R.string.images));
+                    holder1.txtHeader.setVisibility(View.VISIBLE);
+                    holder1.vSplitter.setVisibility(View.VISIBLE);
+                }
+
+                //convert numbers to persian if language was
+                String date ;
+                if (G.selectedLanguage.equals("fa")) {
+                    holder1.txtTime.setGravity(Gravity.RIGHT);
+                    date = HelperCalander.convertToUnicodeFarsiNumber(mList.get(position).messageTime);
+                }else {
+                    date = mList.get(position).messageTime;
+                }
+                //check if date was today set text to txtTime else set date
+                holder1.txtTime.setText(
+                        !mList.get(position).isToday ?
+                                date : context.getString(R.string.today)
+                ) ;
             }
         }
 
@@ -1151,7 +1197,7 @@ public class FragmentShearedMedia extends BaseFragment {
 
             try {
                 // set blue back ground for selected file
-                FrameLayout layout = (FrameLayout) holder.itemView.findViewById(R.id.smsl_fl_contain_main);
+                FrameLayout layout = holder.itemView.findViewById(R.id.smsl_fl_contain_main);
 
                 if (SelectedList.indexOf(mList.get(position).messageId) >= 0) {
                     layout.setForeground(new ColorDrawable(Color.parseColor("#99AADFF7")));
@@ -1419,10 +1465,14 @@ public class FragmentShearedMedia extends BaseFragment {
 
         public class ViewHolderTime extends RecyclerView.ViewHolder {
             public TextView txtTime;
+            public TextView txtHeader;
+            public View vSplitter ;
 
             public ViewHolderTime(View view) {
                 super(view);
-                txtTime = (TextView) itemView.findViewById(R.id.smslt_txt_time);
+                txtTime =  itemView.findViewById(R.id.smslt_txt_time);
+                txtHeader = itemView.findViewById(R.id.smslt_txt_header);
+                vSplitter = itemView.findViewById(R.id.smslt_time_shared_splitter);
             }
         }
     }
@@ -1543,14 +1593,15 @@ public class FragmentShearedMedia extends BaseFragment {
 
         public class ViewHolder extends mHolder {
 
-            public ImageView imvPicFile;
+            public RadiusImageView imvPicFile;
             public String tempFilePath;
             public String filePath;
 
             public ViewHolder(View view) {
                 super(view);
 
-                imvPicFile = (ImageView) itemView.findViewById(R.id.smsl_imv_file_pic);
+                imvPicFile = itemView.findViewById(R.id.smsl_imv_file_pic);
+
             }
         }
     }
@@ -1710,7 +1761,7 @@ public class FragmentShearedMedia extends BaseFragment {
         }
 
         public class ViewHolder extends mHolder {
-            public ImageView imvPicFile;
+            public RadiusImageView imvPicFile;
             public TextView txtVideoIcon;
             public TextView txtVideoTime;
             public LinearLayout layoutInfo;
@@ -1719,7 +1770,7 @@ public class FragmentShearedMedia extends BaseFragment {
             public ViewHolder(View view) {
                 super(view);
 
-                imvPicFile = (ImageView) itemView.findViewById(R.id.smsl_imv_file_pic);
+                imvPicFile =  itemView.findViewById(R.id.smsl_imv_file_pic);
 
                 layoutInfo = (LinearLayout) itemView.findViewById(R.id.smsl_ll_video);
 

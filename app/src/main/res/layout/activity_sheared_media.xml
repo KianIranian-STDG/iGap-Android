@@ -18,6 +18,8 @@
     android:layout_height="match_parent"
     style="?backgroundSubChatTheme"
     android:scrollbars="vertical"
+    android:paddingRight="@dimen/dp16"
+    android:paddingLeft="@dimen/dp16"
     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
   <android.support.design.widget.AppBarLayout

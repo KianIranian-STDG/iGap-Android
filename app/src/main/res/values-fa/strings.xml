@@ -694,6 +694,7 @@
     <string name="shared_voice">پیام صوتی اشتراک گذاشته شده</string>
     <string name="shared_gif">تصویر متحرک اشتراک گذاشته شده</string>
     <string name="shared_file">فایل به اشتراک گذاشته شده</string>
+    <string name="images">تصاویر</string>
     <string name="qr_payment">هزینهٔ کیو آر</string>
     <string name="charge_balance">میزان شارژ</string>
     <string name="total_balance">میزان کل</string>
