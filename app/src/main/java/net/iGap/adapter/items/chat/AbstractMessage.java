@@ -315,6 +315,39 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         return super.withIdentifier(identifier);
     }
 
+    private void OnClickRow(ChatItemHolder holder, View view) {
+        new CountDownTimer(300, 100) {
+
+            public void onTick(long millisUntilFinished) {
+                view.setEnabled(false);
+            }
+
+            public void onFinish() {
+                view.setEnabled(true);
+            }
+        }.start();
+
+        if (FragmentChat.isInSelectionMode) {
+            holder.itemView.performLongClick();
+        } else {
+            if (G.isLinkClicked) {
+                G.isLinkClicked = false;
+                return;
+            }
+
+            if (messageClickListener != null && mMessage != null && mMessage.senderID != null && !mMessage.senderID.equalsIgnoreCase("-1")) {
+                if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
+                    return;
+                }
+                if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
+                    messageClickListener.onFailedMessageClick(view, mMessage, holder.getAdapterPosition());
+                } else {
+                    messageClickListener.onContainerClick(view, mMessage, holder.getAdapterPosition());
+                }
+            }
+        }
+    }
+
     @Override
     @CallSuper
     public void bindView(final VH holder, List<Object> payloads) {
@@ -329,36 +362,14 @@ public abstract class AbstractMessage<Item extends AbstractMessage<?, ?>, VH ext
         mHolder.mainContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new CountDownTimer(300, 100) {
+                OnClickRow(mHolder, view);
+            }
+        });
 
-                    public void onTick(long millisUntilFinished) {
-                        view.setEnabled(false);
-                    }
-
-                    public void onFinish() {
-                        view.setEnabled(true);
-                    }
-                }.start();
-
-                if (FragmentChat.isInSelectionMode) {
-                    holder.itemView.performLongClick();
-                } else {
-                    if (G.isLinkClicked) {
-                        G.isLinkClicked = false;
-                        return;
-                    }
-
-                    if (messageClickListener != null && mMessage != null && mMessage.senderID != null && !mMessage.senderID.equalsIgnoreCase("-1")) {
-                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.SENDING.toString())) {
-                            return;
-                        }
-                        if (mMessage.status.equalsIgnoreCase(ProtoGlobal.RoomMessageStatus.FAILED.toString())) {
-                            messageClickListener.onFailedMessageClick(view, mMessage, holder.getAdapterPosition());
-                        } else {
-                            messageClickListener.onContainerClick(view, mMessage, holder.getAdapterPosition());
-                        }
-                    }
-                }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnClickRow(mHolder, view);
             }
         });
 
