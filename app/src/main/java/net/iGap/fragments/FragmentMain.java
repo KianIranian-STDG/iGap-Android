@@ -1056,7 +1056,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                     OrderedCollectionChangeSet.Range[] insertions = changeSet.getInsertionRanges();
                     for (OrderedCollectionChangeSet.Range range : insertions) {
                         notifyItemRangeInserted(range.startIndex, range.length);
-                        goToTop();
+                        //goToTop();
                     }
 
                     if (!updateOnModification) {
@@ -1275,6 +1275,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             } else {
 
                 if (mInfo.getLastMessage() != null) {
+                    holder.txtTime.setVisibility(View.VISIBLE);
                     String lastMessage = AppUtils.rightLastMessage(RealmRoomMessage.getFinalMessage(mInfo.getLastMessage()));
 
                     if (lastMessage == null) {
@@ -1469,7 +1470,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             if (mInfo.getType() == CHAT || mainType != all) {
                 textView.setVisibility(View.GONE);
             } else {
-
+                textView.setVisibility(View.VISIBLE);
                 if (mInfo.getType() == GROUP) {
                     textView.setText(getStringChatIcon(RoomType.GROUP));
                 } else if (mInfo.getType() == CHANNEL) {
