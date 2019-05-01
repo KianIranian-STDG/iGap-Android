@@ -1147,6 +1147,8 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
                 if (mInfo.getLastMessage() != null && mInfo.getLastMessage().getUpdateOrCreateTime() != 0) {
                     holder.txtTime.setText(HelperCalander.getTimeForMainRoom(mInfo.getLastMessage().getUpdateOrCreateTime()));
+                } else {
+                    holder.txtTime.setVisibility(View.GONE);
                 }
 
                 /**

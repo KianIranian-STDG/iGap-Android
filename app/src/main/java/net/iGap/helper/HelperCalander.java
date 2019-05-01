@@ -315,7 +315,7 @@ public class HelperCalander {
                 output = HelperCalander.getClocktime(time, true);
             }
 
-        } else if (current.get(Calendar.DAY_OF_YEAR) < (date.get(Calendar.DAY_OF_YEAR) + 7)) {// just week name
+        } else if (((current.getTimeInMillis() - date.getTimeInMillis()) / (24 * 60 * 60 * 1000L)) < 7L) {// just week name
 
             if (HelperCalander.isTimeHijri() == 1) {
                 output = getPersianStringDay(date.get(Calendar.DAY_OF_WEEK));
