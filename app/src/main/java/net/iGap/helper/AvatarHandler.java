@@ -256,7 +256,7 @@ public class AvatarHandler {
          * important note: this function must always be called from ui thread
          */
 
-        if (useCache) {
+        if (useCache && !showMain) {
             Bitmap cacheValue = avatarCache.get(ownerId);
             if (cacheValue != null) {
                 imageView.setImageBitmap(cacheValue);

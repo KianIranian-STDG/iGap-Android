@@ -136,6 +136,7 @@ import net.iGap.fragments.emoji.FragmentAddStickers;
 import net.iGap.fragments.emoji.FragmentSettingStickers;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
+import net.iGap.helper.AvatarHandler;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
@@ -144,6 +145,7 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperGetMessageState;
+import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperMimeType;
 import net.iGap.helper.HelperNotification;
@@ -5503,40 +5505,30 @@ public class FragmentChat extends BaseFragment
      */
     private void setAvatar() {
         long idForGetAvatar;
-        HelperAvatar.AvatarType type;
+        AvatarHandler.AvatarType type;
         if (chatType == CHAT) {
             idForGetAvatar = chatPeerId;
-            type = HelperAvatar.AvatarType.USER;
+            type = AvatarHandler.AvatarType.USER;
         } else {
             idForGetAvatar = mRoomId;
-            type = HelperAvatar.AvatarType.ROOM;
+            type = AvatarHandler.AvatarType.ROOM;
         }
 
-        HelperAvatar.getAvatar(idForGetAvatar, type, true, new OnAvatarGet() {
+        final RealmRoom realmRoom = getRealmChat().where(RealmRoom.class).equalTo(RealmRoomFields.ID, mRoomId).findFirst();
+        if (realmRoom == null || !realmRoom.isValid()){
+            return;
+        }
+
+        avatarHandler.getAvatar(imvUserPicture, null, idForGetAvatar, type, true,
+                HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp60), realmRoom.getInitials(), realmRoom.getColor()), false, new OnAvatarGet() {
             @Override
-            public void onAvatarGet(final String avatarPath, long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (idForGetAvatar != ownerId)
-                            return;
-                        G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), imvUserPicture);
-                    }
-                });
+            public void onAvatarGet(String avatarPath, long avatarId) {
+
             }
 
             @Override
-            public void onShowInitials(final String initials, final String color, final long ownerId) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (idForGetAvatar != ownerId)
-                            return;
-                        if (imvUserPicture != null) {
-                            imvUserPicture.setImageBitmap(net.iGap.helper.HelperImageBackColor.drawAlphabetOnPicture((int) G.context.getResources().getDimension(R.dimen.dp60), initials, color));
-                        }
-                    }
-                });
+            public void onShowInitials(String initials, String color, long avatarId) {
+
             }
         });
     }
