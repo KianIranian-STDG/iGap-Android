@@ -129,4 +129,16 @@ public final class TimeUtils {
         }
         return output;
     }
+
+    public static boolean getCheckDateIsToday(Date input){
+        Calendar current = Calendar.getInstance();
+        Calendar date = Calendar.getInstance();
+        date.setTime(input);
+
+        if (  current.get(Calendar.DAY_OF_YEAR) == date.get(Calendar.DAY_OF_YEAR) &&
+                current.get(Calendar.YEAR) == date.get(Calendar.YEAR)  ) {
+            return true;
+        }
+        return false;
+    }
 }

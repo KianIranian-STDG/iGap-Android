@@ -102,18 +102,18 @@ public class ConnectionManager {
                              * hint : if call twice or more this receiver , in second time will be called this section .
                              */
                             if (HelperTimeOut.heartBeatTimeOut()) {
-                                Log.i("HHH", "Connection heartBeatTimeOut");
+                               // Log.i("HHH", "Connection heartBeatTimeOut");
                                 reconnect(true);
                                 if (BuildConfig.DEBUG) {
                                     G.handler.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Toast.makeText(G.context, "Connection HeartBeat TimeOut", Toast.LENGTH_SHORT).show();
+                                           // Toast.makeText(G.context, "Connection HeartBeat TimeOut", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
                             } else {
-                                Log.i("HHH", "Connection Not Time Out HeartBeat");
+                               // Log.i("HHH", "Connection Not Time Out HeartBeat");
                             }
                         }
                     }

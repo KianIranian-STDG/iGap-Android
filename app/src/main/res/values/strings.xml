@@ -710,6 +710,7 @@
     <string name="shared_voice">Shared Voices</string>
     <string name="shared_gif">Shared Gifs</string>
     <string name="shared_file">Shared Files</string>
+    <string name="images">Images</string>
     <string name="qr_payment">QR Payment</string>
     <string name="charge_balance">Charge balance</string>
     <string name="total_balance">Total balance</string>
