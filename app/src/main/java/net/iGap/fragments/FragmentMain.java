@@ -1451,11 +1451,10 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 avatarType = AvatarHandler.AvatarType.ROOM;
             }
 
-            holder.image.setImageBitmap(HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), mInfo.getInitials(), mInfo.getColor()));
-            avatarHandler.getAvatar(holder.image, null, idForGetAvatar, avatarType, false, false, true, new OnAvatarGet() {
+            avatarHandler.getAvatar(holder.image, null, idForGetAvatar, avatarType, false,
+                    HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), mInfo.getInitials(), mInfo.getColor()), true, new OnAvatarGet() {
                 @Override
                 public void onAvatarGet(String avatarPath, long idForGetAvatar) {
-                   G.imageLoader.displayImage(AndroidUtils.suitablePath(avatarPath), holder.image);
                 }
 
                 @Override
