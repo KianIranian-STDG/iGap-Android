@@ -47,6 +47,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -67,10 +68,12 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnPhoneContact;
 import net.iGap.interfaces.OnUserContactDelete;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -113,7 +116,7 @@ import static net.iGap.G.context;
 import static net.iGap.R.string.contacts;
 import static net.iGap.R.string.of;
 
-public class RegisteredContactsFragment extends BaseFragment implements OnUserContactDelete, OnPhoneContact {
+public class RegisteredContactsFragment extends BaseFragment implements ToolbarListener, OnUserContactDelete, OnPhoneContact {
 
     private static boolean getPermission = true;
     StickyRecyclerHeadersDecoration decoration;
@@ -144,6 +147,10 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
     public boolean isLongClick = false;
 
     public ArrayList<StructListOfContact> phoneContactsList = new ArrayList<>();
+
+
+    private HelperToolbar mHelperToolbar;
+    private boolean isToolbarInEditMode = false ;
 
 
     public static RegisteredContactsFragment newInstance() {
@@ -236,7 +243,7 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
         }
 
         toolbar = view.findViewById(R.id.fc_layot_title);
-        toolbar.setBackgroundColor(Color.parseColor(G.appBarColor));
+        //toolbar.setBackgroundColor(Color.parseColor(G.appBarColor));
         menu_txt_titleToolbar = (TextView) view.findViewById(R.id.menu_txt_titleToolbar);
         menu_txt_titleToolbar.setText(title);
 
@@ -529,6 +536,20 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
                 }
             }
         });
+
+
+        //todo: Alireza Nazari: working on new design
+        LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(context)
+                .setLeftIcon(R.drawable.ic_edit_toolbar)
+                .setRightIcons(R.drawable.ic_add_toolbar)
+                .setSearchBoxShown(true)
+                .setLogoShown(true)
+                .setListener(this);
+
+        toolbarLayout.addView(mHelperToolbar.getView());
 
     }
 
@@ -1570,6 +1591,36 @@ public class RegisteredContactsFragment extends BaseFragment implements OnUserCo
 
     private interface onLongClickRecyclerView {
         void onClick(View view, int position);
+    }
+
+    //todo : nazari
+
+    @Override //btn edit
+    public void onLeftIconClickListener(View view) {
+        Toast.makeText(_mActivity, "hhddh", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onSearchClickListener(View view) {
+
+        Toast.makeText(_mActivity, "hhh", Toast.LENGTH_SHORT).show();
+        if (!isToolbarInEditMode){
+            mHelperToolbar.getTextViewSearch().setVisibility(View.GONE);
+            mHelperToolbar.getEditTextSearch().setVisibility(View.VISIBLE);
+
+            isToolbarInEditMode = true;
+        }else {
+            mHelperToolbar.getTextViewSearch().setVisibility(View.VISIBLE);
+            mHelperToolbar.getEditTextSearch().setVisibility(View.GONE);
+            closeKeyboard(view);
+            isToolbarInEditMode = false ;
+        }
+    }
+
+    @Override //btn add
+    public void onRightIconClickListener(View view) {
+
     }
 }
 
