@@ -211,10 +211,8 @@ public class MakeButtons {
             btn1.setText(entity.getLable());
 
             btn1.setTextSize(16);
-            if (Build.VERSION.SDK_INT < 21) {
-                card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
-                btn1.setTextColor(Color.parseColor("#000000"));
-            }
+            card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
+            btn1.setTextColor(Color.parseColor("#000000"));
 
             LinearLayout.LayoutParams layout_844 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
 
@@ -255,19 +253,12 @@ public class MakeButtons {
         card.setOnTouchListener(new View.OnTouchListener() {
                                     @Override
                                     public boolean onTouch(View v, MotionEvent event) {
-                                        if (event.getAction() == MotionEvent.ACTION_CANCEL) {
-                                            card.setCardBackgroundColor(Color.parseColor("#ffffff"));
-                                        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                                            //    event.addBatch(0,0,0,0,0,0);
-                                            //            card.setCardBackgroundColor(Color.parseColor("#ffffff"));
-                                        } else if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
 
-                                            card.setCardBackgroundColor(Color.parseColor("#20000000"));
+                                        if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+                                            card.setCardBackgroundColor(Color.parseColor("#afc8cc"));
 
-                                        } else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
-                                            /* Reset Color */
-                                            card.setCardBackgroundColor(Color.parseColor("#ffffff"));
-                                            //  card.setOnClickListener(clickListener);
+                                        } else if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+                                            card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
 
                                         }
                                         return false;

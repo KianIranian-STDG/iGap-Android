@@ -444,6 +444,17 @@ public class RealmMigration implements io.realm.RealmMigration {
             if (realmAttachment != null) {
                 realmAttachment.addIndex(RealmAttachmentFields.TOKEN);
             }
+
+            RealmObjectSchema realmStickers = schema.get(RealmStickers.class.getSimpleName());
+            if (realmStickers.hasField("id")) {
+                realmStickers.removeField("id");
+            }
+
+            RealmObjectSchema realmStickerDetails = schema.get(RealmStickersDetails.class.getSimpleName());
+            if (realmStickerDetails.hasField("id")) {
+                realmStickerDetails.removeField("id");
+            }
+
             oldVersion++;
         }
     }

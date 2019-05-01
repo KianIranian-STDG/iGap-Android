@@ -814,8 +814,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
 
                 if (response.body() != null) {
-                    if (response.body().getOk() && response.body().getData().size() > 0) {
-                        setStickerToRealm(response.body().getData(), true);// add favorit sticker to db
+                    if (response.body().getOk()) {
+                        RealmStickers.updateStickers(response.body().getData());
                     }
                 }
             }
@@ -825,21 +825,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
         Log.d("bagi" ,"ActivityMain:onCreate:end");
-    }
-
-    public static void setStickerToRealm(List<StructGroupSticker> mData, boolean isFavorite) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-//                RealmStickers.setAllDataIsDeleted();
-                for (StructGroupSticker item : mData) {
-                    RealmStickers.put(item.getCreatedAt(), item.getId(), item.getRefId(), item.getName(), item.getAvatarToken(), item.getAvatarSize(), item.getAvatarName(), item.getPrice(), item.getIsVip(), item.getSort(), item.getIsVip(), item.getCreatedBy(), item.getStickers(), isFavorite);
-                }
-//                RealmStickers.removeandUpdateRealm();
-            }
-        });
-        realm.close();
     }
 
 

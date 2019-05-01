@@ -95,7 +95,7 @@
                     android:layout_gravity="center"
                     android:background="@drawable/account_payment_dialog_buttons_back">
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <ImageView
                         android:id="@+id/minus"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
@@ -106,7 +106,7 @@
                         android:padding="8dp"
                         android:src="@drawable/ic_action_remove_white" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <ImageView
                         android:id="@+id/plus"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
