@@ -1445,5 +1445,6 @@
     <string name="share_link_item_dialog">Share Link</string>
     <string name="not_found_message">This message is missing.</string>
     <string name="ivnalid_data_provided">Input values are incorrect.</string>
+    <string name="new_message_notif">New Message</string>
 
 </resources>

@@ -1457,4 +1457,5 @@
     <string name="share_link_item_dialog">اشتراک لینک</string>
     <string name="not_found_message">این پیام وجود ندارد.</string>
     <string name="ivnalid_data_provided">مقادیر ورودی اشتباه است.</string>
+    <string name="new_message_notif">پیام جدید</string>
 </resources>

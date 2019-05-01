@@ -745,6 +745,10 @@ public class HelperNotification {
     }
 
     private String parseMessage(ProtoGlobal.RoomMessage roomMessage) {
+        if (G.isPassCode && ActivityMain.isLock) {
+            return context.getString(R.string.new_message_notif);
+        }
+
         String text = "";
         try {
             if (roomMessage.hasLog()) {
