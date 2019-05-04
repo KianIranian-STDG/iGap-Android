@@ -1,5 +1,307 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="android.graphics.Color" />
+
+        <import type="net.iGap.G" />
+
+        <variable
+            name="activityCallViewModel"
+            type="net.iGap.viewmodel.ActivityCallViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/ac_layout_call_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layoutDirection="ltr"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <org.webrtc.SurfaceViewRenderer
+                android:id="@+id/fcr_surface_peer"
+                android:layout_width="@dimen/dp100"
+                android:layout_height="@dimen/dp140"
+                android:layout_margin="@dimen/dp8"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/ac_layout_main_call"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <org.webrtc.SurfaceViewRenderer
+                android:id="@+id/fcr_surface_remote"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/fcr_imv_background"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="16dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@id/fcr_btn_chat"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/fcr_imv_background_layer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_imv_background"
+            app:layout_constraintLeft_toLeftOf="@id/fcr_imv_background"
+            app:layout_constraintRight_toRightOf="@id/fcr_imv_background"
+            app:layout_constraintTop_toTopOf="@id/fcr_imv_background" />
+
+        <View
+            android:id="@+id/rippleItem"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/callInfo"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".6" />
+
+        <net.iGap.module.CircleImageView
+            android:id="@+id/callingUserImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:civ_border_color="#cccccc"
+            app:civ_border_width="3dp"
+            app:layout_constraintBottom_toBottomOf="@id/rippleItem"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="@id/rippleItem"
+            app:layout_constraintRight_toRightOf="@id/rippleItem"
+            app:layout_constraintTop_toTopOf="@id/rippleItem"
+            app:layout_constraintWidth_percent=".3" />
+
+        <LinearLayout
+            android:id="@+id/callInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/fcr_btn_end"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rippleItem">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/fcr_txt_name"
+                style="@style/TextAppearance.AppCompat.Display1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@{activityCallViewModel.callBackTxtName ,default = Name}" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/fcr_txt_status"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="4dp"
+                android:text="@{activityCallViewModel.callBackTxtStatus ,default = Status}" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/fcr_txt_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowColor="@color/black"
+                android:shadowDx="0"
+                android:shadowDy="3"
+                android:shadowRadius="10"
+                android:text="@{activityCallViewModel.callBackTxtTimer}"
+                android:textColor="#f8f4df"
+                android:visibility="@{activityCallViewModel.txtTimerVisibility , default = gone}" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/btnAddPerson"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> activityCallViewModel.addPersonClickListener()}"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_end"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/fcr_btn_end"
+            app:layout_constraintTop_toTopOf="@id/fcr_btn_end" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/fcr_btn_end"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/md_call_end"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/red"
+            app:cornerRadius="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/fcr_btn_call"
+            app:layout_constraintTop_toBottomOf="@id/callInfo"
+            app:layout_constraintWidth_percent=".4" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/fcr_btn_call"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/md_phone"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="@color/white"
+            android:visibility="@{activityCallViewModel.layoutAnswerCallVisibility, default = visible}"
+            app:backgroundTint="@color/green"
+            app:cornerRadius="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_end"
+            app:layout_constraintLeft_toRightOf="@id/fcr_btn_end"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/fcr_btn_end"
+            app:layout_constraintWidth_percent=".4" />
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/btnVideoCall"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="@{() -> activityCallViewModel.videoCallClickListener()}"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_end"
+            app:layout_constraintLeft_toRightOf="@id/fcr_btn_end"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/fcr_btn_end" />
+
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/fcr_btn_chat"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:onClick="@{activityCallViewModel::onClickBtnChat}"
+            android:text="@string/md_chat"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/fcr_btn_mic"
+            app:layout_constraintTop_toBottomOf="@id/fcr_btn_end" />
+
+        <View
+            android:id="@+id/t2"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/callingUserImageLayerEnd"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
+            app:layout_constraintLeft_toRightOf="@id/fcr_btn_chat"
+            app:layout_constraintRight_toLeftOf="@id/fcr_btn_mic"
+            app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/fcr_btn_mic"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:onClick="@{activityCallViewModel::onClickBtnMic}"
+            android:text="@{activityCallViewModel.cllBackBtnMic , default = @string/md_mic}"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
+            app:layout_constraintLeft_toRightOf="@id/fcr_btn_chat"
+            app:layout_constraintRight_toLeftOf="@id/fcr_btn_speaker"
+            app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
+
+        <View
+            android:id="@+id/t3"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/callingUserImageLayerEnd"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
+            app:layout_constraintLeft_toRightOf="@id/fcr_btn_mic"
+            app:layout_constraintRight_toLeftOf="@id/fcr_btn_speaker"
+            app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/fcr_btn_speaker"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:onClick="@{activityCallViewModel::onClickBtnSpeaker}"
+            android:text="@{activityCallViewModel.cllBackBtnSpeaker , default = @string/md_Mute}"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
+            app:layout_constraintLeft_toRightOf="@id/fcr_btn_mic"
+            app:layout_constraintRight_toLeftOf="@id/fcr_btn_swich_camera"
+            app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
+
+        <View
+            android:id="@+id/t4"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/callingUserImageLayerEnd"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
+            app:layout_constraintLeft_toRightOf="@id/fcr_btn_speaker"
+            app:layout_constraintRight_toLeftOf="@id/fcr_btn_swich_camera"
+            app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/fcr_btn_swich_camera"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:onClick="@{activityCallViewModel::onClickBtnSwitchCamera}"
+            android:text="@string/md_swich_video"
+            android:textAppearance="@style/TextIconAppearance.all"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
+            app:layout_constraintLeft_toRightOf="@id/fcr_btn_speaker"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
+
+        <View
+            android:id="@+id/bottom"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+</layout><!--
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -293,4 +595,4 @@
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>
-</layout>
+</layout>-->

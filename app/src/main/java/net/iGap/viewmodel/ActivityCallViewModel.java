@@ -10,6 +10,7 @@ package net.iGap.viewmodel;
  */
 
 
+import android.arch.lifecycle.MutableLiveData;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothHeadset;
@@ -18,49 +19,24 @@ import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.media.AudioFocusRequest;
-import android.media.AudioFormat;
 import android.media.AudioManager;
-import android.media.AudioRecord;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.media.RingtoneManager;
-import android.media.audiofx.AcousticEchoCanceler;
-import android.media.audiofx.AutomaticGainControl;
-import android.media.audiofx.NoiseSuppressor;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
-import android.widget.Toast;
-
-
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.GravityEnum;
 import com.afollestad.materialdialogs.MaterialDialog;
-
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.databinding.ActivityCallBinding;
-import net.iGap.fragments.FragmentNotificationAndSound;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
-import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPublicMethod;
 import net.iGap.interfaces.ISignalingCallBack;
@@ -68,7 +44,6 @@ import net.iGap.interfaces.SpeakerControlListener;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AttachFile;
 import net.iGap.module.MusicPlayer;
-import net.iGap.module.SHP_SETTING;
 import net.iGap.module.enums.CallState;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.proto.ProtoGlobal;
@@ -80,25 +55,13 @@ import net.iGap.request.RequestSignalingLeave;
 import net.iGap.request.RequestUserInfo;
 import net.iGap.webrtc.WebRTC;
 
-import org.webrtc.voiceengine.WebRtcAudioEffects;
-import org.webrtc.voiceengine.WebRtcAudioManager;
 import org.webrtc.voiceengine.WebRtcAudioUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import io.realm.Realm;
-import yogesh.firzen.mukkiasevaigal.K;
-
-import static android.content.Context.MODE_PRIVATE;
-import static android.media.AudioManager.ACTION_AUDIO_BECOMING_NOISY;
-import static android.media.AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
 
 public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
@@ -115,6 +78,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     public ObservableInt txtTimerVisibility = new ObservableInt(View.GONE);
     public ObservableInt layoutChatCallVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt layoutAnswerCallVisibility = new ObservableInt(View.VISIBLE);
+    public MutableLiveData<Boolean> changeColor = new MutableLiveData<>();
     private boolean isIncomingCall = false;
     private long userId;
     private boolean isSendLeave = false;
@@ -157,6 +121,8 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         } catch (Exception e) {
         }
 
+        changeColor.setValue(true);
+
         getInfo();
 
     }
@@ -169,6 +135,14 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         }
 
         HelperPublicMethod.goToChatRoom(userId, null, null);
+
+    }
+
+    public void addPersonClickListener(){
+
+    }
+
+    public void videoCallClickListener(){
 
     }
 
@@ -185,8 +159,6 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
 
     public void onClickBtnSpeaker(View v) {
-
-
         if (cllBackBtnSpeaker != null && cllBackBtnSpeaker.get() != null) {
 
             if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_igap_bluetooth))) {
@@ -273,50 +245,15 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         }
     }
 
-/*    public void onClickBtnSpeaker(View v) {
-        if (cllBackBtnSpeaker != null && cllBackBtnSpeaker.get() != null) {
-            if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_Mute))) {
-                if (G.isBluetoothConnected) {
-                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_igap_bluetooth));
-                    setSpeakerphoneOn(false);
-
-                } else {
-                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
-                    setSpeakerphoneOn(true);
-                }
-
-            } else if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_unMuted))) {
-                if (G.isBluetoothConnected)
-                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_igap_bluetooth));
-                else
-                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
-
-                setSpeakerphoneOn(false);
-            } else if (cllBackBtnSpeaker.get().equals(G.context.getResources().getString(R.string.md_igap_bluetooth))) {
-                if (G.isHandsFreeConnected) {
-                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_Mute));
-                    setSpeakerphoneOn(false);
-                } else {
-                    cllBackBtnSpeaker.set(G.context.getResources().getString(R.string.md_unMuted));
-                    setSpeakerphoneOn(true);
-                }
-
-
-            }
-        }
-    }*/
-
     public void onClickBtnSwitchCamera(View v) {
         WebRTC.getInstance().switchCamera();
     }
-
 
     private void getInfo() {
         initComponent();
         initCallBack();
         muteMusic();
     }
-
 
     private void initComponent() {
         G.speakerControlListener = new SpeakerControlListener() {
@@ -374,7 +311,6 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
             callBackTxtStatus.set(G.context.getResources().getString(R.string.signaling));
             layoutAnswerCallVisibility.set(View.GONE);
             layoutChatCallVisibility.set(View.GONE);
-
         }
 
         //setAnimation();
@@ -403,17 +339,14 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                         break;
                     case CONNECTED:
                         txtAviVisibility.set(View.GONE);
-
                         layoutOptionVisibility.set(View.VISIBLE);
                         if (!isConnected) {
                             isConnected = true;
                             playSound(R.raw.igap_connect);
-                            G.handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    cancelRingtone();
-                                    startTimer();
-                                }
+                            G.handler.postDelayed(() -> {
+                                changeColor.setValue(false);
+                                cancelRingtone();
+                                startTimer();
                             }, 350);
                         }
 
@@ -421,12 +354,9 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                     case DISCONNECTED:
                         txtAviVisibility.set(View.GONE);
                         playSound(R.raw.igap_discounect);
-                        G.handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                stopTimer();
-                                endVoiceAndFinish();
-                            }
+                        G.handler.postDelayed(() -> {
+                            stopTimer();
+                            endVoiceAndFinish();
                         }, 1000);
                         if (!isSendLeave) {
                             new RequestSignalingLeave().signalingLeave();
@@ -726,11 +656,6 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         }
     }
 
-    //private void setAnimation() {
-    //    Animation animation = AnimationUtils.loadAnimation(G.context.getApplicationContext(), R.anim.translate_enter_down_circke_button);
-    //    layoutCaller.startAnimation(animation);
-    //}
-
     private void setPicture() {
         Realm realm = Realm.getDefaultInstance();
         RealmRegisteredInfo registeredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
@@ -773,6 +698,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                                 @Override
                                 public void run() {
                                     G.imageLoader.displayImage(AndroidUtils.suitablePath(path), activityCallBinding.fcrImvBackground);
+                                    G.imageLoader.displayImage(AndroidUtils.suitablePath(path),activityCallBinding.callingUserImage);
                                 }
                             });
                         }
@@ -882,8 +808,6 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                 HelperLog.setErrorLog("activity call view model   set ringtone uri  " + e);
             }
         }
-
-        startRingAnimation();
     }
 
     private void playSound(final int resSound) {
@@ -945,7 +869,6 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     }
 
     private void cancelRingtone() {
-
         try {
             if (ringtonePlayer != null) {
                 ringtonePlayer.stop();
@@ -978,84 +901,6 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        stopRingAnimation();
-    }
-
-    private void startRingAnimation() {
-
-        final int start = 1600;
-        final int duration = 700;
-
-        final Animation animation1 = new TranslateAnimation(0, 0, 0, -G.context.getResources().getDimension(R.dimen.dp32));
-        animation1.setStartOffset(start);
-        animation1.setDuration(duration);
-        //animation1.setRepeatMode(Animation.RESTART);
-        //animation1.setRepeatCount(Animation.INFINITE);
-        animation1.setInterpolator(new BounceInterpolator());
-
-        final Animation animation2 = new TranslateAnimation(0, 0, -G.context.getResources().getDimension(R.dimen.dp32), 0);
-        animation2.setDuration(duration);
-        animation2.setInterpolator(new BounceInterpolator());
-
-        animation1.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                activityCallBinding.fcrBtnCall.startAnimation(animation2);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        animation2.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-                activityCallBinding.fcrBtnCall.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        activityCallBinding.fcrBtnCall.startAnimation(animation1);
-                    }
-                }, start);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        activityCallBinding.fcrBtnCall.startAnimation(animation1);
-
-    }
-
-    private void stopRingAnimation() {
-
-        try {
-
-            if (activityCallBinding.fcrBtnCall != null) {
-                activityCallBinding.fcrBtnCall.clearAnimation();
-            }
-
-        } catch (Exception e) {
-
-            Log.e("debug", "activityCall     stopRingAnimation      " + e.toString());
-        }
-
-
     }
 
     //*****************************  distance sensor  **********************************************************
@@ -1124,25 +969,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
             if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
-
-                // if you need ti dermine plugin state
-
-               /* int state = intent.getIntExtra("state", -1);
-                switch (state) {
-                    case 0:
-                        Log.d("dddddd", "Headset is unplugged");
-                        break;
-                    case 1:
-                        Log.d("dddddd", "Headset is plugged");
-                        break;
-                    default:
-                        Log.d("dddddd", "I have no idea what the headset state is");
-                }
-
-              */
-
                 if (ringtonePlayer != null && ringtonePlayer.isPlaying()) {
                     cancelRingtone();
                     playRingtone();

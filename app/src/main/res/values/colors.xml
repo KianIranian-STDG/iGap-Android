@@ -162,4 +162,9 @@
   <color name="color_default_discovery_cards">#84ffffff</color>
 
   <color name="start_color">#706e6a</color>
+
+  <color name="callingUserImageLayerEnd">#FFFFFF</color>
+  <color name="callingUserImageLayerStart">#50FFFFFF</color>
+  <color name="incomingCallUserImageLayerStart">#50999999</color>
+  <color name="incomingCallUserImageLayerEnd">#999999</color>
 </resources>
