@@ -9,6 +9,7 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/dp52"
     android:paddingEnd="@dimen/dp20"
+    android:background="@color/white"
     android:paddingRight="@dimen/dp52">
 
 

@@ -1117,7 +1117,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             public void onClick(View view) {
                 final Fragment fragment = RegisteredContactsFragment.newInstance();
                 Bundle bundle = new Bundle();
-                bundle.putString("TITLE", "New Chat");
+                //bundle.putString("TITLE", "New Chat");
+                bundle.putString("TITLE", "ADD");
                 fragment.setArguments(bundle);
 
                 try {
@@ -1196,7 +1197,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         switch (fm.mainType) {
 
                             case all:
-                                arcMenu.toggleMenu();
+                                //arcMenu.toggleMenu();
+                                btnStartNewChat.performClick();
+
                                 break;
                             case chat:
                                 btnStartNewChat.performClick();

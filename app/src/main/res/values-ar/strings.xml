@@ -2397,4 +2397,7 @@
     <string name="share_link_item_dialog">ربط الاشتراك</string>
     <string name="not_found_message">هذه الرسالة مفقودة.</string>
     <string name="ivnalid_data_provided">قيم الإدخال غير صحيحة.</string>
+
+    <string name="secret_chat">محادثة سرية</string>
+
 </resources>

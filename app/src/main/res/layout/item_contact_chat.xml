@@ -1,19 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/iv_itemContactChat_root"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp70">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_itemContactChat_profileImage"
-        android:layout_width="@dimen/dp52"
-        android:layout_height="@dimen/dp52"
-        android:layout_marginStart="@dimen/dp8"
-        android:layout_marginLeft="@dimen/dp8"
-        android:background="@drawable/shape_background_profile_sample"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:id="@+id/iv_itemContactChat_ll"
+        android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+
+        <CheckBox
+            android:id="@+id/iv_itemContactChat_checkBox"
+            android:layout_width="@dimen/dp36"
+            android:layout_height="@dimen/dp36"
+            android:layout_marginRight="@dimen/dp20"
+            android:layout_marginLeft="@dimen/dp20"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_itemContactChat_profileImage"
+            android:layout_width="@dimen/dp52"
+            android:layout_height="@dimen/dp52"
+            android:layout_marginStart="@dimen/dp24"
+            android:layout_marginLeft="@dimen/dp24"
+            android:background="@drawable/shape_background_profile_sample"/>
+
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_itemContactChat_userName"
@@ -22,6 +41,7 @@
         android:text="user name"
         android:textColor="@android:color/black"
         android:textStyle="bold"
+        android:fontFamily="@font/main_font"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemContactChat_userPhoneNumber"
         app:layout_constraintStart_toStartOf="@+id/tv_itemContactChat_userPhoneNumber"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,10 +51,11 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/dp20"
         android:layout_marginStart="@dimen/dp16"
+        android:fontFamily="@font/main_font"
         android:layout_marginLeft="@dimen/dp16"
         android:text="09xxxxx"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_itemContactChat_profileImage"
+        app:layout_constraintStart_toEndOf="@+id/iv_itemContactChat_ll"
         app:layout_constraintTop_toBottomOf="@+id/tv_itemContactChat_userName" />
 
 
