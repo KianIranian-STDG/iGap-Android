@@ -1448,4 +1448,7 @@
     <string name="ivnalid_data_provided">Input values are incorrect.</string>
     <string name="new_message_notif">New Message</string>
 
+
+    <string name="top_sheet_behavior" translatable="false">net.iGap.dialog.topsheet.TopSheetBehavior</string>
+
 </resources>
