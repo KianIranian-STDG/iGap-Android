@@ -700,4 +700,25 @@
     <item name="android:textSize">@dimen/dp22</item>
   </style>
 
+  <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+    <item name="android:windowIsFloating">true</item>
+    <item name="bottomSheetStyle">@style/BottomSheet</item>
+  </style>
+
+  <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+    <item name="android:background">@drawable/bottom_sheet_background</item>
+  </style>
+
+  <style name="Widget.Design.TopSheet.Modal" parent="android:Widget">
+    <item name="android:elevation">@dimen/dp8</item>
+    <item name="android:background">@drawable/top_sheet_background</item>
+    <!--<item name="behavior_peekHeight">@dimen/top_sheet_modal_peek_height</item>-->
+    <item name="behavior_hideable">true</item>
+  </style>
+
+  <style name="Animation.Design.TopSheetDialog" parent="Animation.AppCompat.Dialog">
+    <item name="android:windowEnterAnimation">@anim/top_sheet_slide_in</item>
+    <item name="android:windowExitAnimation">@anim/top_sheet_slide_out</item>
+  </style>
+
 </resources>

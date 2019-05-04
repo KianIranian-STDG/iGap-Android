@@ -1446,4 +1446,7 @@
     <string name="not_found_message">This message is missing.</string>
     <string name="ivnalid_data_provided">Input values are incorrect.</string>
 
+
+    <string name="top_sheet_behavior" translatable="false">net.iGap.dialog.topsheet.TopSheetBehavior</string>
+
 </resources>

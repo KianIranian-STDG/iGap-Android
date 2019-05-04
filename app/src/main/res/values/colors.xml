@@ -167,4 +167,5 @@
   <color name="callingUserImageLayerStart">#50FFFFFF</color>
   <color name="incomingCallUserImageLayerStart">#50999999</color>
   <color name="incomingCallUserImageLayerEnd">#999999</color>
+  <color name="bottomSheetHeaderLine">#EEEEEE</color>
 </resources>
