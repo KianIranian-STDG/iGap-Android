@@ -344,7 +344,24 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
 
                 @Override
                 public void onOpen(SwipeLayout layout) {
+                    if (!viewHolder.isOpenDialog) {
+                        viewHolder.isOpenDialog = true;
+                        MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).content(R.string.un_block_user).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                new RequestUserContactsUnblock().userContactsUnblock(registeredInfo.getId());
+                            }
+                        }).negativeText(R.string.B_cancel).build();
 
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                viewHolder.swipeLayout.close();
+                                viewHolder.isOpenDialog = false;
+                            }
+                        });
+                        dialog.show();
+                    }
                 }
 
                 @Override
@@ -365,24 +382,6 @@ public class FragmentBlockedUser extends BaseFragment implements OnBlockStateCha
                 @Override
                 public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {
 
-                    if (!viewHolder.isOpenDialog) {
-                        viewHolder.isOpenDialog = true;
-                        MaterialDialog dialog = new MaterialDialog.Builder(G.currentActivity).content(R.string.un_block_user).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                            @Override
-                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                                new RequestUserContactsUnblock().userContactsUnblock(registeredInfo.getId());
-                            }
-                        }).negativeText(R.string.B_cancel).build();
-
-                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                                viewHolder.swipeLayout.close();
-                                viewHolder.isOpenDialog = false;
-                            }
-                        });
-                        dialog.show();
-                    }
                 }
             });
         }

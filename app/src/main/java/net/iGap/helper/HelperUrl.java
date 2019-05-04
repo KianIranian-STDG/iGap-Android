@@ -92,6 +92,7 @@ public class HelperUrl {
     public static MaterialDialog dialogWaiting;
     public static String igapResolve = "igap://resolve?";
     private static Pattern patternMessageLink = Pattern.compile("(https?:(//|\\\\\\\\))?(www\\.)?(igap\\.net(/|\\\\))(.*)(/|\\\\)([0-9]+)(\\\\|/)?");
+    private static Pattern patternMessageLink2 = Pattern.compile("igap://resolve\\?domain=(.*)&post=([0-9]*)");
 
     private static boolean isIgapLink(String text) {
         return text.matches("(https?\\:\\/\\/)?igap.net/(.*)");
@@ -364,19 +365,26 @@ public class HelperUrl {
         ClickableSpan clickable = new ClickableSpan() {
             public void onClick(View view) {
 
+                String url = strBuilder.toString().substring(start, end);
+
                 G.isLinkClicked = true;
-                try {
-                    String url = strBuilder.toString().substring(start, end);
+                Matcher matcher2 = patternMessageLink2.matcher(url);
+                if (matcher2.find()){
+                    String username = matcher2.group(1);
+                    long messageId = Long.parseLong(matcher2.group(2));
+                    checkUsernameAndGoToRoomWithMessageId(username, ChatEntry.profile, messageId);
+                } else {
+                    try {
+                        Uri path = Uri.parse(url);
 
-                    Uri path = Uri.parse(url);
+                        String domain = path.getQueryParameter("domain");
 
-                    String domain = path.getQueryParameter("domain");
+                        if (domain != null && domain.length() > 0) {
+                            checkUsernameAndGoToRoom(domain, ChatEntry.profile);
+                        }
+                    } catch (Exception e) {
 
-                    if (domain != null && domain.length() > 0) {
-                        checkUsernameAndGoToRoom(domain, ChatEntry.profile);
                     }
-                } catch (Exception e) {
-
                 }
             }
 
@@ -920,8 +928,7 @@ public class HelperUrl {
      */
 
     public static void checkUsernameAndGoToRoomWithMessageId(final String username, final ChatEntry chatEntry, final long messageId) {
-
-        if (username == null || username.length() < 1 || isInCurrentChat(username)) return;
+        if (username == null || username.length() < 1) return;
 
         if (G.userLogin) {
 
@@ -1170,8 +1177,17 @@ public class HelperUrl {
 
                 if (room.getId() != FragmentChat.lastChatRoomId) {
                     new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity();
+                } else {
+                    try {
+                        if (G.fragmentManager != null) {
+                            G.fragmentManager.popBackStack();
+                            new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity();
+                        }
+                    } catch (Exception e) {
+                        HelperLog.setErrorLog(e);
+                        e.printStackTrace();
+                    }
                 }
-
             }
 
             realm.close();
@@ -1233,9 +1249,14 @@ public class HelperUrl {
 
         if (G.userLogin) {
             Matcher matcher = patternMessageLink.matcher(path.toString());
+            Matcher matcher2 = patternMessageLink2.matcher(path.toString());
             if (matcher.find()) {
                 String username = matcher.group(6);
                 long messageId = Long.parseLong(matcher.group(8));
+                checkUsernameAndGoToRoomWithMessageId(username, ChatEntry.profile, messageId);
+            } else if (matcher2.find()) {
+                String username = matcher2.group(1);
+                long messageId = Long.parseLong(matcher2.group(2));
                 checkUsernameAndGoToRoomWithMessageId(username, ChatEntry.profile, messageId);
             } else {
                 getToRoom(path);
