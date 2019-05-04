@@ -37,13 +37,14 @@ import net.iGap.R;
 import net.iGap.dialog.BottomSheetItemClickCallback;
 import net.iGap.dialog.BottomSheetListAdapter;
 
+import java.util.List;
+
 /**
  * Created by andrea on 23/08/16.
  */
 public class TopSheetDialog extends AppCompatDialog {
 
-    private TopSheetBehavior<FrameLayout> topSheetBehavior;
-    private int itemListId;
+    private List<String> itemList;
     private int range;
     private BottomSheetItemClickCallback bottomSheetItemClickCallback;
 
@@ -59,88 +60,54 @@ public class TopSheetDialog extends AppCompatDialog {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
     }
 
-    protected TopSheetDialog(@NonNull Context context, boolean cancelable,
-                             DialogInterface.OnCancelListener cancelListener) {
+    protected TopSheetDialog(@NonNull Context context, boolean cancelable, DialogInterface.OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
     }
 
     @Override
     public void setContentView(@LayoutRes int layoutResId) {
-        super.setContentView(wrapInTopSheet(layoutResId, null, null));
+        super.setContentView(wrapInTopSheet());
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
     @Override
     public void setContentView(View view) {
-        super.setContentView(wrapInTopSheet(0, view, null));
+        super.setContentView(wrapInTopSheet());
     }
 
     @Override
     public void setContentView(View view, ViewGroup.LayoutParams params) {
-        super.setContentView(wrapInTopSheet(0, view, params));
+        super.setContentView(wrapInTopSheet());
     }
 
-    public TopSheetDialog setListData(int listItemResId,int range,BottomSheetItemClickCallback bottomSheetItemClickCallback){
-        this.itemListId = listItemResId;
+    public void setListData(List<String> listItem, int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
+        this.itemList = listItem;
         this.range = range;
         this.bottomSheetItemClickCallback = bottomSheetItemClickCallback;
-        super.setContentView(wrapInTopSheet(0, null, null));
-        return this;
+        super.setContentView(wrapInTopSheet());
     }
 
-    private View wrapInTopSheet(int layoutResId, View view, ViewGroup.LayoutParams params) {
-        final CoordinatorLayout coordinator = (CoordinatorLayout) View.inflate(getContext(),
-                R.layout.top_sheet_dialog, null);
-        /*if (layoutResId != 0 && view == null) {
-            view = getLayoutInflater().inflate(layoutResId, coordinator, false);
-        }*/
+    private View wrapInTopSheet() {
+        final CoordinatorLayout coordinator = (CoordinatorLayout) View.inflate(getContext(), R.layout.top_sheet_dialog, null);
         FrameLayout topSheet = coordinator.findViewById(R.id.design_top_sheet);
-        topSheetBehavior = TopSheetBehavior.from(topSheet);
+        TopSheetBehavior<FrameLayout> topSheetBehavior = TopSheetBehavior.from(topSheet);
         topSheetBehavior.setTopSheetCallback(mTopSheetCallback);
         RecyclerView recyclerView = topSheet.findViewById(R.id.bottomSheetList);
-        recyclerView.setAdapter(new BottomSheetListAdapter(getContext().getResources().getStringArray(itemListId), range,bottomSheetItemClickCallback));
-        /*if (params == null) {
-            topSheet.addView(view);
-        } else {
-            topSheet.addView(view, params);
-        }*/
+        recyclerView.setAdapter(new BottomSheetListAdapter(itemList, range, bottomSheetItemClickCallback));
         // We treat the CoordinatorLayout as outside the dialog though it is technically inside
-        if (shouldWindowCloseOnTouchOutside()) {
-            coordinator.findViewById(R.id.top_sheet_touch_outside).setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (isShowing()) {
-                                cancel();
-                            }
-                        }
-                    });
-        }
+        coordinator.findViewById(R.id.top_sheet_touch_outside).setOnClickListener(
+                view -> {
+                    if (isShowing()) {
+                        cancel();
+                    }
+                });
         return coordinator;
-    }
-
-    private boolean shouldWindowCloseOnTouchOutside() {
-        if (true) {
-            return true;
-        }
-
-        if (Build.VERSION.SDK_INT < 11) {
-            return true;
-        }
-        TypedValue value = new TypedValue();
-        //noinspection SimplifiableIfStatement
-        if (getContext().getTheme()
-                .resolveAttribute(android.R.attr.windowCloseOnTouchOutside, value, true)) {
-            return value.data != 0;
-        }
-        return false;
     }
 
     @Override

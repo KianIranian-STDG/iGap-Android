@@ -32,6 +32,8 @@ import net.iGap.R;
 import net.iGap.activities.ActivityCall;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.items.chat.ViewMaker;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
@@ -58,6 +60,7 @@ import net.iGap.request.RequestSignalingGetConfiguration;
 import net.iGap.request.RequestSignalingGetLog;
 import net.iGap.webrtc.WebRTC;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -421,31 +424,14 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
     //*************************************************************************************************************
 
     public void openDialogMenu() {
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-        View view = dialog.getCustomView();
-
-        DialogAnimation.animationUp(dialog);
-        dialog.show();
-
-        final TextView txtClear = (TextView) view.findViewById(R.id.dialog_text_item1_notification);
-        txtClear.setText(G.fragmentActivity.getResources().getString(R.string.clean_log));
-
-        TextView iconClear = (TextView) view.findViewById(R.id.dialog_icon_item1_notification);
-        iconClear.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
-
-        ViewGroup root1 = (ViewGroup) view.findViewById(R.id.dialog_root_item1_notification);
-        root1.setVisibility(View.VISIBLE);
-
-        root1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-
-                if (G.userLogin) {
-                    new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
-                            positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.clean_log));
+        TopSheetDialog topSheetDialog = new TopSheetDialog(getContext());
+        topSheetDialog.setListData(items, -1, position -> {
+            topSheetDialog.dismiss();
+            if (G.userLogin) {
+                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
+                        positiveText(R.string.B_ok).onPositive((dialog, which) -> {
                             Realm realm = Realm.getDefaultInstance();
                             try {
                                 RealmCallLog realmCallLog = realm.where(RealmCallLog.class).findAll().sort(RealmCallLogFields.TIME, Sort.DESCENDING).first();
@@ -457,13 +443,12 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
                             } finally {
                                 realm.close();
                             }
-                        }
-                    }).negativeText(R.string.B_cancel).show();
-                } else {
-                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-                }
+                        }).negativeText(R.string.B_cancel).show();
+            } else {
+                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
             }
         });
+        topSheetDialog.show();
     }
 
     @Override
