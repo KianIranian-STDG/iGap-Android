@@ -86,11 +86,12 @@ public class TopSheetDialog extends AppCompatDialog {
         super.setContentView(wrapInTopSheet());
     }
 
-    public void setListData(List<String> listItem, int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
+    public TopSheetDialog setListData(List<String> listItem, int range, BottomSheetItemClickCallback bottomSheetItemClickCallback) {
         this.itemList = listItem;
         this.range = range;
         this.bottomSheetItemClickCallback = bottomSheetItemClickCallback;
         super.setContentView(wrapInTopSheet());
+        return this;
     }
 
     private View wrapInTopSheet() {
@@ -99,7 +100,10 @@ public class TopSheetDialog extends AppCompatDialog {
         TopSheetBehavior<FrameLayout> topSheetBehavior = TopSheetBehavior.from(topSheet);
         topSheetBehavior.setTopSheetCallback(mTopSheetCallback);
         RecyclerView recyclerView = topSheet.findViewById(R.id.bottomSheetList);
-        recyclerView.setAdapter(new BottomSheetListAdapter(itemList, range, bottomSheetItemClickCallback));
+        recyclerView.setAdapter(new BottomSheetListAdapter(itemList, range, position -> {
+            dismiss();
+            bottomSheetItemClickCallback.onClick(position);
+        }));
         // We treat the CoordinatorLayout as outside the dialog though it is technically inside
         coordinator.findViewById(R.id.top_sheet_touch_outside).setOnClickListener(
                 view -> {

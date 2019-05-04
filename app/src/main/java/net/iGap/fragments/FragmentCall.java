@@ -426,9 +426,7 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
     public void openDialogMenu() {
         List<String> items = new ArrayList<>();
         items.add(getString(R.string.clean_log));
-        TopSheetDialog topSheetDialog = new TopSheetDialog(getContext());
-        topSheetDialog.setListData(items, -1, position -> {
-            topSheetDialog.dismiss();
+        TopSheetDialog topSheetDialog = new TopSheetDialog(getContext()).setListData(items, -1, position -> {
             if (G.userLogin) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clean_log).content(R.string.are_you_sure_clear_call_logs).
                         positiveText(R.string.B_ok).onPositive((dialog, which) -> {

@@ -2595,8 +2595,7 @@ public class FragmentChat extends BaseFragment
                 }
             }
 
-            TopSheetDialog topSheetDialog = new TopSheetDialog(getContext());
-            topSheetDialog.setListData(items, -1, position -> {
+            TopSheetDialog topSheetDialog = new TopSheetDialog(getContext()).setListData(items, -1, position -> {
                 if (items.get(position).equals(getString(R.string.Search))) {
                     initLayoutSearchNavigation();
                     rootView.findViewById(R.id.toolbarContainer).setVisibility(View.GONE);
@@ -2678,7 +2677,6 @@ public class FragmentChat extends BaseFragment
                         }
                     }).negativeText(R.string.no).show();
                 }
-                topSheetDialog.dismiss();
             });
             topSheetDialog.show();
 

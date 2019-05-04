@@ -64,6 +64,8 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
@@ -211,7 +213,7 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
     private String url;
     static boolean changeState = false;
     private int orientation = G.rotationState;
-    private MaterialDialog dialog;
+    private TopSheetDialog dialog;
 
     public static FragmentiGapMap getInstance() {
         return new FragmentiGapMap();
@@ -1174,87 +1176,50 @@ public class FragmentiGapMap extends BaseFragment implements OnLocationChanged, 
                 @Override
                 public void onClick(View view) {
 
-                    final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-                    View v = dialog.getCustomView();
-                    DialogAnimation.animationUp(dialog);
+                    List<String> items = new ArrayList<>();
+                    items.add(getString(R.string.list_user_map));
+                    items.add(getString(R.string.nearby));
+                    items.add(getString(R.string.map_registration));
+
+                    dialog = new TopSheetDialog(getContext()).setListData(items, -1, new BottomSheetItemClickCallback() {
+                        @Override
+                        public void onClick(int position) {
+                            if (items.get(position).equals(getString(R.string.list_user_map))){
+                                fabGps.hide();
+                                fabStateSwitcher.setVisibility(View.GONE);
+                                rippleMoreMap.setVisibility(View.GONE);
+                                page = pageUserList;
+                                try {
+                                    new HelperFragment(FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer_main).setReplace(false).load();
+                                } catch (Exception e) {
+                                    e.getStackTrace();
+                                }
+                            }
+                            else if (items.get(position).equals(getString(R.string.nearby))){
+                                if (location != null && !isSendRequestGeoCoordinate) {
+                                    new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
+                                    showProgress(true);
+                                    isSendRequestGeoCoordinate = true;
+                                }
+                            }
+                            else if (items.get(position).equals(getString(R.string.map_registration))){
+                                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                        new RequestGeoRegister().register(false);
+
+                                    }
+                                }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                    }
+                                }).show();
+                            }
+                        }
+                    });
                     dialog.show();
-
-
-                    ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-                    ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
-                    ViewGroup root3 = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
-
-                    root1.setVisibility(View.GONE);
-                    root2.setVisibility(View.VISIBLE);
-                    root3.setVisibility(View.VISIBLE);
-
-                    TextView txtItem1 = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-                    TextView icon1 = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-                    txtItem1.setText(G.fragmentActivity.getResources().getString(R.string.list_user_map));
-                    icon1.setText(G.fragmentActivity.getResources().getString(R.string.md_nearby));
-
-                    TextView txtItem2 = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
-                    TextView icon2 = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-                    txtItem2.setText(G.fragmentActivity.getResources().getString(R.string.nearby));
-                    icon2.setText(G.fragmentActivity.getResources().getString(R.string.md_refresh_button));
-
-
-                    TextView txtItem3 = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
-                    TextView icon3 = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
-                    txtItem3.setText(G.fragmentActivity.getResources().getString(R.string.map_registration));
-                    icon3.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_map_marker_off));
-
-                    root1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.dismiss();
-                            fabGps.hide();
-                            fabStateSwitcher.setVisibility(View.GONE);
-                            rippleMoreMap.setVisibility(View.GONE);
-                            page = pageUserList;
-                            try {
-                                new HelperFragment(FragmentMapUsers.newInstance()).setResourceContainer(R.id.mapContainer_main).setReplace(false).load();
-                            } catch (Exception e) {
-                                e.getStackTrace();
-                            }
-                        }
-                    });
-
-                    root2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.dismiss();
-
-                            if (location != null && !isSendRequestGeoCoordinate) {
-                                new RequestGeoGetNearbyCoordinate().getNearbyCoordinate(location.getLatitude(), location.getLongitude());
-                                showProgress(true);
-                                isSendRequestGeoCoordinate = true;
-                            }
-
-                        }
-                    });
-
-                    root3.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.dismiss();
-
-
-                            new MaterialDialog.Builder(G.fragmentActivity).title(R.string.Visible_Status_title_dialog_invisible).content(R.string.Visible_Status_text_dialog_invisible).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                    new RequestGeoRegister().register(false);
-
-                                }
-                            }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
-                                @Override
-                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                                }
-                            }).show();
-                        }
-                    });
                 }
             });
 
