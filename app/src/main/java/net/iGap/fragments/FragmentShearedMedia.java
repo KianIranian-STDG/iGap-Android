@@ -52,6 +52,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFragment;
@@ -502,127 +504,37 @@ public class FragmentShearedMedia extends BaseFragment {
 
     public void popUpMenuSharedMedia() {
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-        View v = dialog.getCustomView();
-        if (v == null) {
-            return;
-        }
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.shared_image));
+        items.add(getString(R.string.shared_video));
+        items.add(getString(R.string.shared_audio));
+        items.add(getString(R.string.shared_voice));
+        items.add(getString(R.string.shared_gif));
+        items.add(getString(R.string.shared_file));
+        items.add(getString(R.string.shared_links));
 
-        DialogAnimation.animationUp(dialog);
-        dialog.show();
-
-        ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-        ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
-        ViewGroup root3 = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
-        ViewGroup root4 = (ViewGroup) v.findViewById(R.id.dialog_root_item4_notification);
-        ViewGroup root5 = (ViewGroup) v.findViewById(R.id.dialog_root_item5_notification);
-        ViewGroup root6 = (ViewGroup) v.findViewById(R.id.dialog_root_item6_notification);
-        ViewGroup root7 = (ViewGroup) v.findViewById(R.id.dialog_root_item7_notification);
-
-        TextView txtImage = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-        TextView txtVideo = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
-        TextView txtAudio = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
-        TextView txtVoice = (TextView) v.findViewById(R.id.dialog_text_item4_notification);
-        TextView txtGif = (TextView) v.findViewById(R.id.dialog_text_item5_notification);
-        TextView txtFile = (TextView) v.findViewById(R.id.dialog_text_item6_notification);
-        TextView txtLink = (TextView) v.findViewById(R.id.dialog_text_item7_notification);
-
-        TextView iconImage = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-        iconImage.setText(G.fragmentActivity.getResources().getString(R.string.md_photo));
-
-        TextView iconVideo = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-        iconVideo.setText(G.fragmentActivity.getResources().getString(R.string.md_videocam));
-
-        TextView iconAudio = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
-        iconAudio.setText(G.fragmentActivity.getResources().getString(R.string.icon_music));
-
-        TextView iconVoice = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
-        iconVoice.setText(G.fragmentActivity.getResources().getString(R.string.md_surround_sound));
-
-        TextView iconGif = (TextView) v.findViewById(R.id.dialog_icon_item5_notification);
-        iconGif.setText(G.fragmentActivity.getResources().getString(R.string.md_emby));
-
-        TextView iconFile = (TextView) v.findViewById(R.id.dialog_icon_item6_notification);
-        iconFile.setText(G.fragmentActivity.getResources().getString(R.string.icon_file));
-
-        TextView iconLink = (TextView) v.findViewById(R.id.dialog_icon_item7_notification);
-        iconLink.setText(G.fragmentActivity.getResources().getString(R.string.md_link));
-
-        root1.setVisibility(View.VISIBLE);
-        root2.setVisibility(View.VISIBLE);
-        root3.setVisibility(View.VISIBLE);
-        root4.setVisibility(View.VISIBLE);
-        root5.setVisibility(View.VISIBLE);
-        root6.setVisibility(View.VISIBLE);
-        root7.setVisibility(View.VISIBLE);
-
-        txtImage.setText(G.fragmentActivity.getResources().getString(R.string.shared_image));
-        txtVideo.setText(G.fragmentActivity.getResources().getString(R.string.shared_video));
-        txtAudio.setText(G.fragmentActivity.getResources().getString(R.string.shared_audio));
-        txtVoice.setText(G.fragmentActivity.getResources().getString(R.string.shared_voice));
-        txtGif.setText(G.fragmentActivity.getResources().getString(R.string.shared_gif));
-        txtFile.setText(G.fragmentActivity.getResources().getString(R.string.shared_file));
-        txtLink.setText(G.fragmentActivity.getResources().getString(R.string.shared_links));
-
-        root1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+            if (items.get(position).equals(getString(R.string.shared_image))){
                 fillListImage();
             }
-        });
-        root2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            else if (items.get(position).equals(getString(R.string.shared_video))){
                 fillListVideo();
             }
-        });
-        root3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            else if (items.get(position).equals(getString(R.string.shared_audio))){
                 fillListAudio();
             }
-        });
-        root4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            else if (items.get(position).equals(getString(R.string.shared_voice))){
                 fillListVoice();
             }
-        });
-        root5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            else if (items.get(position).equals(getString(R.string.shared_gif))){
                 fillListGif();
             }
-        });
-        root6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            else if (items.get(position).equals(getString(R.string.shared_file))){
                 fillListFile();
-            }
-        });
-        root7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            }else if (items.get(position).equals(getString(R.string.shared_links))){
                 fillListLink();
             }
-        });
-
-        //WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        //layoutParams.copyFrom(dialog.getWindow().getAttributes());
-        //layoutParams.width = (int) G.context.getResources().getDimension(R.dimen.dp260);
-        //layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
-
-        //dialog.getWindow().setAttributes(layoutParams);
-
-        DialogAnimation.animationUp(dialog);
-        dialog.show();
+        }).show();
     }
 
     private void initLayoutRecycleviewForImage() {

@@ -27,6 +27,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperSaveFile;
@@ -60,6 +62,8 @@ import net.iGap.request.RequestUserAvatarDelete;
 import net.iGap.request.RequestUserAvatarGetList;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -192,90 +196,55 @@ public class FragmentShowAvatars extends BaseFragment {
 
         MaterialDesignTextView btnMenu = (MaterialDesignTextView) view.findViewById(R.id.asi_btn_menu);
         RippleView rippleMenu = (RippleView) view.findViewById(R.id.asi_ripple_menu);
-        rippleMenu.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        rippleMenu.setOnRippleCompleteListener(rippleView -> {
 
-            @Override
-            public void onComplete(RippleView rippleView) {
+            List<String> items = new ArrayList<>();
 
-
-                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-                View v = dialog.getCustomView();
-
-                DialogAnimation.animationUp(dialog);
-                dialog.show();
-
-                ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-
-
-                final TextView txtSearch = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-
-
-                TextView iconSearch = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-
-
-                root1.setVisibility(View.VISIBLE);
-
-                txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.Search));
-
-                switch (from) {
-                    case setting:
-                        //showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
-                        txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.array_Delete_photo));
-                        iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
-                        break;
-                    case group:
-                        if (roleGroup == GroupChatRole.OWNER || roleGroup == GroupChatRole.ADMIN) {
-                            //showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
-                            txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.array_Delete_photo));
-                            iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
-                        } else {
-                            //showPopupMenu(R.array.pop_up_menu_show_avatar);
-                            txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.save_to_gallery));
-                            iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_save));
-                        }
-                        break;
-                    case channel:
-                        if (roleChannel == ChannelChatRole.OWNER || roleChannel == ChannelChatRole.ADMIN) {
-                            //showPopupMenu(R.array.pop_up_menu_show_avatar_setting);
-                            txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.array_Delete_photo));
-                            iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
-                        } else {
-                            //showPopupMenu(R.array.pop_up_menu_show_avatar);
-                            txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.save_to_gallery));
-                            iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_save));
-                        }
-                        break;
-                    case chat:
-                        //showPopupMenu(R.array.pop_up_menu_show_avatar);
-                        txtSearch.setText(G.fragmentActivity.getResources().getString(R.string.save_to_gallery));
-                        iconSearch.setText(G.fragmentActivity.getResources().getString(R.string.md_save));
-                        break;
-                }
-                root1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                        if (txtSearch.getText().equals(G.fragmentActivity.getResources().getString(R.string.save_to_gallery))) {
-                            saveToGallery();
-                        } else if (txtSearch.getText().equals(G.fragmentActivity.getResources().getString(array_Delete_photo))) {
-                            switch (from) {
-                                case setting:
-                                    deletePhotoSetting();
-                                    break;
-                                case group:
-                                    deletePhotoGroup();
-                                    break;
-                                case channel:
-                                    deletePhotoChannel();
-                                    break;
-                                case chat:
-                                    deletePhotoChat();
-                                    break;
-                            }
+            switch (from) {
+                case setting:
+                    items.add(getString(R.string.array_Delete_photo));
+                    break;
+                case group:
+                    if (roleGroup == GroupChatRole.OWNER || roleGroup == GroupChatRole.ADMIN) {
+                        items.add(getString(R.string.array_Delete_photo));
+                    } else {
+                        items.add(getString(R.string.save_to_gallery));
+                    }
+                    break;
+                case channel:
+                    if (roleChannel == ChannelChatRole.OWNER || roleChannel == ChannelChatRole.ADMIN) {
+                        items.add(getString(R.string.array_Delete_photo));
+                    } else {
+                        items.add(getString(R.string.save_to_gallery));
+                    }
+                    break;
+                case chat:
+                    items.add(getString(R.string.save_to_gallery));
+                    break;
+            }
+            new TopSheetDialog(getContext()).setListData(items, -1, new BottomSheetItemClickCallback() {
+                @Override
+                public void onClick(int position) {
+                    if (items.get(position).equals(getString(R.string.save_to_gallery))) {
+                        saveToGallery();
+                    } else if (items.get(position).equals(getString(array_Delete_photo))) {
+                        switch (from) {
+                            case setting:
+                                deletePhotoSetting();
+                                break;
+                            case group:
+                                deletePhotoGroup();
+                                break;
+                            case channel:
+                                deletePhotoChannel();
+                                break;
+                            case chat:
+                                deletePhotoChat();
+                                break;
                         }
                     }
-                });
-            }
+                }
+            }).show();
         });
         viewPager = (ViewPager) view.findViewById(R.id.asi_view_pager);
 
