@@ -9,12 +9,14 @@ import android.support.v7.widget.AppCompatEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.iGap.R;
 import net.iGap.interfaces.ToolbarListener;
+import net.iGap.module.MaterialDesignTextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -32,7 +34,7 @@ public class HelperToolbar {
     private CircleImageView mAvatarSmall, mAvatarBig, mAvatarChat;
     private RelativeLayout mSearchBox;
     private TextView mTxtSearch ;
-    private AppCompatEditText mEdtSearch ;
+    private EditText mEdtSearch ;
 
     private LayoutInflater mInflater;
     private Context mContext;
@@ -49,6 +51,7 @@ public class HelperToolbar {
     private boolean isCounterShown;
     private boolean isInChatRoom;
     private boolean isCallModeEnable;
+    private MaterialDesignTextView mBtnClearSearch;
 
     private HelperToolbar() {
     }
@@ -248,8 +251,12 @@ public class HelperToolbar {
         return mTxtSearch;
     }
 
-    public AppCompatEditText getEditTextSearch() {
+    public EditText getEditTextSearch() {
         return mEdtSearch;
+    }
+
+    public MaterialDesignTextView getButtonClearSearch() {
+        return mBtnClearSearch;
     }
 
     /*************************************************************/
@@ -297,7 +304,7 @@ public class HelperToolbar {
                     ));
 
             mSearchBox.setOnClickListener(v -> mToolbarListener.onSearchClickListener(v));
-            mEdtSearch.setOnClickListener(v -> mToolbarListener.onSearchClickListener(v));
+            mBtnClearSearch.setOnClickListener(v -> mToolbarListener.onBtnClearSearchClickListener(v));
 
         } else {
             mSearchBox.setVisibility(View.GONE);
@@ -396,6 +403,7 @@ public class HelperToolbar {
         mSearchBox = view.findViewById(R.id.view_toolbar_search_layout);
         mTxtSearch = view.findViewById(R.id.view_toolbar_search_layout_txt);
         mEdtSearch = view.findViewById(R.id.view_toolbar_search_layout_edt_input);
+        mBtnClearSearch  = view.findViewById(R.id.view_toolbar_search_layout_btn_clear);
     }
 
     /**

@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/menu_parent_layout"
-    style="?backgroundColorSettingTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
@@ -13,6 +12,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/fc_layot_title"
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="wrap_content"
         app:elevation="0dp">
 
@@ -189,16 +189,16 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat">
 
             <LinearLayout
-                style="?backgroundSubChatTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:background="@color/white"
                 app:layout_scrollFlags="scroll|enterAlways">
 
 
                 <LinearLayout
-                    android:id="@+id/menu_layout_addContact"
-                    style="?backgroundSubChatTheme"
+                    android:id="@+id/menu_layout_inviteFriend"
+                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -212,7 +212,7 @@
                     <ImageView
                         android:layout_width="@dimen/dp48"
                         android:layout_height="@dimen/dp48"
-                        app:srcCompat="@drawable/add_chat_background" />
+                        app:srcCompat="@drawable/invite_friend_ico" />
 
 
                     <net.iGap.module.CustomTextViewMedium
@@ -220,11 +220,120 @@
                         style="?textTitleColorSettingTheme"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/dp8"
-                        android:layout_marginLeft="@dimen/dp8"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginLeft="@dimen/dp16"
                         android:gravity="start|center_vertical"
                         android:singleLine="true"
-                        android:text="@string/menu_add_contact"
+                        android:text="@string/Invite_Friends"
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                        android:textSize="@dimen/dp16" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/menu_layout_add_new_channel"
+                    style="?backgroundSubChatTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/dp52"
+                    android:background="@color/white"
+                    android:paddingTop="@dimen/dp12"
+                    android:paddingEnd="@dimen/dp20"
+                    android:paddingRight="@dimen/dp20"
+                    android:paddingBottom="@dimen/dp6">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp48"
+                        android:layout_height="@dimen/dp48"
+                        android:padding="5dp"
+                        app:srcCompat="@drawable/ic_add_new_channel" />
+
+
+                    <net.iGap.module.CustomTextViewMedium
+                        style="?textTitleColorSettingTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginLeft="@dimen/dp16"
+                        android:gravity="start|center_vertical"
+                        android:singleLine="true"
+                        android:text="@string/new_channel"
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                        android:textSize="@dimen/dp16" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/menu_layout_add_new_group"
+                    style="?backgroundSubChatTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/dp52"
+                    android:background="@color/white"
+                    android:paddingTop="@dimen/dp12"
+                    android:paddingEnd="@dimen/dp20"
+                    android:paddingRight="@dimen/dp20"
+                    android:paddingBottom="@dimen/dp6">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp48"
+                        android:layout_height="@dimen/dp48"
+                        android:padding="5dp"
+                        app:srcCompat="@drawable/ic_add_new_group" />
+
+
+                    <net.iGap.module.CustomTextViewMedium
+                        style="?textTitleColorSettingTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginLeft="@dimen/dp16"
+                        android:gravity="start|center_vertical"
+                        android:singleLine="true"
+                        android:text="@string/new_group"
+                        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
+                        android:textSize="@dimen/dp16" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/menu_layout_btn_secret_chat"
+                    style="?backgroundSubChatTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:background="@color/white"
+                    android:visibility="gone"
+                    android:orientation="horizontal"
+                    android:paddingLeft="@dimen/dp52"
+                    android:paddingTop="@dimen/dp12"
+                    android:paddingEnd="@dimen/dp20"
+                    android:paddingRight="@dimen/dp20"
+                    android:paddingBottom="@dimen/dp6">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp48"
+                        android:layout_height="@dimen/dp48"
+                        android:padding="5dp"
+                        app:srcCompat="@drawable/ic_add_new_secret_chat" />
+
+
+                    <net.iGap.module.CustomTextViewMedium
+                        android:id="@+id/title3"
+                        style="?textTitleColorSettingTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp16"
+                        android:layout_marginLeft="@dimen/dp16"
+                        android:gravity="start|center_vertical"
+                        android:singleLine="true"
+                        android:text="@string/secret_chat"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:textSize="@dimen/dp16" />
 

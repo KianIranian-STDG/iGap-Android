@@ -79,7 +79,7 @@
             android:padding="@dimen/toolbar_icon_padding"
             android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_3"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageView
@@ -106,6 +106,7 @@
             android:layout_toEndOf="@id/view_toolbar_btn_left"
             android:layout_toRightOf="@id/view_toolbar_btn_left"
             android:text="1"
+            android:fontFamily="@font/main_font"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -115,7 +116,6 @@
             app:layout_constraintTop_toTopOf="@+id/view_toolbar_btn_left" />
 
         <TextView
-            android:visibility="visible"
             android:id="@+id/view_toolbar_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -123,15 +123,16 @@
             android:gravity="center"
             android:text="@string/app_name"
             android:textColor="@color/white"
+            android:fontFamily="@font/main_font"
             android:textSize="25sp"
             android:textStyle="bold"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/view_toolbar_txt_call_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -140,9 +141,11 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:text="Your calling now"
+            android:fontFamily="@font/main_font"
             android:textColor="#CCCACA"
             android:textSize="12sp"
-            android:text="Your calling now"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/view_toolbar_logo"
             app:layout_constraintStart_toStartOf="@+id/view_toolbar_logo"
             app:layout_constraintTop_toBottomOf="@+id/view_toolbar_logo" />
@@ -164,7 +167,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/view_toolbar_chat_txt_userName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -173,28 +175,31 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:text="User Name"
+            android:fontFamily="@font/main_font"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:text="User Name"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_3"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/view_toolbar_user_chat_avatar"
             app:layout_constraintTop_toTopOf="@+id/view_toolbar_user_chat_avatar" />
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/view_toolbar_chat_txt_seen_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="1dp"
+            android:fontFamily="@font/main_font"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
+            android:text="Last seen recently"
             android:textColor="#CCCACA"
             android:textSize="12sp"
-            android:text="Last seen recently"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/view_toolbar_btn_right_3"
             app:layout_constraintStart_toEndOf="@+id/view_toolbar_user_chat_avatar"
             app:layout_constraintTop_toBottomOf="@+id/view_toolbar_chat_txt_userName" />
@@ -202,7 +207,6 @@
     </android.support.constraint.ConstraintLayout>
 
     <RelativeLayout
-        android:visibility="visible"
         android:id="@+id/view_toolbar_search_layout"
         android:layout_width="0dp"
         android:layout_height="40dp"
@@ -211,32 +215,55 @@
         android:layout_marginEnd="42dp"
         android:layout_marginRight="42dp"
         android:background="@drawable/shape_toolbar_search_box"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/view_toolbar_main_constraint"
         app:layout_constraintEnd_toEndOf="@+id/view_toolbar_main_constraint"
         app:layout_constraintStart_toStartOf="@+id/view_toolbar_main_constraint"
-        app:layout_constraintTop_toBottomOf="@+id/view_toolbar_main_constraint" >
+        app:layout_constraintTop_toBottomOf="@+id/view_toolbar_main_constraint">
+
+        <EditText
+            android:id="@+id/view_toolbar_search_layout_edt_input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@id/view_toolbar_search_layout_btn_clear"
+            android:background="@color/toolbar_search_box_bg"
+            android:gravity="center"
+            android:hint="@string/search"
+            android:textSize="14sp"
+            android:fontFamily="@font/main_font"
+            android:lines="1"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/toolbar_search_box_txt_color"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/view_toolbar_search_layout_txt"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textSize="14sp"
             android:gravity="center"
             android:text="@string/search"
-            android:textColor="@color/toolbar_search_box_txt_color" />
+            android:fontFamily="@font/main_font"
+            android:textColor="@color/toolbar_search_box_txt_color"
+            android:visibility="visible" />
 
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/view_toolbar_search_layout_edt_input"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:singleLine="true"
-            android:lines="1"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
-            android:hint="@string/search"
+        <net.iGap.module.MaterialDesignTextView
+            android:id="@+id/view_toolbar_search_layout_btn_clear"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/dp10"
+            android:layout_marginRight="@dimen/dp10"
             android:gravity="center"
-            android:textColorHint="@color/toolbar_search_box_txt_color"
-            android:textColor="@color/black"/>
+            android:padding="3dp"
+            android:text="@string/md_close_button"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dp18"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
@@ -262,6 +289,7 @@
         android:text="@string/user_name"
         android:textColor="@color/black"
         android:textSize="18sp"
+        android:fontFamily="@font/main_font"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/view_toolbar_img_big_avatar"
         app:layout_constraintStart_toStartOf="@+id/view_toolbar_img_big_avatar"

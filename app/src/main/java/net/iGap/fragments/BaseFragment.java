@@ -164,4 +164,14 @@ public class BaseFragment extends SwipeBackFragment {
     public void removeFromBaseFragment(Fragment fragment) {
         new HelperFragment(fragment).remove();
     }
+
+    public void openKeyBoard(){
+
+        try {
+            InputMethodManager im = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            im.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }catch (Exception e){
+            //nothing
+        }
+    }
 }

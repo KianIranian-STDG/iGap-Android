@@ -8,6 +8,8 @@ public interface ToolbarListener {
 
     default void onSearchClickListener(View view){}
 
+    default void onBtnClearSearchClickListener(View view){}
+
     default void onSmallAvatarClickListener(View view){}
 
     default void onBigAvatarClickListener(View view){}
