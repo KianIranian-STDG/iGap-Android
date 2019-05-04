@@ -1339,10 +1339,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                             }
 
                             holder.lastMessageSender.setVisibility(View.VISIBLE);
-
-                            holder.lastMessageSender.setText(lastMessageSender);
                             holder.lastMessageSender.setTextColor(Color.parseColor(G.roomSenderTextColor));
-
                         } else {
                             holder.lastMessageSender.setVisibility(View.GONE);
                         }
