@@ -928,8 +928,7 @@ public class HelperUrl {
      */
 
     public static void checkUsernameAndGoToRoomWithMessageId(final String username, final ChatEntry chatEntry, final long messageId) {
-
-        if (username == null || username.length() < 1 || isInCurrentChat(username)) return;
+        if (username == null || username.length() < 1) return;
 
         if (G.userLogin) {
 
