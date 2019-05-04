@@ -10,15 +10,17 @@ import android.view.ViewGroup;
 import net.iGap.R;
 import net.iGap.databinding.CustomListItemBottomSheetBinding;
 
+import java.util.List;
+
 public class BottomSheetListAdapter extends RecyclerView.Adapter<BottomSheetListAdapter.ViewHolder> {
 
-    private String[] items;
+    private List<String> items;
     private int range;
 
     @Nullable
     private final BottomSheetItemClickCallback itemClickCallback;
 
-    public BottomSheetListAdapter(String[] items, int range, @Nullable BottomSheetItemClickCallback itemClickCallback) {
+    public BottomSheetListAdapter(List<String> items, int range, @Nullable BottomSheetItemClickCallback itemClickCallback) {
         this.items = items;
         this.range = range;
         this.itemClickCallback = itemClickCallback;
@@ -34,15 +36,15 @@ public class BottomSheetListAdapter extends RecyclerView.Adapter<BottomSheetList
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.binding.setTitle(items[position]);
+        holder.binding.setTitle(items.get(position));
         holder.binding.setPosition(position);
         holder.binding.executePendingBindings();
-        holder.binding.itemTitle.setSelected(position > range);
+        holder.binding.itemTitle.setSelected(true/*position < range*/);
     }
 
     @Override
     public int getItemCount() {
-        return items == null ? 0 : items.length;
+        return items == null ? 0 : items.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

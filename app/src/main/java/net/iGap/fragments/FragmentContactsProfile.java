@@ -45,6 +45,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentContactsProfileBinding;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.bottomsheet.BottomSheetFragment;
+import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.GoToChatActivity;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
@@ -595,73 +598,25 @@ public class FragmentContactsProfile extends BaseFragment {
 
     private void showPopUp() {
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-        View v = dialog.getCustomView();
-
-        DialogAnimation.animationUp(dialog);
-        dialog.show();
-
-        ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-        ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
-        ViewGroup root3 = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
-        ViewGroup root4 = (ViewGroup) v.findViewById(R.id.dialog_root_item4_notification);
-
-        TextView txtBlockUser = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-        TextView txtClearHistory = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
-        TextView txtDeleteContact = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
-        TextView txtReport = (TextView) v.findViewById(R.id.dialog_text_item4_notification);
-
-        TextView iconBlockUser = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-
-        TextView iconClearHistory = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-        iconClearHistory.setText(G.fragmentActivity.getResources().getString(R.string.md_clearHistory));
-
-        TextView iconDeleteContact = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
-        iconDeleteContact.setText(G.fragmentActivity.getResources().getString(R.string.md_rubbish_delete_file));
-
-        TextView iconReport = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
-        iconReport.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_account_alert));
-
-        root1.setVisibility(View.VISIBLE);
-        root2.setVisibility(View.VISIBLE);
-        root3.setVisibility(View.VISIBLE);
-        root4.setVisibility(View.VISIBLE);
-        if (G.userId == userId) {
-            root1.setVisibility(View.GONE);
-            root3.setVisibility(View.GONE);
-        }
-
-        if (fragmentContactsProfileViewModel.disableDeleteContact) {
-            root3.setVisibility(View.GONE);
-        }
-
-        if (fragmentContactsProfileViewModel.isBlockUser) {
-            txtBlockUser.setText(G.fragmentActivity.getResources().getString(R.string.un_block_user));
-            iconBlockUser.setText(G.fragmentActivity.getResources().getString(R.string.md_unblock));
-        } else {
-            txtBlockUser.setText(G.fragmentActivity.getResources().getString(R.string.block_user));
-            iconBlockUser.setText(G.fragmentActivity.getResources().getString(R.string.md_block));
-        }
-        txtClearHistory.setText(G.fragmentActivity.getResources().getString(R.string.clear_history));
-        txtDeleteContact.setText(G.fragmentActivity.getResources().getString(R.string.delete_contact));
-        txtReport.setText(G.fragmentActivity.getResources().getString(R.string.report));
-
-
-        if (RealmRoom.isNotificationServices(roomId)) {
-            root4.setVisibility(View.GONE);
-        }
-
-        root1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                blockOrUnblockUser();
+        List<String> items = new ArrayList<>();
+        if (G.userId != userId) {
+            if (fragmentContactsProfileViewModel.isBlockUser) {
+                items.add(getString(R.string.un_block_user));
+            } else {
+                items.add(getString(R.string.block_user));
             }
-        });
-        root2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
+        }
+        items.add(getString(R.string.clear_history));
+        if (G.userId != userId && !fragmentContactsProfileViewModel.disableDeleteContact) {
+            items.add(getString(R.string.delete_contact));
+        }
+        if (!RealmRoom.isNotificationServices(roomId)) {
+            items.add(getString(R.string.report));
+        }
+        new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+            if (items.get(position).equals(getString(R.string.un_block_user)) || items.get(position).equals(getString(R.string.block_user))) {
+                blockOrUnblockUser();
+            } else if (items.get(position).equals(getString(R.string.clear_history))) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -671,13 +626,7 @@ public class FragmentContactsProfile extends BaseFragment {
                         }
                     }
                 }).negativeText(R.string.B_cancel).show();
-
-            }
-        });
-        root3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
+            } else if (items.get(position).equals(getString(R.string.delete_contact))) {
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.to_delete_contact).content(R.string.delete_text).positiveText(R.string.B_ok).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -685,94 +634,31 @@ public class FragmentContactsProfile extends BaseFragment {
                         deleteContact();
                     }
                 }).negativeText(R.string.B_cancel).show();
-
-            }
-        });
-        root4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
+            } else if (items.get(position).equals(getString(R.string.report))) {
                 openDialogReport();
             }
-
-        });
+        }).show();
     }
 
     private void openDialogReport() {
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-        View v = dialog.getCustomView();
-        if (v == null) {
-            return;
-        }
-        DialogAnimation.animationDown(dialog);
-        dialog.show();
+        List<String> items = new ArrayList<>();
+        items.add(getString(R.string.st_Spam));
+        items.add(getString(R.string.st_Abuse));
+        items.add(getString(R.string.st_FakeAccount));
+        items.add(getString(R.string.st_Other));
 
-        ViewGroup rootSpam = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-        ViewGroup rootAbuse = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
-        ViewGroup rootFaceAccount = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
-        ViewGroup rootOther = (ViewGroup) v.findViewById(R.id.dialog_root_item4_notification);
-
-        TextView txtSpam = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-        TextView txtAbuse = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
-        TextView txtFakeAccount = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
-        TextView txtOther = (TextView) v.findViewById(R.id.dialog_text_item4_notification);
-
-        TextView iconSpam = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-        iconSpam.setText(G.fragmentActivity.getResources().getString(R.string.md_back_arrow_reply));
-        iconSpam.setVisibility(View.GONE);
-
-        TextView iconAbuse = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-        iconAbuse.setText(G.fragmentActivity.getResources().getString(R.string.md_copy));
-        iconAbuse.setVisibility(View.GONE);
-
-        TextView iconFakeAccount = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
-        iconFakeAccount.setText(G.fragmentActivity.getResources().getString(R.string.md_share_button));
-        iconFakeAccount.setVisibility(View.GONE);
-
-        TextView iconOther = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
-        iconOther.setText(G.fragmentActivity.getResources().getString(R.string.md_forward));
-        iconOther.setVisibility(View.GONE);
-
-
-        rootSpam.setVisibility(View.VISIBLE);
-        rootAbuse.setVisibility(View.VISIBLE);
-        rootFaceAccount.setVisibility(View.VISIBLE);
-        rootOther.setVisibility(View.VISIBLE);
-
-        txtSpam.setText(R.string.st_Spam);
-        txtAbuse.setText(R.string.st_Abuse);
-        txtFakeAccount.setText(R.string.st_FakeAccount);
-        txtOther.setText(R.string.st_Other);
-
-        rootSpam.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+        new BottomSheetFragment().setData(items, -1, position -> {
+            if (items.get(position).equals(getString(R.string.st_Spam))){
                 new RequestUserReport().userReport(userId, ProtoUserReport.UserReport.Reason.SPAM, "");
             }
-        });
-        rootAbuse.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            else if (items.get(position).equals(getString(R.string.st_Abuse))){
                 new RequestUserReport().userReport(userId, ProtoUserReport.UserReport.Reason.ABUSE, "");
             }
-        });
-        rootFaceAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-
+            else if (items.get(position).equals(getString(R.string.st_FakeAccount))){
                 new RequestUserReport().userReport(userId, ProtoUserReport.UserReport.Reason.FAKE_ACCOUNT, "");
-
             }
-        });
-        rootOther.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-
+            else if (items.get(position).equals(getString(R.string.st_Other))){
                 final MaterialDialog dialogReport = new MaterialDialog.Builder(G.fragmentActivity).title(R.string.report).inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE).alwaysCallInputCallback().input(G.context.getString(R.string.description), "", new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(MaterialDialog dialog, CharSequence input) {
@@ -799,16 +685,10 @@ public class FragmentContactsProfile extends BaseFragment {
                 DialogAnimation.animationDown(dialogReport);
 
                 dialogReport.show();
-
             }
-        });
+        }).show(getFragmentManager(),"bottom sheet");
 
-        G.onReport = new OnReport() {
-            @Override
-            public void success() {
-                error(G.fragmentActivity.getResources().getString(R.string.st_send_report));
-            }
-        };
+        G.onReport = () -> error(G.fragmentActivity.getResources().getString(R.string.st_send_report));
 
     }
 

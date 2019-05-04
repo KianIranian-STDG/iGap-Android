@@ -32,6 +32,8 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.AdapterChatBackground;
 import net.iGap.adapter.AdapterSolidChatBackground;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnGetWallpaper;
 import net.iGap.libs.rippleeffect.RippleView;
@@ -103,55 +105,21 @@ public class FragmentChatBackground extends BaseFragment {
 
         chB_ripple_menu_button = (RippleView) view.findViewById(R.id.chB_ripple_menu_button);
 
-        chB_ripple_menu_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-                View v = dialog.getCustomView();
+        chB_ripple_menu_button.setOnClickListener(view1 -> {
 
-                DialogAnimation.animationUp(dialog);
-                dialog.show();
+            List<String> items = new ArrayList<>();
+            items.add(getString(R.string.solid_colors));
+            items.add(getString(R.string.wallpapers));
 
-                ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-                ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
-
-                TextView txtSolidColors = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-                TextView txtWallpaper = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
-
-                TextView iconSolidColor = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-                iconSolidColor.setText(G.fragmentActivity.getResources().getString(R.string.md_solid_colors));
-
-
-
-                TextView iconWallpaper = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-
-                iconWallpaper.setText(G.fragmentActivity.getResources().getString(R.string.md_wallpapers));
-
-                root1.setVisibility(View.VISIBLE);
-                root2.setVisibility(View.VISIBLE);
-
-                txtSolidColors.setText(getResources().getString(R.string.solid_colors));
-                txtWallpaper.setText(getResources().getString(R.string.wallpapers));
-
-                root1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        mRecyclerView.setVisibility(View.GONE);
-                        rcvSolidColor.setVisibility(View.VISIBLE);
-                        dialog.dismiss();
-                    }
-                });
-
-                root2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mRecyclerView.setVisibility(View.VISIBLE);
-                        rcvSolidColor.setVisibility(View.GONE);
-                        dialog.dismiss();
-                    }
-                });
-            }
+            new TopSheetDialog(getContext()).setListData(items, -1, position -> {
+                if (items.get(position).equals(getString(R.string.solid_colors))) {
+                    mRecyclerView.setVisibility(View.GONE);
+                    rcvSolidColor.setVisibility(View.VISIBLE);
+                } else if (items.get(position).equals(getString(R.string.wallpapers))) {
+                    mRecyclerView.setVisibility(View.VISIBLE);
+                    rcvSolidColor.setVisibility(View.GONE);
+                }
+            }).show();
         });
 
         rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
