@@ -143,9 +143,8 @@
                         <net.iGap.libs.tabBar.NavigationTabStrip
                             android:id="@+id/nts"
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/dp36"
+                            android:layout_height="@dimen/dp48"
                             android:layoutDirection="ltr"
-                            android:layout_marginTop="@dimen/dp10"
                             app:nts_active_color="@color/white"
                             app:nts_animation_duration="300"
                             app:nts_color="#000"

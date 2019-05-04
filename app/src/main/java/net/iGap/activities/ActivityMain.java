@@ -248,6 +248,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private ViewGroup itemNavWallet;
     private int currentFabIcon =0;
     private RealmUserInfo userInfo;
+    private int lastMarginTop = 0;
 
     public static void setWeight(View view, int value) {
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
@@ -678,10 +679,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
             @Override
             public void onAppBarLayoutMove(AppBarLayout appBarLayout, int verticalOffset, boolean moveUp) {
-//                int marginTop = Math.round(AndroidUtils.dpToPx(ActivityMain.this, 12f) * 1.0f * Math.abs(verticalOffset) / appBarLayout.getTotalScrollRange());
-//                LinearLayout.LayoutParams param = ((LinearLayout.LayoutParams) navigationTabStrip.getLayoutParams());
-//                param.setMargins(0, marginTop, 0, 0);
-//                navigationTabStrip.setLayoutParams(param);
+                int marginTop = Math.round(AndroidUtils.dpToPx(ActivityMain.this, 10f) * 1.0f * Math.abs(verticalOffset) / appBarLayout.getTotalScrollRange());
+                if (lastMarginTop != marginTop) {
+                    lastMarginTop = marginTop;
+                    LinearLayout.LayoutParams param = ((LinearLayout.LayoutParams) navigationTabStrip.getLayoutParams());
+                    param.setMargins(0, marginTop, 0, 0);
+                    navigationTabStrip.setLayoutParams(param);
+                }
                 toolbar.clearAnimation();
                 if (moveUp) {
                     if (toolbar.getAlpha() != 0F) {
@@ -3001,9 +3005,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                if (navigationTabStrip != null && navigationTabStrip.getVisibility() == View.VISIBLE) {
-//                    navigationTabStrip.setTitleBadge(RealmRoom.getUnreadCountPages());
-//                }
+                if (navigationTabStrip != null) {
+                    navigationTabStrip.setTitleBadge(RealmRoom.getUnreadCountPages());
+                }
             }
         });
     }

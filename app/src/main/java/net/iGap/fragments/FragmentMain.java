@@ -1325,7 +1325,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                                         @Override
                                         public void onChange(RealmModel realmModel, @javax.annotation.Nullable ObjectChangeSet changeSet) {
                                             if (changeSet == null || !changeSet.isDeleted()) {
-                                                if (!((RealmRegisteredInfo) realmModel).isValid() || ((RealmRegisteredInfo) realmModel).getId() !=  mInfo.getLastMessage().getUserId())
+                                                if (!((RealmRegisteredInfo) realmModel).isValid() ||  mInfo.getLastMessage() == null || ((RealmRegisteredInfo) realmModel).getId() !=  mInfo.getLastMessage().getUserId())
                                                     return;
                                                 setSenderName(holder);
                                             }
