@@ -1178,8 +1178,17 @@ public class HelperUrl {
 
                 if (room.getId() != FragmentChat.lastChatRoomId) {
                     new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity();
+                } else {
+                    try {
+                        if (G.fragmentManager != null) {
+                            G.fragmentManager.popBackStack();
+                            new GoToChatActivity(room.getId()).setMessageID(messageId).startActivity();
+                        }
+                    } catch (Exception e) {
+                        HelperLog.setErrorLog(e);
+                        e.printStackTrace();
+                    }
                 }
-
             }
 
             realm.close();
