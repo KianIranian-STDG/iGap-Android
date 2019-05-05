@@ -58,12 +58,12 @@ public class CustomCircleImage extends View {
 
         fiiPain = new Paint();
         fiiPain.setStyle(Paint.Style.FILL);
-        fiiPain.setColor(Color.parseColor(G.appBarColor));
+        fiiPain.setColor(getResources().getColor(R.color.circleIndicatorSelected));
         fiiPain.setAntiAlias(true);
 
         strokePain = new Paint();
-        strokePain.setStyle(Paint.Style.STROKE);
-        strokePain.setColor(Color.parseColor(("#7e7e7e")));
+        strokePain.setStyle(Paint.Style.FILL);
+        strokePain.setColor(getResources().getColor(R.color.circleIndicator));
         strokePain.setAntiAlias(true);
 
         screenWidth = G.context.getResources().getDisplayMetrics().widthPixels;
