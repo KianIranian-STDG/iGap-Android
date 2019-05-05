@@ -67,9 +67,6 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
     private EditText edtLastName;
     private MaskedEditText edtPhoneNumber;
     private ViewGroup parent;
-  //  private RippleView rippleSet;
-  //  private MaterialDesignTextView txtSet;
-  // private TextView txtChooseCountry;
     private EditText txtCodeCountry;
     private HelperToolbar mHelperToolbar;
 
@@ -120,22 +117,6 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
             e.printStackTrace();
         }
 
-       /* MaterialDesignTextView btnBack = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_back);
-        final RippleView rippleBack = (RippleView) view.findViewById(R.id.ac_ripple_back);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-
-                changePage(rippleView);
-            }
-        });*/
-
-        /*view.findViewById(R.id.fac_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));*/
-
-
-        /*txtSet = (MaterialDesignTextView) view.findViewById(R.id.ac_txt_set);
-        txtSet.setTextColor(G.context.getResources().getColor(R.color.line_edit_text));*/
-
         parent = (ViewGroup) view.findViewById(R.id.ac_layoutParent);
         parent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,46 +139,12 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
             }
         });
 
-        //final View viewFirstName = view.findViewById(R.id.ac_view_firstName);
-        //final View viewLastName = view.findViewById(R.id.ac_view_lastName);
-        //final View viewPhoneNumber = view.findViewById(R.id.ac_view_phoneNumber);
         edtFirstName =  view.findViewById(R.id.ac_edt_firstName);
         edtLastName =  view.findViewById(R.id.ac_edt_lastName);
         edtPhoneNumber =  view.findViewById(R.id.ac_edt_phoneNumber);
         if (phoneFromUrl != null && phoneFromUrl.length() > 0) {
             edtPhoneNumber.setText(phoneFromUrl);
         }
-
-       /* edtFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
-                } else {
-                    viewFirstName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-                }
-            }
-        });
-        edtLastName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
-                } else {
-                    viewLastName.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-                }
-            }
-        });
-        edtPhoneNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    viewPhoneNumber.setBackgroundColor(G.context.getResources().getColor(R.color.toolbar_background));
-                } else {
-                    viewPhoneNumber.setBackgroundColor(G.context.getResources().getColor(R.color.line_edit_text));
-                }
-            }
-        });*/
 
         edtFirstName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -250,37 +197,7 @@ public class FragmentAddContact extends BaseFragment implements ToolbarListener 
         });
 
         G.fragmentActivity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        /*rippleSet = (RippleView) view.findViewById(R.id.ac_ripple_set);
-        rippleSet.setEnabled(false);
-        rippleSet.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(final RippleView rippleView) {
 
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.add_to_list_contact).content(R.string.text_add_to_list_contact).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        addContactToServer();
-                        final int permissionWriteContact = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CONTACTS);
-                        if (permissionWriteContact != PackageManager.PERMISSION_GRANTED) {
-                            try {
-                                HelperPermission.getContactPermision(G.fragmentActivity, null);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            addToContactList(rippleView);
-                        }
-                    }
-                }).negativeText(R.string.no).onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        addContactToServer();
-                        dialog.dismiss();
-                        G.fragmentActivity.onBackPressed();
-                    }
-                }).show();
-            }
-        });*/
 
         onCountryCallBack = new OnCountryCallBack() {
             @Override
