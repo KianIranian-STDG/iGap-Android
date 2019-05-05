@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatEditText;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -229,6 +230,28 @@ public class HelperToolbar {
 
         return result;
 
+    }
+
+    public boolean setSearchEditableMode(boolean state){
+
+        if (state){
+
+            mTxtSearch.setVisibility(View.GONE);
+            mEdtSearch.setVisibility(View.VISIBLE);
+            mBtnClearSearch.setVisibility(View.VISIBLE);
+            mEdtSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+            mEdtSearch.requestFocus();
+
+        }else {
+
+            //mEdtSearch.setText("");
+            mBtnClearSearch.setVisibility(View.GONE);
+            mEdtSearch.setVisibility(View.GONE);
+            mTxtSearch.setVisibility(View.VISIBLE);
+
+        }
+
+        return state;
     }
 
     public TextView getTextViewCounter() {

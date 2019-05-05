@@ -504,12 +504,8 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
     @Override
     public void onSearchClickListener(View view) {
         if (!isToolbarInEditMode){
-            mHelperToolbar.getTextViewSearch().setVisibility(View.GONE);
-            mHelperToolbar.getEditTextSearch().setVisibility(View.VISIBLE);
-            mHelperToolbar.getButtonClearSearch().setVisibility(View.VISIBLE);
-
-            configSearchBox();
-            isToolbarInEditMode = true;
+            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(true);
+            openKeyBoard();
         }
     }
 
@@ -518,27 +514,14 @@ public class FragmentShearedMedia extends BaseFragment implements ToolbarListene
         if (mHelperToolbar.getEditTextSearch().getText().length() > 0) {
             mHelperToolbar.getEditTextSearch().setText("");
         } else {
-            mHelperToolbar.getButtonClearSearch().setVisibility(View.GONE);
-            mHelperToolbar.getEditTextSearch().setVisibility(View.GONE);
-            mHelperToolbar.getTextViewSearch().setVisibility(View.VISIBLE);
-
+            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(false) ;
             closeKeyboard(getView());
-            isToolbarInEditMode = false ;
-
         }
     }
 
     @Override //menu button at toolbar
     public void onRightIconClickListener(View view) {
         popUpMenuSharedMedia();
-    }
-
-    private void configSearchBox() {
-
-        mHelperToolbar.getEditTextSearch().setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-        mHelperToolbar.getEditTextSearch().requestFocus();
-        openKeyBoard();
-
     }
 
     //********************************************************************************************
