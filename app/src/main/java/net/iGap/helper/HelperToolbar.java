@@ -282,6 +282,18 @@ public class HelperToolbar {
         return mBtnClearSearch;
     }
 
+    public TextView getTextViewLogo() {
+        return mTxtLogo;
+    }
+
+    public ImageView getLeftButton() {
+        return mLeftBtn;
+    }
+
+    public ImageView getRightButton() {
+        return mRightBtn;
+    }
+
     /*************************************************************/
 
     private void setNormalSizeToRootViews(View view) {
