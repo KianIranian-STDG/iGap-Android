@@ -972,9 +972,14 @@ public class HelperUrl {
                 @Override
                 public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
                     if (messageList.size() == 0 || messageList.get(0).getMessageId() != messageId || messageList.get(0).getDeleted()) {
-                        closeDialogWaiting();
-                        HelperError.showSnackMessage(G.context.getString(R.string.not_found_message), false);
-                        openChat(username, type, user, room, chatEntry, 0);
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                closeDialogWaiting();
+                                HelperError.showSnackMessage(G.context.getString(R.string.not_found_message), false);
+                                openChat(username, type, user, room, chatEntry, 0);
+                            }
+                        });
                     } else {
                         Realm realm = Realm.getDefaultInstance();
                         realm.executeTransaction(new Realm.Transaction() {
@@ -991,20 +996,31 @@ public class HelperUrl {
 
                         realm.close();
                         RealmRoomMessage.setGap(messageList.get(0).getMessageId());
-                        openChat(username, type, user, room, chatEntry, messageList.get(0).getMessageId());
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                G.refreshRealmUi();
+                                openChat(username, type, user, room, chatEntry, messageList.get(0).getMessageId());
+                            }
+                        });
                     }
                 }
 
                 @Override
                 public void onErrorHistory(int major , int minor) {
-                    closeDialogWaiting();
-                    if (major == 626) {
-                        HelperError.showSnackMessage(G.context.getString(R.string.not_found_message), false);
-                    } else if (minor == 624 ){
-                        HelperError.showSnackMessage(G.context.getString(R.string.ivnalid_data_provided), false);
-                    } else {
-                        HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
-                    }
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            closeDialogWaiting();
+                            if (major == 626) {
+                                HelperError.showSnackMessage(G.context.getString(R.string.not_found_message), false);
+                            } else if (minor == 624) {
+                                HelperError.showSnackMessage(G.context.getString(R.string.ivnalid_data_provided), false);
+                            } else {
+                                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                            }
+                        }
+                    });
                 }
             });
 

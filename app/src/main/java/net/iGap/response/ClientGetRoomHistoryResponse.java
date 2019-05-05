@@ -87,13 +87,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
         } else {
             RequestClientGetRoomHistory.RequestData requestData = (RequestClientGetRoomHistory.RequestData) identity;
             final ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder builder = (ProtoClientGetRoomHistory.ClientGetRoomHistoryResponse.Builder) message;
-
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    requestData.onHistoryReady.onHistory(builder.getMessageList());
-                }
-            });
+            requestData.onHistoryReady.onHistory(builder.getMessageList());
         }
     }
 
@@ -114,12 +108,7 @@ public class ClientGetRoomHistoryResponse extends MessageHandler {
         } else {
             RequestClientGetRoomHistory.RequestData requestData = (RequestClientGetRoomHistory.RequestData) identity;
             ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
-            G.handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    requestData.onHistoryReady.onErrorHistory(errorResponse.getMajorCode(), errorResponse.getMinorCode());
-                }
-            });
+            requestData.onHistoryReady.onErrorHistory(errorResponse.getMajorCode(), errorResponse.getMinorCode());
         }
     }
 }
