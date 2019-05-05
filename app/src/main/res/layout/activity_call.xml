@@ -22,11 +22,24 @@
         android:background="@{activityCallViewModel.changeColor ? @color/incomingCallUserImageLayerEnd : @color/callingUserImageLayerEnd}"
         android:layoutDirection="ltr">
 
+        <LinearLayout
+            android:id="@+id/ac_layout_call_ll_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/toolbar_height_call_state"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!--added at runtime-->
+
+        </LinearLayout>
+
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/ac_layout_call_ll_toolbar">
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/fcr_surface_peer"
                 android:layout_width="@dimen/dp100"
@@ -42,7 +55,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/ac_layout_call_ll_toolbar">
 
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/fcr_surface_remote"
@@ -60,7 +73,7 @@
             app:layout_constraintBottom_toTopOf="@id/fcr_btn_chat"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/ac_layout_call_ll_toolbar" />
 
         <View
             android:id="@+id/fcr_imv_background_layer"
@@ -80,7 +93,7 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ac_layout_call_ll_toolbar"
             app:layout_constraintWidth_percent=".6" />
 
         <net.iGap.module.CircleImageView
