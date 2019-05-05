@@ -40,6 +40,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.bottomsheet.BottomSheetFragment;
 import net.iGap.fragments.FragmentAddContact;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentContactsProfile;
@@ -1284,95 +1286,43 @@ public class HelperUrl {
 
         try {
             if (G.fragmentActivity != null) {
-                G.fragmentActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-                        View v = dialog.getCustomView();
-                        if (v == null) {
-                            return;
-                        }
+                G.fragmentActivity.runOnUiThread(() -> {
+                    List<String> items = new ArrayList<>();
+                    items.add(G.fragmentActivity.getString(R.string.copy_item_dialog));
+                    items.add(G.fragmentActivity.getString(R.string.verify_register_call));
+                    items.add(G.fragmentActivity.getString(R.string.add_to_contact));
+                    items.add(G.fragmentActivity.getString(R.string.verify_register_sms));
 
-                        DialogAnimation.animationDown(dialog);
-                        dialog.show();
-                        ViewGroup rootCopy = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-                        TextView iconCopy = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-                        iconCopy.setText(G.fragmentActivity.getResources().getString(R.string.md_copy));
-                        TextView txtItemCopy = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-                        txtItemCopy.setText(R.string.copy_item_dialog);
-
-                        rootCopy.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
+                    new BottomSheetFragment().setData(items, -1, new BottomSheetItemClickCallback() {
+                        @Override
+                        public void onClick(int position) {
+                            if (items.get(position).equals(G.fragmentActivity.getString(R.string.copy_item_dialog))){
                                 ClipboardManager clipboard = (ClipboardManager) G.fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
                                 ClipData clip = ClipData.newPlainText("Copied Text", text);
                                 clipboard.setPrimaryClip(clip);
                                 Toast.makeText(context, R.string.text_copied, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-
-                        ViewGroup rootCall = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
-                        rootCall.setVisibility(View.VISIBLE);
-                        TextView iconCall = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-                        iconCall.setText(G.fragmentActivity.getResources().getString(R.string.md_call_made));
-                        TextView txtCall = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
-                        txtCall.setText(R.string.verify_register_call);
-
-                        rootCall.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
+                            }else if (items.get(position).equals(G.fragmentActivity.getString(R.string.verify_register_call))){
                                 String uri = "tel:" + text;
                                 Intent intent = new Intent(Intent.ACTION_DIAL);
                                 intent.setData(Uri.parse(uri));
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 G.context.startActivity(intent);
-                            }
-                        });
-
-                        ViewGroup rootAddToContact = (ViewGroup) v.findViewById(R.id.dialog_root_item3_notification);
-                        rootAddToContact.setVisibility(View.VISIBLE);
-                        TextView iconAddToContact = (TextView) v.findViewById(R.id.dialog_icon_item3_notification);
-                        iconAddToContact.setText(G.fragmentActivity.getResources().getString(R.string.md_igap_contacts));
-                        TextView txtAddToContact = (TextView) v.findViewById(R.id.dialog_text_item3_notification);
-                        txtAddToContact.setText(R.string.add_to_contact);
-
-                        rootAddToContact.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
-
+                            }else if (items.get(position).equals(G.fragmentActivity.getString(R.string.add_to_contact))){
                                 FragmentAddContact fragment = FragmentAddContact.newInstance();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("TITLE", G.context.getString(R.string.fac_Add_Contact));
                                 bundle.putString("PHONE", text);
                                 fragment.setArguments(bundle);
                                 new HelperFragment(fragment).setReplace(false).load();
-                            }
-                        });
-
-                        ViewGroup rootSendSms = (ViewGroup) v.findViewById(R.id.dialog_root_item4_notification);
-                        rootSendSms.setVisibility(View.VISIBLE);
-                        TextView iconSendSms = (TextView) v.findViewById(R.id.dialog_icon_item4_notification);
-                        iconSendSms.setText(G.fragmentActivity.getResources().getString(R.string.md_email));
-                        TextView txtSendSms = (TextView) v.findViewById(R.id.dialog_text_item4_notification);
-                        txtSendSms.setText(R.string.verify_register_sms);
-
-                        rootSendSms.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                dialog.dismiss();
+                            }else if (items.get(position).equals(G.fragmentActivity.getString(R.string.verify_register_sms))){
                                 String uri = "smsto:" + text;
                                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                                 intent.setData(Uri.parse(uri));
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 G.context.startActivity(intent);
                             }
-                        });
-
-                    }
+                        }
+                    }).show(G.fragmentManager,"bottom sheet");
                 });
             }
         } catch (RuntimeException e) {
