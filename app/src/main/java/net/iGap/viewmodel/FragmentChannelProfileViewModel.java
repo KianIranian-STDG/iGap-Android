@@ -46,6 +46,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.fragments.FragmentChannelProfile;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentNotification;
@@ -1008,41 +1010,20 @@ public class FragmentChannelProfileViewModel
     }
 
     private void showPopUp(View view) {
-
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-        final View v = dialog.getCustomView();
-
-        DialogAnimation.animationUp(dialog);
-        dialog.show();
-
-        ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-
-        TextView txtItem1 = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-
-        TextView iconItem1 = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-
+        List<String> items = new ArrayList<>();
         if (isPrivate) {
-            txtItem1.setText(G.fragmentActivity.getResources().getString(R.string.channel_title_convert_to_public));
-            iconItem1.setText(G.fragmentActivity.getResources().getString(R.string.md_convert_to_public));
+            items.add(G.fragmentActivity.getString(R.string.channel_title_convert_to_public));
         } else {
-            txtItem1.setText(G.fragmentActivity.getResources().getString(R.string.channel_title_convert_to_private));
-            iconItem1.setText(G.fragmentActivity.getResources().getString(R.string.md_convert_to_private));
-
+            items.add(G.fragmentActivity.getString(R.string.channel_title_convert_to_private));
         }
-
-        root1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isPopup = true;
-
-                if (isPrivate) {
-                    convertToPublic(view);
-                } else {
-                    convertToPrivate();
-                }
-                dialog.dismiss();
+        new TopSheetDialog(G.fragmentActivity).setListData(items, -1, position -> {
+            isPopup = true;
+            if (isPrivate) {
+                convertToPublic(view);
+            } else {
+                convertToPrivate();
             }
-        });
+        }).show();
     }
 
     private void convertToPrivate() {
