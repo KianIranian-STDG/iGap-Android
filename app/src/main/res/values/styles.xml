@@ -369,7 +369,7 @@
   </style>
 
   <style name="background_2_setting_light">
-    <item name="android:background">@color/background_setting_light_2</item>
+    <item name="android:background">@color/white</item>
   </style>
 
   <style name="text_title_style_setting_light">
@@ -418,7 +418,7 @@
   </style>
 
   <style name="backgroundSubChat_light">
-    <item name="android:background">@color/pin_color</item>
+    <item name="android:background">@color/white</item>
   </style>
 
   <style name="FabButton_light">

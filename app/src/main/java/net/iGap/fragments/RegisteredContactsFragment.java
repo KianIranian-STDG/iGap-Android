@@ -230,7 +230,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         vgRoot = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
         vgRoot.setBackgroundColor(context.getResources().getColor(R.color.white));
 
-        //todo: Alireza Nazari: working on new design
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
 
         mHelperToolbar = HelperToolbar.create()
