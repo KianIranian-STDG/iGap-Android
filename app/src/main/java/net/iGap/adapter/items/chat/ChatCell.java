@@ -2,228 +2,254 @@ package net.iGap.adapter.items.chat;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.util.TypedValue;
 import android.widget.TextView;
 
+import net.iGap.G;
 import net.iGap.R;
+import net.iGap.helper.HelperCalander;
+import net.iGap.module.CircleImageView;
+import net.iGap.module.EmojiTextViewE;
+import net.iGap.module.MaterialDesignTextView;
 
-public class ChatCell extends RelativeLayout {
+import static android.view.Gravity.CENTER;
+import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
-    public static final int CHAT = 0;
-    public static final int CHANNEL = 1;
-    public static final int GROUP = 2;
-    public static final int BOT = 3;
+public class ChatCell extends ConstraintLayout {
 
-    public static final boolean MUTE = true;
-    public static final boolean UNMUTE = false;
-
-    public static final boolean VERIFIED = true;
-    public static final boolean UNVERIFIED = false;
-
-    public static final int FAILED = 0;
-    public static final int SENDING = 1;
-    public static final int SENT = 2;
-    public static final int DELIVERED = 3;
-    public static final int SEEN = 4;
-    public static final int LISTENED = 5;
-
-    private String userName;
-    private String message;
-    private String lastMessage;
-    private String data;
-    private int messageStatus = SENDING;
-    private int chatType = CHAT;
-    private boolean isVerified = UNVERIFIED;
-    private boolean notificationType = UNMUTE;
-    private boolean isRtl = false;
-    private int backgroundColor = 0;
-
+    boolean isRtl;
+    boolean isDarkTheme;
 
     public ChatCell(Context context) {
         super(context);
         init();
     }
 
-    private void init() {
-        int dimen4 = dpToPx(4);
-        int dimen8 = dpToPx(8);
-        int dimen16 = dpToPx(16);
-
-
-        ImageView avatarImageIv = new ImageView(getContext());
-        TextView userNameTv = new TextView(getContext());
-        TextView lastMessageTv = new TextView(getContext());
-        TextView dataTv = new TextView(getContext());
-        TextView messageStatusTv = new TextView(getContext());
-        TextView chatTypeTv = new TextView(getContext());
-        TextView messageDetailTv = new TextView(getContext());
-        TextView verifiedTv = new TextView(getContext());
-
-        textViewSetup(userNameTv);
-        textViewSetup(lastMessageTv);
-
-
-        if (chatType == CHANNEL)
-            chatTypeTv.setText("Ch");
-        else if (chatType == GROUP)
-            chatTypeTv.setText("Gr");
-        else if (chatType == BOT)
-            chatTypeTv.setText("Bot");
-        else
-            chatTypeTv.setText("");
-
-        lastMessageTv.setText(lastMessage);
-
-        if (!userName.isEmpty())
-            userNameTv.setText(userName);
-
-        if (isVerified)
-            verifiedTv.setText("V");
-        else
-            verifiedTv.setText("");
-
-        if (isVerified)
-            verifiedTv.setText("V");
-        else
-            verifiedTv.setText("");
-        verifiedTv.setTextColor(getResources().getColor(R.color.verify_color));
-
-
-        RelativeLayout.LayoutParams avatarParams = new RelativeLayout.LayoutParams(dpToPx(55), dpToPx(55));
-        avatarParams.addRule(isRtl ? RelativeLayout.ALIGN_PARENT_RIGHT : RelativeLayout.ALIGN_PARENT_LEFT);
-        avatarParams.addRule(RelativeLayout.CENTER_VERTICAL);
-        avatarParams.setMargins(isRtl ? dimen16 : dimen8, dimen8, isRtl ? dimen8 : dimen16, dimen8);
-        avatarImageIv.setBackgroundColor(getResources().getColor(R.color.black_register));
-        avatarImageIv.setId(R.id.iv_chatCell_avatar);
-        avatarImageIv.setLayoutParams(avatarParams);
-
-        LinearLayout rootLinear = new LinearLayout(getContext());
-        rootLinear.setOrientation(LinearLayout.VERTICAL);
-        rootLinear.setWeightSum(2);
-        RelativeLayout.LayoutParams rootLinearParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        rootLinearParams.addRule(isRtl ? RelativeLayout.LEFT_OF : RelativeLayout.RIGHT_OF, avatarImageIv.getId());
-        rootLinear.setLayoutParams(rootLinearParams);
-
-        RelativeLayout topFrame = new RelativeLayout(getContext());
-        LinearLayout.LayoutParams topParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
-        topFrame.setLayoutParams(topParams);
-        topFrame.setPadding(isRtl ? dimen16 : dimen8, 0, isRtl ? dimen8 : dimen16, 0);
-        rootLinear.addView(topFrame);
-
-        RelativeLayout bottomFrame = new RelativeLayout(getContext());
-        LinearLayout.LayoutParams bottomParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
-        bottomFrame.setLayoutParams(bottomParams);
-        bottomFrame.setPadding(isRtl ? dimen16 : dimen8, 0, isRtl ? dimen8 : dimen16, 0);
-
-        rootLinear.addView(bottomFrame);
-
-
-        RelativeLayout.LayoutParams chatTypeParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        chatTypeParams.addRule(isRtl ? RelativeLayout.ALIGN_PARENT_RIGHT : RelativeLayout.ALIGN_PARENT_LEFT);
-        chatTypeParams.setMargins(0, 0, isRtl ? 0 : dimen4, 0);
-        chatTypeParams.addRule(CENTER_VERTICAL);
-        chatTypeTv.setId(R.id.tv_chatCell_chatType);
-        chatTypeTv.setLayoutParams(chatTypeParams);
-        topFrame.addView(chatTypeTv);
-
-        RelativeLayout.LayoutParams userNameParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        userNameParams.addRule(isRtl ? RelativeLayout.LEFT_OF : RelativeLayout.RIGHT_OF, chatTypeTv.getId());
-        userNameParams.setMargins(0, 0, isRtl ? chatTypeTv.getText().equals("") ? 0 : dimen4 : 0, 0);
-        userNameParams.addRule(CENTER_VERTICAL);
-        userNameTv.setId(R.id.tv_chatCell_userName);
-        userNameTv.setLayoutParams(userNameParams);
-        topFrame.addView(userNameTv);
-
-        RelativeLayout.LayoutParams verifyParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        verifyParams.addRule(isRtl ? RelativeLayout.LEFT_OF : RelativeLayout.RIGHT_OF, R.id.tv_chatCell_userName);
-        verifyParams.setMargins(isRtl ? 0 : dimen8, 0, isRtl ? dimen8 : 0, 0);
-        verifiedTv.setLayoutParams(verifyParams);
-        verifyParams.addRule(RelativeLayout.CENTER_VERTICAL);
-        topFrame.addView(verifiedTv);
-
-        RelativeLayout.LayoutParams dataParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dataParams.addRule(CENTER_VERTICAL);
-        dataParams.addRule(isRtl ? RelativeLayout.ALIGN_PARENT_LEFT : RelativeLayout.ALIGN_PARENT_RIGHT);
-        dataTv.setLayoutParams(dataParams);
-        topFrame.addView(dataTv);
-
-
-        RelativeLayout.LayoutParams lastMessageParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lastMessageParams.addRule(isRtl ? RelativeLayout.ALIGN_PARENT_RIGHT : RelativeLayout.ALIGN_PARENT_LEFT);
-        lastMessageParams.addRule(CENTER_VERTICAL);
-        lastMessageTv.setLayoutParams(lastMessageParams);
-        bottomFrame.addView(lastMessageTv);
-
-
-        RelativeLayout.LayoutParams messageStatusParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        messageStatusParams.addRule(isRtl ? RelativeLayout.ALIGN_PARENT_LEFT : RelativeLayout.ALIGN_PARENT_RIGHT);
-        messageStatusParams.addRule(CENTER_VERTICAL);
-        messageStatusTv.setLayoutParams(messageStatusParams);
-        bottomFrame.addView(messageStatusTv);
-
-        addView(avatarImageIv);
-        addView(rootLinear);
-
+    public static void setTextSize(TextView v, int sizeSrc) {
+        int mSize = i_Dp(sizeSrc);
+        v.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSize);
     }
 
-    private TextView textViewSetup(TextView textView) {
-        textView.setMaxLines(1);
-        textView.setEllipsize(TextUtils.TruncateAt.END);
-        textView.setHorizontallyScrolling(false);
+    public static void setTypeFace(TextView v) {
+        v.setTypeface(G.typeface_IRANSansMobile);
+    }
 
-        return textView;
+    private void init() {
+        setId(R.id.cl_chatCell_root);
+
+        ConstraintSet set = new ConstraintSet();
+        isRtl = HelperCalander.isPersianUnicode;
+        isDarkTheme = G.isDarkTheme;
+
+        /**
+         * init avatar image
+         * */
+        CircleImageView avatarImageView = new CircleImageView(G.context);
+        avatarImageView.setId(R.id.iv_chatCell_userAvatar);
+        addView(avatarImageView);
+
+
+        /**
+         * init chat icon(channel,group,pv,mute and unMute)
+         * */
+        MaterialDesignTextView chatIcon = new MaterialDesignTextView(G.context);
+        chatIcon.setId(R.id.tv_chatCell_chatIcon);
+        chatIcon.setTextColor(isDarkTheme ? Color.parseColor(G.textTitleTheme) : Color.parseColor("#333333"));
+        chatIcon.setTextSize(R.dimen.dp14);
+        addView(chatIcon);
+
+
+        /**
+         * init room name
+         * */
+        EmojiTextViewE roomName = new EmojiTextViewE(G.context);
+        roomName.setId(R.id.tv_chatCell_roomName);
+        setTypeFace(roomName);
+        roomName.setEllipsize(TextUtils.TruncateAt.END);
+        roomName.setSingleLine(true);
+        roomName.setEmojiSize(i_Dp(R.dimen.dp16));
+        roomName.setTextColor(isDarkTheme ? Color.parseColor(G.textTitleTheme) : G.context.getResources().getColor(R.color.black90));
+        addView(roomName);
+
+
+        /**
+         * init verify room
+         * */
+        AppCompatImageView verify = new AppCompatImageView(G.context);
+        verify.setId(R.id.tv_chatCell_verify);
+        verify.setImageResource(R.drawable.ic_verify);
+        addView(verify);
+
+
+        /**
+         *
+         * init last message sender name
+         * drafts
+         *
+         * */
+        EmojiTextViewE lastMessageSender = new EmojiTextViewE(G.context);
+        lastMessageSender.setId(R.id.tv_chatCell_firstTextView);
+        lastMessageSender.setSingleLine(true);
+        setTypeFace(lastMessageSender);
+        lastMessageSender.setTextColor(G.context.getResources().getColor(R.color.green));
+        setTextSize(lastMessageSender, R.dimen.dp13);
+        lastMessageSender.setEmojiSize(i_Dp(R.dimen.dp14));
+        addView(lastMessageSender);
+
+        /**
+         * init last message content
+         * is typing
+         * */
+        EmojiTextViewE isTyping = new EmojiTextViewE(G.context);
+        isTyping.setId(R.id.tv_chatCell_secondTextView);
+        isTyping.setEllipsize(TextUtils.TruncateAt.END);
+        isTyping.setSingleLine(true);
+        setTypeFace(isTyping);
+        isTyping.setTextColor(Color.parseColor("#FF616161"));
+        setTextSize(isTyping, G.twoPaneMode ? R.dimen.dp16 : R.dimen.dp12);
+        isTyping.setEmojiSize(i_Dp(R.dimen.dp13));
+        isTyping.setTextColor(getResources().getColor(R.color.md_blue_900));
+        addView(isTyping);
+
+
+        /**
+         * init last message content type (image,file,voice)
+         * */
+        EmojiTextViewE lastMessageType = new EmojiTextViewE(G.context);
+        lastMessageType.setId(R.id.tv_chatCell_thirtedTextView);
+        lastMessageType.setEllipsize(TextUtils.TruncateAt.END);
+        lastMessageType.setSingleLine(true);
+        setTypeFace(lastMessageType);
+        lastMessageType.setTextColor(isDarkTheme ? Color.parseColor(G.textSubTheme) : Color.parseColor("#FF616161"));
+        setTextSize(lastMessageType, R.dimen.dp12);
+        lastMessageType.setEmojiSize(i_Dp(R.dimen.dp13));
+        addView(lastMessageType);
+
+
+        /**
+         * init room notification
+         * */
+        MaterialDesignTextView mute = new MaterialDesignTextView(G.context);
+        mute.setId(R.id.iv_chatCell_mute);
+        mute.setText(G.fragmentActivity.getResources().getString(R.string.md_muted));
+        mute.setTextColor(Color.parseColor(G.textTitleTheme));
+        setTextSize(mute, R.dimen.dp13);
+        addView(mute);
+
+
+        /**
+         * init last message status(read ,send , failed)
+         * */
+        AppCompatImageView messageStatus = new AppCompatImageView(G.context);
+        messageStatus.setId(R.id.iv_chatCell_messageStatus);
+        messageStatus.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
+        addView(messageStatus);
+
+
+        /**
+         * init last message send data and time
+         * */
+        AppCompatTextView messageData = new AppCompatTextView(G.context);
+        messageData.setId(R.id.tv_chatCell_messageData);
+        messageData.setSingleLine(true);
+        messageData.setTextColor(Color.parseColor(G.textTitleTheme));
+        setTextSize(messageData, R.dimen.dp12);
+        setTypeFace(messageData);
+        addView(messageData);
+
+
+        /**
+         * init room unRead message count
+         * */
+        BadgeView badgeView = new BadgeView(G.context);
+        badgeView.setId(R.id.cv_chatCell_badge);
+        badgeView.getTextView().setId(R.id.iv_chatCell_messageCount);
+        badgeView.setBadgeColor(R.drawable.rect_oval_red);
+        setTypeFace(badgeView.getTextView());
+        addView(badgeView);
+
+
+        /**
+         * init pinned room on top
+         * */
+        MaterialDesignTextView pinnedMessage = new MaterialDesignTextView(G.context);
+        pinnedMessage.setId(R.id.iv_chatCell_pinnedMessage);
+        pinnedMessage.setGravity(CENTER);
+        pinnedMessage.setText(G.fragmentActivity.getResources().getString(R.string.md_circlePin));
+        pinnedMessage.setTextColor(Color.parseColor(G.textTitleTheme));
+        pinnedMessage.setTextSize(i_Dp(R.dimen.dp20));
+        setTextSize(pinnedMessage, R.dimen.dp20);
+        addView(pinnedMessage);
+
+
+        /**
+         * set views dependency
+         * */
+
+        set.constrainHeight(avatarImageView.getId(), i_Dp(R.dimen.dp52));
+        set.constrainWidth(avatarImageView.getId(), i_Dp(R.dimen.dp52));
+        set.connect(avatarImageView.getId(), ConstraintSet.TOP,
+                ConstraintSet.PARENT_ID, ConstraintSet.TOP, i_Dp(R.dimen.dp6));
+        set.connect(avatarImageView.getId(), ConstraintSet.BOTTOM,
+                ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp6));
+        set.connect(avatarImageView.getId(), isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT,
+                ConstraintSet.PARENT_ID, isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT, i_Dp(R.dimen.dp6));
+
+        set.constrainHeight(chatIcon.getId(), 0);
+        set.constrainWidth(chatIcon.getId(), ConstraintSet.WRAP_CONTENT);
+        set.connect(chatIcon.getId(), isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT,
+                avatarImageView.getId(), isRtl ? ConstraintSet.LEFT : ConstraintSet.RIGHT, i_Dp(R.dimen.dp8));
+
+        set.constrainHeight(roomName.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainWidth(roomName.getId(), ConstraintSet.WRAP_CONTENT);
+        set.connect(roomName.getId(), isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT,
+                chatIcon.getId(), isRtl ? ConstraintSet.LEFT : ConstraintSet.RIGHT, i_Dp(R.dimen.dp8));
+
+        set.constrainHeight(verify.getId(), i_Dp(R.dimen.dp18));
+        set.constrainWidth(verify.getId(), i_Dp(R.dimen.dp18));
+        set.connect(verify.getId(), isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT,
+                roomName.getId(), isRtl ? ConstraintSet.LEFT : ConstraintSet.RIGHT, i_Dp(R.dimen.dp8));
+        set.connect(verify.getId(), ConstraintSet.TOP, roomName.getId(), ConstraintSet.TOP);
+        set.connect(verify.getId(), ConstraintSet.BOTTOM, roomName.getId(), ConstraintSet.BOTTOM);
+
+        set.constrainHeight(messageData.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainWidth(messageData.getId(), ConstraintSet.WRAP_CONTENT);
+        set.connect(messageData.getId(), isRtl ? ConstraintSet.LEFT : ConstraintSet.RIGHT,
+                ConstraintSet.PARENT_ID, isRtl ? ConstraintSet.LEFT : ConstraintSet.RIGHT);
+
+
+//        bottom
+
+        set.constrainHeight(lastMessageType.getId(), 0);
+        set.constrainWidth(lastMessageType.getId(), ConstraintSet.WRAP_CONTENT);
+        set.connect(lastMessageType.getId(), isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT,
+                chatIcon.getId(), isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT);
+
+        set.constrainHeight(isTyping.getId(), i_Dp(R.dimen.dp100));
+        set.constrainWidth(isTyping.getId(), i_Dp(R.dimen.dp100));
+        set.connect(isTyping.getId(), isRtl ? ConstraintSet.RIGHT : ConstraintSet.LEFT, lastMessageType.getId(),
+                isRtl ? ConstraintSet.LEFT : ConstraintSet.RIGHT);
+
+        set.constrainHeight(messageStatus.getId(), ConstraintSet.WRAP_CONTENT);
+        set.constrainWidth(messageStatus.getId(), ConstraintSet.WRAP_CONTENT);
+        set.connect(messageStatus.getId(), isRtl ? ConstraintSet.LEFT : ConstraintSet.RIGHT,
+                ConstraintSet.PARENT_ID, isRtl ? ConstraintSet.LEFT : ConstraintSet.RIGHT);
+
+        set.setVerticalChainStyle(roomName.getId(), ConstraintSet.CHAIN_PACKED);
+        set.setVerticalChainStyle(lastMessageType.getId(), ConstraintSet.CHAIN_PACKED);
+
+        set.applyTo(this);
     }
 
     public int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public void setLastMessage(String lastMessage) {
-        this.lastMessage = lastMessage;
-    }
-
-    public boolean isNotificationType() {
-        return notificationType;
-    }
-
-    public void setNotificationType(boolean notificationType) {
-        this.notificationType = notificationType;
-    }
-
-    public void setMessageStatus(int messageStatus) {
-        this.messageStatus = messageStatus;
-    }
-
-    @Override
-    public void setBackgroundColor(int backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
-
-    public void setChatType(int chatType) {
-        this.chatType = chatType;
-    }
-
-    public void setVerified(boolean verified) {
-        isVerified = verified;
-    }
-
-    public void setRtl(boolean isRtls) {
-        isRtl = isRtls;
-    }
 }

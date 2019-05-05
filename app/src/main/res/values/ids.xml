@@ -87,9 +87,21 @@
     <item name="animateCheckBoxContact" type="id" />
     <item name="sticker_layout" type="id" />
 
-    <!--chat cell id-->
-    <item name="iv_chatCell_avatar" type="id" />
-    <item name="tv_chatCell_chatType" type="id" />
-    <item name="tv_chatCell_userName" type="id" />
+
+    <!--new chat cell-->
+    <item name="cl_chatCell_root" type="id" />
+    <item name="iv_chatCell_userAvatar" type="id" />
+    <item name="tv_chatCell_roomName" type="id" />
+    <item name="tv_chatCell_chatIcon" type="id" />
+    <item name="tv_chatCell_verify" type="id" />
+    <item name="tv_chatCell_messageData" type="id" />
+    <item name="tv_chatCell_firstTextView" type="id" />
+    <item name="tv_chatCell_secondTextView" type="id" />
+    <item name="tv_chatCell_thirtedTextView" type="id" />
+    <item name="iv_chatCell_messageStatus" type="id" />
+    <item name="iv_chatCell_mute" type="id" />
+    <item name="iv_chatCell_messageCount" type="id" />
+    <item name="iv_chatCell_pinnedMessage" type="id" />
+    <item name="cv_chatCell_badge" type="id" />
 
 </resources>

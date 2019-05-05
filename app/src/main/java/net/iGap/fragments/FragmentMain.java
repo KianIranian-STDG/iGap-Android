@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
@@ -35,6 +36,7 @@ import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
+import net.iGap.adapter.items.chat.ChatCell;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.AvatarHandler;
 import net.iGap.helper.GoToChatActivity;
@@ -107,6 +109,7 @@ import io.realm.Sort;
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
 import static net.iGap.G.userId;
+import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentMain.MainType.all;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
@@ -1026,7 +1029,9 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             // View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
-            return new ViewHolder(ViewMaker.getViewItemRoom());
+            View view = new ChatCell(getContext());
+            view.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp70)));
+            return new ViewHolder(view);
         }
 
         @Override
@@ -1105,9 +1110,9 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                         }
 
                         ViewMaker.setTextSize(cs_txt_contact_initials, R.dimen.dp32);
-                        LinearLayout.LayoutParams layout_936 = new LinearLayout.LayoutParams(ViewMaker.i_Dp(R.dimen.dp52), ViewMaker.i_Dp(R.dimen.dp52));
+                        LinearLayout.LayoutParams layout_936 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp52), i_Dp(R.dimen.dp52));
                         layout_936.gravity = Gravity.CENTER;
-                        layout_936.setMargins(ViewMaker.i_Dp(R.dimen.dp6), ViewMaker.i_Dp(R.dimen.dp6), ViewMaker.i_Dp(R.dimen.dp6), ViewMaker.i_Dp(R.dimen.dp6));
+                        layout_936.setMargins(i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6));
                         cs_txt_contact_initials.setVisibility(View.GONE);
                         cs_txt_contact_initials.setLayoutParams(layout_936);
 
@@ -1276,7 +1281,8 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
                 holder.lastMessageSender.setVisibility(View.VISIBLE);
                 holder.lastMessageSender.setText(R.string.txt_draft);
-                holder.lastMessageSender.setTextColor(Color.parseColor(G.roomSenderTextColor));
+                holder.lastMessageSender.setTextColor(getResources().getColor(R.color.red));
+//                holder.lastMessageSender.setTextColor(Color.parseColor(G.roomSenderTextColor));
 
                 holder.lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
             } else {
@@ -1532,63 +1538,63 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 /**
                  * user avatar image
                  * */
-                image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
+                image = (CircleImageView) view.findViewById(R.id.iv_chatCell_userAvatar);
 
                 /**
                  * user name
                  * */
-                name = (EmojiTextViewE) view.findViewById(R.id.cs_txt_contact_name);
+                name = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_roomName);
                 name.setTypeface(G.typeface_IRANSansMobile_Bold);
 
                 /**
                  * root chat cell
                  * */
-                rootChat = (ViewGroup) view.findViewById(R.id.root_chat_sub_layout);
+                rootChat = (ViewGroup) view.findViewById(R.id.cl_chatCell_root);
 
-                txtLastMessage = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message);
-                txtLastMessageFileText = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message_file_text);
+                txtLastMessage = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_secondTextView);
+                txtLastMessageFileText = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_thirtedTextView);
 
                 /**
                  * channel or group icon
                  * */
-                txtChatIcon = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_chat_icon);
+                txtChatIcon = (MaterialDesignTextView) view.findViewById(R.id.tv_chatCell_chatIcon);
 
                 /**
                  * sended message time
                  * */
-                txtTime = ((TextView) view.findViewById(R.id.cs_txt_contact_time));
+                txtTime = ((TextView) view.findViewById(R.id.tv_chatCell_messageData));
                 txtTime.setTypeface(G.typeface_IRANSansMobile);
 
                 /**
                  * pin icon
                  * */
-                txtPinIcon = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_pinned_message);
+                txtPinIcon = (MaterialDesignTextView) view.findViewById(R.id.iv_chatCell_pinnedMessage);
                 txtPinIcon.setTypeface(G.typeface_Fontico);
 
                 /**
                  * verify imageView
                  * */
-                imgVerifyRoom = (AppCompatImageView) view.findViewById(R.id.cs_img_verify_room);
+                imgVerifyRoom = (AppCompatImageView) view.findViewById(R.id.tv_chatCell_verify);
 
                 /**
                  * unread text counter
                  * */
-                txtUnread = (TextView) view.findViewById(R.id.cs_txt_unread_message);
+                txtUnread = (TextView) view.findViewById(R.id.iv_chatCell_messageCount);
                 txtUnread.setTypeface(G.typeface_IRANSansMobile);
 
                 /**
                  * mute icon
                  * */
-                mute = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_mute);
+                mute = (MaterialDesignTextView) view.findViewById(R.id.iv_chatCell_mute);
 
                 /**
                  * last message sender name
                  * */
-                lastMessageSender = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message_sender);
+                lastMessageSender = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_firstTextView);
                 lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
 
 
-                txtTic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
+                txtTic = (ImageView) view.findViewById(R.id.iv_chatCell_messageStatus);
 
                 txtCloud = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_contact_initials);
 
