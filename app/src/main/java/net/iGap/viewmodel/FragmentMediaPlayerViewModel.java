@@ -24,6 +24,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.fragments.FragmentMediaPlayer;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperPermission;
@@ -39,6 +41,8 @@ import net.iGap.module.MusicPlayer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentMediaPlayerViewModel {
 
@@ -163,45 +167,17 @@ public class FragmentMediaPlayerViewModel {
 
     private void popUpMusicMenu() {
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-        View v = dialog.getCustomView();
+        List<String> items = new ArrayList<>();
+        items.add(G.fragmentActivity.getString(R.string.save_to_Music));
+        items.add(G.fragmentActivity.getString(R.string.share_item_dialog));
 
-        DialogAnimation.animationUp(dialog);
-        dialog.show();
-
-        ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-        ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
-
-        final TextView txtShare = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-        TextView txtSaveToGallery = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
-
-        TextView iconSaveToGallery = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-        iconSaveToGallery.setText(G.fragmentActivity.getResources().getString(R.string.md_save));
-
-        txtShare.setText(G.fragmentActivity.getResources().getString(R.string.save_to_Music));
-        txtSaveToGallery.setText(G.fragmentActivity.getResources().getString(R.string.share_item_dialog));
-
-        root1.setVisibility(View.VISIBLE);
-        root2.setVisibility(View.VISIBLE);
-
-        TextView iconShare = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-        iconShare.setText(G.fragmentActivity.getResources().getString(R.string.md_share_button));
-
-        root1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
+        new TopSheetDialog(G.fragmentActivity).setListData(items, -1, position -> {
+            if (items.get(position).equals(G.fragmentActivity.getString(R.string.save_to_Music))){
                 saveToMusic();
-            }
-        });
-
-        root2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            }else if (items.get(position).equals(G.fragmentActivity.getString(R.string.share_item_dialog))){
                 shareMusic();
             }
-        });
+        }).show();
     }
 
     private void saveToMusic() {

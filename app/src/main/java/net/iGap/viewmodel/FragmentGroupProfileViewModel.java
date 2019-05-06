@@ -39,6 +39,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.dialog.BottomSheetItemClickCallback;
+import net.iGap.dialog.topsheet.TopSheetDialog;
 import net.iGap.fragments.FragmentChat;
 import net.iGap.fragments.FragmentGroupProfile;
 import net.iGap.fragments.FragmentNotification;
@@ -175,7 +177,7 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
 
     public void onClickRippleMenu(View view) {
 
-        LinearLayout layoutDialog = new LinearLayout(G.context);
+        /*LinearLayout layoutDialog = new LinearLayout(G.context);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutDialog.setOrientation(LinearLayout.VERTICAL);
         layoutDialog.setBackgroundColor(G.context.getResources().getColor(android.R.color.white));
@@ -183,50 +185,20 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
         TextView text3 = new AppCompatTextView(G.context);
 
         text2.setTextColor(G.context.getResources().getColor(android.R.color.black));
-        text3.setTextColor(G.context.getResources().getColor(android.R.color.black));
+        text3.setTextColor(G.context.getResources().getColor(android.R.color.black));*/
 
-        final MaterialDialog dialog = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.chat_popup_dialog_custom, true).build();
-        View v = dialog.getCustomView();
-
-        DialogAnimation.animationUp(dialog);
-        dialog.show();
-
-        ViewGroup root1 = (ViewGroup) v.findViewById(R.id.dialog_root_item1_notification);
-        ViewGroup root2 = (ViewGroup) v.findViewById(R.id.dialog_root_item2_notification);
-
-        TextView txtClearHistory = (TextView) v.findViewById(R.id.dialog_text_item1_notification);
-        TextView txtConvert = (TextView) v.findViewById(R.id.dialog_text_item2_notification);
-
-        TextView iconClearHistory = (TextView) v.findViewById(R.id.dialog_icon_item1_notification);
-        iconClearHistory.setText(G.fragmentActivity.getResources().getString(R.string.md_clearHistory));
-        TextView iconConvert = (TextView) v.findViewById(R.id.dialog_icon_item2_notification);
-
-        root1.setVisibility(View.VISIBLE);
-        root2.setVisibility(View.VISIBLE);
-
-        txtClearHistory.setText(G.fragmentActivity.getResources().getString(R.string.clear_history));
+        List<String> items = new ArrayList<>();
+        items.add(context.getString(R.string.clear_history));
         if (role == GroupChatRole.OWNER || role == GroupChatRole.ADMIN) {
-
-            root2.setVisibility(View.VISIBLE);
             if (isPrivate) {
-                txtConvert.setText(G.fragmentActivity.getResources().getString(R.string.group_title_convert_to_public));
-                iconConvert.setText(G.fragmentActivity.getResources().getString(R.string.md_convert_to_public));
+                items.add(context.getString(R.string.group_title_convert_to_public));
             } else {
-                txtConvert.setText(G.fragmentActivity.getResources().getString(R.string.group_title_convert_to_private));
-                iconConvert.setText(G.fragmentActivity.getResources().getString(R.string.md_convert_to_private));
+                items.add(context.getString(R.string.group_title_convert_to_private));
             }
-        } else {
-            root2.setVisibility(View.GONE);
         }
 
-        if (role == GroupChatRole.MODERATOR) {
-            root2.setVisibility(View.VISIBLE);
-        }
-        root1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                dialog.dismiss();
+        new TopSheetDialog(G.fragmentActivity).setListData(items, -1, position -> {
+            if (items.get(position).equals(context.getString(R.string.clear_history))){
                 new MaterialDialog.Builder(G.fragmentActivity).title(R.string.clear_history).content(R.string.clear_history_content).positiveText(R.string.yes).onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -236,26 +208,15 @@ public class FragmentGroupProfileViewModel implements OnGroupRevokeLink {
                         }
                     }
                 }).negativeText(R.string.no).show();
-
-                dialog.dismiss();
-            }
-        });
-
-        root2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            }else if (items.get(position).equals(context.getString(R.string.group_title_convert_to_public)) || items.get(position).equals(context.getString(R.string.group_title_convert_to_private))){
                 isPopup = true;
-
                 if (isPrivate) {
-                    convertToPublic(v);
+                    convertToPublic(view);
                 } else {
                     convertToPrivate();
                 }
-                dialog.dismiss();
             }
-        });
-
+        }).show();
     }
 
     public void onClickRippleGroupAvatar(View v) {
