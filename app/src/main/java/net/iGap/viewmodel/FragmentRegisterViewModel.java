@@ -11,6 +11,7 @@ package net.iGap.viewmodel;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -98,7 +99,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static net.iGap.G.context;
 import static net.iGap.R.color.black_register;
 
-public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRecoverySecurityPassword, OnCountryCode {
+public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCheckPassword, OnRecoverySecurityPassword, OnCountryCode {
 
     private static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
     private static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";

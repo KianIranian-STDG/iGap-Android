@@ -1450,6 +1450,6 @@
 
 
     <string name="top_sheet_behavior" translatable="false">net.iGap.dialog.topsheet.TopSheetBehavior</string>
-    <string name="change_language_title">Change language</string>
+    <string name="change_language_title">Change Language</string>
 
 </resources>
