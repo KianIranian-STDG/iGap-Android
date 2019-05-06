@@ -48,13 +48,13 @@ import net.iGap.fragments.FragmentContactsProfile;
 import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChatGetRoom;
 import net.iGap.interfaces.OnClientCheckInviteLink;
-import net.iGap.interfaces.OnClientGetRoomMessage;
 import net.iGap.interfaces.OnClientJoinByInviteLink;
 import net.iGap.interfaces.OnClientResolveUsername;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.DialogAnimation;
 import net.iGap.module.SHP_SETTING;
+import net.iGap.module.structs.StructMessageOption;
 import net.iGap.proto.ProtoClientResolveUsername;
 import net.iGap.proto.ProtoGlobal;
 import net.iGap.realm.RealmRegisteredInfo;
@@ -64,7 +64,7 @@ import net.iGap.realm.RealmRoomMessage;
 import net.iGap.realm.RealmRoomMessageFields;
 import net.iGap.request.RequestChatGetRoom;
 import net.iGap.request.RequestClientCheckInviteLink;
-import net.iGap.request.RequestClientGetRoomMessage;
+import net.iGap.request.RequestClientGetRoomHistory;
 import net.iGap.request.RequestClientJoinByInviteLink;
 import net.iGap.request.RequestClientResolveUsername;
 
@@ -85,6 +85,7 @@ import me.zhanghai.android.customtabshelper.CustomTabsHelperFragment;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static net.iGap.G.context;
+import static net.iGap.proto.ProtoClientGetRoomHistory.ClientGetRoomHistory.Direction.DOWN;
 import static net.iGap.proto.ProtoGlobal.Room.Type.GROUP;
 
 public class HelperUrl {
@@ -964,42 +965,67 @@ public class HelperUrl {
      * if message isn't exist in Realm resolve from server and then open chat
      */
     private static void resolveMessageAndOpenChat(final long messageId, final String username, final ChatEntry chatEntry, final ProtoClientResolveUsername.ClientResolveUsernameResponse.Type type, final ProtoGlobal.RegisteredUser user, final ProtoGlobal.Room room) {
-
         Realm realm = Realm.getDefaultInstance();
         RealmRoomMessage rm = realm.where(RealmRoomMessage.class).equalTo(RealmRoomMessageFields.ROOM_ID, room.getId()).equalTo(RealmRoomMessageFields.MESSAGE_ID, messageId).findFirst();
         if (rm != null) {
             openChat(username, type, user, room, chatEntry, messageId);
         } else {
-
-            RealmRoom realmRoom = realm.where(RealmRoom.class).equalTo(RealmRoomFields.ID, room.getId()).findFirst();
-            if (realmRoom == null || realmRoom.isDeleted()) {
-                openChat(username, type, user, room, chatEntry, messageId);
-            } else {
-                new RequestClientGetRoomMessage().clientGetRoomMessage(room.getId(), messageId, new OnClientGetRoomMessage() {
-                    @Override
-                    public void onClientGetRoomMessageResponse(ProtoGlobal.RoomMessage message) {
-                        RealmRoomMessage.setGap(message.getMessageId());
-                        openChat(username, type, user, room, chatEntry, message.getMessageId());
-                    }
-
-                    @Override
-                    public void onError(int majorCode, int minorCode) {
+            new RequestClientGetRoomHistory().getRoomHistory(room.getId(), messageId - 1 , 1, DOWN, new RequestClientGetRoomHistory.OnHistoryReady() {
+                @Override
+                public void onHistory(List<ProtoGlobal.RoomMessage> messageList) {
+                    if (messageList.size() == 0 || messageList.get(0).getMessageId() != messageId || messageList.get(0).getDeleted()) {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
                                 closeDialogWaiting();
-                                if (majorCode == 626) {
-                                    HelperError.showSnackMessage(G.context.getString(R.string.not_found_message), false);
-                                } else if (majorCode == 624 ){
-                                    HelperError.showSnackMessage(G.context.getString(R.string.ivnalid_data_provided), false);
-                                } else {
-                                    HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                                HelperError.showSnackMessage(G.context.getString(R.string.not_found_message), false);
+                                openChat(username, type, user, room, chatEntry, 0);
+                            }
+                        });
+                    } else {
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                for (ProtoGlobal.RoomMessage roomMessage : messageList) {
+                                    if (roomMessage.getAuthor().hasUser()) {
+                                        RealmRegisteredInfo.needUpdateUser(roomMessage.getAuthor().getUser().getUserId(), roomMessage.getAuthor().getUser().getCacheId());
+                                    }
+                                    RealmRoomMessage.putOrUpdate(realm, room.getId(), roomMessage, new StructMessageOption().setGap());
                                 }
                             }
                         });
+
+                        realm.close();
+                        RealmRoomMessage.setGap(messageList.get(0).getMessageId());
+                        G.handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                G.refreshRealmUi();
+                                openChat(username, type, user, room, chatEntry, messageList.get(0).getMessageId());
+                            }
+                        });
                     }
-                });
-            }
+                }
+
+                @Override
+                public void onErrorHistory(int major , int minor) {
+                    G.handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            closeDialogWaiting();
+                            if (major == 626) {
+                                HelperError.showSnackMessage(G.context.getString(R.string.not_found_message), false);
+                            } else if (minor == 624) {
+                                HelperError.showSnackMessage(G.context.getString(R.string.ivnalid_data_provided), false);
+                            } else {
+                                HelperError.showSnackMessage(G.context.getString(R.string.there_is_no_connection_to_server), false);
+                            }
+                        }
+                    });
+                }
+            });
+
         }
         realm.close();
     }
@@ -1173,7 +1199,7 @@ public class HelperUrl {
         if (realmRoom != null) {
 
             if (realmRoom.isDeleted()) {
-                addRoomToDataBaseAndGoToRoom(username, room);
+                addRoomToDataBaseAndGoToRoom(username, room, messageId);
             } else {
                 closeDialogWaiting();
 
@@ -1195,11 +1221,11 @@ public class HelperUrl {
             realm.close();
         } else {
 
-            addRoomToDataBaseAndGoToRoom(username, room);
+            addRoomToDataBaseAndGoToRoom(username, room, messageId);
         }
     }
 
-    private static void addRoomToDataBaseAndGoToRoom(final String username, final ProtoGlobal.Room room) {
+    private static void addRoomToDataBaseAndGoToRoom(final String username, final ProtoGlobal.Room room, long messageId) {
         closeDialogWaiting();
 
         new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -1218,8 +1244,19 @@ public class HelperUrl {
                 }, new Realm.Transaction.OnSuccess() {
                     @Override
                     public void onSuccess() {
+                        realm.refresh();
                         if (room.getId() != FragmentChat.lastChatRoomId) {
-                            new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).startActivity();
+                            new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity();
+                        } else {
+                            try {
+                                if (G.fragmentManager != null) {
+                                    G.fragmentManager.popBackStack();
+                                    new GoToChatActivity(room.getId()).setfromUserLink(true).setisNotJoin(true).setuserName(username).setMessageID(messageId).startActivity();
+                                }
+                            } catch (Exception e) {
+                                HelperLog.setErrorLog(e);
+                                e.printStackTrace();
+                            }
                         }
                         realm.close();
                     }

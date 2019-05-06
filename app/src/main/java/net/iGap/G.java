@@ -62,6 +62,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import cat.ereza.customactivityoncrash.config.CaocConfig;
 import io.fabric.sdk.android.Fabric;
+import io.realm.Realm;
 import ir.radsense.raadcore.Raad;
 import ir.radsense.raadcore.web.WebBase;
 
@@ -421,6 +422,17 @@ public class G extends MultiDexApplication {
         } else {
             return Color.parseColor(color);
         }
+    }
+
+    public static void refreshRealmUi() {
+        G.fragmentActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Realm realm = Realm.getDefaultInstance();
+                realm.refresh();
+                realm.close();
+            }
+        });
     }
 
     public static int getTheme2BackgroundColor() {

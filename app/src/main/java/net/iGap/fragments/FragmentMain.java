@@ -1312,9 +1312,8 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                              * room be different latest message sender showing will be wrong
                              */
 
-                            String lastMessageSender = "";
                             if (mInfo.getLastMessage().isAuthorMe()) {
-                                lastMessageSender = holder.itemView.getResources().getString(R.string.txt_you);
+                                holder.lastMessageSender.setText(holder.itemView.getResources().getString(R.string.txt_you));
                             } else {
                                 if (holder.realmRegisteredInfo != null && holder.realmRegisteredInfo.isValid()){
                                     holder.realmRegisteredInfo.removeAllChangeListeners();
