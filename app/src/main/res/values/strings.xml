@@ -1449,5 +1449,9 @@
     <string name="secret_chat">Secret Chat</string>
     <string name="new_message_notif">New Message</string>
     <string name="top_sheet_behavior" translatable="false">net.iGap.dialog.topsheet.TopSheetBehavior</string>
+    <string name="increase_credit">Increase credit</string>
+    <string name="your_rate">Your rate :</string>
+    <string name="increase_score">Increase Score</string>
+    <string name="bots_and_channels">Bots and Channels</string>
 
 </resources>
