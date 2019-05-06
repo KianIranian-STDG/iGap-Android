@@ -18,10 +18,12 @@ public class UserStatusController implements RequestUserUpdateStatus.onUserStatu
     private boolean isOfflineRequestPending;
 
     private int offlineTry;
+    private int onlineTry;
 
     private UserStatusController() {
         this.mutex = new Object();
         this.offlineTry = 0;
+        this.onlineTry = 0;
     }
 
     public void setOnline() {
@@ -31,6 +33,7 @@ public class UserStatusController implements RequestUserUpdateStatus.onUserStatu
             }
 
             if (isOfflineRequestPending) {
+                offlineTry = 16;
                 LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -39,6 +42,13 @@ public class UserStatusController implements RequestUserUpdateStatus.onUserStatu
                 }, 1000);
                 return;
             }
+
+            onlineTry = onlineTry + 1;
+            if (onlineTry > 20) {
+                onlineTry = 0;
+                return;
+            }
+
             isOnlineRequestPending = new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE, this);
             if (!isOnlineRequestPending) {
                 LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
@@ -58,6 +68,7 @@ public class UserStatusController implements RequestUserUpdateStatus.onUserStatu
             }
 
             if (isOnlineRequestPending) {
+                onlineTry = 21;
                 LooperThreadHelper.getInstance().getHandler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -105,6 +116,7 @@ public class UserStatusController implements RequestUserUpdateStatus.onUserStatu
 
             if (isOnlineRequestPending) {
                 isOnlineResponse = true;
+                onlineTry = 0;
                 isOnlineRequestPending = false;
             }
 
