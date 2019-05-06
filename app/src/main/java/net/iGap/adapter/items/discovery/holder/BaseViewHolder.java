@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.FragmentIVandActivities;
 import net.iGap.fragments.FragmentIVandProfile;
 import net.iGap.fragments.FragmentPayment;
@@ -49,6 +50,7 @@ import static net.iGap.activities.ActivityMain.WALLET_REQUEST_CODE;
 import static net.iGap.activities.ActivityMain.waitingForConfiguration;
 import static net.iGap.fragments.FragmentiGapMap.mapUrls;
 import static net.iGap.viewmodel.FragmentIVandProfileViewModel.scanBarCode;
+import static net.iGap.viewmodel.FragmentPaymentViewModel.CallCardToCard;
 
 
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
@@ -251,6 +253,12 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 break;
             case STICKER_SHOP:/** tested **/
                 new HelperFragment(FragmentAddStickers.newInstance()).setReplace(false).load();
+                break;
+            case CARD_TO_CARD:
+                CallCardToCard();
+                break;
+            case IVANDSCORE:
+                ActivityMain.doIvandScore(discoveryField.value, G.currentActivity);
                 break;
             case NONE:
                 break;

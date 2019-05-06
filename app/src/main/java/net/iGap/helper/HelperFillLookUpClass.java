@@ -257,6 +257,7 @@ public class HelperFillLookUpClass {
         lookupMap.put(39100, "ProtoMplGetBillToken.MplGetBillTokenResponse");
         lookupMap.put(39101, "ProtoMplGetTopupToken.MplGetTopupTokenResponse");
         lookupMap.put(39102, "ProtoMplGetSalesToken.MplGetSalesTokenResponse");
+        lookupMap.put(39106, "ProtoMplGetCardToCardToken.MplGetCardToCardTokenResponse");
         lookupMap.put(39200, "ProtoBillInquiryMci.BillInquiryMciResponse");
         lookupMap.put(39201, "ProtoBillInquiryTelecom.BillInquiryTelecomResponse");
 

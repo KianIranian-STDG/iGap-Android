@@ -2398,4 +2398,6 @@
     <string name="not_found_message">هذه الرسالة مفقودة.</string>
     <string name="ivnalid_data_provided">قيم الإدخال غير صحيحة.</string>
     <string name="new_message_notif">پیام جدید</string>
+    <string name="card_to_card">بطاقة إلى بطاقة</string>
+    <string name="your_device_is_root">آسف! جهازك هو الجذر.</string>
 </resources>

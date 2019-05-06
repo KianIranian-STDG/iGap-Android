@@ -1446,5 +1446,7 @@
     <string name="not_found_message">This message is missing.</string>
     <string name="ivnalid_data_provided">Input values are incorrect.</string>
     <string name="new_message_notif">New Message</string>
+    <string name="card_to_card">Crad to Card</string>
+    <string name="your_device_is_root">Sorry! Your device is root.</string>
 
 </resources>
