@@ -196,6 +196,14 @@ public class FragmentPaymentChargeViewModel {
         fragmentPaymentChargeBinding.fpcSpinnerOperator.setSelection(0);
     }
 
+    public static boolean isNumeric(String strNum) {
+        try {
+            long d = Long.parseLong(strNum);
+        } catch (NumberFormatException | NullPointerException nfe) {
+            return false;
+        }
+        return true;
+    }
 
     public void onBuyClick(View v) {
 
@@ -204,9 +212,9 @@ public class FragmentPaymentChargeViewModel {
             return;
         }
 
-        String phoneNumber = fragmentPaymentChargeBinding.fpcEditTextPhoneNumber.getText().toString();
+        String phoneNumber = fragmentPaymentChargeBinding.fpcEditTextPhoneNumber.getText().toString().replace(" ","");
 
-        if (phoneNumber.length() != 11) {
+        if (!isNumeric(phoneNumber) || phoneNumber.length() != 11) {
             HelperError.showSnackMessage(G.context.getResources().getString(R.string.phone_number_is_not_valid), false);
             return;
         }
