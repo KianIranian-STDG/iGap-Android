@@ -230,7 +230,6 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         vgRoot = (ViewGroup) view.findViewById(R.id.menu_parent_layout);
         vgRoot.setBackgroundColor(context.getResources().getColor(R.color.white));
 
-        //todo: Alireza Nazari: working on new design
         LinearLayout toolbarLayout = view.findViewById(R.id.frg_contact_ll_toolbar_layout);
 
         mHelperToolbar = HelperToolbar.create()
@@ -1867,38 +1866,10 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     public void onSearchClickListener(View view) {
 
         if (!isToolbarInEditMode){
-            mHelperToolbar.getTextViewSearch().setVisibility(View.GONE);
-            mHelperToolbar.getEditTextSearch().setVisibility(View.VISIBLE);
-            mHelperToolbar.getButtonClearSearch().setVisibility(View.VISIBLE);
-
-            configSearchBox();
-            isToolbarInEditMode = true;
-        }else {
-         /*   mHelperToolbar.getTextViewSearch().setVisibility(View.VISIBLE);
-            mHelperToolbar.getEditTextSearch().setVisibility(View.GONE);
-            closeKeyboard(view);
-            isToolbarInEditMode = false ;*/
+            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(true);
+            openKeyBoard();
         }
-    }
 
-    private void configSearchBox() {
-
-
-        mHelperToolbar.getEditTextSearch().setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-        mHelperToolbar.getEditTextSearch().requestFocus();
-        openKeyBoard();
-
-        mHelperToolbar.getEditTextSearch().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-                if (actionId == EditorInfo.IME_ACTION_SEARCH){
-                    //do search
-                }
-
-                return false;
-            }
-        });
     }
 
     @Override //btn add
@@ -1918,13 +1889,8 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
         if (edtSearch.getText().length() > 0) {
             edtSearch.setText("");
         } else {
-            mHelperToolbar.getButtonClearSearch().setVisibility(View.GONE);
-            edtSearch.setVisibility(View.GONE);
-            mHelperToolbar.getTextViewSearch().setVisibility(View.VISIBLE);
-
+            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(false) ;
             closeKeyboard(getView());
-            isToolbarInEditMode = false ;
-
         }
     }
 }

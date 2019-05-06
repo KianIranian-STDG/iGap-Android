@@ -26,17 +26,28 @@
     android:id="@+id/asm_appbar_shared_media"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:elevation="0dp"
     android:background="@color/white">
 
     <LinearLayout
-
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:orientation="vertical"
-      app:elevation="8dp"
+      app:elevation="0dp"
       app:layout_scrollFlags="scroll|enterAlways">
 
       <LinearLayout
+          android:id="@+id/frg_shared_media_ll_toolbar_layout"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/toolbar_height_root_with_search"
+          android:orientation="horizontal">
+
+        <!--view added at runtime with toolbar helper-->
+
+      </LinearLayout>
+
+      <LinearLayout
+        android:visibility="gone"
         android:id="@+id/asm_ll_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
@@ -123,7 +134,7 @@
     android:id="@+id/asm_ll_appbar_selelected"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="4dp"
+    android:elevation="0dp"
     android:orientation="vertical"
     android:visibility="gone">
 

@@ -5,9 +5,11 @@
 
         <shape android:shape="rectangle">
 
-            <solid
-                android:color="@color/colorToolbarBackground"/>
-
+            <gradient
+                android:angle="135"
+                android:endColor="@color/colorToolbarBackgroundStart"
+                android:startColor="@color/colorToolbarBackgroundEnd"/>
+            
             <corners
                 android:bottomLeftRadius="@dimen/toolbar_radius"
                 android:bottomRightRadius="@dimen/toolbar_radius"/>

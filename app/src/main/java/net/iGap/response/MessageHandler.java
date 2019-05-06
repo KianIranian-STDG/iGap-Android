@@ -39,7 +39,7 @@ public abstract class MessageHandler {
     @CallSuper
     public void handler() throws NullPointerException {
         if (BuildConfig.DEBUG) {
-            Log.i("MSGH", "MessageHandler handler : " + actionId + " || " + G.lookupMap.get(actionId) + " || " + message);
+           // Log.i("MSGH", "MessageHandler handler : " + actionId + " || " + G.lookupMap.get(actionId) + " || " + message);
         }
         latestResponse = System.currentTimeMillis();
     }
@@ -51,7 +51,7 @@ public abstract class MessageHandler {
                 G.handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(G.context, "MessageHandler HeartBeat TimeOut", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(G.context, "MessageHandler HeartBeat TimeOut", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

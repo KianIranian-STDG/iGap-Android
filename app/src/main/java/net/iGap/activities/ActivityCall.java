@@ -42,6 +42,7 @@ import net.iGap.R;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.databinding.ActivityCallBinding;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnCallLeaveView;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnHoldBackgroundChanegeListener;
@@ -103,6 +104,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     private boolean isVerticalOrient = true;
     private boolean isFirst = true;
     private boolean isHiddenButtons = false;
+    private HelperToolbar mHelperToolbar;
 
 
     /**
@@ -324,6 +326,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
 
     private void initComponent() {
 
+        setupToolbar();
+
         if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
             EglBase rootEglBase = EglBase.create();
             activityCallBinding.fcrSurfacePeer.init(rootEglBase.getEglBaseContext(), null);
@@ -485,6 +489,17 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
                 });
             }
         };
+    }
+
+    //TODO ehsan : Alireza => toolbar doesnt show at video call mode , and set status calling to toolbar text view
+    private void setupToolbar() {
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(ActivityCall.this)
+                .setLogoShown(true)
+                .setCallEnable(true);
+
+        activityCallBinding.acLayoutCallLlToolbar.addView(mHelperToolbar.getView());
     }
 
     /**

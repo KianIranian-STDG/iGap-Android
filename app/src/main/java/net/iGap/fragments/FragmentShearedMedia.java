@@ -39,6 +39,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -58,9 +59,11 @@ import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperDownloadFile;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperMimeType;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUrl;
 import net.iGap.interfaces.OnClientSearchRoomHistory;
 import net.iGap.interfaces.OnComplete;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.messageprogress.MessageProgress;
 import net.iGap.messageprogress.OnProgress;
@@ -110,7 +113,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.fragmentActivity;
 import static net.iGap.module.AndroidUtils.suitablePath;
 
-public class FragmentShearedMedia extends BaseFragment {
+public class FragmentShearedMedia extends BaseFragment implements ToolbarListener {
 
     private static final String ROOM_ID = "RoomId";
     private static final String USERNAME = "USERNAME";
@@ -157,6 +160,9 @@ public class FragmentShearedMedia extends BaseFragment {
     public static GoToPositionFromShardMedia goToPositionFromShardMedia;
     public static boolean goToPosition = false;
     private int mCurrentSharedMediaType = 1 ; // 1 = image / 2 = video / 3 = audio / 4 = voice / 5 = gif / 6 = file / 7 = link
+    private HelperToolbar mHelperToolbar ;
+    private boolean isToolbarInEditMode = false;
+
 
     public static FragmentShearedMedia newInstance(long roomId) {
         Bundle args = new Bundle();
@@ -252,6 +258,18 @@ public class FragmentShearedMedia extends BaseFragment {
     }
 
     private void initComponent(View view) {
+        LinearLayout toolbarLayout = view.findViewById(R.id.frg_shared_media_ll_toolbar_layout);
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(G.context)
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setRightIcons(R.drawable.ic_menu_btn)
+                .setSearchBoxShown(true)
+                .setLogoShown(true)
+                .setListener(this);
+
+        toolbarLayout.addView(mHelperToolbar.getView());
+
 
         progressBar = (ProgressBar) view.findViewById(R.id.asm_progress_bar_waiting);
         AppUtils.setProgresColler(progressBar);
@@ -476,6 +494,34 @@ public class FragmentShearedMedia extends BaseFragment {
         updateStringSharedMediaCount(null, roomId);
 
         adapter.resetSelected();
+    }
+
+    @Override //back button at toolbar
+    public void onLeftIconClickListener(View view) {
+        popBackStackFragment();
+    }
+
+    @Override
+    public void onSearchClickListener(View view) {
+        if (!isToolbarInEditMode){
+            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(true);
+            openKeyBoard();
+        }
+    }
+
+    @Override
+    public void onBtnClearSearchClickListener(View view) {
+        if (mHelperToolbar.getEditTextSearch().getText().length() > 0) {
+            mHelperToolbar.getEditTextSearch().setText("");
+        } else {
+            isToolbarInEditMode = mHelperToolbar.setSearchEditableMode(false) ;
+            closeKeyboard(getView());
+        }
+    }
+
+    @Override //menu button at toolbar
+    public void onRightIconClickListener(View view) {
+        popUpMenuSharedMedia();
     }
 
     //********************************************************************************************
