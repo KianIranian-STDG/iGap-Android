@@ -39,9 +39,9 @@ public class UserUpdateStatusResponse extends MessageHandler {
         super.handler();
         ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder builder = (ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder) message;
 
-        RealmRegisteredInfo.updateStatus(builder.getUserId(), builder.getResponse().getTimestamp(), builder.getStatus().toString());
+        boolean ok = RealmRegisteredInfo.updateStatus(builder.getUserId(), builder.getResponse().getTimestamp(), builder.getStatus().toString());
 
-        if (G.onUserUpdateStatus != null) {
+        if (ok && G.onUserUpdateStatus != null) {
             G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), builder.getResponse().getTimestamp(), builder.getStatus().toString());
         }
 

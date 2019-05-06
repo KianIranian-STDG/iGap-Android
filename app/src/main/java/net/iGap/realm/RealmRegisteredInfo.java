@@ -218,12 +218,12 @@ public class RealmRegisteredInfo extends RealmObject {
         realm.close();
     }
 
-    public static void updateStatus(long userId, final int lastSeen, final String userStatus) {
+    public static boolean updateStatus(long userId, final int lastSeen, final String userStatus) {
         Realm realm = Realm.getDefaultInstance();
         final RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(realm, userId);
         if (realmRegisteredInfo != null) {
-            if (realmRegisteredInfo.getStatus().equals("OFFLINE") && userStatus.equals("OFFLINE"))
-                return;
+            if (userStatus.toLowerCase().equals("offline") && !realmRegisteredInfo.getStatus().toLowerCase().equals("online"))
+                return false;
 
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -234,6 +234,7 @@ public class RealmRegisteredInfo extends RealmObject {
             });
         }
         realm.close();
+        return true;
     }
 
     public long getId() {
