@@ -1243,14 +1243,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             }
         }
 
-        @Override
-        public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
-            super.onViewDetachedFromWindow(holder);
-            if (holder.realmRegisteredInfo == null || !holder.realmRegisteredInfo.isValid())
-                return;
-            holder.realmRegisteredInfo.removeAllChangeListeners();
-        }
-
         //*******************************************************************************************
         private void setLastMessage(RealmRoom mInfo, ViewHolder holder, boolean isMyCloud) {
 
@@ -1315,24 +1307,11 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                             if (mInfo.getLastMessage().isAuthorMe()) {
                                 holder.lastMessageSender.setText(holder.itemView.getResources().getString(R.string.txt_you));
                             } else {
-                                if (holder.realmRegisteredInfo != null && holder.realmRegisteredInfo.isValid()){
-                                    holder.realmRegisteredInfo.removeAllChangeListeners();
-                                }
+                                holder.lastMessageSender.setText("");
                                 if (mInfo.getLastMessage() != null) {
-                                    holder.realmRegisteredInfo = getRealmFragmentMain().where(RealmRegisteredInfo.class).equalTo(RealmRegisteredInfoFields.ID, mInfo.getLastMessage().getUserId()).findFirstAsync();
-                                    holder.realmRegisteredInfo.addChangeListener(new RealmObjectChangeListener<RealmModel>() {
-                                        @Override
-                                        public void onChange(RealmModel realmModel, @javax.annotation.Nullable ObjectChangeSet changeSet) {
-                                            if (changeSet == null || !changeSet.isDeleted()) {
-                                                if (!((RealmRegisteredInfo) realmModel).isValid() ||  mInfo.getLastMessage() == null || ((RealmRegisteredInfo) realmModel).getId() !=  mInfo.getLastMessage().getUserId())
-                                                    return;
-                                                setSenderName(holder);
-                                            }
-                                        }
-                                    });
-
-                                    if (holder.realmRegisteredInfo.isLoaded() && holder.realmRegisteredInfo != null) {
-                                        setSenderName(holder);
+                                    RealmRegisteredInfo realmRegisteredInfo = RealmRegisteredInfo.getRegistrationInfo(getRealmFragmentMain(), mInfo.getLastMessage().getUserId());
+                                    if (realmRegisteredInfo != null && realmRegisteredInfo.getDisplayName() != null) {
+                                        setSenderName(holder, realmRegisteredInfo.getDisplayName());
                                     }
                                 }
                             }
@@ -1410,29 +1389,24 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             }
         }
 
-        private void setSenderName(ViewHolder holder) {
-            if (holder.realmRegisteredInfo.isLoaded() && holder.realmRegisteredInfo.isValid()
-                    && holder.realmRegisteredInfo.getDisplayName() != null) {
+        private void setSenderName(ViewHolder holder, String _name) {
+            if (_name.length() > 0) {
+                String lastMessageSenderAsync;
 
-                String _name = holder.realmRegisteredInfo.getDisplayName();
-                if (_name.length() > 0) {
-                    String lastMessageSenderAsync;
-
-                    if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
-                        if (HelperCalander.isPersianUnicode) {
-                            lastMessageSenderAsync = _name + ": ";
-                        } else {
-                            lastMessageSenderAsync = " :" + _name;
-                        }
+                if (Character.getDirectionality(_name.charAt(0)) == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC) {
+                    if (HelperCalander.isPersianUnicode) {
+                        lastMessageSenderAsync = _name + ": ";
                     } else {
-                        if (HelperCalander.isPersianUnicode) {
-                            lastMessageSenderAsync = " :" + _name;
-                        } else {
-                            lastMessageSenderAsync = _name + ": ";
-                        }
+                        lastMessageSenderAsync = " :" + _name;
                     }
-                    holder.lastMessageSender.setText(lastMessageSenderAsync);
+                } else {
+                    if (HelperCalander.isPersianUnicode) {
+                        lastMessageSenderAsync = " :" + _name;
+                    } else {
+                        lastMessageSenderAsync = _name + ": ";
+                    }
                 }
+                holder.lastMessageSender.setText(lastMessageSenderAsync);
             }
         }
 
@@ -1503,7 +1477,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             protected EmojiTextViewE name;
             protected MaterialDesignTextView mute;
             protected RealmRoom mInfo;
-            protected RealmRegisteredInfo realmRegisteredInfo;
             private ViewGroup rootChat;
             private EmojiTextViewE txtLastMessage;
             private EmojiTextViewE txtLastMessageFileText;
