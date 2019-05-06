@@ -36,6 +36,7 @@ import net.iGap.WebSocketClient;
 import net.iGap.helper.HelperDataUsage;
 import net.iGap.helper.HelperLog;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.UserStatusController;
 import net.iGap.module.AttachFile;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.StartupActions;
@@ -264,9 +265,7 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         AttachFile.isInAttach = false;
 
-        if (!G.isUserStatusOnline && G.userLogin) {
-            new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE);
-        }
+        UserStatusController.getInstance().setOnline();
 
         super.onStart();
     }
@@ -289,16 +288,9 @@ public class ActivityEnhanced extends AppCompatActivity {
 
         }catch (Exception e){};
 
-
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (!G.isAppInFg && !AttachFile.isInAttach && G.userLogin) {
-                    new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE);
-                }
-            }
-        }, Config.UPDATE_STATUS_TIME);
+        if (!AttachFile.isInAttach) {
+            UserStatusController.getInstance().setOffline();
+        }
     }
 
     /**
