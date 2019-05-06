@@ -1454,5 +1454,6 @@
     <string name="increase_score">Increase Score</string>
     <string name="bots_and_channels">Bots and Channels</string>
     <string name="all">All</string>
+    <string name="new_group_call">New Group Call</string>
 
 </resources>

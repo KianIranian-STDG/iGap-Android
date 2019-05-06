@@ -157,6 +157,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private boolean isToolbarInEditMode = false ;
     private int mPageMode = 0 ; // 0 = new chat , 1 = contact , 2 = call , 4 = add new
     private LinearLayout btnAddNewChannel , btnAddNewGroup , btnAddSecretChat ;
+    private LinearLayout btnAddNewGrouopCall , btnAddNewContact , btnDialNumber ;
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -242,6 +243,10 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         toolbarLayout.addView(mHelperToolbar.getView());
 
+        btnAddNewGrouopCall = view.findViewById(R.id.menu_layout_new_group_call);
+        btnAddNewContact = view.findViewById(R.id.menu_layout_add_new_contact);
+        btnDialNumber = view.findViewById(R.id.menu_layout_btn_dial_number);
+
         btnAddSecretChat = view.findViewById(R.id.menu_layout_btn_secret_chat);
         btnAddNewGroup = view.findViewById(R.id.menu_layout_add_new_group);
         btnAddNewChannel = view.findViewById(R.id.menu_layout_add_new_channel);
@@ -265,6 +270,15 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             } else if (title.equals("call")) {
                 title = G.context.getString(R.string.call_with);
                 mPageMode = 2 ;
+
+                //visible add buttons
+                btnAddNewGrouopCall.setVisibility(View.VISIBLE);
+                btnAddNewContact.setVisibility(View.VISIBLE);
+                btnDialNumber.setVisibility(View.VISIBLE);
+                vgInviteFriend.setVisibility(View.GONE);
+
+                mHelperToolbar.getRightButton().setVisibility(View.GONE);
+
             } else if (title.equals("ADD")) {
                 title = G.context.getString(R.string.New_Chat);
                 mPageMode = 3 ;
@@ -596,6 +610,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         });
 
+        btnDialNumber.setOnClickListener(v -> {});
+
+        btnAddNewGrouopCall.setOnClickListener(v -> {});
+
+        btnAddNewContact.setOnClickListener(this::onRightIconClickListener);
     }
 
     private void hideProgress() {
