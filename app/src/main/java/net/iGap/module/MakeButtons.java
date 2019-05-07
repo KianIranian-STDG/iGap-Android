@@ -260,6 +260,8 @@ public class MakeButtons {
                                         } else if (event.getAction() == MotionEvent.ACTION_CANCEL) {
                                             card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
 
+                                        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                                            card.setCardBackgroundColor(Color.parseColor("#cfd8dc"));
                                         }
                                         return false;
                                     }

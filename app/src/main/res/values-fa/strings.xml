@@ -1460,4 +1460,6 @@
     <string name="ivnalid_data_provided">مقادیر ورودی اشتباه است.</string>
     <string name="secret_chat">گفتگوی خصوصی</string>
     <string name="new_message_notif">پیام جدید</string>
+    <string name="card_to_card">کارت به کارت</string>
+    <string name="your_device_is_root">متاسفانه دستگاه شما روت است.</string>
 </resources>

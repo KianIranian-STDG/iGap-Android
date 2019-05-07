@@ -1428,7 +1428,7 @@
 
     <string name="try_later">Try some second later</string>
     <string name="representer">Set Referral</string>
-    <string name="representer_code">Please set your represetative phone number here</string>
+    <string name="representer_code">Please set your representative phone number here</string>
 
     <string name="unknown_type">not supported card</string>
     <string name="order_history">Score History</string>
@@ -1448,6 +1448,8 @@
     <string name="ivnalid_data_provided">Input values are incorrect.</string>
     <string name="secret_chat">Secret Chat</string>
     <string name="new_message_notif">New Message</string>
+    <string name="card_to_card">Card to Card</string>
+    <string name="your_device_is_root">Sorry! Your device is root.</string>
     <string name="top_sheet_behavior" translatable="false">net.iGap.dialog.topsheet.TopSheetBehavior</string>
 
 </resources>

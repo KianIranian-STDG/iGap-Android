@@ -10,9 +10,14 @@
 
 package net.iGap.response;
 
+import android.util.Log;
+
 import net.iGap.G;
+import net.iGap.helper.HelperLog;
+import net.iGap.proto.ProtoError;
 import net.iGap.proto.ProtoUserUpdateStatus;
 import net.iGap.realm.RealmRegisteredInfo;
+import net.iGap.request.RequestUserUpdateStatus;
 
 import static net.iGap.G.userId;
 
@@ -20,9 +25,9 @@ public class UserUpdateStatusResponse extends MessageHandler {
 
     public int actionId;
     public Object message;
-    public String identity;
+    public Object identity;
 
-    public UserUpdateStatusResponse(int actionId, Object protoClass, String identity) {
+    public UserUpdateStatusResponse(int actionId, Object protoClass, Object identity) {
         super(actionId, protoClass, identity);
         this.message = protoClass;
         this.identity = identity;
@@ -34,19 +39,21 @@ public class UserUpdateStatusResponse extends MessageHandler {
         super.handler();
         ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder builder = (ProtoUserUpdateStatus.UserUpdateStatusResponse.Builder) message;
 
-        RealmRegisteredInfo.updateStatus(builder.getUserId(), builder.getResponse().getTimestamp(), builder.getStatus().toString());
+        boolean ok = RealmRegisteredInfo.updateStatus(builder.getUserId(), builder.getResponse().getTimestamp(), builder.getStatus().toString());
 
-        if (builder.getUserId() == userId) {
-            if (builder.getStatus() == ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE) {
-                G.isUserStatusOnline = true;
-            } else {
-                G.isUserStatusOnline = false;
+        if (ok && G.onUserUpdateStatus != null) {
+            G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), builder.getResponse().getTimestamp(), builder.getStatus().toString());
+        }
+
+        if (identity instanceof RequestUserUpdateStatus.onUserStatus) {
+            ((RequestUserUpdateStatus.onUserStatus) identity).onUpdateUserStatus();
+        } else {
+            if (builder.getUserId() == userId) {
+                HelperLog.setErrorLog("Wht the hel bagi");
+                Log.d("bagi" , "Wht the hel bagi");
             }
         }
 
-        if (G.onUserUpdateStatus != null) {
-            G.onUserUpdateStatus.onUserUpdateStatus(builder.getUserId(), builder.getResponse().getTimestamp(), builder.getStatus().toString());
-        }
     }
 
     @Override
@@ -57,6 +64,12 @@ public class UserUpdateStatusResponse extends MessageHandler {
     @Override
     public void error() {
         super.error();
+        ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
+        int majorCode = errorResponse.getMajorCode();
+        int minorCode = errorResponse.getMinorCode();
+        if (identity instanceof RequestUserUpdateStatus.onUserStatus) {
+            ((RequestUserUpdateStatus.onUserStatus) identity).onError(majorCode, minorCode);
+        }
     }
 }
 

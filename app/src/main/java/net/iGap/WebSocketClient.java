@@ -35,6 +35,7 @@ import java.util.Map;
 import static net.iGap.Config.ALLOW_RECONNECT_AGAIN_NORMAL;
 import static net.iGap.G.latestHearBeatTime;
 import static net.iGap.G.latestResponse;
+import static net.iGap.request.RequestClientGetRoomList.pendingRequest;
 
 public class WebSocketClient {
 
@@ -298,7 +299,7 @@ public class WebSocketClient {
      * role back main data for preparation reconnecting to socket
      */
     private static void resetWebsocketInfo() {
-        RequestClientGetRoomList.isLoadingRoomListOffsetZero = false;
+        pendingRequest.remove(0);
         count = 0;
         G.canRunReceiver = true;
         G.symmetricKey = null;

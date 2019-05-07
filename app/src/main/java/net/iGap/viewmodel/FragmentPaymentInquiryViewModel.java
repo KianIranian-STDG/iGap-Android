@@ -127,6 +127,15 @@ public class FragmentPaymentInquiryViewModel {
 
     }
 
+    public static boolean isNumeric(String strNum) {
+        try {
+            long d = Long.parseLong(strNum);
+        } catch (NumberFormatException | NullPointerException nfe) {
+            return false;
+        }
+        return true;
+    }
+
     public void onInquiryClick(View view) {
 
         if (view != null) {
@@ -147,9 +156,9 @@ public class FragmentPaymentInquiryViewModel {
 
         switch (operatorType) {
             case mci:
-                String phoneMci = fragmentPaymentInquiryBinding.fpiEdtMci.getText().toString();
+                String phoneMci = fragmentPaymentInquiryBinding.fpiEdtMci.getText().toString().replace(" ", "");
 
-                if (phoneMci.length() < 11) {
+                if (!isNumeric(phoneMci) || phoneMci.length() < 11) {
                     HelperError.showSnackMessage(G.context.getResources().getString(R.string.phone_number_is_not_valid), false);
                     return;
                 }

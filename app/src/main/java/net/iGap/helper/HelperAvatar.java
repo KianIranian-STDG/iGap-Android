@@ -13,8 +13,10 @@ package net.iGap.helper;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 
 import net.iGap.G;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnAvatarDelete;
 import net.iGap.interfaces.OnAvatarGet;
@@ -34,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import io.realm.Realm;
 
@@ -75,10 +78,36 @@ public class HelperAvatar {
                             onAvatarAdd.onAvatarAdd(avatarPath);
                         }
 
+                        notifyImageViewAvatarFragments(avatarPath, ownerId);
                         syncAvatarAdd(ownerId, avatarPath);
                     }
                 });
                 realm.close();
+            }
+        });
+    }
+
+    private static ArrayList<BaseFragment> getVisibleBaseFragments() {
+        ArrayList<BaseFragment> baseFragments = new ArrayList<>();
+        if (G.fragmentManager != null) {
+            List<Fragment> fragments = G.fragmentManager.getFragments();
+            for (Fragment fragment : fragments) {
+                if (fragment instanceof BaseFragment) {
+                    baseFragments.add((BaseFragment) fragment);
+                }
+            }
+        }
+
+        return baseFragments;
+    }
+
+    private static void notifyImageViewAvatarFragments(String avatarPath, long avatarId) {
+        G.handler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (BaseFragment baseFragment : getVisibleBaseFragments()) {
+                    baseFragment.avatarHandler.notifyImageViewAvatar(avatarPath, avatarId);
+                }
             }
         });
     }
@@ -110,6 +139,8 @@ public class HelperAvatar {
                                 @Override
                                 public void onAvatarGet(String avatarPath, long ownerId) {
                                     onAvatarDelete.latestAvatarPath(avatarPath);
+                                    notifyImageViewAvatarFragments(avatarPath, ownerId);
+
                                 }
 
                                 @Override

@@ -9,6 +9,7 @@ import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.helper.HelperCheckInternetConnection;
 import net.iGap.helper.HelperLogout;
+import net.iGap.helper.UserStatusController;
 import net.iGap.interfaces.OnContactFetchForServer;
 import net.iGap.interfaces.OnSecuring;
 import net.iGap.interfaces.OnUserInfoResponse;
@@ -87,9 +88,7 @@ public class LoginActions {
 
                         getUserInfo();
                         if (G.isAppInFg) {
-                            new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.ONLINE);
-                        } else {
-                            new RequestUserUpdateStatus().userUpdateStatus(ProtoUserUpdateStatus.UserUpdateStatus.Status.OFFLINE);
+                            UserStatusController.getInstance().setOnline();
                         }
 
                         new RequestGeoGetRegisterStatus().getRegisterStatus();

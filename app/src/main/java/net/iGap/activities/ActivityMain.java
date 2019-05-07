@@ -11,6 +11,7 @@
 package net.iGap.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -204,6 +205,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     public static final String openChat = "openChat";
     public static final String openMediaPlyer = "openMediaPlyer";
     public static final int requestCodePaymentCharge = 198;
+    public static final int requestCodeCardToCard = 19800;
     public static final int requestCodePaymentBill = 199;
     public static final int requestCodeQrCode = 200;
     public static final int requestCodeBarcode = 201;
@@ -905,6 +907,22 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
+            case requestCodeCardToCard:
+                Log.d("bagi", "Code" + requestCode);
+                switch (resultCode) {
+                    case 2:
+                    case 1001:
+                    case 1002:
+                    case 1000:
+                        HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
+                    case 201:
+                        break;
+                    case 2334:
+                        HelperError.showSnackMessage(getString(R.string.your_device_is_root), false);
+                        break;
+                }
+
+                break;
             case requestCodePaymentCharge:
             case requestCodePaymentBill:
                 getPaymentResultCode(resultCode, data);
@@ -925,41 +943,45 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             case FragmentIVandProfileViewModel.REQUEST_CODE_QR_IVAND_CODE:
                 IntentResult result2 = IntentIntegrator.parseActivityResult(resultCode, data);
                 if (result2.getContents() != null) {
-                    boolean isSend = new RequestUserIVandSetActivity().setActivity(result2.getContents(), new RequestUserIVandSetActivity.OnSetActivities() {
-                        @Override
-                        public void onSetActivitiesReady(String message, boolean isOk) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    SubmitScoreDialog dialog = new SubmitScoreDialog(ActivityMain.this, message, isOk);
-                                    dialog.show();
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onError(int majorCode, int minorCode) {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    String message = getString(R.string.error_submit_qr_code);
-                                    if (majorCode == 10183 && minorCode == 2) {
-                                        message = getString(R.string.E_10183);
-                                    }
-
-                                    SubmitScoreDialog dialog = new SubmitScoreDialog(ActivityMain.this, message, false);
-                                    dialog.show();
-                                }
-                            });
-                        }
-                    });
-
-                    if (!isSend) {
-                        HelperError.showSnackMessage(getString(R.string.wallet_error_server), false);
-                    }
+                    doIvandScore(result2.getContents(), ActivityMain.this);
                 }
                 break;
 
+        }
+    }
+
+    public static void doIvandScore(String content, Activity activity) {
+        boolean isSend = new RequestUserIVandSetActivity().setActivity(content, new RequestUserIVandSetActivity.OnSetActivities() {
+            @Override
+            public void onSetActivitiesReady(String message, boolean isOk) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, isOk);
+                        dialog.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String message = G.context.getString(R.string.error_submit_qr_code);
+                        if (majorCode == 10183 && minorCode == 2) {
+                            message = G.context.getString(R.string.E_10183);
+                        }
+
+                        SubmitScoreDialog dialog = new SubmitScoreDialog(activity, message, false);
+                        dialog.show();
+                    }
+                });
+            }
+        });
+
+        if (!isSend) {
+            HelperError.showSnackMessage(G.context.getString(R.string.wallet_error_server), false);
         }
     }
 

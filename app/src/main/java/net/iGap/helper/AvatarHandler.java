@@ -117,7 +117,7 @@ public class AvatarHandler {
         return result;
     }
 
-    private void notifyImageViewAvatar(String avatarPath, long avatarId) {
+    public void notifyImageViewAvatar(String avatarPath, long avatarId) {
         final Bitmap bmImg = BitmapFactory.decodeFile(avatarPath);
         avatarCache.put(avatarId, bmImg);
         G.handler.post(new Runnable() {
@@ -137,7 +137,6 @@ public class AvatarHandler {
                 }
             }
         });
-
     }
 
     private void notifyImageViewAvatar(String initials, String color, long avatarId) {
