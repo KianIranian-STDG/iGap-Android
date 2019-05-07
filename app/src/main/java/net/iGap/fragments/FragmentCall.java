@@ -91,6 +91,8 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
     private RecyclerView mRecyclerView;
     //private CallAdapterA mAdapter;
 
+    private TextView mBtnAllCalls , mBtnMissedCalls ;
+
     public static FragmentCall newInstance(boolean openInFragmentMain) {
 
         FragmentCall fragmentCall = new FragmentCall();
@@ -214,6 +216,8 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
             imgCallEmpty.setVisibility(View.VISIBLE);
             empty_call.setVisibility(View.VISIBLE);
         }
+
+
 
         CallAdapter callAdapter = new CallAdapter(results);
         mRecyclerView.setAdapter(callAdapter);
@@ -380,6 +384,27 @@ public class FragmentCall extends BaseFragment implements OnCallLogClear {
             });
 
         }
+
+
+        mBtnAllCalls = view.findViewById(R.id.fc_btn_all_calls);
+        mBtnMissedCalls = view.findViewById(R.id.fc_btn_missed_calls);
+
+        //todo : update recycler list when clicked on buttons
+        mBtnAllCalls.setOnClickListener( v -> {
+
+            mBtnAllCalls.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
+            mBtnMissedCalls.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
+
+            //update recycler data
+        });
+
+        mBtnMissedCalls.setOnClickListener( v -> {
+
+            mBtnMissedCalls.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_enabled_bg));
+            mBtnAllCalls.setBackground(G.context.getResources().getDrawable(R.drawable.round_button_disabled_bg));
+
+            //update recycler data
+        });
     }
 
     public void showContactListForCall() {

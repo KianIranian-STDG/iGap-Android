@@ -24,6 +24,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -42,7 +43,9 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.adapter.StickyHeaderAdapter;
 import net.iGap.adapter.items.ContactItemGroup;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.interfaces.OnSelectedList;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.ContactChip;
 import net.iGap.module.structs.StructContactInfo;
@@ -52,12 +55,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ShowCustomList extends BaseFragment {
+public class ShowCustomList extends BaseFragment implements ToolbarListener {
     private static List<StructContactInfo> contacts;
     private static OnSelectedList onSelectedList;
     private FastAdapter fastAdapter;
-    private TextView txtStatus;
-    private TextView txtNumberOfMember;
+  //  private TextView txtStatus;
+  //  private TextView txtNumberOfMember;
     //private EditText edtSearch;
     private String textString = "";
     private int sizeTextEdittext = 0;
@@ -65,10 +68,11 @@ public class ShowCustomList extends BaseFragment {
     private long lastId = 0;
     private int count = 0;
     private boolean singleSelect = false;
-    private RippleView rippleDown;
+    // private RippleView rippleDown;
     private List<ContactChip> mContactList = new ArrayList<>();
     private ChipsInput chipsInput;
     private boolean isRemove = true;
+    private HelperToolbar mHelperToolbar;
 
     public static ShowCustomList newInstance(List<StructContactInfo> list, OnSelectedList onSelectedListResult) {
         onSelectedList = onSelectedListResult;
@@ -101,37 +105,21 @@ public class ShowCustomList extends BaseFragment {
             singleSelect = bundle.getBoolean("SINGLE_SELECT");
         }
 
-        view.findViewById(R.id.fcg_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
-        txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(G.context)
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setRightIcons(R.drawable.ic_checked)
+                .setListener(this)
+                .setLogoShown(true);
+
+
+        LinearLayout toolbarLayout = view.findViewById(R.id.fcg_layout_toolbar);
+        toolbarLayout.addView(mHelperToolbar.getView());
+        mHelperToolbar.getTextViewLogo().setText(G.context.getResources().getString(R.string.add_new_member));
+
         //edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
         chipsInput = (ChipsInput) view.findViewById(R.id.chips_input);
-
-
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                popBackStackFragment();
-            }
-        });
-
-        rippleDown = (RippleView) view.findViewById(R.id.fcg_ripple_done);
-        rippleDown.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-
-                if (dialogShowing) {
-                    showDialog();
-                } else {
-                    if (onSelectedList != null) {
-                        onSelectedList.getSelectedList(true, "", 0, getSelectedList());
-                    }
-                    popBackStackFragment();
-                }
-            }
-        });
 
         final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
         final ItemAdapter headerAdapter = new ItemAdapter();
@@ -361,7 +349,7 @@ public class ShowCustomList extends BaseFragment {
             }
         }
 
-        txtNumberOfMember.setText(selectedNumber + " / " + size);
+
         // sizeTextEdittext = textString.length();
         //edtSearch.setText("");
     }
@@ -384,5 +372,23 @@ public class ShowCustomList extends BaseFragment {
         //add the values which need to be saved from the adapter to the bundle
         outState = fastAdapter.saveInstanceState(outState);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        popBackStackFragment();
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+
+        if (dialogShowing) {
+            showDialog();
+        } else {
+            if (onSelectedList != null) {
+                onSelectedList.getSelectedList(true, "", 0, getSelectedList());
+            }
+            popBackStackFragment();
+        }
     }
 }

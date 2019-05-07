@@ -31,6 +31,8 @@
       android:id="@+id/cig_checkBox_select_user"
       android:layout_width="@dimen/dp24"
       android:layout_height="@dimen/dp24"
+        android:layout_marginRight="@dimen/dp10"
+        android:layout_marginEnd="@dimen/dp10"
       android:layout_gravity="center"
       android:clickable="false"
       android:visibility="invisible"

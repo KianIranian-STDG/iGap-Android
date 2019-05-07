@@ -11,7 +11,6 @@
 package net.iGap.fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -23,7 +22,6 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -33,8 +31,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.ActionMode;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,30 +40,21 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.daimajia.swipe.SwipeLayout;
-import com.hanks.library.AnimateCheckBox;
-import com.mikepenz.fastadapter.IItemAdapter;
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter;
-import com.mikepenz.fastadapter.items.AbstractItem;
-import com.squareup.picasso.Picasso;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.HelperAvatar;
-import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperPublicMethod;
@@ -84,41 +71,30 @@ import net.iGap.module.ContactUtils;
 import net.iGap.module.Contacts;
 import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.EmojiEditTextE;
-import net.iGap.module.LastSeenTimeUtil;
 import net.iGap.module.LoginActions;
 import net.iGap.module.MEditText;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.SHP_SETTING;
 import net.iGap.module.structs.StructListOfContact;
-import net.iGap.proto.ProtoGlobal;
 import net.iGap.proto.ProtoSignalingOffer;
 import net.iGap.realm.RealmContacts;
 import net.iGap.realm.RealmContactsFields;
-import net.iGap.realm.RealmRegisteredInfo;
-import net.iGap.realm.RealmRoom;
 import net.iGap.request.RequestUserContactsDelete;
 import net.iGap.request.RequestUserContactsEdit;
 import net.iGap.request.RequestUserContactsGetList;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.realm.Case;
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 
 import static android.content.Context.MODE_PRIVATE;
 import static net.iGap.G.context;
 import static net.iGap.R.string.contacts;
-import static net.iGap.R.string.of;
 
 public class RegisteredContactsFragment extends BaseFragment implements ToolbarListener, OnUserContactDelete, OnPhoneContact {
 
@@ -157,6 +133,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
     private boolean isToolbarInEditMode = false ;
     private int mPageMode = 0 ; // 0 = new chat , 1 = contact , 2 = call , 4 = add new
     private LinearLayout btnAddNewChannel , btnAddNewGroup , btnAddSecretChat ;
+    private LinearLayout btnAddNewGroupCall, btnAddNewContact , btnDialNumber ;
 
     public static RegisteredContactsFragment newInstance() {
         return new RegisteredContactsFragment();
@@ -242,6 +219,10 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         toolbarLayout.addView(mHelperToolbar.getView());
 
+        btnAddNewGroupCall = view.findViewById(R.id.menu_layout_new_group_call);
+        btnAddNewContact = view.findViewById(R.id.menu_layout_add_new_contact);
+        btnDialNumber = view.findViewById(R.id.menu_layout_btn_dial_number);
+
         btnAddSecretChat = view.findViewById(R.id.menu_layout_btn_secret_chat);
         btnAddNewGroup = view.findViewById(R.id.menu_layout_add_new_group);
         btnAddNewChannel = view.findViewById(R.id.menu_layout_add_new_channel);
@@ -265,6 +246,15 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             } else if (title.equals("call")) {
                 title = G.context.getString(R.string.call_with);
                 mPageMode = 2 ;
+
+                //visible add buttons
+                btnAddNewGroupCall.setVisibility(View.VISIBLE);
+                btnAddNewContact.setVisibility(View.VISIBLE);
+                btnDialNumber.setVisibility(View.VISIBLE);
+                vgInviteFriend.setVisibility(View.GONE);
+
+                mHelperToolbar.getRightButton().setVisibility(View.GONE);
+
             } else if (title.equals("ADD")) {
                 title = G.context.getString(R.string.New_Chat);
                 mPageMode = 3 ;
@@ -596,6 +586,11 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         });
 
+        btnDialNumber.setOnClickListener(v -> {});
+
+        btnAddNewGroupCall.setOnClickListener(v -> {});
+
+        btnAddNewContact.setOnClickListener(this::onRightIconClickListener);
     }
 
     private void hideProgress() {

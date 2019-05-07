@@ -12,6 +12,16 @@
   <dimen name="toolbar_icon_size">40dp</dimen>
   <dimen name="toolbar_icon_padding">10dp</dimen>
 
+  <dimen name="toolbar_icon_margin">4dp</dimen>
+  <dimen name="ivand_profile_toolbar_txt_margin_left">32dp</dimen>
+  <dimen name="ivand_profile_toolbar_txt_textSize">14sp</dimen>
+  <dimen name="ivand_profile_toolbar_bottom_radius">20dp</dimen>
+  <dimen name="ivand_profile_setting_buttons_marginRight">32dp</dimen>
+  <dimen name="ivand_profile_setting_buttons_marginTop">16dp</dimen>
+  <dimen name="ivand_profile_setting_buttons_textSize">16sp</dimen>
+  <dimen name="ivand_profile_shared_content_txt_mTop">4dp</dimen>
+  <dimen name="ivand_profile_shared_contents_txt_textSize">14sp</dimen>
+  <dimen name="ivand_profile_more_buttons_mTop">4dp</dimen>
 
   <!-- Audio Item Id -->
 
@@ -87,5 +97,6 @@
   <dimen name="md_listitem_textsize" tools:override="true">16dp</dimen>
   <dimen name="md_title_textsize" tools:override="true">18dp</dimen>
   <dimen name="md_content_padding_bottom" tools:override="true">6dp</dimen>
+  <dimen name="ivand_profile_icon_padding">5dp</dimen>
 
 </resources>
