@@ -163,6 +163,10 @@
 
   <color name="start_color">#706e6a</color>
 
+  <color name="notification_badge">#5ebc45</color>
+  <color name="chat_cell_pin">#f1f1f1</color>
+  <color name="chat_cell_pin_dark">#4a4d4c</color>
+
   <color name="callingUserImageLayerEnd">#FFFFFF</color>
   <color name="callingUserImageLayerStart">#50FFFFFF</color>
   <color name="incomingCallUserImageLayerStart">#50999999</color>

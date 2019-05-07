@@ -6,9 +6,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
@@ -32,14 +32,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
+import net.iGap.adapter.items.chat.BadgeView;
+import net.iGap.adapter.items.chat.ChatCell;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.AvatarHandler;
 import net.iGap.helper.GoToChatActivity;
-import net.iGap.helper.HelperAvatar;
 import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperGetAction;
 import net.iGap.helper.HelperImageBackColor;
@@ -61,7 +61,6 @@ import net.iGap.interfaces.OnVersionCallBack;
 import net.iGap.libs.MyRealmRecyclerViewAdapter;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.floatingAddButton.ArcMenu;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.BotInit;
 import net.iGap.module.CircleImageView;
@@ -69,7 +68,6 @@ import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 import net.iGap.module.MusicPlayer;
 import net.iGap.module.MyDialog;
-import net.iGap.module.PreCachingLayoutManager;
 import net.iGap.module.enums.ChannelChatRole;
 import net.iGap.module.enums.GroupChatRole;
 import net.iGap.module.enums.RoomType;
@@ -109,8 +107,8 @@ import io.realm.Sort;
 
 import static net.iGap.G.clientConditionGlobal;
 import static net.iGap.G.context;
-import static net.iGap.G.fragmentActivity;
 import static net.iGap.G.userId;
+import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 import static net.iGap.fragments.FragmentMain.MainType.all;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHANNEL;
 import static net.iGap.proto.ProtoGlobal.Room.Type.CHAT;
@@ -222,9 +220,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 initRecycleView();
             }
         }, 10);
-        Log.d("bagi" ,"FragmentMain:onViewCreated:end");
-
-
     }
 
     private void initRecycleView() {
@@ -234,7 +229,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             // mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0); // for avoid from show avatar and cloud view together
             mRecyclerView.setItemAnimator(null);
             mRecyclerView.setItemViewCacheSize(0);
-            final LinearLayoutManager layoutManager = new  LinearLayoutManager(getActivity());
+            final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             mRecyclerView.setLayoutManager(layoutManager);
 //            mRecyclerView.setLayoutManager(new PreCachingLayoutManager(G.fragmentActivity, 3000));
@@ -304,7 +299,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         if (mainType == all) {
             getChatLists();
         }
-        Log.d("bagi" , "" + mOffset);
 
         if (mView != null) {
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -354,7 +348,9 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     @Override
     public void onAction(ActivityMain.MainAction action) {
 
-        if (mRecyclerView == null) {return;}
+        if (mRecyclerView == null) {
+            return;
+        }
 
         switch (action) {
 
@@ -729,7 +725,6 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
     @Override
     public synchronized void onClientGetRoomList(List<ProtoGlobal.Room> roomList, ProtoResponse.Response response, RequestClientGetRoomList.IdentityGetRoomList identity) {
 
-        Log.d("bagi" , "onClientGetRoomList" + roomList.size() + "" + identity.offset);
         boolean fromLogin = false;
         if (identity.isFromLogin) {
             mOffset = 0;
@@ -1017,6 +1012,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         public String action;
         private View emptyView;
         private View loadingView;
+        private ConstraintLayout rootView;
 
         public RoomAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, OnComplete complete, View emptyView, View loadingView) {
             super(data, true);
@@ -1028,7 +1024,9 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             // View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
-            return new ViewHolder(ViewMaker.getViewItemRoom());
+            rootView = new ChatCell(getContext());
+            rootView.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80)));
+            return new ViewHolder(rootView);
         }
 
         @Override
@@ -1107,9 +1105,9 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                         }
 
                         ViewMaker.setTextSize(cs_txt_contact_initials, R.dimen.dp32);
-                        LinearLayout.LayoutParams layout_936 = new LinearLayout.LayoutParams(ViewMaker.i_Dp(R.dimen.dp52), ViewMaker.i_Dp(R.dimen.dp52));
+                        LinearLayout.LayoutParams layout_936 = new LinearLayout.LayoutParams(i_Dp(R.dimen.dp52), i_Dp(R.dimen.dp52));
                         layout_936.gravity = Gravity.CENTER;
-                        layout_936.setMargins(ViewMaker.i_Dp(R.dimen.dp6), ViewMaker.i_Dp(R.dimen.dp6), ViewMaker.i_Dp(R.dimen.dp6), ViewMaker.i_Dp(R.dimen.dp6));
+                        layout_936.setMargins(i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6), i_Dp(R.dimen.dp6));
                         cs_txt_contact_initials.setVisibility(View.GONE);
                         cs_txt_contact_initials.setLayoutParams(layout_936);
 
@@ -1156,7 +1154,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                  */
 
                 if (mInfo.isPinned()) {
-                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
+//                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
 
                     //if (mInfo.getChatRoom() != null && RealmRoom.isBot(mInfo.getChatRoom().getPeerId())) {
 
@@ -1168,7 +1166,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                     }
 
                 } else {
-                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme));
+//                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme));
                     holder.txtPinIcon.setVisibility(View.GONE);
                 }
 
@@ -1179,21 +1177,24 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 } else {
                     holder.txtUnread.setVisibility(View.VISIBLE);
                     holder.txtPinIcon.setVisibility(View.GONE);
-                    holder.txtUnread.setText(mInfo.getUnreadCount() + "");
+                    holder.txtUnread.getTextView().setText(mInfo.getUnreadCount() + "");
 
-                    if (HelperCalander.isPersianUnicode) {
-                        holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red);
-                    } else {
-                        holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red_left);
-                    }
+//                    if (HelperCalander.isPersianUnicode) {
+                    holder.txtUnread.setBadgeColor(getResources().getColor(R.color.notification_badge));
+//                    } else {
+//                        holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red_left);
+//                    }
 
                     if (mInfo.getMute()) {
-                        AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor("#c6c1c1"));
+//                        AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor("#c6c1c1"));
+                        holder.txtUnread.setBadgeColor(getResources().getColor(R.color.gray_9d));
                     } else {
                         if (G.isDarkTheme) {
-                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(Theme.default_notificationColor));
+//                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(Theme.default_notificationColor));
+                            holder.txtUnread.setBadgeColor(getResources().getColor(R.color.notification_badge));
                         } else {
-                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(G.notificationColor));
+//                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(G.notificationColor));
+                            holder.txtUnread.setBadgeColor(getResources().getColor(R.color.notification_badge));
                         }
                     }
                 }
@@ -1210,7 +1211,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
              */
             if (HelperCalander.isPersianUnicode) {
                 holder.txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtLastMessage.getText().toString()));
-                holder.txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getText().toString()));
+                holder.txtUnread.getTextView().setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getTextView().getText().toString()));
             }
         }
 
@@ -1246,7 +1247,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         //*******************************************************************************************
         private void setLastMessage(RealmRoom mInfo, ViewHolder holder, boolean isMyCloud) {
 
-            holder.txtTic.setVisibility(View.GONE);
+            holder.txtTic.setVisibility(View.INVISIBLE);
             holder.txtLastMessageFileText.setVisibility(View.GONE);
             holder.txtLastMessage.setText("");
 
@@ -1263,7 +1264,8 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
                 holder.lastMessageSender.setVisibility(View.VISIBLE);
                 holder.lastMessageSender.setText(R.string.txt_draft);
-                holder.lastMessageSender.setTextColor(Color.parseColor(G.roomSenderTextColor));
+                holder.lastMessageSender.setTextColor(getResources().getColor(R.color.red));
+//                holder.lastMessageSender.setTextColor(Color.parseColor(G.roomSenderTextColor));
 
                 holder.lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
             } else {
@@ -1423,20 +1425,20 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
 
             avatarHandler.getAvatar(holder.image, null, idForGetAvatar, avatarType, false,
                     HelperImageBackColor.drawAlphabetOnPicture((int) context.getResources().getDimension(R.dimen.dp52), mInfo.getInitials(), mInfo.getColor()), true, new OnAvatarGet() {
-                @Override
-                public void onAvatarGet(String avatarPath, long idForGetAvatar) {
-                }
+                        @Override
+                        public void onAvatarGet(String avatarPath, long idForGetAvatar) {
+                        }
 
-                @Override
-                public void onShowInitials(String initials, String color, long idForGetAvatar) {
+                        @Override
+                        public void onShowInitials(String initials, String color, long idForGetAvatar) {
 
-                }
-            });
+                        }
+                    });
         }
 
         private void setChatIcon(RealmRoom mInfo, MaterialDesignTextView textView) {
             /**
-             * ********************* chat icon *********************
+             * ********************* set chat icon *********************
              */
             if (mInfo.getType() == CHAT || mainType != all) {
                 textView.setVisibility(View.GONE);
@@ -1482,9 +1484,9 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             private EmojiTextViewE txtLastMessageFileText;
             private MaterialDesignTextView txtChatIcon;
             private TextView txtTime;
-            private MaterialDesignTextView txtPinIcon;
+            private View txtPinIcon;
             private AppCompatImageView imgVerifyRoom;
-            private TextView txtUnread;
+            private BadgeView txtUnread;
             private EmojiTextViewE lastMessageSender;
             private ImageView txtTic;
             private MaterialDesignTextView txtCloud;
@@ -1493,32 +1495,69 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             public ViewHolder(View view) {
                 super(view);
 
-                image = (CircleImageView) view.findViewById(R.id.cs_img_contact_picture);
-                name = (EmojiTextViewE) view.findViewById(R.id.cs_txt_contact_name);
+                /**
+                 * user avatar image
+                 * */
+                image = (CircleImageView) view.findViewById(R.id.iv_chatCell_userAvatar);
+
+                /**
+                 * user name
+                 * */
+                name = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_roomName);
                 name.setTypeface(G.typeface_IRANSansMobile_Bold);
 
-                rootChat = (ViewGroup) view.findViewById(R.id.root_chat_sub_layout);
-                txtLastMessage = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message);
-                txtLastMessageFileText = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message_file_text);
-                txtChatIcon = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_chat_icon);
+                /**
+                 * root chat cell
+                 * */
+                rootChat = (ViewGroup) view.findViewById(R.id.cl_chatCell_root);
 
-                txtTime = ((TextView) view.findViewById(R.id.cs_txt_contact_time));
+                txtLastMessage = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_secondTextView);
+                txtLastMessageFileText = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_thirdTextView);
+
+                /**
+                 * channel or group icon
+                 * */
+                txtChatIcon = (MaterialDesignTextView) view.findViewById(R.id.tv_chatCell_chatIcon);
+                txtChatIcon.setTypeface(G.typeface_Fontico);
+
+                /**
+                 * sended message time
+                 * */
+                txtTime = ((TextView) view.findViewById(R.id.tv_chatCell_messageData));
                 txtTime.setTypeface(G.typeface_IRANSansMobile);
 
-                txtPinIcon = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_pinned_message);
-                txtPinIcon.setTypeface(G.typeface_Fontico);
+                /**
+                 * pin icon
+                 * */
+//                txtPinIcon = (MaterialDesignTextView) view.findViewById(R.id.iv_chatCell_pinnedMessage);
+//                txtPinIcon.setTypeface(G.typeface_Fontico);
 
-                imgVerifyRoom = (AppCompatImageView) view.findViewById(R.id.cs_img_verify_room);
+                txtPinIcon = view.findViewById(R.id.iv_iv_chatCell_pin);
 
-                txtUnread = (TextView) view.findViewById(R.id.cs_txt_unread_message);
-                txtUnread.setTypeface(G.typeface_IRANSansMobile);
+                /**
+                 * verify imageView
+                 * */
+                imgVerifyRoom = (AppCompatImageView) view.findViewById(R.id.tv_chatCell_verify);
 
-                mute = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_mute);
+                /**
+                 * unread text counter
+                 * */
+                txtUnread = view.findViewById(R.id.iv_chatCell_messageCount);
+                txtUnread.getTextView().setTypeface(G.typeface_IRANSansMobile);
 
-                lastMessageSender = (EmojiTextViewE) view.findViewById(R.id.cs_txt_last_message_sender);
+                /**
+                 * mute icon
+                 * */
+                mute = (MaterialDesignTextView) view.findViewById(R.id.iv_chatCell_mute);
+
+                /**
+                 * last message sender name
+                 * */
+                lastMessageSender = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_firstTextView);
                 lastMessageSender.setTypeface(G.typeface_IRANSansMobile);
 
-                txtTic = (ImageView) view.findViewById(R.id.cslr_txt_tic);
+
+                txtTic = (ImageView) view.findViewById(R.id.iv_chatCell_messageStatus);
 
                 txtCloud = (MaterialDesignTextView) view.findViewById(R.id.cs_txt_contact_initials);
 

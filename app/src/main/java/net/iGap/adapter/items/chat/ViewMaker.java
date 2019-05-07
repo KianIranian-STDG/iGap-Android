@@ -4,65 +4,43 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.text.util.Linkify;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
-import com.googlecode.mp4parser.boxes.cenc.CencDecryptingSampleList;
-import com.hanks.library.AnimateCheckBox;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.fragments.FragmentChat;
 import net.iGap.helper.HelperCalander;
 import net.iGap.messageprogress.MessageProgress;
-import net.iGap.module.AppUtils;
 import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
-import net.iGap.module.ReserveSpaceGifImageView;
-import net.iGap.module.ReserveSpaceRoundedImageView;
 
-import me.saket.bettermovementmethod.BetterLinkMovementMethod;
-
-import static android.R.attr.left;
-import static android.graphics.Typeface.BOLD;
-import static android.support.design.R.id.center;
-import static android.view.Gravity.BOTTOM;
 import static android.view.Gravity.CENTER;
-import static android.view.Gravity.CENTER_HORIZONTAL;
 import static android.view.Gravity.CENTER_VERTICAL;
 import static android.view.Gravity.LEFT;
-import static android.view.Gravity.RIGHT;
 import static android.widget.LinearLayout.HORIZONTAL;
 import static android.widget.LinearLayout.VERTICAL;
-import static java.lang.Boolean.TRUE;
 import static net.iGap.G.context;
 import static net.iGap.G.isDarkTheme;
-import static net.iGap.R.dimen.dp1_minus;
 import static net.iGap.R.dimen.dp4;
-import static net.iGap.R.dimen.dp52;
 import static net.iGap.R.dimen.dp8;
 import static net.iGap.R.dimen.messageContainerPadding;
 
@@ -301,7 +279,6 @@ public class ViewMaker {
         setLayoutDirection(textView, View.LAYOUT_DIRECTION_LOCALE);
 
 
-
         return textView;
     }
 
@@ -417,6 +394,175 @@ public class ViewMaker {
 
     //*******************************************************************************************
 
+
+    public static View getNewItemRoom() {
+
+        boolean isRtl = HelperCalander.isPersianUnicode;
+        boolean isDarkTheme = G.isDarkTheme;
+
+        ConstraintLayout root = new ConstraintLayout(context);
+        root.setId(R.id.cl_chatCell_root);
+        root.setBackgroundColor(Color.parseColor(G.backgroundTheme));
+
+
+        /**
+         * init avatar image
+         * */
+
+        CircleImageView avatarImageView = new CircleImageView(G.context);
+        avatarImageView.setId(R.id.iv_chatCell_userAvatar);
+
+
+        /**
+         * init chat icon(channel,group,pv,mute and unMute)
+         * */
+
+        MaterialDesignTextView chatIcon = new MaterialDesignTextView(G.context);
+        chatIcon.setId(R.id.tv_chatCell_chatIcon);
+        chatIcon.setTextColor(isDarkTheme ? Color.parseColor(G.textTitleTheme) : Color.parseColor("#333333"));
+        chatIcon.setTextSize(R.dimen.dp14);
+
+
+        /**
+         * init room name
+         * */
+
+        EmojiTextViewE roomName = new EmojiTextViewE(G.context);
+        roomName.setId(R.id.tv_chatCell_roomName);
+        setTypeFace(roomName);
+        roomName.setEllipsize(TextUtils.TruncateAt.END);
+        roomName.setSingleLine(true);
+        roomName.setEmojiSize(i_Dp(R.dimen.dp16));
+        roomName.setTextColor(isDarkTheme ? Color.parseColor(G.textTitleTheme) : G.context.getResources().getColor(R.color.black90));
+
+
+        /**
+         * init verify room
+         * */
+
+        AppCompatImageView verify = new AppCompatImageView(G.context);
+        verify.setId(R.id.tv_chatCell_verify);
+        verify.setImageResource(R.drawable.ic_verify);
+
+
+        /**
+         * init last message sender name
+         * */
+
+        EmojiTextViewE lastMessageSender = new EmojiTextViewE(G.context);
+        lastMessageSender.setId(R.id.tv_chatCell_firstTextView);
+        lastMessageSender.setSingleLine(true);
+        setTypeFace(lastMessageSender);
+        lastMessageSender.setTextColor(G.context.getResources().getColor(R.color.green));
+        setTextSize(lastMessageSender, R.dimen.dp13);
+        lastMessageSender.setEmojiSize(i_Dp(R.dimen.dp14));
+
+
+        /**
+         * init last message content
+         * */
+
+        EmojiTextViewE lastMessage = new EmojiTextViewE(G.context);
+        lastMessage.setId(R.id.tv_chatCell_secondTextView);
+        lastMessage.setEllipsize(TextUtils.TruncateAt.END);
+        lastMessage.setSingleLine(true);
+        setTypeFace(lastMessage);
+        lastMessage.setTextColor(Color.parseColor("#FF616161"));
+        setTextSize(lastMessage, G.twoPaneMode ? R.dimen.dp16 : R.dimen.dp12);
+        lastMessage.setEmojiSize(i_Dp(R.dimen.dp13));
+
+
+        /**
+         * init last message content type (image,file,voice)
+         * */
+
+        EmojiTextViewE lastMessageType = new EmojiTextViewE(G.context);
+        lastMessageType.setId(R.id.tv_chatCell_thirdTextView);
+        lastMessageType.setEllipsize(TextUtils.TruncateAt.END);
+        lastMessageType.setSingleLine(true);
+        setTypeFace(lastMessageType);
+        lastMessageType.setTextColor(isDarkTheme ? Color.parseColor(G.textSubTheme) : Color.parseColor("#FF616161"));
+        setTextSize(lastMessageType, R.dimen.dp12);
+        lastMessageType.setEmojiSize(i_Dp(R.dimen.dp13));
+
+
+        /**
+         * init room notification
+         * */
+
+        MaterialDesignTextView mute = new MaterialDesignTextView(G.context);
+        mute.setId(R.id.iv_chatCell_mute);
+        mute.setText(G.fragmentActivity.getResources().getString(R.string.md_muted));
+        mute.setTextColor(Color.parseColor(G.textTitleTheme));
+        setTextSize(mute, R.dimen.dp13);
+
+
+        /**
+         * init last message status(read ,send , failed)
+         * */
+
+        AppCompatImageView messageStatus = new AppCompatImageView(G.context);
+        messageStatus.setId(R.id.iv_chatCell_messageStatus);
+        messageStatus.setColorFilter(Color.parseColor(G.tintImage), PorterDuff.Mode.SRC_IN);
+
+
+        /**
+         * init last message send data and time
+         * */
+
+        AppCompatTextView messageData = new AppCompatTextView(G.context);
+        messageData.setId(R.id.tv_chatCell_messageData);
+        messageData.setSingleLine(true);
+        messageData.setTextColor(Color.parseColor(G.textTitleTheme));
+        setTextSize(messageData, R.dimen.dp12);
+        setTypeFace(messageData);
+
+
+        /**
+         * init room unRead message count
+         * */
+
+        BadgeView badgeView = new BadgeView(G.context);
+        badgeView.getTextView().setId(R.id.iv_chatCell_messageCount);
+        badgeView.setBadgeColor(R.drawable.rect_oval_red);
+        setTypeFace(badgeView.getTextView());
+
+
+        /**
+         * init pinned room on top
+         * */
+
+        MaterialDesignTextView pinnedMessage = new MaterialDesignTextView(G.context);
+        pinnedMessage.setId(R.id.iv_chatCell_pinnedMessage);
+        pinnedMessage.setGravity(CENTER);
+        pinnedMessage.setText(G.fragmentActivity.getResources().getString(R.string.md_circlePin));
+        pinnedMessage.setTextColor(Color.parseColor(G.textTitleTheme));
+        pinnedMessage.setTextSize(i_Dp(R.dimen.dp20));
+        setTextSize(pinnedMessage, R.dimen.dp20);
+
+
+        /**
+         * set views dependency
+         * */
+
+
+        root.addView(avatarImageView);
+        root.addView(chatIcon);
+        root.addView(roomName);
+        root.addView(verify);
+        root.addView(lastMessageSender);
+        root.addView(lastMessage);
+        root.addView(lastMessageType);
+        root.addView(mute);
+        root.addView(messageStatus);
+        root.addView(messageData);
+        root.addView(badgeView);
+        root.addView(pinnedMessage);
+
+        return root;
+    }
+
+
     public static View getViewItemRoom() {
 
         LinearLayout root_chat_sub_layout = new LinearLayout(G.context);
@@ -496,7 +642,7 @@ public class ViewMaker {
 
         EmojiTextViewE cs_txt_contact_name = new EmojiTextViewE(G.context);
         cs_txt_contact_name.setId(R.id.cs_txt_contact_name);
-        // cs_txt_contact_name.setLineSpacing((0/G.context.getResources().getDisplayMetrics().density), .8);
+//         cs_txt_contact_name.setLineSpacing((0/G.context.getResources().getDisplayMetrics().density), 0.8f);
         cs_txt_contact_name.setMaxWidth(i_Dp(R.dimen.dp160));
         cs_txt_contact_name.setPadding(0, i_Dp(R.dimen.dp4), 0, i_Dp(R.dimen.dp4));
         cs_txt_contact_name.setText("Name");
@@ -543,7 +689,7 @@ public class ViewMaker {
 
         LinearLayout lyt_last_message_room = new LinearLayout(G.context);
         lyt_last_message_room.setId(R.id.lyt_last_message_room);
-        // lyt_last_message_room.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+        lyt_last_message_room.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
         if (HelperCalander.isPersianUnicode) {
             lyt_last_message_room.setGravity(Gravity.RIGHT);
         } else {
@@ -639,13 +785,13 @@ public class ViewMaker {
         linearLayout_353.addView(lyt_last_message_room);
         linearLayout_938.addView(linearLayout_353);
 
-        //LinearLayout linearLayout_604 = new LinearLayout(G.context);
-        //linearLayout_604.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-        //linearLayout_604.setMinimumWidth(i_Dp(R.dimen.dp28));
-        //linearLayout_604.setOrientation(VERTICAL);
-        //linearLayout_604.setPadding(0, i_Dp(R.dimen.dp10), 0, 0);
-        //LinearLayout.LayoutParams layout_468 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        //linearLayout_604.setLayoutParams(layout_468);
+        LinearLayout linearLayout_604 = new LinearLayout(G.context);
+        linearLayout_604.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+        linearLayout_604.setMinimumWidth(i_Dp(R.dimen.dp28));
+        linearLayout_604.setOrientation(VERTICAL);
+        linearLayout_604.setPadding(0, i_Dp(R.dimen.dp10), 0, 0);
+        LinearLayout.LayoutParams layout_468 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        linearLayout_604.setLayoutParams(layout_468);
 
         LinearLayout linearLayout_620 = new LinearLayout(G.context);
         linearLayout_620.setOrientation(HORIZONTAL);
@@ -703,6 +849,7 @@ public class ViewMaker {
 
         AppCompatTextView cs_txt_unread_message = new AppCompatTextView(G.context);
         cs_txt_unread_message.setId(R.id.cs_txt_unread_message);
+
         cs_txt_unread_message.setBackgroundResource(R.drawable.rect_oval_red);
         cs_txt_unread_message.setGravity(CENTER);
         cs_txt_unread_message.setMinimumHeight(i_Dp(R.dimen.dp16));
@@ -719,6 +866,7 @@ public class ViewMaker {
 
         MaterialDesignTextView cs_txt_pinned_message = new MaterialDesignTextView(G.context);
         cs_txt_pinned_message.setId(R.id.cs_txt_pinned_message);
+
         cs_txt_pinned_message.setGravity(CENTER);
         cs_txt_pinned_message.setText(G.fragmentActivity.getResources().getString(R.string.md_circlePin));
         cs_txt_pinned_message.setTextColor(Color.parseColor(G.textTitleTheme));
@@ -1040,7 +1188,6 @@ public class ViewMaker {
         LinearLayout linearLayout_673 = new LinearLayout(G.context);
         linearLayout_673.setOrientation(VERTICAL);
         LinearLayout.LayoutParams layout_445 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
 
 
         if (HelperCalander.isPersianUnicode) {
