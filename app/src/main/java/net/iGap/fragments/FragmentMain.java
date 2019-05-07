@@ -1017,6 +1017,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         public String action;
         private View emptyView;
         private View loadingView;
+        private ConstraintLayout rootView;
 
         public RoomAdapter(@Nullable OrderedRealmCollection<RealmRoom> data, OnComplete complete, View emptyView, View loadingView) {
             super(data, true);
@@ -1028,9 +1029,9 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             // View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
-            View view = new ChatCell(getContext());
-            view.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80)));
-            return new ViewHolder(view);
+            rootView = new ChatCell(getContext());
+            rootView.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80)));
+            return new ViewHolder(rootView);
         }
 
         @Override
@@ -1165,7 +1166,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                  */
 
                 if (mInfo.isPinned()) {
-                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
+//                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme_2));
 
                     //if (mInfo.getChatRoom() != null && RealmRoom.isBot(mInfo.getChatRoom().getPeerId())) {
 
@@ -1177,7 +1178,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                     }
 
                 } else {
-                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme));
+//                    holder.rootChat.setBackgroundColor(Color.parseColor(G.backgroundTheme));
                     holder.txtPinIcon.setVisibility(View.GONE);
                 }
 
@@ -1526,7 +1527,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             private EmojiTextViewE txtLastMessageFileText;
             private MaterialDesignTextView txtChatIcon;
             private TextView txtTime;
-            private MaterialDesignTextView txtPinIcon;
+            private View txtPinIcon;
             private AppCompatImageView imgVerifyRoom;
             private BadgeView txtUnread;
             private EmojiTextViewE lastMessageSender;
@@ -1571,8 +1572,10 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 /**
                  * pin icon
                  * */
-                txtPinIcon = (MaterialDesignTextView) view.findViewById(R.id.iv_chatCell_pinnedMessage);
-                txtPinIcon.setTypeface(G.typeface_Fontico);
+//                txtPinIcon = (MaterialDesignTextView) view.findViewById(R.id.iv_chatCell_pinnedMessage);
+//                txtPinIcon.setTypeface(G.typeface_Fontico);
+
+                txtPinIcon = view.findViewById(R.id.iv_iv_chatCell_pin);
 
                 /**
                  * verify imageView

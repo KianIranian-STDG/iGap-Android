@@ -3,8 +3,10 @@ package net.iGap.adapter.items.chat;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
@@ -19,34 +21,35 @@ import net.iGap.module.CircleImageView;
 import net.iGap.module.EmojiTextViewE;
 import net.iGap.module.MaterialDesignTextView;
 
-import static android.view.Gravity.CENTER;
 import static net.iGap.adapter.items.chat.ViewMaker.i_Dp;
 
 public class ChatCell extends ConstraintLayout {
-
-    boolean isRtl;
-    boolean isDarkTheme;
 
     public ChatCell(Context context) {
         super(context);
         init();
     }
 
-    public static void setTextSize(TextView v, int sizeSrc) {
-        int mSize = i_Dp(sizeSrc);
-        v.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSize);
-    }
-
-    public static void setTypeFace(TextView v) {
-        v.setTypeface(G.typeface_IRANSansMobile);
-    }
 
     private void init() {
+
+        boolean isRtl = HelperCalander.isPersianUnicode;
+        boolean isDarkTheme = G.isDarkTheme;
+        ConstraintSet set = new ConstraintSet();
         setId(R.id.cl_chatCell_root);
 
-        ConstraintSet set = new ConstraintSet();
-        isRtl = HelperCalander.isPersianUnicode;
-        isDarkTheme = G.isDarkTheme;
+
+        /**
+         * init pinned room on top
+         * */
+
+        View pinView = new View(getContext());
+        pinView.setId(R.id.iv_iv_chatCell_pin);
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), isDarkTheme ? R.drawable.shape_background_pin
+                : R.drawable.shape_background_pin, null);
+        pinView.setBackground(drawable);
+        addView(pinView);
+
 
         /**
          * init avatar image
@@ -180,19 +183,6 @@ public class ChatCell extends ConstraintLayout {
         setTypeFace(badgeView.getTextView());
         addView(badgeView);
 
-
-        /**
-         * init pinned room on top
-         * */
-        MaterialDesignTextView pinnedMessage = new MaterialDesignTextView(G.context);
-        pinnedMessage.setId(R.id.iv_chatCell_pinnedMessage);
-        pinnedMessage.setGravity(CENTER);
-        pinnedMessage.setText(G.fragmentActivity.getResources().getString(R.string.md_circlePin));
-        pinnedMessage.setTextColor(Color.parseColor(G.textTitleTheme));
-        pinnedMessage.setTextSize(i_Dp(R.dimen.dp20));
-        setTextSize(pinnedMessage, R.dimen.dp20);
-        addView(pinnedMessage);
-
         /**
          * bottom line
          * */
@@ -205,6 +195,7 @@ public class ChatCell extends ConstraintLayout {
         /**
          * set views dependency
          * */
+
 
         set.constrainHeight(avatarImageView.getId(), i_Dp(R.dimen.dp68));
         set.constrainWidth(avatarImageView.getId(), i_Dp(R.dimen.dp68));
@@ -283,6 +274,12 @@ public class ChatCell extends ConstraintLayout {
             set.constrainCircle(badgeView.getId(), avatarImageView.getId(), i_Dp(R.dimen.dp24), 135);
             set.connect(messageStatus.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp8));
 
+            //pin
+            set.connect(pinView.getId(), ConstraintSet.RIGHT, avatarImageView.getId(), ConstraintSet.RIGHT, i_Dp(R.dimen.dp32));
+            set.connect(pinView.getId(), ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, i_Dp(R.dimen.dp4));
+            set.connect(pinView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, i_Dp(R.dimen.dp4));
+            set.connect(pinView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp4));
+
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
             float[] chainWeights = {0, 0, 1};
@@ -305,6 +302,11 @@ public class ChatCell extends ConstraintLayout {
             set.connect(bottomView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp2));
             set.connect(bottomView.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.RIGHT);
 
+            //pin
+            set.connect(pinView.getId(), ConstraintSet.LEFT, avatarImageView.getId(), ConstraintSet.LEFT, i_Dp(R.dimen.dp32));
+            set.connect(pinView.getId(), ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, i_Dp(R.dimen.dp4));
+            set.connect(pinView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, i_Dp(R.dimen.dp4));
+            set.connect(pinView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, i_Dp(R.dimen.dp4));
 
             int[] chainViews = {firstTextView.getId(), secondTextView.getId(), thirdTextView.getId()};
             float[] chainWeights = {0, 0, 1};
@@ -318,4 +320,14 @@ public class ChatCell extends ConstraintLayout {
 
         set.applyTo(this);
     }
+
+    private void setTextSize(TextView v, int sizeSrc) {
+        int mSize = i_Dp(sizeSrc);
+        v.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSize);
+    }
+
+    private void setTypeFace(TextView v) {
+        v.setTypeface(G.typeface_IRANSansMobile);
+    }
+
 }

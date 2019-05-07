@@ -102,6 +102,7 @@
     <item name="iv_chatCell_mute" type="id" />
     <item name="iv_chatCell_messageCount" type="id" />
     <item name="iv_chatCell_pinnedMessage" type="id" />
+    <item name="iv_iv_chatCell_pin" type="id" />
     <item name="cv_chatCell_badge" type="id" />
     <item name="v_chatCell_bottomView" type="id" />
 
