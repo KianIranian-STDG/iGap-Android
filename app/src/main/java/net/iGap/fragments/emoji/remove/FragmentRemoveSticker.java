@@ -1,4 +1,4 @@
-package net.iGap.fragments.emoji;
+package net.iGap.fragments.emoji.remove;
 
 
 import android.content.Context;
@@ -26,18 +26,18 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.emoji.FragmentDetailStickers;
+import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
 import net.iGap.helper.HelperFragment;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.proto.ProtoFileDownload;
 import net.iGap.realm.RealmStickers;
 import net.iGap.request.RequestFileDownload;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;

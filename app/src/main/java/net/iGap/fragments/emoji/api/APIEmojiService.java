@@ -2,6 +2,7 @@ package net.iGap.fragments.emoji.api;
 
 import com.vanniktech.emoji.sticker.struct.StructSticker;
 
+import net.iGap.fragments.emoji.struct.StructCategoryResult;
 import net.iGap.fragments.emoji.struct.StructEachSticker;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
 
@@ -22,6 +23,14 @@ import retrofit2.http.Query;
  * All rights reserved.
  */
 public interface APIEmojiService {
+
+    @GET("/category/")
+    Call<StructCategoryResult> getCategories();
+
+    @GET("/category/{id}")
+    Call<StructSticker> getCategoryStickers(@Path("id") String id,
+                                            @Query("skip") int skip,
+                                            @Query("limit") int limit);
 
     @POST("/stickers/{id}/favorite")
     Call<StructStickerResult> addSticker(@Path("id") String groupId);

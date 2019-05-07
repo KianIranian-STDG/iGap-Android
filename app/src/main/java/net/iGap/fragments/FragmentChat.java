@@ -131,9 +131,10 @@ import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.adapter.items.chat.VoiceItem;
 import net.iGap.databinding.PaymentDialogBinding;
 import net.iGap.eventbus.PaymentFragment;
-import net.iGap.fragments.emoji.DialogAddSticker;
-import net.iGap.fragments.emoji.FragmentAddStickers;
-import net.iGap.fragments.emoji.FragmentSettingStickers;
+import net.iGap.fragments.emoji.add.DialogAddSticker;
+import net.iGap.fragments.emoji.add.FragmentAddStickers;
+import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
+import net.iGap.fragments.emoji.remove.FragmentSettingRemoveStickers;
 import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.OnUpdateSticker;
 import net.iGap.helper.AvatarHandler;
@@ -6218,12 +6219,12 @@ public class FragmentChat extends BaseFragment
                 .setOpenPageSticker(new OnOpenPageStickerListener() {
                     @Override
                     public void addSticker(String page) {
-                        new HelperFragment(FragmentAddStickers.newInstance()).setReplace(false).load();
+                        new HelperFragment(FragmentSettingAddStickers.newInstance()).setReplace(false).load();
                     }
 
                     @Override
                     public void openSetting(ArrayList<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
-                        new HelperFragment(FragmentSettingStickers.newInstance(data, recentStickerList)).setReplace(false).load();
+                        new HelperFragment(FragmentSettingRemoveStickers.newInstance(data, recentStickerList)).setReplace(false).load();
                     }
                 })
                 .setBackgroundColor(BackgroundColor)

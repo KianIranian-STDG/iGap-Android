@@ -1,4 +1,4 @@
-package net.iGap.fragments.emoji;
+package net.iGap.fragments.emoji.remove;
 
 
 import android.os.Bundle;
@@ -30,18 +30,18 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentSettingStickers extends FragmentToolBarBack {
+public class FragmentSettingRemoveStickers extends FragmentToolBarBack {
 
     private List<StructGroupSticker> stickerList = new ArrayList<>();
     private ArrayList<StructItemSticker> recentStickerList;
 
-    public FragmentSettingStickers() {
+    public FragmentSettingRemoveStickers() {
         // Required empty public constructor
     }
 
-    public static FragmentSettingStickers newInstance(List<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
+    public static FragmentSettingRemoveStickers newInstance(List<StructGroupSticker> stickerList, ArrayList<StructItemSticker> recentStickerList) {
 
-        FragmentSettingStickers fragmentDetailStickers = new FragmentSettingStickers();
+        FragmentSettingRemoveStickers fragmentDetailStickers = new FragmentSettingRemoveStickers();
         Bundle bundle = new Bundle();
         bundle.putSerializable("GROUP_ID", (Serializable) stickerList);
         bundle.putSerializable("RECENT", (Serializable) recentStickerList);
@@ -51,7 +51,7 @@ public class FragmentSettingStickers extends FragmentToolBarBack {
 
     @Override
     public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
-        inflater.inflate(R.layout.fragment_remove_stickers, root, true);
+        inflater.inflate(R.layout.fragment_setting_stickers, root, true);
     }
 
     @Override

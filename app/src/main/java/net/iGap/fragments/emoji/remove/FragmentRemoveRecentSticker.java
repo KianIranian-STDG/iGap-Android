@@ -1,51 +1,36 @@
-package net.iGap.fragments.emoji;
+package net.iGap.fragments.emoji.remove;
 
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.hanks.library.AnimateCheckBox;
-import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.BaseFragment;
-import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
-import net.iGap.fragments.emoji.struct.StructStickerResult;
-import net.iGap.helper.HelperFragment;
-import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.proto.ProtoFileDownload;
-import net.iGap.realm.RealmStickers;
 import net.iGap.request.RequestFileDownload;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.

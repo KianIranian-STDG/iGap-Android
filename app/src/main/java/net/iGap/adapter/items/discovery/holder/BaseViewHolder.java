@@ -28,7 +28,7 @@ import net.iGap.fragments.FragmentiGapMap;
 import net.iGap.fragments.discovery.DiscoveryFragment;
 import net.iGap.adapter.items.discovery.DiscoveryItem;
 import net.iGap.adapter.items.discovery.DiscoveryItemField;
-import net.iGap.fragments.emoji.FragmentAddStickers;
+import net.iGap.fragments.emoji.add.FragmentSettingAddStickers;
 import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperPermission;
 import net.iGap.helper.HelperUrl;
@@ -252,7 +252,7 @@ public abstract class BaseViewHolder extends RecyclerView.ViewHolder {
                 // coming soon
                 break;
             case STICKER_SHOP:/** tested **/
-                new HelperFragment(FragmentAddStickers.newInstance()).setReplace(false).load();
+                new HelperFragment(FragmentSettingAddStickers.newInstance()).setReplace(false).load();
                 break;
             case CARD_TO_CARD:
                 CallCardToCard();
