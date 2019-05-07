@@ -21,6 +21,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.app.FragmentActivity;
@@ -425,14 +426,20 @@ public class G extends MultiDexApplication {
     }
 
     public static void refreshRealmUi() {
-        G.fragmentActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Realm realm = Realm.getDefaultInstance();
-                realm.refresh();
-                realm.close();
-            }
-        });
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            Realm realm = Realm.getDefaultInstance();
+            realm.refresh();
+            realm.close();
+        } else {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.refresh();
+                    realm.close();
+                }
+            });
+        }
     }
 
     public static int getTheme2BackgroundColor() {
