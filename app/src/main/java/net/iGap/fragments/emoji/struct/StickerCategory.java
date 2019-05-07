@@ -1,16 +1,32 @@
 package net.iGap.fragments.emoji.struct;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class StickerCategory {
+
+    @SerializedName("createdAt")
+    @Expose
     private String createdAt;
 
+    @SerializedName("name")
+    @Expose
     private String name;
 
+    @SerializedName("id")
+    @Expose
     private String id;
 
+    @SerializedName("sort")
+    @Expose
     private String sort;
 
+    @SerializedName("updatedAt")
+    @Expose
     private String updatedAt;
 
+    @SerializedName("status")
+    @Expose
     private String status;
 
     public String getCreatedAt() {

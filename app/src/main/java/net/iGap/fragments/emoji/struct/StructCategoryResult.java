@@ -1,8 +1,16 @@
 package net.iGap.fragments.emoji.struct;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class StructCategoryResult {
+
+    @SerializedName("data")
+    @Expose
     private StickerCategory[] data;
 
+    @SerializedName("ok")
+    @Expose
     private boolean ok;
 
     public StickerCategory[] getStickerCategories() {
