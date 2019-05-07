@@ -11,6 +11,7 @@
 package net.iGap.fragments;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -21,6 +22,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -41,12 +44,14 @@ import net.iGap.helper.HelperFragment;
 import net.iGap.helper.HelperGetDataFromOtherApp;
 import net.iGap.helper.HelperImageBackColor;
 import net.iGap.helper.HelperPermission;
+import net.iGap.helper.HelperToolbar;
 import net.iGap.helper.HelperUploadFile;
 import net.iGap.helper.ImageHelper;
 import net.iGap.interfaces.OnAvatarAdd;
 import net.iGap.interfaces.OnChannelAvatarAdd;
 import net.iGap.interfaces.OnGetPermission;
 import net.iGap.interfaces.OnGroupAvatarResponse;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
 import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
@@ -71,7 +76,7 @@ import static net.iGap.G.context;
 import static net.iGap.module.AttachFile.isInAttach;
 import static net.iGap.module.AttachFile.request_code_image_from_gallery_single_select;
 
-public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarResponse, OnChannelAvatarAdd {
+public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarResponse, OnChannelAvatarAdd, ToolbarListener {
 
     public static long avatarId = 0;
     public static OnRemoveFragmentNewGroup onRemoveFragmentNewGroup;
@@ -82,10 +87,12 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
     private CircleImageView imgCircleImageView;
     private long groomId = 0;
     private EditText edtGroupName;
-    private LinedEditText edtDescription;
+    private AppCompatEditText edtDescription;
     private int lastSpecialRequestsCursorPosition = 0;
     private String specialRequests;
     private String pathSaveImage;
+
+    private HelperToolbar mHelperToolbar;
 
     public static FragmentNewGroup newInstance() {
         return new FragmentNewGroup();
@@ -105,6 +112,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         initDataBinding();
         initComponent(view);
 
+        //fragmentNewGroupViewModel.onClickCancel();
         FragmentEditImage.completeEditImage = new FragmentEditImage.CompleteEditImage() {
             @Override
             public void result(String path, String message, HashMap<String, StructBottomSheet> textImageList) {
@@ -274,19 +282,25 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
         AppUtils.setProgresColler(fragmentNewGroupBinding.ngPrgWaiting);
 
-        G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        fragmentNewGroupBinding.ngRippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(context)
+                .setLogoShown(true)
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setRightIcons(R.drawable.ic_checked)
+                .setListener(this);
+
+        LinearLayout toollbarLayout = view.findViewById(R.id.ng_layout_toolbar);
+        toollbarLayout.addView(mHelperToolbar.getView());
+
+        fragmentNewGroupViewModel.titleToolbar.observe(this, new Observer<String>() {
             @Override
-            public void onComplete(RippleView rippleView) {
-                AppUtils.closeKeyboard(rippleView);
-                if (G.IMAGE_NEW_GROUP.exists()) {
-                    G.IMAGE_NEW_GROUP.delete();
-                } else {
-                    G.IMAGE_NEW_CHANEL.delete();
-                }
-                G.fragmentActivity.onBackPressed();
+            public void onChanged(@Nullable String s) {
+                mHelperToolbar.getTextViewLogo().setText(s);
             }
         });
+
+        G.fragmentActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
 
         //=======================set image for group
         imgCircleImageView = fragmentNewGroupBinding.ngProfileCircleImage;
@@ -346,7 +360,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
             public void afterTextChanged(Editable s) {
                 edtDescription.removeTextChangedListener(this);
 
-                if (edtDescription.getLineCount() > 4) {
+                if (edtDescription.getLineCount() > 2) {
                     edtDescription.setText(specialRequests);
                     edtDescription.setSelection(lastSpecialRequestsCursorPosition);
                 } else {
@@ -500,5 +514,22 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         void onRemove();
     }
 
+    @Override
+    public void onLeftIconClickListener(View view) {
 
+        AppUtils.closeKeyboard(view);
+        if (G.IMAGE_NEW_GROUP.exists()) {
+            G.IMAGE_NEW_GROUP.delete();
+        } else {
+            G.IMAGE_NEW_CHANEL.delete();
+        }
+
+         fragmentNewGroupViewModel.onClickCancel(view);
+        //G.fragmentActivity.onBackPressed();
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+        fragmentNewGroupViewModel.onClickNextStep(view);
+    }
 }

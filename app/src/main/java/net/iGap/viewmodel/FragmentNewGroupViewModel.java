@@ -9,6 +9,7 @@ package net.iGap.viewmodel;
  * All rights reserved.
  */
 
+import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.databinding.ObservableField;
 import android.net.Uri;
@@ -56,13 +57,14 @@ public class FragmentNewGroupViewModel {
     public boolean existAvatar = false;
     public String mInviteLink;
     public boolean isChannel = false;
-    public ObservableField<String> titleToolbar = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.new_group));
+    public MutableLiveData<String> titleToolbar = new MutableLiveData<>();
     public ObservableField<String> txtInputName = new ObservableField<>(G.fragmentActivity.getResources().getString(R.string.group_name) + " " + G.fragmentActivity.getResources().getString(R.string.mandatory));
     public ObservableField<String> edtSetNewGroup = new ObservableField<>("");
     public ObservableField<String> edtDescription = new ObservableField<>("");
+    public ObservableField<String> txtDescriptionHint = new ObservableField<>("");
     public ObservableField<Integer> prgWaiting = new ObservableField<>(View.GONE);
-    public ObservableField<Integer> edtDescriptionLines = new ObservableField<>(4);
-    public ObservableField<Integer> edtDescriptionMaxLines = new ObservableField<>(4);
+    public ObservableField<Integer> edtDescriptionLines = new ObservableField<>(1);
+    public ObservableField<Integer> edtDescriptionMaxLines = new ObservableField<>(2);
     public ObservableField<Integer> edtDescriptionImeOptions = new ObservableField<>(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
     public ObservableField<Integer> edtDescriptionInputType = new ObservableField<>(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
     public ObservableField<Boolean> nextStepEnable = new ObservableField<>(true);
@@ -127,28 +129,33 @@ public class FragmentNewGroupViewModel {
         }
 
         if (prefix.equals("NewChanel")) {
-            titleToolbar.set(G.fragmentActivity.getResources().getString(R.string.New_Chanel));
+            titleToolbar.setValue(G.fragmentActivity.getResources().getString(R.string.New_Chanel));
         } else if (prefix.equals("ConvertToGroup")) {
-            titleToolbar.set(G.fragmentActivity.getResources().getString(R.string.chat_to_group));
+            titleToolbar.setValue(G.fragmentActivity.getResources().getString(R.string.chat_to_group));
+        }else {
+            titleToolbar.setValue(G.fragmentActivity.getResources().getString(R.string.new_group));
         }
 
         switch (prefix) {
             case "NewChanel":
                 txtInputName.set(G.fragmentActivity.getResources().getString(R.string.channel_name) + " " + G.fragmentActivity.getResources().getString(R.string.mandatory));
+                txtDescriptionHint.set(G.fragmentActivity.getResources().getString(R.string.new_channel_hint));
                 break;
             case "ConvertToGroup":
                 txtInputName.set(G.fragmentActivity.getResources().getString(R.string.group_name) + " " + G.fragmentActivity.getResources().getString(R.string.mandatory));
+                txtDescriptionHint.set(G.fragmentActivity.getResources().getString(R.string.new_group_hint));
                 break;
             default:
                 txtInputName.set(G.fragmentActivity.getResources().getString(R.string.group_name) + " " + G.fragmentActivity.getResources().getString(R.string.mandatory));
+                txtDescriptionHint.set(G.fragmentActivity.getResources().getString(R.string.new_group_hint));
                 break;
         }
 
 
         edtDescriptionImeOptions.set(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
         edtDescriptionInputType.set(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        edtDescriptionLines.set(4);
-        edtDescriptionMaxLines.set(4);
+        edtDescriptionLines.set(1);
+        edtDescriptionMaxLines.set(2);
 
 
     }

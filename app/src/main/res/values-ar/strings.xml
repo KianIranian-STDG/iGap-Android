@@ -2401,4 +2401,11 @@
     <string name="ivnalid_data_provided">قيم الإدخال غير صحيحة.</string>
     <string name="secret_chat">محادثة سرية</string>
     <string name="new_message_notif">پیام جدید</string>
+
+
+    <!--todo: translate these below lines-->
+    <string name="new_channel_hint">You can provide an optional description for your channel.</string>
+    <string name="new_group_hint">You can provide an optional description for your group.</string>
+
+
 </resources>
