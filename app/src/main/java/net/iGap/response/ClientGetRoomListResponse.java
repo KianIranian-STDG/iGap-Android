@@ -46,17 +46,13 @@ public class ClientGetRoomListResponse extends MessageHandler {
             putChatToDatabase(clientGetRoomListResponse.getRoomsList());
         }
 
-        pendingRequest.remove(identity.offset);
+        if (identity.offset != 0)
+            pendingRequest.remove(identity.offset);
     }
 
     @Override
     public void timeOut() {
         super.timeOut();
-        pendingRequest.remove(identity.offset);
-
-        if (identity.offset == 0) {
-            RequestClientGetRoomList.isLoadingRoomListOffsetZero = false;
-        }
 
         if (G.onClientGetRoomListResponse != null)
             G.onClientGetRoomListResponse.onClientGetRoomListTimeout();
@@ -66,10 +62,6 @@ public class ClientGetRoomListResponse extends MessageHandler {
     public void error() {
         super.error();
         pendingRequest.remove(identity.offset);
-
-        if (identity.offset == 0) {
-            RequestClientGetRoomList.isLoadingRoomListOffsetZero = false;
-        }
 
         ProtoError.ErrorResponse.Builder errorResponse = (ProtoError.ErrorResponse.Builder) message;
         int majorCode = errorResponse.getMajorCode();

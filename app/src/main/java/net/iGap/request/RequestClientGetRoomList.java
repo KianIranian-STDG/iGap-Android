@@ -20,8 +20,6 @@ import java.util.HashSet;
 public class RequestClientGetRoomList {
 
     public static HashSet<Integer> pendingRequest = new HashSet<>();
-    public static boolean isLoadingRoomListOffsetZero = false;
-    private static final Integer mutex = 1;
 
     public static class IdentityGetRoomList {
         public boolean isFromLogin;
@@ -35,26 +33,11 @@ public class RequestClientGetRoomList {
         }
     }
 
-    public boolean clientGetRoomList(int offset, int limit, String identity) {
+    public synchronized boolean clientGetRoomList(int offset, int limit, String identity) {
+        if (pendingRequest.contains(offset)) {
+            return false;
+        }
         Log.d("bagi" , "clientGetRoomList" + offset + "" + limit + identity);
-        if (offset == 0) {
-            synchronized(mutex) {
-                if (isLoadingRoomListOffsetZero) {
-                    return false;
-                } else {
-                    isLoadingRoomListOffsetZero = true;
-                }
-            }
-        }
-
-        synchronized(mutex) {
-            if (pendingRequest.contains(offset)) {
-                return false;
-            } else {
-                if (G.userLogin)
-                    pendingRequest.add(offset);
-            }
-        }
 
         ProtoClientGetRoomList.ClientGetRoomList.Builder clientGetRoomList = ProtoClientGetRoomList.ClientGetRoomList.newBuilder();
         clientGetRoomList.setPagination(new RequestPagination().pagination(offset, limit));
@@ -62,10 +45,17 @@ public class RequestClientGetRoomList {
         IdentityGetRoomList identityGetRoomList = new IdentityGetRoomList(identity.equals("0"), offset, identity);
         RequestWrapper requestWrapper = new RequestWrapper(601, clientGetRoomList, identityGetRoomList);
         try {
-            RequestQueue.sendRequest(requestWrapper);
+
+            if (G.userLogin) {
+                RequestQueue.sendRequest(requestWrapper);
+                pendingRequest.add(offset);
+                return true;
+            } else {
+                return false;
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+            return false;
         }
-        return true;
     }
 }
