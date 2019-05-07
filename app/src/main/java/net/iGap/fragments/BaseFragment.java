@@ -26,6 +26,7 @@ import net.iGap.helper.AvatarHandler;
 import net.iGap.helper.HelperFragment;
 import net.iGap.libs.swipeback.SwipeBackFragment;
 import net.iGap.libs.swipeback.SwipeBackLayout;
+import net.iGap.module.AttachFile;
 
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
@@ -147,13 +148,16 @@ public class BaseFragment extends SwipeBackFragment {
     }
 
     public void popBackStackFragment() {
+        try {
+            if (!G.fragmentActivity.isFinishing()) {
+                G.fragmentActivity.getSupportFragmentManager().popBackStack();
+            }
 
-        if (!G.fragmentActivity.isFinishing()) {
-            G.fragmentActivity.getSupportFragmentManager().popBackStack();
-        }
+            if (G.iTowPanModDesinLayout != null) {
+                G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+            }
+        } catch (Exception empty) {
 
-        if (G.iTowPanModDesinLayout != null) {
-            G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
         }
     }
 
