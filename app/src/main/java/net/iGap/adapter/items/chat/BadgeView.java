@@ -30,9 +30,10 @@ public class BadgeView extends FrameLayout {
         textView = new TextView(getContext());
         textView.setGravity(Gravity.CENTER);
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.setMargins(dpToPx(5), 0, dpToPx(5), 0);
+        params.setMargins(dpToPx(6), 0, dpToPx(6), 0);
         textView.setLayoutParams(params);
         textView.setTextColor(getResources().getColor(R.color.white));
+        textView.setTextSize(10);
         addView(textView);
 
     }

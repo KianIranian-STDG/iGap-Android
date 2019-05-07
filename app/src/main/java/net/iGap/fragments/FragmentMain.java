@@ -32,10 +32,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.iGap.Config;
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.Theme;
 import net.iGap.activities.ActivityMain;
 import net.iGap.activities.ActivityRegisteration;
 import net.iGap.adapter.items.chat.AbstractMessage;
+import net.iGap.adapter.items.chat.BadgeView;
 import net.iGap.adapter.items.chat.ChatCell;
 import net.iGap.adapter.items.chat.ViewMaker;
 import net.iGap.helper.AvatarHandler;
@@ -61,7 +61,6 @@ import net.iGap.interfaces.OnVersionCallBack;
 import net.iGap.libs.MyRealmRecyclerViewAdapter;
 import net.iGap.libs.Tuple;
 import net.iGap.libs.floatingAddButton.ArcMenu;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.AppUtils;
 import net.iGap.module.BotInit;
 import net.iGap.module.CircleImageView;
@@ -1030,7 +1029,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             // View v = inflater.inflate(R.layout.chat_sub_layout, parent, false);
             View view = new ChatCell(getContext());
-            view.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp70)));
+            view.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, i_Dp(R.dimen.dp80)));
             return new ViewHolder(view);
         }
 
@@ -1189,21 +1188,24 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 } else {
                     holder.txtUnread.setVisibility(View.VISIBLE);
                     holder.txtPinIcon.setVisibility(View.GONE);
-                    holder.txtUnread.setText(mInfo.getUnreadCount() + "");
+                    holder.txtUnread.getTextView().setText(mInfo.getUnreadCount() + "");
 
-                    if (HelperCalander.isPersianUnicode) {
-                        holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red);
-                    } else {
-                        holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red_left);
-                    }
+//                    if (HelperCalander.isPersianUnicode) {
+                    holder.txtUnread.setBadgeColor(getResources().getColor(R.color.notification_badge));
+//                    } else {
+//                        holder.txtUnread.setBackgroundResource(R.drawable.rect_oval_red_left);
+//                    }
 
                     if (mInfo.getMute()) {
-                        AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor("#c6c1c1"));
+//                        AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor("#c6c1c1"));
+                        holder.txtUnread.setBadgeColor(getResources().getColor(R.color.gray_9d));
                     } else {
                         if (G.isDarkTheme) {
-                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(Theme.default_notificationColor));
+//                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(Theme.default_notificationColor));
+                            holder.txtUnread.setBadgeColor(getResources().getColor(R.color.notification_badge));
                         } else {
-                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(G.notificationColor));
+//                            AndroidUtils.setBackgroundShapeColor(holder.txtUnread, Color.parseColor(G.notificationColor));
+                            holder.txtUnread.setBadgeColor(getResources().getColor(R.color.notification_badge));
                         }
                     }
                 }
@@ -1220,7 +1222,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
              */
             if (HelperCalander.isPersianUnicode) {
                 holder.txtLastMessage.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtLastMessage.getText().toString()));
-                holder.txtUnread.setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getText().toString()));
+                holder.txtUnread.getTextView().setText(HelperCalander.convertToUnicodeFarsiNumber(holder.txtUnread.getTextView().getText().toString()));
             }
         }
 
@@ -1264,7 +1266,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
         //*******************************************************************************************
         private void setLastMessage(RealmRoom mInfo, ViewHolder holder, boolean isMyCloud) {
 
-            holder.txtTic.setVisibility(View.GONE);
+            holder.txtTic.setVisibility(View.INVISIBLE);
             holder.txtLastMessageFileText.setVisibility(View.GONE);
             holder.txtLastMessage.setText("");
 
@@ -1526,7 +1528,7 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
             private TextView txtTime;
             private MaterialDesignTextView txtPinIcon;
             private AppCompatImageView imgVerifyRoom;
-            private TextView txtUnread;
+            private BadgeView txtUnread;
             private EmojiTextViewE lastMessageSender;
             private ImageView txtTic;
             private MaterialDesignTextView txtCloud;
@@ -1552,12 +1554,13 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 rootChat = (ViewGroup) view.findViewById(R.id.cl_chatCell_root);
 
                 txtLastMessage = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_secondTextView);
-                txtLastMessageFileText = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_thirtedTextView);
+                txtLastMessageFileText = (EmojiTextViewE) view.findViewById(R.id.tv_chatCell_thirdTextView);
 
                 /**
                  * channel or group icon
                  * */
                 txtChatIcon = (MaterialDesignTextView) view.findViewById(R.id.tv_chatCell_chatIcon);
+                txtChatIcon.setTypeface(G.typeface_Fontico);
 
                 /**
                  * sended message time
@@ -1579,8 +1582,8 @@ public class FragmentMain extends BaseFragment implements ActivityMain.MainInter
                 /**
                  * unread text counter
                  * */
-                txtUnread = (TextView) view.findViewById(R.id.iv_chatCell_messageCount);
-                txtUnread.setTypeface(G.typeface_IRANSansMobile);
+                txtUnread = view.findViewById(R.id.iv_chatCell_messageCount);
+                txtUnread.getTextView().setTypeface(G.typeface_IRANSansMobile);
 
                 /**
                  * mute icon
