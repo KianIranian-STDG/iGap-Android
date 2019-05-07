@@ -10,19 +10,23 @@
 
 package net.iGap.fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mikepenz.fastadapter.FastAdapter;
@@ -40,12 +44,19 @@ import net.iGap.R;
 import net.iGap.adapter.StickyHeaderAdapter;
 import net.iGap.adapter.items.ContactItemGroup;
 import net.iGap.helper.GoToChatActivity;
+import net.iGap.helper.HelperAvatar;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.OnAvatarGet;
 import net.iGap.interfaces.OnChannelAddMember;
 import net.iGap.interfaces.OnContactsGetList;
 import net.iGap.interfaces.OnGroupAddMember;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.libs.rippleeffect.RippleView;
+import net.iGap.module.AndroidUtils;
+import net.iGap.module.CircleImageView;
 import net.iGap.module.ContactChip;
 import net.iGap.module.Contacts;
+import net.iGap.module.CustomTextViewMedium;
 import net.iGap.module.LoginActions;
 import net.iGap.module.structs.StructContactInfo;
 import net.iGap.proto.ProtoGlobal;
@@ -58,12 +69,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ContactGroupFragment extends BaseFragment implements OnContactsGetList {
+public class ContactGroupFragment extends BaseFragment implements OnContactsGetList , ToolbarListener {
     private static ProtoGlobal.Room.Type type;
     ItemAdapter itemAdapter;
     private FastAdapter fastAdapter;
     private TextView txtStatus;
-    private TextView txtNumberOfMember;
+    //private TextView txtNumberOfMember;
     //private EditText edtSearch;
     private ChipsInput chipsInput;
     private String textString = "";
@@ -77,6 +88,9 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     private int sizeTextEditText = 0;
     private List<StructContactInfo> contacts;
     private boolean isRemove = true;
+
+    private HelperToolbar mHelperToolbar;
+
 
     public static ContactGroupFragment newInstance() {
         return new ContactGroupFragment();
@@ -103,108 +117,28 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             if (bundle.getString("LIMIT") != null) participantsLimit = bundle.getString("LIMIT");
         }
 
-        view.findViewById(R.id.fcg_ll_toolbar).setBackgroundColor(Color.parseColor(G.appBarColor));
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(G.context)
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setRightIcons(R.drawable.ic_checked)
+                .setListener(this)
+                .setLogoShown(true);
 
-        txtStatus = (TextView) view.findViewById(R.id.fcg_txt_status);
-        txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
-        txtNumberOfMember.setText("0" + "/" + participantsLimit + " " + G.fragmentActivity.getResources().getString(R.string.member));
+
+        LinearLayout toolbarLayout = view.findViewById(R.id.fcg_layout_toolbar);
+        toolbarLayout.addView(mHelperToolbar.getView());
+        mHelperToolbar.getTextViewLogo().setText(G.context.getResources().getString(R.string.new_group));
+
+
+        //txtNumberOfMember = (TextView) view.findViewById(R.id.fcg_txt_number_of_member);
+        //txtNumberOfMember.setText("0" + "/" + participantsLimit + " " + G.fragmentActivity.getResources().getString(R.string.member));
 
         if (typeCreate.equals("CHANNEL")) {
-            txtNumberOfMember.setText("Add Members");
+            mHelperToolbar.getTextViewLogo().setText(G.context.getResources().getString(R.string.new_channel));
         }
 
         //edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
         chipsInput = (ChipsInput) view.findViewById(R.id.chips_input);
-
-
-        RippleView rippleBack = (RippleView) view.findViewById(R.id.fcg_ripple_back);
-        rippleBack.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                G.fragmentActivity.onBackPressed();
-            }
-        });
-
-        RippleView rippleDone = (RippleView) view.findViewById(R.id.fcg_ripple_done);
-        rippleDone.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-
-                if (typeCreate.equals("CHANNEL")) { // addMemberChannel
-                    G.onChannelAddMember = new OnChannelAddMember() {
-                        @Override
-                        public void onChannelAddMember(Long RoomId, Long UserId, ProtoGlobal.ChannelRoom.Role role) {
-                            countAddMemberResponse++;
-                            countMember++;
-                            if (countAddMemberResponse == countAddMemberRequest) {
-                                addMember(RoomId, ProtoGlobal.Room.Type.CHANNEL);
-                            }
-                        }
-
-                        @Override
-                        public void onError(int majorCode, int minorCode) {
-                            countAddMemberResponse++;
-                            if (countAddMemberResponse == countAddMemberRequest) {
-                                addMember(roomId, ProtoGlobal.Room.Type.CHANNEL);
-                            }
-                        }
-
-                        @Override
-                        public void onTimeOut() {
-
-                        }
-                    };
-
-                    ArrayList<Long> list = getSelectedList();
-                    if (list.size() > 0) {
-                        for (long peerId : list) {
-                            new RequestChannelAddMember().channelAddMember(roomId, peerId);
-                        }
-                    } else {
-                        if (isAdded()) {
-                            removeFromBaseFragment(ContactGroupFragment.this);
-                            new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
-                        }
-                    }
-                } else if (typeCreate.equals("GROUP")) { // addMemberGroup
-                    G.onGroupAddMember = new OnGroupAddMember() {
-                        @Override
-                        public void onGroupAddMember(Long roomId, Long UserId) {
-                            countAddMemberResponse++;
-                            countMember++;
-                            if (countAddMemberResponse == countAddMemberRequest) {
-                                addMember(roomId, ProtoGlobal.Room.Type.GROUP);
-                            }
-                        }
-
-                        @Override
-                        public void onError(int majorCode, int minorCode) {
-                            countAddMemberResponse++;
-                            if (countAddMemberResponse == countAddMemberRequest) {
-                                addMember(roomId, ProtoGlobal.Room.Type.GROUP);
-                            }
-                        }
-                    };
-                    /**
-                     * request add member for group
-                     *
-                     */
-                    ArrayList<Long> list = getSelectedList();
-                    if (list.size() > 0) {
-                        for (long peerId : list) {
-                            new RequestGroupAddMember().groupAddMember(roomId, peerId, 0);
-                        }
-                    } else {
-
-                        if (isAdded()) {
-                            removeFromBaseFragment(ContactGroupFragment.this);
-                            new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
-                        }
-
-                    }
-                }
-            }
-        });
 
         final StickyHeaderAdapter stickyHeaderAdapter = new StickyHeaderAdapter();
         final ItemAdapter headerAdapter = new ItemAdapter();
@@ -232,7 +166,9 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 if (item.mContact.isSelected) {
                     chipsInput.removeChipByLabel(item.mContact.displayName);
                 } else {
-                    Uri uri = null;
+
+
+                  Uri uri = null;
                     if (item.mContact.avatar != null && item.mContact.avatar.getFile() != null && item.mContact.avatar.getFile().getLocalThumbnailPath() != null) {
                         uri = Uri.fromFile(new File(item.mContact.avatar.getFile().getLocalThumbnailPath()));
                     }
@@ -246,7 +182,7 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
                 }
 
 
-                if (isRemove) {
+                    if (isRemove) {
                     notifyAdapter(item, position);
                 }
 
@@ -364,11 +300,11 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
             }
         }
 
-        if (typeCreate.equals("CHANNEL")) {
+        /*if (typeCreate.equals("CHANNEL")) {
             txtNumberOfMember.setVisibility(View.GONE);
         }
         //  sizeTextEditText = textString.length();
-        txtNumberOfMember.setText(selectedNumber + "/" + participantsLimit + " " + G.fragmentActivity.getResources().getString(R.string.member));
+        txtNumberOfMember.setText(selectedNumber + "/" + participantsLimit + " " + G.fragmentActivity.getResources().getString(R.string.member));*/
 
         //edtSearch.setText("");
     }
@@ -419,4 +355,92 @@ public class ContactGroupFragment extends BaseFragment implements OnContactsGetL
     public void onContactsGetList() {
         addItems();
     }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        G.fragmentActivity.onBackPressed();
+
+    }
+
+    @Override
+    public void onRightIconClickListener(View view) {
+
+
+        if (typeCreate.equals("CHANNEL")) { // addMemberChannel
+            G.onChannelAddMember = new OnChannelAddMember() {
+                @Override
+                public void onChannelAddMember(Long RoomId, Long UserId, ProtoGlobal.ChannelRoom.Role role) {
+                    countAddMemberResponse++;
+                    countMember++;
+                    if (countAddMemberResponse == countAddMemberRequest) {
+                        addMember(RoomId, ProtoGlobal.Room.Type.CHANNEL);
+                    }
+                }
+
+                @Override
+                public void onError(int majorCode, int minorCode) {
+                    countAddMemberResponse++;
+                    if (countAddMemberResponse == countAddMemberRequest) {
+                        addMember(roomId, ProtoGlobal.Room.Type.CHANNEL);
+                    }
+                }
+
+                @Override
+                public void onTimeOut() {
+
+                }
+            };
+
+            ArrayList<Long> list = getSelectedList();
+            if (list.size() > 0) {
+                for (long peerId : list) {
+                    new RequestChannelAddMember().channelAddMember(roomId, peerId);
+                }
+            } else {
+                if (isAdded()) {
+                    removeFromBaseFragment(ContactGroupFragment.this);
+                    new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
+                }
+            }
+        } else if (typeCreate.equals("GROUP")) { // addMemberGroup
+            G.onGroupAddMember = new OnGroupAddMember() {
+                @Override
+                public void onGroupAddMember(Long roomId, Long UserId) {
+                    countAddMemberResponse++;
+                    countMember++;
+                    if (countAddMemberResponse == countAddMemberRequest) {
+                        addMember(roomId, ProtoGlobal.Room.Type.GROUP);
+                    }
+                }
+
+                @Override
+                public void onError(int majorCode, int minorCode) {
+                    countAddMemberResponse++;
+                    if (countAddMemberResponse == countAddMemberRequest) {
+                        addMember(roomId, ProtoGlobal.Room.Type.GROUP);
+                    }
+                }
+            };
+            /**
+             * request add member for group
+             *
+             */
+            ArrayList<Long> list = getSelectedList();
+            if (list.size() > 0) {
+                for (long peerId : list) {
+                    new RequestGroupAddMember().groupAddMember(roomId, peerId, 0);
+                }
+            } else {
+
+                if (isAdded()) {
+                    removeFromBaseFragment(ContactGroupFragment.this);
+                    new GoToChatActivity(ContactGroupFragment.this.roomId).startActivity();
+                }
+
+            }
+        }
+
+    }
+
+
 }

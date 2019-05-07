@@ -365,7 +365,7 @@
 
   <!--setting-->
   <style name="background_setting_light">
-    <item name="android:background">@color/background_setting_light</item>
+    <item name="android:background">@color/white</item>
   </style>
 
   <style name="background_2_setting_light">
@@ -438,7 +438,7 @@
   </style>
 
   <style name="background_2_setting_BlueGreyComplete">
-    <item name="android:background">#CFD8DC</item>
+    <item name="android:background">@color/white</item>
   </style>
 
   <style name="page_background_BlueGreyComplete">
@@ -545,7 +545,7 @@
 
   <!--==================================Brown complete==================================-->
   <style name="background_settingBrownComplete">
-    <item name="android:background">#D7CCC8</item>
+    <item name="android:background">@color/white</item> <!--old value = #D7CCC8-->
   </style>
 
   <style name="background_2_setting_BrownComplete">
