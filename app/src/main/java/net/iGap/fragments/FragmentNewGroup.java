@@ -516,6 +516,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
 
     @Override
     public void onLeftIconClickListener(View view) {
+/*
 
         AppUtils.closeKeyboard(view);
         if (G.IMAGE_NEW_GROUP.exists()) {
@@ -523,6 +524,7 @@ public class FragmentNewGroup extends BaseFragment implements OnGroupAvatarRespo
         } else {
             G.IMAGE_NEW_CHANEL.delete();
         }
+*/
 
          fragmentNewGroupViewModel.onClickCancel(view);
         //G.fragmentActivity.onBackPressed();

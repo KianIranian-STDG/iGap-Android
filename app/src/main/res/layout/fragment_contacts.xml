@@ -200,8 +200,10 @@
                     android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="?backgroundSubChatTheme"
                     android:gravity="center"
                     android:orientation="horizontal"
+                    android:background="@color/white"
                     android:paddingLeft="@dimen/dp52"
                     android:paddingTop="@dimen/dp12"
                     android:paddingEnd="@dimen/dp20"
@@ -221,6 +223,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/dp16"
                         android:layout_marginLeft="@dimen/dp16"
+                        android:textColor="@color/black"
                         android:gravity="start|center_vertical"
                         android:singleLine="true"
                         android:text="@string/Invite_Friends"
@@ -237,6 +240,7 @@
                     android:gravity="center"
                     android:visibility="gone"
                     android:orientation="horizontal"
+                    android:background="@color/white"
                     android:paddingLeft="@dimen/dp52"
                     android:paddingTop="@dimen/dp12"
                     android:paddingEnd="@dimen/dp20"
@@ -258,6 +262,7 @@
                         android:layout_marginLeft="@dimen/dp16"
                         android:gravity="start|center_vertical"
                         android:singleLine="true"
+                        android:textColor="@color/black"
                         android:text="@string/new_channel"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:textSize="@dimen/dp16" />
@@ -270,6 +275,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:background="@color/white"
                     android:visibility="gone"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
@@ -294,6 +300,7 @@
                         android:gravity="start|center_vertical"
                         android:singleLine="true"
                         android:text="@string/new_group"
+                        android:textColor="@color/black"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:textSize="@dimen/dp16" />
 
@@ -305,6 +312,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:background="@color/white"
                     android:visibility="gone"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
@@ -330,6 +338,7 @@
                         android:gravity="start|center_vertical"
                         android:singleLine="true"
                         android:text="@string/secret_chat"
+                        android:textColor="@color/black"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:textSize="@dimen/dp16" />
 
@@ -343,6 +352,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:visibility="gone"
+                    android:background="@color/white"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
                     android:paddingTop="@dimen/dp12"
@@ -366,6 +376,7 @@
                         android:gravity="start|center_vertical"
                         android:singleLine="true"
                         android:text="@string/new_group_call"
+                        android:textColor="@color/black"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:textSize="@dimen/dp16" />
 
@@ -378,6 +389,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:visibility="gone"
+                    android:background="@color/white"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
                     android:paddingTop="@dimen/dp12"
@@ -401,6 +413,7 @@
                         android:gravity="start|center_vertical"
                         android:singleLine="true"
                         android:text="@string/menu_add_contact"
+                        android:textColor="@color/black"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:textSize="@dimen/dp16" />
 
@@ -412,6 +425,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:background="@color/white"
                     android:visibility="gone"
                     android:orientation="horizontal"
                     android:paddingLeft="@dimen/dp52"
@@ -436,6 +450,7 @@
                         android:gravity="start|center_vertical"
                         android:singleLine="true"
                         android:text="Dial Number"
+                        android:textColor="@color/black"
                         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                         android:textSize="@dimen/dp16" />
 

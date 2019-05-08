@@ -16,19 +16,24 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import net.iGap.G;
 import net.iGap.R;
 import net.iGap.databinding.FragmentCreateChannelBinding;
+import net.iGap.helper.HelperToolbar;
+import net.iGap.interfaces.ToolbarListener;
 import net.iGap.module.AppUtils;
 import net.iGap.viewmodel.FragmentCreateChannelViewModel;
 
-public class FragmentCreateChannel extends BaseFragment {
+public class FragmentCreateChannel extends BaseFragment implements ToolbarListener {
 
     public static OnRemoveFragment onRemoveFragment;
 
     private FragmentCreateChannelViewModel fragmentCreateChannelViewModel;
     private FragmentCreateChannelBinding fragmentCreateChannelBinding;
+    private HelperToolbar mHelperToolbar;
 
     public FragmentCreateChannel() {
         // Required empty public constructor
@@ -46,6 +51,7 @@ public class FragmentCreateChannel extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         initDataBinding();
+        initComponents(view);
         ProgressBar prgWaiting = fragmentCreateChannelBinding.fchPrgWaitingAddContact;
         AppUtils.setProgresColler(prgWaiting);
 
@@ -55,6 +61,22 @@ public class FragmentCreateChannel extends BaseFragment {
                 popBackStackFragment();
             }
         };
+    }
+
+    private void initComponents(View view) {
+
+        mHelperToolbar = HelperToolbar.create()
+                .setContext(G.context)
+                .setLogoShown(true)
+                .setRightIcons(R.drawable.ic_checked)
+                .setLeftIcon(R.drawable.ic_back_btn)
+                .setListener(this);
+
+        LinearLayout layoutToolbar = fragmentCreateChannelBinding.fchLayoutToolbar;
+        layoutToolbar.addView(mHelperToolbar.getView());
+
+        mHelperToolbar.getTextViewLogo().setText(G.context.getString(R.string.new_channel));
+
     }
 
     private void initDataBinding() {
@@ -74,4 +96,13 @@ public class FragmentCreateChannel extends BaseFragment {
         void remove();
     }
 
+    @Override
+    public void onRightIconClickListener(View view) {
+        fragmentCreateChannelViewModel.onClickFinish(view);
+    }
+
+    @Override
+    public void onLeftIconClickListener(View view) {
+        fragmentCreateChannelViewModel.onClickCancel(view);
+    }
 }

@@ -26,6 +26,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.activities.ActivityMain;
 import net.iGap.fragments.ContactGroupFragment;
 import net.iGap.fragments.FragmentCreateChannel;
 import net.iGap.fragments.FragmentNewGroup;
@@ -96,6 +97,7 @@ public class FragmentNewGroupViewModel {
                 isChannel = false;
                 createGroup();
             }
+
         } else {
             if (prefix.equals("NewChanel")) {
                 Toast.makeText(G.context, R.string.please_enter_channel_name, Toast.LENGTH_SHORT).show();
@@ -216,6 +218,13 @@ public class FragmentNewGroupViewModel {
                             bundle.putString("TOKEN", token);
                             fragmentCreateChannel.setArguments(bundle);
 
+                            if (!G.fragmentActivity.isFinishing()) {
+                                G.fragmentActivity.getSupportFragmentManager().popBackStack();
+                            }
+
+                            if (G.iTowPanModDesinLayout != null) {
+                                G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+                            }
 
                             if (FragmentNewGroup.onRemoveFragmentNewGroup != null)
                                 FragmentNewGroup.onRemoveFragmentNewGroup.onRemove();
@@ -347,6 +356,15 @@ public class FragmentNewGroupViewModel {
                                 } else {
                                     bundle.putString("LIMIT", room.getGroupRoomExtra().getParticipantsCountLimitLabel());
                                 }
+
+                                if (!G.fragmentActivity.isFinishing()) {
+                                    G.fragmentActivity.getSupportFragmentManager().popBackStack();
+                                }
+
+                                if (G.iTowPanModDesinLayout != null) {
+                                    G.iTowPanModDesinLayout.onLayout(ActivityMain.chatLayoutMode.none);
+                                }
+
                                 bundle.putString("TYPE", typeCreate.toString());
                                 bundle.putBoolean("NewRoom", true);
                                 fragment.setArguments(bundle);

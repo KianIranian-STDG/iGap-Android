@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/iv_itemContactChat_root"
     android:layout_width="match_parent"
+    style="?backgroundColorSettingTheme"
     android:layout_height="@dimen/dp70">
 
     <LinearLayout
@@ -42,6 +43,7 @@
         android:textColor="@android:color/black"
         android:textStyle="bold"
         android:fontFamily="@font/main_font"
+        style="?textTitleColorSettingTheme"
         app:layout_constraintBottom_toTopOf="@+id/tv_itemContactChat_userPhoneNumber"
         app:layout_constraintStart_toStartOf="@+id/tv_itemContactChat_userPhoneNumber"
         app:layout_constraintTop_toTopOf="parent" />
@@ -54,6 +56,7 @@
         android:fontFamily="@font/main_font"
         android:layout_marginLeft="@dimen/dp16"
         android:text="09xxxxx"
+        style="?textSubColorSettingTheme"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_itemContactChat_ll"
         app:layout_constraintTop_toBottomOf="@+id/tv_itemContactChat_userName" />
