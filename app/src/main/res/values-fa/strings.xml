@@ -1466,5 +1466,6 @@
     <string name="new_channel_hint">You can provide an optional description for your channel.</string>
     <string name="new_group_hint">You can provide an optional description for your group.</string>
     <string name="permanent_link">Permanent Link</string>
+    <string name="new_channels_rules">If you set a permanent link, other people will be able to find and join your channel.    You can use a-z, 0-9 and underscores.  Minimum length as 5 characters.</string>
 
 </resources>

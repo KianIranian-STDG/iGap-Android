@@ -29,6 +29,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -45,6 +46,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -388,6 +390,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
                 realmRecyclerView.setAdapter(contactListAdapter);
                 prgWaitingLoadContact.setVisibility(View.GONE);
                 realmRecyclerView.setVisibility(View.VISIBLE);
+
             }
         }, 500);
 
@@ -584,7 +587,7 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
             Bundle bundle_ = new Bundle();
             bundle_.putString("TYPE", "NewGroup");
             fragment.setArguments(bundle_);
-            new HelperFragment(fragment).setReplace(false).load();
+            new HelperFragment(fragment).setReplace(false).load(true);
 
 
 
