@@ -51,6 +51,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -130,7 +131,6 @@ import net.iGap.interfaces.OneFragmentIsOpen;
 import net.iGap.interfaces.OpenFragment;
 import net.iGap.interfaces.RefreshWalletBalance;
 import net.iGap.libs.bottomNavigation.BottomNavigation;
-import net.iGap.libs.bottomNavigation.Event.OnItemChangeListener;
 import net.iGap.libs.floatingAddButton.ArcMenu;
 import net.iGap.libs.floatingAddButton.StateChangeListener;
 import net.iGap.module.AndroidUtils;
@@ -229,7 +229,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     SampleFragmentPagerAdapter sampleFragmentPagerAdapter;
     private LinearLayout mediaLayout;
     private FrameLayout frameChatContainer;
-    private FrameLayout frameMainContainer;
+    private RelativeLayout frameMainContainer;
     private FrameLayout frameFragmentBack;
     private FrameLayout frameFragmentContainer;
     //    private NavigationTabStrip navigationTabStrip;
@@ -565,7 +565,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
 
         frameChatContainer = (FrameLayout) findViewById(R.id.am_frame_chat_container);
-        frameMainContainer = (FrameLayout) findViewById(R.id.am_frame_main_container);
+        frameMainContainer = findViewById(R.id.am_frame_main_container);
 
         if (G.twoPaneMode) {
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -1360,16 +1360,13 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         mViewPager = findViewById(R.id.viewpager);
 
 //        navigationTabStrip.setVisibility(View.VISIBLE);
-        mViewPager.setOffscreenPageLimit(3);
 
+        boolean isRtl = HelperCalander.isPersianUnicode;
         BottomNavigation bottomNavigation = findViewById(R.id.bn_main_bottomNavigation);
         bottomNavigation.setCurrentItem(0);
         bottomNavigation.setBackgroundColor(Color.parseColor(G.appBarColor));
-        bottomNavigation.setOnItemChangeListener(new OnItemChangeListener() {
-            @Override
-            public void onSelectedItemChanged(int itemId) {
-                mViewPager.setCurrentItem(itemId);
-            }
+        bottomNavigation.setOnItemChangeListener(itemId -> {
+            mViewPager.setCurrentItem(itemId);
         });
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -1461,6 +1458,26 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (HelperCalander.isPersianUnicode) {
             ViewMaker.setLayoutDirection(mViewPager, View.LAYOUT_DIRECTION_RTL);
         }
+    }
+
+    private int bottomNavigationAdapter(int pos, boolean rtl) {
+        if (rtl) {
+            switch (pos) {
+                case 0:
+                    return 4;
+                case 1:
+                    return 3;
+                case 2:
+                    return 2;
+                case 3:
+                    return 1;
+                case 4:
+                    return 0;
+            }
+        } else {
+            return pos;
+        }
+        return pos;
     }
 
     /**

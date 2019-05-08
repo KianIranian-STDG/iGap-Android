@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <FrameLayout
+            <RelativeLayout
                 android:id="@+id/am_frame_main_container"
                 android:layout_width="1px"
                 android:layout_height="match_parent"
@@ -29,7 +29,8 @@
                 <net.iGap.module.NotTouchableCoordinatorLayout
                     android:id="@+id/fragmentContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/bn_main_bottomNavigation">
 
 
                     <net.iGap.module.MyAppBarLayout
@@ -140,26 +141,6 @@
 
                         </RelativeLayout>
 
-                        <!--<net.iGap.libs.tabBar.NavigationTabStrip-->
-                        <!--android:id="@+id/nts"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="@dimen/dp48"-->
-                        <!--android:layoutDirection="ltr"-->
-                        <!--app:nts_active_color="@color/white"-->
-                        <!--app:nts_animation_duration="300"-->
-                        <!--app:nts_color="#000"-->
-                        <!--app:nts_corners_radius="1.5dp"-->
-                        <!--app:nts_factor="1.5"-->
-                        <!--app:nts_gravity="bottom"-->
-                        <!--app:nts_inactive_color="#adffffff"-->
-                        <!--app:nts_type="point"-->
-                        <!--app:nts_typeface="fonts/iGap-Fontico.ttf"-->
-                        <!--app:nts_weight="3dp"-->
-                        <!--tools:ignore="MissingConstraints"-->
-                        <!--tools:layout_editor_absoluteX="8dp"-->
-                        <!--tools:layout_editor_absoluteY="0dp" />-->
-
-
                         <include
                             android:id="@+id/amr_ll_music_layout"
                             layout="@layout/music_layout_small"
@@ -237,7 +218,47 @@
 
                 </net.iGap.module.NotTouchableCoordinatorLayout>
 
-            </FrameLayout>
+                <net.iGap.libs.bottomNavigation.BottomNavigation
+                    android:id="@+id/bn_main_bottomNavigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp52"
+                    android:layout_alignParentBottom="true"
+                    app:corner_radius="25"
+                    app:default_item="0"
+                    app:unselect_color="@color/gray_300">
+
+                    <net.iGap.libs.bottomNavigation.TabItem
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tab_icon="@string/md_chat_tab" />
+
+                    <net.iGap.libs.bottomNavigation.TabItem
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tab_icon="@string/md_apps" />
+
+                    <net.iGap.libs.bottomNavigation.TabItem
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tab_icon="@string/md_phone" />
+
+                    <net.iGap.libs.bottomNavigation.TabItem
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tab_icon="@string/md_play_rounded_button" />
+
+                    <net.iGap.libs.bottomNavigation.TabItem
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:tab_icon="@string/md_channel_icon" />
+                </net.iGap.libs.bottomNavigation.BottomNavigation>
+
+            </RelativeLayout>
 
 
             <FrameLayout
@@ -275,47 +296,6 @@
 
 
         </FrameLayout>
-
-        <net.iGap.libs.bottomNavigation.BottomNavigation
-            android:id="@+id/bn_main_bottomNavigation"
-            android:layout_gravity="bottom"
-            app:default_item="0"
-            android:layout_width="match_parent"
-            app:corner_radius="25"
-            app:unselect_color="@color/gray_300"
-            android:layout_height="@dimen/dp52">
-
-            <net.iGap.libs.bottomNavigation.TabItem
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:tab_icon="@string/md_chat_tab" />
-
-            <net.iGap.libs.bottomNavigation.TabItem
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:tab_icon="@string/md_apps" />
-
-            <net.iGap.libs.bottomNavigation.TabItem
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:tab_icon="@string/md_phone" />
-
-            <net.iGap.libs.bottomNavigation.TabItem
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:tab_icon="!" />
-
-            <net.iGap.libs.bottomNavigation.TabItem
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:tab_icon="!" />
-        </net.iGap.libs.bottomNavigation.BottomNavigation>
-
     </FrameLayout>
 
 
