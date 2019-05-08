@@ -1,9 +1,7 @@
-package net.iGap.fragments.emoji;
+package net.iGap.fragments.emoji.add;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +22,7 @@ import com.vanniktech.emoji.sticker.struct.StructItemSticker;
 import net.iGap.G;
 import net.iGap.R;
 import net.iGap.fragments.FragmentChat;
+import net.iGap.fragments.emoji.HelperDownloadSticker;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.struct.StructEachSticker;

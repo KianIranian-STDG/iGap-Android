@@ -1,4 +1,4 @@
-package net.iGap.fragments.emoji;
+package net.iGap.fragments.emoji.add;
 
 
 import android.content.Context;
@@ -14,26 +14,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.vanniktech.emoji.sticker.struct.StructGroupSticker;
 import com.vanniktech.emoji.sticker.struct.StructSticker;
 
 import net.iGap.G;
 import net.iGap.R;
+import net.iGap.fragments.BaseFragment;
 import net.iGap.fragments.FragmentChat;
-import net.iGap.fragments.FragmentToolBarBack;
+import net.iGap.fragments.emoji.FragmentDetailStickers;
+import net.iGap.fragments.emoji.HelperDownloadSticker;
+import net.iGap.fragments.emoji.struct.StickerCategory;
 import net.iGap.helper.HelperFragment;
 import net.iGap.fragments.emoji.api.APIEmojiService;
 import net.iGap.fragments.emoji.api.ApiEmojiUtils;
 import net.iGap.fragments.emoji.struct.StructStickerResult;
-import net.iGap.libs.rippleeffect.RippleView;
-import net.iGap.module.AndroidUtils;
 import net.iGap.module.DeviceUtils;
 import net.iGap.module.EndlessRecyclerViewScrollListener;
 import net.iGap.module.PreCachingLayoutManager;
@@ -54,7 +55,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FragmentAddStickers extends FragmentToolBarBack {
+public class FragmentAddStickers extends BaseFragment {
 
     private APIEmojiService mAPIService;
     private AdapterSettingPage adapterSettingPage;
@@ -63,28 +64,32 @@ public class FragmentAddStickers extends FragmentToolBarBack {
     private EndlessRecyclerViewScrollListener scrollListener;
     private int page = 0;
     private int limit = 20;
+    StickerCategory stickerCategory;
 
     public FragmentAddStickers() {
         // Required empty public constructor
     }
 
-    public static FragmentAddStickers newInstance() {
+    public static FragmentAddStickers newInstance(String tabJson) {
 
         FragmentAddStickers fragmentAddStickers = new FragmentAddStickers();
         Bundle bundle = new Bundle();
+        bundle.putString("tab", tabJson);
         fragmentAddStickers.setArguments(bundle);
         return fragmentAddStickers;
     }
 
+    @Nullable
     @Override
-    public void onCreateViewBody(LayoutInflater inflater, LinearLayout root, @Nullable Bundle savedInstanceState) {
-        inflater.inflate(R.layout.fragment_add_stickers, root, true);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_add_stickers, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        titleTextView.setText(R.string.add_sticker);
+        Gson gson = new Gson();
+        stickerCategory = gson.fromJson(getArguments().getString("tab"), StickerCategory.class);
 
         getDataStickers();
         progressBar = view.findViewById(R.id.progress_stricker);
@@ -120,7 +125,7 @@ public class FragmentAddStickers extends FragmentToolBarBack {
 
         mAPIService = ApiEmojiUtils.getAPIService();
 
-        mAPIService.getAllSticker(page, limit).enqueue(new Callback<StructSticker>() {
+        mAPIService.getCategoryStickers(stickerCategory.getId(), page, limit).enqueue(new Callback<StructSticker>() {
             @Override
             public void onResponse(Call<StructSticker> call, Response<StructSticker> response) {
                 progressBar.setVisibility(View.GONE);
