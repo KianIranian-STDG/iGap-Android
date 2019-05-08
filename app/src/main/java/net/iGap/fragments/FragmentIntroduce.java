@@ -1,12 +1,12 @@
 /*
-* This is the source code of iGap for Android
-* It is licensed under GNU AGPL v3.0
-* You should have received a copy of the license in this archive (see LICENSE).
-* Copyright © 2017 , iGap - www.iGap.net
-* iGap Messenger | Free, Fast and Secure instant messaging application
-* The idea of the Kianiranian Company - www.kianiranian.com
-* All rights reserved.
-*/
+ * This is the source code of iGap for Android
+ * It is licensed under GNU AGPL v3.0
+ * You should have received a copy of the license in this archive (see LICENSE).
+ * Copyright © 2017 , iGap - www.iGap.net
+ * iGap Messenger | Free, Fast and Secure instant messaging application
+ * The idea of the Kianiranian Company - www.kianiranian.com
+ * All rights reserved.
+ */
 
 package net.iGap.fragments;
 
@@ -14,15 +14,8 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -31,32 +24,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.iGap.G;
 import net.iGap.R;
-import net.iGap.helper.HelperCalander;
 import net.iGap.helper.HelperError;
-import net.iGap.interfaces.OnReceiveInfoLocation;
-import net.iGap.interfaces.OnReceivePageInfoTOS;
 import net.iGap.module.CustomCircleImage;
-import net.iGap.request.RequestInfoLocation;
-import net.iGap.request.RequestInfoPage;
 
-import static net.iGap.G.context;
+import org.jetbrains.annotations.NotNull;
 
 public class FragmentIntroduce extends BaseFragment {
 
-    private static final String KEY_SAVE = "SAVE";
-    private static int ONETIME = 1;
     private ViewPager viewPager;
     private CustomCircleImage circleButton;
     private boolean isOne0 = true;
     private boolean isOne1 = true;
     private boolean isOne6 = true;
-    private boolean locationFound;
-    private boolean registrationTry;
-    private boolean enableRegistration = true;
     private ImageView logoIgap, logoSecurity, boy;
     private TextView txt_p1_l2;
     private TextView txt_p1_l3;
@@ -64,31 +46,23 @@ public class FragmentIntroduce extends BaseFragment {
     private TextView txt_p2_l2;
     private TextView txt_p6_l1;
     private TextView txt_p6_l2;
-//    private TextView txtSkip;
     private Button btnStart;
-    private String isoCode = "", countryName = "", pattern = "", regex = "", body = null;
-    private int callingCode;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+    public View onCreateView(@NotNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_introduce, container, false);
-
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        goToProgram(view, savedInstanceState);
-
+        goToProgram(view);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-
         boolean beforeState = G.isLandscape;
-
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             G.isLandscape = true;
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -99,18 +73,14 @@ public class FragmentIntroduce extends BaseFragment {
 
         try {
             if (beforeState != G.isLandscape) {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (!isAdded() || G.fragmentActivity.isFinishing()) {
-                            return;
-                        }
-
-                        G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commitAllowingStateLoss();
-                        FragmentIntroduce fragment = new FragmentIntroduce();
-                        G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+                G.handler.post(() -> {
+                    if (!isAdded() || G.fragmentActivity.isFinishing()) {
+                        return;
                     }
+
+                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commitAllowingStateLoss();
+                    FragmentIntroduce fragment = new FragmentIntroduce();
+                    G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
                 });
             }
         } catch (IllegalStateException e) {
@@ -119,85 +89,40 @@ public class FragmentIntroduce extends BaseFragment {
         super.onConfigurationChanged(newConfig);
     }
 
-    private void goToProgram(View view, Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            // Restore value of members from saved state
-            ONETIME = savedInstanceState.getInt(KEY_SAVE);
-            if (ONETIME != 1) {
-                getInfo();
-            }
-        } else {
-            getInfo();
-        }
+    private void goToProgram(View view) {
 
-        int[] layout = new int[]{
-                R.layout.view_pager_introduce_1,
-        };
+        viewPager = view.findViewById(R.id.int_viewPager_introduce);
 
-        viewPager = (ViewPager) view.findViewById(R.id.int_viewPager_introduce);
-
-        circleButton = (CustomCircleImage) view.findViewById(R.id.int_circleButton_introduce);
+        circleButton = view.findViewById(R.id.int_circleButton_introduce);
         if (circleButton != null) {
             circleButton.circleButtonCount(3);
         }
 
-        Typeface titleTypeface;
-        if (!HelperCalander.isPersianUnicode) {
-            titleTypeface = G.typeface_neuropolitical;
-        } else {
-            titleTypeface = G.typeface_IRANSansMobile;
-        }
+        logoIgap = view.findViewById(R.id.int_img_logo_introduce);
 
-//        txtSkip = (TextView) view.findViewById(R.id.int_txt_skip);
-
-        Drawable mDrawableSkip = ContextCompat.getDrawable(context, R.drawable.background_skip);
-        mDrawableSkip.setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//            txtSkip.setBackground(mDrawableSkip);
-//        }
-
-        logoIgap = (ImageView) view.findViewById(R.id.int_img_logo_introduce);
-
-        txt_p1_l2 = (TextView) view.findViewById(R.id.int_txt_p1_l2);
-        txt_p1_l3 = (TextView) view.findViewById(R.id.int_txt_p1_l3);
+        txt_p1_l2 = view.findViewById(R.id.int_txt_p1_l2);
+        txt_p1_l3 = view.findViewById(R.id.int_txt_p1_l3);
         txt_p1_l3.setText(R.string.text_line_2_introduce_page5);
 
         txt_p1_l2.setText(R.string.text_line_1_introduce_page5);
 
-        logoSecurity = (ImageView) view.findViewById(R.id.int_img_security_introduce);
-        txt_p2_l1 = (TextView) view.findViewById(R.id.int_txt_p2_l1);
-        txt_p2_l2 = (TextView) view.findViewById(R.id.int_txt_p2_l2);
+        logoSecurity = view.findViewById(R.id.int_img_security_introduce);
+        txt_p2_l1 = view.findViewById(R.id.int_txt_p2_l1);
+        txt_p2_l2 = view.findViewById(R.id.int_txt_p2_l2);
 
         txt_p2_l1.setText(R.string.text_line_1_introduce_page7);
         txt_p2_l2.setText(R.string.text_line_2_introduce_page7);
 
 
-        boy = (ImageView) view.findViewById(R.id.int_img_boy_introduce);
-        txt_p6_l1 = (TextView) view.findViewById(R.id.int_txt_p6_l1);
-        txt_p6_l2 = (TextView) view.findViewById(R.id.int_txt_p6_l2);
+        boy = view.findViewById(R.id.int_img_boy_introduce);
+        txt_p6_l1 = view.findViewById(R.id.int_txt_p6_l1);
+        txt_p6_l2 = view.findViewById(R.id.int_txt_p6_l2);
         txt_p6_l2.setText(R.string.text_line_1_introduce_page3);
         txt_p6_l2.setText(R.string.text_line_2_introduce_page3);
 
-        btnStart = (Button) view.findViewById(R.id.int_btnStart);
-        Drawable mDrawable = ContextCompat.getDrawable(context, R.drawable.int_button_interduce);
-        mDrawable.setColorFilter(new PorterDuffColorFilter(Color.parseColor(G.appBarColor), PorterDuff.Mode.SRC_IN));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            btnStart.setBackground(mDrawable);
-        }
+        btnStart = view.findViewById(R.id.int_btnStart);
 
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startRegistration();
-            }
-        });
-
-//        txtSkip.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startRegistration();
-//            }
-//        });
+        btnStart.setOnClickListener(view1 -> startRegistration());
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -280,137 +205,22 @@ public class FragmentIntroduce extends BaseFragment {
             }
         });
 
-        AdapterViewPager adapterViewPager = new AdapterViewPager(layout);
+        AdapterViewPager adapterViewPager = new AdapterViewPager();
         viewPager.setAdapter(adapterViewPager);
         adapterViewPager.notifyDataSetChanged();
 
     }
 
     private void startRegistration() {
-
         if (!isAdded() || G.fragmentActivity.isFinishing()) {
             return;
         }
-
-        try {
-            registrationTry = true;
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if (G.socketConnection) {
-                        if (body != null & enableRegistration & (!isoCode.equals("") || !locationFound)) {
-                            enableRegistration = false;
-
-                            FragmentRegister fragment = new FragmentRegister();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("ISO_CODE", isoCode);
-                            bundle.putInt("CALLING_CODE", callingCode);
-                            bundle.putString("COUNTRY_NAME", countryName);
-                            bundle.putString("PATTERN", pattern);
-                            bundle.putString("REGEX", regex);
-                            bundle.putString("TERMS_BODY", body);
-                            fragment.setArguments(bundle);
-
-                            G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
-                            G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commitAllowingStateLoss();
-                        } else {
-                            G.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.Toast_waiting_fot_get_info), false);
-
-                                }
-                            });
-                            getInfo();
-                        }
-                    } else {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.waiting_for_connection), false);
-
-                            }
-                        });
-                    }
-
-                }
-            });
-            thread.start();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void getInfo() {
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (G.isSecure) {
-                    getTermsOfServiceBody();
-                    //getInfoLocation();
-                    ONETIME = 1;
-                } else {
-                    getInfo();
-                }
-            }
-        }, 1000);
-    }
-
-    private void getInfoLocation() {
-
-        G.onReceiveInfoLocation = new OnReceiveInfoLocation() {
-            @Override
-            public void onReceive(String isoCodeR, final int callingCodeR, final String countryNameR, String patternR, String regexR) {
-                locationFound = true;
-                isoCode = isoCodeR;
-                callingCode = callingCodeR;
-                countryName = countryNameR;
-                pattern = patternR;
-                regex = regexR;
-                autoRegistration();
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-                if (majorCode == 500 && minorCode == 1) {
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            locationFound = false;
-                        }
-                    });
-                }
-            }
-        };
-
-        new RequestInfoLocation().infoLocation();
-    }
-
-    private void getTermsOfServiceBody() {
-
-        G.onReceivePageInfoTOS = new OnReceivePageInfoTOS() {
-
-            @Override
-            public void onReceivePageInfo(final String bodyR) {
-                body = bodyR;
-                getInfoLocation();
-            }
-
-            @Override
-            public void onError(int majorCode, int minorCode) {
-
-            }
-        };
-
-        new RequestInfoPage().infoPage("TOS");
-    }
-
-    private void autoRegistration() { // if before user try for registration now after get data automatically go to registration page
-        if (registrationTry & enableRegistration) {
-            locationFound = false;
-            startRegistration();
+        if (G.socketConnection) {
+            FragmentRegister fragment = new FragmentRegister();
+            G.fragmentActivity.getSupportFragmentManager().beginTransaction().add(R.id.ar_layout_root, fragment).setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_exit_in_right, R.anim.slide_exit_out_left).commitAllowingStateLoss();
+            G.fragmentActivity.getSupportFragmentManager().beginTransaction().remove(FragmentIntroduce.this).commitAllowingStateLoss();
+        } else {
+            G.handler.post(() -> HelperError.showSnackMessage(G.fragmentActivity.getResources().getString(R.string.waiting_for_connection), false));
         }
     }
 
@@ -458,12 +268,7 @@ public class FragmentIntroduce extends BaseFragment {
             }
         });
 
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                scaleDown.start();
-            }
-        }, 500);
+        G.handler.postDelayed(scaleDown::start, 500);
     }
 
     private void animationOutPage1(final ImageView logo, final TextView txt2, final TextView txt3) {
@@ -555,12 +360,7 @@ public class FragmentIntroduce extends BaseFragment {
                 }
             });
 
-            G.handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    scaleDown.start();
-                }
-            }, 500);
+            G.handler.postDelayed(scaleDown::start, 500);
         }
     }
 
@@ -655,12 +455,7 @@ public class FragmentIntroduce extends BaseFragment {
             }
         });
 
-        G.handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                scaleDown.start();
-            }
-        }, 500);
+        G.handler.postDelayed(scaleDown::start, 500);
     }
 
     private void animationOutBoy(final ImageView logo, final TextView txt1, final TextView txt2) {
@@ -746,26 +541,9 @@ public class FragmentIntroduce extends BaseFragment {
         }
     }
 
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the user's current game state
-        savedInstanceState.putInt(KEY_SAVE, ONETIME);
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    private void displayResult(final String result) {
-        G.handler.post(new Runnable() {
-            public void run() {
-                Toast.makeText(context, result, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
     public class AdapterViewPager extends PagerAdapter {
-        int[] layout;
 
-        public AdapterViewPager(int[] layout) {
-            this.layout = layout;
+        AdapterViewPager() {
         }
 
         @Override
@@ -774,19 +552,20 @@ public class FragmentIntroduce extends BaseFragment {
         }
 
         @Override
-        public boolean isViewFromObject(View view, Object object) {
+        public boolean isViewFromObject(@NotNull View view, @NotNull Object object) {
             return view.equals(object);
         }
 
+        @NotNull
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(@NotNull ViewGroup container, int position) {
             View view = G.inflater.inflate(R.layout.view_pager_introduce_1, container, false);
             container.addView(view);
             return view;
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        public void destroyItem(@NotNull ViewGroup container, int position, @NotNull Object object) {
             container.removeView((View) object);
         }
     }

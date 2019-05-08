@@ -11,6 +11,8 @@ package net.iGap.viewmodel;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,20 +20,24 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -49,6 +55,7 @@ import net.iGap.G;
 import net.iGap.R;
 import net.iGap.activities.ActivityMain;
 import net.iGap.adapter.AdapterDialog;
+import net.iGap.dialog.DefaultRoundDialog;
 import net.iGap.fragments.FragmentRegister;
 import net.iGap.fragments.FragmentRegistrationNickname;
 import net.iGap.fragments.FragmentSecurityRecovery;
@@ -61,6 +68,8 @@ import net.iGap.interfaces.OnInfoCountryResponse;
 import net.iGap.interfaces.OnPushLoginToken;
 import net.iGap.interfaces.OnPushTwoStepVerification;
 import net.iGap.interfaces.OnQrCodeNewDevice;
+import net.iGap.interfaces.OnReceiveInfoLocation;
+import net.iGap.interfaces.OnReceivePageInfoTOS;
 import net.iGap.interfaces.OnRecoverySecurityPassword;
 import net.iGap.interfaces.OnSecurityCheckPassword;
 import net.iGap.interfaces.OnUserInfoResponse;
@@ -79,6 +88,8 @@ import net.iGap.proto.ProtoUserRegister;
 import net.iGap.proto.ProtoUserVerify;
 import net.iGap.realm.RealmUserInfo;
 import net.iGap.request.RequestInfoCountry;
+import net.iGap.request.RequestInfoLocation;
+import net.iGap.request.RequestInfoPage;
 import net.iGap.request.RequestQrCodeNewDevice;
 import net.iGap.request.RequestQueue;
 import net.iGap.request.RequestUserInfo;
@@ -98,7 +109,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static net.iGap.G.context;
 import static net.iGap.R.color.black_register;
 
-public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRecoverySecurityPassword, OnCountryCode {
+public class FragmentRegisterViewModel extends ViewModel implements OnSecurityCheckPassword, OnRecoverySecurityPassword, OnCountryCode {
 
     private static final String KEY_SAVE_CODENUMBER = "SAVE_CODENUMBER";
     private static final String KEY_SAVE_PHONENUMBER_MASK = "SAVE_PHONENUMBER_MASK";
@@ -118,13 +129,15 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     public ObservableField<String> callbackEdtCodeNumber = new ObservableField<>("+98");
     public ObservableField<String> callBackEdtPhoneNumber = new ObservableField<>("");
     public ObservableField<String> edtPhoneNumberMask = new ObservableField<>("###-###-####");
-    public ObservableField<String> CallBackTxtVerifyConnect = new ObservableField<>(G.context.getResources().getString(R.string.rg_verify_register1));
+    /*public ObservableField<String> CallBackTxtVerifyConnect = new ObservableField<>(G.context.getResources().getString(R.string.rg_verify_register1));*/
     public ObservableField<String> callBackEdtCheckPassword = new ObservableField<>("");
     public ObservableField<String> edtCheckPasswordHint = new ObservableField<>("");
-    public ObservableField<String> callBackTxtVerifyTimer = new ObservableField<>("05:00");
     public ObservableField<String> callBackTxtVerifySms = new ObservableField<>(G.context.getResources().getString(R.string.rg_verify_register2));
-    public ObservableField<String> callBackTxtVerifyKey = new ObservableField<>(G.context.getResources().getString(R.string.rg_verify_register3));
-    public ObservableField<String> callBackTxtIconVerifyConnect = new ObservableField<String>(G.context.getResources().getString(R.string.md_check_symbol));
+    /*public ObservableField<String> callBackTxtVerifyKey = new ObservableField<>(G.context.getResources().getString(R.string.rg_verify_register3));*/
+    /*public ObservableField<String> callBackTxtIconVerifyConnect = new ObservableField<String>(G.context.getResources().getString(R.string.md_check_symbol));*/
+    public ObservableBoolean termsAndConditionIsChecked = new ObservableBoolean(false);
+    public MutableLiveData<Boolean> showConditionErrorDialog = new MutableLiveData<>();
+    public MutableLiveData<Boolean> goNextStep = new MutableLiveData<>();
     public ObservableInt prgVerifyConnectVisibility = new ObservableInt(View.INVISIBLE);
     public ObservableInt txtVerifyTimerVisibility = new ObservableInt(View.INVISIBLE);
     public ObservableInt prgVerifySmsVisibility = new ObservableInt(View.INVISIBLE);
@@ -141,9 +154,9 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     public ObservableInt prgWaitingVisibility = new ObservableInt(View.GONE);
     public ObservableInt rootCheckPasswordVisibility = new ObservableInt(View.GONE);
     public ObservableInt txtAgreementVisibility = new ObservableInt(View.VISIBLE);
-    public ObservableInt txtIconVerifyConnectColor = new ObservableInt(G.context.getResources().getColor(R.color.grayNew));
-    public ObservableInt txtVerifyConnectColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_text_dark_verify));
-    public ObservableInt txtVerifyTimerColor = new ObservableInt(G.context.getResources().getColor(R.color.black));
+    /*public ObservableInt txtIconVerifyConnectColor = new ObservableInt(G.context.getResources().getColor(R.color.grayNew));*/
+    /*public ObservableInt txtVerifyConnectColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_text_dark_verify));*/
+    /*public ObservableInt txtVerifyTimerColor = new ObservableInt(G.context.getResources().getColor(R.color.black));*/
     public ObservableInt edtCodeNumberColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_black_register));
     public ObservableInt imgVerifySmsColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_text_verify));
     public ObservableInt txtVerifySmsColor = new ObservableInt(G.context.getResources().getColor(R.color.rg_text_verify));
@@ -163,12 +176,12 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     private ArrayList<StructCountry> structCountryArrayList = new ArrayList();
     private Uri image_uriQrCode;
     private String _resultQrCode;
-    private String phoneNumber;
-    private String userName;
-    private String authorHash;
+    public String phoneNumber;
+    public String userName;
+    public String authorHash;
     private String token;
     private String regexFetchCodeVerification;
-    private long userId;
+    public long userId;
     private boolean newUser;
     private ArrayList<StructCountry> items = new ArrayList<>();
     private AdapterDialog adapterDialog;
@@ -197,11 +210,18 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     private TextView btnResondCode = null;
     private TextView txtShowReason;
 
+    public static final String KEY_SAVE = "SAVE";
+    public static int ONETIME = 1;
+    private String countryName = "", pattern = "", body = null;
+    private boolean locationFound;
+    private int callingCode;
+
     public FragmentRegisterViewModel(FragmentRegister fragmentRegister, View root, FragmentActivity mActivity) {
         this.fragmentRegister = fragmentRegister;
         view = root;
         this.mActivity = mActivity;
         G.onCountryCode = this;
+        showConditionErrorDialog.setValue(false);
         getInfo();
     }
 
@@ -313,80 +333,65 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
     }
 
-    public void onClickChoseCountry(View v) {
+    public void onClickChoseCountry() {
 
         dialogChooseCountry = new Dialog(G.fragmentActivity);
         dialogChooseCountry.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogChooseCountry.setContentView(R.layout.rg_dialog);
+        dialogChooseCountry.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         int setWidth = (int) (G.context.getResources().getDisplayMetrics().widthPixels * 0.9);
         int setHeight = (int) (G.context.getResources().getDisplayMetrics().heightPixels * 0.9);
         dialogChooseCountry.getWindow().setLayout(setWidth, setHeight);
         //
-        final TextView txtTitle = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
-        edtSearchView = (SearchView) dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
+        final TextView txtTitle = dialogChooseCountry.findViewById(R.id.rg_txt_titleToolbar);
+        edtSearchView = dialogChooseCountry.findViewById(R.id.rg_edtSearch_toolbar);
 
-        txtTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                edtSearchView.setIconified(false);
-                edtSearchView.setIconifiedByDefault(true);
-                txtTitle.setVisibility(View.GONE);
-            }
+        txtTitle.setOnClickListener(view -> {
+            edtSearchView.setIconified(false);
+            edtSearchView.setIconifiedByDefault(true);
+            txtTitle.setVisibility(View.GONE);
         });
 
-        edtSearchView.setOnCloseListener(new SearchView.OnCloseListener() { // close SearchView and show title again
-            @Override
-            public boolean onClose() {
-
-                txtTitle.setVisibility(View.VISIBLE);
-
-                return false;
-            }
+        // close SearchView and show title again
+        edtSearchView.setOnCloseListener(() -> {
+            txtTitle.setVisibility(View.VISIBLE);
+            return false;
         });
 
-        final ViewGroup root = (ViewGroup) dialogChooseCountry.findViewById(android.R.id.content);
+        final ViewGroup root = dialogChooseCountry.findViewById(android.R.id.content);
         InputMethodManager im = (InputMethodManager) G.context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         SoftKeyboard softKeyboard = new SoftKeyboard(root, im);
         softKeyboard.setSoftKeyboardCallback(new SoftKeyboard.SoftKeyboardChanged() {
             @Override
             public void onSoftKeyboardHide() {
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (edtSearchView.getQuery().toString().length() > 0) {
-                            edtSearchView.setIconified(false);
-                            edtSearchView.clearFocus();
-                            txtTitle.setVisibility(View.GONE);
-                        } else {
-                            edtSearchView.setIconified(true);
-                            txtTitle.setVisibility(View.VISIBLE);
-                        }
-                        adapterDialog.notifyDataSetChanged();
+                G.handler.post(() -> {
+                    if (edtSearchView.getQuery().toString().length() > 0) {
+                        edtSearchView.setIconified(false);
+                        edtSearchView.clearFocus();
+                        txtTitle.setVisibility(View.GONE);
+                    } else {
+                        edtSearchView.setIconified(true);
+                        txtTitle.setVisibility(View.VISIBLE);
                     }
+                    adapterDialog.notifyDataSetChanged();
                 });
             }
 
             @Override
             public void onSoftKeyboardShow() {
-
-                G.handler.post(new Runnable() {
-
-                    @Override
-                    public void run() {
-
-                        txtTitle.setVisibility(View.GONE);
-                    }
-                });
+                G.handler.post(() -> txtTitle.setVisibility(View.GONE));
             }
         });
 
-        final ListView listView = (ListView) dialogChooseCountry.findViewById(R.id.lstContent);
+        final ListView listView = dialogChooseCountry.findViewById(R.id.lstContent);
         adapterDialog = new AdapterDialog(G.fragmentActivity, items);
         listView.setAdapter(adapterDialog);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            G.onCountryCode.countryInfo(adapterDialog.getItem(position));
+        });
 
-        final View border = (View) dialogChooseCountry.findViewById(R.id.rg_borderButton);
+        final View border = dialogChooseCountry.findViewById(R.id.rg_borderButton);
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -395,7 +400,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-
                 if (i > 0) {
                     border.setVisibility(View.VISIBLE);
                 } else {
@@ -411,7 +415,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         edtSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-
                 return false;
             }
 
@@ -423,41 +426,34 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             }
         });
 
-        btnOk = (TextView) dialogChooseCountry.findViewById(R.id.rg_txt_okDialog);
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnOk = dialogChooseCountry.findViewById(R.id.rg_txt_okDialog);
+        btnOk.setOnClickListener(v -> {
+            G.onInfoCountryResponse = new OnInfoCountryResponse() {
+                @Override
+                public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
+                    G.handler.post(() -> {
+                        callbackEdtCodeNumber.set("+" + callingCode);
+                        if (pattern.equals("")) {
+                            edtPhoneNumberMask.set("##################");
+                        } else {
+                            edtPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
+                        }
+                        regex = regexR;
+                        btnStartBackgroundColor.set(Color.parseColor(G.appBarColor));
+                        btnStartEnable.set(true);
+                    });
+                }
 
-                G.onInfoCountryResponse = new OnInfoCountryResponse() {
-                    @Override
-                    public void onInfoCountryResponse(final int callingCode, final String name, final String pattern, final String regexR) {
-                        G.handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                callbackEdtCodeNumber.set("+" + callingCode);
-                                if (pattern.equals("")) {
-                                    FragmentRegister.edtPhoneNumber.setMask("##################");
-                                } else {
-                                    edtPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
-                                }
-                                regex = regexR;
-                                btnStartBackgroundColor.set(Color.parseColor(G.appBarColor));
-                                btnStartEnable.set(true);
-                            }
-                        });
-                    }
+                @Override
+                public void onError(int majorCode, int minorCode) {
+                    //empty
+                }
+            };
 
-                    @Override
-                    public void onError(int majorCode, int minorCode) {
-                        //empty
-                    }
-                };
+            new RequestInfoCountry().infoCountry(isoCode);
 
-                new RequestInfoCountry().infoCountry(isoCode);
-
-                callBackEdtPhoneNumber.set("");
-                dialogChooseCountry.dismiss();
-            }
+            callBackEdtPhoneNumber.set("");
+            dialogChooseCountry.dismiss();
         });
 
         if (!(G.fragmentActivity).isFinishing()) {
@@ -466,30 +462,31 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
     }
 
-    public void onClicksStart(View v) {
+    public void termsOnCheckChange(boolean isChecked) {
+        termsAndConditionIsChecked.set(isChecked);
+    }
 
+    public void onClicksStart() {
         if ((G.fragmentActivity).isFinishing()) {
             return;
         }
-
+        phoneNumber = callBackEdtPhoneNumber.get();
         if (callBackEdtPhoneNumber.get().length() > 0 && (regex.equals("") || (!regex.equals("") && callBackEdtPhoneNumber.get().replace("-", "").matches(regex)))) {
+            if (termsAndConditionIsChecked.get()) {
+                new DefaultRoundDialog(G.fragmentActivity).setMessage(G.fragmentActivity.getString(R.string.Re_dialog_verify_number_part1) + "\n" +
+                        callbackEdtCodeNumber.get() + "" + callBackEdtPhoneNumber.get() + "\n" + G.fragmentActivity.getString(R.string.Re_dialog_verify_number_part2)).setPositiveButton(R.string.B_ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        isVerify = true;
+                        checkVerify();
+                    }
+                }).setNegativeButton(R.string.B_edit, null).show();
 
-            phoneNumber = callBackEdtPhoneNumber.get();
+                /*dialogRegistration = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.rg_mdialog_text, true).positiveText(G.fragmentActivity.getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_edit)).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-            dialogRegistration = new MaterialDialog.Builder(G.fragmentActivity).customView(R.layout.rg_mdialog_text, true).positiveText(G.fragmentActivity.getResources().getString(R.string.B_ok)).negativeText(G.fragmentActivity.getResources().getString(R.string.B_edit)).onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                    //txtAgreement_register.setMovementMethod(new ScrollingMovementMethod());
-                    //txtAgreement_register.startAnimation(trans_x_out);
-
-                    if (FragmentRegister.onStartAnimationRegister != null)
-                        FragmentRegister.onStartAnimationRegister.start();
-
-                    G.handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-
+                        G.handler.postDelayed(() -> {
                             btnStartBackgroundColor.set(G.context.getResources().getColor(R.color.rg_background_verify));
                             btnStartColor.set(G.context.getResources().getColor(R.color.rg_border_editText));
                             btnChoseCountryEnable.set(false);
@@ -499,32 +496,30 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                             edtCodeNumberEnable.set(false);
                             edtCodeNumberColor.set(G.context.getResources().getColor(R.color.rg_border_editText));
                             txtAgreementVisibility.set(View.GONE);
-                            //layoutVerifyAgreement.set(View.VISIBLE);
-                            //layout_verify.startAnimation(trans_x_in);
                             isVerify = true;
                             checkVerify();
+                        }, 600);
 
-                        }
-                    }, 600);
+                    }
+                }).build();
+                View view = dialogRegistration.getCustomView();
+                assert view != null;
+                TextView phone = (TextView) view.findViewById(R.id.rg_dialog_txt_number);
+                phone.setText(callbackEdtCodeNumber.get() + "" + callBackEdtPhoneNumber.get());
 
-                }
-            }).build();
-
-            View view = dialogRegistration.getCustomView();
-            assert view != null;
-            TextView phone = (TextView) view.findViewById(R.id.rg_dialog_txt_number);
-            phone.setText(callbackEdtCodeNumber.get() + "" + callBackEdtPhoneNumber.get());
-
-            try {
-                dialogRegistration.show();
-            } catch (WindowManager.BadTokenException e) {
-                e.printStackTrace();
+                try {
+                    dialogRegistration.show();
+                } catch (WindowManager.BadTokenException e) {
+                    e.printStackTrace();
+                }*/
+            } else {
+                showConditionErrorDialog.setValue(true);
             }
         } else {
             if (!callBackEdtPhoneNumber.get().replace("-", "").matches(regex)) {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.Toast_Minimum_Characters).positiveText(R.string.B_ok).show();
+                new DefaultRoundDialog(G.fragmentActivity).setTitle(R.string.phone_number).setMessage(R.string.Toast_Minimum_Characters).setPositiveButton(R.string.B_ok, null).show();
             } else {
-                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.phone_number).content(R.string.please_enter_correct_phone_number).positiveText(R.string.B_ok).show();
+                new DefaultRoundDialog(G.fragmentActivity).setTitle(R.string.phone_number).setMessage(R.string.please_enter_correct_phone_number).setPositiveButton(R.string.B_ok, null).show();
             }
         }
     }
@@ -584,60 +579,50 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
     private void getInfo() {
         G.onSecurityCheckPassword = this;
         G.onRecoverySecurityPassword = this;
-
-        G.onPushLoginToken = new OnPushLoginToken() {
-            @Override
-            public void pushLoginToken(final String tokenQrCode, String userNameR, long userIdR, String authorHashR) {
-
-                token = tokenQrCode;
-                G.displayName = userName = userNameR;
-                G.userId = userId = userIdR;
-                G.authorHash = authorHash = authorHashR;
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (dialogQrCode != null && dialogQrCode.isShowing())
-                            dialogQrCode.dismiss();
-
-                        userLogin(token);
-                    }
-                });
-
-            }
+        G.onPushLoginToken = (tokenQrCode, userNameR, userIdR, authorHashR) -> {
+            token = tokenQrCode;
+            G.displayName = userName = userNameR;
+            G.userId = userId = userIdR;
+            G.authorHash = authorHash = authorHashR;
+            G.handler.post(() -> {
+                if (dialogQrCode != null && dialogQrCode.isShowing())
+                    dialogQrCode.dismiss();
+                userLogin(token);
+            });
         };
 
-        G.onPushTwoStepVerification = new OnPushTwoStepVerification() {
-            @Override
-            public void pushTwoStepVerification(String userNameR, long userIdR, String authorHashR) {
-
-                userName = userNameR;
-                userId = userIdR;
-                authorHash = authorHashR;
-
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (dialogQrCode != null && dialogQrCode.isShowing())
-                            dialogQrCode.dismiss();
-                    }
-                });
-                checkPassword("", true);
-            }
+        G.onPushTwoStepVerification = (userNameR, userIdR, authorHashR) -> {
+            userName = userNameR;
+            userId = userIdR;
+            authorHash = authorHashR;
+            G.handler.post(() -> {
+                if (dialogQrCode != null && dialogQrCode.isShowing())
+                    dialogQrCode.dismiss();
+            });
+            checkPassword("", true);
         };
+
+        G.handler.postDelayed(() -> {
+            if (G.isSecure) {
+                getTermsOfServiceBody();
+                ONETIME = 1;
+            } else {
+                getInfo();
+            }
+        }, 1000);
 
         CountryReader countryReade = new CountryReader();
         StringBuilder fileListBuilder = countryReade.readFromAssetsTextFile("country.txt", G.context);
 
         String list = fileListBuilder.toString();
         // Split line by line Into array
-        String listArray[] = list.split("\\r?\\n");
-        final String countryNameList[] = new String[listArray.length];
+        String[] listArray = list.split("\\r?\\n");
+        final String[] countryNameList = new String[listArray.length];
         //Convert array
-        for (int i = 0; listArray.length > i; i++) {
+        for (String s : listArray) {
             StructCountry structCountry = new StructCountry();
 
-            String listItem[] = listArray[i].split(";");
+            String[] listItem = s.split(";");
             structCountry.setCountryCode(listItem[0]);
             structCountry.setAbbreviation(listItem[1]);
             structCountry.setName(listItem[2]);
@@ -667,6 +652,60 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         }
     }
 
+    private void getTermsOfServiceBody() {
+        G.onReceivePageInfoTOS = new OnReceivePageInfoTOS() {
+            @Override
+            public void onReceivePageInfo(final String bodyR) {
+                body = bodyR;
+                getInfoLocation();
+            }
+            @Override
+            public void onError(int majorCode, int minorCode) {
+
+            }
+        };
+        new RequestInfoPage().infoPage("TOS");
+    }
+
+    private void getInfoLocation() {
+        G.onReceiveInfoLocation = new OnReceiveInfoLocation() {
+            @Override
+            public void onReceive(String isoCodeR, final int callingCodeR, final String countryNameR, String patternR, String regexR) {
+                locationFound = true;
+                isoCode = isoCodeR;
+                callingCode = callingCodeR;
+                countryName = countryNameR;
+                pattern = patternR;
+                regex = regexR;
+                G.handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callbackEdtCodeNumber.set("+" + callingCode);
+                        callbackBtnChoseCountry.set(countryName);
+                        if (pattern != null && !pattern.equals("")) {
+                            edtPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
+                        } else {
+                            edtPhoneNumberMask.set("##################");
+                        }
+                        Log.wtf("Register view model","value of body: "+body);
+                        if (body != null) {
+                            callbackTxtAgreement.set(Html.fromHtml(body).toString());
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(int majorCode, int minorCode) {
+                if (majorCode == 500 && minorCode == 1) {
+                    G.handler.post(() -> locationFound = false);
+                }
+            }
+        };
+
+        new RequestInfoLocation().infoLocation();
+    }
+
     public void saveInstance(Bundle savedInstanceState, Bundle argument) {
         if (savedInstanceState != null) { // TODO: 12/16/2017
             // Restore value of members from saved state
@@ -676,68 +715,30 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             callbackBtnChoseCountry.set(savedInstanceState.getString(KEY_SAVE_NAMECOUNTRY));
             callbackTxtAgreement.set(savedInstanceState.getString(KEY_SAVE_AGREEMENT));
             regex = (savedInstanceState.getString(KEY_SAVE_REGEX));
-        } else {
-            if (argument != null) {
-                isoCode = argument.getString("ISO_CODE");
-                callbackEdtCodeNumber.set("+" + argument.getInt("CALLING_CODE"));
-                callbackBtnChoseCountry.set(argument.getString("COUNTRY_NAME"));
-                String pattern = argument.getString("PATTERN");
-
-                if (pattern != null && !pattern.equals("")) {
-                    edtPhoneNumberMask.set(pattern.replace("X", "#").replace(" ", "-"));
-                } else {
-                    edtPhoneNumberMask.set("##################");
-                }
-                regex = argument.getString("REGEX");
-                String body = argument.getString("TERMS_BODY");
-                if (body != null) {
-                    callbackTxtAgreement.set(Html.fromHtml(body).toString());
-                }
+            ONETIME = savedInstanceState.getInt(KEY_SAVE);
+            if (ONETIME != 1) {
+                getInfo();
             }
+        } else {
+            getInfo();
         }
     }
 
     //======= process verify : check internet and sms
     private void checkVerify() {
-
         prgVerifyConnectVisibility.set(View.VISIBLE);
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                if (G.socketConnection) { //connection ok
-                    //                        if (checkInternet()) { //connection ok
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            btnStartEnable.set(false);
-                            userRegister();
-                        }
-                    });
-                } else { // connection error
-                    G.handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            edtPhoneNumberEnable.set(true);
-                            prgVerifyConnectVisibility.set(View.GONE);
-                            callBackTxtIconVerifyConnect.set(G.context.getResources().getString(R.string.md_igap_alert));
-                            txtIconVerifyConnectColor.set(G.context.getResources().getColor(R.color.rg_error_red));
-                            txtIconVerifyConnectVisibility.set(View.VISIBLE);
-                            txtVerifyTimerColor.set(G.context.getResources().getColor(R.color.rg_error_red));
-                            callBackTxtVerifyTimer.set(G.context.getResources().getString(R.string.please_check_your_connenction));
-
-                        }
-                    });
-                }
-            }
-        });
-        thread.start();
+        if (G.socketConnection) { //connection ok
+            btnStartEnable.set(false);
+            userRegister();
+        } else { // connection error
+            edtPhoneNumberEnable.set(true);
+            new DefaultRoundDialog(G.fragmentActivity).setTitle(R.string.error).setMessage(R.string.please_check_your_connenction).setPositiveButton(R.string.ok, null).show();
+        }
     }
 
     // error verify sms and open rg_dialog for enter sms code
     private void errorVerifySms(FragmentRegister.Reason reason) { //when don't receive sms and open rg_dialog for enter code
-        if (G.userLogin || G.currentActivity != null && G.currentActivity instanceof ActivityMain) {
+        if (G.userLogin || G.currentActivity instanceof ActivityMain) {
             return;
         }
 
@@ -755,11 +756,11 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             dialog.setContentView(R.layout.rg_dialog_verify_code);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setCancelable(false);
-            edtEnterCodeVerify = (EditText) dialog.findViewById(R.id.rg_edt_dialog_verifyCode); //EditText For Enter sms cod
-            txtShowReason = (TextView) dialog.findViewById(R.id.txt_show_reason);
-            btnEnterManuallyCode = (TextView) dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
-            txtTimer = (TextView) dialog.findViewById(R.id.remindTime);
-            btnResondCode = (TextView) dialog.findViewById(R.id.rg_btn_dialog_okVerifyCode);// resend code
+            edtEnterCodeVerify = dialog.findViewById(R.id.rg_edt_dialog_verifyCode); //EditText For Enter sms cod
+            txtShowReason = dialog.findViewById(R.id.txt_show_reason);
+            btnEnterManuallyCode = dialog.findViewById(R.id.rg_btn_cancelVerifyCode);
+            txtTimer = dialog.findViewById(R.id.remindTime);
+            btnResondCode = dialog.findViewById(R.id.rg_btn_dialog_okVerifyCode);// resend code
         }
 
         edtEnterCodeVerify.setText("");
@@ -822,7 +823,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         if (isNeedTimer) {
             txtTimer.setVisibility(View.VISIBLE);
             counterTimer(txtTimer, btnResondCode);
-
         } else {
             txtTimer.setVisibility(View.INVISIBLE);
         }
@@ -871,50 +871,32 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
         countDownTimer.start();
     }
 
-    private void startRegister(View v) {
-        userRegister();
-        dialog.dismiss();
-        InputMethodManager imm = (InputMethodManager) G.context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-        }
-    }
-
     private void userRegister() {
-
         G.onUserRegistration = new OnUserRegistration() {
-
             @Override
             public void onRegister(final String userNameR, final long userIdR, final ProtoUserRegister.UserRegisterResponse.Method methodValue, final List<Long> smsNumbersR, String regex, int verifyCodeDigitCount, final String authorHashR, boolean callMethodSupported) {
+                Log.wtf("view model", "onRegister");
                 G.onUserRegistration = null;
                 isCallMethodSupported = callMethodSupported;
                 digitCount = verifyCodeDigitCount;
-//                countDownTimer.start();
                 regexFetchCodeVerification = regex;
-                G.handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        txtVerifyTimerVisibility.set(View.VISIBLE);
-
-                        userName = userNameR;
-                        userId = userIdR;
-                        authorHash = authorHashR;
-                        G.smsNumbers = smsNumbersR;
-
-                        if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {
-                            errorVerifySms(FragmentRegister.Reason.SOCKET);
-//                            countDownTimer.cancel();
-                        } else {
-                            errorVerifySms(FragmentRegister.Reason.TIME_OUT); // open rg_dialog for enter sms code
-                        }
-                        prgVerifyConnectVisibility.set(View.GONE);
-                        txtIconVerifyConnectVisibility.set(View.VISIBLE);
-                        imgVerifySmsVisibility.set(View.GONE);
-                        txtVerifyConnectColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
-                        prgVerifySmsVisibility.set(View.VISIBLE);
-
-                    }
+                G.handler.post(() -> {
+                    txtVerifyTimerVisibility.set(View.VISIBLE);
+                    userName = userNameR;
+                    userId = userIdR;
+                    authorHash = authorHashR;
+                    G.smsNumbers = smsNumbersR;
+                    /*if (methodValue == ProtoUserRegister.UserRegisterResponse.Method.VERIFY_CODE_SOCKET) {
+                        errorVerifySms(FragmentRegister.Reason.SOCKET);
+                    } else {
+                        errorVerifySms(FragmentRegister.Reason.TIME_OUT); // open rg_dialog for enter sms code
+                    }*/
+                    goNextStep.setValue(true);
+                    /*prgVerifyConnectVisibility.set(View.GONE);
+                    txtIconVerifyConnectVisibility.set(View.VISIBLE);
+                    imgVerifySmsVisibility.set(View.GONE);
+                    txtVerifyConnectColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
+                    prgVerifySmsVisibility.set(View.VISIBLE);*/
                 });
             }
 
@@ -947,14 +929,14 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                new MaterialDialog.Builder(G.fragmentActivity).title(R.string.USER_VERIFY_BLOCKED_USER).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();
+                                new DefaultRoundDialog(G.fragmentActivity).setTitle(R.string.USER_VERIFY_BLOCKED_USER).setMessage(R.string.Toast_Number_Block).setPositiveButton(R.string.B_ok, null).show();
+                                /*new MaterialDialog.Builder(G.fragmentActivity).title(R.string.USER_VERIFY_BLOCKED_USER).content(R.string.Toast_Number_Block).positiveText(R.string.B_ok).show();*/
                             }
                         });
                     } else if (majorCode == 136) {
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-
                                 dialogWaitTime(R.string.USER_VERIFY_MANY_TRIES, time, majorCode);
                             }
                         });
@@ -962,7 +944,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                         G.handler.post(new Runnable() {
                             @Override
                             public void run() {
-
                                 dialogWaitTime(R.string.USER_VERIFY_MANY_TRIES_SEND, time, majorCode);
                             }
                         });
@@ -998,12 +979,9 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
             return;
         }
 
-
-        boolean wrapInScrollView = true;
-        dialogWait = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, wrapInScrollView).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).cancelable(false).onPositive(new MaterialDialog.SingleButtonCallback() {
+        dialogWait = new MaterialDialog.Builder(G.fragmentActivity).title(title).customView(R.layout.dialog_remind_time, true).positiveText(R.string.B_ok).autoDismiss(false).canceledOnTouchOutside(false).cancelable(false).onPositive(new MaterialDialog.SingleButtonCallback() {
             @Override
             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
                 btnStartBackgroundColor.set(Color.parseColor(G.appBarColor));
                 btnStartColor.set(G.context.getResources().getColor(R.color.white));
                 btnStartEnable.set(true);
@@ -1275,6 +1253,7 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                             G.handler.post(new Runnable() {
                                 @Override
                                 public void run() {
+                                    //TODO: change this part
                                     FragmentRegistrationNickname fragment = new FragmentRegistrationNickname();
                                     Bundle bundle = new Bundle();
                                     bundle.putLong(FragmentRegistrationNickname.ARG_USER_ID, userId);
@@ -1299,7 +1278,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                     G.handler.post(new Runnable() {
                         @Override
                         public void run() {
-
                             HelperLogout.logout();
                         }
                     });
@@ -1405,35 +1383,6 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
                 }
             }, 1000);
         }
-    }
-
-    public void receiveVerifySms(String message) {
-
-
-        G.handler.post(new Runnable() {
-            @Override
-            public void run() {
-
-
-                verifyCode = HelperString.regexExtractValue(message, regexFetchCodeVerification);
-//        countDownTimer.cancel(); //cancel method CountDown and continue process verify
-
-                prgVerifySmsVisibility.set(View.GONE);
-                imgVerifySmsVisibility.set(View.VISIBLE);
-                txtVerifySmsColor.set(G.context.getResources().getColor(R.color.rg_text_verify));
-
-                if (dialog != null && dialog.isShowing()) {
-                    if (edtEnterCodeVerify != null) {
-                        edtEnterCodeVerify.setText(verifyCode);
-                    }
-                    if (btnEnterManuallyCode != null) {
-                        btnEnterManuallyCode.performClick();
-                    }
-                    dialog.dismiss();
-                }
-//        userVerify(userName, verificationCode);
-            }
-        });
     }
 
     private void closeKeyboard(final View v) {
@@ -1661,18 +1610,16 @@ public class FragmentRegisterViewModel implements OnSecurityCheckPassword, OnRec
 
         FragmentRegister.positionRadioButton = structCountry.getId();
 
-        FragmentRegister.edtCodeNumber.setText(("+ " + structCountry.getCountryCode()));
+        callbackEdtCodeNumber.set("+ " + structCountry.getCountryCode());
 
         if (structCountry.getPhonePattern() != null || structCountry.getPhonePattern().equals(" ")) {
-            FragmentRegister.edtPhoneNumber.setMask((structCountry.getPhonePattern().replace("X", "#").replace(" ", "-")));
+            edtPhoneNumberMask.set((structCountry.getPhonePattern().replace("X", "#").replace(" ", "-")));
         } else {
             FragmentRegister.edtPhoneNumber.setMaxLines(18);
-            FragmentRegister.edtPhoneNumber.setMask("##################");
+            edtPhoneNumberMask.set("##################");
         }
 
-        FragmentRegister.btnChoseCountry.setText(structCountry.getName());
-
-
+        callbackBtnChoseCountry.set(structCountry.getName());
     }
 
     public enum Reason {

@@ -19,7 +19,6 @@
         android:id="@+id/ac_layout_call_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@{activityCallViewModel.changeColor ? @color/incomingCallUserImageLayerEnd : @color/callingUserImageLayerEnd}"
         android:layoutDirection="ltr">
 
         <LinearLayout
@@ -36,6 +35,7 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/v"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintRight_toRightOf="parent"
@@ -79,7 +79,6 @@
             android:id="@+id/fcr_imv_background_layer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@{activityCallViewModel.changeColor ? @drawable/incoming_call_person_image_layer : @drawable/calling_person_image_layer}"
             app:layout_constraintBottom_toBottomOf="@id/fcr_imv_background"
             app:layout_constraintLeft_toLeftOf="@id/fcr_imv_background"
             app:layout_constraintRight_toRightOf="@id/fcr_imv_background"
@@ -163,10 +162,12 @@
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_end"
             app:layout_constraintTop_toTopOf="@id/fcr_btn_end" />
 
-        <android.support.v7.widget.AppCompatButton
+        <android.support.design.button.MaterialButton
             android:id="@+id/fcr_btn_end"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="@string/md_call_end"
             android:textAppearance="@style/TextIconAppearance.all"
             android:textColor="@color/white"
@@ -178,10 +179,12 @@
             app:layout_constraintTop_toBottomOf="@id/callInfo"
             app:layout_constraintWidth_percent=".4" />
 
-        <android.support.v7.widget.AppCompatButton
+        <android.support.design.button.MaterialButton
             android:id="@+id/fcr_btn_call"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="@string/md_phone"
             android:textAppearance="@style/TextIconAppearance.all"
             android:textColor="@color/white"
@@ -207,15 +210,17 @@
             app:layout_constraintTop_toTopOf="@id/fcr_btn_end" />
 
 
-        <android.support.v7.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/fcr_btn_chat"
-            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
             android:onClick="@{activityCallViewModel::onClickBtnChat}"
             android:text="@string/md_chat"
             android:textAppearance="@style/TextIconAppearance.all"
-            android:textColor="@{activityCallViewModel.changeColor ? @color/white : @color/incomingCallUserImageLayerEnd}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -234,15 +239,17 @@
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_mic"
             app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
 
-        <android.support.v7.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/fcr_btn_mic"
-            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
             android:onClick="@{activityCallViewModel::onClickBtnMic}"
             android:text="@{activityCallViewModel.cllBackBtnMic , default = @string/md_mic}"
             android:textAppearance="@style/TextIconAppearance.all"
-            android:textColor="@{activityCallViewModel.changeColor ? @color/white : @color/incomingCallUserImageLayerEnd}"
             app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
             app:layout_constraintLeft_toRightOf="@id/fcr_btn_chat"
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_speaker"
@@ -260,11 +267,14 @@
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_speaker"
             app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
 
-        <android.support.v7.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/fcr_btn_speaker"
-            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
             android:onClick="@{activityCallViewModel::onClickBtnSpeaker}"
             android:text="@{activityCallViewModel.cllBackBtnSpeaker , default = @string/md_Mute}"
             android:textAppearance="@style/TextIconAppearance.all"
@@ -286,15 +296,18 @@
             app:layout_constraintRight_toLeftOf="@id/fcr_btn_swich_camera"
             app:layout_constraintTop_toTopOf="@id/fcr_btn_chat" />
 
-        <android.support.v7.widget.AppCompatButton
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/fcr_btn_swich_camera"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center"
             android:onClick="@{activityCallViewModel::onClickBtnSwitchCamera}"
             android:text="@string/md_swich_video"
             android:textAppearance="@style/TextIconAppearance.all"
-            android:textColor="@{activityCallViewModel.changeColor ? @color/white : @color/incomingCallUserImageLayerEnd}"
             app:layout_constraintBottom_toBottomOf="@id/fcr_btn_chat"
             app:layout_constraintLeft_toRightOf="@id/fcr_btn_speaker"
             app:layout_constraintRight_toRightOf="parent"

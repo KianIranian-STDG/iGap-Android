@@ -79,6 +79,7 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
     public ObservableInt layoutChatCallVisibility = new ObservableInt(View.VISIBLE);
     public ObservableInt layoutAnswerCallVisibility = new ObservableInt(View.VISIBLE);
     public MutableLiveData<Boolean> changeColor = new MutableLiveData<>();
+    public MutableLiveData<Boolean> videoCallConnected = new MutableLiveData<>();
     private boolean isIncomingCall = false;
     private long userId;
     private boolean isSendLeave = false;
@@ -121,7 +122,8 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
         } catch (Exception e) {
         }
 
-        changeColor.setValue(true);
+        changeColor.setValue(isIncomingCall);
+        videoCallConnected.setValue(false);
 
         getInfo();
 
@@ -345,6 +347,9 @@ public class ActivityCallViewModel implements BluetoothProfile.ServiceListener {
                             playSound(R.raw.igap_connect);
                             G.handler.postDelayed(() -> {
                                 changeColor.setValue(false);
+                                if (callTYpe == ProtoSignalingOffer.SignalingOffer.Type.VIDEO_CALLING) {
+                                    videoCallConnected.setValue(true);
+                                }
                                 cancelRingtone();
                                 startTimer();
                             }, 350);

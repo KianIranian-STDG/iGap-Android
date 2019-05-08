@@ -10,6 +10,7 @@
 
 package net.iGap.activities;
 
+import android.arch.lifecycle.Observer;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothProfile;
@@ -25,7 +26,12 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintSet;
+import android.support.design.button.MaterialButton;
+import android.support.transition.TransitionManager;
 import android.support.v7.widget.AppCompatButton;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -81,8 +87,8 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
     boolean canClick = false;
     boolean canTouch = false;
     boolean down = false;
-    AppCompatButton btnEndCall;
-    AppCompatButton btnAnswer;
+    MaterialButton btnEndCall;
+    MaterialButton btnAnswer;
     MediaPlayer player;
     MediaPlayer ringtonePlayer;
     SensorEventListener sensorEventListener;
@@ -313,6 +319,57 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
         if (!isIncomingCall) {
             WebRTC.getInstance().createOffer(userId);
         }
+        activityCallViewModel.changeColor.observe(this, aBoolean -> {
+            ConstraintSet set = new ConstraintSet();
+            set.clone(activityCallBinding.acLayoutCallRoot);
+            if (aBoolean) {
+                set.connect(activityCallBinding.fcrBtnEnd.getId(), ConstraintSet.BOTTOM, 0, ConstraintSet.BOTTOM);
+                set.connect(activityCallBinding.fcrBtnEnd.getId(), ConstraintSet.TOP, activityCallBinding.fcrBtnChat.getId(), ConstraintSet.BOTTOM);
+                set.connect(activityCallBinding.fcrBtnChat.getId(), ConstraintSet.BOTTOM, activityCallBinding.fcrBtnEnd.getId(), ConstraintSet.TOP);
+                set.connect(activityCallBinding.fcrBtnChat.getId(), ConstraintSet.TOP, activityCallBinding.callInfo.getId(), ConstraintSet.BOTTOM);
+                set.connect(activityCallBinding.callInfo.getId(), ConstraintSet.BOTTOM, activityCallBinding.fcrBtnChat.getId(), ConstraintSet.TOP);
+                set.connect(activityCallBinding.fcrImvBackground.getId(), ConstraintSet.BOTTOM, activityCallBinding.fcrBtnEnd.getId(), ConstraintSet.TOP);
+                activityCallBinding.acLayoutCallRoot.setBackgroundColor(getResources().getColor(R.color.incomingCallUserImageLayerEnd));
+                activityCallBinding.fcrImvBackgroundLayer.setBackgroundResource(R.drawable.incoming_call_person_image_layer);
+                activityCallBinding.fcrBtnChat.setTextColor(getResources().getColor(R.color.white));
+                activityCallBinding.fcrBtnMic.setTextColor(getResources().getColor(R.color.white));
+                activityCallBinding.fcrBtnSpeaker.setTextColor(getResources().getColor(R.color.white));
+                activityCallBinding.fcrBtnSwichCamera.setTextColor(getResources().getColor(R.color.white));
+                activityCallBinding.t4.setBackgroundResource(R.color.white);
+                activityCallBinding.t3.setBackgroundResource(R.color.white);
+                activityCallBinding.t2.setBackgroundResource(R.color.white);
+            } else {
+                set.connect(activityCallBinding.fcrBtnEnd.getId(), ConstraintSet.BOTTOM, activityCallBinding.fcrBtnChat.getId(), ConstraintSet.TOP);
+                set.connect(activityCallBinding.fcrBtnEnd.getId(), ConstraintSet.TOP, activityCallBinding.callInfo.getId(), ConstraintSet.BOTTOM);
+                set.connect(activityCallBinding.fcrBtnChat.getId(), ConstraintSet.BOTTOM, 0, ConstraintSet.BOTTOM);
+                set.connect(activityCallBinding.fcrBtnChat.getId(), ConstraintSet.TOP, activityCallBinding.fcrBtnEnd.getId(), ConstraintSet.BOTTOM);
+                set.connect(activityCallBinding.callInfo.getId(), ConstraintSet.BOTTOM, activityCallBinding.fcrBtnEnd.getId(), ConstraintSet.TOP);
+                set.connect(activityCallBinding.fcrImvBackground.getId(), ConstraintSet.BOTTOM, activityCallBinding.fcrBtnChat.getId(), ConstraintSet.TOP);
+                activityCallBinding.acLayoutCallRoot.setBackgroundColor(getResources().getColor(R.color.callingUserImageLayerEnd));
+                activityCallBinding.fcrImvBackgroundLayer.setBackgroundResource(R.drawable.calling_person_image_layer);
+                activityCallBinding.fcrBtnChat.setTextColor(getResources().getColor(R.color.incomingCallUserImageLayerEnd));
+                activityCallBinding.fcrBtnMic.setTextColor(getResources().getColor(R.color.incomingCallUserImageLayerEnd));
+                activityCallBinding.fcrBtnSpeaker.setTextColor(getResources().getColor(R.color.incomingCallUserImageLayerEnd));
+                activityCallBinding.fcrBtnSwichCamera.setTextColor(getResources().getColor(R.color.incomingCallUserImageLayerEnd));
+                activityCallBinding.t4.setBackgroundResource(R.color.incomingCallUserImageLayerEnd);
+                activityCallBinding.t3.setBackgroundResource(R.color.incomingCallUserImageLayerEnd);
+                activityCallBinding.t2.setBackgroundResource(R.color.incomingCallUserImageLayerEnd);
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                TransitionManager.beginDelayedTransition(activityCallBinding.acLayoutCallRoot);
+                set.applyTo(activityCallBinding.acLayoutCallRoot);
+            } else {
+                set.applyTo(activityCallBinding.acLayoutCallRoot);
+            }
+        });
+        activityCallViewModel.videoCallConnected.observe(this, aBoolean -> {
+            if (aBoolean) {
+                activityCallBinding.fcrSurfaceRemote.setVisibility(View.VISIBLE);
+            } else {
+                activityCallBinding.fcrSurfaceRemote.setVisibility(View.GONE);
+            }
+        });
     }
 
     //***************************************************************************************
@@ -340,7 +397,7 @@ public class ActivityCall extends ActivityEnhanced implements OnCallLeaveView, O
             activityCallBinding.fcrSurfaceRemote.init(rootEglBase.getEglBaseContext(), null);
             activityCallBinding.fcrSurfaceRemote.setEnableHardwareScaler(true);
             activityCallBinding.fcrSurfaceRemote.setMirror(false);
-            activityCallBinding.fcrSurfaceRemote.setVisibility(View.VISIBLE);
+            /*activityCallBinding.fcrSurfaceRemote.setVisibility(View.VISIBLE);*/
 
             activityCallBinding.fcrImvBackground.setVisibility(View.VISIBLE);
             /*activityCallBinding.fcrTxtCallType.setText(getResources().getString(R.string.video_calls));*/

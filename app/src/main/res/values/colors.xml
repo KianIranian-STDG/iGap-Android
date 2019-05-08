@@ -176,6 +176,14 @@
   <color name="colorToolbarBackgroundStart">#B9E244</color>
   <color name="toolbar_search_box_bg">#D8D8D8</color>
   <color name="toolbar_search_box_txt_color">#7E7E7E</color>
+
+  <!-- New Color-->
+  <color name="buttonColor">#57BA26</color>
+  <color name="buttonTextColor">#FFFFFF</color>
+  <color name="circleIndicator">#BFE26C</color>
+  <color name="circleIndicatorSelected">#42B120</color>
+  <color name="introductionBackgroundEnd">#FEFFEF</color>
+  <color name="termsAndConditionTitle">#5FBD31</color>
   <color name="ivand_green_text_color">#45B321</color>
 
 </resources>
