@@ -118,6 +118,13 @@ public class ShowCustomList extends BaseFragment implements ToolbarListener {
         toolbarLayout.addView(mHelperToolbar.getView());
         mHelperToolbar.getTextViewLogo().setText(G.context.getResources().getString(R.string.add_new_member));
 
+        TextView btnInviteViaLink = view.findViewById(R.id.fcg_lbl_add_member);
+        btnInviteViaLink.setText(G.context.getResources().getString(R.string.channel_link_hint_revoke));
+        btnInviteViaLink.setOnClickListener( v -> {
+
+            //Todo : add action for inviting member
+        });
+
         //edtSearch = (EditText) view.findViewById(R.id.fcg_edt_search);
         chipsInput = (ChipsInput) view.findViewById(R.id.chips_input);
 
