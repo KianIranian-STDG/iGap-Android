@@ -1460,4 +1460,6 @@
     <string name="ivnalid_data_provided">مقادیر ورودی اشتباه است.</string>
     <string name="new_message_notif">پیام جدید</string>
     <string name="change_language_title">تغییر زبان برنامه</string>
+    <string name="terms_condition_title">قوانین و مقررات</string>
+    <string name="welcome_title">به آیگپ خوش آمدید</string>
 </resources>

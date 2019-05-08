@@ -178,4 +178,5 @@
   <color name="circleIndicator">#BFE26C</color>
   <color name="circleIndicatorSelected">#42B120</color>
   <color name="introductionBackgroundEnd">#FEFFEF</color>
+  <color name="termsAndConditionTitle">#5FBD31</color>
 </resources>

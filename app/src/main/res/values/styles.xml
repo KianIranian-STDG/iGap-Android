@@ -730,4 +730,8 @@
     <item name="android:textSize">@dimen/dp16</item>
   </style>
 
+  <style name="MyAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <item name="android:background">@drawable/dialog_background</item>
+  </style>
+
 </resources>

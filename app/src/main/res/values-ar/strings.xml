@@ -2401,4 +2401,6 @@
     <string name="ivnalid_data_provided">قيم الإدخال غير صحيحة.</string>
     <string name="new_message_notif">پیام جدید</string>
     <string name="change_language_title">غير اللغة</string>
+    <string name="terms_condition_title">قوانین و مقررات</string>
+    <string name="welcome_title">Welcome To IGap</string>
 </resources>
