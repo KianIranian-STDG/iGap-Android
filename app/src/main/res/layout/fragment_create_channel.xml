@@ -25,14 +25,13 @@
     tools:ignore="MissingPrefix">
 
 
-    <android.support.design.widget.AppBarLayout
+    <!--<android.support.design.widget.AppBarLayout
       android:id="@+id/fch_backgroundToolbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}">
 
       <android.support.v7.widget.Toolbar
-
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp60"
         android:layout_alignParentLeft="true"
@@ -43,12 +42,14 @@
         app:contentInsetStart="0dp"
         app:layout_collapseMode="pin">
 
-        <RelativeLayout
+        <LinearLayout
+          android:orientation="horizontal"
+          android:id="@+id/fch_layout_toolbar"
           android:layout_width="match_parent"
           android:layout_height="match_parent">
 
 
-          <TextView
+        &lt;!&ndash;  <TextView
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -83,44 +84,38 @@
               android:textColor="@color/whit_background" />
 
           </net.iGap.libs.rippleeffect.RippleView>
-
-        </RelativeLayout>
+&ndash;&gt;
+        </LinearLayout>
       </android.support.v7.widget.Toolbar>
 
 
-    </android.support.design.widget.AppBarLayout>
+    </android.support.design.widget.AppBarLayout>-->
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/fch_layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height_root_with_search">
+
+    </LinearLayout>
 
     <ScrollView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignParentLeft="true"
       android:layout_alignParentStart="true"
-      android:layout_below="@+id/fch_backgroundToolbar">
+      android:layout_below="@+id/fch_layout_toolbar">
 
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-        <net.iGap.module.HeaderTextView
-          fontPath="fonts/IRANSansMobile_Bold.ttf"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:gravity="center"
-          android:paddingBottom="@dimen/dp16"
-          android:paddingTop="@dimen/dp12"
-          android:text="@string/st_Info"
-          android:textColor="@{Color.parseColor(G.appBarColor),default=@color/toolbar_background}"
-          android:textSize="@dimen/dp18"
-          android:textStyle="bold" />
-
         <RadioGroup
           android:id="@+id/fch_radioGroup"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="12dp"
+          android:layout_marginTop="@dimen/dp10"
           android:onCheckedChanged="@{fragmentCreateChannelViewModel::isRadioGroup}"
           android:paddingEnd="@dimen/dp12"
           android:paddingLeft="@dimen/dp12"
@@ -176,24 +171,24 @@
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_below="@id/fch_radioGroup"
           style="?backgroundColorSettingTheme_2"
           android:orientation="vertical"
-          android:padding="@dimen/dp8"
+          android:padding="@dimen/dp8">
 
-          >
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:background="@color/gray"/>
 
-          <net.iGap.module.HeaderTextView
+          <net.iGap.module.MaterialDesignTextView
             fontPath="fonts/IRANSansMobile_Bold.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:paddingBottom="@dimen/dp16"
             android:paddingTop="@dimen/dp12"
-            android:text="@string/st_Info"
-            android:textColor="@color/green"
-            android:textSize="@dimen/dp18"
-            android:textStyle="bold" />
+            android:text="@string/permanent_link"
+            android:textColor="@color/black"
+            android:textSize="@dimen/dp15" />
 
 
           <LinearLayout
@@ -228,14 +223,15 @@
 
             </android.support.design.widget.TextInputLayout>
 
-
           </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/dp8"
+          android:visibility="gone"
           android:gravity="right|center_horizontal"
           android:layoutDirection="ltr"
           android:padding="@dimen/dp20">

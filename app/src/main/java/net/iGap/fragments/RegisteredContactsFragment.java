@@ -574,11 +574,19 @@ public class RegisteredContactsFragment extends BaseFragment implements ToolbarL
 
         btnAddNewGroup.setOnClickListener( v -> {
 
+            /*try {
+                G.fragmentActivity.onBackPressed();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }*/
+
             FragmentNewGroup fragment = FragmentNewGroup.newInstance();
             Bundle bundle_ = new Bundle();
             bundle_.putString("TYPE", "NewGroup");
             fragment.setArguments(bundle_);
             new HelperFragment(fragment).setReplace(false).load();
+
+
 
         });
 
