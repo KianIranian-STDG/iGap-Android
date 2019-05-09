@@ -557,7 +557,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
         setContentView(R.layout.activity_main);
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
 
         if (G.isAppRtl) {
             ViewCompat.setLayoutDirection(drawer, ViewCompat.LAYOUT_DIRECTION_RTL);
@@ -566,28 +566,20 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
 
-        frameChatContainer = (FrameLayout) findViewById(R.id.am_frame_chat_container);
+        frameChatContainer = findViewById(R.id.am_frame_chat_container);
         frameMainContainer = findViewById(R.id.am_frame_main_container);
 
         if (G.twoPaneMode) {
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                G.isLandscape = true;
-            } else {
-                G.isLandscape = false;
-            }
+            G.isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
-            frameFragmentBack = (FrameLayout) findViewById(R.id.am_frame_fragment_back);
-            frameFragmentContainer = (FrameLayout) findViewById(R.id.am_frame_fragment_container);
+            frameFragmentBack = findViewById(R.id.am_frame_fragment_back);
+            frameFragmentContainer = findViewById(R.id.am_frame_fragment_container);
 
             G.oneFragmentIsOpen = new OneFragmentIsOpen() {
                 @Override
                 public void justOne() {
 
-                    if (frameFragmentContainer.getChildCount() == 0) {
-                        disableSwipe = true;
-                    } else {
-                        disableSwipe = false;
-                    }
+                    disableSwipe = frameFragmentContainer.getChildCount() == 0;
 
 
                 }
@@ -624,11 +616,8 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 @Override
                 public boolean getBackChatVisibility() {
 
-                    if (frameFragmentBack != null && frameFragmentBack.getVisibility() == View.VISIBLE) {
-                        return true;
-                    }
+                    return frameFragmentBack != null && frameFragmentBack.getVisibility() == View.VISIBLE;
 
-                    return false;
                 }
 
                 @Override
@@ -666,7 +655,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         mTracker.setScreenName("RoomList");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
-        mediaLayout = (LinearLayout) findViewById(R.id.amr_ll_music_layout);
+        mediaLayout = findViewById(R.id.amr_ll_music_layout);
 
         MusicPlayer.setMusicPlayer(mediaLayout);
         MusicPlayer.mainLayout = mediaLayout;
@@ -674,10 +663,10 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         ActivityCall.stripLayoutMain = findViewById(R.id.am_ll_strip_call);
 
 
-        appBarLayout = (MyAppBarLayout) findViewById(R.id.appBarLayout);
+        appBarLayout = findViewById(R.id.appBarLayout);
         ((CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams()).setBehavior(new FixAppBarLayoutBehavior());
 
-        final ViewGroup toolbar = (ViewGroup) findViewById(R.id.rootToolbar);
+        final ViewGroup toolbar = findViewById(R.id.rootToolbar);
 
         appBarLayout.addOnMoveListener(new MyAppBarLayout.OnMoveListener() {
             @Override
@@ -1123,7 +1112,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void initFloatingButtonCreateNew() {
-        arcMenu = (ArcMenu) findViewById(R.id.ac_arc_button_add);
+        arcMenu = findViewById(R.id.ac_arc_button_add);
         arcMenu.setStateChangeListener(new StateChangeListener() {
             @Override
             public void onMenuOpened() {
@@ -1136,7 +1125,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        btnStartNewChat = (FloatingActionButton) findViewById(R.id.ac_fab_start_new_chat);
+        btnStartNewChat = findViewById(R.id.ac_fab_start_new_chat);
         btnStartNewChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1163,7 +1152,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        btnCreateNewGroup = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_group);
+        btnCreateNewGroup = findViewById(R.id.ac_fab_crate_new_group);
         btnCreateNewGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1184,7 +1173,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        btnCreateNewChannel = (FloatingActionButton) findViewById(R.id.ac_fab_crate_new_channel);
+        btnCreateNewChannel = findViewById(R.id.ac_fab_crate_new_channel);
         btnCreateNewChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1205,44 +1194,41 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        arcMenu.fabMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        arcMenu.fabMenu.setOnClickListener(v -> {
 
-                if (mViewPager == null || mViewPager.getAdapter() == null) {
-                    return;
-                }
+            if (mViewPager == null || mViewPager.getAdapter() == null) {
+                return;
+            }
 
-                try {
+            try {
 
-                    FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
-                    if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
+                FragmentPagerAdapter adapter = (FragmentPagerAdapter) mViewPager.getAdapter();
+                if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentMain) {
 
-                        FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
-                        switch (fm.mainType) {
+                    FragmentMain fm = (FragmentMain) adapter.getItem(mViewPager.getCurrentItem());
+                    switch (fm.mainType) {
 
-                            case all:
-                                //arcMenu.toggleMenu();
-                                btnStartNewChat.performClick();
+                        case all:
+                            //arcMenu.toggleMenu();
+                            btnStartNewChat.performClick();
 
-                                break;
-                            case chat:
-                                btnStartNewChat.performClick();
-                                break;
-                            case group:
-                                btnCreateNewGroup.performClick();
-                                break;
-                            case channel:
-                                btnCreateNewChannel.performClick();
-                                break;
-                        }
-                    } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
-
-                        ((FragmentCall) adapter.getItem(mViewPager.getCurrentItem())).showContactListForCall();
+                            break;
+                        case chat:
+                            btnStartNewChat.performClick();
+                            break;
+                        case group:
+                            btnCreateNewGroup.performClick();
+                            break;
+                        case channel:
+                            btnCreateNewChannel.performClick();
+                            break;
                     }
-                } catch (Exception e) {
-                    HelperLog.setErrorLog(" Activity main   arcMenu.fabMenu.setOnClickListener   " + e.toString());
+                } else if (adapter.getItem(mViewPager.getCurrentItem()) instanceof FragmentCall) {
+
+                    ((FragmentCall) adapter.getItem(mViewPager.getCurrentItem())).showContactListForCall();
                 }
+            } catch (Exception e) {
+                HelperLog.setErrorLog(" Activity main   arcMenu.fabMenu.setOnClickListener   " + e.toString());
             }
         });
     }
@@ -1297,64 +1283,6 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             @Override
             public void run() {
 
-                if (mViewPager == null || mViewPager.getAdapter() == null || mViewPager.getAdapter().getCount() == 0) {
-                    return;
-                }
-
-                int index = 0;
-
-                if (G.selectedTabInMainActivity.length() > 0) {
-
-                    if (HelperCalander.isPersianUnicode) {
-
-                        if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
-                            index = 2;
-                        } else if (DiscoveryFragment.class.toString().contains(G.selectedTabInMainActivity)) {
-                            index = 1;
-                        } else if (FragmentCall.class.toString().contains(G.selectedTabInMainActivity)) {
-                            index = 0;
-                        }
-
-                    } else {
-
-                        if (G.selectedTabInMainActivity.equals(FragmentMain.MainType.all.toString())) {
-                            index = 0;
-                        } else if (DiscoveryFragment.class.toString().contains(G.selectedTabInMainActivity)) {
-                            index = 1;
-                        } else if (FragmentCall.class.toString().contains(G.selectedTabInMainActivity)) {
-                            index = 2;
-                        }
-                    }
-
-                    G.selectedTabInMainActivity = "";
-
-
-                } else {
-
-                    if (HelperCalander.isPersianUnicode) {
-                        index = 2;
-                    } else {
-                        index = 0;
-                    }
-                }
-
-//                navigationTabStrip.setViewPager(mViewPager, index);
-                if (!HelperCalander.isPersianUnicode) {
-//                    navigationTabStrip.updatePointIndicator();
-                }
-
-//                navigationTabStrip.setOnTabStripSelectedIndexListener(new NavigationTabStrip.OnTabStripSelectedIndexListener() {
-//                    @Override
-//                    public void onStartTabSelected(String title, int index) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onEndTabSelected(String title, int index) {
-//                        onSelectItem(index);
-//                    }
-//                });
-
                 if (G.onUnreadChange != null) {
                     G.onUnreadChange.onChange();
                 }
@@ -1367,22 +1295,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void initTabStrip() {
 
-//        navigationTabStrip = (NavigationTabStrip) findViewById(R.id.nts);
-//        navigationTabStrip.setBackgroundColor(Color.parseColor(G.appBarColor));
-
-        if (HelperCalander.isPersianUnicode) {
-//            navigationTabStrip.setTitles(getString(R.string.md_phone), getString(R.string.md_apps), getString(R.string.md_chat_tab));
-        } else {
-//            navigationTabStrip.setTitles(getString(R.string.md_chat_tab), getString(R.string.md_apps), getString(R.string.md_phone));
-        }
-
-//        navigationTabStrip.setTitleSize(getResources().getDimension(R.dimen.dp20));
-//        navigationTabStrip.setStripColor(Color.WHITE);
-
         mViewPager = findViewById(R.id.viewpager);
-
-//        navigationTabStrip.setVisibility(View.VISIBLE);
-
         boolean isRtl = HelperCalander.isPersianUnicode;
         BottomNavigation bottomNavigation = findViewById(R.id.bn_main_bottomNavigation);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -1478,7 +1391,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }, 800);
         }
 
-        MaterialDesignTextView txtMenu = (MaterialDesignTextView) findViewById(R.id.am_btn_menu);
+        MaterialDesignTextView txtMenu = findViewById(R.id.am_btn_menu);
 
         txtMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1572,7 +1485,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
     private void initDrawerMenu() {
 
-        Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        Toolbar mainToolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
@@ -1592,7 +1505,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         };
 
-        final ViewGroup drawerButton = (ViewGroup) findViewById(R.id.amr_ripple_menu);
+        final ViewGroup drawerButton = findViewById(R.id.amr_ripple_menu);
         drawerButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -1612,7 +1525,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         findViewById(R.id.lm_layout_header).setBackgroundColor(Color.parseColor(G.appBarColor));
 
-        final ViewGroup navBackGround = (ViewGroup) findViewById(R.id.lm_layout_user_picture);
+        final ViewGroup navBackGround = findViewById(R.id.lm_layout_user_picture);
         navBackGround.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1623,7 +1536,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        TextView txtCloud = (TextView) findViewById(R.id.lm_txt_cloud);
+        TextView txtCloud = findViewById(R.id.lm_txt_cloud);
         txtCloud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1631,7 +1544,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        ViewGroup itemNavChat = (ViewGroup) findViewById(R.id.lm_ll_new_chat);
+        ViewGroup itemNavChat = findViewById(R.id.lm_ll_new_chat);
         itemNavChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1649,7 +1562,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        ViewGroup itemNavGroup = (ViewGroup) findViewById(R.id.lm_ll_new_group);
+        ViewGroup itemNavGroup = findViewById(R.id.lm_ll_new_group);
         itemNavGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1669,7 +1582,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        ViewGroup itemNavChanel = (ViewGroup) findViewById(R.id.lm_ll_new_channle);
+        ViewGroup itemNavChanel = findViewById(R.id.lm_ll_new_channle);
         itemNavChanel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1688,7 +1601,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        ViewGroup itemNavContacts = (ViewGroup) findViewById(R.id.lm_ll_contacts);
+        ViewGroup itemNavContacts = findViewById(R.id.lm_ll_contacts);
         itemNavContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1708,7 +1621,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
 
-        itemNavWallet = (ViewGroup) findViewById(R.id.lm_ll_wallet);
+        itemNavWallet = findViewById(R.id.lm_ll_wallet);
         itemNavWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1735,7 +1648,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        itemCash = (TextView) findViewById(R.id.cash);
+        itemCash = findViewById(R.id.cash);
         if (G.isDarkTheme) {
             itemCash.setTextColor(Color.parseColor(G.textTitleTheme));
         } else {
@@ -1744,12 +1657,12 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
 
         if (G.selectedCard != null) {
             itemCash.setVisibility(View.VISIBLE);
-            itemCash.setText("" + getResources().getString(R.string.wallet_Your_credit) + " " + String.valueOf(G.selectedCard.cashOutBalance) + " " + getResources().getString(R.string.wallet_Reial));
+            itemCash.setText("" + getResources().getString(R.string.wallet_Your_credit) + " " + G.selectedCard.cashOutBalance + " " + getResources().getString(R.string.wallet_Reial));
         } else {
             itemCash.setVisibility(View.GONE);
         }
 
-        ViewGroup itemNavPayment = (ViewGroup) findViewById(R.id.lm_ll_payment);
+        ViewGroup itemNavPayment = findViewById(R.id.lm_ll_payment);
         itemNavPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1759,7 +1672,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
 
-        ViewGroup itemNavCall = (ViewGroup) findViewById(R.id.lm_ll_call);
+        ViewGroup itemNavCall = findViewById(R.id.lm_ll_call);
 
         // gone or visible view call
         RealmCallConfig callConfig = getRealm().where(RealmCallConfig.class).findFirst();
@@ -1789,7 +1702,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         }
 
 
-        ViewGroup itemNavMap = (ViewGroup) findViewById(R.id.lm_ll_map);
+        ViewGroup itemNavMap = findViewById(R.id.lm_ll_map);
         itemNavMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1797,7 +1710,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        ViewGroup itemNavSend = (ViewGroup) findViewById(R.id.lm_ll_invite_friends);
+        ViewGroup itemNavSend = findViewById(R.id.lm_ll_invite_friends);
         itemNavSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1810,7 +1723,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 closeDrawer();
             }
         });
-        ViewGroup itemNavSetting = (ViewGroup) findViewById(R.id.lm_ll_setting);
+        ViewGroup itemNavSetting = findViewById(R.id.lm_ll_setting);
         itemNavSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1819,7 +1732,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                 lockNavigation();
             }
         });
-        ViewGroup itemQrCode = (ViewGroup) findViewById(R.id.lm_ll_qrCode);
+        ViewGroup itemQrCode = findViewById(R.id.lm_ll_qrCode);
 
         itemQrCode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1850,7 +1763,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
         final ToggleButton toggleButton = findViewById(R.id.st_txt_st_toggle_theme_dark);
-        ViewGroup rootDarkTheme = (ViewGroup) findViewById(R.id.lt_txt_st_theme_dark);
+        ViewGroup rootDarkTheme = findViewById(R.id.lt_txt_st_theme_dark);
         rootDarkTheme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1885,7 +1798,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
             }
         });
 
-        ViewGroup itemNavOut = (ViewGroup) findViewById(R.id.lm_ll_igap_faq);
+        ViewGroup itemNavOut = findViewById(R.id.lm_ll_igap_faq);
         itemNavOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -2237,7 +2150,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     private void initComponent() {
 
 
-        iconLock = (TextView) findViewById(R.id.am_btn_lock);
+        iconLock = findViewById(R.id.am_btn_lock);
 
         iconLock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2255,7 +2168,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         });
 
 
-        contentLoading = (ProgressBar) findViewById(R.id.loadingContent);
+        contentLoading = findViewById(R.id.loadingContent);
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHP_SETTING.FILE_NAME, MODE_PRIVATE);
         final SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -2321,7 +2234,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
     }
 
     private void connectionState() {
-        final TextView txtIgap = (TextView) findViewById(R.id.cl_txt_igap);
+        final TextView txtIgap = findViewById(R.id.cl_txt_igap);
 
         Typeface typeface = G.typeface_IRANSansMobile;
 
@@ -2435,9 +2348,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (userInfo != null) {
             String username = userInfo.getUserInfo().getDisplayName();
             phoneNumber = userInfo.getUserInfo().getPhoneNumber();
-            imgNavImage = (ImageView) findViewById(R.id.lm_imv_user_picture);
-            EmojiTextViewE txtNavName = (EmojiTextViewE) findViewById(R.id.lm_txt_user_name);
-            TextView txtNavPhone = (TextView) findViewById(R.id.lm_txt_phone_number);
+            imgNavImage = findViewById(R.id.lm_imv_user_picture);
+            EmojiTextViewE txtNavName = findViewById(R.id.lm_txt_user_name);
+            TextView txtNavPhone = findViewById(R.id.lm_txt_phone_number);
             txtNavName.setText(username);
             txtNavPhone.setText(phoneNumber);
             setPhoneInquiry(phoneNumber);
@@ -2613,9 +2526,9 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
         if (G.isInCall) {
             findViewById(R.id.am_ll_strip_call).setVisibility(View.VISIBLE);
 
-            ActivityCallViewModel.txtTimerMain = (TextView) findViewById(R.id.cslcs_txt_timer);
+            ActivityCallViewModel.txtTimerMain = findViewById(R.id.cslcs_txt_timer);
 
-            TextView txtCallActivityBack = (TextView) findViewById(R.id.cslcs_btn_call_strip);
+            TextView txtCallActivityBack = findViewById(R.id.cslcs_btn_call_strip);
             txtCallActivityBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -3030,11 +2943,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                             if (frameFragmentBack != null) {
                                 frameFragmentBack.setVisibility(View.GONE);
                             }
-                        } else if (frameFragmentContainer.getChildCount() == 1) {
-                            disableSwipe = true;
-                        } else {
-                            disableSwipe = false;
-                        }
+                        } else disableSwipe = frameFragmentContainer.getChildCount() == 1;
                     } else {
                         if (frameFragmentBack != null) {
                             frameFragmentBack.setVisibility(View.GONE);
@@ -3174,7 +3083,7 @@ public class ActivityMain extends ActivityEnhanced implements OnUserInfoMyClient
                         if (G.selectedCard != null) {
                             if (itemCash != null) {
                                 itemCash.setVisibility(View.VISIBLE);
-                                itemCash.setText("" + getResources().getString(R.string.wallet_Your_credit) + " " + String.valueOf(G.cardamount) + " " + getResources().getString(R.string.wallet_Reial));
+                                itemCash.setText("" + getResources().getString(R.string.wallet_Your_credit) + " " + G.cardamount + " " + getResources().getString(R.string.wallet_Reial));
                             }
 
                         }
