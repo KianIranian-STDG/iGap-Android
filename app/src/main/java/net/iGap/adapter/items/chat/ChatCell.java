@@ -189,7 +189,7 @@ public class ChatCell extends ConstraintLayout {
 
         View bottomView = new View(getContext());
         bottomView.setId(R.id.v_chatCell_bottomView);
-        bottomView.setBackgroundColor(isDarkTheme ? getResources().getColor(R.color.gray_bottom_line) : getResources().getColor(R.color.gray_300));
+        bottomView.setBackgroundColor(isDarkTheme ? getResources().getColor(R.color.gray_6c) : getResources().getColor(R.color.gray_300));
         addView(bottomView);
 
         /**

@@ -14,6 +14,7 @@
   <color name="sky_blue">#7f9fff</color>
   <color name="greenStatus">#3c000000</color>
 
+  <color name="gray_300">#e0e0e0</color>
   <color name="gray_9d">#9d9d9d</color>
   <color name="gray_f2">#f2f2f2</color>
   <color name="gray_4c">#4c4c4c</color>
@@ -162,10 +163,6 @@
   <color name="color_default_discovery_cards">#84ffffff</color>
 
   <color name="start_color">#706e6a</color>
-
-  <color name="notification_badge">#5ebc45</color>
-  <color name="chat_cell_pin">#f1f1f1</color>
-  <color name="chat_cell_pin_dark">#4a4d4c</color>
 
   <color name="callingUserImageLayerEnd">#FFFFFF</color>
   <color name="callingUserImageLayerStart">#50FFFFFF</color>
